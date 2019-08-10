@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Titles-->
+    <string name="menu_title">เมนู</string>
+    <string name="manage_nmod_title">การจัดการ NMods</string>
+    <string name="settings_title">การตั้งค่า</string>
+    <string name="about_title">เกี่ยวกับ</string>
+    <string name="nmod_picker_file_title">เลือก NMod (หน่วยความจำ)</string>
+    <string name="nmod_picker_package_title">เลือก NMod (แอป)</string>
+    <string name="main_title">หน้าหลัก</string>
+    <string name="prestart_title">Preloading</string>
+    <string name="import_nmod_title">นำขเข้า NMod</string>
+    <string name="nmods_load_failed_title">NMods บางส่วนได้รับความเสียหาย</string>
+    <string name="dir_picker_title">เลือก Directory</string>
+    <string name="pkg_picker_title">ตัวเลือก Package</string>
+
+    <!--NMod-->
+    <string name="load_fail_title">โหลดไม่สำเร็จ!</string>
+    <string name="load_fail_msg">Error Type:\n%1$s\nError Message:\n%2$s</string>
+    <string name="nmod_enabled_title">เปิดใช้งาน NMod</string>
+    <string name="nmod_disabled_title">ปิดใช้งาน NMod</string>
+    <string name="nmod_importing_title">กำลังนำเข้า NMod&#8230;</string>
+    <string name="nmod_import_failed">นำเข้า NMod ไม่สำเร็จ</string>
+    <string name="nmod_import_failed_message_unexpected">มีการ Error เกิดขึ้นในขณะที่นำเข้า NMod.</string>
+    <string name="nmod_import_failed_message_decode">การนำเข้า NMod ล้มเหลวเนื่องจาก NMod ดังกล่าวไม่ถูกต้องโปรดตรวจสอบว่าไฟล์นั้นเป็นไฟล์.zip</string>
+    <string name="nmod_import_failed_message_no_manifest">ModdedPE decoded NMod ประสบความสำเร็จแต่ไม่พบ nmod_manifest.json โปรดตรวจสอบ NMod ที่ถูกต้อง</string>
+    <string name="nmod_import_failed_message_io_exception">io exception ในขณะที่นำเข้า NMod.</string>
+    <string name="nmod_import_failed_message_manifest_json_syntax_error">json syntax error เกิดขึ้นในขณะที่อ่าน nmod_manifest.json โปรดตรวจสอบด้วย</string>
+    <string name="nmod_import_failed_message_invalid_package_name">ชื่อ package ไม่ถูกต้องตามที่กำหนดใน manifest.Element "package_name" ต้องเป็น java-styled package name.</string>
+    <string name="nmod_import_failed_message_no_package_name">ไม่พบชื่อ Package ใน nmod_manifest.json.โปรดเพิ่ม element "package_name"(String).</string>
+    <string name="nmod_import_failed_message_inequal_package_name">เจอความไม่ตรงกันกับชื่อ package ที่กำหนดใน AndroidManifest.xml และ nmod_manifest.json.ModdedPE ไม่สามารถรู้ไดว่าจะต้องใช้อันใหน.</string>
+    <string name="nmod_import_failed_message_redundant_manifest">ModdedPE พบ nmod_manifest.json 2 อันในไฟล์นี้แต่ไม่รู้ว่าจะอ่านอันใหน โปรดลบอันใดอันหนึ่ง(/nmod_manifest.json หรือ /assets/nmod_manifest.json)</string>
+    <string name="nmod_import_failed_button_full_info">ข้อมูล Error</string>
+    <string name="nmod_import_replaced_title">แทนที่</string>
+    <string name="nmod_import_replaced_message">ModdedPE พบว่ามี NMod ถูกนำเข้าอยู่แล้ว ModdedPE จะนำเข้า NMod ที่ใหม่กว่าแทนที่ NMod ตัวเก่า</string>
+    <string name="nmod_import_succeed_title">นำเข้าสำเร็จ</string>
+    <string name="nmod_import_failed_view_more">กดเพื่อดูข้อมูลเพิ่มเติม.</string>
+    <string name="nmod_import_succeed_message">NMod ได้ถูกนำเข้าเป็นที่เรียบร้อย</string>
+    <string name="nmod_import_failed_full_info_title">ข้อมูล Error</string>
+    <string name="nmod_import_failed_full_info_message">Error Type:\n%1$s\nError Message:\n%2$s</string>
+    <string name="nmod_add_new">เพิ่มใหม่</string>
+    <string name="nmod_add_new_title">เพิ่มใหม่&#8230;</string>
+    <string name="nmod_export">ส่งออก</string>
+    <string name="nmod_add_new_message">ต้องการเพิ่ม NMod จากที่ใหน?</string>
+    <string name="nmod_add_new_pick_installed">แอป</string>
+    <string name="nmod_add_new_pick_storage">หน่วยความจำ</string>
+    <string name="nmod_delete_title">ลบ NMod</string>
+    <string name="nmod_delete_message">แน่ใจหรือเปล่าที่ต้องการลบ NMod นี้?มันอาจจะหายไปตลอตกาล.(นานจริงๆนะ!)</string>
+    <string name="nmod_description_description_title">รายละเอียด</string>
+    <string name="nmod_description_about_title">เกี่ยวกับ</string>
+    <string name="nmod_description_whatsnew_title">มีอะไรใหม่บ้าง</string>
+    <string name="nmod_description_about_author">ผู้สร้าง:</string>
+    <string name="nmod_description_about_version_name">เวอร์ชัน:</string>
+    <string name="nmod_description_about_minecraft_version_name">รุ่นเกม:</string>
+    <string name="nmod_description_unknow">ไม่ทราบ</string>
+    <string name="nmod_imported_view_more">กดปุ่มเพื่อดูเพิ่มเติม</string>
+
+    <!--About-->
+    <string name="about_license">Licenses</string>
+    <string name="about_copyright_owner">Copyright © MCAL, Nextdev.</string>
+    <string name="about_author">MADE BY Тимашков Иван and Listerily</string>
+    <string name="about_translators">Translators</string>
+    <string name="about_translators_message">People who have participated in this language translator:\nТимашков Иван\nListerily\nCreepsoGaming\nDarkShuper\nriku1227\nLeonardo Queiroz\nBayram Akdemir\nThamTvMaster\nНағымет Адаев\nMr Ikso</string>
+    <string name="about_view_github">Github Page</string>
+    <string name="about_view_nmod_api">View NModAPI</string>
+    <string name="about_donate">Donate</string>
+
+    <!--Preferences-->
+    <string name="preferences_title">ตั้งค่า</string>
+    <string name="preferences_title_launcher">ตัวเลือก Launcher</string>
+    <string name="preferences_title_safe_mode">โหมดปลอดภัย</string>
+    <string name="preferences_summary_safe_mode">ปิดการทำงาน NMods ทุกอัน.</string>
+    <string name="preferences_title_data_saved_path">ข้อมูลเส้นทางเกม</string>
+    <string name="preferences_summary_data_saved_path">เส้นทางไฟล้ที่ game saves data.</string>
+    <string name="preferences_title_game_pkg_name">ชื่อ Minecraft PE Package</string>
+    <string name="preferences_summary_game_pkg_name">เปลี่ยนชื่อ game package.</string>
+    <string name="preferences_update_message_data_path">ประสบความสำเร็จในการ set data path:%1$s</string>
+    <string name="preferences_update_message_reset_data_path">ประสบความสำเร็จในการ reset data path.</string>
+    <string name="preferences_update_message_pkg_name">ประสบความสำเร็จในการ set pkg name:%1$s</string>
+    <string name="preferences_update_message_reset_pkg_name">ประสบความสำเร็จในการ reset pkg name.</string>
+    <string name="preferences_title_app">แอปพลิเคชัน</string>
+    <string name="preferences_title_about">เกี่ยวกับ</string>
+    <string name="preferences_summary_about">เกี่ยวกับ ModdedPE</string>
+    <string name="preferences_title_language">ภาษา</string>
+    <string name="preferences_summary_language">เปลี่ยนภาษา</string>
+    <string name="preferences_title_music">Music</string>
+    <string name="preferences_summary_music">Background music while playing</string>
+    <string name="preferences_title_moddedpe_texture_pack">ModdedPE Texture Pack</string>
+    <string name="preferences_summary_moddedpe_texture_pack">The default ModdedPE graphics, now updated with stylish new textures!</string>
+    <string name="preferences_title_desktop_gui">Use Desktop GUI</string>
+    <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
+	<string name="preferences_title_xbox">Войти в Xbox</string>
+    <string name="preferences_summary_xbox">Вам будет доступен тестовый аккаунт Xbox</string>
+    <string name="preferences_title_servers">Новые сервера</string>
+    <string name="preferences_summary_servers">В игре появится много новых серверов</string>
+	
+    <!--Open Game Dialog-->
+    <string name="opengame_loading">Waiting for the Game to Open&#8230;</string>
+    <string name="preloading_initing">Initiating Launcher</string>
+    <string name="preloading_initing_info">--NModAPI Version: %1$s\n--Minecraft PE Version: %2$s</string>
+    <string name="preloading_initing_info_safe_mode">--Safe Mode On\n--Minecraft PE Version: %1$s</string>
+    <string name="preloading_initing_loading_libs">Loading Native Libs</string>
+    <string name="preloading_loading_lib_substrate">--Loading libsubstrate.so</string>
+    <string name="preloading_loading_lib_game_launcher">--Loading liblauncher-core.so</string>
+    <string name="preloading_loading_lib_fmod">--Loading libfmod.so</string>
+    <string name="preloading_loading_lib_minecraftpe">--Loading libminecraftpe.so</string>
+    <string name="preloading_loading_lib_nmodapi">--Loading libnmod-core.so</string>
+    <string name="preloading_initing_loading_libs_done">Loading Native Libs Done</string>
+    <string name="preloading_nmod_start_loading">Loading NMods</string>
+    <string name="preloading_nmod_loaded">--Loaded NMod: %1$s</string>
+    <string name="preloading_nmod_loaded_failed">--Loading Failed: %1$s</string>
+    <string name="preloading_nmod_finish_loading">Loading NMods Done</string>
+    <string name="preloading_finished">Starting Game&#8230;</string>
+
+    <string-array name="preloading_tips_text">
+        <item>ไฟล์ NMod ประเภท APK ก่อนสามารถนำเข้ามาได้นะ~</item>
+        <item>รู้หรือไม่ คุณสามารถเลื่อนหน้าจอซ้ายขวาใน หน้าหลัก ได้นะ</item>
+        <item>การนำเข้า NMod จากหน่วยความจำดูกว่านำเข้าแบบแอปนะ</item>
+        <item>SSSSSSSSSSSSSSSSSSSSSS~~~.โอ้,นั้นมัน Creeeeeper!</item>
+        <item>ต้องการสร้าง NMods ใหม?(เกี่ยวกับ->NModAPI</item>
+        <item>I have an apple~I have a pen~</item>
+        <item>NMod ถูกสร้างมาจาก C++/JSON.</item>
+        <item>Native-Mod คือคำเต็มของ NMod.</item>
+        <item>NMod ควรที่จะได้รับการติดตั้งให้กับผูเล่นทุกคนที่เล่นโลกสำหรับหลายคน.</item>
+        <item>Random splashes!</item>
+        <item>กดเครื่องหมาย "+"(plus) เพื่อเปิดใช้งาน NMod~</item>
+    </string-array>
+
+    <!--Pick NMod from installed-->
+    <string name="pick_nmod_loading">Loading NMods&#8230;</string>
+
+    <!--Main Activity-->
+    <string name="main_play">เล่น</string>
+    <string name="main_reloading_title">Reloading&#8230;</string>
+    <string name="main_default_minecraft_title">Minecraft PE : ตั้งต้น</string>
+    <string name="no_available_mcpe_version_found">ModdedPE พบกับเวอร์ชันที่ไม่รองรับของ  MinecraftPE (%1$s) on ในเครื่องนี้(ModdedPE รองรับเฉพาะ %2$s!)\nถ้าเกิดต้องการที่จะเปิดเกม,ModdedPE อาจจะหยุดทำงานหรือเกิดอาการ Crash ขึ้น</string>
+    <string name="no_available_mcpe_version_found_title">Minecraft PE ไม่รองรับ</string>
+    <string name="no_available_mcpe_version_continue">ทำต่อ(DEPRECATED!)</string>
+    <string name="safe_mode_on_title">โหมดปลอดภัยกำลังทำงาน</string>
+    <string name="safe_mode_on_message">ในขณะที่เปิดโหมดปลอดภัย,ModdedPE จะไม่โหลด NMod ใดๆเลยและฟังก์ชันในการตั้งค่าของ ModdedPE จะไม่ทำงาน</string>
+    <string name="no_mcpe_found">ModdedPE คือ launcher ของ Minecraft:PE แต่พวกเราไม่มีหา Minecraft PE(สร้างโดย Mojang) on this device.</string>
+    <string name="no_mcpe_found_title">ไม่พบMinecraft PE</string>
+
+    <!--Manage NMods-->
+    <string name="manage_nmod_no_nmod_found">ไม่เจอ NMod ในเครื่องนี้.</string>
+
+    <!--Dir Picker-->
+    <string name="dir_picker_reset_warning_title">Reset Path</string>
+    <string name="dir_picker_reset_warning_message">ต้องการที่จะ reset game data path กลับไปเป็นค่าตั้งต้นใช่หรือไม่?</string>
+
+    <!--Pkg Picker-->
+    <string name="pkg_picker_not_found">ไม่พบ Packages.\nโปรดตรวจสอบถ้า permission เป็น dined.</string>
+    <string name="pick_pkg_loading">Loading Packages&#8320;</string>
+    <string name="pick_tips_title">Tips</string>
+    <string name="pick_tips_message">Are you sure to set minecraft package name to %1$s[%2$s]?ModdedPE will restart.</string>
+    <string name="pick_tips_reset_message">คุณต้องการที่จะ reset minecraft package name กลับไปยังค่าตั้งต้นใช่หรือไม่?ModdedPE จะทำการ restart.</string>
+
+    <!--Launch Failed-->
+    <string name="launch_failed_title">เปิดเกมไม่สำเร็จ</string>
+    <string name="launch_failed_message">ขออภัย, ModdeddPE กระตุ้น error ในขณะที่เปิดตัวเกมทำให้เกมเด้ง ถ้าปัญหานี้ยังคงอยู่ ให้ทำการล้่างข้อมูลของแอป ModdedPE, \nError Message:%1$s</string>
+
+    <!--Enable Warnings-->
+    <string name="enable_warning_unsupported_title">เวอร์ชันไม่รองรับ</string>
+    <string name="enable_warning_unsupported_message">NMod %1$s ไม่รองรับ MinecraftPE %2$s .โปรดอัปเดท NMod %1$s.</string>
+    <string name="enable_warning_unsupported_message_if_next">NMod %1$s ไม่รองรับ MinecraftPE %2$s คุณสามารถเปิดใช้งานได้แต่อาจก่อให้เกิดปัญหาและเกมเด้ง.</string>
+
+    <!--Permissions-->
+    <string name="permission_grant_failed_title">การขออนุญาตล้มเหลว</string>
+    <string name="permission_grant_failed_message">ไม่สามารถขออนุญาต: อ่านหน่วยความจำภายนอก โปรดไปที่หน้าการตั้งค่าเพื่อขออนุญาตเกี่ยวข้อง</string>
+</resources>

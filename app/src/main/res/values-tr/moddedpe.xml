@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Titles-->
+    <string name="menu_title">Menü</string>
+    <string name="manage_nmod_title">NModları Yönet</string>
+    <string name="settings_title">Ayarlar</string>
+    <string name="about_title">Hakkında</string>
+    <string name="nmod_picker_file_title">NMod Seç(Depolama)</string>
+    <string name="nmod_picker_package_title">NMod Seç(Uygulama)</string>
+    <string name="main_title">Ana Sayfa</string>
+    <string name="prestart_title">Ön Yükleme Yapılıyor</string>
+    <string name="import_nmod_title">NMod Aktar</string>
+    <string name="nmods_load_failed_title">Bazı NModlar Yüklenemiyor</string>
+    <string name="dir_picker_title">Dosya Seç</string>
+    <string name="pkg_picker_title">Paket Seçici</string>
+
+    <!--NMod-->
+    <string name="load_fail_title">Yükleme Başarısız!</string>
+    <string name="load_fail_msg">Hata Tipi:\n%1$s\nHata Mesajı:\n%2$s</string>
+    <string name="nmod_enabled_title">Etkin NModlar</string>
+    <string name="nmod_disabled_title">Etkinleşmemiş NModlar</string>
+    <string name="nmod_importing_title">NMod Aktarılıyor</string>
+    <string name="nmod_import_failed">NMod Aktarımı Başarısız!</string>
+    <string name="nmod_import_failed_message_unexpected">NMod aktarılırken beklenmedik bir hata oluştu.</string>
+    <string name="nmod_import_failed_message_decode">NMod dosyası aktarımı başarısız oldu. Lütfen NMod dosyasının zip formatında olduğundan emin olun. </string>
+    <string name="nmod_import_failed_message_no_manifest">ModdedPE NMod dosyasını başarılı bir şekilde derledi fakat nmod_manifest.json dosyası bulunamadı.Lütfen geçerli bir NMod dosyası seçin.</string>
+    <string name="nmod_import_failed_message_io_exception">NMod Aktarılırken bir io hatası oluştu.</string>
+    <string name="nmod_import_failed_message_manifest_json_syntax_error">nmod_manifest.json dosyası okunurken bir yazım hatası bulundu.Lütfen kontrol edin.</string>
+    <string name="nmod_import_failed_message_invalid_package_name">Manifest dosyasında geçersiz paket adı tanımlı."package_name" elementi Java dilinde olmalı.</string>
+    <string name="nmod_import_failed_message_no_package_name">nmod_manifest.json dosyasında paket adı bulunamadı.Lütfen "package_name" elementini ekleyin.</string>
+    <string name="nmod_import_failed_message_inequal_package_name">AndroidManifest.xml ve nmod_manifest.json dosyasında farklı paket isimleri tanımlı.ModdedPE hangi paket ismini kullanacağına karar veremiyor!</string>
+    <string name="nmod_import_failed_message_redundant_manifest">ModdedPE iki tane nmod_manifest.json dosyası buldu.Hangi dosyayı okuması gerektiğini bilemiyor.Lütfen birini silin.(/nmod_manifest.json veya /assets/nmod_manifest.json)</string>
+    <string name="nmod_import_failed_button_full_info">Hata bilgisi</string>
+    <string name="nmod_import_replaced_title">yeniden yerleştirildi</string>
+    <string name="nmod_import_replaced_message">ModdedPE daha önce aktarılmış , aynı isme sahip bir NMod buldu.Yeni NMod başarılı bir şekilde eskisinin yerine aktarıldı.</string>
+    <string name="nmod_import_succeed_title">Aktarma başarılı</string>
+    <string name="nmod_import_failed_view_more">daha fazla göster</string>
+    <string name="nmod_import_succeed_message">NMod başarılı bir şekilde aktarıldı.</string>
+    <string name="nmod_import_failed_full_info_title">Hata bilgisi</string>
+    <string name="nmod_import_failed_full_info_message">Hata türü:\n%1$s\nHata mesajı:\n%2$s</string>
+    <string name="nmod_add_new">Yeni</string>
+    <string name="nmod_add_new_title">Yeni</string>
+    <string name="nmod_export">Dışarı aktar</string>
+    <string name="nmod_add_new_message">NMod\'u nereden seçmek istiyorsunuz?</string>
+    <string name="nmod_add_new_pick_installed">Uygulamalar</string>
+    <string name="nmod_add_new_pick_storage">Depolama</string>
+    <string name="nmod_delete_title">NMod\'u Sil</string>
+    <string name="nmod_delete_message">Silmek istediğinize emin misiniz?Uzun bir süre boyunca bulamayabilirsiniz.(GERÇEKTEN UZUN BİR ZAMAN!)</string>
+    <string name="nmod_description_description_title">Açıklama</string>
+    <string name="nmod_description_about_title">Hakkında</string>
+    <string name="nmod_description_about_author">Yazar:</string>
+    <string name="nmod_description_about_version_name">Versiyon Adı:</string>
+    <string name="nmod_description_about_minecraft_version_name">Oyunun versiyonu:</string>
+    <string name="nmod_description_unknow">Bilinmiyor</string>
+    <string name="nmod_description_whatsnew_title">What\'s New</string>
+    <string name="nmod_imported_view_more">Daha fazlasını göster</string>
+
+    <!--About-->
+    <string name="about_license">Lisanslar</string>
+    <string name="about_copyright_owner">Copyright © MCAL, Nextdev.</string>
+    <string name="about_author">Иван Тимашков ve Listerily tarafından yapıldı</string>
+    <string name="about_translators">Çevirmenler</string>
+    <string name="about_translators_message">Bu dil çevirileri katılan Kim:\nТимашков Иван\nListerily\nCreepsoGaming\nDarkShuper\nriku1227\nLeonardo Queiroz\nBayram Akdemir\nThamTvMaster\nНағымет Адаев\nMr Ikso</string>
+    <string name="about_view_github">Github Sayfasına Git</string>
+    <string name="about_view_nmod_api">NModAPI\'yi Görüntüle</string>
+    <string name="about_donate">Donate</string>
+
+    <!--Preferences-->
+    <string name="preferences_title">Ayarlar</string>
+    <string name="preferences_title_launcher">Başlatma Ayarları</string>
+    <string name="preferences_title_safe_mode">Güvenli Mod</string>
+    <string name="preferences_summary_safe_mode">Tüm NMod\'ları devre dışı bırak</string>
+    <string name="preferences_title_data_saved_path">Oyun Veri Dosyaları Yolu</string>
+    <string name="preferences_summary_data_saved_path">Oyun verisi kaydedilen dosya yolu.</string>
+    <string name="preferences_title_game_pkg_name">Minecraft PE Paket Adı.</string>
+    <string name="preferences_summary_game_pkg_name">Uygulama paket adını değiştir.</string>
+    <string name="preferences_update_message_data_path">Uygulama veri yolu başarılı bir şekilde değiştirilildi:%1$s</string>
+    <string name="preferences_update_message_reset_data_path">Veri yolu başarılı bir şekilde sıfırlandı.</string>
+    <string name="preferences_update_message_pkg_name">pkg ismi başarılı bir şekilde değiştirildi:%1$s</string>
+    <string name="preferences_update_message_reset_pkg_name">Successfully reset pkg name.</string>
+    <string name="preferences_title_app">Uygulama</string>
+    <string name="preferences_title_about">Hakkında</string>
+    <string name="preferences_summary_about">ModdedPE Hakkında</string>
+    <string name="preferences_title_language">Dil</string>
+    <string name="preferences_summary_language">Dili değiştir.</string>
+    <string name="preferences_title_music">Music</string>
+    <string name="preferences_summary_music">Background music while playing</string>
+    <string name="preferences_title_moddedpe_texture_pack">ModdedPE Texture Pack</string>
+    <string name="preferences_summary_moddedpe_texture_pack">The default ModdedPE graphics, now updated with stylish new textures!</string>
+    <string name="preferences_title_desktop_gui">Use Desktop GUI</string>
+    <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
+	<string name="preferences_title_xbox">Войти в Xbox</string>
+    <string name="preferences_summary_xbox">Вам будет доступен тестовый аккаунт Xbox</string>
+    <string name="preferences_title_servers">Новые сервера</string>
+    <string name="preferences_summary_servers">В игре появится много новых серверов</string>
+	
+    <!--Open Game Dialog-->
+    <string name="preloading_initing">Başlatılıyor</string>
+    <string name="preloading_initing_info">--NModAPI Versiyonu: %1$s\n--Minecraft PE Versiyonu: %2$s</string>
+    <string name="preloading_initing_info_safe_mode">--Güvenli Mod Açık\n--Minecraft PE Versiyonu: %1$s</string>
+    <string name="preloading_initing_loading_libs">Native Kütüphaneleri Yükleniyor&#8320;</string>
+    <string name="preloading_loading_lib_substrate">--libsubstrate.so yükleniyor</string>
+    <string name="preloading_loading_lib_game_launcher">--liblauncher-core.so yükleniyor</string>
+    <string name="preloading_loading_lib_fmod">--libfmod.so yükleniyor</string>
+    <string name="preloading_loading_lib_minecraftpe">--libminecraftpe.so yükleniyor</string>
+    <string name="preloading_loading_lib_nmodapi">--libnmod-core.so yükleniyor</string>
+    <string name="preloading_initing_loading_libs_done">Native Kütüphaneleri yüklemesi tamamlandı.</string>
+    <string name="preloading_nmod_start_loading">NMods yükleniyor</string>
+    <string name="preloading_nmod_loaded">--NMod: %1$s yüklendi</string>
+    <string name="preloading_nmod_loaded_failed">--Yükleme başarısız: %1$s</string>
+    <string name="preloading_nmod_finish_loading">NMod\'ları yükleme tamamlandı</string>
+    <string name="preloading_finished">Oyun Başlatılıyor</string>
+
+    <string-array name="preloading_tips_text">
+        <item>APK formatındaki NMod\'lar​ aktarabilirsiniz~</item>
+        <item>Biliyor musunuz?Ana Sayfada sağa yada sola elinizi kaydırarak sayfayı değiştirebilirsiniz.</item>
+        <item>Uygulamaları seçmek yerine dosyaları seçerek Mod\'ları daha iyi aktarırsınız.</item>
+        <item>SSSSSSSSSSSSSSSSSSSSSS~~~.Oh,Bu Bir Creeeeeper!</item>
+        <item>NMod geliştirmek ister misiniz?(Hakkında->NModAPI)</item>
+        <item>I have an apple~I have a pen~(şarkı sözleri olduğundan çevirmedim)</item>
+        <item>NMod C++/JSON kullanılarak yapılır.</item>
+        <item>Native-Mod, NMod\'un tam yazımıdır.</item>
+        <item>Multiplayer oyunlarda NMod çalışabilmesi için tüm oyuncuların o NMod\'u kurması gerekmektedir.</item>
+        <item>Rastgele sıçramalar!</item>
+        <item>NMod\'u aktif etme için +(artı) butonuna basınız.~</item>
+    </string-array>
+
+    <!--Pick NMod from installed-->
+    <string name="pick_nmod_loading">NMod\'lar yükleniyor</string>
+
+    <!--Main Activity-->
+    <string name="main_play">Oyna</string>
+    <string name="main_reloading_title">Yeniden Yükleniyor</string>
+    <string name="main_default_minecraft_title">Minecraft PE : Varsayılan</string>
+    <string name="no_available_mcpe_version_found">ModdedPE desteklenmeyen bir Minecraft PE sürümü tespit etti.(%1$s)(ModdedPE sadece şu versiyonları destekler: %2$s!)\n Oyunu başlatmak bazı hatalara veya oyun esnasında çökmelere sebep olabilir!</string>
+    <string name="no_available_mcpe_version_found_title">Minecraft PE sürümü desteklenmiyor</string>
+    <string name="no_available_mcpe_version_continue">Devam Et(Önerilmez!)</string>
+    <string name="safe_mode_on_title">Güvenli Mod Aktif</string>
+    <string name="safe_mode_on_message">Aynı mod açıkken, ModdedPE herhangi bir NMod yükleyemez ve ModdedPE \ \'nin ayarlarındaki tüm işlevler çalışamaz.</string>
+    <string name="no_mcpe_found">ModdedPE bir Minecraft PE başlatıcısıdır,bu yüzden bu cihazda Minecraft PE(Mojang tarafından yapılmış) kurulu olmalıdır.</string>
+    <string name="no_mcpe_found_title">Minecraft PE bulunamadı.</string>
+
+    <!--Manage NMods-->
+    <string name="manage_nmod_no_nmod_found">Bu cihazda hiçbir NMod bulunamadı.</string>
+
+    <!--Dir Picker-->
+    <string name="dir_picker_reset_warning_title">Yolu sıfırla</string>
+    <string name="dir_picker_reset_warning_message">Oyun verileri yolunu varsayılan değere sıfırlamak ister misiniz?</string>
+
+    <!--Pkg Picker-->
+    <string name="pkg_picker_not_found">Paket bulunamadı.\nLütfen izinlerin verildiğinden emin olun.</string>
+    <string name="pick_pkg_loading">Paketler yükleniyor</string>
+    <string name="pick_tips_title">İpuçları</string>
+    <string name="pick_tips_message">Minecraft paket adını %1$s[%2$s] değerine ayarlamak istediğinizden emin misiniz? ModdedPE yeniden başlatılacaktır.</string>
+    <string name="pick_tips_reset_message">Minecraft paketi adını varsayılan değere sıfırladığınızdan emin misiniz? ModdedPE yeniden başlatılacaktır.</string>
+
+    <!--Launch Failed-->
+    <string name="launch_failed_title">Uygulama başlatılamadı.</string>
+    <string name="launch_failed_message">Üzgünüz, ModdedPE oyunu başlatırken başlatıcının çökmesine neden olan bir hata buldu. Bu sorun devam ederse ModdedPE \ \'nin uygulama verilerini silin. \nHata Mesajı:%1$s</string>
+
+    <!--Enable Warnings-->
+    <string name="enable_warning_unsupported_title">Unsupported Version</string>
+    <string name="enable_warning_unsupported_message">NMod %1$s hasn\'t support Minecraft PE %2$s yet.Please update NMod %1$s.</string>
+    <string name="enable_warning_unsupported_message_if_next">NMod %1$s hasn\'t support Minecraft PE %2$s yet.You can enable it but may cause issues or crashes.</string>
+
+    <!--Permissions-->
+    <string name="permission_grant_failed_title">Permission Grant Failed</string>
+    <string name="permission_grant_failed_message">Cannot grant permission: read external storage.Please go to the settings page to grant the relevant permissions.</string>
+</resources>

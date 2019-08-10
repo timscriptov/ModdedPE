@@ -1,0 +1,52 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.0"
+    defaultConfig {
+        applicationId "com.mcal.mcpelauncher"
+        minSdkVersion 16
+        targetSdkVersion 29
+        versionCode 871130004
+        versionName "1.13.0.4"
+        ndk {
+            abiFilters 'armeabi-v7a', 'x86'//, 'arm64-v8a', 'x86_64'
+        }
+ }
+
+    externalNativeBuild {
+        ndkBuild {
+            path 'src/main/jni/Android.mk'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
+	implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+	implementation 'com.android.support:support-v4:25.0.0'
+    implementation 'androidx.preference:preference:1.0.0'
+	implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+	implementation 'androidx.vectordrawable:vectordrawable-animated:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'org.zeroturnaround:zt-zip:1.13'
+    implementation 'com.anjlab.android.iab.v3:library:1.0.44'
+}

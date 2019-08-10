@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Titles-->
+    <string name="menu_title">Меню</string>
+    <string name="manage_nmod_title">Налаштувати NMods</string>
+    <string name="settings_title">Опції</string>
+    <string name="about_title">Про додаток</string>
+    <string name="nmod_picker_file_title">Вибрати  NMod (Сховище)</string>
+    <string name="nmod_picker_package_title">Вибрати  NMod (Додаток)</string>
+    <string name="main_title">Головна сторінка</string>
+    <string name="prestart_title">Попереднє завантаження</string>
+    <string name="import_nmod_title">Імпортувати NMod</string>
+    <string name="nmods_load_failed_title">Деякі NMods були пошкоджені</string>
+    <string name="dir_picker_title">Вибрати теку</string>
+    <string name="pkg_picker_title">Вибір пакетів</string>
+
+    <!--NMod-->
+    <string name="load_fail_title">Не вдалося завантажити!</string>
+    <string name="load_fail_msg">Тип помилки:\n%1$s\nПовідомлення помилки:\n%2$s</string>
+    <string name="nmod_enabled_title">Ввімкнені  NMods</string>
+    <string name="nmod_disabled_title">Вимкнені NMods</string>
+    <string name="nmod_importing_title">Імпорт NMod…</string>
+    <string name="nmod_import_failed">Імпорт  NMod невдався!</string>
+    <string name="nmod_import_failed_message_unexpected">Несподівана помилка при імпортувані NMod.</string>
+    <string name="nmod_import_failed_message_decode">Імпорт цього NMod невдався через невірний NMod файл. Будь ласка, переконайтесь, що він в zip форматі.</string>
+    <string name="nmod_import_failed_message_no_manifest">ModdedPE успішно розпізнав NMod, але файл nmod_manifest.json не знайдено. Будь ласка, переконайтесь, що це робочий NMod.</string>
+    <string name="nmod_import_failed_message_io_exception">Помилка при імпортувані NMod!</string>
+    <string name="nmod_import_failed_message_manifest_json_syntax_error">Знайдена синтаксична помилка при перевірці файлу nmod_manifest.json. Будь ласка, перевірте цей файл.</string>
+    <string name="nmod_import_failed_message_invalid_package_name">Неправильне ім\'я пакета в manifest. Елемент "package_name" повинен бути в java-стилі назви пакета.</string>
+    <string name="nmod_import_failed_message_no_package_name">Не знайдено ім\'я пакета в nmod_ manifest.json. Будь ласка, додайте елемент "package_name"(рядок).</string>
+    <string name="nmod_import_failed_message_inequal_package_name">Різні назви пакетів знайдені в AndroidManifest.xml і nmod_manifest.json. ModdedPE не зміг вибрати, яке ім\'я пакета використовувати.</string>
+    <string name="nmod_import_failed_message_redundant_manifest">ModdedPE знайшов два nmod_manifest.json в цьому файлі, але не зміг вибрати хоча б один з них. Будь ласка, видаліть один з цих файлів. (/nmod_manifest.json або /assets/nmod_manifest.json)</string>
+    <string name="nmod_import_failed_button_full_info">Інформація про помилку</string>
+    <string name="nmod_import_replaced_title">Замінено</string>
+    <string name="nmod_import_replaced_message">ModdedPE знайшов імпортований NМod зі схожою назвою. Новий мод був імпортований, замінивши старий.</string>
+    <string name="nmod_import_succeed_title">Успішний імпорт</string>
+    <string name="nmod_import_failed_view_more">Натисніть на кнопку, щоб дізнатися більше.</string>
+    <string name="nmod_import_succeed_message">NMod був успішно імпортований!</string>
+    <string name="nmod_import_failed_full_info_title">Інформація про помилку</string>
+    <string name="nmod_import_failed_full_info_message">Тип помилки:\n%1$s\nПовідомлення помилки:\n%2$s</string>
+    <string name="nmod_add_new">Додати новий</string>
+    <string name="nmod_add_new_title">Додати новий...</string>
+    <string name="nmod_export">Експорт</string>
+    <string name="nmod_add_new_message">Звідки ви бажаєте вибрати NMod?</string>
+    <string name="nmod_add_new_pick_installed">Додаток</string>
+    <string name="nmod_add_new_pick_storage">Пристрій</string>
+    <string name="nmod_delete_title">Видалити NMod</string>
+    <string name="nmod_delete_message">Ви правда хочете видалити це? Адже це зникне назавжди. (А ЦЕ ДУЖЕ ДОВГО!)</string>
+    <string name="nmod_description_description_title">Опис</string>
+    <string name="nmod_description_about_title">Про NMod</string>
+    <string name="nmod_description_about_author">Автор:</string>
+    <string name="nmod_description_about_version_name">Версія:</string>
+    <string name="nmod_description_about_minecraft_version_name">Версія гри:</string>
+    <string name="nmod_description_unknow">Невідомо</string>
+    <string name="nmod_description_whatsnew_title">Що нового?</string>
+    <string name="nmod_imported_view_more">Натисніть на кнопку, щоб переглянути більше.</string>
+
+    <!--About-->
+    <string name="about_license">Ліцензії</string>
+    <string name="about_copyright_owner">Copyright © MCAL, Nextdev.</string>
+    <string name="about_author">Додаток від Тимашкова Івана і Listerily</string>
+    <string name="about_translators">Перекладачі</string>
+    <string name="about_translators_message">Люди, які брали участь в перекладі програми:\nТимашков Иван\nListerily\nCreepsoGaming\nDarkShuper\nriku1227\nLeonardo Queiroz\nBayram Akdemir\nThamTvMaster\nНағымет Адаев\nMr Ikso</string>
+    <string name="about_view_github">Github сторінка</string>
+    <string name="about_view_nmod_api">Переглянути NModAPI</string>
+    <string name="about_donate">Donate</string>
+
+    <!--Preferences-->
+    <string name="preferences_title">Налаштування</string>
+    <string name="preferences_title_launcher">Налаштування лончера</string>
+    <string name="preferences_title_safe_mode">Безпечний режим</string>
+    <string name="preferences_summary_safe_mode">Вимкнути всі NMods.</string>
+    <string name="preferences_title_data_saved_path">Шлях до даних гри</string>
+    <string name="preferences_summary_data_saved_path">Файловий шлях, де гра зберігає дані.</string>
+    <string name="preferences_title_game_pkg_name">Minecraft PE ім\'я пакета</string>
+    <string name="preferences_summary_game_pkg_name">Змінити ім\'я пакета гри</string>
+    <string name="preferences_update_message_data_path">Шлях успішно встановлений:%1$s</string>
+    <string name="preferences_update_message_reset_data_path">Шлях був успішно скинуто.</string>
+    <string name="preferences_update_message_pkg_name"> Ім\'я пакета успішно змінено:%1$s</string>
+    <string name="preferences_update_message_reset_pkg_name">Ім\'я пакета успішно було скинуто.</string>
+    <string name="preferences_title_app">Додаток</string>
+    <string name="preferences_title_about">Інформація</string>
+    <string name="preferences_summary_about">Про ModdedPE</string>
+    <string name="preferences_title_language">Мова</string>
+    <string name="preferences_summary_language">Змінити мову лончера.</string>
+    <string name="preferences_title_music">Музика</string>
+    <string name="preferences_summary_music">Музика на фоні під час гри</string>
+    <string name="preferences_title_moddedpe_texture_pack">ModdedPE Texture Pack</string>
+    <string name="preferences_summary_moddedpe_texture_pack">До стандартної графіки ModdedPE додано нові стильні текстури!</string>
+    <string name="preferences_title_desktop_gui">Use Desktop GUI</string>
+    <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
+	<string name="preferences_title_xbox">Увійти в Xbox</string>
+    <string name="preferences_summary_xbox">Вам буде доступний тестовий акаунт Xbox</string>
+    <string name="preferences_title_servers">Нові сервера</string>
+    <string name="preferences_summary_servers">У грі з\'явиться багато нових серверів</string>
+	
+    <!--Open Game Dialog-->
+    <string name="preloading_initing">Запускаємо лончер</string>
+    <string name="preloading_initing_info">--NModAPI Версія: %1$s\n--Версія Minecraft PE: %2$s</string>
+    <string name="preloading_initing_info_safe_mode">--Безпечний режим ввімк.\n--Версія Minecraft PE: %1$s</string>
+    <string name="preloading_initing_loading_libs">Завантаження Native Libs</string>
+    <string name="preloading_loading_lib_substrate">--Завантаження libsubstrate.so</string>
+    <string name="preloading_loading_lib_game_launcher">--Завантаження liblauncher-core.so</string>
+    <string name="preloading_loading_lib_fmod">--Завантаження libfmod.so</string>
+    <string name="preloading_loading_lib_minecraftpe">--Завантаження libminecraftpe.so</string>
+    <string name="preloading_loading_lib_nmodapi">--Завантаження libnmod-core.so</string>
+    <string name="preloading_initing_loading_libs_done">Завантаження Native Libs завершено</string>
+    <string name="preloading_nmod_start_loading">Завантаження NMods</string>
+    <string name="preloading_nmod_loaded">--Завантажено NMod: %1$s</string>
+    <string name="preloading_nmod_loaded_failed">--Завантаження не вдалося: %1$s</string>
+    <string name="preloading_nmod_finish_loading">Завантаження NMods завершено</string>
+    <string name="preloading_finished">Запуск гри</string>
+    <string-array name="preloading_tips_text">
+        <item>APK відформатовані NMods також можуть бути імпортовані.</item>
+        <item>А чи знаєте ви? Можна прокручувати вліво або вправо для зміни сторінки.</item>
+        <item>Краще імпортувати NMods через файли, ніж через додаток.</item>
+        <item>ССССССССССССССССССС! Це ж кріпер!</item>
+        <item>Хочете створювати моди NMods? (Про додаток-&gt;NModAPI</item>
+        <item>У мене є яблуко~У мене є ручка~</item>
+        <item>NMod написані на C++/JSON.</item>
+        <item>Native-Mod повнястю написано на NMod.</item>
+        <item>NMod повинен бути встановлений у всіх гравців цього світу.</item>
+        <item>Випадковий Сплеш!</item>
+        <item>Натисніть на "+"(плюс) щоб ввімк. NMod~</item>
+    </string-array>
+
+    <!--Pick NMod from installed-->
+    <string name="pick_nmod_loading">Завантаження NMods…</string>
+
+    <!--Main Activity-->
+    <string name="main_play">Грати</string>
+    <string name="main_reloading_title">Перезавантаження</string>
+    <string name="main_default_minecraft_title">Minecraft PE: За замовчуванням</string>
+    <string name="no_available_mcpe_version_found">ModdedPE знайшов несумісну версію Minecraft PE (%1$s) на цьому пристрої. (ModdedPE сумісний з %2$s!)\nЯкщо ви продовжите запуск, то ModdedPE може вилетіти або заглючити.</string>
+    <string name="no_available_mcpe_version_found_title">Невідповідна версія Minecraft PE</string>
+    <string name="no_available_mcpe_version_continue">Продовжити (НЕ РАДИМО!)</string>
+    <string name="safe_mode_on_title">Безпечний режим ввімкнено</string>
+    <string name="safe_mode_on_message">З цим режимом ModdedPE НЕ буде запускатись NMod і всі опції в ModdedPE перестануть виконуватись.</string>
+    <string name="no_mcpe_found">ModdedPE це лаунчер для Minecraft PE, але ми не знайшли встановлений Minecraft PE на цьому пристрої.</string>
+    <string name="no_mcpe_found_title">Minecraft PE не знайдено.</string>
+
+    <!--Manage NMods-->
+    <string name="manage_nmod_no_nmod_found">NMods не знайдені на цьому пристрої.</string>
+
+    <!--Dir Picker-->
+    <string name="dir_picker_reset_warning_title">Скинути шлях</string>
+    <string name="dir_picker_reset_warning_message">Ви точно бажаєте скинути шлях ігрових даних до значень за замовчуванням?</string>
+
+    <!--Pkg Picker-->
+    <string name="pkg_picker_not_found">Жоден пакет не знайдений.\nБудь ласка, перевірте чи є у вас дозволи системи.</string>
+    <string name="pick_pkg_loading">Завантаження пакетів</string>
+    <string name="pick_tips_title">Підсказки</string>
+    <string name="pick_tips_message">Ви правда хочете змінити ім\'я пакету minecraft на %1$s[%2$s]? ModdedPE буде перезапущений.</string>
+    <string name="pick_tips_reset_message">Ви впевнені, що хочете змінити пакет minecraft на стандартне значення? ModdedPE буде перезапущений.</string>
+
+    <!--Launch Failed-->
+    <string name="launch_failed_title">Невдалий запуск лончера</string>
+    <string name="launch_failed_message">На жаль, ModdedPE видає помилки при відкритті гри, що призводить до крашів. Для вирішення цієї проблеми спробуйте очистити дані додатка ModdedPE.\nПовідомлення про помилку:%1$s</string>
+
+    <!--Enable Warnings-->
+    <string name="enable_warning_unsupported_title">Непідтримувана версія</string>
+    <string name="enable_warning_unsupported_message">NMod %1$s ще не підтримує Minecraft %2$s. Будь ласка, оновіть NMod %1$s.</string>
+    <string name="enable_warning_unsupported_message_if_next">NMod %1$s ще не підтримує Minecraft %2$s.Ви можете ввімкнути його, але можуть бути проблеми або збої.</string>
+
+    <!--Permissions-->
+    <string name="permission_grant_failed_title">Не вдалося отримати дозволи</string>
+    <string name="permission_grant_failed_message">Чи не вдалося отрмати дозвіл: Зміна даних на USB-накопичувачі. Перейдіть на сторінку налаштувань, щоб надати відповідні дозволи.</string>
+
+</resources>

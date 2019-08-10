@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+    <!--Titles-->
+    <string name="menu_title">メニュー</string>
+    <string name="manage_nmod_title">NModの管理</string>
+    <string name="settings_title">設定</string>
+    <string name="about_title">About</string>
+    <string name="nmod_picker_file_title">NModを選択(ストレージ)</string>
+    <string name="nmod_picker_package_title">NModを選択(インストール済みのアプリ)</string>
+    <string name="main_title">ホームページ</string>
+    <string name="prestart_title">再読み込み</string>
+    <string name="import_nmod_title">NModをインポート</string>
+    <string name="nmods_load_failed_title">いくつかのNModが壊れています</string>
+    <string name="dir_picker_title">ディレクトリを選択</string>
+    <string name="pkg_picker_title">パッケージピッカー</string>
+
+    <!--NMod-->
+    <string name="load_fail_title">読み込みに失敗しました!</string>
+    <string name="load_fail_msg">エラータイプ:\n%1$s\nエラーメッセージ:\n%2$s</string>
+    <string name="nmod_enabled_title">有効なNMod</string>
+    <string name="nmod_disabled_title">無効なNMod</string>
+    <string name="nmod_importing_title">NModをインポート中…</string>
+    <string name="nmod_import_failed">NModのインポートに失敗しました</string>
+    <string name="nmod_import_failed_message_unexpected">NModのインポート中に予期せぬエラーが発生しました</string>
+    <string name="nmod_import_failed_message_decode">このNModファイルは有効ではないため、インポートに失敗しました。それがzip形式であるか確認してください。</string>
+    <string name="nmod_import_failed_message_no_manifest">ModdedPEはこのNModを正常にデコードしましたが、nmod_manifest.jsonは見つかりませんでした。そのNModが有効であるか確認してください。</string>
+    <string name="nmod_import_failed_message_io_exception">NModをインポート中に例外が発生しました。</string>
+    <string name="nmod_import_failed_message_manifest_json_syntax_error">nmod_manifest.jsonの読み込み中にjson構文でエラーが発生しました。構文を確認してください。</string>
+    <string name="nmod_import_failed_message_invalid_package_name">マニフェストで定義しているパッケージ名は無効です。要素である"package_name"は、Java方式のパッケージ名でなければいけません。</string>
+    <string name="nmod_import_failed_message_no_package_name">nmod_manifest.jsonでパッケージ名が見つかりませんでした。"package_name"(String)の要素が追加してください。</string>
+    <string name="nmod_import_failed_message_inequal_package_name">AndroidManifest.xmlとnmod_manifest.jsonで定義されているパッケージ名は等しくありません。ModdedPEは使用するパッケージ名を決定できませんでした。</string>
+    <string name="nmod_import_failed_message_redundant_manifest">ModdedPEはこのファイル内に２つのnmod_manifest.jsonを見つけたため、どのファイルを読めばいいのかわかりませんでした。１つ削除してください。(/nmod_manifest.json or /assets/nmod_manifest.json)</string>
+    <string name="nmod_import_failed_button_full_info">エラーの情報</string>
+    <string name="nmod_import_replaced_title">置き換えました</string>
+    <string name="nmod_import_replaced_message">ModdedPEは同じパッケージ名でインポートされたNModを見つけました。新しいものを正常にインポートし、置き換えました。</string>
+    <string name="nmod_import_succeed_title">正常にインポートされました。</string>
+    <string name="nmod_import_failed_view_more">もっと見る場合はボタンをクリックしてください。</string>
+    <string name="nmod_import_succeed_message">NModが正常にインポートされました！</string>
+    <string name="nmod_import_failed_full_info_title">エラーの情報</string>
+    <string name="nmod_import_failed_full_info_message">エラータイプ:\n%1$s\nエラーメッセージ:\n%2$s</string>
+    <string name="nmod_add_new">新しく追加</string>
+    <string name="nmod_add_new_title">新しく追加…</string>
+    <string name="nmod_export">エクスポート</string>
+    <string name="nmod_add_new_message">どこからNModを選びますか？</string>
+    <string name="nmod_add_new_pick_installed">インストール済みのアプリ</string>
+    <string name="nmod_add_new_pick_storage">ストレージ</string>
+    <string name="nmod_delete_title">NModを削除</string>
+    <string name="nmod_delete_message">本当に削除しますか？長い間失われる可能性があります。(本当に長い！)</string>
+    <string name="nmod_description_description_title">説明</string>
+    <string name="nmod_description_about_title">このNModについて</string>
+    <string name="nmod_description_about_author">著者:</string>
+    <string name="nmod_description_about_version_name">バージョン名:</string>
+    <string name="nmod_description_about_minecraft_version_name">ゲームのバージョン:</string>
+    <string name="nmod_description_whatsnew_title">What\'s New</string>
+    <string name="nmod_description_unknow">不明</string>
+    <string name="nmod_imported_view_more">もっと見るにはボタンをクリックしてください。</string>
+
+    <!--About-->
+    <string name="about_license">ライセンス</string>
+    <string name="about_copyright_owner">Copyright © MCAL, Nextdev.</string>
+    <string name="about_author">MADE BY Тимашков Иван と Listerily</string>
+    <string name="about_translators">翻訳者</string>
+    <string name="about_translators_message">この言語の翻訳参加者\nТимашков Иван\nListerily\nCreepsoGaming\nDarkShuper\nriku1227\nLeonardo Queiroz\nBayram Akdemir\nThamTvMaster\nНағымет Адаев\nMr Ikso</string>
+    <string name="about_view_github">Githubページ</string>
+    <string name="about_view_nmod_api">NModAPIを見る</string>
+    <string name="about_donate">Donate</string>
+
+    <!--Preferences-->
+    <string name="preferences_title">設定</string>
+    <string name="preferences_title_launcher">ランチャーオプション</string>
+    <string name="preferences_title_safe_mode">セーフモード</string>
+    <string name="preferences_summary_safe_mode">全てのNModを無効にする</string>
+    <string name="preferences_title_data_saved_path">ゲームデータパス</string>
+    <string name="preferences_summary_data_saved_path">ゲームデータを保存するファイルパス</string>
+    <string name="preferences_title_game_pkg_name">Minecraft PEのパッケージ名</string>
+    <string name="preferences_summary_game_pkg_name">ゲームのパッケージ名を変更します。</string>
+    <string name="preferences_update_message_data_path">データパスが正常に設定されました:%1$s</string>
+    <string name="preferences_update_message_reset_data_path">ゲームパスをリセットしました。</string>
+    <string name="preferences_update_message_pkg_name">パッケージ名を正常に設定しました:%1$s</string>
+    <string name="preferences_update_message_reset_pkg_name">パッケージ名をリセットしました。</string>
+    <string name="preferences_title_app">アプリケーション</string>
+    <string name="preferences_title_about">情報</string>
+    <string name="preferences_summary_about">ModdedPEについて</string>
+    <string name="preferences_title_language">言語</string>
+    <string name="preferences_summary_language">言語を変更します。</string>
+    <string name="preferences_title_music">Music</string>
+    <string name="preferences_summary_music">Background music while playing</string>
+    <string name="preferences_title_moddedpe_texture_pack">ModdedPE Texture Pack</string>
+    <string name="preferences_summary_moddedpe_texture_pack">デフォルトの ModdedPE のグラフィックが、スタイリッシュな新規テクスチャで生まれ変わりました!</string>
+    <string name="preferences_title_desktop_gui">Use Desktop GUI</string>
+    <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
+	<string name="preferences_title_xbox">Войти в Xbox</string>
+    <string name="preferences_summary_xbox">Вам будет доступен тестовый аккаунт Xbox</string>
+    <string name="preferences_title_servers">Новые сервера</string>
+    <string name="preferences_summary_servers">В игре появится много новых серверов</string>
+	
+    <!--Open Game Dialog-->
+    <string name="preloading_initing">ランチャーを起動中</string>
+    <string name="preloading_initing_info">--NModAPIのバージョン: %1$s\n--Minecraft PEのバージョン: %2$s</string>
+    <string name="preloading_initing_info_safe_mode">--セーフモードをオン\n--Minecraft PEのバージョン: %1$s</string>
+    <string name="preloading_initing_loading_libs">ネイティブライブラリを読み込み中</string>
+    <string name="preloading_loading_lib_substrate">--libsubstrate.soを読み込み中</string>
+    <string name="preloading_loading_lib_game_launcher">--liblauncher-core.soを読み込み中</string>
+    <string name="preloading_loading_lib_fmod">--libfmod.soを読み込み中</string>
+    <string name="preloading_loading_lib_minecraftpe">--libminecraftpe.soを読み込み中</string>
+    <string name="preloading_loading_lib_nmodapi">--libnmod-core.soを読み込み中</string>
+    <string name="preloading_initing_loading_libs_done">ネイティブライブラリの読み込みが完了しました。</string>
+    <string name="preloading_nmod_start_loading">NModを読み込み中</string>
+    <string name="preloading_nmod_loaded">--NModを読み込みました: %1$s</string>
+    <string name="preloading_nmod_loaded_failed">--読み込みに失敗しました: %1$s</string>
+    <string name="preloading_nmod_finish_loading">NModの読み込みに完了しました。</string>
+    <string name="preloading_finished">ゲームを開始…</string>
+
+
+    <string-array name="preloading_tips_text">
+        <item>APK形式のNModもインポートできるんだ~</item>
+        <item>知ってるかい？左か右にスクロールすると、メインページのページを変更できるんだ。</item>
+        <item>アプリケーションを選ぶより、ファイルを選んでNModをインポートするほうがいいよ。</item>
+        <item>シューーーーーー…うわぁ、クリーパーだぁ！</item>
+        <item>NModを開発したいって？(About->NModAPI</item>
+        <item>それらはメインページのクリーパーの顔に奇妙な何かがあるよ:)</item>
+        <item>GithubにModdedPEのソースコードが含まれてるよ~</item>
+        <item>I have an apple~I have a pen~</item>
+        <item>ModdedPEを翻訳したい場合は、ツイッターの@model_partにメッセージを送ってくれ~</item>
+        <item>ModdedPEがScriptModをサポートするのは不可能なんだ。</item>
+        <item>NModはC++とJSONで作られているよ。</item>
+        <item>自分のランチャーにNModを読み込む？(About->NModAPI</item>
+        <item>ModdedPEは決して広告を表示しないよ</item>
+        <item>NativeModはNModの完全な書き込みだ。</item>
+        <item>ツイッターで@model_partをフォローしてくれ！</item>
+        <item>NModはマルチの世界の全てのプレイヤーがインストールする必要がある。</item>
+        <item>Random splashes!</item>
+        <item>"+"(plus)をクリックしてNModを有効にしてくれ~</item>
+    </string-array>
+
+    <!--Pick NMod from installed-->
+    <string name="pick_nmod_loading">NModsを読み込み中…</string>
+
+    <!--Main Activity-->
+    <string name="main_play">プレイ</string>
+    <string name="main_reloading_title">リロード…</string>
+    <string name="main_default_minecraft_title">Minecraft PE : デフォルト</string>
+    <string name="no_available_mcpe_version_found">ModdedPEが、このデバイスでサポートされていないバージョンのMinecraft PE (%1$s) を検出しました。(ModdedPEがサポートしているバージョンは %2$s です！)\nゲームを続行すると、ModdedPEがクラッシュするか、問題が発生する場合があります。</string>
+    <string name="no_available_mcpe_version_found_title">サポートされていないバージョンのMinecraft PE</string>
+    <string name="no_available_mcpe_version_continue">プレイする(非推奨!)</string>
+    <string name="safe_mode_on_title">セーフモードが有効化されています。</string>
+    <string name="safe_mode_on_message">セーフモードをオンにすると、ModdedPEはNModを読み込まず、ModdedPEの設定の全ての機能が動作しなくなります。</string>
+    <string name="no_mcpe_found">ModdedPEはMinecraft PEのランチャーですが、このデバイスではMinecraft PE(Mojang製)は見つかりませんでした。</string>
+    <string name="no_mcpe_found_title">Minecraft PEは見つかりませんでした。</string>
+
+    <!--Manage NMods-->
+    <string name="manage_nmod_no_nmod_found">このデバイスでNModは見つかりませんでした。</string>
+
+    <!--Dir Picker-->
+    <string name="dir_picker_reset_warning_title">パスをリセット</string>
+    <string name="dir_picker_reset_warning_message">ゲームのデータパスをデフォルトの値に戻しますか？</string>
+
+    <!--Pkg Picker-->
+    <string name="pkg_picker_not_found">パッケージが見つかりませんでした。\n権限が拒否されているかどうかを確認してください。</string>
+    <string name="pick_pkg_loading">パッケージを読み込み中…</string>
+    <string name="pick_tips_title">Tips</string>
+    <string name="pick_tips_message">マインクラフトのパッケージ名を %1$s[%2$s]に設定してもよろしいですか？ModdedPEはリセットされます。</string>
+    <string name="pick_tips_reset_message">マインクラフトのパッケージ名をデフォルトの値にリセットしてもよろしいですか？ModdedPEはリセットされます。</string>
+
+    <!--Launch Failed-->
+    <string name="launch_failed_title">ゲームを開くことができませんでした。</string>
+    <string name="launch_failed_message">ModdeddPEはゲームを開くときにエラーが発生しました、イニシエーターがクラッシュする原因。 この問題が解決しない場合、ModdedPEのアプリケーションデータを削除してみてください。\nエラーメッセージ:%1$s</string>
+
+    <!--Permissions-->
+    <string name="permission_grant_failed_title">許可されていません</string>
+    <string name="permission_grant_failed_message">外部ストレージを読む権限を取得できませんでした。[設定]ページでModdedPEのストレージアクセス権限を許可してください。</string>
+
+    <!--Enable Warnings-->
+    <string name="enable_warning_unsupported_title">サポートしていないバージョン</string>
+    <string name="enable_warning_unsupported_message">NMod %1$s はまだMinecraft PE %2$s をサポートしていません。NModをアップデートしてください %1$s.</string>
+    <string name="enable_warning_unsupported_message_if_next">NMod %1$s はまだMinecraft PE %2$s をサポートしていません。有効化することはできますがクラッシュや不具合の原因になるかもしれません。</string>
+
+</resources>

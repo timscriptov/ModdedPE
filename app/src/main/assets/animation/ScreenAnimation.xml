@@ -1,0 +1,81 @@
+<!-- don't touch unless you are an animator! -->
+<maas class="com.microsoft.xbox.xle.anim.XLEMAASAnimationPackageNavigationManager">
+    <forward>
+        <inAnimation>
+            <animations>
+                <XLEAnimationDefinition
+                    property="Scale"
+                    type="Exponential"
+                    easing="EaseOut"
+                    from="0.6"
+                    to="1"
+                    parameter="7"
+                    durationMs="833" />
+                <XLEAnimationDefinition
+                    property="Alpha"
+                    type="Linear"
+                    from="0"
+                    to="1"
+					durationMs="333"/>
+            </animations>
+        </inAnimation>
+        <outAnimation>
+            <animations>
+                <XLEAnimationDefinition
+                    property="Scale"
+                    type="Exponential"
+                    easing="EaseIn"
+                    from="1"
+                    to="1.2"
+                    parameter="7"
+                    durationMs="666" />
+                <XLEAnimationDefinition
+                    property="Alpha"
+                    type="Linear"
+                    from="1"
+                    to="0"
+                    delayMs="333"
+                    durationMs="333" />
+            </animations>
+        </outAnimation>
+    </forward>
+    <backward>
+        <inAnimation>
+            <animations>
+                <XLEAnimationDefinition
+                    property="Scale"
+                    type="Exponential"
+                    easing="EaseOut"
+                    from="1.2"
+                    to="1"
+                    parameter="7"
+                    durationMs="633" />
+                <XLEAnimationDefinition
+                    property="Alpha"
+                    type="Linear"
+                    from="0"
+                    to="1"
+                    delayMs ="633"/>
+            </animations>
+        </inAnimation>
+        <outAnimation>
+            <animations>
+                <XLEAnimationDefinition
+                    property="Scale"
+                    type="Exponential"
+                    easing="EaseIn"
+                    from="1"
+                    to="0.6"
+                    parameter="7"
+                    durationMs="666" />
+                <XLEAnimationDefinition
+                    property="Alpha"
+                    type="Linear"
+                    from="1"
+                    to="0"
+                    durationMs="333" 
+                    delayMs="333"/>
+            </animations>
+        </outAnimation>
+    </backward>
+</maas>

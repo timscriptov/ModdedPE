@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Titles-->
+    <string name="menu_title">Меню</string>
+    <string name="manage_nmod_title">NMods Дұрыстау</string>
+    <string name="settings_title">Опции</string>
+    <string name="about_title">Программа жайлы</string>
+    <string name="nmod_picker_file_title">NMod (Хранилище) Таңдау</string>
+    <string name="nmod_picker_package_title">NMod (Приложение) Таңдау</string>
+    <string name="main_title">Басты бет</string>
+    <string name="prestart_title">Алдын-ала жүктеу</string>
+    <string name="import_nmod_title">NMod Импорттау</string>
+    <string name="nmods_load_failed_title">Кейбір NMods бүлінген</string>
+    <string name="dir_picker_title">Директорию таңдау</string>
+    <string name="pkg_picker_title">Package Picker</string>
+
+    <!--NMod-->
+    <string name="load_fail_title">Жүктеу мүмкін болмады!</string>
+    <string name="load_fail_msg">Ошибка түрі:\n%1$s\nОшибка хаттамасы:\n%2$s</string>
+    <string name="nmod_enabled_title">Қосылған NMods</string>
+    <string name="nmod_disabled_title">Өшірілген NMods</string>
+    <string name="nmod_importing_title">Импорт NMod…</string>
+    <string name="nmod_import_failed">Импортту NMod мүмкін болмады!</string>
+    <string name="nmod_import_failed_message_unexpected">NMod Импорттағанда күтпеген қателік!.</string>
+    <string name="nmod_import_failed_message_decode">Импорттау NMod орындалмады, NMod файлаға байланысты. Өтінемін, файл zip форматында болуы керек.</string>
+    <string name="nmod_import_failed_message_no_manifest">ModdedPE сәтті қондырылды NMod, бірақ файл nmod_manifest.json табылмады. Өтінемін, NMod жұмыс істейтіндігіне көз жеткізіңіз.</string>
+    <string name="nmod_import_failed_message_io_exception">NMod Импорттағанда қателік!</string>
+    <string name="nmod_import_failed_message_manifest_json_syntax_error">Тексеру кезінде синтаксисттік қателік пайда болды файла nmod_manifest.json. Өтінемін, файлды тексеріп көріңіз.</string>
+    <string name="nmod_import_failed_message_invalid_package_name">Пакет аты дұрыс емес manifest. Элемент "package_name" java-стилінде болуы керек.</string>
+    <string name="nmod_import_failed_message_no_package_name">Пакет аты nmod_manifest.json табылған жоқ. Өтінемін,  "package_name"(строка) элементін қосыңыз.</string>
+    <string name="nmod_import_failed_message_inequal_package_name">Әртүрлі пакеттер аттары табылды AndroidManifest.xml және nmod_manifest.json. ModdedPE қабылдай алмады, қандай пакет атын қолданазыз ?</string>
+    <string name="nmod_import_failed_message_redundant_manifest">ModdedPE осы файлада екі nmod_manifest.json тапты, бірақ біреуінде таңдай алмады. Өтінемін, біреуін өшіріп тастауыңызды сұраймын.(/nmod_manifest.json или /assets/nmod_manifest.json)</string>
+    <string name="nmod_import_failed_button_full_info">Қателік туралы мәлімет</string>
+    <string name="nmod_import_replaced_title">Ауыстырылды</string>
+    <string name="nmod_import_replaced_message">ModdedPE импортталған тауып алды NМod ұқсас атымен.Жаңа мод импортталды, ескі мод орнына.</string>
+    <string name="nmod_import_succeed_title">Импорт сәтті аяқталды!</string>
+    <string name="nmod_import_failed_view_more">Бұдан да көп білу үшін, батырманы басыңыз!</string>
+    <string name="nmod_import_succeed_message">NMod сәтті импортталды!</string>
+    <string name="nmod_import_failed_full_info_title">Қателік туралы мәлімет</string>
+    <string name="nmod_import_failed_full_info_message">Ошибка түоі:\n%1$s\n Хаттама ошибки:\n%2$s</string>
+    <string name="nmod_add_new">Жаңасын қосу</string>
+    <string name="nmod_add_new_title">Жаңасын қосу…</string>
+    <string name="nmod_export">Экспорт</string>
+    <string name="nmod_add_new_message"> Сіз NMod қайда таңдайсыз ?</string>
+    <string name="nmod_add_new_pick_installed">Приложение</string>
+    <string name="nmod_add_new_pick_storage">Құрылғы</string>
+    <string name="nmod_delete_title">NMod Өшіру</string>
+    <string name="nmod_delete_message">Сіз шыныменде өшіргіңіз келеме ? Бұл мәңгі өшіп кетуі мүмкін.(АЛ БҰЛ ӨТЕ ҰЗАҚ!)</string>
+    <string name="nmod_description_description_title">Сипаттама</string>
+    <string name="nmod_description_about_title">NMod Туралы</string>
+    <string name="nmod_description_about_author">Автор:</string>
+    <string name="nmod_description_about_version_name">Версия:</string>
+    <string name="nmod_description_about_minecraft_version_name">Ойынның версиясы:</string>
+    <string name="nmod_description_unknow">Белгізіз</string>
+    <string name="nmod_description_whatsnew_title">Жаңадан не шықты ?</string>
+    <string name="nmod_imported_view_more">Бұдан да көп білу үшін, батырманы басыңыз!</string>
+
+    <!--About-->
+    <string name="about_license">Лицензиялар</string>
+    <string name="about_copyright_owner">Copyright © MCAL, Nextdev.</string>
+    <string name="about_author">Приложениені жасаған Тимашкова Иван және Listerily</string>
+    <string name="about_translators">Аудармашылар</string>
+    <string name="about_translators_message">Приложниені аударуға келісімін берген адамдар:\nТимашков Иван\nListerily\nCreepsoGaming\nDarkShuper\nriku1227\nLeonardo Queiroz\nBayram Akdemir\nThamTvMaster\nНағымет Адаев\nMr Ikso</string>
+    <string name="about_view_github">Github Бет</string>
+    <string name="about_view_nmod_api">NModAPI Көру</string>
+    <string name="about_donate">Donate</string>
+
+    <!--Preferences-->
+    <string name="preferences_title">Баптаулар</string>
+    <string name="preferences_title_launcher">Лаунчер баптаулары</string>
+    <string name="preferences_title_safe_mode">Қауіпсіздік режимі</string>
+    <string name="preferences_summary_safe_mode">Барлық NMods өшіру.</string>
+    <string name="preferences_title_data_saved_path">Ойындар деректер жолы</string>
+    <string name="preferences_summary_data_saved_path">Файл жолдары, ойын деректерді қайда сақтайды.</string>
+    <string name="preferences_title_game_pkg_name">Minecraft PE пакет аты</string>
+    <string name="preferences_summary_game_pkg_name">Ойын пакет атын ауыстыру</string>
+    <string name="preferences_update_message_data_path">Жолы сәтті орнатылды:%1$s</string>
+    <string name="preferences_update_message_reset_data_path">Жолы сәтті жойылды.</string>
+    <string name="preferences_update_message_pkg_name">Аты сәтті аяқталды pkg :%1$s</string>
+    <string name="preferences_update_message_reset_pkg_name">Аты сәтті жойылды pkg.</string>
+    <string name="preferences_title_app">Приложение</string>
+    <string name="preferences_title_about">Мәлімет</string>
+    <string name="preferences_summary_about">ModdedPE Туралы</string>
+    <string name="preferences_title_language">Тіл</string>
+    <string name="preferences_summary_language">Лаунчердің тілін ауыстыру.</string>
+    <string name="preferences_title_music">Music</string>
+    <string name="preferences_summary_music">Background music while playing</string>
+    <string name="preferences_title_moddedpe_texture_pack">ModdedPE Texture Pack</string>
+    <string name="preferences_summary_moddedpe_texture_pack">ModdedPE графикалық моделі стандартты стильді текстуралармен жаңартылған!</string>
+    <string name="preferences_title_desktop_gui">Use Desktop GUI</string>
+    <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
+	<string name="preferences_title_xbox">Войти в Xbox</string>
+    <string name="preferences_summary_xbox">Вам будет доступен тестовый аккаунт Xbox</string>
+    <string name="preferences_title_servers">Новые сервера</string>
+    <string name="preferences_summary_servers">В игре появится много новых серверов</string>
+	
+    <!--Open Game Dialog-->
+    <string name="preloading_initing">Лаунчерді қосамыз</string>
+    <string name="preloading_initing_info">--NModAPI Версия: %1$s\n--Версия Minecraft PE: %2$s</string>
+    <string name="preloading_initing_info_safe_mode">--Қауіпсіздік режимін қосу.\n--Версия Minecraft PE: %1$s</string>
+    <string name="preloading_initing_loading_libs">Native Libs Жүктелуде</string>
+    <string name="preloading_loading_lib_substrate">-- ibsubstrate.so Жүктелуде</string>
+    <string name="preloading_loading_lib_game_launcher">--liblauncher-core.so Жүктелуде</string>
+    <string name="preloading_loading_lib_fmod">--libfmod.so Жүктелуде</string>
+    <string name="preloading_loading_lib_minecraftpe">--libminecraftpe.so Жүктелуде</string>
+    <string name="preloading_loading_lib_nmodapi">--libnmod-core.so Жүктелуде</string>
+    <string name="preloading_initing_loading_libs_done">Жүктелу Native Libs аяқталды</string>
+    <string name="preloading_nmod_start_loading">Жүктелу NMods</string>
+    <string name="preloading_nmod_loaded">--Жүктелді NMod: %1$s</string>
+    <string name="preloading_nmod_loaded_failed">--Жүктелінбеді: %1$s</string>
+    <string name="preloading_nmod_finish_loading">Жүктелу NMods аяқталды</string>
+    <string name="preloading_finished">Ойын қосылуда…</string>
+
+    <string-array name="preloading_tips_text">
+        <item>APK форматындағы NMods тағыда импортталуы мүмкін.</item>
+        <item>Ал сіз білесіз бе? Басты қосымшалар бетте, оңға немесе солға өзгерту үшін айналдыруға болады.</item>
+        <item>NMods импорттау файлдар арқылы жақсырақ, приложениеге қарағанда.</item>
+        <item>ССССССССССССССССССС! Бұл крипер!</item>
+        <item>NMods-қа Модтар жасағың келема ?(Приложения туралы->NModAPI</item>
+        <item>Менде алма бар~Менде ручка бар~</item>
+        <item>NMod C++/JSON арқылы жазылады!</item>
+        <item>Native-Mod бүкілі NMod жазылған.</item>
+        <item>NMod осы жердегі барлық ойыншыларда болуы керек!</item>
+        <item>Кездейсоқ Сплэш!</item>
+        <item>NMod қосу үшін "+"(плюс) басыңыз~</item>
+    </string-array>
+
+    <!--Pick NMod from installed-->
+    <string name="pick_nmod_loading">Жүктелуде NMods…</string>
+
+    <!--Main Activity-->
+    <string name="main_play">Ойнау</string>
+    <string name="main_reloading_title">Қайта жүктелуде...</string>
+    <string name="main_default_minecraft_title">Minecraft PE : Әдеттегідей</string>
+    <string name="no_available_mcpe_version_found">ModdedPE сәйкес келмейтін версяны тапты Minecraft PE (%1$s).(ModdedPE совместим с %2$s!)\nЕгер сіз қосуды жалғастырсаңыз ModdedPE шығып кетуі мүмкін.</string>
+    <string name="no_available_mcpe_version_found_title">Minecraft PE версиясы келмейді!</string>
+    <string name="no_available_mcpe_version_continue">Жалғастыру(КЕҢЕС БЕРМЕЙМІЗ!)</string>
+    <string name="safe_mode_on_title">Қауіпсіздік режимі қосылды!</string>
+    <string name="safe_mode_on_message">Бұл режиммен ModdedPE қосылмайды NMod және барлық опцилар ModdedPE жұмысын тоқтадады.</string>
+    <string name="no_mcpe_found">ModdedPE деген Minecraft PE-ге арналған лаунчер,бірақ біз жүктелегн Minecraft PE-ді құрылғыңызда тапқан жоқпыз!</string>
+    <string name="no_mcpe_found_title">Minecraft PE табылған жоқ.</string>
+
+    <!--Manage NMods-->
+    <string name="manage_nmod_no_nmod_found">NMods құрылғыңызда табылған жоқ.</string>
+
+    <!--Dir Picker-->
+    <string name="dir_picker_reset_warning_title">Жодын алып тастау</string>
+    <string name="dir_picker_reset_warning_message">Сіз шыныменде ойын жолын әдеттегідейге алып  тастағыңыз келеме ?</string>
+
+    <!--Pkg Picker-->
+    <string name="pkg_picker_not_found">Бірде-бір пакет табылған жлқ.\nӨтінемін, тексеріңіз,системада келісім бар ма.</string>
+    <string name="pick_pkg_loading"> Пакеттар жуктелуже₀</string>
+    <string name="pick_tips_title">Кеңестер</string>
+    <string name="pick_tips_message">Сіз шыныменде minecraft pkg атын %1$s[%2$s] өзгерткіңіз келіп тұрма ? ModdedPE қайта қосылады.</string>
+    <string name="pick_tips_reset_message">Сіз өзгерту үшін сенімдісізбе minecraft pkg стандартты мәніне ? ModdedPE қайта қосылады.</string>
+
+    <!--Launch Failed-->
+    <string name="launch_failed_title">Лаунчер сәтсыздікке ұшырады</string>
+    <string name="launch_failed_message">Өкінішке орай, ModdedPE ойынды ашқан кезде ошибка шығарып тұр. Бұл қателікті шешу үшін приложения ModdedPE данныйын очистить етіп көріңіз. \nХаттама ошибки:%1$s</string>
+
+    <!--Enable Warnings-->
+    <string name="enable_warning_unsupported_title">Қабылдалынбайтын версия</string>
+    <string name="enable_warning_unsupported_message">NMOD %1$s әзірше қабылдамайды Minecraft %2$s.Өтінеміз NMod обновить етіңыз %1$s.</string>
+    <string name="enable_warning_unsupported_message_if_next">NMod %1$s әзірше қабылдамайды Minecraft %2$s. Вы можете включить его, но могут быть проблемы или сбои.</string>
+
+    <!--Permissions-->
+    <string name="permission_grant_failed_title">Рұқсат алу орындалмады</string>
+    <string name="permission_grant_failed_message">Рұқсат беру орындалмады:Деректерді өзгерту үшін USB-флэш жадынан,баптаулар бетіне өтіңіз,параметрлерді ұсыну үшін тиісті рұқсат.</string>
+
+</resources>
+

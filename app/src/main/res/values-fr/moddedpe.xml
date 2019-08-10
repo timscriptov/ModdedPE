@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+    <!--Titles-->
+    <string name="menu_title">Menu</string>
+    <string name="manage_nmod_title">Gérer les NMods</string>
+    <string name="settings_title">Paramètres</string>
+    <string name="about_title">À Propos..</string>
+    <string name="nmod_picker_file_title">Choisir un NMod (Stockage)</string>
+    <string name="nmod_picker_package_title">Choisir un NMod (Applications)</string>
+    <string name="main_title">Page D\'accueil</string>
+    <string name="prestart_title">Pré-Chargement</string>
+    <string name="import_nmod_title">Importer un NMod</string>
+    <string name="nmods_load_failed_title">Il est possible qu\'un NMod ne fonctionne pas</string>
+    <string name="dir_picker_title">Choisir un dossier</string>
+    <string name="pkg_picker_title">Prendre un nom de package</string>
+
+    <!--NMod-->
+    <string name="load_fail_title">Chargement échoué !</string>
+    <string name="load_fail_msg">Type d\'erreur:\n%1$s\nMessage D\'erreur\n%2$s</string>
+    <string name="nmod_enabled_title">NMods Activés</string>
+    <string name="nmod_disabled_title">NMods Désactivés</string>
+    <string name="nmod_importing_title">Importation de l\'NMod…</string>
+    <string name="nmod_import_failed">L\'importation de l\'NMod à échoué !</string>
+    <string name="nmod_import_failed_message_unexpected">Une erreur inconnue s\'est produite lors de l\'importation de l\'NMod.</string>
+    <string name="nmod_import_failed_message_decode">L\'importation du NMod à échouer car le format est invalide. S\'il vous plaît, vérifiez que le fichier est en format .zip</string>
+    <string name="nmod_import_failed_message_no_manifest">ModdedPE à réussi à décodé ce NMod mais aucun fichier nmod_manifest.json a été trouvé. Veuillez vérifier si ce NMod est valide.</string>
+    <string name="nmod_import_failed_message_io_exception">Erreur: une exception io s\'est produite lors de l\'importation du NMod.</string>
+    <string name="nmod_import_failed_message_manifest_json_syntax_error">Une erreur de syntaxe Json s\'est produite lors de la lecture du fichier nmod_manifest.json. Veuillez vérifier le NMod.</string>
+    <string name="nmod_import_failed_message_invalid_package_name">Nom de package invalide défini dans le fichier de manifeste. L\'Élément "package_name" doit être un nom de Package de style java.</string>
+    <string name="nmod_import_failed_message_no_package_name">Aucun nom de package défini dans nmod_manifest.json.S\'il vous plaît, ajoutez l\'élément "package_name"(Ligne).</string>
+    <string name="nmod_import_failed_message_inequal_package_name">Les noms de package défini dans AndroidManifest.xml et nmod_manifest.json ne sont pas les mêmes ! ModdedPE n\'a pu décider quel nom utiliser.</string>
+    <string name="nmod_import_failed_message_redundant_manifest">ModdedPE à trouver deux nmod_manifest.json dans ce fichier mais ne sait pas le quel prendre, S\'il vous plaît, veuillez en supprimez un.(/nmod_manifest.json ou /assets/nmod_manifest.json)</string>
+    <string name="nmod_import_failed_button_full_info">Info D\'erreur</string>
+    <string name="nmod_import_replaced_title">Replacé</string>
+    <string name="nmod_import_replaced_message">ModdedPE à trouver un NMod avec un nom de package similaire. Ce dernier à remplacer l\'ancien.</string>
+    <string name="nmod_import_succeed_title">Importé avec succès.</string>
+    <string name="nmod_import_failed_view_more">Clickez sur le bouton pour en voir plus.</string>
+    <string name="nmod_import_succeed_message">Le NMod à été importé avec succès !</string>
+    <string name="nmod_import_failed_full_info_title">Erreur Info</string>
+    <string name="nmod_import_failed_full_info_message">Type d\'erreur:\n%1$s\nMessage d\'erreur:\n%2$s</string>
+    <string name="nmod_add_new">Ajouter un nouveau NMod</string>
+    <string name="nmod_add_new_title">Ajouter un nouveau…</string>
+    <string name="nmod_export">Exporter</string>
+    <string name="nmod_add_new_message">D\'ou veut tu importer ton NMod?</string>
+    <string name="nmod_add_new_pick_installed">Applications</string>
+    <string name="nmod_add_new_pick_storage">Stockage</string>
+    <string name="nmod_delete_title">Suppression d\'un NMod</string>
+    <string name="nmod_delete_message">Veut tu vraiment le supprimer ? Ce sera sûrement pour un long moment.(TRÈS LONG!)</string>
+    <string name="nmod_description_description_title">Description</string>
+    <string name="nmod_description_about_title">A propos de..</string>
+    <string name="nmod_description_about_author">Auteur:</string>
+    <string name="nmod_description_about_version_name">Version:</string>
+    <string name="nmod_description_about_minecraft_version_name">Version du jeu:</string>
+    <string name="nmod_description_whatsnew_title">What\'s New</string>
+    <string name="nmod_description_unknow">Inconnue</string>
+    <string name="nmod_imported_view_more">Clickez sur le bouton pour en voir plus.</string>
+
+    <!--About-->
+    <string name="about_license">Licenses</string>
+    <string name="about_copyright_owner">Copyright © MCAL, Nextdev.</string>
+    <string name="about_author">Créé par Иван Тимашков et Listerily</string>
+    <string name="about_translators">Traducteurs</string>
+    <string name="about_translators_message">Personnes qui ont participé à la traduction de cette langue: \nТимашков Иван\nListerily\nCreepsoGaming\nDarkShuper\nriku1227\nLeonardo Queiroz\nBayram Akdemir\nThamTvMaster\nНағымет Адаев\nMr Ikso</string>
+    <string name="about_view_github">Page Github</string>
+    <string name="about_view_nmod_api">Voir l\'API des NMods</string>
+    <string name="about_donate">Donate</string>
+
+    <!--Preferences-->
+    <string name="preferences_title">Paramètres</string>
+    <string name="preferences_title_launcher">Option du Launcher</string>
+    <string name="preferences_title_safe_mode">Safe Mode</string>
+    <string name="preferences_summary_safe_mode">Désactivation de tout les nmods.</string>
+    <string name="preferences_title_data_saved_path">Endroit où l\'application enregistrera ses données</string>
+    <string name="preferences_summary_data_saved_path">Fichier ou le jeu se sauvegarde.</string>
+    <string name="preferences_title_game_pkg_name">Nom de Package pour Minecraft PE</string>
+    <string name="preferences_summary_game_pkg_name">Change le Game Package ici.</string>
+    <string name="preferences_update_message_data_path">Défini le Game Path avec succès:%1$s</string>
+    <string name="preferences_update_message_reset_data_path">Reset du Path Data avec succès !</string>
+    <string name="preferences_update_message_pkg_name">Nom PKG défini avec succès:%1$s</string>
+    <string name="preferences_update_message_reset_pkg_name">Reset du nom PKG réalisé avec succès</string>
+    <string name="preferences_title_app">Application</string>
+    <string name="preferences_title_about">A Propos..</string>
+    <string name="preferences_summary_about">À propos de ModdedPE</string>
+    <string name="preferences_title_language">Langage</string>
+    <string name="preferences_summary_language">Change la langue de l\'application ici.</string>
+    <string name="preferences_title_music">Music</string>
+    <string name="preferences_summary_music">Background music while playing</string>
+    <string name="preferences_title_moddedpe_texture_pack">ModdedPE Texture Pack</string>
+    <string name="preferences_summary_moddedpe_texture_pack">Les graphismes ModdedPE par défaut, améliorés avec de toutes nouvelles textures!</string>
+    <string name="preferences_title_desktop_gui">Use Desktop GUI</string>
+    <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
+	<string name="preferences_title_xbox">Войти в Xbox</string>
+    <string name="preferences_summary_xbox">Вам будет доступен тестовый аккаунт Xbox</string>
+    <string name="preferences_title_servers">Новые сервера</string>
+    <string name="preferences_summary_servers">В игре появится много новых серверов</string>
+	
+    <!--Open Game Dialog-->
+    <string name="preloading_initing">Initialisation du Launcher</string>
+    <string name="preloading_initing_info">--Version de l\'API NMod: %1$s\n--Version de Minecraft PE: %2$s</string>
+    <string name="preloading_initing_info_safe_mode">--Safe Mode Actif\n--Version de Minecraft PE: %1$s</string>
+    <string name="preloading_initing_loading_libs">Chargement des libraires requises..</string>
+    <string name="preloading_loading_lib_substrate">--Chargement de libsubstrate.so</string>
+    <string name="preloading_loading_lib_game_launcher">--Chargement de liblauncher-core.so</string>
+    <string name="preloading_loading_lib_fmod">--Chargement de libfmod.so</string>
+    <string name="preloading_loading_lib_minecraftpe">--Chargement de libminecraftpe.so</string>
+    <string name="preloading_loading_lib_nmodapi">--Chargement de libnmod-core.so</string>
+    <string name="preloading_initing_loading_libs_done">Chargement des Librairies requises terminé.</string>
+    <string name="preloading_nmod_start_loading">Chargement des NMods</string>
+    <string name="preloading_nmod_loaded">-- NMod chargé: %1$s</string>
+    <string name="preloading_nmod_loaded_failed">-- Chargement de cet NMod échoué: %1$s</string>
+    <string name="preloading_nmod_finish_loading">Chargement des NMods terminé</string>
+    <string name="preloading_finished">Lancement du jeu…</string>
+
+    <string-array name="preloading_tips_text">
+        <item>APK formatted nmod can also be imported~</item>
+        <item>Le saviez-vous? Vous pouvez faire glisser l\'écran de l\'écran d\'accueil vers la gauche et vers la droite pour accéder aux autres pages.</item>
+        <item>Tu auras mieux d\'importer tes NMods par des fichiers que par des applications.</item>
+        <item>SSSSSSSSSSSSSSSSSSSSSS~~~.Oh, C\'est un Creeeeeper!</item>
+        <item>Tu voudrais développer ton propre NMod?(A Propos..->Voir l\'API de NMod)</item>
+        <item>I have an apple~I have a pen~</item>
+        <item>NMod est fait de C++/JSON.</item>
+        <item>Native-Mod est le mot entier pour NMod.</item>
+        <item>NMod devrait être installé sur tout les appareils sur des mondes en multijoueur</item>
+        <item>Splashs Aléatoires !!</item>
+        <item>Clickez le bouton "+"(plus) pour activer les NMod~</item>
+    </string-array>
+
+    <!--Pick NMod from installed-->
+    <string name="pick_nmod_loading">Chargement des NMods…</string>
+
+    <!--Main Activity-->
+    <string name="main_play">Jouer</string>
+    <string name="main_reloading_title">Rechargement…</string>
+    <string name="main_default_minecraft_title">Minecraft PE par Défaut</string>
+    <string name="no_available_mcpe_version_found">ModdedPE n\'a pas trouvé de version supportée de Minecraft PE (%1$s) sur cet appareil.(ModdedPE ne supporte que %2$s!)\nSi vous continuez à ouvrir le jeu, ModdedPE pourrait crash et créer des issues !</string>
+    <string name="no_available_mcpe_version_found_title">Version non supportée de Minecraft PE</string>
+    <string name="no_available_mcpe_version_continue">Continuer(DÉSAPROUVÉ!)</string>
+    <string name="safe_mode_on_title">Safe Mode est actif</string>
+    <string name="safe_mode_on_message">Avec le safe mode actif, tous vos NMods seront désactivés ainsi que vos paramètres.</string>
+    <string name="no_mcpe_found">ModdedPE est un launcher pour Minecraft PE, mais nous n\'avons pas trouvé de Minecraft PE(Fait par MojangAB) installé sur cet appareil.</string>
+    <string name="no_mcpe_found_title">Minecraft PE non-installé</string>
+
+    <!--Manage NMods-->
+    <string name="manage_nmod_no_nmod_found">Aucun NMod détecté sur cet appareil.</string>
+
+    <!--Dir Picker-->
+    <string name="dir_picker_reset_warning_title">Reset l\'endroit d\'enregistrement de l\'application</string>
+    <string name="dir_picker_reset_warning_message">Veut tu vraiment reset le "Path" ?</string>
+
+    <!--Pkg Picker-->
+    <string name="pkg_picker_not_found">Aucun fichier package détecté.\nS\'il vous plaît, check si la permission est déniée.</string>
+    <string name="pick_pkg_loading">Chargement des packages</string>
+    <string name="pick_tips_title">Tips</string>
+    <string name="pick_tips_message">Voulez vous vraiment renommer le Minecraft PE Package en %1$s[%2$s]?\nModdedPE exécutera un redémarrage.</string>
+    <string name="pick_tips_reset_message">Voulez vous vraiment le nom de Package par défaut ?\nModdedPE exécutera un redémarrage.</string>
+
+    <!--Launch Failed-->
+    <string name="launch_failed_title">Lancement du jeu à échoué</string>
+    <string name="launch_failed_message">Désolé, mais ModdedPE à détecté un problème causant la fermeture de l\'application et des problèmes internes à l\'application.\n Si ce problème persiste, nettoyez le cache de l\'application.\nMessage d\'erreur:%1$s</string>
+
+    <!--Enable Warnings-->
+    <string name="enable_warning_unsupported_title">Version non supportée</string>
+    <string name="enable_warning_unsupported_message">NMod %1$s ne supporte pas encore Minecraft PE %2$s. Mettez à jour NMod %1$s s\'il vous plaît.</string>
+    <string name="enable_warning_unsupported_message_if_next">NMod %1$s ne supporte pas encore Minecraft PE %2$s. Vous pouvez le lancer, cependant l\'application aura des risques de crash ou autres.</string>
+
+    <!--Permissions-->
+    <string name="permission_grant_failed_title">Permission d\'accès au stockage déniée.</string>
+    <string name="permission_grant_failed_message">ModdedPE N\'a pas pu accéder à la permission: Lire les informations du stockage interne/externe. S\'il vous plaît veuillez vous rendre dans les "informations de l\'applications">autorisations de l\'application>stockage.</string>
+
+</resources>

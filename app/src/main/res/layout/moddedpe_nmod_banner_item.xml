@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/moddedpe_nmod_banner_item_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:adjustViewBounds="true"
+        android:src="@drawable/image_default_minecraft" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/moddedpe_nmod_banner_item_image_view"
+        android:layout_alignLeft="@id/moddedpe_nmod_banner_item_image_view"
+        android:layout_alignEnd="@id/moddedpe_nmod_banner_item_image_view"
+        android:layout_alignRight="@id/moddedpe_nmod_banner_item_image_view"
+        android:layout_alignBottom="@id/moddedpe_nmod_banner_item_image_view"
+        android:alpha="0.5"
+        android:background="#000000">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/moddedpe_nmod_banner_item_text_view_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:maxLines="1"
+            android:text="@string/main_default_minecraft_title"
+            android:textColor="#DEDEDE" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
+
