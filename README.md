@@ -1,4 +1,4 @@
-[![License Info](https://img.shields.io/badge/license-GNU_GPLv3-blue.svg?style=flat-square)](https://github.com/TimScriptov/ModdedPE) [![Play Store Info](https://img.shields.io/badge/Play_Store-v1.13.0.1-blue.svg?style=flat-square)](https://play.google.com/store/apps/details?id=com.mcal.mcpelauncher) [![All Releases Download](https://img.shields.io/github/downloads/TimScriptov/ModdedPE/total.svg)](../../releases)
+[![License Info](https://img.shields.io/badge/license-GNU_GPLv3-blue.svg?style=flat-square)](https://github.com/TimScriptov/ModdedPE) [![Play Store Info](https://img.shields.io/badge/Play_Store-v1.13.0.1-blue.svg?style=flat-square)](https://play.google.com/store/apps/details?id=com.mcal.mcpelauncher) [![Latest Release](https://img.shields.io/github/release/TimScriptov/ModdedPE.svg)](../../releases) [![All Releases Download](https://img.shields.io/github/downloads/TimScriptov/ModdedPE/total.svg)](../../releases)
 
 
 # ModdedPE!
