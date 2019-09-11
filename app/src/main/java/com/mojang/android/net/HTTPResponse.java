@@ -16,34 +16,34 @@ public class HTTPResponse {
     int status = 0;
 
     public int getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(int newStatus) {
-        status = newStatus;
+        this.status = newStatus;
     }
 
     public String getBody() {
-        return body;
+        return this.body;
     }
 
     public void setBody(String newBody) {
-        body = newBody;
+        this.body = newBody;
     }
 
     public int getResponseCode() {
-        return responseCode;
+        return this.responseCode;
     }
 
     public void setResponseCode(int newResonseCode) {
-        responseCode = newResonseCode;
+        this.responseCode = newResonseCode;
     }
 
     public Header[] getHeaders() {
-        return headers;
+        return this.headers;
     }
 
     public void setHeaders(Header[] newHeaders) {
-        headers = newHeaders;
+        this.headers = newHeaders;
     }
 }

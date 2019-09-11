@@ -1,9 +1,13 @@
+/*
+ * Copyright (C) 2018-2019 Тимашков Иван
+ */
 package com.mojang.minecraftpe.codeBuilder;
 
 import android.webkit.JavascriptInterface;
 
 class CodeBuilderHostInterface {
     private CodeBuilderView mView;
+
     public CodeBuilderHostInterface(CodeBuilderView view) {
         mView = view;
     }

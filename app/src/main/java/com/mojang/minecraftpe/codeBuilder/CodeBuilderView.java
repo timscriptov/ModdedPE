@@ -1,26 +1,26 @@
+/*
+ * Copyright (C) 2018-2019 Тимашков Иван
+ */
 package com.mojang.minecraftpe.codeBuilder;
 
-import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebSettings;
 import android.webkit.WebSettings.RenderPriority;
 import android.webkit.WebView;
+
 import com.mcal.mcpelauncher.R;
 import com.mojang.minecraftpe.MainActivity;
 import com.mojang.minecraftpe.PopupView;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 public class CodeBuilderView {
     private MainActivity mActivity = MainActivity.mInstance;
-    public WebView mWebView;
-    public PopupView mWebViewPopup;
-
-    public native void nativeDismiss();
-    public native void nativeOnWebError(int i, String str);
-    public native void nativeSendToHost(String str);
+    private WebView mWebView;
+    private PopupView mWebViewPopup;
 
     public CodeBuilderView() {
         this.mActivity.runOnUiThread(new Runnable() {
@@ -29,6 +29,12 @@ public class CodeBuilderView {
             }
         });
     }
+
+    public native void nativeDismiss();
+
+    public native void nativeOnWebError(int i, String str);
+
+    public native void nativeSendToHost(String str);
 
     public void teardown() {
         mWebViewPopup.dismiss();
@@ -65,7 +71,7 @@ public class CodeBuilderView {
 
     public void setShowView(boolean show) {
         final boolean showCapture = show;
-        mActivity.runOnUiThread(new Runnable() {
+        this.mActivity.runOnUiThread(new Runnable() {
             public void run() {
                 mWebViewPopup.setVisible(showCapture);
             }
@@ -73,7 +79,8 @@ public class CodeBuilderView {
     }
 
     public void sendToWebView(String data) {
-        final String toEvaluate = String.format("window.ipcRenderer.responseFromApp('%s');", new Object[]{data.replace("\\", "\\\\").replace("\n", "\\n").replace("\"", "\\\"").replace("'", "\\'")});
+        data = data.replace("\\", "\\\\").replace("\n", "\\n").replace("\"", "\\\"").replace("'", "\\'");
+        final String toEvaluate = String.format("window.ipcRenderer.responseFromApp('%s');", new Object[]{data});
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
                 mWebView.evaluateJavascript(toEvaluate, null);
@@ -82,7 +89,7 @@ public class CodeBuilderView {
     }
 
     public void _injectApi() {
-        String apiScript = _readResource(mActivity.getResources().getIdentifier("code_builder_hosted_editor", "raw", this.mActivity.getPackageName()));
+        String apiScript = _readResource(mActivity.getResources().getIdentifier("code_builder_hosted_editor", "raw", mActivity.getPackageName()));
         if (apiScript != null) {
             mWebView.evaluateJavascript(apiScript, null);
         } else {
@@ -110,8 +117,7 @@ public class CodeBuilderView {
         }
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
-    public void _createWebView() {
+    private void _createWebView() {
         if (!MainActivity.mInstance.isPublishBuild()) {
             WebView.setWebContentsDebuggingEnabled(true);
         }

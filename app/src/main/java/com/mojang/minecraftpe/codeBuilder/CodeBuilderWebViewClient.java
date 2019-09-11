@@ -1,3 +1,6 @@
+/*
+ * Copyright (C) 2018-2019 Тимашков Иван
+ */
 package com.mojang.minecraftpe.codeBuilder;
 
 import android.graphics.Bitmap;
@@ -14,6 +17,7 @@ import com.mojang.minecraftpe.MainActivity;
 
 class CodeBuilderWebViewClient extends WebViewClient {
     private CodeBuilderView mView;
+
     public CodeBuilderWebViewClient(CodeBuilderView view) {
         mView = view;
     }

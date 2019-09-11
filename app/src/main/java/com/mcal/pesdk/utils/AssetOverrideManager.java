@@ -20,10 +20,6 @@ import android.content.res.AssetManager;
 
 import java.lang.reflect.Method;
 
-/**
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
- */
 public class AssetOverrideManager {
     private static AssetOverrideManager mInstance;
     private AssetManager mLocalAssetManager;

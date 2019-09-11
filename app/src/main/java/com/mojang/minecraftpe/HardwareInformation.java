@@ -1,3 +1,6 @@
+/*
+ * Copyright (C) 2018-2019 Тимашков Иван
+ */
 package com.mojang.minecraftpe;
 
 import android.annotation.SuppressLint;
@@ -19,11 +22,11 @@ import java.util.regex.Pattern;
 public class HardwareInformation {
     private final Context context;
 
-    HardwareInformation(Context context) {
+    public HardwareInformation(Context context) {
         this.context = context;
     }
 
-    static String getDeviceModelName() {
+    public static String getDeviceModelName() {
         return Build.MANUFACTURER.toUpperCase() + " " + Build.MODEL;
     }
 
@@ -69,7 +72,9 @@ public class HardwareInformation {
                         }
                     }
                 }
-                br.close();
+                if (br != null) {
+                    br.close();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -77,7 +82,6 @@ public class HardwareInformation {
         return new CPUInfo(list, processorCount);
     }
 
-    @SuppressLint("HardwareIds")
     public static String getSerialNumber() {
         return Build.SERIAL;
     }
@@ -113,13 +117,13 @@ public class HardwareInformation {
 
         public String getCPULine(String line) {
             if (this.cpuLines.containsKey(line)) {
-                return cpuLines.get(line);
+                return this.cpuLines.get(line);
             }
             return "";
         }
 
         public int getNumberCPUCores() {
-            return numberCPUCores;
+            return this.numberCPUCores;
         }
     }
 }

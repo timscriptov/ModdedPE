@@ -6,13 +6,13 @@
 -dontwarn
 -dontnote
 
-#-dontobfuscate
+-dontobfuscate
 
 #-obfuscationdictionary proguard-dictionary.txt
 #-packageobfuscationdictionary proguard-dictionary.txt
 #-classobfuscationdictionary proguard-dictionary.txt
 
--keep class com.mcal.** { *; }
+-keep class com.mcal.pesdk.nativeapi.** { *; }
 
 -keep class org.slf4j.LoggerFactory
 

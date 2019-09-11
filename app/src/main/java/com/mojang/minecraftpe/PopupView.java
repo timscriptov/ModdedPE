@@ -1,6 +1,8 @@
+/*
+ * Copyright (C) 2018-2019 Тимашков Иван
+ */
 package com.mojang.minecraftpe;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.IBinder;
 import android.view.View;
@@ -17,8 +19,7 @@ public class PopupView {
     private View mParentView;
     private View mPopupView;
     private int mWidth;
-    @SuppressLint("WrongConstant")
-    private WindowManager mWindowManager = ((WindowManager) this.mContext.getSystemService("window"));
+    private WindowManager mWindowManager = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE));
 
     public PopupView(Context context) {
         mContext = context;
@@ -47,6 +48,10 @@ public class PopupView {
         mOriginY = minY;
     }
 
+    public boolean getVisible() {
+        return (mPopupView == null || mPopupView.getParent() == null) ? false : true;
+    }
+
     public void setVisible(boolean visible) {
         if (visible == getVisible()) {
             return;
@@ -56,10 +61,6 @@ public class PopupView {
         } else {
             removePopupView();
         }
-    }
-
-    private boolean getVisible() {
-        return (mPopupView == null || mPopupView.getParent() == null) ? false : true;
     }
 
     public void dismiss() {
@@ -102,7 +103,7 @@ public class PopupView {
         LayoutParams p = new LayoutParams();
         p.format = -3;
         p.flags = computeFlags(p.flags);
-        p.type = 0x3e8;
+        p.type = 1000;
         p.token = token;
         p.softInputMode = 1;
         p.setTitle("PopupWindow:" + Integer.toHexString(hashCode()));
@@ -123,10 +124,10 @@ public class PopupView {
     }
 
     private void setLayoutRect(LayoutParams p) {
-        p.width = mWidth;
-        p.height = mHeight;
-        p.x = mOriginX;
-        p.y = mOriginY;
+        p.width = this.mWidth;
+        p.height = this.mHeight;
+        p.x = this.mOriginX;
+        p.y = this.mOriginY;
         p.gravity = 51;
     }
 }

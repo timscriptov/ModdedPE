@@ -1,12 +1,16 @@
+/*
+ * Copyright (C) 2018-2019 Тимашков Иван
+ */
 package com.mojang.minecraftpe.codeBuilder;
 
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+
 import com.mojang.minecraftpe.MainActivity;
 
 class CodeBuilderChromeClient extends WebChromeClient {
-    
-    public CodeBuilderView mView;
+    private CodeBuilderView mView;
+
     public CodeBuilderChromeClient(CodeBuilderView view) {
         mView = view;
     }

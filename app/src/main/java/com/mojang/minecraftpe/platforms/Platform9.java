@@ -1,3 +1,6 @@
+/*
+ * Copyright (C) 2018-2019 Тимашков Иван
+ */
 package com.mojang.minecraftpe.platforms;
 
 import android.os.Build;

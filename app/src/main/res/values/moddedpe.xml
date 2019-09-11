@@ -90,10 +90,6 @@
     <string name="preferences_summary_moddedpe_texture_pack">The default ModdedPE graphics, now updated with stylish new textures!</string>
     <string name="preferences_title_desktop_gui">Use Desktop GUI</string>
     <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
-    <string name="preferences_title_xbox">Sign in Xbox</string>
-    <string name="preferences_summary_xbox">Вам будет доступен тестовый аккаунт Xbox</string>
-    <string name="preferences_title_servers">New servers</string>
-    <string name="preferences_summary_servers">Many new servers will appear in the game.</string>
 
     <!--Open Game Dialog-->
     <string name="preloading_initing">Initiating Launcher</string>

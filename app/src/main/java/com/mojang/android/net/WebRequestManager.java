@@ -84,7 +84,7 @@ public class WebRequestManager {
         if (r.status != Status.REQUEST_NOT_FOUND) {
             synchronized (_requestlock) {
                 r.abort();
-                _webRequests.remove(r);
+                this._webRequests.remove(r);
             }
 
             System.out.println("Requests left " + _webRequests.size());

@@ -90,11 +90,7 @@
     <string name="preferences_summary_moddedpe_texture_pack">До стандартної графіки ModdedPE додано нові стильні текстури!</string>
     <string name="preferences_title_desktop_gui">Use Desktop GUI</string>
     <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
-	<string name="preferences_title_xbox">Увійти в Xbox</string>
-    <string name="preferences_summary_xbox">Вам буде доступний тестовий акаунт Xbox</string>
-    <string name="preferences_title_servers">Нові сервера</string>
-    <string name="preferences_summary_servers">У грі з\'явиться багато нових серверів</string>
-	
+
     <!--Open Game Dialog-->
     <string name="preloading_initing">Запускаємо лончер</string>
     <string name="preloading_initing_info">--NModAPI Версія: %1$s\n--Версія Minecraft PE: %2$s</string>

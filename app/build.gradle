@@ -1,24 +1,27 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.0"
+    buildToolsVersion "29.0.2"
+
     defaultConfig {
         applicationId "com.mcal.mcpelauncher"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 29
-        versionCode 871130004
-        versionName "1.13.0.4"
-        ndk {
-            abiFilters 'armeabi-v7a', 'x86'//, 'arm64-v8a', 'x86_64'
-        }
+        versionCode 871130002
+        versionName "1.13.0.1"
+        //ndk {
+        //    abiFilters 'armeabi-v7a', 'x86'//, 'arm64-v8a', 'x86_64'
+        //}
  }
 
-    externalNativeBuild {
-        ndkBuild {
-            path 'src/main/jni/Android.mk'
-        }
-    }
+//    externalNativeBuild {
+//        ndkBuild {
+//            path 'src/main/jni/Android.mk'
+//        }
+//    }
 
     buildTypes {
         release {
@@ -34,19 +37,28 @@ android {
         // but continue the build even when errors are found:
         abortOnError false
     }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
 	implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-	implementation 'com.android.support:support-v4:25.0.0'
-    implementation 'androidx.preference:preference:1.0.0'
-	implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-	implementation 'androidx.vectordrawable:vectordrawable-animated:1.0.0'
+    implementation 'androidx.preference:preference:1.1.0'
+	implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+	implementation 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'org.zeroturnaround:zt-zip:1.13'
-    implementation 'com.anjlab.android.iab.v3:library:1.0.44'
+    implementation 'com.anjlab.android.iab.v3:library:1.1.0'
+    implementation "androidx.core:core-ktx:1.2.0-alpha04"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"//1.3.41
+}
+repositories {
+    mavenCentral()
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/moddedpe_nmod_news_root"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
@@ -14,23 +15,23 @@
         android:id="@+id/moddedpeNewsNModTitleBG"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@id/moddedpeNewsNModImage"
         android:layout_alignLeft="@id/moddedpeNewsNModImage"
-        android:layout_alignEnd="@id/moddedpeNewsNModImage"
         android:layout_alignRight="@id/moddedpeNewsNModImage"
         android:layout_alignParentBottom="true"
         android:alpha="0.5"
-        android:background="#000000">
+        android:background="#000000"
+        android:layout_alignStart="@id/moddedpeNewsNModImage"
+        android:layout_alignEnd="@id/moddedpeNewsNModImage">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/moddedpeTextViewNewsNModTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_margin="3dp"
             android:maxLines="1"
-            android:textColor="#DEDEDE" />
+            android:textColor="#DEDEDE"
+            android:layout_alignParentStart="true" />
 
     </RelativeLayout>
 

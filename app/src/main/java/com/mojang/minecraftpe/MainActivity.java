@@ -1,3 +1,6 @@
+/*
+ * Copyright (C) 2018-2019 Тимашков Иван
+ */
 package com.mojang.minecraftpe;
 
 import android.annotation.SuppressLint;
@@ -13,6 +16,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
@@ -26,6 +30,7 @@ import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
@@ -46,6 +51,7 @@ import android.provider.Settings.Secure;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -59,15 +65,17 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.mcal.mcpelauncher.app.SoundService;
 import com.mcal.mcpelauncher.R;
+import com.mcal.mcpelauncher.app.SoundService;
 import com.mojang.android.net.WebRequestManager;
 import com.mojang.minecraftpe.TextInputProxyEditTextbox.MCPEKeyWatcher;
 import com.mojang.minecraftpe.platforms.Platform;
@@ -84,6 +92,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
+import java.math.BigInteger;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.ByteOrder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -95,7 +107,6 @@ import java.util.Map;
 import java.util.UUID;
 
 public class MainActivity extends NativeActivity implements OnKeyListener, WebRequestManager.IRequestCompleteCallback {
-    
     public static MainActivity mInstance = null;
     private static boolean _isPowerVr = false;
     private static boolean mHasStoragePermission = false;
@@ -155,7 +166,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, WebRe
         String[] tags = {Build.MODEL, Build.DEVICE, Build.PRODUCT};
         for (String tag : tags) {
             tag.toLowerCase(Locale.ENGLISH);
-            if (tag.contains("r800") || tag.contains("so-01d") || (tag.contains("xperia") && tag.contains("play"))) {
+            if (tag.indexOf("r800") >= 0 || tag.indexOf("so-01d") >= 0 || (tag.indexOf("xperia") >= 0 && tag.indexOf("play") >= 0)) {
                 return true;
             }
         }
@@ -199,7 +210,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, WebRe
     }
 
     private static void copyAssetDir(AssetManager am, String outpath) {
-        Log.w("ModdedPE", "EXTRACTING: " + "mono");
+        Log.w("MONO", "EXTRACTING: " + "mono");
         try {
             String[] res = am.list("mono");
             int length = res.length;
@@ -207,14 +218,14 @@ public class MainActivity extends NativeActivity implements OnKeyListener, WebRe
                 String fromFile = "mono" + "/" + result;
                 String toFile = outpath + "/" + result;
                 if (fromFile.endsWith(".dll")) {
-                    Log.w("ModdedPE", "\tCOPYING " + fromFile + " to " + toFile);
+                    Log.w("MONO", "\tCOPYING " + fromFile + " to " + toFile);
                     copyFile(am.open(fromFile), new FileOutputStream(toFile));
                 } else {
-                    Log.w("ModdedPE", "\t" + fromFile + " is not a dll, skipping");
+                    Log.w("MONO", "\t" + fromFile + " is not a dll, skipping");
                 }
             }
         } catch (Exception e) {
-            Log.w("ModdedPE", "DLL copy failed: ", e);
+            Log.w("MONO", "DLL copy failed: ", e);
         }
     }
 
@@ -223,39 +234,73 @@ public class MainActivity extends NativeActivity implements OnKeyListener, WebRe
     }
 
     native String nativeScreenIsPresentInStack(String str);
+
     native void nativeLoginData(String accessToken, String clientId, String profileId, String profileName);
+
     native void nativeTypeCharacter(String character);
+
     native void nativeWebRequestCompleted(int requestId, long userData, int httpStatusOrNegativeError, String content);
+
     public native void setUpBreakpad(String str);
+
     public native boolean isAndroidTrial();
+
     public native boolean isBrazeEnabled();
+
     public native boolean isEduMode();
+
     public native boolean isPublishBuild();
+
     public native boolean isTestInfrastructureDisabled();
+
     public native void nativeBackPressed();
+
     public native void nativeBackSpacePressed();
+
     public native String nativeCheckIfTestsAreFinished();
+
     public native void nativeClearAButtonState();
+
     public native void nativeDeviceCorrelation(long j, String str, long j2, String str2);
+
     public native String nativeGetActiveScreen();
+
     public native String nativeGetDevConsoleLogName();
+
     public native String nativeGetDeviceId();
+
     public native String nativeGetLogText(String str);
+
     public native boolean nativeKeyHandler(int i, int i2);
+
     public native void nativeOnDestroy();
+
     public native void nativeOnPickImageCanceled(long j);
+
     public native void nativeOnPickImageSuccess(long j, String str);
+
     public native void nativeProcessIntentUriQuery(String str, String str2);
+
     public native void nativeRegisterThis();
+
     public native void nativeResize(int i, int i2);
+
     public native void nativeReturnKeyPressed();
+
     public native void nativeSetHeadphonesConnected(boolean z);
+
     public native String nativeSetOptions(String str);
+
     public native void nativeSetTextboxText(String str);
+
     public native void nativeShutdown();
+
     public native void nativeStopThis();
+
     public native void nativeStoragePermissionRequestResult(boolean z, int i);
+
     public native void nativeSuspend();
+
     public native void nativeUnregisterThis();
 
     public void onRequestComplete(int requestId, long userData, int httpStatusOrNegativeError, String content) {
@@ -292,7 +337,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, WebRe
         eventValue.put("af_content_type", contentType);
         eventValue.put("af_content_id", contentId);
         eventValue.put("af_currency", currencyCode);
-        Log.d("ModdedPE", contentId + ":" + revenue + ":" + playerId + ":" +playerSessionId + ":" + currencyCode + ":" + eventName );
+        //AppsFlyerLib.getInstance().trackEvent(getApplicationContext(), eventName, eventValue);
     }
 
     public void sendBrazeEvent(String eventName) {
@@ -321,14 +366,14 @@ public class MainActivity extends NativeActivity implements OnKeyListener, WebRe
     }
 
     public String getLastDeviceSessionId() {
-        if (mLastDeviceSessionId.equals("")) {
+        if (mLastDeviceSessionId == "") {
             mLastDeviceSessionId = PreferenceManager.getDefaultSharedPreferences(this).getString("LastDeviceSessionId", "");
         }
         return mLastDeviceSessionId;
     }
 
     public void setLastDeviceSessionId(String currentDeviceSessionId) {
-        if (mLastDeviceSessionId.equals("")) {
+        if (mLastDeviceSessionId == "") {
             getLastDeviceSessionId();
         }
         Editor edit = PreferenceManager.getDefaultSharedPreferences(this).edit();
@@ -398,7 +443,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, WebRe
         initialUserLocale = Locale.getDefault();
         mInstance = this;
         _fromOnCreate = true;
-        //textInputWidget = createTextWidget();
+        textInputWidget = createTextWidget();
     }
 
     public boolean dispatchKeyEvent(KeyEvent event) {
@@ -424,7 +469,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, WebRe
                     public void onInit(int status) {
                     }
                 });
-            } catch (Exception ignored) {
+            } catch (Exception e) {
             }
         }
     }
@@ -503,12 +548,13 @@ public class MainActivity extends NativeActivity implements OnKeyListener, WebRe
         textInputWidget.setSelection(textInputWidget.length());
     }
 
+    @SuppressLint("WrongConstant")
     public TextInputProxyEditTextbox createTextWidget() {
         final TextInputProxyEditTextbox textWidget = new TextInputProxyEditTextbox(this);
         textWidget.setVisibility(View.GONE);
         textWidget.setFocusable(true);
         textWidget.setFocusableInTouchMode(true);
-        textWidget.setImeOptions(268435461);
+        textWidget.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         textWidget.setOnEditorActionListener(new OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean isVirtualEnter;
@@ -636,13 +682,13 @@ public class MainActivity extends NativeActivity implements OnKeyListener, WebRe
     }
 
     private boolean isTextWidgetActive() {
-        return textInputWidget != null && textInputWidget.getVisibility() == (View.VISIBLE);
+        return textInputWidget != null && textInputWidget.getVisibility() == View.VISIBLE;
     }
 
     private void dismissTextWidget() {
         if (isTextWidgetActive()) {
             getInputMethodManager().hideSoftInputFromWindow(textInputWidget.getWindowToken(), 0);
-            textInputWidget.setInputType(524288);
+            textInputWidget.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
             textInputWidget.setVisibility(View.GONE);
         }
     }
@@ -677,9 +723,8 @@ public class MainActivity extends NativeActivity implements OnKeyListener, WebRe
     public void onBackPressed() {
     }
 
-    @SuppressLint("WrongConstant")
     private InputMethodManager getInputMethodManager() {
-        return (InputMethodManager) getSystemService("input_method");
+        return (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
     public void setIsPowerVR(boolean status) {
@@ -755,7 +800,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, WebRe
                         try {
                             bis.close();
                             break;
-                        } catch (IOException ignored) {
+                        } catch (IOException e3) {
                         }
                     } else {
                         s.write(tmp, 0, count);
@@ -764,15 +809,17 @@ public class MainActivity extends NativeActivity implements OnKeyListener, WebRe
                     System.err.println("Cannot read from file " + filename);
                     try {
                         bis.close();
-                    } catch (IOException ignored) {
+                    } catch (IOException e5) {
                     }
                 } catch (Throwable th) {
                     try {
                         bis.close();
-                    } catch (IOException ignored) {
+                    } catch (IOException e6) {
                     }
+                    //throw th;
                 }
             }
+            //bis.close();
             return s.toByteArray();
         } catch (NullPointerException e7) {
             System.err.println("getAssets threw NPE: Could not getFileDataBytes " + filename);
@@ -810,16 +857,14 @@ public class MainActivity extends NativeActivity implements OnKeyListener, WebRe
     }
 
     public int getScreenWidth() {
-        @SuppressLint("WrongConstant")
-        Display display = ((WindowManager) getSystemService("window")).getDefaultDisplay();
+        Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         int out = Math.max(display.getWidth(), display.getHeight());
         System.out.println("getwidth: " + out);
         return out;
     }
 
     public int getScreenHeight() {
-        @SuppressLint("WrongConstant")
-        Display display = ((WindowManager) getSystemService("window")).getDefaultDisplay();
+        Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         int out = Math.min(display.getWidth(), display.getHeight());
         System.out.println("getheight: " + out);
         return out;
@@ -920,8 +965,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, WebRe
     }
 
     public boolean isNetworkEnabled(boolean onlyWifiAllowed) {
-        @SuppressLint("WrongConstant")
-        ConnectivityManager cm = (ConnectivityManager) getSystemService("connectivity");
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = cm.getNetworkInfo(9);
         if (info != null && info.isConnected()) {
             return true;
@@ -1006,9 +1050,10 @@ public class MainActivity extends NativeActivity implements OnKeyListener, WebRe
         return getWindow().getContext().getPackageManager().hasSystemFeature("android.hardware.type.pc");
     }
 
+    @RequiresApi(api = VERSION_CODES.M)
     public String chromebookCompatibilityIP() {
-        /*Context activityContext = getWindow().getContext();
-        if (isChromebook() && activityContext.checkCallingOrSelfPermission("android.permission.ACCESS_WIFI_STATE") == 0) {
+        Context activityContext = getWindow().getContext();
+        if (isChromebook() && activityContext.checkCallingOrSelfPermission("android.permission.ACCESS_WIFI_STATE") == PackageManager.PERMISSION_GRANTED) {
             int ip = activityContext.getSystemService(WifiManager.class).getConnectionInfo().getIpAddress();
             if (ip != 0) {
                 if (ByteOrder.nativeOrder().equals(ByteOrder.LITTLE_ENDIAN)) {
@@ -1019,7 +1064,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, WebRe
                 } catch (UnknownHostException e) {
                 }
             }
-        }*/
+        }
         return "";
     }
 
@@ -1041,16 +1086,14 @@ public class MainActivity extends NativeActivity implements OnKeyListener, WebRe
         return _userInputText;
     }
 
-    @SuppressLint("WrongConstant")
     public void vibrate(int milliSeconds) {
-        ((Vibrator) getSystemService("vibrator")).vibrate((long) milliSeconds);
+        ((Vibrator) getSystemService(Context.VIBRATOR_SERVICE)).vibrate((long) milliSeconds);
     }
 
-    @SuppressLint("WrongConstant")
     public MemoryInfo getMemoryInfo() {
         long currentTime = SystemClock.uptimeMillis();
         if (currentTime >= mCachedMemoryInfoUpdateTime) {
-            ((ActivityManager) getSystemService("activity")).getMemoryInfo(mCachedMemoryInfo);
+            ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE)).getMemoryInfo(mCachedMemoryInfo);
             mCachedMemoryInfoUpdateTime = 2000 + currentTime;
         }
         return mCachedMemoryInfo;
@@ -1147,9 +1190,9 @@ public class MainActivity extends NativeActivity implements OnKeyListener, WebRe
             ss.pause();
             paused = true;
         }
-        /**********************************
+        /* *********************************
          * Bg music                       *
-         **********************************/
+         * *********************************/
     }
 
     public void onDestroy() {
@@ -1160,15 +1203,15 @@ public class MainActivity extends NativeActivity implements OnKeyListener, WebRe
         nativeUnregisterThis();
         nativeOnDestroy();
         super.onDestroy();
-        /**********************************
+        /* *********************************
          * Bg music                       *
-         **********************************/
-    	if(bound) {
-        	unbindService(sc);
-		}
-        /**********************************
+         * *********************************/
+        if (bound) {
+            unbindService(sc);
+        }
+        /* *********************************
          * Bg music                       *
-         **********************************/
+         * *********************************/
         System.exit(0);
     }
 
@@ -1325,8 +1368,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, WebRe
 
     public boolean isTTSEnabled() {
         if (getApplicationContext() != null) {
-            @SuppressLint("WrongConstant")
-            AccessibilityManager am = (AccessibilityManager) getSystemService("accessibility");
+            AccessibilityManager am = (AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE);
             if (!(am == null || !am.isEnabled() || am.getEnabledAccessibilityServiceList(1).isEmpty())) {
                 return true;
             }
@@ -1350,31 +1392,34 @@ public class MainActivity extends NativeActivity implements OnKeyListener, WebRe
     @SuppressLint("HandlerLeak")
     class IncomingHandler extends Handler {
         public void handleMessage(Message msg) {
-            if (msg.what == 837) {
-                String myName = getApplicationContext().getPackageName();
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                try {
-                    long myTime = getPackageManager().getPackageInfo(myName, 0).firstInstallTime;
-                    String theirId = msg.getData().getString("deviceId");
-                    String theirLastSessionId = msg.getData().getString("sessionId");
-                    long theirTime = msg.getData().getLong("time");
-                    if (myTime > theirTime) {
-                        prefs.edit().apply();
-                        nativeDeviceCorrelation(myTime, theirId, theirTime, theirLastSessionId);
-                    }
-                    Editor edit = prefs.edit();
-                    edit.putInt("correlationAttempts", 0);
-                    edit.apply();
-                    if (mBound == MessageConnectionStatus.CONNECTED) {
-                        unbindService(mConnection);
+            switch (msg.what) {
+                case 837:
+                    String myName = getApplicationContext().getPackageName();
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    try {
+                        long myTime = getPackageManager().getPackageInfo(myName, 0).firstInstallTime;
+                        String theirId = msg.getData().getString("deviceId");
+                        String theirLastSessionId = msg.getData().getString("sessionId");
+                        long theirTime = msg.getData().getLong("time");
+                        if (myTime > theirTime) {
+                            prefs.edit().commit();
+                            nativeDeviceCorrelation(myTime, theirId, theirTime, theirLastSessionId);
+                        }
+                        Editor edit = prefs.edit();
+                        edit.putInt("correlationAttempts", 0);
+                        edit.apply();
+                        if (mBound == MessageConnectionStatus.CONNECTED) {
+                            unbindService(mConnection);
+                            return;
+                        }
+                        return;
+                    } catch (NameNotFoundException e) {
                         return;
                     }
+                default:
+                    super.handleMessage(msg);
                     return;
-                } catch (NameNotFoundException e) {
-                    return;
-                }
             }
-            super.handleMessage(msg);
         }
     }
 }
