@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:msaui="http://schemas.android.com/apk/res-auto"
+	style="@style/accountPickerUserTile">
+
+	<ImageView
+		android:id="@+id/imageUserTile"
+		style="@style/userTileImageBidirectional"/>
+
+	<com.microsoft.onlineid.ui.StyledTextView
+		android:id="@+id/textEmail"
+		style="@style/accountPickerUserTileUserNameBidirectional"/>
+
+</RelativeLayout>
+

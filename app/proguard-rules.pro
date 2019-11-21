@@ -12,7 +12,7 @@
 #-packageobfuscationdictionary proguard-dictionary.txt
 #-classobfuscationdictionary proguard-dictionary.txt
 
--keep class com.mcal.pesdk.nativeapi.** { *; }
+-keep class com.mcal.** { *; }
 
 -keep class org.slf4j.LoggerFactory
 

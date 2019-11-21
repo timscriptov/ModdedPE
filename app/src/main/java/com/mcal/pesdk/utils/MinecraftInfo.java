@@ -23,6 +23,10 @@ import android.content.res.AssetManager;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
 public class MinecraftInfo {
     private static String MC_PACKAGE_NAME = "com.mojang.minecraftpe";
 
@@ -33,7 +37,7 @@ public class MinecraftInfo {
         this.mContext = context;
 
         String mMinecraftPackageName = MC_PACKAGE_NAME;
-        if (!options.getMinecraftPEPackageName().equals(LauncherOptions.Companion.getSTRING_VALUE_DEFAULT()))
+        if (!options.getMinecraftPEPackageName().equals(LauncherOptions.STRING_VALUE_DEFAULT))
             mMinecraftPackageName = options.getMinecraftPEPackageName();
 
         try {

@@ -1,6 +1,3 @@
-/*
- * Copyright (C) 2018-2019 Тимашков Иван
- */
 package com.mojang.minecraftpe.platforms;
 
 import android.annotation.TargetApi;
@@ -10,9 +7,9 @@ import android.view.View.OnSystemUiVisibilityChangeListener;
 
 @TargetApi(19)
 public class Platform19 extends Platform9 {
-    private Runnable decorViewSettings;
-    private View decoreView;
-    private Handler eventHandler;
+    public Runnable decorViewSettings;
+    public View decoreView;
+    public Handler eventHandler;
 
     public Platform19(boolean initEventHandler) {
         if (initEventHandler) {
@@ -31,7 +28,7 @@ public class Platform19 extends Platform9 {
                     eventHandler.postDelayed(decorViewSettings, 500);
                 }
             });
-            decorViewSettings = new Runnable() {
+            this.decorViewSettings = new Runnable() {
                 public void run() {
                     decoreView.setSystemUiVisibility(5894);
                 }

@@ -1,6 +1,3 @@
-/*
- * Copyright (C) 2018-2019 Тимашков Иван
- */
 package com.mojang.minecraftpe.store;
 
 public class ExtraLicenseResponseData {

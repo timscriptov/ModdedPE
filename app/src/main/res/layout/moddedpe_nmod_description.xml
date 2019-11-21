@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -67,20 +66,20 @@
                 android:id="@+id/moddedpenmoddescriptionTextViewDescriptionTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:text="@string/nmod_description_description_title"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_marginStart="10dp" />
+                android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="5dp"
-                android:layout_toRightOf="@id/moddedpenmoddescriptionTextViewDescriptionTitle"
-                android:background="#6E6E6E"
                 android:layout_marginStart="5dp"
-                android:layout_toEndOf="@id/moddedpenmoddescriptionTextViewDescriptionTitle" />
+                android:layout_marginLeft="5dp"
+                android:layout_toEndOf="@id/moddedpenmoddescriptionTextViewDescriptionTitle"
+                android:layout_toRightOf="@id/moddedpenmoddescriptionTextViewDescriptionTitle"
+                android:background="#6E6E6E" />
 
         </RelativeLayout>
 
@@ -103,20 +102,20 @@
                 android:id="@+id/moddedpenmoddescriptionTextViewAboutTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:text="@string/nmod_description_about_title"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_marginStart="10dp" />
+                android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_centerVertical="true"
+                android:layout_marginStart="5dp"
                 android:layout_marginLeft="5dp"
-                android:layout_toRightOf="@id/moddedpenmoddescriptionTextViewAboutTitle"
-                android:background="#6E6E6E"
                 android:layout_toEndOf="@id/moddedpenmoddescriptionTextViewAboutTitle"
-                android:layout_marginStart="5dp" />
+                android:layout_toRightOf="@id/moddedpenmoddescriptionTextViewAboutTitle"
+                android:background="#6E6E6E" />
 
         </RelativeLayout>
 
@@ -127,20 +126,20 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
                 android:layout_marginLeft="15dp"
                 android:text="@string/nmod_description_about_author"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_marginStart="15dp" />
+                android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/moddedpenmoddescriptionTextViewAuthor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
                 tools:ignore="RelativeOverlap" />
 
         </RelativeLayout>
@@ -152,20 +151,20 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
                 android:layout_marginLeft="15dp"
                 android:text="@string/nmod_description_about_version_name"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_marginStart="15dp" />
+                android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/moddedpenmoddescriptionTextViewVersionName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
                 tools:ignore="RelativeOverlap" />
 
         </RelativeLayout>
@@ -177,20 +176,20 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
                 android:layout_marginLeft="15dp"
                 android:text="@string/nmod_description_about_minecraft_version_name"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_marginStart="15dp" />
+                android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/moddedpenmoddescriptionTextViewMinecraftVersionName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
                 tools:ignore="RelativeOverlap" />
 
         </RelativeLayout>
@@ -204,20 +203,20 @@
                 android:id="@+id/moddedpenmoddescriptionTextViewWhatsNewTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:text="@string/nmod_description_whatsnew_title"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_marginStart="10dp" />
+                android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="5dp"
-                android:layout_toRightOf="@id/moddedpenmoddescriptionTextViewWhatsNewTitle"
-                android:background="#6E6E6E"
                 android:layout_marginStart="5dp"
-                android:layout_toEndOf="@id/moddedpenmoddescriptionTextViewWhatsNewTitle" />
+                android:layout_marginLeft="5dp"
+                android:layout_toEndOf="@id/moddedpenmoddescriptionTextViewWhatsNewTitle"
+                android:layout_toRightOf="@id/moddedpenmoddescriptionTextViewWhatsNewTitle"
+                android:background="#6E6E6E" />
 
         </RelativeLayout>
 

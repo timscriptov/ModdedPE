@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:msaui="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:id="@+id/xbid_scroll_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/xbid_body_padding_horizontal"
+        android:layout_marginRight="@dimen/xbid_body_padding_horizontal"
+        android:fillViewport="true"
+        android:layout_above="@+id/xbid_claim_it"
+        android:layout_alignParentTop="true">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/xbid_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/xbid_margin_body_standard"
+                android:layout_marginBottom="@dimen/xbid_margin_body_standard"
+                android:text="@string/xbid_sign_up_header"
+                style="@style/Body.Title" />
+
+            <TextView
+                android:id="@+id/xbid_title_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/xbid_margin_body_standard"
+                android:layout_marginBottom="@dimen/xbid_margin_body_standard"
+                android:text="@string/xbid_sign_up_subheader_android"
+                style="@style/Body.TitleComment" />
+
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:id="@+id/xbid_enter_gamertag_container"
+                android:background="@drawable/xbid_edit_text_state_normal"
+                android:padding="2dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/xbid_margin_body_standard"
+                android:layout_marginBottom="@dimen/xbid_margin_body_standard">
+
+                <EditText
+                    android:id="@+id/xbid_enter_gamertag"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/xbid_gamertag_placeholder"
+                    android:maxLength="15"
+                    android:layout_weight="1"
+                    android:imeOptions="flagNoExtractUi"
+                    style="@style/Body.TextInput" />
+
+                <ImageView
+                    android:id="@+id/xbid_clear_text"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/xbid_x_icon" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="2dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/xbid_margin_body_standard"
+                android:layout_marginBottom="@dimen/xbid_margin_body_standard">
+
+                <ImageView
+                    android:id="@+id/xbid_search"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/xbid_search" />
+
+                <TextView
+                    android:id="@+id/xbid_enter_gamertag_comment"
+                    android:background="@drawable/xbid_clickable_view_background"
+                    android:padding="@dimen/xbid_clickable_view_padding"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/xbid_margin_body_standard"
+                    style="@style/Body.TextInputComment" />
+            </LinearLayout>
+
+            <GridView
+                android:gravity="left|center_vertical|center_horizontal|center"
+                android:id="@+id/xbid_suggestions_list"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/xbid_margin_body_standard"
+                android:layout_marginBottom="@dimen/xbid_margin_body_standard"
+                android:listSelector="@drawable/xbid_list_selector_background"
+                android:stretchMode="columnWidth"
+                android:numColumns="1"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/xbid_privacy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/xbid_margin_body_standard"
+                android:layout_marginBottom="@dimen/xbid_margin_body_standard"
+                style="@style/Body.SectionTitle" />
+
+            <TextView
+                android:id="@+id/xbid_privacy_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/xbid_margin_body_standard"
+                android:layout_marginBottom="@dimen/xbid_margin_body_standard"
+                style="@style/Body.SectionText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/xbid_margin_body_standard"
+                android:layout_marginBottom="@dimen/xbid_margin_body_standard"
+                android:text="@string/xbid_another_gamertag"
+                style="@style/Body.SectionTitle" />
+
+            <TextView
+                android:id="@+id/xbid_aleady_have_gamer_tag_answer"
+                android:background="@drawable/xbid_clickable_view_background"
+                android:padding="@dimen/xbid_clickable_view_padding"
+                android:focusable="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Body.SectionText" />
+        </LinearLayout>
+    </ScrollView>
+
+    <View
+        android:id="@+id/xbid_bottom_bar_shadow"
+        android:background="@drawable/xbid_bottom_bar_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/xbid_bottom_bar_shadow_height"
+        android:layout_above="@+id/xbid_claim_it" />
+
+    <Button
+        android:id="@+id/xbid_claim_it"
+        android:focusable="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/xbid_body_padding_horizontal"
+        android:layout_marginTop="@dimen/xbid_margin_button_top"
+        android:layout_marginRight="@dimen/xbid_body_padding_horizontal"
+        android:layout_marginBottom="@dimen/xbid_margin_button"
+        android:text="@string/xbid_next"
+        android:layout_alignParentBottom="true"
+        style="@style/Body.BottomButton" />
+</RelativeLayout>

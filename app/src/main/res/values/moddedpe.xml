@@ -90,6 +90,10 @@
     <string name="preferences_summary_moddedpe_texture_pack">The default ModdedPE graphics, now updated with stylish new textures!</string>
     <string name="preferences_title_desktop_gui">Use Desktop GUI</string>
     <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
+    <string name="preferences_title_xbox">Sign in Xbox</string>
+    <string name="preferences_summary_xbox">Вам будет доступен тестовый аккаунт Xbox</string>
+    <string name="preferences_title_servers">New servers</string>
+    <string name="preferences_summary_servers">Many new servers will appear in the game.</string>
 
     <!--Open Game Dialog-->
     <string name="preloading_initing">Initiating Launcher</string>
@@ -163,5 +167,8 @@
     <!--Permissions-->
     <string name="permission_grant_failed_title">Permission Grant Failed</string>
     <string name="permission_grant_failed_message">Cannot grant permission: read external storage. Please go to the settings page to grant the relevant permissions.</string>
+	
+	<string name="opengame_loading"></string>
+	<string name="preloading_loading_lib_gnustl_shared"></string>
 </resources>
 

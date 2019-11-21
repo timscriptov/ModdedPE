@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:msaui="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:id="@+id/baseScreenView"
+	style="@style/activity">
+
+	<com.microsoft.onlineid.internal.ui.ProgressView
+		android:id="@+id/baseScreenProgressView"
+		android:focusable="false"
+		android:visibility="invisible"
+		android:layout_width="fill_parent"
+		android:layout_height="@dimen/marginMedium"/>
+
+	<com.microsoft.onlineid.ui.StyledTextView
+		android:id="@+id/baseScreenHeader"
+		android:focusable="false"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="@dimen/marginLarge"
+		android:layout_marginTop="@dimen/marginSmall"
+		android:layout_marginRight="@dimen/marginLarge"
+		style="@style/textLargest"/>
+
+	<com.microsoft.onlineid.ui.StyledTextView
+		android:id="@+id/baseScreenBody"
+		android:focusable="false"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="@dimen/marginLarge"
+		android:layout_marginTop="@dimen/marginLarge"
+		android:layout_marginRight="@dimen/marginLarge"
+		style="@style/textLarge"/>
+
+</LinearLayout>
+
