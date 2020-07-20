@@ -1,2 +1,0 @@
-[armeabi-v7a] Compile thumb  : substrate <= hde64.c
-[armeabi-v7a] Compile++ thumb: substrate <= Hooker.cpp
