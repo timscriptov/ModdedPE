@@ -1,0 +1,3 @@
+[arm64-v8a] Compile++      : mcpelauncher <= launcher.cpp
+[arm64-v8a] Prebuilt       : libc++_shared.so <= <NDK>/sources/cxx-stl/llvm-libc++/libs/arm64-v8a/
+[arm64-v8a] SharedLibrary  : libmcpelauncher.so

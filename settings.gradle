@@ -1,1 +1,1 @@
-include ':app', ':minecraft'
+include ':app', ':minecraft', ':substrate', ':nmod'

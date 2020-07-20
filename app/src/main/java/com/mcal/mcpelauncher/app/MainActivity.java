@@ -130,7 +130,7 @@ public class MainActivity extends BaseActivity implements BackgroundSoundPlayer 
             }
         };
 
-        if (!bound && PreferenceManager.getDefaultSharedPreferences(this).getBoolean("background_music", true)) {
+        if (!bound && PreferenceManager.getDefaultSharedPreferences(this).getBoolean("background_music", false)) {
             bind();
         }
     }

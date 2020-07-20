@@ -1,0 +1,19 @@
+{
+  "buildFiles": [
+    "E:\\AppProjects\\ModdedPE\\nmod\\src\\main\\cpp\\Android.mk",
+    "E:\\AppProjects\\ModdedPE\\nmod\\src\\main\\cpp\\Application.mk"
+  ],
+  "cleanCommands": [
+    "E:\\Android\\Sdk\\ndk\\21.0.6113669\\ndk-build.cmd NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dE:\\AppProjects\\ModdedPE\\nmod\\src\\main\\cpp\\Android.mk NDK_APPLICATION_MK\u003dE:\\AppProjects\\ModdedPE\\nmod\\src\\main\\cpp\\Application.mk APP_ABI\u003darm64-v8a NDK_ALL_ABIS\u003darm64-v8a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-16 NDK_OUT\u003dE:/AppProjects/ModdedPE/nmod/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003dE:\\AppProjects\\ModdedPE\\nmod\\build\\intermediates\\ndkBuild\\release\\lib clean"
+  ],
+  "buildTargetsCommand": "E:\\Android\\Sdk\\ndk\\21.0.6113669\\ndk-build.cmd NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dE:\\AppProjects\\ModdedPE\\nmod\\src\\main\\cpp\\Android.mk NDK_APPLICATION_MK\u003dE:\\AppProjects\\ModdedPE\\nmod\\src\\main\\cpp\\Application.mk APP_ABI\u003darm64-v8a NDK_ALL_ABIS\u003darm64-v8a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-16 NDK_OUT\u003dE:/AppProjects/ModdedPE/nmod/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003dE:\\AppProjects\\ModdedPE\\nmod\\build\\intermediates\\ndkBuild\\release\\lib {LIST_OF_TARGETS_TO_BUILD}",
+  "libraries": {
+    "nmod-core-release-arm64-v8a": {
+      "artifactName": "nmod-core",
+      "buildCommand": "E:\\Android\\Sdk\\ndk\\21.0.6113669\\ndk-build.cmd NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dE:\\AppProjects\\ModdedPE\\nmod\\src\\main\\cpp\\Android.mk NDK_APPLICATION_MK\u003dE:\\AppProjects\\ModdedPE\\nmod\\src\\main\\cpp\\Application.mk APP_ABI\u003darm64-v8a NDK_ALL_ABIS\u003darm64-v8a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-16 NDK_OUT\u003dE:/AppProjects/ModdedPE/nmod/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003dE:\\AppProjects\\ModdedPE\\nmod\\build\\intermediates\\ndkBuild\\release\\lib E:/AppProjects/ModdedPE/nmod/build/intermediates/ndkBuild/release/obj/local/arm64-v8a/libnmod-core.so",
+      "abi": "arm64-v8a",
+      "output": "E:\\AppProjects\\ModdedPE\\nmod\\build\\intermediates\\ndkBuild\\release\\obj\\local\\arm64-v8a\\libnmod-core.so",
+      "runtimeFiles": []
+    }
+  }
+}

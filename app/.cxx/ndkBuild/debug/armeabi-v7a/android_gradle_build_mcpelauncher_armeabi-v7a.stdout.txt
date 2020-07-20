@@ -1,0 +1,8 @@
+Android NDK: WARNING:E:\AppProjects\ModdedPE\app\src\main\cpp\Android.mk:mcpelauncher: non-system libraries in linker flags: -lsubstrate -lminecraftpe    
+Android NDK:     This is likely to result in incorrect builds. Try using LOCAL_STATIC_LIBRARIES    
+Android NDK:     or LOCAL_SHARED_LIBRARIES instead to list the library dependencies of the    
+Android NDK:     current module    
+[armeabi-v7a] Compile++ thumb: mcpelauncher <= launcher.cpp
+[armeabi-v7a] Compile++ thumb: mcpelauncher <= nmod.cpp
+[armeabi-v7a] Prebuilt       : libc++_shared.so <= <NDK>/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a/
+[armeabi-v7a] SharedLibrary  : libmcpelauncher.so

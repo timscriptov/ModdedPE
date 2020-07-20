@@ -1,0 +1,80 @@
+[
+  {
+    "level": "INFO",
+    "message": "Start JSON generation. Platform version: 16 min SDK version: arm64-v8a",
+    "file": "E:\\AppProjects\\ModdedPE\\substrate\\src\\main\\cpp\\Android.mk",
+    "tag": "release|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "rebuilding JSON E:\\AppProjects\\ModdedPE\\substrate\\.cxx\\ndkBuild\\release\\arm64-v8a\\android_gradle_build.json due to:",
+    "file": "E:\\AppProjects\\ModdedPE\\substrate\\src\\main\\cpp\\Android.mk",
+    "tag": "release|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "- a dependent build file changed",
+    "file": "E:\\AppProjects\\ModdedPE\\substrate\\src\\main\\cpp\\Android.mk",
+    "tag": "release|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "  - E:\\AppProjects\\ModdedPE\\substrate\\src\\main\\cpp\\Application.mk",
+    "file": "E:\\AppProjects\\ModdedPE\\substrate\\src\\main\\cpp\\Android.mk",
+    "tag": "release|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "keeping json folder \u0027E:\\AppProjects\\ModdedPE\\substrate\\.cxx\\ndkBuild\\release\\arm64-v8a\u0027 but regenerating project",
+    "file": "E:\\AppProjects\\ModdedPE\\substrate\\src\\main\\cpp\\Android.mk",
+    "tag": "release|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "executing ndkBuild Executable : E:\\Android\\Sdk\\ndk\\21.0.6113669\\ndk-build.cmd\narguments : \nNDK_PROJECT_PATH\u003dnull\nAPP_BUILD_SCRIPT\u003dE:\\AppProjects\\ModdedPE\\substrate\\src\\main\\cpp\\Android.mk\nNDK_APPLICATION_MK\u003dE:\\AppProjects\\ModdedPE\\substrate\\src\\main\\cpp\\Application.mk\nAPP_ABI\u003darm64-v8a\nNDK_ALL_ABIS\u003darm64-v8a\nNDK_DEBUG\u003d0\nAPP_PLATFORM\u003dandroid-16\nNDK_OUT\u003dE:/AppProjects/ModdedPE/substrate/build/intermediates/ndkBuild/release/obj\nNDK_LIBS_OUT\u003dE:\\AppProjects\\ModdedPE\\substrate\\build\\intermediates\\ndkBuild\\release\\lib\nAPP_SHORT_COMMANDS\u003dfalse\nLOCAL_SHORT_COMMANDS\u003dfalse\n-B\n-n\njvmArgs : \n\n",
+    "file": "E:\\AppProjects\\ModdedPE\\substrate\\src\\main\\cpp\\Android.mk",
+    "tag": "release|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "Executable : E:\\Android\\Sdk\\ndk\\21.0.6113669\\ndk-build.cmd\narguments : \nNDK_PROJECT_PATH\u003dnull\nAPP_BUILD_SCRIPT\u003dE:\\AppProjects\\ModdedPE\\substrate\\src\\main\\cpp\\Android.mk\nNDK_APPLICATION_MK\u003dE:\\AppProjects\\ModdedPE\\substrate\\src\\main\\cpp\\Application.mk\nAPP_ABI\u003darm64-v8a\nNDK_ALL_ABIS\u003darm64-v8a\nNDK_DEBUG\u003d0\nAPP_PLATFORM\u003dandroid-16\nNDK_OUT\u003dE:/AppProjects/ModdedPE/substrate/build/intermediates/ndkBuild/release/obj\nNDK_LIBS_OUT\u003dE:\\AppProjects\\ModdedPE\\substrate\\build\\intermediates\\ndkBuild\\release\\lib\nAPP_SHORT_COMMANDS\u003dfalse\nLOCAL_SHORT_COMMANDS\u003dfalse\n-B\n-n\njvmArgs : \n\n",
+    "file": "E:\\AppProjects\\ModdedPE\\substrate\\src\\main\\cpp\\Android.mk",
+    "tag": "release|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "done executing ndkBuild",
+    "file": "E:\\AppProjects\\ModdedPE\\substrate\\src\\main\\cpp\\Android.mk",
+    "tag": "release|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "write build output E:\\AppProjects\\ModdedPE\\substrate\\.cxx\\ndkBuild\\release\\arm64-v8a\\build_output.txt",
+    "file": "E:\\AppProjects\\ModdedPE\\substrate\\src\\main\\cpp\\Android.mk",
+    "tag": "release|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "parse and convert ndk-build output to build configuration JSON",
+    "file": "E:\\AppProjects\\ModdedPE\\substrate\\src\\main\\cpp\\Android.mk",
+    "tag": "release|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "found application make file E:\\AppProjects\\ModdedPE\\substrate\\src\\main\\cpp\\Application.mk",
+    "file": "E:\\AppProjects\\ModdedPE\\substrate\\src\\main\\cpp\\Android.mk",
+    "tag": "release|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "write command file E:\\AppProjects\\ModdedPE\\substrate\\.cxx\\ndkBuild\\release\\arm64-v8a\\build_command.txt",
+    "file": "E:\\AppProjects\\ModdedPE\\substrate\\src\\main\\cpp\\Android.mk",
+    "tag": "release|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "JSON generation completed without problems",
+    "file": "E:\\AppProjects\\ModdedPE\\substrate\\src\\main\\cpp\\Android.mk",
+    "tag": "release|arm64-v8a"
+  }
+]

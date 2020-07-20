@@ -1,0 +1,3 @@
+[x86_64] Compile++      : launcher-core <= launcher.cpp
+[x86_64] Prebuilt       : libc++_shared.so <= <NDK>/sources/cxx-stl/llvm-libc++/libs/x86_64/
+[x86_64] SharedLibrary  : liblauncher-core.so

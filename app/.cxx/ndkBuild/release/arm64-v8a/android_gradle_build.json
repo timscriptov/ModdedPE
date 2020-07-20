@@ -1,0 +1,34 @@
+{
+  "buildFiles": [
+    "E:\\AppProjects\\ModdedPE\\app\\src\\main\\cpp\\Android.mk",
+    "E:\\AppProjects\\ModdedPE\\app\\src\\main\\cpp\\Application.mk"
+  ],
+  "cleanCommands": [
+    "E:\\Android\\Sdk\\ndk\\21.0.6113669\\ndk-build.cmd NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dE:\\AppProjects\\ModdedPE\\app\\src\\main\\cpp\\Android.mk NDK_APPLICATION_MK\u003dE:\\AppProjects\\ModdedPE\\app\\src\\main\\cpp\\Application.mk APP_ABI\u003darm64-v8a NDK_ALL_ABIS\u003darm64-v8a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-16 NDK_OUT\u003dE:/AppProjects/ModdedPE/app/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003dE:\\AppProjects\\ModdedPE\\app\\build\\intermediates\\ndkBuild\\release\\lib clean"
+  ],
+  "buildTargetsCommand": "E:\\Android\\Sdk\\ndk\\21.0.6113669\\ndk-build.cmd NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dE:\\AppProjects\\ModdedPE\\app\\src\\main\\cpp\\Android.mk NDK_APPLICATION_MK\u003dE:\\AppProjects\\ModdedPE\\app\\src\\main\\cpp\\Application.mk APP_ABI\u003darm64-v8a NDK_ALL_ABIS\u003darm64-v8a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-16 NDK_OUT\u003dE:/AppProjects/ModdedPE/app/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003dE:\\AppProjects\\ModdedPE\\app\\build\\intermediates\\ndkBuild\\release\\lib {LIST_OF_TARGETS_TO_BUILD}",
+  "libraries": {
+    "launcher-core-release-arm64-v8a": {
+      "buildCommand": "E:\\Android\\Sdk\\ndk\\21.0.6113669\\ndk-build.cmd NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dE:\\AppProjects\\ModdedPE\\app\\src\\main\\cpp\\Android.mk NDK_APPLICATION_MK\u003dE:\\AppProjects\\ModdedPE\\app\\src\\main\\cpp\\Application.mk APP_ABI\u003darm64-v8a NDK_ALL_ABIS\u003darm64-v8a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-16 NDK_OUT\u003dE:/AppProjects/ModdedPE/app/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003dE:\\AppProjects\\ModdedPE\\app\\build\\intermediates\\ndkBuild\\release\\lib E:/AppProjects/ModdedPE/app/build/intermediates/ndkBuild/release/obj/local/arm64-v8a/liblauncher-core.so",
+      "toolchain": "toolchain-arm64-v8a",
+      "abi": "arm64-v8a",
+      "artifactName": "launcher-core",
+      "files": [
+        {
+          "src": "E:\\AppProjects\\ModdedPE\\app\\src\\main\\cpp\\launcher-core\\launcher.cpp",
+          "flags": "-target aarch64-none-linux-android21 -fdata-sections -ffunction-sections -fstack-protector-strong -funwind-tables -no-canonical-prefixes --sysroot E:/Android/Sdk/ndk/21.0.6113669/build//../toolchains/llvm/prebuilt/windows-x86_64/sysroot -g -Wno-invalid-command-line-argument -Wno-unused-command-line-argument -D_FORTIFY_SOURCE\u003d2 -fno-exceptions -fno-rtti -fpic -O2 -DNDEBUG -IE:/Android/Sdk/ndk/21.0.6113669/build//../sources/cxx-stl/llvm-libc++/include -IE:/Android/Sdk/ndk/21.0.6113669/build//../sources/cxx-stl/llvm-libc++/../llvm-libc++abi/include -IE:/AppProjects/ModdedPE/app/src/main/cpp -O2 -DANDROID -nostdinc++ -Wformat -Werror\u003dformat-security"
+        }
+      ],
+      "output": "E:\\AppProjects\\ModdedPE\\app\\build\\intermediates\\ndkBuild\\release\\obj\\local\\arm64-v8a\\liblauncher-core.so"
+    }
+  },
+  "toolchains": {
+    "toolchain-arm64-v8a": {
+      "cppCompilerExecutable": "E:\\Android\\Sdk\\ndk\\21.0.6113669\\build\\..\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe"
+    }
+  },
+  "cFileExtensions": [],
+  "cppFileExtensions": [
+    "cpp"
+  ]
+}

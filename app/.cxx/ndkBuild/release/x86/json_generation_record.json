@@ -1,0 +1,20 @@
+[
+  {
+    "level": "INFO",
+    "message": "Start JSON generation. Platform version: 16 min SDK version: x86",
+    "file": "E:\\AppProjects\\ModdedPE\\app\\src\\main\\cpp\\Android.mk",
+    "tag": "release|x86"
+  },
+  {
+    "level": "INFO",
+    "message": "JSON \u0027E:\\AppProjects\\ModdedPE\\app\\.cxx\\ndkBuild\\release\\x86\\android_gradle_build.json\u0027 was up-to-date",
+    "file": "E:\\AppProjects\\ModdedPE\\app\\src\\main\\cpp\\Android.mk",
+    "tag": "release|x86"
+  },
+  {
+    "level": "INFO",
+    "message": "JSON generation completed without problems",
+    "file": "E:\\AppProjects\\ModdedPE\\app\\src\\main\\cpp\\Android.mk",
+    "tag": "release|x86"
+  }
+]

@@ -3,6 +3,8 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 30
     buildToolsVersion '30.0.1'
+    ndkVersion '21.0.6113669'
+
     defaultConfig {
         applicationId "com.mcal.mcpelauncher"
         minSdkVersion 16
@@ -10,16 +12,16 @@ android {
         versionCode 943160102
         versionName "1.16.1.02"
         multiDexEnabled true
-        /*ndk {
-            abiFilters 'armeabi-v7a', 'x86'//, 'arm64-v8a', 'x86_64'
-        }*/
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+        }
     }
 
-    /*externalNativeBuild {
+    externalNativeBuild {
         ndkBuild {
-            path 'src/main/jni/Android.mk'
+            path 'src/main/cpp/Android.mk'
         }
-    }*/
+    }
 
     buildTypes {
         release {
@@ -42,8 +44,9 @@ android {
 }
 
 dependencies {
-	//api project(':microsoft-onlineid-sdk')
 	api project(':minecraft')
+    api project(':substrate')
+    api project(':nmod')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
