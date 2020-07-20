@@ -9,10 +9,11 @@
         <item>^1[.]11</item>
         <item>^1[.]12</item>
         <item>^1[.]13</item>
-        <item>^1[.]14</item -->
-        <item>^1[.]15</item>
+        <item>^1[.]14</item>
+        <item>^1[.]15</item -->
+        <item>^1[.]16</item>
     </string-array>
-    <string name="target_mcpe_version_info" translatable="false">Minecraft 1.15.0.53</string>
+    <string name="target_mcpe_version_info" translatable="false">Minecraft 1.16.1.02</string>
     <string name="app_name" translatable="false">ModdedPE</string>
     <string name="app_name_trial" translatable="false">ModdedPE Trial</string>
     <string name="app_name_demo" translatable="false">ModdedPE Demo</string>
