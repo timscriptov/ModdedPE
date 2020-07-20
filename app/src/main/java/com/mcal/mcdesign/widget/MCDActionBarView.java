@@ -28,8 +28,7 @@ import com.mcal.mcpelauncher.R;
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-public class MCDActionBarView extends RelativeLayout
-{
+public class MCDActionBarView extends RelativeLayout {
     public MCDActionBarView(android.content.Context context) {
         super(context);
     }

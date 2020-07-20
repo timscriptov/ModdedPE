@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Тимашков Иван
+ * Copyright (C) 2018-2020 Тимашков Иван
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,50 +16,42 @@
  */
 package com.mcal.pesdk.nativeapi;
 
-import java.io.File;
-import java.io.IOException;
-import android.os.Build;
-import java.io.InputStream;
-import java.io.FileOutputStream;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import android.content.Context;
+
+import java.io.File;
 
 /**
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 public class LibraryLoader {
-    private static final String FMOD_LIB_NAME = "libfmod.so";
-    private static final String MINECRAFTPE_LIB_NAME = "libminecraftpe.so";
+    private static native void nativeOnLauncherLoaded(String libPath);
 
-    private static final String API_NAME = "nmod-core";
-    private static final String SUBSTRATE_NAME = "substrate";
-    private static final String LAUNCHER_NAME = "launcher-core";
-	
-	private static native void nativeOnLauncherLoaded(String libPath);
     private static native void nativeOnNModAPILoaded(String libPath);
-	
+
     static public void loadSubstrate() {
-        System.loadLibrary(SUBSTRATE_NAME);
+        System.loadLibrary("substrate");
     }
 
     static public void loadLauncher(String mcLibsPath) {
-        System.loadLibrary(LAUNCHER_NAME);
-        nativeOnLauncherLoaded(mcLibsPath + File.separator + MINECRAFTPE_LIB_NAME);
+        System.loadLibrary("launcher-core");
+        nativeOnLauncherLoaded(mcLibsPath + "/" + "libminecraftpe.so");
     }
 
     static public void loadFMod(String mcLibsPath) {
-        System.load(new File(mcLibsPath, FMOD_LIB_NAME).getAbsolutePath());
+        System.load(new File(mcLibsPath, "libfmod.so").getAbsolutePath());
     }
 
     static public void loadMinecraftPE(String mcLibsPath) {
-        System.load(new File(mcLibsPath, MINECRAFTPE_LIB_NAME).getAbsolutePath());
+        System.load(new File(mcLibsPath, "libminecraftpe.so").getAbsolutePath());
+    }
+
+    static public void loadCppShared(String mcLibsPath) {
+        System.load(new File(mcLibsPath, "libc++_shared.so").getAbsolutePath());
     }
 
     static public void loadNModAPI(Context context, String mcLibsPath) {
-        System.loadLibrary(API_NAME);
-        nativeOnNModAPILoaded(mcLibsPath + File.separator + MINECRAFTPE_LIB_NAME);
+        System.loadLibrary("nmod-core");
+        nativeOnNModAPILoaded(mcLibsPath + "/" + "libminecraftpe.so");
     }
 }

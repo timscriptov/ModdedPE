@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Тимашков Иван
+ * Copyright (C) 2018-2020 Тимашков Иван
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,27 +27,24 @@ import java.io.File;
  * @author https://github.com/TimScriptov
  */
 public class NativeUtils {
-        public static native void nativeSetDataDirectory ( String directory );
-        public static native String nativeDemangle ( String symbol_name );
-        public static native void nativeRegisterNatives ( Class cls );
+    static {
+        nativeRegisterNatives(NativeUtils.class);
+    }
 
-        public static void setValues ( Context context, LauncherOptions options )
-            {
-                if ( options.getDataSavedPath ( ).equals ( LauncherOptions.STRING_VALUE_DEFAULT ) )
-                    {
-                        NativeUtils.nativeSetDataDirectory ( context.getFilesDir ( ).getAbsolutePath ( ) + File.separator );
-                    }
-                else
-                    {
-                        String pathStr = options.getDataSavedPath ( );
-                        if ( !pathStr.endsWith ( File.separator ) )
-                            pathStr += File.separator;
-                        NativeUtils.nativeSetDataDirectory ( pathStr );
-                    }
-            }
+    public static native void nativeSetDataDirectory(String directory);
 
-        static
-            {
-                nativeRegisterNatives ( NativeUtils.class );
-			}
+    public static native String nativeDemangle(String symbol_name);
+
+    public static native void nativeRegisterNatives(Class cls);
+
+    public static void setValues(Context context, LauncherOptions options) {
+        if (options.getDataSavedPath().equals(LauncherOptions.STRING_VALUE_DEFAULT)) {
+            NativeUtils.nativeSetDataDirectory(context.getFilesDir().getAbsolutePath() + File.separator);
+        } else {
+            String pathStr = options.getDataSavedPath();
+            if (!pathStr.endsWith(File.separator))
+                pathStr += File.separator;
+            NativeUtils.nativeSetDataDirectory(pathStr);
+        }
+    }
 }

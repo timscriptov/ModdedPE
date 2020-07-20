@@ -1,12 +1,12 @@
 package com.mojang.minecraftpe;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.IBinder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.WindowManager.LayoutParams;
+
+import org.jetbrains.annotations.NotNull;
 
 public class PopupView {
     private View mContentView;
@@ -17,8 +17,7 @@ public class PopupView {
     private View mParentView;
     private View mPopupView;
     private int mWidth;
-    @SuppressLint("WrongConstant")
-    private WindowManager mWindowManager = ((WindowManager) this.mContext.getSystemService("window"));
+    private WindowManager mWindowManager = ((WindowManager) mContext.getSystemService("window"));
 
     public PopupView(Context context) {
         mContext = context;
@@ -58,8 +57,8 @@ public class PopupView {
         }
     }
 
-    private boolean getVisible() {
-        return (mPopupView == null || mPopupView.getParent() == null) ? false : true;
+    public boolean getVisible() {
+        return mPopupView != null && mPopupView.getParent() != null;
     }
 
     public void dismiss() {
@@ -74,7 +73,7 @@ public class PopupView {
 
     public void update() {
         if (getVisible()) {
-            LayoutParams p = (LayoutParams) mPopupView.getLayoutParams();
+            WindowManager.LayoutParams p = (WindowManager.LayoutParams) mPopupView.getLayoutParams();
             int newFlags = computeFlags(p.flags);
             if (newFlags != p.flags) {
                 p.flags = newFlags;
@@ -86,7 +85,7 @@ public class PopupView {
 
     private void addPopupView() {
         mPopupView = mContentView;
-        LayoutParams p = createPopupLayout(mParentView.getWindowToken());
+        WindowManager.LayoutParams p = createPopupLayout(mParentView.getWindowToken());
         setLayoutRect(p);
         invokePopup(p);
     }
@@ -94,15 +93,16 @@ public class PopupView {
     private void removePopupView() {
         try {
             mWindowManager.removeView(mPopupView);
-        } catch (Exception ignored) {
+        } catch (Exception e) {
         }
     }
 
-    private LayoutParams createPopupLayout(IBinder token) {
-        LayoutParams p = new LayoutParams();
+    @NotNull
+    private WindowManager.LayoutParams createPopupLayout(IBinder token) {
+        WindowManager.LayoutParams p = new WindowManager.LayoutParams();
         p.format = -3;
         p.flags = computeFlags(p.flags);
-        p.type = 0x3e8;
+        p.type = 1000;
         p.token = token;
         p.softInputMode = 1;
         p.setTitle("PopupWindow:" + Integer.toHexString(hashCode()));
@@ -110,10 +110,10 @@ public class PopupView {
         return p;
     }
 
-    private void preparePopup(LayoutParams p) {
+    private void preparePopup(WindowManager.LayoutParams p) {
     }
 
-    private void invokePopup(LayoutParams p) {
+    private void invokePopup(@NotNull WindowManager.LayoutParams p) {
         p.packageName = mContext.getPackageName();
         mWindowManager.addView(mPopupView, p);
     }
@@ -122,7 +122,7 @@ public class PopupView {
         return curFlags | 32;
     }
 
-    private void setLayoutRect(LayoutParams p) {
+    private void setLayoutRect(@NotNull WindowManager.LayoutParams p) {
         p.width = mWidth;
         p.height = mHeight;
         p.x = mOriginX;

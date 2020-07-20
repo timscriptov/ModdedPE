@@ -3,84 +3,36 @@
     <forward>
         <inAnimation>
             <animations>
-                <XLEAnimationDefinition
-                    property="Scale"
-                    type="Exponential"
-                    easing="EaseOut"
-                    from="1.2"
-                    to="1"
-                    parameter="7"
-                    durationMs="150" />
-                <XLEAnimationDefinition
-                    property="Alpha"
-                    type="Linear"
-                    easing="EaseOut"
-                    from="0"
-                    to="1"
-					durationMs="100" 
-                    delayMs="50"/>
+                <XLEAnimationDefinition durationMs="150" easing="EaseOut" from="1.2"
+                    parameter="7" property="Scale" to="1" type="Exponential" />
+                <XLEAnimationDefinition delayMs="50" durationMs="100" easing="EaseOut" from="0"
+                    property="Alpha" to="1" type="Linear" />
             </animations>
         </inAnimation>
         <outAnimation>
             <animations>
-                <XLEAnimationDefinition
-                    property="Scale"
-                    type="Exponential"
-                    easing="EaseIn"
-                    from="1"
-                    to="1.2"
-                    parameter="7"
-                    durationMs="150" />
-                <XLEAnimationDefinition
-                    property="Alpha"
-                    type="Linear"
-                    easing="EaseOut"
-                    from="1"
-                    to="0"
-                    durationMs="100" 
-                    delayMs="50"/>
+                <XLEAnimationDefinition durationMs="150" easing="EaseIn" from="1" parameter="7"
+                    property="Scale" to="1.2" type="Exponential" />
+                <XLEAnimationDefinition delayMs="50" durationMs="100" easing="EaseOut" from="1"
+                    property="Alpha" to="0" type="Linear" />
             </animations>
         </outAnimation>
     </forward>
     <backward>
         <inAnimation>
             <animations>
-                <XLEAnimationDefinition
-                    property="Scale"
-                    type="Exponential"
-                    easing="EaseOut"
-                    from="1.2"
-                    to="1"
-                    parameter="7"
-                    durationMs="666" />
-                <XLEAnimationDefinition
-                    property="Alpha"
-                    type="Linear"
-                    easing="EaseInOut"
-                    from="0"
-                    to="1"
-                    delayMs="166"
-                    durationMs="500" />
+                <XLEAnimationDefinition durationMs="666" easing="EaseOut" from="1.2"
+                    parameter="7" property="Scale" to="1" type="Exponential" />
+                <XLEAnimationDefinition delayMs="166" durationMs="500" easing="EaseInOut" from="0"
+                    property="Alpha" to="1" type="Linear" />
             </animations>
         </inAnimation>
         <outAnimation>
             <animations>
-                <XLEAnimationDefinition
-                    property="Scale"
-                    type="Exponential"
-                    easing="EaseIn"
-                    from="1"
-                    to="0.79"
-                    parameter="7"
-                    durationMs="666" />
-                <XLEAnimationDefinition
-                    property="Alpha"
-                    type="Linear"
-                    easing="EaseInOut"
-                    from="1"
-                    to="0"
-                    durationMs="500" 
-                    delayMs="166"/>
+                <XLEAnimationDefinition durationMs="666" easing="EaseIn" from="1" parameter="7"
+                    property="Scale" to="0.79" type="Exponential" />
+                <XLEAnimationDefinition delayMs="166" durationMs="500" easing="EaseInOut" from="1"
+                    property="Alpha" to="0" type="Linear" />
             </animations>
         </outAnimation>
     </backward>

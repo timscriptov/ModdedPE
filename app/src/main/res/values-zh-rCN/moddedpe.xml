@@ -88,11 +88,11 @@
     <string name="preferences_summary_music">游戏时播放的后台音乐</string>
     <string name="preferences_title_moddedpe_texture_pack">材质包</string>
     <string name="preferences_summary_moddedpe_texture_pack">现已新增了时尚的新材质</string>
-	<string name="preferences_title_xbox">Войти в Xbox</string>
+    <string name="preferences_title_xbox">Войти в Xbox</string>
     <string name="preferences_summary_xbox">Вам будет доступен тестовый аккаунт Xbox</string>
     <string name="preferences_title_servers">Новые сервера</string>
     <string name="preferences_summary_servers">В игре появится много новых серверов</string>
-	
+
     <!--Open Game Dialog-->
     <string name="preloading_initing">初始化启动器</string>
     <string name="preloading_initing_info">--NModAPI版本：%1$s\n--Minecraft PE版本：%2$s</string>

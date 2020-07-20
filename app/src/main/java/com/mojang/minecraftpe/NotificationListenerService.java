@@ -6,7 +6,6 @@ import com.microsoft.xbox.services.NotificationHelper;
 import com.microsoft.xbox.services.NotificationResult;
 
 public class NotificationListenerService extends GcmListenerService {
-    
     public native void nativePushNotificationReceived(int i, String str, String str2, String str3);
 
     public void onMessageReceived(String from, Bundle data) {

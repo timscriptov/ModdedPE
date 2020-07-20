@@ -27,8 +27,7 @@ import com.mcal.mcpelauncher.R;
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-public class MCDSwitch extends Switch
-{
+public class MCDSwitch extends Switch {
     Bitmap bitmap;
     Bitmap bitmapClicked;
     Bitmap bitmapNI;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Тимашков Иван
+ * Copyright (C) 2018-2020 Тимашков Иван
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -145,9 +145,9 @@ public class MainActivity extends BaseActivity implements BackgroundSoundPlayer 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-		if(bound) {
-        	unbind();
-		}
+        if (bound) {
+            unbind();
+        }
     }
 
     @Override

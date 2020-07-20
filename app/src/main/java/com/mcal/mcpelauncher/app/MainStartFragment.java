@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Тимашков Иван
+ * Copyright (C) 2018-2020 Тимашков Иван
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@ package com.mcal.mcpelauncher.app;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,13 +38,10 @@ public class MainStartFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.moddedpe_main, null);
         view.findViewById(R.id.moddedpe_main_play_button).setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View p1) {
                 onPlayClicked();
             }
-
-
         });
         return view;
     }

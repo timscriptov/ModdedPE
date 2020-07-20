@@ -2,7 +2,6 @@ package com.mojang.minecraftpe;
 
 import android.content.Context;
 import android.text.InputFilter;
-import android.text.InputFilter.LengthFilter;
 import android.text.Spanned;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
@@ -10,36 +9,21 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputConnectionWrapper;
 import android.widget.EditText;
+
+import androidx.appcompat.widget.AppCompatEditText;
+
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
-public class TextInputProxyEditTextbox extends EditText {
-    
+public class TextInputProxyEditTextbox extends AppCompatEditText {
     public MCPEKeyWatcher _mcpeKeyWatcher;
     public int allowedLength;
     private String mLastSentText;
 
-    private class MCPEInputConnection extends InputConnectionWrapper {
-        TextInputProxyEditTextbox textbox;
-
-        public MCPEInputConnection(InputConnection target, boolean mutable, TextInputProxyEditTextbox textbox2) {
-            super(target, mutable);
-            textbox = textbox2;
-        }
-
-        public boolean sendKeyEvent(KeyEvent event) {
-            if (textbox.getText().length() != 0 || event.getAction() != 0 || event.getKeyCode() != 67) {
-                return super.sendKeyEvent(event);
-            }
-            if (_mcpeKeyWatcher != null) {
-                _mcpeKeyWatcher.onDeleteKeyPressed();
-            }
-            return false;
-        }
-    }
-
     public interface MCPEKeyWatcher {
         boolean onBackKeyPressed();
-
         void onDeleteKeyPressed();
     }
 
@@ -64,13 +48,13 @@ public class TextInputProxyEditTextbox extends EditText {
         this.allowedLength = allowedLength2;
         ArrayList<InputFilter> filterList = new ArrayList<>();
         if (allowedLength2 != 0) {
-            filterList.add(new LengthFilter(allowedLength));
+            filterList.add(new InputFilter.LengthFilter(allowedLength));
         }
         if (singleLine) {
             filterList.add(createSingleLineFilter());
         }
         filterList.add(createUnicodeFilter());
-        setFilters(filterList.toArray(new InputFilter[0]));
+        setFilters(filterList.toArray(new InputFilter[filterList.size()]));
     }
 
     public boolean shouldSendText() {
@@ -94,46 +78,65 @@ public class TextInputProxyEditTextbox extends EditText {
         if (keyCode != 4 || event.getAction() != 1) {
             return super.onKeyPreIme(keyCode, event);
         }
-        if (this._mcpeKeyWatcher != null) {
+        if (_mcpeKeyWatcher != null) {
             return _mcpeKeyWatcher.onBackKeyPressed();
         }
         return false;
     }
 
     public void setOnMCPEKeyWatcher(MCPEKeyWatcher mcpeKeyWatcher) {
-        _mcpeKeyWatcher = mcpeKeyWatcher;
+        this._mcpeKeyWatcher = mcpeKeyWatcher;
     }
 
+    @NotNull
+    @Contract(pure = true)
     private InputFilter createSingleLineFilter() {
-        return new InputFilter() {
-            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int destStart, int destEnd) {
-                for (int i = start; i < end; i++) {
-                    if (source.charAt(i) == 10) {
-                        return dest.subSequence(destStart, destEnd);
-                    }
+        return (source, start, end, dest, destStart, destEnd) -> {
+            for (int i = start; i < end; i++) {
+                if (source.charAt(i) == 10) {
+                    return dest.subSequence(destStart, destEnd);
                 }
-                return null;
             }
+            return null;
         };
     }
 
+    @NotNull
+    @Contract(pure = true)
     private InputFilter createUnicodeFilter() {
-        return new InputFilter() {
-            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int destStart, int destEnd) {
-                StringBuilder modString = null;
-                for (int i = start; i < end; i++) {
-                    if (source.charAt(i) == 12288) {
-                        if (modString == null) {
-                            modString = new StringBuilder(source);
-                        }
-                        modString.setCharAt(i, ' ');
+        return (source, start, end, dest, destStart, destEnd) -> {
+            StringBuilder modString = null;
+            for (int i = start; i < end; i++) {
+                if (source.charAt(i) == 12288) {
+                    if (modString == null) {
+                        modString = new StringBuilder(source);
                     }
+                    modString.setCharAt(i, ' ');
                 }
-                if (modString != null) {
-                    return modString.subSequence(start, end);
-                }
-                return null;
             }
+            if (modString != null) {
+                return modString.subSequence(start, end);
+            }
+            return null;
         };
+    }
+
+    private class MCPEInputConnection extends InputConnectionWrapper {
+        TextInputProxyEditTextbox textbox;
+
+        public MCPEInputConnection(InputConnection target, boolean mutable, TextInputProxyEditTextbox textbox2) {
+            super(target, mutable);
+            textbox = textbox2;
+        }
+
+        public boolean sendKeyEvent(KeyEvent event) {
+            if (textbox.getText().length() != 0 || event.getAction() != 0 || event.getKeyCode() != 67) {
+                return super.sendKeyEvent(event);
+            }
+            if (_mcpeKeyWatcher != null) {
+                _mcpeKeyWatcher.onDeleteKeyPressed();
+            }
+            return false;
+        }
     }
 }

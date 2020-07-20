@@ -1,10 +1,9 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
 
     defaultConfig {
-        applicationId "com.mojang.minecraftpe"
         minSdkVersion 16
         targetSdkVersion 29
         versionCode 1
@@ -16,6 +15,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+    buildToolsVersion '30.0.1'
 }
 
 dependencies {

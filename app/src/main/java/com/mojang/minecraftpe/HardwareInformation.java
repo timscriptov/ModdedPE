@@ -7,6 +7,9 @@ import android.os.Build.VERSION;
 
 import com.mojang.minecraftpe.platforms.Platform;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -23,10 +26,13 @@ public class HardwareInformation {
         this.context = context;
     }
 
+    @NotNull
     static String getDeviceModelName() {
         return Build.MANUFACTURER.toUpperCase() + " " + Build.MODEL;
     }
 
+    @NotNull
+    @Contract(pure = true)
     public static String getAndroidVersion() {
         return "Android " + VERSION.RELEASE;
     }
@@ -35,10 +41,14 @@ public class HardwareInformation {
         return Platform.createPlatform(false).getABIS();
     }
 
+    @NotNull
+    @Contract(pure = true)
     public static String getCPUName() {
         return "unknown";
     }
 
+    @NotNull
+    @Contract(pure = true)
     public static String getCPUFeatures() {
         return "unknown";
     }
@@ -47,8 +57,10 @@ public class HardwareInformation {
         return 1;
     }
 
+    @NotNull
+    @Contract(" -> new")
     public static CPUInfo getCPUInfo() {
-        Map<String, String> list = new HashMap<String, String>();
+        Map<String, String> list = new HashMap<>();
         int processorCount = 0;
         if (new File("/proc/cpuinfo").exists()) {
             try {

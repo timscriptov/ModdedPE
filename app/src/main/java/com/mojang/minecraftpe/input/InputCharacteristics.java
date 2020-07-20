@@ -1,6 +1,7 @@
 package com.mojang.minecraftpe.input;
 
-import android.os.Build.VERSION;
+import android.os.Build;
+import androidx.core.view.InputDeviceCompat;
 import android.view.InputDevice;
 import java.io.File;
 
@@ -9,13 +10,13 @@ public class InputCharacteristics {
         boolean supportsL2;
         boolean supportsR2;
         boolean supportsDoubleTriggers = false;
-        if (VERSION.SDK_INT < 19) {
+        if (Build.VERSION.SDK_INT < 19) {
             return true;
         }
         int[] ids = InputDevice.getDeviceIds();
         for (int device : ids) {
             InputDevice device2 = InputDevice.getDevice(device);
-            if (!device2.isVirtual() && device2.getControllerNumber() > 0 && (device2.getSources() & 0x401) != 0) {
+            if (!device2.isVirtual() && device2.getControllerNumber() > 0 && (device2.getSources() & InputDeviceCompat.SOURCE_GAMEPAD) != 0) {
                 boolean[] supportedTriggerKeys = device2.hasKeys(new int[]{102, 103, 104, 105});
                 if (supportedTriggerKeys.length == 4) {
                     supportsDoubleTriggers = true;
@@ -63,7 +64,7 @@ public class InputCharacteristics {
 
     public static boolean isCreteController(int deviceId) {
         InputDevice device = InputDevice.getDevice(deviceId);
-        if (VERSION.SDK_INT < 19 || device == null || device.isVirtual() || device.getControllerNumber() <= 0 || (device.getSources() & 0x401) == 0) {
+        if (Build.VERSION.SDK_INT < 19 || device == null || device.isVirtual() || device.getControllerNumber() <= 0 || (device.getSources() & InputDeviceCompat.SOURCE_GAMEPAD) == 0) {
             return false;
         }
         if (!(device.getVendorId() == 1118) || !(device.getProductId() == 736)) {

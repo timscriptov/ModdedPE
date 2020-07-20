@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Тимашков Иван
+ * Copyright (C) 2018-2020 Тимашков Иван
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -197,7 +197,7 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
                                 return true;
                             }
                     });*/
-               
+
         SwitchPreference mModdedPEPackPreference = (SwitchPreference) findPreference("resource_pack");
         mModdedPEPackPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -213,13 +213,13 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
                             ZipUtil.unpack(getActivity().getAssets().open("resource_pack.zip"), dir);
                         } catch (IOException e) {
                         }
-                        } else {
-                            try {
-                                    FileUtils.deleteDirectory(dir);
-                                    dir.delete();
-                                } catch (IOException e) {
-                                }
+                    } else {
+                        try {
+                            FileUtils.deleteDirectory(dir);
+                            dir.delete();
+                        } catch (IOException e) {
                         }
+                    }
 
                     gsonFileDir.mkdirs();
                     try {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Тимашков Иван
+ * Copyright (C) 2018-2020 Тимашков Иван
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,10 +16,12 @@
  */
 package com.mcal.mcpelauncher.app;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -29,7 +31,7 @@ import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
 import com.mcal.mcpelauncher.R;
 import com.mcal.mcpelauncher.data.Constants;
-import com.mcal.mcpelauncher.utils.*;
+import com.mcal.mcpelauncher.utils.I18n;
 
 /**
  * @author Тимашков Иван
@@ -39,12 +41,6 @@ public class AboutActivity extends BaseActivity implements BillingProcessor.IBil
     private static final String URI_GITHUB = "https://github.com/TimScriptov/ModdedPE.git";
     private static final String URI_NMOD_API = "http://github.com/TimScriptov/NModAPI.git";
     private BillingProcessor bp;
-
-    @Override
-    public void onProductPurchased(String p1, TransactionDetails p2) {
-        Toast.makeText(this, "Thanks", Toast.LENGTH_LONG).show();
-        bp.consumePurchase(p1);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,10 +75,17 @@ public class AboutActivity extends BaseActivity implements BillingProcessor.IBil
             }
         });
         bp = new BillingProcessor(this, null, this);
+        I18n.setLanguage(this);
     }
 
     public void donate(View v) {
         bp.purchase(this, Constants.DONATE);
+    }
+
+    @Override
+    public void onProductPurchased(String p1, TransactionDetails p2) {
+        Toast.makeText(this, "Thanks", Toast.LENGTH_LONG).show();
+        bp.consumePurchase(p1);
     }
 
     @Override
@@ -112,5 +115,31 @@ public class AboutActivity extends BaseActivity implements BillingProcessor.IBil
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         bp.handleActivityResult(requestCode, resultCode, data);
+    }
+
+    @SuppressLint({"DefaultLocale"})
+    public void onStart() {
+        Log.d("ModdedPE", "onStart");
+        super.onStart();
+    }
+
+    public void onResume() {
+        Log.d("ModdedPE", "onResume");
+        super.onResume();
+    }
+
+    public void onPause() {
+        Log.d("ModdedPE", "onPause");
+        super.onPause();
+    }
+
+    public void onStop() {
+        Log.d("ModdedPE", "onStop");
+        super.onStop();
+    }
+
+    public void onDestroy() {
+        Log.d("ModdedPE", "onDestroy");
+        super.onDestroy();
     }
 }

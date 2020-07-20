@@ -37,8 +37,7 @@ import com.mcal.mcpelauncher.R;
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-public class MCDActivity extends AppCompatActivity
-{
+public class MCDActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

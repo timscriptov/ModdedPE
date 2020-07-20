@@ -1,407 +1,204 @@
 <?xml version='1.0' encoding='utf-8'?>
-<manifest
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.mcal.mcpelauncher">
-	<!-- Неограниченный доступ к Интернету -->
-	<uses-permission android:name="android.permission.INTERNET" />
-	<!-- Просмотр данных на USB-накопителе -->
-	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-	<!-- Изменение/удаление данных на USB-накопителе -->
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<!-- Управление функцией вибросигнала -->
-	<uses-permission android:name="android.permission.VIBRATE" />
-	<!-- Просмотр сетевых подключений -->
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<!-- Поиск аккаунтов на устройстве -->
-	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
-	<uses-permission android:name="com.android.vending.BILLING" />
-	<uses-permission android:name="com.android.vending.CHECK_LICENSE" />
-	<!-- Просмотр контактов -->
-	<uses-permission android:name="android.permission.READ_CONTACTS" />
-	<!-- Получение данных о статусе телефона -->
-	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-	<permission
-		android:name="com.mcal.mcpelauncher.permission.C2D_MESSAGE" />
-	<uses-permission android:name="com.mcal.mcpelauncher.permission.C2D_MESSAGE" />
-	<uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
-	<uses-feature
-		android:glEsVersion="0x00020000"
-		android:required="true"/>
-	<uses-feature
-		android:name="android.hardware.touchscreen"
-		android:required="false"/>
-	<uses-feature
-		android:name="android.hardware.microphone"
-		android:required="false"/>
-	<application
-		android:requestLegacyExternalStorage="true"
-		android:theme="@style/FullScreenTheme"
-		android:label="@string/app_name"
-		android:icon="@mipmap/ic_launcher"
-		android:name="com.mcal.mcpelauncher.ModdedPEApplication"
-		android:hasCode="true"
-		android:debuggable="true"
-		android:allowBackup="true"
-		android:largeHeap="true"
-		android:roundIcon="@mipmap/ic_launcher_round">
-		<activity
-			android:theme="@style/AppTheme"
-			android:label="@string/main_title"
-			android:name="com.mcal.mcpelauncher.app.MainActivity"
-			android:screenOrientation="sensorLandscape"/>
-		<service
-			android:name="com.mcal.mcpelauncher.app.SoundService"/>
-		<activity
-			android:theme="@style/FullScreenTheme"
-			android:name="com.mcal.mcpelauncher.app.SplashesActivity"
-			android:screenOrientation="sensorLandscape">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN"/>
-				<category android:name="android.intent.category.LAUNCHER"/>
-			</intent-filter>
-		</activity>
-		<activity
-			android:theme="@style/FullScreenTheme"
-			android:label="@string/app_name"
-			android:name="com.mcal.mcpelauncher.app.MinecraftActivity"
-			android:excludeFromRecents="false"
-			android:launchMode="singleTask"
-			android:screenOrientation="sensorLandscape"
-			android:configChanges="fontScale|keyboard|keyboardHidden|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
-			android:alwaysRetainTaskState="true">
-			<meta-data
-				android:name="android.app.lib_name"
-				android:value="launcher-core"/>
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW"/>
-				<category android:name="android.intent.category.DEFAULT"/>
-				<category android:name="android.intent.category.BROWSABLE"/>
-				<data android:scheme="minecraft"/>
-			</intent-filter>
-		</activity>
-		<activity
-			android:theme="@style/AppTheme"
-			android:label="@string/about_title"
-			android:name="com.mcal.mcpelauncher.app.AboutActivity"
-			android:screenOrientation="sensorLandscape"/>
-		<activity
-			android:theme="@style/AppTheme"
-			android:name="com.mcal.mcpelauncher.app.NModDescriptionActivity"
-			android:screenOrientation="sensorLandscape"/>
-		<activity
-			android:theme="@style/AppTheme"
-			android:label="@string/nmod_picker_file_title"
-			android:name="com.mcal.mcpelauncher.app.NModFilePickerActivity"
-			android:screenOrientation="sensorLandscape"/>
-		<activity
-			android:theme="@style/AppTheme"
-			android:label="@string/dir_picker_title"
-			android:name="com.mcal.mcpelauncher.app.DirPickerActivity"
-			android:screenOrientation="sensorLandscape"/>
-		<activity
-			android:theme="@style/AppTheme"
-			android:label="@string/pkg_picker_title"
-			android:name="com.mcal.mcpelauncher.app.MCPkgPickerActivity"
-			android:screenOrientation="sensorLandscape"/>
-		<activity
-			android:theme="@style/AppTheme"
-			android:label="@string/nmod_picker_package_title"
-			android:name="com.mcal.mcpelauncher.app.NModPackagePickerActivity"
-			android:screenOrientation="sensorLandscape"/>
-		<activity
-			android:theme="@style/AppTheme"
-			android:label="@string/nmods_load_failed_title"
-			android:name="com.mcal.mcpelauncher.app.NModLoadFailActivity"
-			android:launchMode="singleTask"
-			android:screenOrientation="sensorLandscape"/>
-		<activity
-			android:theme="@style/FullScreenTheme"
-			android:label="@string/prestart_title"
-			android:name="com.mcal.mcpelauncher.app.PreloadActivity"
-			android:screenOrientation="sensorLandscape"/>
-		<activity
-			android:theme="@style/AppTheme"
-			android:label="@string/import_nmod_title"
-			android:icon="@drawable/mcd_add_pack"
-			android:name="com.mcal.mcpelauncher.app.ImportNModActivity"
-			android:screenOrientation="sensorLandscape">
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW"/>
-				<category android:name="android.intent.category.DEFAULT"/>
-				<data
-					android:mimeType="*/*"
-					android:scheme="file"
-					android:host="*"
-					android:pathPattern=".*\.mcnmod"/>
-			</intent-filter>
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW"/>
-				<category android:name="android.intent.category.DEFAULT"/>
-				<data
-					android:mimeType="*/*"
-					android:scheme="file"
-					android:host="*"
-					android:pathPattern=".*\.zip"/>
-			</intent-filter>
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW"/>
-				<category android:name="android.intent.category.DEFAULT"/>
-				<data
-					android:mimeType="*/*"
-					android:scheme="file"
-					android:host="*"
-					android:pathPattern=".*\.apk"/>
-			</intent-filter>
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW"/>
-				<category android:name="android.intent.category.DEFAULT"/>
-				<data
-					android:mimeType="*/*"
-					android:scheme="file"
-					android:host="*"
-					android:pathPattern=".*\.nmod"/>
-			</intent-filter>
-		</activity>
-		
-		<!-- Minecraft -->
-			
-		<activity
-			android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-			android:label="@string/app_name_short"
-			android:name="com.mojang.minecraftpe.MainActivity"
-			android:excludeFromRecents="false"
-			android:launchMode="singleTask"
-			android:screenOrientation="sensorLandscape"
-			android:configChanges="fontScale|keyboard|keyboardHidden|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
-			android:alwaysRetainTaskState="true">
-			<meta-data
-				android:name="android.app.lib_name"
-				android:value="minecraftpe" />
-			<intent-filter>
-				<action android:name="xbox_live_game_invite" />
-				<action
-					android:name="xbox_live_achievement_unlock" />
-				<category
-					android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-			<intent-filter>
-				<action
-					android:name="android.intent.action.VIEW" />
-				<category
-					android:name="android.intent.category.DEFAULT" />
-				<category
-					android:name="android.intent.category.BROWSABLE" />
-				<data android:scheme="minecraft" />
-			</intent-filter>
-			<intent-filter>
-				<action
-					android:name="android.intent.action.VIEW" />
-				<category
-					android:name="android.intent.category.DEFAULT" />
-				<data android:mimeType="*/*" />
-				<data android:host="*" />
-				<data android:scheme="file" />
-				<data android:scheme="content" />
-				<data android:pathPattern=".*\.mcworld" />
-				<data android:pathPattern=".*\..*\.mcworld" />
-				<data
-					android:pathPattern=".*\..*\..*\.mcworld" />
-				<data
-					android:pathPattern=".*\..*\..*\..*\.mcworld" />
-				<data
-					android:pathPattern=".*\..*\..*\..*\..*\.mcworld" />
-				<data android:pathPattern=".*\.mcpack" />
-				<data android:pathPattern=".*\..*\.mcpack" />
-				<data
-					android:pathPattern=".*\..*\..*\.mcpack" />
-				<data
-					android:pathPattern=".*\..*\..*\..*\.mcpack" />
-				<data
-					android:pathPattern=".*\..*\..*\..*\..*\.mcpack" />
-				<data android:pathPattern=".*\.mcaddon" />
-				<data android:pathPattern=".*\..*\.mcaddon" />
-				<data
-					android:pathPattern=".*\..*\..*\.mcaddon" />
-				<data
-					android:pathPattern=".*\..*\..*\..*\.mcaddon" />
-				<data
-					android:pathPattern=".*\..*\..*\..*\..*\.mcaddon" />
-				<data android:pathPattern=".*\.mctemplate" />
-				<data
-					android:pathPattern=".*\..*\.mctemplate" />
-				<data
-					android:pathPattern=".*\..*\..*\.mctemplate" />
-				<data
-					android:pathPattern=".*\..*\..*\..*\.mctemplate" />
-				<data
-					android:pathPattern=".*\..*\..*\..*\..*\.mctemplate" />
-			</intent-filter>
-		</activity>
-		<activity
-			android:name="com.microsoft.xbox.idp.ui.AuthFlowActivity"
-			android:windowSoftInputMode="adjustPan|stateUnchanged" />
-		<activity
-			android:name="com.microsoft.xbox.idp.ui.ErrorActivity" />
-		<activity
-			android:label="Microsoft account"
-			android:icon="@mipmap/ic_launcher"
-			android:name="com.microsoft.onlineid.authenticator.AccountAddPendingActivity"
-			android:exported="false" />
-		<activity
-			android:name="com.microsoft.onlineid.internal.ui.WebFlowActivity"
-			android:exported="false"
-			android:configChanges="orientation|screenSize"
-			android:windowSoftInputMode="adjustResize" />
-		<activity
-			android:label="Microsoft account"
-			android:icon="@mipmap/ic_launcher"
-			android:name="com.microsoft.onlineid.ui.AddAccountActivity"
-			android:exported="false"
-			android:configChanges="orientation|screenSize"
-			android:windowSoftInputMode="adjustResize">
-			<intent-filter>
-				<action
-					android:name="com.microsoft.onlineid.internal.ADD_ACCOUNT" />
-				<action
-					android:name="com.microsoft.onlineid.internal.SIGN_UP_ACCOUNT" />
-				<category
-					android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
-		<activity
-			android:name="com.microsoft.onlineid.ui.SignOutActivity"
-			android:exported="false"
-			android:configChanges="orientation|screenSize" />
-		<activity
-			android:label="Microsoft account"
-			android:icon="@mipmap/ic_launcher"
-			android:name="com.microsoft.onlineid.internal.ui.AccountPickerActivity"
-			android:exported="false">
-			<intent-filter>
-				<action
-					android:name="com.microsoft.onlineid.internal.PICK_ACCOUNT" />
-				<category
-					android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
-		<activity
-			android:label="Microsoft account"
-			android:icon="@mipmap/ic_launcher"
-			android:name="com.microsoft.onlineid.internal.ui.InterruptResolutionActivity"
-			android:exported="false" />
-		<activity
-			android:theme="@android:style/Theme.Translucent.NoTitleBar"
-			android:name="com.microsoft.xboxtcui.FbLoginShimActivity"
-			android:configChanges="orientation|screenSize" />
-		<activity
-			android:theme="@android:style/Theme.Translucent.NoTitleBar"
-			android:name="com.microsoft.xboxtcui.FbShareShimActivity"
-			android:configChanges="orientation|screenSize" />
-		<meta-data
-			android:name="xperiaplayoptimized_content"
-			android:resource="@string/xperiaplayoptimized_content" />
-		<meta-data
-			android:name="game_display_name"
-			android:resource="@string/app_name" />
-		<meta-data
-			android:name="game_icon"
-			android:resource="@mipmap/ic_launcher" />
-		<meta-data
-			android:name="com.facebook.sdk.ApplicationId"
-			android:value="@string/facebook_app_id" />
-		<meta-data
-			android:name="appcenter_android_id"
-			android:value="@string/appcenter_android_id" />
-		<receiver
-			android:name="com.appsflyer.SingleInstallBroadcastReceiver"
-			android:exported="true">
-			<intent-filter>
-				<action
-					android:name="com.android.vending.INSTALL_REFERRER" />
-			</intent-filter>
-		</receiver>
-		<uses-library
-			android:name="xperiaplaycertified"
-			android:required="false" />
-		<receiver
-			android:name="com.amazon.device.iap.ResponseReceiver">
-			<intent-filter>
-				<action
-					android:name="com.amazon.inapp.purchasing.NOTIFY"
-					android:permission="com.amazon.inapp.purchasing.Permission.NOTIFY"
-					android:windowSoftInputMode="adjustResize" />
-			</intent-filter>
-		</receiver>
-		<service
-			android:name="com.microsoft.onlineid.internal.sso.client.BackupService"
-			android:exported="false">
-			<intent-filter>
-				<action
-					android:name="com.microsoft.onlineid.internal.sso.client.PUSH_BACKUP" />
-				<action
-					android:name="com.microsoft.onlineid.internal.sso.client.PUSH_BACKUP_IF_NEEDED" />
-				<category
-					android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</service>
-		<service
-			android:name="com.microsoft.onlineid.internal.MsaService"
-			android:exported="false">
-			<intent-filter>
-				<action
-					android:name="com.microsoft.onlineid.internal.GET_TICKET" />
-				<action
-					android:name="com.microsoft.onlineid.internal.UPDATE_PROFILE" />
-				<action
-					android:name="com.microsoft.onlineid.internal.SIGN_OUT" />
-				<action
-					android:name="com.microsoft.onlineid.internal.SIGN_OUT_ALL_APPS" />
-				<category
-					android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</service>
-		<service
-			android:name="com.microsoft.onlineid.internal.sso.service.MsaSsoService"
-			android:enabled="true"
-			android:exported="true">
-			<intent-filter>
-				<action
-					android:name="com.microsoft.msa.action.SSO_SERVICE" />
-			</intent-filter>
-			<meta-data
-				android:name="com.microsoft.msa.service.sso_version"
-				android:value="2" />
-			<meta-data
-				android:name="com.microsoft.msa.service.sdk_version"
-				android:value="@string/sdk_version_name" />
-		</service>
-		<service
-			android:name="com.mojang.minecraftpe.NotificationListenerService"
-			android:exported="false">
-			<intent-filter>
-				<action
-					android:name="com.google.android.c2dm.intent.RECEIVE" />
-			</intent-filter>
-		</service>
-		<service
-			android:name="com.microsoft.xbox.idp.model.gcm.NotificationInstanceIDListenerService"
-			android:exported="true">
-			<intent-filter>
-				<action
-					android:name="com.google.android.gms.iid.InstanceID" />
-			</intent-filter>
-		</service>
-		<service
-			android:name="com.microsoft.xbox.idp.model.gcm.RegistrationIntentService"
-			android:exported="false" />
-		<service
-			android:name="com.mojang.minecraftpe.ImportService"
-			android:exported="true" />
-		<provider
-			android:name="androidx.lifecycle.ProcessLifecycleOwnerInitializer"
-			android:exported="false"
-			android:multiprocess="true"
-			android:authorities="com.mcal.mcpelauncher.lifecycle-process"/>
-	</application>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mcal.mcpelauncher"
+    android:installLocation="preferExternal">
+    <!-- Неограниченный доступ к Интернету -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="com.android.vending.CHECK_LICENSE" />
+    <!-- Просмотр сетевых подключений -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Изменение/удаление данных на USB-накопителе -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- Управление функцией вибросигнала -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- Поиск аккаунтов на устройстве -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <!-- Просмотр контактов -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!-- Получение данных о статусе телефона -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="false" />
+
+    <application
+        android:name="com.mcal.mcpelauncher.ModdedPEApplication"
+        android:allowBackup="true"
+        android:hasCode="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:theme="@style/FullScreenTheme">
+        <activity
+            android:name="com.mcal.mcpelauncher.app.MainActivity"
+            android:label="@string/main_title"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/AppTheme" />
+        <service android:name="com.mcal.mcpelauncher.app.SoundService" />
+
+        <activity
+            android:name="com.mcal.mcpelauncher.app.SplashesActivity"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/FullScreenTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.mcal.mcpelauncher.app.MinecraftActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
+            android:excludeFromRecents="false"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/FullScreenTheme">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="launcher-core" />
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="minecraft" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.mcal.mcpelauncher.app.AboutActivity"
+            android:label="@string/about_title"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.mcal.mcpelauncher.app.NModDescriptionActivity"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.mcal.mcpelauncher.app.NModFilePickerActivity"
+            android:label="@string/nmod_picker_file_title"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.mcal.mcpelauncher.app.DirPickerActivity"
+            android:label="@string/dir_picker_title"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.mcal.mcpelauncher.app.MCPkgPickerActivity"
+            android:label="@string/pkg_picker_title"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.mcal.mcpelauncher.app.NModPackagePickerActivity"
+            android:label="@string/nmod_picker_package_title"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.mcal.mcpelauncher.app.NModLoadFailActivity"
+            android:label="@string/nmods_load_failed_title"
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.mcal.mcpelauncher.app.PreloadActivity"
+            android:label="@string/prestart_title"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/FullScreenTheme" />
+        <activity
+            android:name="com.mcal.mcpelauncher.app.ImportNModActivity"
+            android:icon="@drawable/mcd_add_pack"
+            android:label="@string/import_nmod_title"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="*"
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\.mcnmod"
+                    android:scheme="file" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="*"
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\.zip"
+                    android:scheme="file" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="*"
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\.apk"
+                    android:scheme="file" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="*"
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\.nmod"
+                    android:scheme="file" />
+            </intent-filter>
+        </activity>
+
+
+        <!-- activity
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:label="@string/app_name_short"
+            android:name="com.mojang.minecraftpe.MainActivity"
+            android:excludeFromRecents="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
+            android:alwaysRetainTaskState="true" / -->
+
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.mojang.minecraftpe" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.mojang.minecraftpe.NotificationListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.microsoft.xbox.idp.model.gcm.RegistrationIntentService"
+            android:exported="false" />
+        <service
+            android:name="com.mojang.minecraftpe.ImportService"
+            android:exported="true" />
+        <provider
+            android:name="androidx.lifecycle.ProcessLifecycleOwnerInitializer"
+            android:authorities="com.mcal.mcpelauncher.lifecycle-process"
+            android:exported="false"
+            android:multiprocess="true" />
+    </application>
 </manifest>

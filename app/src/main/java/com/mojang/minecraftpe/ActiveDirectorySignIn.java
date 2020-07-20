@@ -1,22 +1,30 @@
 package com.mojang.minecraftpe;
 
 import android.content.Intent;
+import android.os.Build;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
+import android.webkit.ValueCallback;
 import com.microsoft.aad.adal.AuthenticationCallback;
 import com.microsoft.aad.adal.AuthenticationCancelError;
 import com.microsoft.aad.adal.AuthenticationContext;
 import com.microsoft.aad.adal.AuthenticationResult;
 import com.microsoft.aad.adal.PromptBehavior;
 
-public class ActiveDirectorySignIn implements ActivityListener {
-    private String mAccessToken;
-    private AuthenticationContext mAuthenticationContext;
-    private boolean mDialogOpen = false;
-    private String mIdentityToken;
-    private String mLastError;
-    private boolean mResultObtained = false;
-    private String mUserId;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
-    private native void nativeOnDataChanged();
+public class ActiveDirectorySignIn implements ActivityListener {
+    public String mAccessToken;
+    public AuthenticationContext mAuthenticationContext;
+    public boolean mDialogOpen = false;
+    public String mIdentityToken;
+    private boolean mIsActivityListening = false;
+    public String mLastError;
+    public boolean mResultObtained = false;
+    public String mUserId;
+
+    public native void nativeOnDataChanged();
 
     public ActiveDirectorySignIn() {
         MainActivity.mInstance.addListener(this);
@@ -48,6 +56,12 @@ public class ActiveDirectorySignIn implements ActivityListener {
         }
     }
 
+    public void onResume() {
+    }
+
+    public void onStop() {
+    }
+
     public void onDestroy() {
     }
 
@@ -59,47 +73,58 @@ public class ActiveDirectorySignIn implements ActivityListener {
         /*if (prompt != 2) {
             doRefresh = false;
         }*/
-        MainActivity.mInstance.runOnUiThread(new Runnable() {
-            public void run() {
-                String resourceId = "https://meeservices.minecraft.net";
-                String redirectUri = "urn:ietf:wg:oauth:2.0:oob";
-                String clientId = "b36b1432-1a1c-4c82-9b76-24de1cab42f2";
-                mAuthenticationContext = new AuthenticationContext(MainActivity.mInstance, "https://login.windows.net/common", true);
-                if (doRefresh) {
-                    mAuthenticationContext.acquireTokenSilent(resourceId, clientId, mUserId, getAdalCallback());
-                } else {
-                    mAuthenticationContext.acquireToken(MainActivity.mInstance, resourceId, clientId, redirectUri, "", promptBehavior, "", getAdalCallback());
-                }
+        MainActivity.mInstance.runOnUiThread(() -> {
+            AuthenticationContext unused = ActiveDirectorySignIn.this.mAuthenticationContext = new AuthenticationContext(MainActivity.mInstance, "https://login.windows.net/common", true);
+            if (doRefresh) {
+                ActiveDirectorySignIn.this.mAuthenticationContext.acquireTokenSilent("https://meeservices.minecraft.net", "b36b1432-1a1c-4c82-9b76-24de1cab42f2", ActiveDirectorySignIn.this.mUserId, ActiveDirectorySignIn.this.getAdalCallback());
+            } else {
+                ActiveDirectorySignIn.this.mAuthenticationContext.acquireToken(MainActivity.mInstance, "https://meeservices.minecraft.net", "b36b1432-1a1c-4c82-9b76-24de1cab42f2", "urn:ietf:wg:oauth:2.0:oob", "", promptBehavior, "", ActiveDirectorySignIn.this.getAdalCallback());
             }
         });
     }
 
+    public void clearCookies() {
+        CookieManager cookieManager = CookieManager.getInstance();
+        if (Build.VERSION.SDK_INT >= 21) {
+            cookieManager.removeAllCookies((ValueCallback<Boolean>) null);
+            cookieManager.flush();
+            return;
+        }
+        CookieSyncManager syncManager = CookieSyncManager.createInstance(MainActivity.mInstance);
+        syncManager.startSync();
+        cookieManager.removeAllCookie();
+        syncManager.stopSync();
+        syncManager.sync();
+    }
+
+    @NotNull
+    @Contract(" -> new")
     public static ActiveDirectorySignIn createActiveDirectorySignIn() {
         return new ActiveDirectorySignIn();
     }
 
-    private AuthenticationCallback<AuthenticationResult> getAdalCallback() {
+    public AuthenticationCallback<AuthenticationResult> getAdalCallback() {
         return new AuthenticationCallback<AuthenticationResult>() {
             public void onSuccess(AuthenticationResult authenticationResult) {
                 System.out.println("ADAL sign in success");
-                mResultObtained = true;
-                mAccessToken = authenticationResult.getAccessToken();
-                mIdentityToken = authenticationResult.getIdToken();
-                mLastError = "";
-                mDialogOpen = false;
-                mUserId = authenticationResult.getUserInfo().getUserId();
-                nativeOnDataChanged();
+                boolean unused = ActiveDirectorySignIn.this.mResultObtained = true;
+                String unused2 = ActiveDirectorySignIn.this.mAccessToken = authenticationResult.getAccessToken();
+                String unused3 = ActiveDirectorySignIn.this.mIdentityToken = authenticationResult.getIdToken();
+                String unused4 = ActiveDirectorySignIn.this.mLastError = "";
+                boolean unused5 = ActiveDirectorySignIn.this.mDialogOpen = false;
+                String unused6 = ActiveDirectorySignIn.this.mUserId = authenticationResult.getUserInfo().getUserId();
+                ActiveDirectorySignIn.this.nativeOnDataChanged();
             }
 
             public void onError(Exception e) {
                 System.out.println("ADAL sign in error: " + e.getMessage());
-                mResultObtained = false;
+                boolean unused = ActiveDirectorySignIn.this.mResultObtained = false;
                 if (!(e instanceof AuthenticationCancelError)) {
-                    mLastError = e.getMessage();
+                    String unused2 = ActiveDirectorySignIn.this.mLastError = e.getMessage();
                 }
-                mDialogOpen = false;
-                mUserId = "";
-                nativeOnDataChanged();
+                boolean unused3 = ActiveDirectorySignIn.this.mDialogOpen = false;
+                String unused4 = ActiveDirectorySignIn.this.mUserId = "";
+                ActiveDirectorySignIn.this.nativeOnDataChanged();
             }
         };
     }

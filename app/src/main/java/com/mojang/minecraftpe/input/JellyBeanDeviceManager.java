@@ -1,13 +1,14 @@
 package com.mojang.minecraftpe.input;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.hardware.input.InputManager;
-import android.hardware.input.InputManager.InputDeviceListener;
+import android.os.Handler;
+
+import org.jetbrains.annotations.NotNull;
 
 @TargetApi(16)
-public class JellyBeanDeviceManager extends InputDeviceManager implements InputDeviceListener {
+public class JellyBeanDeviceManager extends InputDeviceManager implements InputManager.InputDeviceListener {
     private final InputManager inputManager;
 
     public native void onInputDeviceAddedNative(int i);
@@ -16,14 +17,13 @@ public class JellyBeanDeviceManager extends InputDeviceManager implements InputD
     public native void setCreteControllerNative(int i, boolean z);
     public native void setDoubleTriggersSupportedNative(boolean z);
 
-    @SuppressLint("WrongConstant")
-    JellyBeanDeviceManager(Context ctx) {
+    JellyBeanDeviceManager(@NotNull Context ctx) {
         inputManager = (InputManager) ctx.getSystemService("input");
     }
 
     public void register() {
         int[] ids = inputManager.getInputDeviceIds();
-        inputManager.registerInputDeviceListener(this, null);
+        inputManager.registerInputDeviceListener(this, (Handler) null);
         setDoubleTriggersSupportedNative(InputCharacteristics.allControllersHaveDoubleTriggers());
         for (int i = 0; i < ids.length; i++) {
             setCreteControllerNative(ids[i], InputCharacteristics.isCreteController(ids[i]));

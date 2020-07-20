@@ -1,24 +1,25 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    compileSdkVersion 30
+    buildToolsVersion '30.0.1'
     defaultConfig {
         applicationId "com.mcal.mcpelauncher"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 871130105
-        versionName "1.13.1.5"
-        ndk {
+        versionCode 943160102
+        versionName "1.16.1.02"
+        multiDexEnabled true
+        /*ndk {
             abiFilters 'armeabi-v7a', 'x86'//, 'arm64-v8a', 'x86_64'
-        }
+        }*/
  }
 
-    externalNativeBuild {
+    /*externalNativeBuild {
         ndkBuild {
             path 'src/main/jni/Android.mk'
         }
-    }
+    }*/
 
     buildTypes {
         release {
@@ -34,22 +35,28 @@ android {
         // but continue the build even when errors are found:
         abortOnError false
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
 	//api project(':microsoft-onlineid-sdk')
 	api project(':minecraft')
-	api project(':microsoft-xbox-idp')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
 	implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-	api 'com.android.support:support-v4:25.0.0'
     implementation 'androidx.preference:preference:1.0.0'
 	implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
 	implementation 'androidx.vectordrawable:vectordrawable-animated:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.android.gms:play-services-gcm:17.0.0'
+    implementation 'com.google.android.gms:play-services-iid:17.0.0'
     implementation 'org.zeroturnaround:zt-zip:1.13'
     implementation 'com.anjlab.android.iab.v3:library:1.0.44'
+    implementation 'org.jetbrains:annotations:19.0.0'
 }

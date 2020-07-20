@@ -23,8 +23,7 @@ import android.graphics.Canvas;
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-public class BitmapRepeater
-{
+public class BitmapRepeater {
     private static Bitmap repeatW(int width, Bitmap src) {
         int count = (width + src.getWidth() - 1) / src.getWidth() + 1;
         Bitmap bitmap = Bitmap.createBitmap(width, src.getHeight(), Bitmap.Config.ARGB_8888);

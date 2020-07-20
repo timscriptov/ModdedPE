@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="settings_fragment"
     android:layout="@layout/preference_item"
-    android:title="@string/preferences_title"
-    android:key="settings_fragment">
-    <PreferenceCategory
+    android:title="@string/preferences_title">
+    <androidx.preference.PreferenceCategory
         android:layout="@layout/preference_category_widget"
         android:title="@string/preferences_title_launcher">
-        <SwitchPreference
-            android:title="@string/preferences_title_safe_mode"
+        <androidx.preference.SwitchPreference
+            android:defaultValue="false"
             android:key="safe_mode"
             android:summary="@string/preferences_summary_safe_mode"
-            android:defaultValue="false" />
-        <SwitchPreference
-            android:title="@string/preferences_title_moddedpe_texture_pack"
+            android:title="@string/preferences_title_safe_mode" />
+        <androidx.preference.SwitchPreference
+            android:defaultValue="false"
             android:key="resource_pack"
             android:summary="@string/preferences_summary_moddedpe_texture_pack"
-            android:defaultValue="false" />
+            android:title="@string/preferences_title_moddedpe_texture_pack" />
         <!-- SwitchPreference
             android:title="@string/preferences_title_xbox"
             android:key="xbox"
@@ -26,43 +26,43 @@
             android:key="servers"
             android:summary="@string/preferences_summary_servers"
             android:defaultValue="false" / -->
-        <SwitchPreference
-            android:title="@string/preferences_title_music"
+        <androidx.preference.SwitchPreference
+            android:defaultValue="true"
             android:key="background_music"
             android:summary="@string/preferences_summary_music"
-            android:defaultValue="true" />
-        <SwitchPreference
-            android:title="@string/preferences_title_desktop_gui"
+            android:title="@string/preferences_title_music" />
+        <androidx.preference.SwitchPreference
+            android:defaultValue="false"
             android:key="desktop_gui"
             android:summary="@string/preferences_summary_desktop_gui"
-            android:defaultValue="false" />
-        <Preference
-            android:layout="@layout/preference_item"
-            android:title="@string/preferences_title_data_saved_path"
+            android:title="@string/preferences_title_desktop_gui" />
+        <androidx.preference.Preference
             android:key="data_saved_path"
-            android:summary="@string/preferences_summary_data_saved_path" />
-        <Preference
             android:layout="@layout/preference_item"
-            android:title="@string/preferences_title_game_pkg_name"
+            android:summary="@string/preferences_summary_data_saved_path"
+            android:title="@string/preferences_title_data_saved_path" />
+        <androidx.preference.Preference
             android:key="game_pkg_name"
-            android:summary="@string/preferences_summary_game_pkg_name" />
-    </PreferenceCategory>
-    <PreferenceCategory
+            android:layout="@layout/preference_item"
+            android:summary="@string/preferences_summary_game_pkg_name"
+            android:title="@string/preferences_title_game_pkg_name" />
+    </androidx.preference.PreferenceCategory>
+    <androidx.preference.PreferenceCategory
         android:layout="@layout/preference_category_widget"
         android:title="@string/preferences_title_app">
-        <ListPreference
-            android:entries="@array/language_strings"
-            android:layout="@layout/preference_item"
-            android:title="@string/preferences_title_language"
-            android:key="language"
-            android:summary="@string/preferences_summary_language"
+        <androidx.preference.ListPreference
             android:defaultValue="0"
             android:dialogTitle="@string/preferences_title_language"
-            android:entryValues="@array/language_values" />
-        <Preference
+            android:entries="@array/language_strings"
+            android:entryValues="@array/language_values"
+            android:key="language"
             android:layout="@layout/preference_item"
-            android:title="@string/preferences_title_about"
+            android:summary="@string/preferences_summary_language"
+            android:title="@string/preferences_title_language" />
+        <androidx.preference.Preference
             android:key="about"
-            android:summary="@string/preferences_summary_about" />
-    </PreferenceCategory>
+            android:layout="@layout/preference_item"
+            android:summary="@string/preferences_summary_about"
+            android:title="@string/preferences_title_about" />
+    </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>

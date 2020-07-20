@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Тимашков Иван
+ * Copyright (C) 2018-2020 Тимашков Иван
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,5 +38,4 @@ public class ModdedPEApplication extends Application {
     public AssetManager getAssets() {
         return mPESdk.getMinecraftInfo().getAssets();
     }
-
 }

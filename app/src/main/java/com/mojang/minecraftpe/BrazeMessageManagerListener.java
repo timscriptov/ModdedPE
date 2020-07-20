@@ -6,6 +6,9 @@ import com.appboy.models.MessageButton;
 import com.appboy.ui.inappmessage.InAppMessageCloser;
 import com.appboy.ui.inappmessage.InAppMessageOperation;
 import com.appboy.ui.inappmessage.listeners.IInAppMessageManagerListener;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +21,7 @@ public class BrazeMessageManagerListener implements IInAppMessageManagerListener
     public native void nativeBrazeModalDialogMessageReceived(String str, String str2, String str3, String str4, String str5, String str6, String str7);
     public native void nativeBrazeToastMessageReceived(String str, String str2, String str3);
 
-    public InAppMessageOperation beforeInAppMessageDisplayed(IInAppMessage inAppMessage) {
+    public InAppMessageOperation beforeInAppMessageDisplayed(@NotNull IInAppMessage inAppMessage) {
         if (inAppMessage.getClass().getSimpleName().equals("InAppMessageSlideup")) {
             String uri = "";
             if (inAppMessage.getUri() != null) {

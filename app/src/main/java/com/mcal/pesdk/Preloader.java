@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Тимашков Иван
+ * Copyright (C) 2018-2020 Тимашков Иван
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ import com.mcal.pesdk.nmod.NModLib;
 import com.mcal.pesdk.nmod.NModTextEditor;
 import com.mcal.pesdk.utils.MinecraftInfo;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 
 import java.io.File;
@@ -74,6 +75,10 @@ public class Preloader {
             LibraryLoader.loadSubstrate();
             mPreloadListener.onLoadFModLib();
             LibraryLoader.loadFMod(mPESdk.getMinecraftInfo().getMinecraftPackageNativeLibraryDir());
+
+            mPreloadListener.onLoadCppSharedLib();
+            LibraryLoader.loadCppShared(mPESdk.getMinecraftInfo().getMinecraftPackageNativeLibraryDir());
+
             mPreloadListener.onLoadMinecraftPELib();
             LibraryLoader.loadMinecraftPE(mPESdk.getMinecraftInfo().getMinecraftPackageNativeLibraryDir());
             mPreloadListener.onLoadGameLauncherLib();
@@ -135,7 +140,7 @@ public class Preloader {
         mPreloadListener.onFinish(mBundle);
     }
 
-    private boolean loadNMod(Context context, NMod nmod, NMod.NModPreloadBean preloadDataItem) {
+    private boolean loadNMod(Context context, @NotNull NMod nmod, NMod.NModPreloadBean preloadDataItem) {
         MinecraftInfo minecraftInfo = mPESdk.getMinecraftInfo();
 
         String jsonEditFile = null;
@@ -231,6 +236,10 @@ public class Preloader {
         }
 
         public void onLoadMinecraftPELib() {
+        }
+
+        public void onLoadCppSharedLib() {
+
         }
 
         public void onLoadPESdkLib() {

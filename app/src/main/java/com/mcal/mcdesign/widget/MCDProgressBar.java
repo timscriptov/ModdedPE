@@ -25,8 +25,7 @@ import android.widget.ProgressBar;
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-public class MCDProgressBar extends ProgressBar
-{
+public class MCDProgressBar extends ProgressBar {
     private static final float mDefaultSpeed = 0.075F;
     private Paint mPaint;
     private int mWidth = 0;

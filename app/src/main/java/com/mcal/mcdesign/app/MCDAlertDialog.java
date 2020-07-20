@@ -22,8 +22,7 @@ import androidx.appcompat.app.AlertDialog;
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-public class MCDAlertDialog extends AlertDialog
-{
+public class MCDAlertDialog extends AlertDialog {
     protected MCDAlertDialog(android.content.Context context) {
         super(context, android.R.style.Theme_Translucent);
     }

@@ -2,18 +2,13 @@ package com.mojang.minecraftpe;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
-import android.graphics.pdf.PdfDocument.Page;
-import android.graphics.pdf.PdfDocument.PageInfo;
-import android.graphics.pdf.PdfDocument.PageInfo.Builder;
-import android.os.Build;
 import android.os.Environment;
-
-import androidx.annotation.RequiresApi;
 import androidx.core.view.ViewCompat;
-import android.text.Layout.Alignment;
+import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import java.io.File;
@@ -22,6 +17,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import org.apache.http.HttpStatus;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public class PDFWriter {
     private Rect mImageRect;
@@ -37,7 +34,7 @@ public class PDFWriter {
         mTextRect = new Rect(mPageRect);
         mTextRect.inset(20, 20);
         mImageRect = new Rect(0, 0, HttpStatus.SC_INTERNAL_SERVER_ERROR, HttpStatus.SC_INTERNAL_SERVER_ERROR);
-        mImageRect.offset(this.mPageRect.centerX() - mImageRect.centerX(), mPageRect.centerY() - mImageRect.centerY());
+        mImageRect.offset(mPageRect.centerX() - mImageRect.centerX(), mPageRect.centerY() - mImageRect.centerY());
         Typeface titleFont = Typeface.DEFAULT_BOLD;
         try {
             titleFont = Typeface.createFromAsset(MainActivity.mInstance.getAssets(), "fonts/Mojangles.ttf");
@@ -55,29 +52,28 @@ public class PDFWriter {
         mPageTextPaint.setColor(ViewCompat.MEASURED_STATE_MASK);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public boolean createDocument(String[] orderedFilenames, String title) {
         if (mOpenDocument != null) {
             mOpenDocument.close();
         }
         mOpenDocument = new PdfDocument();
-        Page titlePage = mOpenDocument.startPage(_getPageInfo(1));
-        _drawTextInRect(title, titlePage, mTitleTextPaint, mTitleRect, Alignment.ALIGN_CENTER);
+        PdfDocument.Page titlePage = mOpenDocument.startPage(_getPageInfo(1));
+        _drawTextInRect(title, titlePage, mTitleTextPaint, mTitleRect, Layout.Alignment.ALIGN_CENTER);
         mOpenDocument.finishPage(titlePage);
         int i = 0;
         while (i < orderedFilenames.length) {
             String filename = orderedFilenames[i];
-            Page page = mOpenDocument.startPage(_getPageInfo(i + 2));
+            PdfDocument.Page page = mOpenDocument.startPage(_getPageInfo(i + 2));
             try {
                 String fileExtension = _getExtension(filename);
                 if (fileExtension.equals("txt")) {
-                    _drawTextInRect(_readFileToString(filename), page, mPageTextPaint, mTextRect, Alignment.ALIGN_NORMAL);
+                    _drawTextInRect(_readFileToString(filename), page, mPageTextPaint, mTextRect, Layout.Alignment.ALIGN_NORMAL);
                 } else if (fileExtension.equals("jpeg")) {
-                    page.getCanvas().drawBitmap(BitmapFactory.decodeFile(filename), null, mImageRect, null);
+                    page.getCanvas().drawBitmap(BitmapFactory.decodeFile(filename), (Rect) null, mImageRect, (Paint) null);
                 } else {
                     throw new UnsupportedOperationException("Unsupported extension from file: " + filename);
                 }
-                this.mOpenDocument.finishPage(page);
+                mOpenDocument.finishPage(page);
                 i++;
             } catch (Exception e) {
                 System.out.println("Failed to write page: " + e.getMessage());
@@ -88,7 +84,6 @@ public class PDFWriter {
         return true;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public boolean writeDocumentToFile(String destinationFilename) {
         try {
             mOpenDocument.writeTo(new FileOutputStream(destinationFilename));
@@ -99,7 +94,6 @@ public class PDFWriter {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void closeDocument() {
         if (mOpenDocument != null) {
             mOpenDocument.close();
@@ -111,19 +105,19 @@ public class PDFWriter {
         return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private PageInfo _getPageInfo(int pageNumber) {
-        return new Builder(mPageRect.width(), mPageRect.height(), pageNumber).create();
+    private PdfDocument.PageInfo _getPageInfo(int pageNumber) {
+        return new PdfDocument.PageInfo.Builder(this.mPageRect.width(), mPageRect.height(), pageNumber).create();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private void _drawTextInRect(String text, Page page, TextPaint textPaint, Rect rect, Alignment alignment) {
+    private void _drawTextInRect(String text, @NotNull PdfDocument.Page page, TextPaint textPaint, @NotNull Rect rect, Layout.Alignment alignment) {
         StaticLayout textLayout = new StaticLayout(text, textPaint, rect.width(), alignment, 1.0f, 0.0f, false);
         Canvas pageCanvas = page.getCanvas();
         pageCanvas.translate((float) rect.left, (float) rect.top);
         textLayout.draw(pageCanvas);
     }
 
+    @NotNull
+    @Contract("_ -> new")
     private String _readFileToString(String filename) throws FileNotFoundException, IOException {
         File textFile = new File(filename);
         FileInputStream textStream = new FileInputStream(textFile);
@@ -133,7 +127,8 @@ public class PDFWriter {
         return new String(textBytes);
     }
 
-    private String _getExtension(String filename) {
+    @NotNull
+    private String _getExtension(@NotNull String filename) {
         int index = filename.lastIndexOf(46);
         if (index < 0 || index + 1 >= filename.length()) {
             return "";

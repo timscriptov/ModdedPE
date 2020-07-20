@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Тимашков Иван
+ * Copyright (C) 2018-2020 Тимашков Иван
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,29 +25,33 @@ import com.mojang.minecraftpe.MainActivity;
  * @author https://github.com/TimScriptov
  */
 public class NModLib {
-    private static native boolean nativeRegisterNatives ( Class cls );
-    private static native boolean nativeCallOnActivityFinish ( String name, MainActivity mainActivity );
-    private static native boolean nativeCallOnLoad ( String name, String mcVersion, String apiVersion );
-    private static native boolean nativeCallOnActivityCreate ( String mame, MainActivity mainActivity, Bundle savedInstanceState );
-    
+    static {
+        nativeRegisterNatives(NModLib.class);
+    }
+
     private String mName;
-    public NModLib ( String name ) {
+
+    public NModLib(String name) {
         mName = name;
     }
 
-    public boolean callOnActivityCreate ( com.mojang.minecraftpe.MainActivity mainActivity, Bundle bundle ) {
-        return nativeCallOnActivityCreate ( mName, mainActivity, bundle );
+    private static native boolean nativeRegisterNatives(Class cls);
+
+    private static native boolean nativeCallOnActivityFinish(String name, MainActivity mainActivity);
+
+    private static native boolean nativeCallOnLoad(String name, String mcVersion, String apiVersion);
+
+    private static native boolean nativeCallOnActivityCreate(String mame, MainActivity mainActivity, Bundle savedInstanceState);
+
+    public boolean callOnActivityCreate(com.mojang.minecraftpe.MainActivity mainActivity, Bundle bundle) {
+        return nativeCallOnActivityCreate(mName, mainActivity, bundle);
     }
 
-    public boolean callOnActivityFinish ( com.mojang.minecraftpe.MainActivity mainActivity ) {
-        return nativeCallOnActivityFinish ( mName, mainActivity );
+    public boolean callOnActivityFinish(com.mojang.minecraftpe.MainActivity mainActivity) {
+        return nativeCallOnActivityFinish(mName, mainActivity);
     }
 
-    public boolean callOnLoad ( String mcver, String apiVer ) {
-        return nativeCallOnLoad ( mName, mcver, apiVer );
-    }
-
-    static {
-        nativeRegisterNatives ( NModLib.class );
+    public boolean callOnLoad(String mcver, String apiVer) {
+        return nativeCallOnLoad(mName, mcver, apiVer);
     }
 }

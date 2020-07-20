@@ -8,11 +8,13 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import com.mojang.minecraftpe.MainActivity;
 
+import org.jetbrains.annotations.NotNull;
+
 class MinecraftWebViewClient extends WebViewClient {
     private MinecraftWebview mView;
 
     public MinecraftWebViewClient(MinecraftWebview view) {
-        this.mView = view;
+        mView = view;
     }
 
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -25,13 +27,13 @@ class MinecraftWebViewClient extends WebViewClient {
         super.onPageFinished(view, url);
     }
 
-    public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-        System.out.println(String.format("Error %s loading url %s", new Object[]{error.getDescription().toString(), request.getUrl().toString()}));
-        this.mView.nativeOnWebError(error.getErrorCode(), error.getDescription().toString());
+    public void onReceivedError(WebView view, @NotNull WebResourceRequest request, @NotNull WebResourceError error) {
+        System.out.println(String.format("Error %s loading url %s", error.getDescription().toString(), request.getUrl().toString()));
+        mView.nativeOnWebError(error.getErrorCode(), error.getDescription().toString());
         super.onReceivedError(view, request, error);
     }
 
-    public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+    public boolean shouldOverrideUrlLoading(@NotNull WebView view, @NotNull WebResourceRequest request) {
         Uri newUrl = request.getUrl();
         Uri oldUrl = Uri.parse(view.getUrl());
         if (!request.hasGesture() || oldUrl.getHost().equals(newUrl.getHost())) {

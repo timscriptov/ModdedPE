@@ -13,18 +13,20 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
 
+import org.jetbrains.annotations.NotNull;
+
 public class ImportService extends Service {
     final Messenger mMessenger = new Messenger(new IncomingHandler());
 
     @SuppressLint("HandlerLeak")
     class IncomingHandler extends Handler {
         
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NotNull Message msg) {
             if (msg.what == 672) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 String deviceId = prefs.getString("deviceId", "?");
                 String lastSessionId = prefs.getString("LastDeviceSessionId", "");
-                if (deviceId != "?") {
+                if (!deviceId.equals("?")) {
                     try {
                         long timestamp = getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).firstInstallTime;
                         Bundle b = new Bundle();
