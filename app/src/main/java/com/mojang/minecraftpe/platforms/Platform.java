@@ -8,8 +8,11 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class Platform {
     public abstract String getABIS();
+
     public abstract void onAppStart(View view);
+
     public abstract void onViewFocusChanged(boolean z);
+
     public abstract void onVolumePressed();
 
     @NotNull

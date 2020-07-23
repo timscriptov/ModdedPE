@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class InputDeviceManager {
     public abstract void register();
+
     public abstract void unregister();
 
     @NotNull

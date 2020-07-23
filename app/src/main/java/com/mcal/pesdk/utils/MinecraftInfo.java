@@ -20,6 +20,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 
+import com.mcal.mcpelauncher.data.Preferences;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,12 +35,12 @@ public class MinecraftInfo {
     private Context mContext;
     private Context mMCContext;
 
-    public MinecraftInfo(Context context, LauncherOptions options) {
+    public MinecraftInfo(Context context) {
         this.mContext = context;
 
         String mMinecraftPackageName = MC_PACKAGE_NAME;
-        if (!options.getMinecraftPEPackageName().equals(LauncherOptions.STRING_VALUE_DEFAULT))
-            mMinecraftPackageName = options.getMinecraftPEPackageName();
+        if (!Preferences.getMinecraftPEPackageName().equals(LauncherOptions.STRING_VALUE_DEFAULT))
+            mMinecraftPackageName = Preferences.getMinecraftPEPackageName();
 
         try {
             mMCContext = context.createPackageContext(mMinecraftPackageName, Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);

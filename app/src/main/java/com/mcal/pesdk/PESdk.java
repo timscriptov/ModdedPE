@@ -29,14 +29,12 @@ import com.mcal.pesdk.utils.MinecraftInfo;
 public class PESdk {
     private MinecraftInfo mMinecraftInfo;
     private NModAPI mNModAPI;
-    private LauncherOptions mLauncherOptions;
     private GameManager mGameManager;
     private boolean mIsInited;
 
-    public PESdk(Context context, LauncherOptions options) {
-        mMinecraftInfo = new MinecraftInfo(context, options);
+    public PESdk(Context context) {
+        mMinecraftInfo = new MinecraftInfo(context);
         mNModAPI = new NModAPI(context);
-        mLauncherOptions = options;
         mGameManager = new GameManager(this);
         mIsInited = false;
     }
@@ -58,9 +56,6 @@ public class PESdk {
         return mMinecraftInfo;
     }
 
-    public LauncherOptions getLauncherOptions() {
-        return mLauncherOptions;
-    }
 
     public GameManager getGameManager() {
         return mGameManager;

@@ -29,8 +29,10 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import com.mcal.mcpelauncher.ModdedPEApplication;
 import com.mcal.mcpelauncher.R;
-import com.mcal.mcpelauncher.app.NModDescriptionActivity;
+import com.mcal.mcpelauncher.activities.NModDescriptionActivity;
 import com.mcal.pesdk.nmod.NMod;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -97,6 +99,7 @@ public class NModBanner extends RelativeLayout {
         return (RelativeLayout) LayoutInflater.from(getContext()).inflate(R.layout.moddedpe_nmod_banner_item, null);
     }
 
+    @NotNull
     private RelativeLayout createBannerItemFor(NMod nmod_for) {
         final NMod nmod = nmod_for;
         RelativeLayout view = createEmptyBannerItem();
@@ -105,13 +108,10 @@ public class NModBanner extends RelativeLayout {
         AppCompatTextView bannerTitle = view.findViewById(R.id.moddedpe_nmod_banner_item_text_view_title);
         bannerTitle.setText(nmod.getBannerTitle());
         view.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View p1) {
                 NModDescriptionActivity.startThisActivity(getContext(), nmod);
             }
-
-
         });
         return view;
     }

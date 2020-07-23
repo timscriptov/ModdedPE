@@ -6,13 +6,21 @@ public class NativeStoreListener implements StoreListener {
     public NativeStoreListener(long storeListener) {
         mStoreListener = storeListener;
     }
+
     public native void onPurchaseCanceled(long j, String str);
+
     public native void onPurchaseFailed(long j, String str);
+
     public native void onPurchaseSuccessful(long j, String str, String str2);
+
     public native void onQueryProductsFail(long j);
+
     public native void onQueryProductsSuccess(long j, Product[] productArr);
+
     public native void onQueryPurchasesFail(long j);
+
     public native void onQueryPurchasesSuccess(long j, Purchase[] purchaseArr);
+
     public native void onStoreInitialized(long j, boolean z);
 
     public void onStoreInitialized(boolean available) {

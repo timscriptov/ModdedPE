@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+
 import com.mojang.minecraftpe.MainActivity;
 import com.mojang.minecraftpe.PopupView;
 
@@ -21,7 +22,9 @@ public class MinecraftWebview {
     public PopupView mWebViewPopup;
 
     public native void nativeDismiss();
+
     public native void nativeOnWebError(int i, String str);
+
     public native void nativeSendToHost(String str);
 
     public MinecraftWebview() {

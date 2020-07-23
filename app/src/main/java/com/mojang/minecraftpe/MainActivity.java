@@ -5,11 +5,13 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
 import android.app.NativeActivity;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -61,10 +63,14 @@ import android.view.inputmethod.InputMethodManager;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.mcal.mcpelauncher.app.SoundService;
+import com.appsflyer.AppsFlyerLib;
+import com.mcal.mcpelauncher.services.SoundService;
 import com.mojang.minecraftpe.platforms.Platform;
 
 import org.fmod.FMOD;
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -85,13 +91,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
-import com.appsflyer.AppsFlyerLib;
-import android.content.BroadcastReceiver;
-import android.content.IntentFilter;
-
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
-import org.json.JSONException;
 
 public class MainActivity extends NativeActivity implements OnKeyListener {
     HeadsetConnectionReceiver headsetConnectionReceiver;
@@ -119,7 +118,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
     private Locale initialUserLocale;
     private long mCallback = 0;
     private SessionInfo mLastDeviceSessionInfo = null;
-    
+
     private class HeadsetConnectionReceiver extends BroadcastReceiver {
         private HeadsetConnectionReceiver() {
         }
@@ -193,7 +192,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         }
         return this.mLastDeviceSessionInfo;
     }
-    
+
     public void setLastDeviceSessionInfo(@NotNull SessionInfo info) {
         SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(this).edit();
         edit.putString("last-session-info", info.toString());
@@ -205,7 +204,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
     public void setLastDeviceSessionInfo(String sessionId, String buildId) {
         setLastDeviceSessionInfo(new SessionInfo(sessionId, buildId));
     }
-    
+
     public static boolean isPowerVR() {
         return _isPowerVr;
     }
@@ -267,40 +266,75 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
     }
 
     public native void fireCrashedTelemetry(String str, String str2, String str3);
+
     native String nativeScreenIsPresentInStack(String str);
+
     native void nativeLoginData(String accessToken, String clientId, String profileId, String profileName);
+
     native void nativeTypeCharacter(String character);
+
     native void nativeWebRequestCompleted(int requestId, long userData, int httpStatusOrNegativeError, String content);
+
     public native void setUpBreakpad(String str);
+
     public native boolean isAndroidTrial();
+
     public native boolean isBrazeEnabled();
+
     public native boolean isEduMode();
+
     public native boolean isPublishBuild();
+
     public native boolean isTestInfrastructureDisabled();
+
     public native void nativeBackPressed();
+
     public native void nativeBackSpacePressed();
+
     public native String nativeCheckIfTestsAreFinished();
+
     public native void nativeClearAButtonState();
+
     public native void nativeDeviceCorrelation(long j, String str, long j2, String str2);
+
     public native String nativeGetActiveScreen();
+
     public native String nativeGetDevConsoleLogName();
+
     public native String nativeGetDeviceId();
+
     public native String nativeGetLogText(String str);
+
     public native boolean nativeKeyHandler(int i, int i2);
+
     public native void nativeOnDestroy();
+
     public native void nativeOnPickImageCanceled(long j);
+
     public native void nativeOnPickImageSuccess(long j, String str);
+
     public native void nativeProcessIntentUriQuery(String str, String str2);
+
     public native void nativeRegisterThis();
+
     public native void nativeResize(int i, int i2);
+
     public native void nativeReturnKeyPressed();
+
     public native void nativeSetHeadphonesConnected(boolean z);
+
     public native String nativeSetOptions(String str);
+
     public native void nativeSetTextboxText(String str);
+
     public native void nativeShutdown();
+
     public native void nativeStopThis();
+
     public native void nativeStoragePermissionRequestResult(boolean z, int i);
+
     public native void nativeSuspend();
+
     public native void nativeUnregisterThis();
 
     public void onRequestComplete(int requestId, long userData, int httpStatusOrNegativeError, String content) {
@@ -339,7 +373,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         eventValue.put("af_currency", currencyCode);
         Log.d("ModdedPE", contentId + ":" + revenue + ":" + playerId + ":" +playerSessionId + ":" + currencyCode + ":" + eventName );
     }*/
-    
+
     public void trackPurchaseEvent(String contentId, String contentType, String revenue, String clientId, String userId, String playerSessionId, String currencyCode, String eventName) {
         Map<String, Object> eventValue = new HashMap<>();
         eventValue.put("player_session_id", playerSessionId);
@@ -457,12 +491,12 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
          * Bg music                        *
          **********************************/
     }
-    
+
     public void onNewIntent(Intent intent) {
         setIntent(intent);
         processIntent(intent);
     }
-    
+
     private void processIntent(Intent intent) {
         if (intent != null) {
             String extraCmd = intent.getStringExtra("intent_cmd");
@@ -556,7 +590,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
             }
         }
     }
-    
+
     public boolean dispatchKeyEvent(@NotNull KeyEvent event) {
         if (nativeKeyHandler(event.getKeyCode(), event.getAction())) {
             return true;
@@ -705,37 +739,37 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
             }
         });
         textWidget.addTextChangedListener(new TextWatcher() {
-				public void onTextChanged(CharSequence s, int start, int before, int count) {
-				}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
-				public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-				}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-				public void afterTextChanged(Editable s) {
-					String textBoxText = s.toString();
-					if (textWidget == null) {
-						nativeSetTextboxText(textBoxText);
-					} else if (textWidget.shouldSendText()) {
-						nativeSetTextboxText(textBoxText);
-						textWidget.updateLastSentText();
-					}
-				}
-			});
+            public void afterTextChanged(Editable s) {
+                String textBoxText = s.toString();
+                if (textWidget == null) {
+                    nativeSetTextboxText(textBoxText);
+                } else if (textWidget.shouldSendText()) {
+                    nativeSetTextboxText(textBoxText);
+                    textWidget.updateLastSentText();
+                }
+            }
+        });
         textWidget.setOnMCPEKeyWatcher(new TextInputProxyEditTextbox.MCPEKeyWatcher() {
-				public void onDeleteKeyPressed() {
-					MainActivity.this.runOnUiThread(() -> nativeBackSpacePressed());
-				}
+            public void onDeleteKeyPressed() {
+                MainActivity.this.runOnUiThread(() -> nativeBackSpacePressed());
+            }
 
-				public boolean onBackKeyPressed() {
-					runOnUiThread(new Runnable() {
-							public void run() {
-								Log.w("mcpe - keyboard", "textInputWidget.onBackPressed");
-								nativeBackPressed();
-							}
-						});
-					return true;
-				}
-			});
+            public boolean onBackKeyPressed() {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Log.w("mcpe - keyboard", "textInputWidget.onBackPressed");
+                        nativeBackPressed();
+                    }
+                });
+                return true;
+            }
+        });
         ((ViewGroup) findViewById(16908290)).addView(textWidget, new ViewGroup.LayoutParams(320, 50));
         final View activityRootView = findViewById(16908290).getRootView();
         activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
@@ -758,20 +792,20 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         });
     }
 
-	public void showKeyboard(String text, int maxLength, boolean limitInput, boolean numbersOnly, boolean isMultiline) {
+    public void showKeyboard(String text, int maxLength, boolean limitInput, boolean numbersOnly, boolean isMultiline) {
         final String startText = text;
         final int fMaxLength = maxLength;
         final boolean fLimitInput = limitInput;
         final boolean fNumbersOnly = numbersOnly;
         final boolean fIsMultiline = isMultiline;
-		//Не поддерживается в Minecraft 1.11.4.2
+        //Не поддерживается в Minecraft 1.11.4.2
         //nativeClearAButtonState();
         nativeClearAButtonState();
         runOnUiThread(new Runnable() {
-				public void run() {
-					setupKeyboardViews(startText, fMaxLength, fLimitInput, fNumbersOnly, fIsMultiline);
-				}
-			});
+            public void run() {
+                setupKeyboardViews(startText, fMaxLength, fLimitInput, fNumbersOnly, fIsMultiline);
+            }
+        });
     }
 
     public void hideKeyboard() {
@@ -801,7 +835,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
             }
         });
     }
-	
+
 
     public int getCursorPosition() {
         if (isTextWidgetActive()) {
@@ -868,7 +902,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
             return false;
         }
     }
-    
+
     public byte[] getFileDataBytes(@NotNull String filename) {
         BufferedInputStream bis;
         if (filename.isEmpty()) {
@@ -993,7 +1027,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
     public String getObbDirPath() {
         return getApplicationContext().getObbDir().getAbsolutePath();
     }
-    
+
     public String getExternalStoragePath() {
         return Environment.getExternalStorageDirectory().getAbsolutePath();
     }
@@ -1014,7 +1048,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
 
     public void postScreenshotToFacebook(String filename, int w, int h, int[] pixels) {
     }
-    
+
     public void quit() {
         runOnUiThread(() -> finish());
     }
@@ -1071,7 +1105,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         }
         return null;
     }
-    
+
     public boolean isNetworkEnabled(boolean onlyWifiAllowed) {
         @SuppressLint("WrongConstant")
         ConnectivityManager cm = (ConnectivityManager) getSystemService("connectivity");
@@ -1262,7 +1296,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
          * Bg music                       *
          **********************************/
     }
-    
+
     @NotNull
     private File copyContentStoreToTempFile(Uri content) {
         return copyContentStoreToTempFile(content, "skintemp.png");
@@ -1288,8 +1322,8 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
             ie.printStackTrace();
             return new File("/sdcard/totally/fake");
         }
-	}
-    
+    }
+
     public void onResume() {
         boolean numbersOnly;
         boolean isMultiline;
@@ -1360,9 +1394,9 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         /**********************************
          * Bg music                       *
          **********************************/
-    	if(bound) {
-        	unbindService(sc);
-		}
+        if (bound) {
+            unbindService(sc);
+        }
         /**********************************
          * Bg music                       *
          **********************************/

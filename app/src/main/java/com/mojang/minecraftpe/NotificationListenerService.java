@@ -1,6 +1,7 @@
 package com.mojang.minecraftpe;
 
 import android.os.Bundle;
+
 import com.google.android.gms.gcm.GcmListenerService;
 import com.microsoft.xbox.services.NotificationHelper;
 import com.microsoft.xbox.services.NotificationResult;

@@ -7,18 +7,21 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
 import android.os.Environment;
-import androidx.core.view.ViewCompat;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+
+import androidx.core.view.ViewCompat;
+
+import org.apache.http.HttpStatus;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import org.apache.http.HttpStatus;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 public class PDFWriter {
     private Rect mImageRect;

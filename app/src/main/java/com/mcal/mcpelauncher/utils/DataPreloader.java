@@ -38,7 +38,7 @@ public class DataPreloader {
         final Context context = context_a;
         new Thread() {
             public void run() {
-                ModdedPEApplication.mPESdk = new PESdk(context, new UtilsSettings(context));
+                ModdedPEApplication.mPESdk = new PESdk(context);
                 ModdedPEApplication.mPESdk.init();
                 mIsPreloadingFinished = true;
                 checkFinish();
@@ -50,7 +50,7 @@ public class DataPreloader {
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
-
+                    e.printStackTrace();
                 }
                 mIsSleepingFinished = true;
                 checkFinish();
@@ -61,9 +61,5 @@ public class DataPreloader {
     private void checkFinish() {
         if (mIsPreloadingFinished && mIsSleepingFinished)
             mListener.onPreloadingFinished();
-    }
-
-    public abstract interface PreloadingFinishedListener {
-        void onPreloadingFinished();
     }
 }

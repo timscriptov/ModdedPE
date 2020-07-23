@@ -2,13 +2,11 @@ package com.mojang.minecraftpe;
 
 import android.content.Context;
 import android.text.InputFilter;
-import android.text.Spanned;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputConnectionWrapper;
-import android.widget.EditText;
 
 import androidx.appcompat.widget.AppCompatEditText;
 
@@ -24,6 +22,7 @@ public class TextInputProxyEditTextbox extends AppCompatEditText {
 
     public interface MCPEKeyWatcher {
         boolean onBackKeyPressed();
+
         void onDeleteKeyPressed();
     }
 

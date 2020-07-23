@@ -16,12 +16,9 @@
  */
 package com.mcal.mcpelauncher.data;
 
-import com.mcal.mcpelauncher.utils.Utils;
-
 /**
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 public final class Constants {
-    public static final String DONATE = Utils.fromBase64("ZG9uYXRl"); // donate
 }

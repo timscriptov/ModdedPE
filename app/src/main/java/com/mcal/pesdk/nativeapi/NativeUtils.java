@@ -18,7 +18,10 @@ package com.mcal.pesdk.nativeapi;
 
 import android.content.Context;
 
+import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.pesdk.utils.LauncherOptions;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
@@ -37,11 +40,11 @@ public class NativeUtils {
 
     public static native void nativeRegisterNatives(Class cls);
 
-    public static void setValues(Context context, LauncherOptions options) {
-        if (options.getDataSavedPath().equals(LauncherOptions.STRING_VALUE_DEFAULT)) {
+    public static void setValues(Context context) {
+        if (Preferences.getDataSavedPath().equals(LauncherOptions.STRING_VALUE_DEFAULT)) {
             NativeUtils.nativeSetDataDirectory(context.getFilesDir().getAbsolutePath() + File.separator);
         } else {
-            String pathStr = options.getDataSavedPath();
+            String pathStr = Preferences.getDataSavedPath();
             if (!pathStr.endsWith(File.separator))
                 pathStr += File.separator;
             NativeUtils.nativeSetDataDirectory(pathStr);

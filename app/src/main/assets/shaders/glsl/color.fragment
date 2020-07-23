@@ -1,0 +1,202 @@
+// __multiversion__
+// This signals the loading code to prepend either #version 100 or #version 300 es as apropriate.
+
+// To use centroid sampling we need to have version 300 es shaders, which requires changing:
+// attribute to in
+// varying to out when in vertex shaders or in when in fragment shaders
+// defining an out vec4 FragColor and replacing uses of gl_FragColor with FragColor
+// texture2D to texture
+#if __VERSION__ >= 300
+
+// version 300 code
+
+#define varying in
+#define texture2D texture
+out vec4 FragColor;
+#define gl_FragColor FragColor
+
+#else
+
+// version 100 code
+
+#endif
+
+uniform vec2 FOG_CONTROL;
+uniform vec4 FOG_COLOR;
+uniform vec4 CURRENT_COLOR;
+uniform highp float TIME;
+
+varying vec4 color;
+
+void main()
+{
+vec4 cf = color;
+vec4 fog = FOG_COLOR;
+
+float fog_flag = 0.0;
+
+gl_FragColor = cf;
+
+if(FOG_CONTROL.x < 0.55 && FOG_CONTROL.x > 0.1){
+fog_flag = 1.0;
+}
+
+if(fog.r > 0.15 && fog.g > 0.15){
+if(fog_flag == 0.0){
+  if(cf.r + cf.b < cf.g * 1.95) cf.g *= 1.5;
+			else if(cf.r < 1.2 && cf.g < 1.2&& cf.b < 1.2){
+	    gl_FragColor.r *= 0.8;
+	    gl_FragColor.g *= 0.8;
+	    gl_FragColor.b *= 0.9;
+	}
+  else if(cf.r < 1.25 && cf.g < 1.25&& cf.b < 1.25){
+	    gl_FragColor.r *= 0.78;
+	    gl_FragColor.g *= 0.78;
+	    gl_FragColor.b *= 0.78;
+	}
+	  else if(cf.r < 1.3 && cf.g < 1.3&& cf.b < 1.3){
+	    gl_FragColor.r *= 0.75;
+	    gl_FragColor.g *= 0.75;
+	    gl_FragColor.b *= 0.75;
+	}
+	  else if(cf.r < 1.35 && cf.g < 1.35&& cf.b < 1.35){
+	    gl_FragColor.r *= 0.73;
+	    gl_FragColor.g *= 0.725;
+	    gl_FragColor.b *= 0.735;
+	}
+	else if(cf.r < 1.4 && cf.g < 1.4&& cf.b < 1.4){
+	    gl_FragColor.r *= 0.71;
+	    gl_FragColor.g *= 0.705;
+	    gl_FragColor.b *= 0.72;
+	}
+	  else if(cf.r < 1.45 && cf.g < 1.45&& cf.b < 1.45){
+	    gl_FragColor.r *= 0.69;
+	    gl_FragColor.g *= 0.685;
+	    gl_FragColor.b *= 0.705;
+	}
+	else if(cf.r < 1.5 && cf.g < 1.5&& cf.b < 1.5){
+	    gl_FragColor.r *= 0.6735;
+	    gl_FragColor.g *= 0.6635;
+	    gl_FragColor.b *= 0.6905;
+	}
+	  else if(cf.r < 1.55 && cf.g < 1.55&& cf.b < 1.55){
+	    gl_FragColor.r *= 0.653+0.005;
+	    gl_FragColor.g *= 0.643+0.005;
+	    gl_FragColor.b *= 0.67+0.005;
+	}
+	else if(cf.r < 1.6 && cf.g < 1.6&& cf.b < 1.6){
+	    gl_FragColor.r *= 0.635+0.01;
+	    gl_FragColor.g *= 0.625+0.01;
+	    gl_FragColor.b *= 0.65+0.01;
+	}
+	  else if(cf.r < 1.65 && cf.g < 1.65&& cf.b < 1.65){
+	    gl_FragColor.r *= 0.615+0.015;
+	    gl_FragColor.g *= 0.605+0.015;
+	    gl_FragColor.b *= 0.63+0.015;
+	}
+	else if(cf.r < 1.7 && cf.g < 1.7&& cf.b < 1.7){
+	    gl_FragColor.r *= 0.597+0.02;
+	    gl_FragColor.g *= 0.587+0.02;
+	    gl_FragColor.b *= 0.61+0.02;
+	}
+	else if(cf.r < 1.8 && cf.g < 1.8&& cf.b < 1.8){
+	    gl_FragColor.r *= 0.587+0.025;
+	    gl_FragColor.g *= 0.577+0.015;
+	    gl_FragColor.b *= 0.60+0.025;
+	}
+	  else if(cf.r < 1.85 && cf.g < 1.85&& cf.b < 1.85){
+	    gl_FragColor.r *= 0.577+0.03;
+	    gl_FragColor.g *= 0.567+0.00;
+	    gl_FragColor.b *= 0.59+0.03;
+	}
+	else if(cf.r < 1.9 && cf.g < 1.9&& cf.b < 1.9){
+	    gl_FragColor.r *= 0.56+0.015;
+	    gl_FragColor.g *= 0.55+0.015;
+	    gl_FragColor.b *= 0.585+0.015;
+	}
+	  else if(cf.r < 2.0 && cf.g < 2.0&& cf.b < 2.0){
+	    gl_FragColor.r *= 0.55+0.00;
+	    gl_FragColor.g *= 0.54;
+	    gl_FragColor.b *= 0.575+0.00;
+	}
+		else if(cf.r < 2.1 && cf.g < 2.1&& cf.b < 2.1){
+	    gl_FragColor.r *= 0.53;
+	    gl_FragColor.g *= 0.51;
+	    gl_FragColor.b *= 0.56;
+	}
+		else if(cf.r < 2.15 && cf.g < 2.15&& cf.b < 2.15){
+	    gl_FragColor.r *= 0.51+0.01;
+	    gl_FragColor.g *= 0.50+0.00;
+	    gl_FragColor.b *= 0.55+0.01;
+	}
+	else if(cf.r < 2.2 && cf.g < 2.2&& cf.b < 2.2){
+	    gl_FragColor.r *= 0.50+0.01;
+	    gl_FragColor.g *= 0.48+0.00;
+	    gl_FragColor.b *= 0.54+0.01;
+	}
+	else if(cf.r < 2.25 && cf.g < 2.25&& cf.b < 2.25){
+	    gl_FragColor.r *= 0.48+0.01;
+	    gl_FragColor.g *= 0.46+0.00;
+	    gl_FragColor.b *= 0.52+0.01;
+	}
+	else if(cf.r < 2.3 && cf.g < 2.3&& cf.b < 2.3){
+	    gl_FragColor.r *= 0.475+0.01;
+	    gl_FragColor.g *= 0.455;
+	    gl_FragColor.b *= 0.52+0.01;
+	}
+		else if(cf.r < 2.35 && cf.g < 2.35&& cf.b < 2.35){
+	    gl_FragColor.r *= 0.47;
+	    gl_FragColor.g *= 0.45;
+	    gl_FragColor.b *= 0.51;
+	}
+	else if(cf.r < 2.4 && cf.g < 2.4&& cf.b < 2.4){
+	    gl_FragColor.r *= 0.46;
+	    gl_FragColor.g *= 0.44;
+	    gl_FragColor.b *= 0.5;
+	}
+		else if(cf.r < 2.45 && cf.g < 2.45&& cf.b < 2.45){
+	    gl_FragColor.r *= 0.45;
+	    gl_FragColor.g *= 0.43;
+	    gl_FragColor.b *= 0.49;
+	}
+	else if(cf.r < 2.5 && cf.g < 2.5&& cf.b < 2.5){
+	    gl_FragColor.r *= 0.44;
+	    gl_FragColor.g *= 0.42;
+	    gl_FragColor.b *= 0.48;
+	}
+		else if(cf.r < 2.55 && cf.g < 2.55&& cf.b < 2.55){
+	    gl_FragColor.r *= 0.43;
+	    gl_FragColor.g *= 0.41;
+	    gl_FragColor.b *= 0.47;
+	}
+	else if(cf.r < 2.6 && cf.g < 2.6&& cf.b < 2.6){
+	    gl_FragColor.r *= 0.42;
+	    gl_FragColor.g *= 0.4;
+	    gl_FragColor.b *= 0.46;
+	}
+		else if(cf.r < 2.65 && cf.g < 2.65&& cf.b < 2.65){
+	    gl_FragColor.r *= 0.41;
+	    gl_FragColor.g *= 0.39;
+	    gl_FragColor.b *= 0.45;
+	}
+	else if(cf.r < 2.7 && cf.g < 2.7&& cf.b < 2.7){
+	    gl_FragColor.r *= 0.4;
+	    gl_FragColor.g *= 0.38;
+	    gl_FragColor.b *= 0.44;
+	}
+		else if(cf.r < 2.75 && cf.g < 2.75&& cf.b < 2.75){
+	    gl_FragColor.r *= 0.395;
+	    gl_FragColor.g *= 0.375;
+	    gl_FragColor.b *= 0.45;
+	}
+		else if(cf.r < 2.8 && cf.g < 2.8&& cf.b < 2.8){
+	    gl_FragColor.r *= 0.39;
+	    gl_FragColor.g *= 0.37;
+	    gl_FragColor.b *= 0.46;
+	}
+    else{
+      gl_FragColor.r *= 0.36;
+	    gl_FragColor.g *= 0.35;
+	    gl_FragColor.b *= 0.44;
+}}}
+}

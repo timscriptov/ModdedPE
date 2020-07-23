@@ -20,10 +20,13 @@ import android.content.res.AssetManager;
 import android.os.Bundle;
 
 import com.google.gson.Gson;
+import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.pesdk.nativeapi.NativeUtils;
 import com.mcal.pesdk.nmod.NModLib;
 import com.mcal.pesdk.utils.AssetOverrideManager;
 import com.mojang.minecraftpe.MainActivity;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Тимашков Иван
@@ -36,20 +39,16 @@ public class GameManager {
         mPESdk = pesdk;
     }
 
-    public boolean isSafeMode() {
-        return mPESdk.getLauncherOptions().isSafeMode();
-    }
-
     public AssetManager getAssets() {
         return mPESdk.getMinecraftInfo().getAssets();
     }
 
-    public void onMinecraftActivityCreate(MainActivity activity, Bundle savedInstanceState) {
-        boolean safeMode = mPESdk.getLauncherOptions().isSafeMode();
+    public void onMinecraftActivityCreate(@NotNull MainActivity activity, Bundle savedInstanceState) {
+        boolean safeMode = Preferences.isSafeMode();
         AssetOverrideManager.addAssetOverride(activity.getAssets(), mPESdk.getMinecraftInfo().getMinecraftPackageContext().getPackageResourcePath());
 
         if (!safeMode) {
-            NativeUtils.setValues(activity, mPESdk.getLauncherOptions());
+            NativeUtils.setValues(activity);
             Gson gson = new Gson();
             Bundle data = activity.getIntent().getExtras();
 
@@ -67,7 +66,7 @@ public class GameManager {
     }
 
     public void onMinecraftActivityFinish(MainActivity activity) {
-        if (mPESdk.getLauncherOptions().isSafeMode())
+        if (Preferences.isSafeMode())
             return;
         Gson gson = new Gson();
         Preloader.NModPreloadData preloadData = gson.fromJson(activity.getIntent().getExtras().getString(PreloadingInfo.NMOD_DATA_TAG), Preloader.NModPreloadData.class);

@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.mcal.mcpelauncher"
     android:installLocation="preferExternal">
     <!-- Неограниченный доступ к Интернету -->
@@ -32,23 +33,25 @@
 
     <application
         android:name="com.mcal.mcpelauncher.ModdedPEApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:hasCode="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:theme="@style/FullScreenTheme">
+        android:theme="@style/FullScreenTheme"
+        tools:targetApi="q"
+        android:fullBackupContent="false">
         <activity
-            android:name="com.mcal.mcpelauncher.app.MainActivity"
+            android:name="com.mcal.mcpelauncher.activities.MainActivity"
             android:label="@string/main_title"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme" />
-        <service android:name="com.mcal.mcpelauncher.app.SoundService" />
-
+        <service
+            android:name="com.mcal.mcpelauncher.services.SoundService" />
         <activity
-            android:name="com.mcal.mcpelauncher.app.SplashesActivity"
+            android:name="com.mcal.mcpelauncher.activities.SplashesActivity"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/FullScreenTheme">
             <intent-filter>
@@ -57,7 +60,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.mcal.mcpelauncher.app.MinecraftActivity"
+            android:name="com.mcal.mcpelauncher.activities.MinecraftActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="fontScale|keyboard|keyboardHidden|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
             android:excludeFromRecents="false"
@@ -78,47 +81,47 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.mcal.mcpelauncher.app.AboutActivity"
+            android:name="com.mcal.mcpelauncher.activities.AboutActivity"
             android:label="@string/about_title"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme" />
         <activity
-            android:name="com.mcal.mcpelauncher.app.NModDescriptionActivity"
+            android:name="com.mcal.mcpelauncher.activities.NModDescriptionActivity"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme" />
         <activity
-            android:name="com.mcal.mcpelauncher.app.NModFilePickerActivity"
+            android:name="com.mcal.mcpelauncher.activities.NModFilePickerActivity"
             android:label="@string/nmod_picker_file_title"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme" />
         <activity
-            android:name="com.mcal.mcpelauncher.app.DirPickerActivity"
+            android:name="com.mcal.mcpelauncher.activities.DirPickerActivity"
             android:label="@string/dir_picker_title"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme" />
         <activity
-            android:name="com.mcal.mcpelauncher.app.MCPkgPickerActivity"
+            android:name="com.mcal.mcpelauncher.activities.MCPkgPickerActivity"
             android:label="@string/pkg_picker_title"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme" />
         <activity
-            android:name="com.mcal.mcpelauncher.app.NModPackagePickerActivity"
+            android:name="com.mcal.mcpelauncher.activities.NModPackagePickerActivity"
             android:label="@string/nmod_picker_package_title"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme" />
         <activity
-            android:name="com.mcal.mcpelauncher.app.NModLoadFailActivity"
+            android:name="com.mcal.mcpelauncher.activities.NModLoadFailActivity"
             android:label="@string/nmods_load_failed_title"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme" />
         <activity
-            android:name="com.mcal.mcpelauncher.app.PreloadActivity"
+            android:name="com.mcal.mcpelauncher.activities.PreloadActivity"
             android:label="@string/prestart_title"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/FullScreenTheme" />
         <activity
-            android:name="com.mcal.mcpelauncher.app.ImportNModActivity"
+            android:name="com.mcal.mcpelauncher.activities.ImportNModActivity"
             android:icon="@drawable/mcd_add_pack"
             android:label="@string/import_nmod_title"
             android:screenOrientation="sensorLandscape"

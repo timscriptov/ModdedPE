@@ -1,3 +1,0 @@
-[arm64-v8a] Compile++      : launcher-core <= launcher.cpp
-[arm64-v8a] Prebuilt       : libc++_shared.so <= <NDK>/sources/cxx-stl/llvm-libc++/libs/arm64-v8a/
-[arm64-v8a] SharedLibrary  : liblauncher-core.so

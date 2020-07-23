@@ -12,9 +12,13 @@ public class JellyBeanDeviceManager extends InputDeviceManager implements InputM
     private final InputManager inputManager;
 
     public native void onInputDeviceAddedNative(int i);
+
     public native void onInputDeviceChangedNative(int i);
+
     public native void onInputDeviceRemovedNative(int i);
+
     public native void setCreteControllerNative(int i, boolean z);
+
     public native void setDoubleTriggersSupportedNative(boolean z);
 
     JellyBeanDeviceManager(@NotNull Context ctx) {

@@ -13,9 +13,9 @@
 
 #include "Debug.hpp"
 
-#include <errno.h>
-#include <stdio.h>
-#include <string.h>
+#include <cerrno>
+#include <cstdio>
+#include <cstring>
 
 #include <cmath>
 

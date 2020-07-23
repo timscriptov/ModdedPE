@@ -20,6 +20,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.google.gson.Gson;
+import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.pesdk.nativeapi.LibraryLoader;
 import com.mcal.pesdk.nmod.LoadFailedException;
 import com.mcal.pesdk.nmod.NMod;
@@ -67,7 +68,7 @@ public class Preloader {
         if (mBundle == null)
             mBundle = new Bundle();
         Gson gson = new Gson();
-        boolean safeMode = mPESdk.getLauncherOptions().isSafeMode();
+        boolean safeMode = Preferences.isSafeMode();
 
         try {
             mPreloadListener.onLoadNativeLibs();
@@ -85,7 +86,7 @@ public class Preloader {
             LibraryLoader.loadLauncher(mPESdk.getMinecraftInfo().getMinecraftPackageNativeLibraryDir());
             if (!safeMode) {
                 mPreloadListener.onLoadPESdkLib();
-                LibraryLoader.loadNModAPI(context, mPESdk.getMinecraftInfo().getMinecraftPackageNativeLibraryDir());
+                LibraryLoader.loadNModAPI(mPESdk.getMinecraftInfo().getMinecraftPackageNativeLibraryDir());
             }
             mPreloadListener.onFinishedLoadingNativeLibs();
         } catch (Throwable throwable) {

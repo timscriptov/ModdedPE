@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "com.mcal.mcpelauncher"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 943160102
         versionName "1.16.1.02"
@@ -44,7 +44,6 @@ android {
 }
 
 dependencies {
-	api project(':minecraft')
     api project(':substrate')
     api project(':nmod')
     implementation fileTree(dir: 'libs', include: ['*.jar'])

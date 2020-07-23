@@ -19,6 +19,10 @@ package com.mcal.mcpelauncher.utils;
 import android.app.Activity;
 import android.content.res.Configuration;
 
+import com.mcal.mcpelauncher.data.Preferences;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Locale;
 
 /**
@@ -26,13 +30,11 @@ import java.util.Locale;
  * @author https://github.com/TimScriptov
  */
 public class I18n {
-    public static void setLanguage(Activity context) {
-        int type = new UtilsSettings(context).getLanguageType();
-
+    public static void setLanguage(@NotNull Activity context) {
         Locale defaultLocale = context.getResources().getConfiguration().locale;
         Configuration config = context.getResources().getConfiguration();
 
-        switch (type) {
+        switch (Preferences.getLanguageType()) {
             case 0:
             default:
                 config.setLocale(Locale.getDefault());
@@ -73,6 +75,5 @@ public class I18n {
         }
         if (!defaultLocale.equals(config.locale))
             context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
-
     }
 }

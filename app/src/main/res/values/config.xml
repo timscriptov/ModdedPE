@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_version" translatable="false">ModdedPE 1.15.0.53</string>
+    <string name="app_version" translatable="false">ModdedPE 1.16.1.02</string>
     <string-array name="target_mcpe_versions">
         <!-- item>^1[.]7</item>
         <item>^1[.]8</item>

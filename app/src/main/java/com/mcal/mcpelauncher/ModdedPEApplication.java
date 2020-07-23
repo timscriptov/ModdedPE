@@ -16,10 +16,11 @@
  */
 package com.mcal.mcpelauncher;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
+import android.content.Context;
 import android.content.res.AssetManager;
 
-import com.mcal.mcpelauncher.utils.UtilsSettings;
 import com.mcal.pesdk.PESdk;
 
 /**
@@ -28,10 +29,20 @@ import com.mcal.pesdk.PESdk;
  */
 public class ModdedPEApplication extends Application {
     public static PESdk mPESdk;
+    @SuppressLint("StaticFieldLeak")
+    private static Context context;
+
+    public static Context getContext() {
+        if (context == null) {
+            context = new ModdedPEApplication();
+        }
+        return context;
+    }
 
     public void onCreate() {
         super.onCreate();
-        mPESdk = new PESdk(this, new UtilsSettings(this));
+        context = this;
+        mPESdk = new PESdk(this);
     }
 
     @Override

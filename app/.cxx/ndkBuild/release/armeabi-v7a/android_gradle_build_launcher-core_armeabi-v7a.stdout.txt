@@ -1,3 +1,0 @@
-[armeabi-v7a] Compile++ thumb: launcher-core <= launcher.cpp
-[armeabi-v7a] Prebuilt       : libc++_shared.so <= <NDK>/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a/
-[armeabi-v7a] SharedLibrary  : liblauncher-core.so

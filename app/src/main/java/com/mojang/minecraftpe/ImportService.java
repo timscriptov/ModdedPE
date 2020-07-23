@@ -20,7 +20,7 @@ public class ImportService extends Service {
 
     @SuppressLint("HandlerLeak")
     class IncomingHandler extends Handler {
-        
+
         public void handleMessage(@NotNull Message msg) {
             if (msg.what == 672) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

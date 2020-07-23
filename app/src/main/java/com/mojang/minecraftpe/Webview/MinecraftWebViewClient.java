@@ -6,6 +6,7 @@ import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
 import com.mojang.minecraftpe.MainActivity;
 
 import org.jetbrains.annotations.NotNull;

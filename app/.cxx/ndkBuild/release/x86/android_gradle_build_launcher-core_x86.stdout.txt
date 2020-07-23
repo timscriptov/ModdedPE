@@ -1,3 +1,0 @@
-[x86] Compile++      : launcher-core <= launcher.cpp
-[x86] Prebuilt       : libc++_shared.so <= <NDK>/sources/cxx-stl/llvm-libc++/libs/x86/
-[x86] SharedLibrary  : liblauncher-core.so

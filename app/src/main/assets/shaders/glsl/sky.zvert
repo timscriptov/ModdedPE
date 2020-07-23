@@ -1,0 +1,32 @@
+// __multiversion__
+//#version 100 or #version 300 es
+//TRXDev EVO Shader Mod V1.1 (Special Edition)
+
+#if __VERSION__ >= 300
+#define attribute in
+#define varying out
+#else
+
+
+#endif
+
+uniform MAT4 WORLDVIEWPROJ;
+uniform vec4 FOG_COLOR;
+uniform vec4 CURRENT_COLOR;
+
+attribute mediump vec4 POSITION;
+attribute vec4 COLOR;
+
+varying vec4 color;
+
+const float fogNear = 0.2;
+
+void main()
+{
+    gl_Position = WORLDVIEWPROJ * POSITION;
+
+    vec4 dsky = vec4( 0.05, 0.45, 0.85, CURRENT_COLOR.a );
+    vec4 nsky = (CURRENT_COLOR + vec4(0.10, 0.2, 0.35, CURRENT_COLOR.a));
+
+    color = mix(nsky * dsky, FOG_COLOR, COLOR.r );
+}
