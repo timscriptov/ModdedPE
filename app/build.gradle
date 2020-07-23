@@ -10,7 +10,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 943160102
-        versionName "1.16.1.02"
+        versionName "1.16.1.02b3"
         multiDexEnabled true
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
@@ -44,9 +44,9 @@ android {
 }
 
 dependencies {
-    api project(':substrate')
-    api project(':nmod')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':substrate')
+    implementation project(':nmod')
     implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
