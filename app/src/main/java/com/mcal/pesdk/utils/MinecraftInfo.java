@@ -17,8 +17,10 @@
 package com.mcal.pesdk.utils;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.os.Build;
 
 import com.mcal.mcpelauncher.data.Preferences;
 
@@ -45,6 +47,7 @@ public class MinecraftInfo {
         try {
             mMCContext = context.createPackageContext(mMinecraftPackageName, Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);
         } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
 
         AssetOverrideManager.newInstance();
@@ -72,12 +75,24 @@ public class MinecraftInfo {
         try {
             return mContext.getPackageManager().getPackageInfo(getMinecraftPackageContext().getPackageName(), PackageManager.GET_CONFIGURATIONS).versionName;
         } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
     public String getMinecraftPackageNativeLibraryDir() {
-        return mMCContext.getApplicationInfo().nativeLibraryDir;
+        ApplicationInfo mcpe_info = null;
+        try {
+            mcpe_info = mContext.getPackageManager().getPackageInfo("com.mojang.minecraftpe", 0).applicationInfo;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (SplitParser2.isBundle(mcpe_info)) {
+            SplitParser2.parse(mContext);
+            return mContext.getCacheDir().getPath() + "/lib/" + Build.CPU_ABI;
+        } else {
+            return mMCContext.getApplicationInfo().nativeLibraryDir;
+        }
     }
 
     public Context getMinecraftPackageContext() {

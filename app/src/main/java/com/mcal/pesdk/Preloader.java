@@ -28,6 +28,7 @@ import com.mcal.pesdk.nmod.NModJSONEditor;
 import com.mcal.pesdk.nmod.NModLib;
 import com.mcal.pesdk.nmod.NModTextEditor;
 import com.mcal.pesdk.utils.MinecraftInfo;
+import com.mcal.pesdk.utils.SplitParser2;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -74,6 +75,7 @@ public class Preloader {
             mPreloadListener.onLoadNativeLibs();
             mPreloadListener.onLoadSubstrateLib();
             LibraryLoader.loadSubstrate();
+            //SplitParser2.parse(context);
             mPreloadListener.onLoadFModLib();
             LibraryLoader.loadFMod(mPESdk.getMinecraftInfo().getMinecraftPackageNativeLibraryDir());
 
