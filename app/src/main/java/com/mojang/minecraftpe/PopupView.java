@@ -46,6 +46,10 @@ public class PopupView {
         mOriginY = minY;
     }
 
+    public boolean getVisible() {
+        return mPopupView != null && mPopupView.getParent() != null;
+    }
+
     public void setVisible(boolean visible) {
         if (visible == getVisible()) {
             return;
@@ -55,10 +59,6 @@ public class PopupView {
         } else {
             removePopupView();
         }
-    }
-
-    public boolean getVisible() {
-        return mPopupView != null && mPopupView.getParent() != null;
     }
 
     public void dismiss() {

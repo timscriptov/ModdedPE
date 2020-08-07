@@ -8,10 +8,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class InputDeviceManager {
-    public abstract void register();
-
-    public abstract void unregister();
-
     @NotNull
     @Contract("_ -> new")
     public static InputDeviceManager create(Context ctx) {
@@ -20,6 +16,10 @@ public abstract class InputDeviceManager {
         }
         return new DefaultDeviceManager();
     }
+
+    public abstract void register();
+
+    public abstract void unregister();
 
     public static class DefaultDeviceManager extends InputDeviceManager {
         private DefaultDeviceManager() {

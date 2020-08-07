@@ -20,16 +20,22 @@ public class ActiveDirectorySignIn implements ActivityListener {
     public AuthenticationContext mAuthenticationContext;
     public boolean mDialogOpen = false;
     public String mIdentityToken;
-    private boolean mIsActivityListening = false;
     public String mLastError;
     public boolean mResultObtained = false;
     public String mUserId;
-
-    public native void nativeOnDataChanged();
+    private boolean mIsActivityListening = false;
 
     public ActiveDirectorySignIn() {
         MainActivity.mInstance.addListener(this);
     }
+
+    @NotNull
+    @Contract(" -> new")
+    public static ActiveDirectorySignIn createActiveDirectorySignIn() {
+        return new ActiveDirectorySignIn();
+    }
+
+    public native void nativeOnDataChanged();
 
     public boolean getDialogOpen() {
         return this.mDialogOpen;
@@ -96,12 +102,6 @@ public class ActiveDirectorySignIn implements ActivityListener {
         cookieManager.removeAllCookie();
         syncManager.stopSync();
         syncManager.sync();
-    }
-
-    @NotNull
-    @Contract(" -> new")
-    public static ActiveDirectorySignIn createActiveDirectorySignIn() {
-        return new ActiveDirectorySignIn();
     }
 
     public AuthenticationCallback<AuthenticationResult> getAdalCallback() {

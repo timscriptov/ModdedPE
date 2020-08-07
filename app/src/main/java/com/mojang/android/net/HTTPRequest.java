@@ -23,6 +23,19 @@ public class HTTPRequest {
 
     public String url, requestBody, cookieData, contentType;
 
+    @NotNull
+    private static Header[] toApacheHeaders(@NotNull HttpURLConnection conn) {
+        Map<String, List<String>> headers = conn.getHeaderFields();
+        int headerSize = headers.containsKey(null) ? headers.size() - 1 : headers.size();
+        Header[] headersOut = new Header[headerSize];
+        int headerIndex = 0;
+        for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+            if (entry.getKey() == null) continue;
+            headersOut[headerIndex++] = new BasicHeader(entry.getKey(), TextUtils.join(",", entry.getValue()));
+        }
+        return headersOut;
+    }
+
     public void setURL(String url) {
         if (debugNet) System.out.println("URL: " + url);
         this.url = url;
@@ -98,19 +111,6 @@ public class HTTPRequest {
 
     public void abort() {
         if (debugNet) System.out.println("Abort");
-    }
-
-    @NotNull
-    private static Header[] toApacheHeaders(@NotNull HttpURLConnection conn) {
-        Map<String, List<String>> headers = conn.getHeaderFields();
-        int headerSize = headers.containsKey(null) ? headers.size() - 1 : headers.size();
-        Header[] headersOut = new Header[headerSize];
-        int headerIndex = 0;
-        for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
-            if (entry.getKey() == null) continue;
-            headersOut[headerIndex++] = new BasicHeader(entry.getKey(), TextUtils.join(",", entry.getValue()));
-        }
-        return headersOut;
     }
 }
  

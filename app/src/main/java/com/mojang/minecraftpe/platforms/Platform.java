@@ -7,14 +7,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class Platform {
-    public abstract String getABIS();
-
-    public abstract void onAppStart(View view);
-
-    public abstract void onViewFocusChanged(boolean z);
-
-    public abstract void onVolumePressed();
-
     @NotNull
     @Contract("_ -> new")
     public static Platform createPlatform(boolean initEventHandler) {
@@ -26,4 +18,12 @@ public abstract class Platform {
         }
         return new Platform9();
     }
+
+    public abstract String getABIS();
+
+    public abstract void onAppStart(View view);
+
+    public abstract void onViewFocusChanged(boolean z);
+
+    public abstract void onVolumePressed();
 }

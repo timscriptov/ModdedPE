@@ -48,7 +48,6 @@ import java.util.List;
  * @author https://github.com/TimScriptov
  */
 public class MCPkgPickerActivity extends BaseActivity {
-    public static final String TAG_PACKAGE_NAME = "package_name";
     public static final int REQUEST_PICK_PACKAGE = 5;
     private static final int MSG_SHOW_LIST_VIEW = 1;
     private static final int MSG_SHOW_UNFOUND_VIEW = 2;
@@ -105,7 +104,7 @@ public class MCPkgPickerActivity extends BaseActivity {
                 p1.dismiss();
                 Intent intent = new Intent();
                 Bundle extras = new Bundle();
-                extras.putString(TAG_PACKAGE_NAME, LauncherOptions.STRING_VALUE_DEFAULT);
+                extras.putString("package_name", "com.mojang.minecraftpe");
                 intent.putExtras(extras);
                 setResult(RESULT_OK, intent);
                 finish();
@@ -204,7 +203,7 @@ public class MCPkgPickerActivity extends BaseActivity {
                             p1.dismiss();
                             Intent intent = new Intent();
                             Bundle extras = new Bundle();
-                            extras.putString(TAG_PACKAGE_NAME, pkg.packageName);
+                            extras.putString("package_name", pkg.packageName);
                             intent.putExtras(extras);
                             setResult(RESULT_OK, intent);
                             finish();

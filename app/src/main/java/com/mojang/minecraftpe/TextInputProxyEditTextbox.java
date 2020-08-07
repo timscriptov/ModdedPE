@@ -20,12 +20,6 @@ public class TextInputProxyEditTextbox extends AppCompatEditText {
     public int allowedLength;
     private String mLastSentText;
 
-    public interface MCPEKeyWatcher {
-        boolean onBackKeyPressed();
-
-        void onDeleteKeyPressed();
-    }
-
     public TextInputProxyEditTextbox(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         _mcpeKeyWatcher = null;
@@ -118,6 +112,12 @@ public class TextInputProxyEditTextbox extends AppCompatEditText {
             }
             return null;
         };
+    }
+
+    public interface MCPEKeyWatcher {
+        boolean onBackKeyPressed();
+
+        void onDeleteKeyPressed();
     }
 
     private class MCPEInputConnection extends InputConnectionWrapper {

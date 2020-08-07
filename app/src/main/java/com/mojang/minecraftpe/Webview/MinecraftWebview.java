@@ -17,19 +17,19 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class MinecraftWebview {
-    private MainActivity mActivity = MainActivity.mInstance;
     public WebView mWebView;
     public PopupView mWebViewPopup;
+    private MainActivity mActivity = MainActivity.mInstance;
+
+    public MinecraftWebview() {
+        this.mActivity.runOnUiThread(() -> _createWebView());
+    }
 
     public native void nativeDismiss();
 
     public native void nativeOnWebError(int i, String str);
 
     public native void nativeSendToHost(String str);
-
-    public MinecraftWebview() {
-        this.mActivity.runOnUiThread(() -> _createWebView());
-    }
 
     public void teardown() {
         mWebViewPopup.dismiss();

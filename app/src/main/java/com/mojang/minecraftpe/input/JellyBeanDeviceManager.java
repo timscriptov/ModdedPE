@@ -11,6 +11,10 @@ import org.jetbrains.annotations.NotNull;
 public class JellyBeanDeviceManager extends InputDeviceManager implements InputManager.InputDeviceListener {
     private final InputManager inputManager;
 
+    JellyBeanDeviceManager(@NotNull Context ctx) {
+        inputManager = (InputManager) ctx.getSystemService("input");
+    }
+
     public native void onInputDeviceAddedNative(int i);
 
     public native void onInputDeviceChangedNative(int i);
@@ -20,10 +24,6 @@ public class JellyBeanDeviceManager extends InputDeviceManager implements InputM
     public native void setCreteControllerNative(int i, boolean z);
 
     public native void setDoubleTriggersSupportedNative(boolean z);
-
-    JellyBeanDeviceManager(@NotNull Context ctx) {
-        inputManager = (InputManager) ctx.getSystemService("input");
-    }
 
     public void register() {
         int[] ids = inputManager.getInputDeviceIds();

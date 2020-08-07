@@ -17,7 +17,6 @@
 package com.mcal.pesdk.nativeapi;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 
 import java.io.File;
 
@@ -52,6 +51,7 @@ public class LibraryLoader {
     @SuppressLint("UnsafeDynamicallyLoadedCode")
     static public void loadCppShared(String mcLibsPath) {
         System.load(new File(mcLibsPath, "libc++_shared.so").getAbsolutePath());
+        //System.loadLibrary("c++_shared");
     }
 
     static public void loadNModAPI(String mcLibsPath) {

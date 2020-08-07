@@ -48,7 +48,6 @@ import com.mcal.mcpelauncher.R;
 import com.mcal.mcpelauncher.activities.NModDescriptionActivity;
 import com.mcal.mcpelauncher.activities.NModFilePickerActivity;
 import com.mcal.mcpelauncher.activities.NModPackagePickerActivity;
-import com.mcal.mcpelauncher.fragments.BaseFragment;
 import com.mcal.mcpelauncher.utils.DataPreloader;
 import com.mcal.mcpelauncher.utils.PreloadingFinishedListener;
 import com.mcal.pesdk.nmod.ExtractFailedException;

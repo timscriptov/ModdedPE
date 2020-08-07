@@ -15,14 +15,6 @@ public class SessionInfo {
     public String sessionId = null;
     public boolean valid = false;
 
-    public String toString() {
-        return toString(getDateFormat());
-    }
-
-    public String toString(SimpleDateFormat dateFormat) {
-        return this.valid ? this.sessionId + ";" + this.buildId + ";" + dateFormat.format(this.recordDate) : "<null>";
-    }
-
     public SessionInfo() {
     }
 
@@ -69,5 +61,13 @@ public class SessionInfo {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat result = new SimpleDateFormat("MM/dd/yyyy-HH:mm:ss");
         result.setTimeZone(TimeZone.getTimeZone("UTC"));
         return result;
+    }
+
+    public String toString() {
+        return toString(getDateFormat());
+    }
+
+    public String toString(SimpleDateFormat dateFormat) {
+        return this.valid ? this.sessionId + ";" + this.buildId + ";" + dateFormat.format(this.recordDate) : "<null>";
     }
 }

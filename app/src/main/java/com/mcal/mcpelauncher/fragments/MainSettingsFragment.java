@@ -39,8 +39,8 @@ import com.mcal.mcpelauncher.activities.AboutActivity;
 import com.mcal.mcpelauncher.activities.DirPickerActivity;
 import com.mcal.mcpelauncher.activities.MCPkgPickerActivity;
 import com.mcal.mcpelauncher.activities.SplashesActivity;
-import com.mcal.mcpelauncher.services.BackgroundSoundPlayer;
 import com.mcal.mcpelauncher.data.Preferences;
+import com.mcal.mcpelauncher.services.BackgroundSoundPlayer;
 import com.mcal.mcpelauncher.utils.I18n;
 import com.mcal.pesdk.utils.LauncherOptions;
 
@@ -128,8 +128,6 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
                 Preferences.setSafeMode((boolean) p2);
                 return true;
             }
-
-
         });
         mSafeModePreference.setChecked(Preferences.isSafeMode());
 
@@ -142,31 +140,25 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
                     DirPickerActivity.startThisActivity(getActivity());
                 return true;
             }
-
-
         });
+
         Preference mAboutPreference = findPreference("about");
         mAboutPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-
             @Override
             public boolean onPreferenceClick(Preference p1) {
                 Intent intent = new Intent(getActivity(), AboutActivity.class);
                 getActivity().startActivity(intent);
                 return true;
             }
-
-
         });
+
         mPkgPreference = findPreference("game_pkg_name");
         mPkgPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-
             @Override
             public boolean onPreferenceClick(Preference p1) {
                 MCPkgPickerActivity.startThisActivity(getActivity());
                 return true;
             }
-
-
         });
 
         ListPreference mLanguagePreference = (ListPreference) findPreference("language");
@@ -182,8 +174,6 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
                 startActivity(intent);
                 return true;
             }
-
-
         });
         updatePreferences();
     }
@@ -200,7 +190,7 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
             else
                 Snackbar.make(getActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_data_path, new Object[]{dir}), 2500).show();
         } else if (requestCode == MCPkgPickerActivity.REQUEST_PICK_PACKAGE && resultCode == Activity.RESULT_OK) {
-            String pkgName = data.getExtras().getString(MCPkgPickerActivity.TAG_PACKAGE_NAME);
+            String pkgName = data.getExtras().getString("package_name");
             Preferences.setMinecraftPackageName(pkgName);
             if (pkgName.equals(LauncherOptions.STRING_VALUE_DEFAULT))
                 Snackbar.make(getActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_reset_pkg_name), 2500).show();
@@ -219,7 +209,7 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
         else
             mDataPathPreference.setSummary(R.string.preferences_summary_data_saved_path);
 
-        if (!Preferences.getMinecraftPEPackageName().equals("default"))
+        if (!Preferences.getMinecraftPEPackageName().equals("com.mojang.minecraftpe"))
             mPkgPreference.setSummary(Preferences.getMinecraftPEPackageName());
         else
             mPkgPreference.setSummary(R.string.preferences_summary_game_pkg_name);

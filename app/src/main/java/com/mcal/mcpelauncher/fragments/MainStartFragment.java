@@ -28,7 +28,6 @@ import androidx.appcompat.app.AlertDialog;
 import com.mcal.mcpelauncher.R;
 import com.mcal.mcpelauncher.activities.PreloadActivity;
 import com.mcal.mcpelauncher.data.Preferences;
-import com.mcal.mcpelauncher.fragments.BaseFragment;
 
 /**
  * @author Тимашков Иван

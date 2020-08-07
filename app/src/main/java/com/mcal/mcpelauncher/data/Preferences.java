@@ -52,7 +52,7 @@ public final class Preferences {
     }
 
     public static String getMinecraftPEPackageName() {
-        return preferences.getString("pkg_name", "default");
+        return preferences.getString("pkg_name", "com.mojang.minecraftpe");
     }
 
     public static void setMinecraftPackageName(String str) {

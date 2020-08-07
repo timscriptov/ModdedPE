@@ -18,6 +18,10 @@ import org.jetbrains.annotations.NotNull;
 public class ImportService extends Service {
     final Messenger mMessenger = new Messenger(new IncomingHandler());
 
+    public IBinder onBind(Intent intent) {
+        return mMessenger.getBinder();
+    }
+
     @SuppressLint("HandlerLeak")
     class IncomingHandler extends Handler {
 
@@ -50,9 +54,5 @@ public class ImportService extends Service {
             }
             super.handleMessage(msg);
         }
-    }
-
-    public IBinder onBind(Intent intent) {
-        return mMessenger.getBinder();
     }
 }

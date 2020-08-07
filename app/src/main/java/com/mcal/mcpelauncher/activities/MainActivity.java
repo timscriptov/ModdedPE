@@ -32,12 +32,12 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.mcal.mcpelauncher.R;
-import com.mcal.mcpelauncher.services.BackgroundSoundPlayer;
+import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.mcpelauncher.fragments.MainManageNModFragment;
 import com.mcal.mcpelauncher.fragments.MainSettingsFragment;
 import com.mcal.mcpelauncher.fragments.MainStartFragment;
+import com.mcal.mcpelauncher.services.BackgroundSoundPlayer;
 import com.mcal.mcpelauncher.services.SoundService;
-import com.mcal.mcpelauncher.data.Preferences;
 
 import java.util.ArrayList;
 import java.util.List;

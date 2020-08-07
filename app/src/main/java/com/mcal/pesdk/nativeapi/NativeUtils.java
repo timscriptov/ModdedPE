@@ -21,8 +21,6 @@ import android.content.Context;
 import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.pesdk.utils.LauncherOptions;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 
 /**

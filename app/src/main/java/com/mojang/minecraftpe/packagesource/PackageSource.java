@@ -6,6 +6,10 @@ import java.util.Map;
 public abstract class PackageSource {
     public static final Map<Integer, String> stringResources = new HashMap<>();
 
+    public static void setStringResource(int i, String str) {
+        stringResources.put(i, str);
+    }
+
     public abstract void abortDownload();
 
     public abstract void destructor();
@@ -25,8 +29,4 @@ public abstract class PackageSource {
     public abstract void resumeDownloadOnCell();
 
     public abstract void unmountFiles(String str);
-
-    public static void setStringResource(int i, String str) {
-        stringResources.put(i, str);
-    }
 }

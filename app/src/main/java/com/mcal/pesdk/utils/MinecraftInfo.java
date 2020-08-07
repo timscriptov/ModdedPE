@@ -17,7 +17,6 @@
 package com.mcal.pesdk.utils;
 
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.os.Build;
@@ -41,7 +40,7 @@ public class MinecraftInfo {
         this.mContext = context;
 
         String mMinecraftPackageName = MC_PACKAGE_NAME;
-        if (!Preferences.getMinecraftPEPackageName().equals(LauncherOptions.STRING_VALUE_DEFAULT))
+        if (!Preferences.getMinecraftPEPackageName().equals("com.mojang.minecraftpe"))
             mMinecraftPackageName = Preferences.getMinecraftPEPackageName();
 
         try {
@@ -81,14 +80,7 @@ public class MinecraftInfo {
     }
 
     public String getMinecraftPackageNativeLibraryDir() {
-        ApplicationInfo mcpe_info = null;
-        try {
-            mcpe_info = mContext.getPackageManager().getPackageInfo("com.mojang.minecraftpe", 0).applicationInfo;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        if (SplitParser2.isBundle(mcpe_info)) {
-            SplitParser2.parse(mContext);
+        if (SplitParser.isBundle(mContext)) {
             return mContext.getCacheDir().getPath() + "/lib/" + Build.CPU_ABI;
         } else {
             return mMCContext.getApplicationInfo().nativeLibraryDir;

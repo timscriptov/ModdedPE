@@ -19,7 +19,6 @@ package com.mcal.pesdk;
 import android.content.Context;
 
 import com.mcal.pesdk.nmod.NModAPI;
-import com.mcal.pesdk.utils.LauncherOptions;
 import com.mcal.pesdk.utils.MinecraftInfo;
 
 /**

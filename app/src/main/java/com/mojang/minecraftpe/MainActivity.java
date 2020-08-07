@@ -93,7 +93,6 @@ import java.util.Map;
 import java.util.UUID;
 
 public class MainActivity extends NativeActivity implements OnKeyListener {
-    HeadsetConnectionReceiver headsetConnectionReceiver;
     public static MainActivity mInstance = null;
     private static boolean _isPowerVr = false;
     private static boolean mHasStoragePermission = false;
@@ -102,6 +101,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
     public int mLastPermissionRequestReason;
     public int virtualKeyboardHeight = 0;
     protected DisplayMetrics displayMetrics;
+    HeadsetConnectionReceiver headsetConnectionReceiver;
     List<ActivityListener> mActivityListeners = new ArrayList<ActivityListener>();
     MessageConnectionStatus mBound = MessageConnectionStatus.NOTSET;
     MemoryInfo mCachedMemoryInfo = new MemoryInfo();
@@ -118,28 +118,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
     private Locale initialUserLocale;
     private long mCallback = 0;
     private SessionInfo mLastDeviceSessionInfo = null;
-
-    private class HeadsetConnectionReceiver extends BroadcastReceiver {
-        private HeadsetConnectionReceiver() {
-        }
-
-        public void onReceive(Context context, @NotNull Intent intent) {
-            if (intent.getAction().equals("android.intent.action.HEADSET_PLUG")) {
-                switch (intent.getIntExtra("state", -1)) {
-                    case 0:
-                        Log.d("ModdedPE", "Headset unplugged");
-                        nativeSetHeadphonesConnected(false);
-                        return;
-                    case 1:
-                        Log.d("ModdedPE", "Headset plugged in");
-                        nativeSetHeadphonesConnected(true);
-                        return;
-                    default:
-                }
-            }
-        }
-    }
-
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
             mService = new Messenger(service);
@@ -181,28 +159,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
             }
         }
         return false;
-    }
-
-    public SessionInfo getLastDeviceSessionInfo() {
-        if (this.mLastDeviceSessionInfo == null) {
-            this.mLastDeviceSessionInfo = SessionInfo.fromString(PreferenceManager.getDefaultSharedPreferences(this).getString("last-session-info", ""));
-            Log.i("ModdedPE", "getLastDeviceSessionInfo was null and now: " + this.mLastDeviceSessionInfo.toString());
-        } else {
-            Log.i("ModdedPE", "getLastDeviceSessionInfo was not null with: " + this.mLastDeviceSessionInfo.toString());
-        }
-        return this.mLastDeviceSessionInfo;
-    }
-
-    public void setLastDeviceSessionInfo(@NotNull SessionInfo info) {
-        SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(this).edit();
-        edit.putString("last-session-info", info.toString());
-        edit.apply();
-        Log.i("MCPE", "setLastDeviceSessionInfo: " + info.toString());
-        this.mLastDeviceSessionInfo = info;
-    }
-
-    public void setLastDeviceSessionInfo(String sessionId, String buildId) {
-        setLastDeviceSessionInfo(new SessionInfo(sessionId, buildId));
     }
 
     public static boolean isPowerVR() {
@@ -259,6 +215,28 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         } catch (Exception e) {
             Log.w("ModdedPE", "DLL copy failed: ", e);
         }
+    }
+
+    public SessionInfo getLastDeviceSessionInfo() {
+        if (this.mLastDeviceSessionInfo == null) {
+            this.mLastDeviceSessionInfo = SessionInfo.fromString(PreferenceManager.getDefaultSharedPreferences(this).getString("last-session-info", ""));
+            Log.i("ModdedPE", "getLastDeviceSessionInfo was null and now: " + this.mLastDeviceSessionInfo.toString());
+        } else {
+            Log.i("ModdedPE", "getLastDeviceSessionInfo was not null with: " + this.mLastDeviceSessionInfo.toString());
+        }
+        return this.mLastDeviceSessionInfo;
+    }
+
+    public void setLastDeviceSessionInfo(@NotNull SessionInfo info) {
+        SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        edit.putString("last-session-info", info.toString());
+        edit.apply();
+        Log.i("MCPE", "setLastDeviceSessionInfo: " + info.toString());
+        this.mLastDeviceSessionInfo = info;
+    }
+
+    public void setLastDeviceSessionInfo(String sessionId, String buildId) {
+        setLastDeviceSessionInfo(new SessionInfo(sessionId, buildId));
     }
 
     public boolean supportsNonTouchscreen() {
@@ -363,17 +341,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         return (float) virtualKeyboardHeight;
     }
 
-    /*public void trackPurchaseEvent(String contentId, String contentType, String revenue, String playerId, String playerSessionId, String currencyCode, String eventName) {
-        Map<String, Object> eventValue = new HashMap<String, Object>();
-        eventValue.put("player_session_id", playerSessionId);
-        eventValue.put("client_id", playerId);
-        eventValue.put("af_revenue", revenue);
-        eventValue.put("af_content_type", contentType);
-        eventValue.put("af_content_id", contentId);
-        eventValue.put("af_currency", currencyCode);
-        Log.d("ModdedPE", contentId + ":" + revenue + ":" + playerId + ":" +playerSessionId + ":" + currencyCode + ":" + eventName );
-    }*/
-
     public void trackPurchaseEvent(String contentId, String contentType, String revenue, String clientId, String userId, String playerSessionId, String currencyCode, String eventName) {
         Map<String, Object> eventValue = new HashMap<>();
         eventValue.put("player_session_id", playerSessionId);
@@ -384,6 +351,17 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         eventValue.put("af_currency", currencyCode);
         AppsFlyerLib.getInstance().trackEvent(getApplicationContext(), eventName, eventValue);
     }
+
+    /*public void trackPurchaseEvent(String contentId, String contentType, String revenue, String playerId, String playerSessionId, String currencyCode, String eventName) {
+        Map<String, Object> eventValue = new HashMap<String, Object>();
+        eventValue.put("player_session_id", playerSessionId);
+        eventValue.put("client_id", playerId);
+        eventValue.put("af_revenue", revenue);
+        eventValue.put("af_content_type", contentType);
+        eventValue.put("af_content_id", contentId);
+        eventValue.put("af_currency", currencyCode);
+        Log.d("ModdedPE", contentId + ":" + revenue + ":" + playerId + ":" +playerSessionId + ":" + currencyCode + ":" + eventName );
+    }*/
 
     public void sendBrazeEvent(String eventName) {
     }
@@ -835,7 +813,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
             }
         });
     }
-
 
     public int getCursorPosition() {
         if (isTextWidgetActive()) {
@@ -1576,6 +1553,27 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         NOTSET,
         CONNECTED,
         DISCONNECTED
+    }
+
+    private class HeadsetConnectionReceiver extends BroadcastReceiver {
+        private HeadsetConnectionReceiver() {
+        }
+
+        public void onReceive(Context context, @NotNull Intent intent) {
+            if (intent.getAction().equals("android.intent.action.HEADSET_PLUG")) {
+                switch (intent.getIntExtra("state", -1)) {
+                    case 0:
+                        Log.d("ModdedPE", "Headset unplugged");
+                        nativeSetHeadphonesConnected(false);
+                        return;
+                    case 1:
+                        Log.d("ModdedPE", "Headset plugged in");
+                        nativeSetHeadphonesConnected(true);
+                        return;
+                    default:
+                }
+            }
+        }
     }
 
     @SuppressLint("HandlerLeak")
