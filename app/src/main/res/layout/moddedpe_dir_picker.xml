@@ -13,23 +13,20 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/moddedpe_dir_picker_fab_select"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="25dp"
         android:src="@drawable/ic_play_white" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/moddedpe_dir_picker_fab_reset"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_above="@id/moddedpe_dir_picker_fab_select"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_marginEnd="25dp"
-        android:layout_marginRight="25dp"
         android:src="@drawable/ic_undo_white" />
 
 </RelativeLayout>

@@ -14,14 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.mcdesign.widget;
+package com.mcal.mcpelauncher.widget;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.widget.RelativeLayout;
 
-import com.mcal.mcdesign.utils.BitmapRepeater;
+import com.mcal.mcpelauncher.utils.BitmapRepeater;
 import com.mcal.mcpelauncher.R;
 
 /**

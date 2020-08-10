@@ -15,8 +15,20 @@ public final class Preferences {
         preferences = PreferenceManager.getDefaultSharedPreferences(ModdedPEApplication.getContext());
     }
 
+    public static void setNightMode(boolean value) {
+        preferences.edit().putBoolean("night_mode", value).apply();
+    }
+
+    public static boolean isNightMode() {
+        return preferences.getBoolean("night_mode", false);
+    }
+
     public static boolean isBackgroundMusic() {
         return preferences.getBoolean("background_music", false);
+    }
+
+    public static boolean DesktopGui() {
+        return preferences.getBoolean("safe_mode", false);
     }
 
     public static boolean isSafeMode() {

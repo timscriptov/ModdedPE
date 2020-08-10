@@ -2,11 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginLeft="10dp"
-    android:layout_marginTop="10dp"
-    android:layout_marginRight="10dp"
-    android:layout_marginBottom="10dp">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,6 +12,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatImageView
@@ -57,6 +54,16 @@
 
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@drawable/pref_shadow_top" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@drawable/pref_shadow_bottom" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -67,19 +74,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
                 android:text="@string/nmod_description_description_title"
+                android:textStyle="bold"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_toEndOf="@id/moddedpenmoddescriptionTextViewDescriptionTitle"
-                android:layout_toRightOf="@id/moddedpenmoddescriptionTextViewDescriptionTitle"
-                android:background="#6E6E6E" />
 
         </RelativeLayout>
 
@@ -93,6 +90,16 @@
             android:layout_marginBottom="5dp"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@drawable/pref_shadow_top" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@drawable/pref_shadow_bottom" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -103,19 +110,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
                 android:text="@string/nmod_description_about_title"
+                android:textStyle="bold"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_toEndOf="@id/moddedpenmoddescriptionTextViewAboutTitle"
-                android:layout_toRightOf="@id/moddedpenmoddescriptionTextViewAboutTitle"
-                android:background="#6E6E6E" />
 
         </RelativeLayout>
 
@@ -127,7 +124,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:layout_marginLeft="15dp"
                 android:text="@string/nmod_description_about_author"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -136,9 +132,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 tools:ignore="RelativeOverlap" />
 
@@ -152,7 +146,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:layout_marginLeft="15dp"
                 android:text="@string/nmod_description_about_version_name"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -161,9 +154,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 tools:ignore="RelativeOverlap" />
 
@@ -177,7 +168,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:layout_marginLeft="15dp"
                 android:text="@string/nmod_description_about_minecraft_version_name"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -186,13 +176,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 tools:ignore="RelativeOverlap" />
 
         </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@drawable/pref_shadow_top" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@drawable/pref_shadow_bottom" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -204,19 +202,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
                 android:text="@string/nmod_description_whatsnew_title"
+                android:textStyle="bold"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_toEndOf="@id/moddedpenmoddescriptionTextViewWhatsNewTitle"
-                android:layout_toRightOf="@id/moddedpenmoddescriptionTextViewWhatsNewTitle"
-                android:background="#6E6E6E" />
 
         </RelativeLayout>
 

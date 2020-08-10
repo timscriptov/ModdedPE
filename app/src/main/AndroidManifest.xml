@@ -43,13 +43,13 @@
         android:theme="@style/FullScreenTheme"
         tools:targetApi="q"
         android:fullBackupContent="false">
+
         <activity
             android:name="com.mcal.mcpelauncher.activities.MainActivity"
             android:label="@string/main_title"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme" />
-        <service
-            android:name="com.mcal.mcpelauncher.services.SoundService" />
+
         <activity
             android:name="com.mcal.mcpelauncher.activities.SplashesActivity"
             android:screenOrientation="sensorLandscape"
@@ -59,6 +59,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="com.mcal.mcpelauncher.activities.MinecraftActivity"
             android:alwaysRetainTaskState="true"
@@ -80,46 +81,55 @@
                 <data android:scheme="minecraft" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="com.mcal.mcpelauncher.activities.AboutActivity"
             android:label="@string/about_title"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name="com.mcal.mcpelauncher.activities.NModDescriptionActivity"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name="com.mcal.mcpelauncher.activities.NModFilePickerActivity"
             android:label="@string/nmod_picker_file_title"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name="com.mcal.mcpelauncher.activities.DirPickerActivity"
             android:label="@string/dir_picker_title"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name="com.mcal.mcpelauncher.activities.MCPkgPickerActivity"
             android:label="@string/pkg_picker_title"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name="com.mcal.mcpelauncher.activities.NModPackagePickerActivity"
             android:label="@string/nmod_picker_package_title"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name="com.mcal.mcpelauncher.activities.NModLoadFailActivity"
             android:label="@string/nmods_load_failed_title"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name="com.mcal.mcpelauncher.activities.PreloadActivity"
             android:label="@string/prestart_title"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/FullScreenTheme" />
+
         <activity
             android:name="com.mcal.mcpelauncher.activities.ImportNModActivity"
             android:icon="@drawable/mcd_add_pack"
@@ -164,17 +174,6 @@
             </intent-filter>
         </activity>
 
-
-        <!-- activity
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-            android:label="@string/app_name_short"
-            android:name="com.mojang.minecraftpe.MainActivity"
-            android:excludeFromRecents="false"
-            android:launchMode="singleTask"
-            android:screenOrientation="sensorLandscape"
-            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
-            android:alwaysRetainTaskState="true" / -->
-
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
@@ -186,22 +185,40 @@
         </receiver>
 
         <service
+            android:name="com.mcal.mcpelauncher.services.SoundService" />
+
+        <service
             android:name="com.mojang.minecraftpe.NotificationListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
+
         <service
             android:name="com.microsoft.xbox.idp.model.gcm.RegistrationIntentService"
             android:exported="false" />
+
         <service
             android:name="com.mojang.minecraftpe.ImportService"
             android:exported="true" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.mcal.mcpelauncher.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+
         <provider
             android:name="androidx.lifecycle.ProcessLifecycleOwnerInitializer"
             android:authorities="com.mcal.mcpelauncher.lifecycle-process"
             android:exported="false"
             android:multiprocess="true" />
+
     </application>
+
 </manifest>

@@ -19,7 +19,7 @@
         android:layout_centerInParent="true"
         android:visibility="gone">
 
-        <com.mcal.mcdesign.widget.MCDProgressBar
+        <com.mcal.mcpelauncher.widget.MCDProgressBar
             android:id="@+id/pkg_picker_package_progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,10 +53,9 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/pkg_picker_reset_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="25dp"
         android:src="@drawable/ic_undo_white" />

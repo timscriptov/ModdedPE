@@ -45,7 +45,7 @@ import java.util.Random;
 public class NModBanner extends RelativeLayout {
     private RelativeLayout mBannerView;
     private Random mRandom = new Random();
-    private ArrayList<NMod> mNModArrayList = new ArrayList<NMod>();
+    private ArrayList<NMod> mNModArrayList = new ArrayList<>();
 
     public NModBanner(Context context) {
         super(context);
@@ -107,12 +107,7 @@ public class NModBanner extends RelativeLayout {
         image.setImageBitmap(nmod.getBannerImage());
         AppCompatTextView bannerTitle = view.findViewById(R.id.moddedpe_nmod_banner_item_text_view_title);
         bannerTitle.setText(nmod.getBannerTitle());
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View p1) {
-                NModDescriptionActivity.startThisActivity(getContext(), nmod);
-            }
-        });
+        view.setOnClickListener(p1 -> NModDescriptionActivity.startThisActivity(getContext(), nmod));
         return view;
     }
 }

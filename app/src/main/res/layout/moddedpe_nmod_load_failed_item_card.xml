@@ -31,9 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
                 android:layout_toEndOf="@id/moddedpe_nmod_load_failed_item_card_icon"
-                android:layout_toRightOf="@id/moddedpe_nmod_load_failed_item_card_icon"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </RelativeLayout>
@@ -50,4 +48,3 @@
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
-

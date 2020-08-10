@@ -26,6 +26,7 @@ import android.widget.RelativeLayout;
 
 import androidx.appcompat.widget.AppCompatTextView;
 
+import com.mcal.mcpelauncher.BuildConfig;
 import com.mcal.mcpelauncher.ModdedPEApplication;
 import com.mcal.mcpelauncher.R;
 
@@ -55,12 +56,13 @@ public class ConsoleTableView extends RelativeLayout {
         addTableView();
     }
 
+    @SuppressLint("SetTextI18n")
     private void addTableView() {
         View rootView = LayoutInflater.from(getContext()).inflate(R.layout.moddedpe_main_console_table, null);
 
-        ((AppCompatTextView) rootView.findViewById(R.id.moddedpe_main_text_view_app_version)).setText(getContext().getResources().getString(R.string.app_version));
+        ((AppCompatTextView) rootView.findViewById(R.id.moddedpe_main_text_view_app_version)).setText(getContext().getResources().getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME);
         ((AppCompatTextView) rootView.findViewById(R.id.moddedpe_main_text_view_target_mc_version)).setTextColor(ModdedPEApplication.mPESdk.getMinecraftInfo().isSupportedMinecraftVersion(getContext().getResources().getStringArray(R.array.target_mcpe_versions)) ? Color.GREEN : Color.RED);
-        ((AppCompatTextView) rootView.findViewById(R.id.moddedpe_main_text_view_target_mc_version)).setText(R.string.target_mcpe_version_info);
+        ((AppCompatTextView) rootView.findViewById(R.id.moddedpe_main_text_view_target_mc_version)).setText(getContext().getResources().getString(R.string.app_game) + " " + BuildConfig.VERSION_NAME);
         addView(rootView);
     }
 }

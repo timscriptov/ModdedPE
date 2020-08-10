@@ -38,7 +38,7 @@
                 android:layout_marginRight="15dp"
                 android:gravity="center"
                 android:singleLine="true"
-                android:text="@string/app_version"
+                android:text=""
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <androidx.appcompat.widget.AppCompatTextView

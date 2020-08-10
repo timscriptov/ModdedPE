@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.mcdesign.widget;
+package com.mcal.mcpelauncher.widget;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -25,7 +25,9 @@ import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
-import com.mcal.mcdesign.utils.BitmapRepeater;
+import com.mcal.mcpelauncher.utils.BitmapRepeater;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Тимашков Иван
@@ -56,7 +58,7 @@ public class RepeatableImageView extends AppCompatImageView {
         }
     }
 
-    private Bitmap drawableToBitmap(Drawable drawable) {
+    private Bitmap drawableToBitmap(@NotNull Drawable drawable) {
         Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());

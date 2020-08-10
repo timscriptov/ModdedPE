@@ -19,6 +19,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,11 +40,14 @@ import com.mcal.mcpelauncher.activities.AboutActivity;
 import com.mcal.mcpelauncher.activities.DirPickerActivity;
 import com.mcal.mcpelauncher.activities.MCPkgPickerActivity;
 import com.mcal.mcpelauncher.activities.SplashesActivity;
+import com.mcal.mcpelauncher.data.NightMode;
 import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.mcpelauncher.services.BackgroundSoundPlayer;
+import com.mcal.mcpelauncher.utils.DesktopGui;
 import com.mcal.mcpelauncher.utils.I18n;
 import com.mcal.pesdk.utils.LauncherOptions;
 
+import org.jetbrains.annotations.NotNull;
 import org.zeroturnaround.zip.commons.FileUtils;
 
 import java.io.File;
@@ -54,7 +58,7 @@ import java.io.IOException;
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-public class MainSettingsFragment extends PreferenceFragmentCompat {
+public class MainSettingsFragment extends PreferenceFragmentCompat  implements SharedPreferences.OnSharedPreferenceChangeListener {
     private Preference mDataPathPreference;
     private Preference mPkgPreference;
 
@@ -62,118 +66,56 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.preferences);
 
-        SwitchPreference mBackgroundMusicPreference = (SwitchPreference) findPreference("background_music");
-        mBackgroundMusicPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-            @Override
-            public boolean onPreferenceChange(Preference p1, Object p2) {
-                if ((boolean) p2) {
-                    ((BackgroundSoundPlayer) getActivity()).bind();
-                } else ((BackgroundSoundPlayer) getActivity()).unbind();
-                return true;
-            }
+        SwitchPreference mBackgroundMusicPreference = findPreference("background_music");
+        mBackgroundMusicPreference.setOnPreferenceChangeListener((p1, p2) -> {
+            if ((boolean) p2) {
+                ((BackgroundSoundPlayer) getActivity()).bind();
+            } else ((BackgroundSoundPlayer) getActivity()).unbind();
+            return true;
         });
 
-        SwitchPreference mDesktopGuiPreference = (SwitchPreference) findPreference("desktop_gui");
-        mDesktopGuiPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-            @Override
-            public boolean onPreferenceChange(Preference p1, Object p2) {
-                File optionsFileDir = new File(Environment.getExternalStorageDirectory() + "/games/com.mojang/minecraftpe");
-                File optionsFile = new File(optionsFileDir + "/options.txt");
-
-                if (!optionsFileDir.exists()) {
-                    optionsFileDir.mkdirs();
-                }
-
-                if (!optionsFile.exists()) {
-                    try {
-                        FileWriter writer = new FileWriter(optionsFile);
-                        writer.write("gfx_guiscale_offset:0");
-                        writer.flush();
-                    } catch (IOException ignored) {
-                    }
-                }
-
-                String fileContent = null;
-                try {
-                    fileContent = FileUtils.readFileToString(optionsFile);
-                } catch (IOException ignored) {
-                }
-
-                if ((boolean) p2) {
-                    try {
-                        FileWriter writer = new FileWriter(optionsFile);
-                        writer.write(fileContent.replaceFirst("gfx_guiscale_offset:(\\d|-\\d)", "gfx_guiscale_offset:-1"));
-                        writer.flush();
-                    } catch (IOException e) {
-                    }
-                } else {
-                    try {
-                        FileWriter writer = new FileWriter(optionsFile);
-                        writer.write(fileContent.replaceFirst("gfx_guiscale_offset:(\\d|-\\d)", "gfx_guiscale_offset:0"));
-                        writer.flush();
-                    } catch (IOException e) {
-                    }
-                }
-                return true;
-            }
+        SwitchPreference mDesktopGuiPreference = findPreference("desktop_gui");
+        mDesktopGuiPreference.setOnPreferenceChangeListener((p1, p2) -> {
+            DesktopGui.run();
+            return true;
         });
 
-        SwitchPreference mSafeModePreference = (SwitchPreference) findPreference("safe_mode");
-        mSafeModePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-            @Override
-            public boolean onPreferenceChange(Preference p1, Object p2) {
-                Preferences.setSafeMode((boolean) p2);
-                return true;
-            }
+        SwitchPreference mSafeModePreference = findPreference("safe_mode");
+        mSafeModePreference.setOnPreferenceChangeListener((p1, p2) -> {
+            Preferences.setSafeMode((boolean) p2);
+            return true;
         });
         mSafeModePreference.setChecked(Preferences.isSafeMode());
 
         mDataPathPreference = findPreference("data_saved_path");
-        mDataPathPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-
-            @Override
-            public boolean onPreferenceClick(Preference p1) {
-                if (checkPermissions())
-                    DirPickerActivity.startThisActivity(getActivity());
-                return true;
-            }
+        mDataPathPreference.setOnPreferenceClickListener(p1 -> {
+            if (checkPermissions())
+                DirPickerActivity.startThisActivity(getActivity());
+            return true;
         });
 
         Preference mAboutPreference = findPreference("about");
-        mAboutPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference p1) {
-                Intent intent = new Intent(getActivity(), AboutActivity.class);
-                getActivity().startActivity(intent);
-                return true;
-            }
+        mAboutPreference.setOnPreferenceClickListener(p1 -> {
+            Intent intent = new Intent(getActivity(), AboutActivity.class);
+            getActivity().startActivity(intent);
+            return true;
         });
 
         mPkgPreference = findPreference("game_pkg_name");
-        mPkgPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference p1) {
-                MCPkgPickerActivity.startThisActivity(getActivity());
-                return true;
-            }
+        mPkgPreference.setOnPreferenceClickListener(p1 -> {
+            MCPkgPickerActivity.startThisActivity(getActivity());
+            return true;
         });
 
-        ListPreference mLanguagePreference = (ListPreference) findPreference("language");
-        mLanguagePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-            @Override
-            public boolean onPreferenceChange(Preference p1, Object p2) {
-                int type = Integer.valueOf((String) p2);
-                Preferences.setLanguageType(type);
-                I18n.setLanguage(getActivity());
-                Intent intent = new Intent(getActivity(), SplashesActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                return true;
-            }
+        ListPreference mLanguagePreference = findPreference("language");
+        mLanguagePreference.setOnPreferenceChangeListener((p1, p2) -> {
+            int type = Integer.parseInt((String) p2);
+            Preferences.setLanguageType(type);
+            I18n.setLanguage(getActivity());
+            Intent intent = new Intent(getActivity(), SplashesActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            return true;
         });
         updatePreferences();
     }
@@ -188,14 +130,14 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
             if (dir.equals(LauncherOptions.STRING_VALUE_DEFAULT))
                 Snackbar.make(getActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_reset_data_path), 2500).show();
             else
-                Snackbar.make(getActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_data_path, new Object[]{dir}), 2500).show();
+                Snackbar.make(getActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_data_path, dir), 2500).show();
         } else if (requestCode == MCPkgPickerActivity.REQUEST_PICK_PACKAGE && resultCode == Activity.RESULT_OK) {
             String pkgName = data.getExtras().getString("package_name");
             Preferences.setMinecraftPackageName(pkgName);
             if (pkgName.equals(LauncherOptions.STRING_VALUE_DEFAULT))
                 Snackbar.make(getActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_reset_pkg_name), 2500).show();
             else
-                Snackbar.make(getActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_pkg_name, new Object[]{pkgName}), 2500).show();
+                Snackbar.make(getActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_pkg_name, pkgName), 2500).show();
             Intent intent = new Intent(getActivity(), SplashesActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             getActivity().startActivity(intent);
@@ -227,25 +169,22 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.permission_grant_failed_title);
         builder.setMessage(R.string.permission_grant_failed_message);
-        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent();
-                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                intent.addCategory(Intent.CATEGORY_DEFAULT);
-                intent.setData(Uri.parse("package:" + getActivity().getPackageName()));
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                startActivity(intent);
-            }
+        builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            intent.setData(Uri.parse("package:" + getActivity().getPackageName()));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+            startActivity(intent);
         });
         builder.setNegativeButton(android.R.string.cancel, null);
         builder.show();
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == 1) {
@@ -264,5 +203,21 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
                 showPermissionDinedDialog();
             }
         }
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, @NotNull String key) {
+        switch (key) {
+            case "night_mode":
+                NightMode.setMode(NightMode.getCurrentMode());
+                restartPerfect(requireActivity().getIntent());
+                break;
+        }
+    }
+
+    private void restartPerfect(Intent intent) {
+        requireActivity().finish();
+        requireActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        startActivity(intent);
     }
 }

@@ -14,17 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.mcdesign.utils;
+package com.mcal.mcpelauncher.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 public class BitmapRepeater {
-    private static Bitmap repeatW(int width, Bitmap src) {
+    private static Bitmap repeatW(int width, @NotNull Bitmap src) {
         int count = (width + src.getWidth() - 1) / src.getWidth() + 1;
         Bitmap bitmap = Bitmap.createBitmap(width, src.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
@@ -37,7 +39,7 @@ public class BitmapRepeater {
         return bitmap;
     }
 
-    private static Bitmap repeatH(int height, Bitmap src) {
+    private static Bitmap repeatH(int height, @NotNull Bitmap src) {
         int count = (height + src.getHeight() - 1) / src.getHeight() + 1;
         Bitmap bitmap = Bitmap.createBitmap(src.getWidth(), height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);

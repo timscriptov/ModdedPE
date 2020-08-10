@@ -19,9 +19,16 @@ package com.mcal.mcpelauncher;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 
+import androidx.preference.PreferenceManager;
+
 import com.mcal.pesdk.PESdk;
+
+import io.github.inflationx.calligraphy3.CalligraphyConfig;
+import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
+import io.github.inflationx.viewpump.ViewPump;
 
 /**
  * @author Тимашков Иван
@@ -31,6 +38,7 @@ public class ModdedPEApplication extends Application {
     public static PESdk mPESdk;
     @SuppressLint("StaticFieldLeak")
     private static Context context;
+    public static SharedPreferences preferences;
 
     public static Context getContext() {
         if (context == null) {
@@ -43,6 +51,14 @@ public class ModdedPEApplication extends Application {
         super.onCreate();
         context = this;
         mPESdk = new PESdk(this);
+        ViewPump.init(ViewPump.builder()
+                .addInterceptor(new CalligraphyInterceptor(
+                        new CalligraphyConfig.Builder()
+                                .setDefaultFontPath("fonts/Lato.ttf")
+                                .setFontAttrId(R.attr.fontPath)
+                                .build()))
+                .build());
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
     @Override

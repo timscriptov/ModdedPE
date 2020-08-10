@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.mcdesign.widget;
+package com.mcal.mcpelauncher.widget;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -64,6 +64,4 @@ public class MCDSwitch extends Switch {
             canvas.drawBitmap(bitmap, 0, 0, null);
         invalidate();
     }
-
-
 }

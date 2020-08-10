@@ -13,6 +13,11 @@
             android:summary="@string/preferences_summary_safe_mode"
             android:title="@string/preferences_title_safe_mode" />
         <androidx.preference.SwitchPreference
+            android:defaultValue="false"
+            android:key="night_mode"
+            android:summary=""
+            android:title="Night mode" />
+        <androidx.preference.SwitchPreference
             android:icon="@drawable/ic_music"
             android:defaultValue="false"
             android:key="background_music"

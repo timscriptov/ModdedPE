@@ -19,7 +19,7 @@
         android:layout_centerInParent="true"
         android:visibility="gone">
 
-        <com.mcal.mcdesign.widget.MCDProgressBar
+        <com.mcal.mcpelauncher.widget.MCDProgressBar
             android:id="@+id/nmod_picker_package_progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,6 +51,4 @@
 
     </RelativeLayout>
 
-
 </RelativeLayout>
-

@@ -9,7 +9,7 @@
         android:layout_height="90dp"
         tools:ignore="UselessParent">
 
-        <com.mcal.mcdesign.widget.RepeatableImageView
+        <com.mcal.mcpelauncher.widget.RepeatableImageView
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_alignParentBottom="true"
@@ -43,23 +43,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="#DEDEDE" />
+            android:textColor="#DEDEDE"
+            android:layout_margin="5dp"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/moddedpe_main_text_view_target_mc_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="#DEDEDE"
+            android:layout_margin="5dp"
             tools:ignore="RelativeOverlap" />
 
     </RelativeLayout>
 
 </RelativeLayout>
-
