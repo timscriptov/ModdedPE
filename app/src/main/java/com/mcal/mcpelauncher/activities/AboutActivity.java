@@ -17,7 +17,6 @@
 package com.mcal.mcpelauncher.activities;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -48,31 +47,14 @@ public class AboutActivity extends BaseActivity implements BillingProcessor.IBil
 
         setActionBarButtonCloseRight();
 
-        findViewById(R.id.about_view_github_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View p1) {
-                openUri(URI_GITHUB);
-            }
-        });
+        findViewById(R.id.about_view_github_button).setOnClickListener(p1 -> openUri(URI_GITHUB));
 
-        findViewById(R.id.about_view_nmod_api_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View p1) {
-                openUri(URI_NMOD_API);
-            }
-        });
+        findViewById(R.id.about_view_nmod_api_button).setOnClickListener(p1 -> openUri(URI_NMOD_API));
 
-        findViewById(R.id.about_translators_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View p1) {
-                new AlertDialog.Builder(AboutActivity.this).setTitle(R.string.about_translators).setMessage(R.string.about_translators_message).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface p1, int p2) {
-                        p1.dismiss();
-                    }
-                }).show();
-            }
-        });
+        findViewById(R.id.about_translators_button).setOnClickListener(p1 -> new AlertDialog.Builder(AboutActivity.this)
+                .setTitle(R.string.about_translators)
+                .setMessage(R.string.about_translators_message)
+                .setPositiveButton(android.R.string.ok, (p11, p2) -> p11.dismiss()).show());
         bp = new BillingProcessor(this, null, this);
         I18n.setLanguage(this);
     }

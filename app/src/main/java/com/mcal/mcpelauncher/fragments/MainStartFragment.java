@@ -16,7 +16,6 @@
  */
 package com.mcal.mcpelauncher.fragments;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -54,7 +53,7 @@ public class MainStartFragment extends BaseFragment {
         } else if (!getPESdk().getMinecraftInfo().isSupportedMinecraftVersion(getResources().getStringArray(R.array.target_mcpe_versions))) {
             AlertDialog.Builder mdialog = new AlertDialog.Builder(getActivity());
             mdialog.setTitle(getString(R.string.no_available_mcpe_version_found_title));
-            mdialog.setMessage(getString(R.string.no_available_mcpe_version_found, getPESdk().getMinecraftInfo().getMinecraftVersionName(), R.string.app_game  + " " + BuildConfig.VERSION_NAME));
+            mdialog.setMessage(getString(R.string.no_available_mcpe_version_found, getPESdk().getMinecraftInfo().getMinecraftVersionName(), R.string.app_game + " " + BuildConfig.VERSION_NAME));
             mdialog.setNegativeButton(getString(android.R.string.cancel), (p1, id) -> p1.dismiss());
             mdialog.setPositiveButton(getString(R.string.no_available_mcpe_version_continue), (p1, id) -> startMinecraft());
             mdialog.show();

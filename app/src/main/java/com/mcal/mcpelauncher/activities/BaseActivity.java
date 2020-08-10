@@ -31,10 +31,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 
-import com.mcal.mcpelauncher.data.NightMode;
-import com.mcal.mcpelauncher.utils.BitmapRepeater;
 import com.mcal.mcpelauncher.ModdedPEApplication;
 import com.mcal.mcpelauncher.R;
+import com.mcal.mcpelauncher.utils.BitmapRepeater;
 import com.mcal.mcpelauncher.utils.I18n;
 import com.mcal.pesdk.PESdk;
 
@@ -43,11 +42,6 @@ import com.mcal.pesdk.PESdk;
  * @author https://github.com/TimScriptov
  */
 public class BaseActivity extends AppCompatActivity {
-    private NightMode.Mode nightMode;
-
-    static {
-        NightMode.setMode(NightMode.getCurrentMode());
-    }
 
     protected PESdk getPESdk() {
         return ModdedPEApplication.mPESdk;
@@ -58,7 +52,6 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setDefaultActionBar();
         I18n.setLanguage(this);
-        nightMode = NightMode.getCurrentMode();
     }
 
     protected void setDefaultActionBar() {
@@ -134,16 +127,5 @@ public class BaseActivity extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mcd_bg);
         bitmap = BitmapRepeater.repeat(getWindowManager().getDefaultDisplay().getWidth(), getWindowManager().getDefaultDisplay().getHeight(), bitmap);
         getWindow().getDecorView().setBackground(new BitmapDrawable(bitmap));
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (!nightMode.equals(NightMode.getCurrentMode())) recreate();
-
-        if (requestCode == 0 & resultCode == AppCompatActivity.RESULT_OK) {
-            recreate();
-        }
     }
 }

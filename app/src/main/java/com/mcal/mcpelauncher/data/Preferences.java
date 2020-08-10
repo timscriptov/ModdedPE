@@ -15,12 +15,12 @@ public final class Preferences {
         preferences = PreferenceManager.getDefaultSharedPreferences(ModdedPEApplication.getContext());
     }
 
-    public static void setNightMode(boolean value) {
-        preferences.edit().putBoolean("night_mode", value).apply();
-    }
-
     public static boolean isNightMode() {
         return preferences.getBoolean("night_mode", false);
+    }
+
+    public static void setNightMode(boolean value) {
+        preferences.edit().putBoolean("night_mode", value).apply();
     }
 
     public static boolean isBackgroundMusic() {

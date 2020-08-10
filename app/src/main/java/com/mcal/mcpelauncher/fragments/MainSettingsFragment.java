@@ -17,16 +17,14 @@ package com.mcal.mcpelauncher.fragments;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.Settings;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.preference.ListPreference;
@@ -40,7 +38,6 @@ import com.mcal.mcpelauncher.activities.AboutActivity;
 import com.mcal.mcpelauncher.activities.DirPickerActivity;
 import com.mcal.mcpelauncher.activities.MCPkgPickerActivity;
 import com.mcal.mcpelauncher.activities.SplashesActivity;
-import com.mcal.mcpelauncher.data.NightMode;
 import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.mcpelauncher.services.BackgroundSoundPlayer;
 import com.mcal.mcpelauncher.utils.DesktopGui;
@@ -48,17 +45,12 @@ import com.mcal.mcpelauncher.utils.I18n;
 import com.mcal.pesdk.utils.LauncherOptions;
 
 import org.jetbrains.annotations.NotNull;
-import org.zeroturnaround.zip.commons.FileUtils;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 /**
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-public class MainSettingsFragment extends PreferenceFragmentCompat  implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class MainSettingsFragment extends PreferenceFragmentCompat {
     private Preference mDataPathPreference;
     private Preference mPkgPreference;
 
@@ -106,6 +98,24 @@ public class MainSettingsFragment extends PreferenceFragmentCompat  implements S
             MCPkgPickerActivity.startThisActivity(getActivity());
             return true;
         });
+
+        SwitchPreference mNightModeePreference = findPreference("night_mode");
+        mNightModeePreference.setOnPreferenceChangeListener((p1, p2) -> {
+            if (Preferences.isNightMode()) {
+                Preferences.setNightMode(false);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                restartPerfect(requireActivity().getIntent());
+            } else {
+                Preferences.setNightMode(true);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                restartPerfect(requireActivity().getIntent());
+            }
+            return true;
+        });
+        mNightModeePreference.setChecked(Preferences.isNightMode());
+
+
+        //Toast.makeText(getContext(), "Для применения настроек перезапустите приложение!", Toast.LENGTH_SHORT).show();
 
         ListPreference mLanguagePreference = findPreference("language");
         mLanguagePreference.setOnPreferenceChangeListener((p1, p2) -> {
@@ -202,16 +212,6 @@ public class MainSettingsFragment extends PreferenceFragmentCompat  implements S
             } else {
                 showPermissionDinedDialog();
             }
-        }
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, @NotNull String key) {
-        switch (key) {
-            case "night_mode":
-                NightMode.setMode(NightMode.getCurrentMode());
-                restartPerfect(requireActivity().getIntent());
-                break;
         }
     }
 

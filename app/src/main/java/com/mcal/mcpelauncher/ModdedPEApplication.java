@@ -36,9 +36,9 @@ import io.github.inflationx.viewpump.ViewPump;
  */
 public class ModdedPEApplication extends Application {
     public static PESdk mPESdk;
+    public static SharedPreferences preferences;
     @SuppressLint("StaticFieldLeak")
     private static Context context;
-    public static SharedPreferences preferences;
 
     public static Context getContext() {
         if (context == null) {

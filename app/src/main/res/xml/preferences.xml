@@ -13,6 +13,7 @@
             android:summary="@string/preferences_summary_safe_mode"
             android:title="@string/preferences_title_safe_mode" />
         <androidx.preference.SwitchPreference
+            android:icon="@drawable/ic_theme"
             android:defaultValue="false"
             android:key="night_mode"
             android:summary=""

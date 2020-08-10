@@ -37,7 +37,6 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.mcal.mcpelauncher.R;
-import com.mcal.pesdk.utils.LauncherOptions;
 
 import java.util.Collections;
 import java.util.Comparator;

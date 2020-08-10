@@ -21,8 +21,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.widget.RelativeLayout;
 
-import com.mcal.mcpelauncher.utils.BitmapRepeater;
 import com.mcal.mcpelauncher.R;
+import com.mcal.mcpelauncher.utils.BitmapRepeater;
 
 /**
  * @author Тимашков Иван
