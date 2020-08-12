@@ -16,6 +16,7 @@
 
 -keep class org.slf4j.LoggerFactory
 
+-keep class com.xbox.httpclient.** { *; }
 -keep class okhttp3.** { *; }
 -keep class okio.** { *; }
 -keep class org.spongycastle.** { *; }
