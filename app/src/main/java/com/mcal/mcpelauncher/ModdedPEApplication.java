@@ -22,8 +22,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 
+import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.pesdk.PESdk;
 
 import io.github.inflationx.calligraphy3.CalligraphyConfig;
@@ -51,6 +53,11 @@ public class ModdedPEApplication extends Application {
         super.onCreate();
         context = this;
         mPESdk = new PESdk(this);
+        if (Preferences.isNightMode()) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
         ViewPump.init(ViewPump.builder()
                 .addInterceptor(new CalligraphyInterceptor(
                         new CalligraphyConfig.Builder()

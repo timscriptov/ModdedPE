@@ -243,76 +243,42 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         return isXperiaPlay();
     }
 
+    public native void nativeInitializeXboxLive(long j, long j2);
     public native void fireCrashedTelemetry(String str, String str2, String str3);
-
     native String nativeScreenIsPresentInStack(String str);
-
     native void nativeLoginData(String accessToken, String clientId, String profileId, String profileName);
-
     native void nativeTypeCharacter(String character);
-
     native void nativeWebRequestCompleted(int requestId, long userData, int httpStatusOrNegativeError, String content);
-
     public native void setUpBreakpad(String str);
-
     public native boolean isAndroidTrial();
-
     public native boolean isBrazeEnabled();
-
     public native boolean isEduMode();
-
     public native boolean isPublishBuild();
-
     public native boolean isTestInfrastructureDisabled();
-
     public native void nativeBackPressed();
-
     public native void nativeBackSpacePressed();
-
     public native String nativeCheckIfTestsAreFinished();
-
     public native void nativeClearAButtonState();
-
     public native void nativeDeviceCorrelation(long j, String str, long j2, String str2);
-
     public native String nativeGetActiveScreen();
-
     public native String nativeGetDevConsoleLogName();
-
     public native String nativeGetDeviceId();
-
     public native String nativeGetLogText(String str);
-
     public native boolean nativeKeyHandler(int i, int i2);
-
     public native void nativeOnDestroy();
-
     public native void nativeOnPickImageCanceled(long j);
-
     public native void nativeOnPickImageSuccess(long j, String str);
-
     public native void nativeProcessIntentUriQuery(String str, String str2);
-
     public native void nativeRegisterThis();
-
     public native void nativeResize(int i, int i2);
-
     public native void nativeReturnKeyPressed();
-
     public native void nativeSetHeadphonesConnected(boolean z);
-
     public native String nativeSetOptions(String str);
-
     public native void nativeSetTextboxText(String str);
-
     public native void nativeShutdown();
-
     public native void nativeStopThis();
-
     public native void nativeStoragePermissionRequestResult(boolean z, int i);
-
     public native void nativeSuspend();
-
     public native void nativeUnregisterThis();
 
     public void onRequestComplete(int requestId, long userData, int httpStatusOrNegativeError, String content) {
@@ -1605,5 +1571,11 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
             }
             super.handleMessage(msg);
         }
+    }
+
+    public void initializeXboxLive(long xalInitArgs, long xblInitArgs) {
+        final long j = xalInitArgs;
+        final long j2 = xblInitArgs;
+        runOnUiThread(() -> MainActivity.this.nativeInitializeXboxLive(j, j2));
     }
 }

@@ -16,8 +16,9 @@
 
 -keep class org.slf4j.LoggerFactory
 
--keep class androidx.arch.** { *; }
--keep class androidx.lifecycle.** { *; }
+-keep class okhttp3.** { *; }
+-keep class okio.** { *; }
+-keep class org.spongycastle.** { *; }
 -keep class com.mojang.** { *; }
 -keep class org.fmod.** { *; }
 -keep class Microsoft.** { *; }
