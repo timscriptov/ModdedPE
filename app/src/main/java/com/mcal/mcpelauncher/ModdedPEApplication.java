@@ -21,11 +21,13 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.os.Build;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 
 import com.mcal.mcpelauncher.data.Preferences;
+import com.mcal.mcpelauncher.utils.FileUtils;
 import com.mcal.pesdk.PESdk;
 
 import io.github.inflationx.calligraphy3.CalligraphyConfig;
@@ -58,14 +60,13 @@ public class ModdedPEApplication extends Application {
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
-        ViewPump.init(ViewPump.builder()
-                .addInterceptor(new CalligraphyInterceptor(
-                        new CalligraphyConfig.Builder()
-                                .setDefaultFontPath("fonts/Lato.ttf")
-                                .setFontAttrId(R.attr.fontPath)
-                                .build()))
-                .build());
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+
     }
 
     @Override
