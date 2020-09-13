@@ -76,7 +76,7 @@ public class Preloader {
 
             mPreloadListener.onLoadNativeLibs();
             mPreloadListener.onLoadSubstrateLib();
-            LibraryLoader.loadSubstrate();
+            LibraryLoader.loadSubstrate(mPESdk.getMinecraftInfo().getMinecraftPackageNativeLibraryDir());
 
             mPreloadListener.onLoadFModLib();
             LibraryLoader.loadFMod(mPESdk.getMinecraftInfo().getMinecraftPackageNativeLibraryDir());

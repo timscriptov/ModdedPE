@@ -18,6 +18,8 @@ package com.mcal.pesdk.nativeapi;
 
 import android.annotation.SuppressLint;
 
+import com.mcal.mcpelauncher.utils.FileUtils;
+
 import java.io.File;
 
 /**
@@ -29,12 +31,16 @@ public class LibraryLoader {
 
     private static native void nativeOnNModAPILoaded(String libPath);
 
-    static public void loadSubstrate() {
+    @SuppressLint("UnsafeDynamicallyLoadedCode")
+    static public void loadSubstrate(String mcLibsPath) {
         System.loadLibrary("substrate");
+        //System.load(new File(mcLibsPath, "libsubstrate.so").getAbsolutePath());
     }
 
+    @SuppressLint("UnsafeDynamicallyLoadedCode")
     static public void loadLauncher(String mcLibsPath) {
         System.loadLibrary("launcher-core");
+        //System.load(new File(mcLibsPath, "liblauncher-core.so").getAbsolutePath());
         nativeOnLauncherLoaded(mcLibsPath + "/" + "libminecraftpe.so");
     }
 
@@ -54,8 +60,10 @@ public class LibraryLoader {
         //System.loadLibrary("c++_shared");
     }
 
+    @SuppressLint("UnsafeDynamicallyLoadedCode")
     static public void loadNModAPI(String mcLibsPath) {
         System.loadLibrary("nmod-core");
+        //System.load(new File(mcLibsPath, "libnmod-core.so").getAbsolutePath());
         nativeOnNModAPILoaded(mcLibsPath + "/" + "libminecraftpe.so");
     }
 }
