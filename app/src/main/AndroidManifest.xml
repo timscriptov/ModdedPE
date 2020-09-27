@@ -8,6 +8,7 @@
     <uses-permission android:name="com.android.vending.BILLING" />
     <uses-permission android:name="com.android.vending.CHECK_LICENSE" />
     <!-- Просмотр сетевых подключений -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- Изменение/удаление данных на USB-накопителе -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -174,15 +175,25 @@
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND">
+        <activity
+            android:name="com.mojang.minecraftpe.MainActivity">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="com.mojang.minecraftpe" />
+                <action
+                    android:name="xbox_live_game_invite" />
+                <action
+                    android:name="xbox_live_achievement_unlock" />
+                <category
+                    android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </receiver>
+            <intent-filter tools:ignore="AppLinkUrlError">
+                <action
+                    android:name="android.intent.action.VIEW" />
+                <category
+                    android:name="android.intent.category.DEFAULT" />
+                <category
+                    android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
 
         <service android:name="com.mcal.mcpelauncher.services.SoundService" />
 
@@ -207,6 +218,72 @@
             android:multiprocess="true" />
 
         <!-- Xbox Live SDK -->
+
+        <activity
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:name="com.microsoft.xal.browser.IntentHandler"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="orientation">
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.VIEW" />
+                <data
+                    android:scheme="ms-xal-0000000048183522"
+                    android:host="auth" />
+                <category
+                    android:name="android.intent.category.DEFAULT" />
+                <category
+                    android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:name="com.microsoft.xal.browser.WebView"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="orientation" />
+        <activity
+            android:name="com.microsoft.xal.browser.WebKitWebViewController"
+            android:exported="false"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="orientation" />
+        <meta-data
+            android:name="xperiaplayoptimized_content"
+            android:resource="@string/xperiaplayoptimized_content" />
+        <meta-data
+            android:name="game_display_name"
+            android:resource="@string/app_name" />
+        <meta-data
+            android:name="game_icon"
+            android:resource="@mipmap/ic_launcher_round" />
+        <meta-data
+            android:name="appcenter_android_id"
+            android:value="@string/appcenter_android_id" />
+        <receiver
+            android:name="com.appsflyer.SingleInstallBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action
+                    android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+        <uses-library
+            android:name="xperiaplaycertified"
+            android:required="false" />
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND"
+            android:exported="true">
+            <intent-filter>
+                <action
+                    android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category
+                    android:name="com.mojang.minecraftpe" />
+            </intent-filter>
+        </receiver>
 
     </application>
 

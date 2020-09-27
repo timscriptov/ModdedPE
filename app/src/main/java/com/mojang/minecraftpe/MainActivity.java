@@ -15,6 +15,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
@@ -51,6 +52,7 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.View;
@@ -93,6 +95,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class MainActivity extends NativeActivity implements OnKeyListener {
+    private Context mMinecraftAPKContext;
     public static MainActivity mInstance = null;
     private static boolean _isPowerVr = false;
     private static boolean mHasStoragePermission = false;
@@ -1267,11 +1270,26 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         }
     }
 
+    @Override
     public void onResume() {
         boolean numbersOnly;
         boolean isMultiline;
         Log.d("ModdedPE", "onResume");
         super.onResume();
+
+        // Show menu button.
+        final FloatButton hb = new FloatButton(MainActivity.this);
+        final MainActivity thiz = this;
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            thiz.runOnUiThread(() -> hb.showAtLocation(thiz.getWindow().getDecorView(),
+                    Gravity.TOP| Gravity.LEFT | Gravity.CENTER_VERTICAL, 0, 0));
+        }).start();
+
         registerReceiver(this.headsetConnectionReceiver, new IntentFilter("android.intent.action.HEADSET_PLUG"));
         if (isTextWidgetActive()) {
             String oldText = this.textInputWidget.getText().toString();
