@@ -1,3 +1,24 @@
+/* Cydia Substrate - Powerful Code Insertion Platform
+ * Copyright (C) 2008-2011  Jay Freeman (saurik)
+*/
+
+/* GNU Lesser General Public License, Version 3 {{{ */
+/*
+ * Substrate is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * Substrate is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Substrate.  If not, see <http://www.gnu.org/licenses/>.
+**/
+/* }}} */
+
 #ifndef SUBSTRATE_X86_HPP
 #define SUBSTRATE_X86_HPP
 
@@ -82,7 +103,7 @@ _disused static void MSWriteCall(uint8_t *&current, I$r target) {
     if (target >> 3 != 0)
         MSWrite<uint8_t>(current, 0x40 | (target & 0x08) >> 3);
     MSWrite<uint8_t>(current, 0xff);
-    MSWrite<uint8_t>(current, 0xd0 | (target & 0x07));
+    MSWrite<uint8_t>(current, 0xd0 | target & 0x07);
 }
 
 _disused static void MSWriteCall(uint8_t *&current, uintptr_t target) {
@@ -130,13 +151,13 @@ _disused static void MSWriteJump(uint8_t *&current, I$r target) {
     if (target >> 3 != 0)
         MSWrite<uint8_t>(current, 0x40 | (target & 0x08) >> 3);
     MSWrite<uint8_t>(current, 0xff);
-    MSWrite<uint8_t>(current, 0xe0 | (target & 0x07));
+    MSWrite<uint8_t>(current, 0xe0 | target & 0x07);
 }
 
 _disused static void MSWritePop(uint8_t *&current, uint8_t target) {
     if (target >> 3 != 0)
         MSWrite<uint8_t>(current, 0x40 | (target & 0x08) >> 3);
-    MSWrite<uint8_t>(current, 0x58 | (target & 0x07));
+    MSWrite<uint8_t>(current, 0x58 | target & 0x07);
 }
 
 _disused static size_t MSSizeOfPop(uint8_t target) {
@@ -146,18 +167,18 @@ _disused static size_t MSSizeOfPop(uint8_t target) {
 _disused static void MSWritePush(uint8_t *&current, I$r target) {
     if (target >> 3 != 0)
         MSWrite<uint8_t>(current, 0x40 | (target & 0x08) >> 3);
-    MSWrite<uint8_t>(current, 0x50 | (target & 0x07));
+    MSWrite<uint8_t>(current, 0x50 | target & 0x07);
 }
 
 _disused static void MSWriteAdd(uint8_t *&current, I$r target, uint8_t source) {
     MSWrite<uint8_t>(current, 0x83);
-    MSWrite<uint8_t>(current, 0xc4 | (target & 0x07));
+    MSWrite<uint8_t>(current, 0xc4 | target & 0x07);
     MSWrite<uint8_t>(current, source);
 }
 
 _disused static void MSWriteSet64(uint8_t *&current, I$r target, uintptr_t source) {
     MSWrite<uint8_t>(current, 0x48 | (target & 0x08) >> 3 << 2);
-    MSWrite<uint8_t>(current, 0xb8 | (target & 0x7));
+    MSWrite<uint8_t>(current, 0xb8 | target & 0x7);
     MSWrite<uint64_t>(current, source);
 }
 
@@ -169,7 +190,7 @@ _disused static void MSWriteSet64(uint8_t *&current, I$r target, Type_ *source) 
 _disused static void MSWriteMove64(uint8_t *&current, uint8_t source, uint8_t target) {
     MSWrite<uint8_t>(current, 0x48 | (target & 0x08) >> 3 << 2 | (source & 0x08) >> 3);
     MSWrite<uint8_t>(current, 0x8b);
-    MSWrite<uint8_t>(current, (target & 0x07) << 3 | (source & 0x07));
+    MSWrite<uint8_t>(current, (target & 0x07) << 3 | source & 0x07);
 }
 
 _disused static size_t MSSizeOfMove64() {

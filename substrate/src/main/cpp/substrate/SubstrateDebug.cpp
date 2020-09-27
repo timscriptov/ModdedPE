@@ -1,12 +1,30 @@
-#include "CydiaSubstrate.h"
-#include "Debug.hpp"
+/* Cydia Substrate - Powerful Code Insertion Platform
+ * Copyright (C) 2008-2011  Jay Freeman (saurik)
+*/
+
+/* GNU Lesser General Public License, Version 3 {{{ */
+/*
+ * Substrate is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * Substrate is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Substrate.  If not, see <http://www.gnu.org/licenses/>.
+**/
+/* }}} */
+
+#include "SubstrateHook.h"
+#include "SubstrateDebug.hpp"
 
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
-
-_extern bool MSDebug;
-bool MSDebug = false;
 
 static char _MSHexChar(uint8_t value) {
     return value < 0x20 || value >= 0x80 ? '.' : value;
@@ -27,7 +45,7 @@ void MSLogHexEx(const void *vdata, size_t size, size_t stride, const char *mark)
     while (i != size) {
         if (i % HexWidth_ == 0) {
             if (mark != NULL)
-                b += sprintf(d + b, "[%s] ", mark);
+                b += sprintf(d + b, "\n[%s] ", mark);
             b += sprintf(d + b, "0x%.3zx:", i);
         }
 

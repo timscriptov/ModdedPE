@@ -19,20 +19,22 @@
 **/
 /* }}} */
 
-#ifndef SUBSTRATE_BUFFER_HPP
-#define SUBSTRATE_BUFFER_HPP
+#ifndef SUBSTRATE_LOG_HPP
+#define SUBSTRATE_LOG_HPP
 
-#include <string.h>
+#if 0
+#include <android/log.h>
 
-template <typename Type_>
-_disused static _finline void MSWrite(uint8_t *&buffer, Type_ value) {
-    *reinterpret_cast<Type_ *>(buffer) = value;
-    buffer += sizeof(Type_);
-}
+#define MSLog(level, format, ...) ((void)__android_log_print(level, "NNNN", format, __VA_ARGS__))
 
-_disused static _finline void MSWrite(uint8_t *&buffer, uint8_t *data, size_t size) {
-    memcpy(buffer, data, size);
-    buffer += size;
-}
+#define MSLogLevelNotice ANDROID_LOG_INFO
+#define MSLogLevelWarning ANDROID_LOG_WARN
+#define MSLogLevelError ANDROID_LOG_ERROR
 
-#endif//SUBSTRATE_BUFFER_HPP
+#else
+
+#define MSLog(level, format, ...) printf(format, __VA_ARGS__)
+
+#endif
+
+#endif//SUBSTRATE_LOG_HPP

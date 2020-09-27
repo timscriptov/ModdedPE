@@ -36,7 +36,7 @@ public class NativeUtils {
 
     public static native String nativeDemangle(String symbol_name);
 
-    public static native void nativeRegisterNatives(Class cls);
+    public static native boolean nativeRegisterNatives(Class cls);
 
     public static void setValues(Context context) {
         if (Preferences.getDataSavedPath().equals(LauncherOptions.STRING_VALUE_DEFAULT)) {

@@ -1,3 +1,24 @@
+/* Cydia Substrate - Powerful Code Insertion Platform
+ * Copyright (C) 2008-2011  Jay Freeman (saurik)
+*/
+
+/* GNU Lesser General Public License, Version 3 {{{ */
+/*
+ * Substrate is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * Substrate is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Substrate.  If not, see <http://www.gnu.org/licenses/>.
+**/
+/* }}} */
+
 #define SubstrateInternal
 #include "CydiaSubstrate.h"
 
@@ -11,12 +32,11 @@
 #include "hde64.h"
 #endif
 
-#include "Debug.hpp"
+#include "SubstrateDebug.hpp"
 
-#include <cerrno>
-#include <cstdio>
-#include <cstring>
-
+#include <errno.h>
+#include <stdio.h>
+#include <string.h>
 #include <cmath>
 
 #ifdef __arm__
@@ -32,7 +52,7 @@ X 4790  ldr r*,[pc,#*]    */
 // x=0; while IFS= read -r line; do if [[ ${#line} -ne 0 && $line == +([^\;]): ]]; then x=2; elif [[ $line == ' +'* && $x -ne 0 ]]; then ((--x)); echo "$x${line}"; fi; done <WebCore.asm >WebCore.pc
 // grep pc WebCore.pc | cut -c 40- | sed -Ee 's/^ldr *(ip|r[0-9]*),\[pc,\#0x[0-9a-f]*\].*/ ldr r*,[pc,#*]/;s/^add *r[0-9]*,pc,r[0-9]*.*/ add r*, pc,r*/;s/^(st|ld)r *r([0-9]*),\[pc,r([0-9]*)\].*/ \1r r\2,[pc,r\3]/;s/^fld(s|d) *(s|d)[0-9]*,\[pc,#0x[0-9a-f]*].*/fld\1 \2*,[pc,#*]/' | sort | uniq -c | sort -n
 
-#include "ARM.hpp"
+#include "SubstrateARM.hpp"
 
 #define T$Label(l, r) \
     (((r) - (l)) * 2 - 4 + ((l) % 2 == 0 ? 0 : 2))
@@ -70,8 +90,16 @@ X 4790  ldr r*,[pc,#*]    */
 
 #define T1$ldr_rt_$rn_im$(rt, rn, im) /* ldr rt, [rn, #im] */ \
     (0xf850 | ((im < 0 ? 0 : 1) << 7) | (rn))
+
+template<class T> T xabs(T _Val)
+{
+        typedef int BOOL;
+        if(_Val>T(0))return _Val;
+        return -_Val;
+}
+
 #define T2$ldr_rt_$rn_im$(rt, rn, im) /* ldr rt, [rn, #im] */ \
-    (((rt) << 12) | abs(im))
+    (((rt) << 12) | xabs(im))
 
 #define T1$mrs_rd_apsr(rd) /* mrs rd, apsr */ \
     (0xf3ef)
@@ -137,24 +165,10 @@ extern "C" size_t MSGetInstructionWidth(void *start) {
         return MSGetInstructionWidthThumb(reinterpret_cast<void *>(reinterpret_cast<uintptr_t>(start) & ~0x1));
 }
 
-/* BlockLauncher */
-static void* SubstrateTranslateAddressNoOp(void* input) {
-        return input;
-}
-
-static void* (*SubstrateTranslateAddress)(void*) = SubstrateTranslateAddressNoOp;
-
-static const char* SubstrateTempFilePattern = "/tmp/XXXXXX";
-
-void MSSetAddressTranslationFunction(void* (*translationFunction)(void*), const char* tempFilePattern) {
-        SubstrateTranslateAddress = translationFunction;
-        SubstrateTempFilePattern = tempFilePattern;
-}
-
-static void SubstrateHookFunctionThumb(SubstrateProcessRef process, void *symbol, void *replace, void **result) {
+static size_t SubstrateHookFunctionThumb(SubstrateProcessRef process, void *symbol, void *replace, void **result) {
     if (symbol == NULL)
-        return;
-
+        return 0;
+printf("SubstrateHookFunctionThumb\n");
     uint16_t *area(reinterpret_cast<uint16_t *>(symbol));
 
     unsigned align((reinterpret_cast<uintptr_t>(area) & 0x2) == 0 ? 0 : 1);
@@ -172,11 +186,11 @@ static void SubstrateHookFunctionThumb(SubstrateProcessRef process, void *symbol
         if (result != NULL)
             *result = reinterpret_cast<void *>(arm[1]);
 
-        //SubstrateHookMemory code(process, arm + 1, sizeof(uint32_t) * 1);
+        SubstrateHookMemory code(process, arm + 1, sizeof(uint32_t) * 1);
 
-        reinterpret_cast<uint32_t *>(SubstrateTranslateAddress(arm))[1] = reinterpret_cast<uint32_t>(replace);
+        arm[1] = reinterpret_cast<uint32_t>(replace);
 
-        return;
+        return sizeof(arm[0]);
     }
 
     size_t required((trail - area) * sizeof(uint16_t));
@@ -231,13 +245,13 @@ static void SubstrateHookFunctionThumb(SubstrateProcessRef process, void *symbol
     if (buffer == MAP_FAILED) {
         MSLog(MSLogLevelError, "MS:Error:mmap() = %d", errno);
         *result = NULL;
-        return;
+        return 0;
     }
 
     if (false) fail: {
         munmap(buffer, length);
         *result = NULL;
-        return;
+        return 0;
     }
 
     size_t start(pad), end(length / sizeof(uint16_t));
@@ -512,7 +526,7 @@ static void SubstrateHookFunctionThumb(SubstrateProcessRef process, void *symbol
 
     if (mprotect(buffer, length, PROT_READ | PROT_EXEC) == -1) {
         MSLog(MSLogLevelError, "MS:Error:mprotect():%d", errno);
-        return;
+        return 0;
     }
 
     *result = reinterpret_cast<uint8_t *>(buffer + pad) + 1;
@@ -526,24 +540,19 @@ static void SubstrateHookFunctionThumb(SubstrateProcessRef process, void *symbol
     }
 
     {
-        //SubstrateHookMemory code(process, area, used);
+        SubstrateHookMemory code(process, area, used);
 
-        if (align != 0) {
-            uint16_t* area_write = reinterpret_cast<uint16_t *>(SubstrateTranslateAddress(area));
-            area_write[0] = T$nop;
-        }
-        uint16_t* thumb_write = reinterpret_cast<uint16_t *>(SubstrateTranslateAddress(thumb));
-        thumb_write[0] = T$bx(A$pc);
-        thumb_write[1] = T$nop;
-        uint32_t* arm_write = reinterpret_cast<uint32_t *>(SubstrateTranslateAddress(arm));
+        if (align != 0)
+            area[0] = T$nop;
 
-        arm_write[0] = A$ldr_rd_$rn_im$(A$pc, A$pc, 4 - 8);
-        arm_write[1] = reinterpret_cast<uint32_t>(replace);
+        thumb[0] = T$bx(A$pc);
+        thumb[1] = T$nop;
 
-        uint16_t* trail_write = reinterpret_cast<uint16_t *>(SubstrateTranslateAddress(trail));
+        arm[0] = A$ldr_rd_$rn_im$(A$pc, A$pc, 4 - 8);
+        arm[1] = reinterpret_cast<uint32_t>(replace);
 
         for (unsigned offset(0); offset != blank; ++offset)
-            trail_write[offset] = T$nop;
+            trail[offset] = T$nop;
     }
 
     if (MSDebug) {
@@ -551,13 +560,14 @@ static void SubstrateHookFunctionThumb(SubstrateProcessRef process, void *symbol
         sprintf(name, "%p", area);
         MSLogHexEx(area, used + sizeof(uint16_t), 2, name);
     }
+
+	return used;
 }
 
-static void SubstrateHookFunctionARM(SubstrateProcessRef process, void *symbol, void *replace, void **result) {
-
+static size_t SubstrateHookFunctionARM(SubstrateProcessRef process, void *symbol, void *replace, void **result) {
     if (symbol == NULL)
-        return;
-
+        return 0;
+printf("SubstrateHookFunctionARM\n");
     uint32_t *area(reinterpret_cast<uint32_t *>(symbol));
     uint32_t *arm(area);
 
@@ -575,7 +585,8 @@ static void SubstrateHookFunctionARM(SubstrateProcessRef process, void *symbol, 
 
     if (backup[0] == A$ldr_rd_$rn_im$(A$pc, A$pc, 4 - 8)) {
         *result = reinterpret_cast<void *>(backup[1]);
-        return;
+
+		return sizeof(backup[0]);
     }
 
     size_t length(used);
@@ -596,13 +607,13 @@ static void SubstrateHookFunctionARM(SubstrateProcessRef process, void *symbol, 
     if (buffer == MAP_FAILED) {
         MSLog(MSLogLevelError, "MS:Error:mmap() = %d", errno);
         *result = NULL;
-        return;
+        return 0;
     }
 
     if (false) fail: {
         munmap(buffer, length);
         *result = NULL;
-        return;
+        return 0;
     }
 
     size_t start(0), end(length / sizeof(uint32_t));
@@ -685,11 +696,13 @@ static void SubstrateHookFunctionARM(SubstrateProcessRef process, void *symbol, 
         sprintf(name, "%p", area);
         MSLogHexEx(area, used + sizeof(uint32_t), 4, name);
     }
+
+	return used;
 }
 
-static void SubstrateHookFunction(SubstrateProcessRef process, void *symbol, void *replace, void **result) {
+static size_t SubstrateHookFunction(SubstrateProcessRef process, void *symbol, void *replace, void **result) {
     if (MSDebug)
-        MSLog(MSLogLevelNotice, "SubstrateHookFunction(%p, %p, %p, %p)", process, symbol, replace, result);
+        MSLog(MSLogLevelNotice, "SubstrateHookFunction(%p, %p, %p, %p)\n", process, symbol, replace, result);
     if ((reinterpret_cast<uintptr_t>(symbol) & 0x1) == 0)
         return SubstrateHookFunctionARM(process, symbol, replace, result);
     else
@@ -699,7 +712,7 @@ static void SubstrateHookFunction(SubstrateProcessRef process, void *symbol, voi
 
 #if defined(__i386__) || defined(__x86_64__)
 
-#include "x86.hpp"
+#include "SubstrateX86.hpp"
 
 static size_t MSGetInstructionWidthIntel(void *start) {
     hde64s decode;
@@ -708,7 +721,7 @@ static size_t MSGetInstructionWidthIntel(void *start) {
 
 static void SubstrateHookFunction(SubstrateProcessRef process, void *symbol, void *replace, void **result) {
     if (MSDebug)
-        MSLog(MSLogLevelNotice, "MSHookFunction(%p, %p, %p)", symbol, replace, result);
+        MSLog(MSLogLevelNotice, "MSHookFunction(%p, %p, %p)\n", symbol, replace, result);
     if (symbol == NULL)
         return;
 
@@ -919,9 +932,9 @@ static void SubstrateHookFunction(SubstrateProcessRef process, void *symbol, voi
 }
 #endif
 
-#if defined(__arm__) || defined(__i386__) || defined(__x86_64__)
+#if defined(__i386__) || defined(__arm__)
 _extern void MSHookFunction(void *symbol, void *replace, void **result) {
-    return SubstrateHookFunction(NULL, symbol, replace, result);
+     SubstrateHookFunction(NULL, symbol, replace, result);
 }
 #endif
 

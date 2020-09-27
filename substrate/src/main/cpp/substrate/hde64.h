@@ -1,3 +1,12 @@
+/*
+ * Hacker Disassembler Engine 64
+ * Copyright (c) 2008-2009, Vyacheslav Patkov.
+ * All rights reserved.
+ *
+ * hde64.h: C/C++ header file
+ *
+ */
+
 #ifndef _HDE64_H_
 #define _HDE64_H_
 

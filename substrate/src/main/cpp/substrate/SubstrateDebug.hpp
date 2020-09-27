@@ -19,20 +19,15 @@
 **/
 /* }}} */
 
-#ifndef SUBSTRATE_BUFFER_HPP
-#define SUBSTRATE_BUFFER_HPP
+#ifndef SUBSTRATE_DEBUG_HPP
+#define SUBSTRATE_DEBUG_HPP
 
-#include <string.h>
+#include "SubstrateLog.hpp"
+#define lprintf(format, ...) \
+    MSLog(MSLogLevelNotice, format, ## __VA_ARGS__)
 
-template <typename Type_>
-_disused static _finline void MSWrite(uint8_t *&buffer, Type_ value) {
-    *reinterpret_cast<Type_ *>(buffer) = value;
-    buffer += sizeof(Type_);
-}
+#define MSDebug false
+void MSLogHexEx(const void *vdata, size_t size, size_t stride, const char *mark = 0);
+void MSLogHex(const void *vdata, size_t size, const char *mark = 0);
 
-_disused static _finline void MSWrite(uint8_t *&buffer, uint8_t *data, size_t size) {
-    memcpy(buffer, data, size);
-    buffer += size;
-}
-
-#endif//SUBSTRATE_BUFFER_HPP
+#endif//SUBSTRATE_DEBUG_HPP
