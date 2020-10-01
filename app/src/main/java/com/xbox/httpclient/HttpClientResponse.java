@@ -1,6 +1,7 @@
 package com.xbox.httpclient;
 
 import java.io.IOException;
+
 import okhttp3.Response;
 
 class HttpClientResponse {

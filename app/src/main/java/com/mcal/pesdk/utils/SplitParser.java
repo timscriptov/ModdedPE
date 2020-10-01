@@ -36,7 +36,6 @@ import java.util.zip.ZipFile;
 /**
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
- *
  * @author Vologhat
  */
 public class SplitParser {

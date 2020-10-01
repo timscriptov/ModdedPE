@@ -1,8 +1,6 @@
 package com.mojang.minecraftpe;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -12,7 +10,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.AppCompatTextView;
 
 import com.mcal.mcpelauncher.R;
 
@@ -35,18 +32,19 @@ public class FloatButton extends PopupWindow {
             String text = textView.getText().toString();
 
             if (text.equals("AlertDialog")) {
-                new AlertDialog.Builder(mContext)
-                        .setTitle("About")
-                        .setMessage("ModdedPE - open source Minecraft launcher")
-                        .show();
-            } else if(text.equals("Toast")) {
+                AlertDialog.Builder mDialog = new AlertDialog.Builder(mContext);
+                mDialog.setTitle("About");
+                mDialog.setMessage("ModdedPE - open source Minecraft launcher");
+                mDialog.show();
+            } else if (text.equals("Toast")) {
                 Toast.makeText(mContext, "ModdedPE - open source Minecraft launcher", Toast.LENGTH_SHORT).show();
             }
         });
 
-        new AlertDialog.Builder(mContext).setTitle("Menu")
-                .setView(optionsListView).show();
-
+        AlertDialog.Builder mDialog = new AlertDialog.Builder(mContext);
+        mDialog.setTitle("About");
+        mDialog.setView(optionsListView);
+        mDialog.show();
     }
 
     public void init() {

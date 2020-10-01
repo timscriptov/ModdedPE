@@ -176,6 +176,7 @@
         </activity>
 
         <activity
+            android:theme="@style/AppTheme"
             android:name="com.mojang.minecraftpe.MainActivity">
             <intent-filter>
                 <action

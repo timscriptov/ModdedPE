@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -23,9 +24,6 @@ public class HttpClientRequest {
     private Request okHttpRequest;
     private Request.Builder requestBuilder = new Request.Builder();
 
-    public native void OnRequestCompleted(long j, HttpClientResponse httpClientResponse);
-    public native void OnRequestFailed(long j, String str);
-
     public static boolean isNetworkAvailable(@NotNull Context context) {
         @SuppressLint("WrongConstant") NetworkInfo activeNetworkInfo = ((ConnectivityManager) context.getSystemService("connectivity")).getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
@@ -36,6 +34,10 @@ public class HttpClientRequest {
     public static HttpClientRequest createClientRequest() {
         return new HttpClientRequest();
     }
+
+    public native void OnRequestCompleted(long j, HttpClientResponse httpClientResponse);
+
+    public native void OnRequestFailed(long j, String str);
 
     public void setHttpUrl(String url) {
         this.requestBuilder = this.requestBuilder.url(url);

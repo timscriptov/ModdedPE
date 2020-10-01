@@ -186,7 +186,7 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
         }.start();
     }
 
-    public void showPickNModFailedDialog(ExtractFailedException archiveFailedException) {
+    public void showPickNModFailedDialog(@NotNull ExtractFailedException archiveFailedException) {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity()).setTitle(R.string.nmod_import_failed).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface p1, int p2) {
@@ -268,6 +268,7 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
         }).show();
     }
 
+    @NotNull
     private View createCutlineView(int textResId) {
         View convertView = LayoutInflater.from(getActivity()).inflate(R.layout.moddedpe_ui_cutline, null);
         AppCompatTextView textTitle = convertView.findViewById(R.id.moddedpe_cutline_textview);
@@ -275,6 +276,7 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
         return convertView;
     }
 
+    @NotNull
     private View createAddNewView() {
         View convertView = LayoutInflater.from(getActivity()).inflate(R.layout.moddedpe_nmod_item_new, null);
         convertView.setOnClickListener(new View.OnClickListener() {

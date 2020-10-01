@@ -21,18 +21,12 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
-import android.os.Build;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 
 import com.mcal.mcpelauncher.data.Preferences;
-import com.mcal.mcpelauncher.utils.FileUtils;
 import com.mcal.pesdk.PESdk;
-
-import io.github.inflationx.calligraphy3.CalligraphyConfig;
-import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
-import io.github.inflationx.viewpump.ViewPump;
 
 /**
  * @author Тимашков Иван

@@ -31,11 +31,4 @@
         <item name="android:textColor">@color/colorAccent</item>
     </style>
 
-    <style name="FullScreenTheme" parent="@style/Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">#444444</item>
-        <item name="colorPrimaryDark">#212121</item>
-        <item name="colorOnPrimary">#FF448aff</item>
-        <item name="colorAccent">#FF448aff</item>
-        <item name="android:windowFullscreen">true</item>
-    </style>
 </resources>

@@ -18,8 +18,6 @@ package com.mcal.pesdk.nativeapi;
 
 import android.annotation.SuppressLint;
 
-import com.mcal.mcpelauncher.utils.FileUtils;
-
 import java.io.File;
 
 /**
