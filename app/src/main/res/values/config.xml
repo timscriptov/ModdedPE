@@ -10,7 +10,8 @@
         <item>^1[.]13</item>
         <item>^1[.]14</item>
         <item>^1[.]15</item -->
-        <item>^1[.]16[.]20[.]03</item>
+        <item>^1[.]16[.]20</item>
+        <item>^1[.]16[.]40</item>
     </string-array>
     <string name="app_game" translatable="false">Minecraft</string>
     <string name="app_name" translatable="false">ModdedPE</string>

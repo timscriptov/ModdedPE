@@ -6,6 +6,11 @@ import android.view.View;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public abstract class Platform {
     @NotNull
     @Contract("_ -> new")

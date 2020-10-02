@@ -1,5 +1,10 @@
 package com.mojang.minecraftpe.store;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public class Product {
     public String mCurrencyCode;
     public String mId;

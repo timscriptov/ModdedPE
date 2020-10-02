@@ -9,6 +9,7 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -19,6 +20,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.UUID;
+
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
 
 public class CrashManager {
     private static native String getSentryParameters(String str, String str2, int i);
@@ -41,6 +47,7 @@ public class CrashManager {
         return crashReportsSent;
     }
 
+    @Nullable
     public static String createLogFile(String dumpFilesPath, String formattedDumpTimestamp, String userId, String lastDeviceSessionId) {
         Date now = new Date();
         try {

@@ -12,6 +12,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public class BrazeMessageManagerListener implements IInAppMessageManagerListener {
     private MessageButton _mostRecentButton0 = null;
     private MessageButton _mostRecentButton1 = null;

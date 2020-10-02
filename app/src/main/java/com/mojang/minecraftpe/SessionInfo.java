@@ -9,6 +9,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public class SessionInfo {
     public String buildId = null;
     public Date recordDate = null;
@@ -19,17 +24,17 @@ public class SessionInfo {
     }
 
     public SessionInfo(String aSessionId, String aBuildId) {
-        this.sessionId = aSessionId;
-        this.buildId = aBuildId;
-        this.recordDate = new Date();
-        this.valid = true;
+        sessionId = aSessionId;
+        buildId = aBuildId;
+        recordDate = new Date();
+        valid = true;
     }
 
     public SessionInfo(String aSessionId, String aBuildId, Date aRecordDate) {
-        this.sessionId = aSessionId;
-        this.buildId = aBuildId;
-        this.recordDate = aRecordDate;
-        this.valid = true;
+        sessionId = aSessionId;
+        buildId = aBuildId;
+        recordDate = aRecordDate;
+        valid = true;
     }
 
     @NotNull
@@ -68,6 +73,6 @@ public class SessionInfo {
     }
 
     public String toString(SimpleDateFormat dateFormat) {
-        return this.valid ? this.sessionId + ";" + this.buildId + ";" + dateFormat.format(this.recordDate) : "<null>";
+        return valid ? sessionId + ";" + buildId + ";" + dateFormat.format(recordDate) : "<null>";
     }
 }

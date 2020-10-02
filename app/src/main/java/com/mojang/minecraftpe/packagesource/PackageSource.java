@@ -3,6 +3,11 @@ package com.mojang.minecraftpe.packagesource;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public abstract class PackageSource {
     public static final Map<Integer, String> stringResources = new HashMap<>();
 

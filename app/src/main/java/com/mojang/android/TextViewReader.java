@@ -5,6 +5,11 @@ package com.mojang.android;
 
 import android.widget.TextView;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public class TextViewReader implements StringValue {
     private TextView _view;
 

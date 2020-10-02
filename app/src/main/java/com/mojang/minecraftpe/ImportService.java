@@ -15,6 +15,11 @@ import android.preference.PreferenceManager;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public class ImportService extends Service {
     final Messenger mMessenger = new Messenger(new IncomingHandler());
 

@@ -16,6 +16,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public class MinecraftWebview {
     public WebView mWebView;
     public PopupView mWebViewPopup;

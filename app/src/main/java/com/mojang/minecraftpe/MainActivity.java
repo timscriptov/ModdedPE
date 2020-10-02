@@ -51,7 +51,6 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.View;
@@ -92,6 +91,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
 
 public class MainActivity extends NativeActivity implements OnKeyListener {
     public static MainActivity mInstance = null;
@@ -1312,7 +1316,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         Log.d("ModdedPE", "onResume");
         super.onResume();
 
-        // Show menu button.
+    /*    // Show menu button.
         final FloatButton hb = new FloatButton(MainActivity.this);
         final MainActivity thiz = this;
         new Thread(() -> {
@@ -1324,6 +1328,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
             thiz.runOnUiThread(() -> hb.showAtLocation(thiz.getWindow().getDecorView(),
                     Gravity.TOP | Gravity.LEFT | Gravity.CENTER_VERTICAL, 0, 0));
         }).start();
+    */
 
         registerReceiver(this.headsetConnectionReceiver, new IntentFilter("android.intent.action.HEADSET_PLUG"));
         if (isTextWidgetActive()) {

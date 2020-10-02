@@ -4,6 +4,11 @@ import org.apache.http.Header;
 
 import static com.mojang.android.net.HTTPRequest.debugNet;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public class HTTPResponse {
     public static final int STATUS_FAIL = 0;
     public static final int STATUS_SUCCESS = 1;

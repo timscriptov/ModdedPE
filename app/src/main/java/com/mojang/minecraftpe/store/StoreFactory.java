@@ -7,6 +7,11 @@ import com.mojang.minecraftpe.store.googleplay.GooglePlayStore;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public class StoreFactory {
     @NotNull
     @Contract("_, _ -> new")

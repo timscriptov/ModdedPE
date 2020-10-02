@@ -2,14 +2,22 @@ package com.mojang.minecraftpe.Webview;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.annotation.RequiresApi;
+
 import com.mojang.minecraftpe.MainActivity;
 
 import org.jetbrains.annotations.NotNull;
+
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
 
 class MinecraftWebViewClient extends WebViewClient {
     private MinecraftWebview mView;
@@ -28,6 +36,7 @@ class MinecraftWebViewClient extends WebViewClient {
         super.onPageFinished(view, url);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void onReceivedError(WebView view, @NotNull WebResourceRequest request, @NotNull WebResourceError error) {
         System.out.println(String.format("Error %s loading url %s", error.getDescription().toString(), request.getUrl().toString()));
         mView.nativeOnWebError(error.getErrorCode(), error.getDescription().toString());

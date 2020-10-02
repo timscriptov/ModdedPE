@@ -1,5 +1,6 @@
 package com.mojang.minecraftpe.input;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.hardware.input.InputManager;
@@ -7,10 +8,16 @@ import android.os.Handler;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 @TargetApi(16)
 public class JellyBeanDeviceManager extends InputDeviceManager implements InputManager.InputDeviceListener {
     private final InputManager inputManager;
 
+    @SuppressLint("WrongConstant")
     JellyBeanDeviceManager(@NotNull Context ctx) {
         inputManager = (InputManager) ctx.getSystemService("input");
     }

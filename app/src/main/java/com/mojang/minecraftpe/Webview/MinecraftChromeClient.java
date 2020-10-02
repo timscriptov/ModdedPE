@@ -5,6 +5,11 @@ import android.webkit.WebView;
 
 import com.mojang.minecraftpe.MainActivity;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 class MinecraftChromeClient extends WebChromeClient {
     public MinecraftWebview mView;
 
@@ -14,10 +19,6 @@ class MinecraftChromeClient extends WebChromeClient {
 
     public void onProgressChanged(WebView view, int newProgress) {
         super.onProgressChanged(view, newProgress);
-        MainActivity.mInstance.runOnUiThread(new Runnable() {
-            public void run() {
-                mView._injectApi();
-            }
-        });
+        MainActivity.mInstance.runOnUiThread(() -> mView._injectApi());
     }
 }

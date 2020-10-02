@@ -1,5 +1,10 @@
 package com.mojang.minecraftpe;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public final class Manifest {
 
     public static final class permission {

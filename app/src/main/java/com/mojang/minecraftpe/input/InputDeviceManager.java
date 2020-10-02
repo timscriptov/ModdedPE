@@ -7,6 +7,11 @@ import android.util.Log;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public abstract class InputDeviceManager {
     @NotNull
     @Contract("_ -> new")
@@ -26,11 +31,11 @@ public abstract class InputDeviceManager {
         }
 
         public void register() {
-            Log.w("MCPE", "INPUT Noop register device manager");
+            Log.w("ModdedPE", "INPUT Noop register device manager");
         }
 
         public void unregister() {
-            Log.w("MCPE", "INPUT Noop unregister device manager");
+            Log.w("ModdedPE", "INPUT Noop unregister device manager");
         }
     }
 }

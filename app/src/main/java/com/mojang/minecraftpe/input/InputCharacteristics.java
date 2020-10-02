@@ -7,6 +7,11 @@ import androidx.core.view.InputDeviceCompat;
 
 import java.io.File;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public class InputCharacteristics {
     public static boolean allControllersHaveDoubleTriggers() {
         boolean supportsL2;

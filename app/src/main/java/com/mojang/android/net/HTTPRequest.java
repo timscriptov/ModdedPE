@@ -17,6 +17,11 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public class HTTPRequest {
 
     public static boolean debugNet = BuildConfig.DEBUG;

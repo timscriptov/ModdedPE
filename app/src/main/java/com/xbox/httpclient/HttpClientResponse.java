@@ -4,6 +4,11 @@ import java.io.IOException;
 
 import okhttp3.Response;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 class HttpClientResponse {
     private Response response;
 

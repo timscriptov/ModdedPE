@@ -7,6 +7,11 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public class AppConstants {
     public static String ANDROID_BUILD = null;
     public static String ANDROID_VERSION = null;

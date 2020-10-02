@@ -23,6 +23,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public class PDFWriter {
     private Rect mImageRect;
     private PdfDocument mOpenDocument;

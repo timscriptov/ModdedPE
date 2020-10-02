@@ -1,5 +1,6 @@
 package com.mojang.minecraftpe;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.IBinder;
 import android.view.View;
@@ -7,6 +8,11 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import org.jetbrains.annotations.NotNull;
+
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
 
 public class PopupView {
     private View mContentView;
@@ -17,6 +23,7 @@ public class PopupView {
     private View mParentView;
     private View mPopupView;
     private int mWidth;
+    @SuppressLint("WrongConstant")
     private WindowManager mWindowManager = ((WindowManager) mContext.getSystemService("window"));
 
     public PopupView(Context context) {

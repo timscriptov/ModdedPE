@@ -15,6 +15,11 @@ import com.microsoft.aad.adal.PromptBehavior;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public class ActiveDirectorySignIn implements ActivityListener {
     public String mAccessToken;
     public AuthenticationContext mAuthenticationContext;
@@ -38,28 +43,28 @@ public class ActiveDirectorySignIn implements ActivityListener {
     public native void nativeOnDataChanged();
 
     public boolean getDialogOpen() {
-        return this.mDialogOpen;
+        return mDialogOpen;
     }
 
     public boolean getResultObtained() {
-        return this.mResultObtained;
+        return mResultObtained;
     }
 
     public String getIdentityToken() {
-        return this.mIdentityToken;
+        return mIdentityToken;
     }
 
     public String getAccessToken() {
-        return this.mAccessToken;
+        return mAccessToken;
     }
 
     public String getLastError() {
-        return this.mLastError;
+        return mLastError;
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (this.mAuthenticationContext != null) {
-            this.mAuthenticationContext.onActivityResult(requestCode, resultCode, data);
+        if (mAuthenticationContext != null) {
+            mAuthenticationContext.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -81,11 +86,11 @@ public class ActiveDirectorySignIn implements ActivityListener {
             doRefresh = false;
         }*/
         MainActivity.mInstance.runOnUiThread(() -> {
-            AuthenticationContext unused = ActiveDirectorySignIn.this.mAuthenticationContext = new AuthenticationContext(MainActivity.mInstance, "https://login.windows.net/common", true);
+            AuthenticationContext unused = mAuthenticationContext = new AuthenticationContext(MainActivity.mInstance, "https://login.windows.net/common", true);
             if (doRefresh) {
-                ActiveDirectorySignIn.this.mAuthenticationContext.acquireTokenSilent("https://meeservices.minecraft.net", "b36b1432-1a1c-4c82-9b76-24de1cab42f2", ActiveDirectorySignIn.this.mUserId, ActiveDirectorySignIn.this.getAdalCallback());
+                mAuthenticationContext.acquireTokenSilent("https://meeservices.minecraft.net", "b36b1432-1a1c-4c82-9b76-24de1cab42f2", mUserId, getAdalCallback());
             } else {
-                ActiveDirectorySignIn.this.mAuthenticationContext.acquireToken(MainActivity.mInstance, "https://meeservices.minecraft.net", "b36b1432-1a1c-4c82-9b76-24de1cab42f2", "urn:ietf:wg:oauth:2.0:oob", "", promptBehavior, "", ActiveDirectorySignIn.this.getAdalCallback());
+                mAuthenticationContext.acquireToken(MainActivity.mInstance, "https://meeservices.minecraft.net", "b36b1432-1a1c-4c82-9b76-24de1cab42f2", "urn:ietf:wg:oauth:2.0:oob", "", promptBehavior, "", getAdalCallback());
             }
         });
     }
@@ -108,24 +113,24 @@ public class ActiveDirectorySignIn implements ActivityListener {
         return new AuthenticationCallback<AuthenticationResult>() {
             public void onSuccess(AuthenticationResult authenticationResult) {
                 System.out.println("ADAL sign in success");
-                boolean unused = ActiveDirectorySignIn.this.mResultObtained = true;
-                String unused2 = ActiveDirectorySignIn.this.mAccessToken = authenticationResult.getAccessToken();
-                String unused3 = ActiveDirectorySignIn.this.mIdentityToken = authenticationResult.getIdToken();
-                String unused4 = ActiveDirectorySignIn.this.mLastError = "";
-                boolean unused5 = ActiveDirectorySignIn.this.mDialogOpen = false;
-                String unused6 = ActiveDirectorySignIn.this.mUserId = authenticationResult.getUserInfo().getUserId();
-                ActiveDirectorySignIn.this.nativeOnDataChanged();
+                boolean unused = mResultObtained = true;
+                String unused2 = mAccessToken = authenticationResult.getAccessToken();
+                String unused3 = mIdentityToken = authenticationResult.getIdToken();
+                String unused4 = mLastError = "";
+                boolean unused5 = mDialogOpen = false;
+                String unused6 = mUserId = authenticationResult.getUserInfo().getUserId();
+                nativeOnDataChanged();
             }
 
             public void onError(Exception e) {
                 System.out.println("ADAL sign in error: " + e.getMessage());
-                boolean unused = ActiveDirectorySignIn.this.mResultObtained = false;
+                boolean unused = mResultObtained = false;
                 if (!(e instanceof AuthenticationCancelError)) {
-                    String unused2 = ActiveDirectorySignIn.this.mLastError = e.getMessage();
+                    String unused2 = mLastError = e.getMessage();
                 }
-                boolean unused3 = ActiveDirectorySignIn.this.mDialogOpen = false;
-                String unused4 = ActiveDirectorySignIn.this.mUserId = "";
-                ActiveDirectorySignIn.this.nativeOnDataChanged();
+                boolean unused3 = mDialogOpen = false;
+                String unused4 = mUserId = "";
+                nativeOnDataChanged();
             }
         };
     }

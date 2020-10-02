@@ -18,6 +18,11 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public class HttpClientRequest {
     private static final byte[] NO_BODY = new byte[0];
     private static OkHttpClient OK_CLIENT = new OkHttpClient.Builder().retryOnConnectionFailure(false).build();
@@ -40,31 +45,31 @@ public class HttpClientRequest {
     public native void OnRequestFailed(long j, String str);
 
     public void setHttpUrl(String url) {
-        this.requestBuilder = this.requestBuilder.url(url);
+        requestBuilder = requestBuilder.url(url);
     }
 
     public void setHttpMethodAndBody(String method, String contentType, byte[] body) {
         if (body != null && body.length != 0) {
-            this.requestBuilder = this.requestBuilder.method(method, RequestBody.create(MediaType.parse(contentType), body));
+            requestBuilder = requestBuilder.method(method, RequestBody.create(MediaType.parse(contentType), body));
         } else if ("POST".equals(method) || "PUT".equals(method)) {
-            this.requestBuilder = this.requestBuilder.method(method, RequestBody.create((MediaType) null, NO_BODY));
+            requestBuilder = requestBuilder.method(method, RequestBody.create((MediaType) null, NO_BODY));
         } else {
-            this.requestBuilder = this.requestBuilder.method(method, (RequestBody) null);
+            requestBuilder = requestBuilder.method(method, (RequestBody) null);
         }
     }
 
     public void setHttpHeader(String name, String value) {
-        this.requestBuilder = this.requestBuilder.addHeader(name, value);
+        requestBuilder = requestBuilder.addHeader(name, value);
     }
 
     public void doRequestAsync(final long sourceCall) {
-        OK_CLIENT.newCall(this.requestBuilder.build()).enqueue(new Callback() {
+        OK_CLIENT.newCall(requestBuilder.build()).enqueue(new Callback() {
             public void onFailure(Call call, IOException e) {
-                HttpClientRequest.this.OnRequestFailed(sourceCall, e.getClass().getCanonicalName());
+                OnRequestFailed(sourceCall, e.getClass().getCanonicalName());
             }
 
             public void onResponse(Call call, Response response) throws IOException {
-                HttpClientRequest.this.OnRequestCompleted(sourceCall, new HttpClientResponse(response));
+                OnRequestCompleted(sourceCall, new HttpClientResponse(response));
             }
         });
     }

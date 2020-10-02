@@ -4,6 +4,11 @@ import android.annotation.TargetApi;
 import android.os.Handler;
 import android.view.View;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 @TargetApi(19)
 public class Platform19 extends Platform9 {
     public Runnable decorViewSettings;
@@ -23,7 +28,7 @@ public class Platform19 extends Platform9 {
         if (eventHandler != null) {
             decoreView = view;
             decoreView.setOnSystemUiVisibilityChangeListener(visibility -> eventHandler.postDelayed(decorViewSettings, 500));
-            this.decorViewSettings = () -> decoreView.setSystemUiVisibility(5894);
+            decorViewSettings = () -> decoreView.setSystemUiVisibility(5894);
             eventHandler.post(decorViewSettings);
         }
     }
