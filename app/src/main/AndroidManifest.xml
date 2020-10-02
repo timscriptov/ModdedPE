@@ -229,7 +229,7 @@
                     android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="minecraft" />
             </intent-filter>
-            <intent-filter>
+            <!-- intent-filter>
                 <action
                     android:name="android.intent.action.VIEW" />
                 <category
@@ -275,7 +275,7 @@
                     android:pathPattern=".*\..*\..*\..*\.mctemplate" />
                 <data
                     android:pathPattern=".*\..*\..*\..*\..*\.mctemplate" />
-            </intent-filter>
+            </intent-filter -->
         </activity>
 
         <service

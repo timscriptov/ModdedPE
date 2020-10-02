@@ -1,5 +1,5 @@
 -keepattributes SourceFile, LineNumberTable
--renamesourcefileattribute SourceFile
+-renamesourcefileattribute
 -repackageclasses
 
 -ignorewarnings

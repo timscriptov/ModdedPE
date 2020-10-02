@@ -306,7 +306,7 @@ public class WebView extends AppCompatActivity {
             return false;
         }
         try {
-            PackageInfo packageInfo = getApplicationContext().getPackageManager().getPackageInfo(browserPackageName, 64);
+            @SuppressLint("WrongConstant") PackageInfo packageInfo = getApplicationContext().getPackageManager().getPackageInfo(browserPackageName, 64);
             if (packageInfo == null) {
                 m_logger.Important("No package info found for package: " + browserPackageName);
                 return false;

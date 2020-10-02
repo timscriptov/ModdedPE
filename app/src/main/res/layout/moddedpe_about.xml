@@ -63,45 +63,49 @@
                 android:text="@string/about_author"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="#6E6E6E" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <androidx.appcompat.widget.AppCompatButton
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/donate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:onClick="donate"
+                android:src="@drawable/ic_donate"
+                android:background="@drawable/moddedpe_main_start_button_drawable"
                 android:text="@string/about_donate" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/about_view_github_button"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_github"
+                android:background="@drawable/moddedpe_main_start_button_drawable"
                 android:text="@string/about_view_github" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/about_view_nmod_api_button"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_api"
+                android:background="@drawable/moddedpe_main_start_button_drawable"
                 android:text="@string/about_view_nmod_api" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/about_translators_button"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/ic_translate"
+                android:background="@drawable/moddedpe_main_start_button_drawable"
                 android:text="@string/about_translators" />
+
+        </LinearLayout>
 
         </LinearLayout>
 
