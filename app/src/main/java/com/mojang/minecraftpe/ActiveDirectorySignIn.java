@@ -1,10 +1,14 @@
 package com.mojang.minecraftpe;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.ValueCallback;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.microsoft.aad.adal.AuthenticationCallback;
 import com.microsoft.aad.adal.AuthenticationCancelError;
@@ -25,22 +29,16 @@ public class ActiveDirectorySignIn implements ActivityListener {
     public AuthenticationContext mAuthenticationContext;
     public boolean mDialogOpen = false;
     public String mIdentityToken;
+    private boolean mIsActivityListening = false;
     public String mLastError;
     public boolean mResultObtained = false;
     public String mUserId;
-    private boolean mIsActivityListening = false;
+
+    public native void nativeOnDataChanged();
 
     public ActiveDirectorySignIn() {
         MainActivity.mInstance.addListener(this);
     }
-
-    @NotNull
-    @Contract(" -> new")
-    public static ActiveDirectorySignIn createActiveDirectorySignIn() {
-        return new ActiveDirectorySignIn();
-    }
-
-    public native void nativeOnDataChanged();
 
     public boolean getDialogOpen() {
         return mDialogOpen;
@@ -78,16 +76,17 @@ public class ActiveDirectorySignIn implements ActivityListener {
     }
 
     public void authenticate(int prompt) {
-        final boolean doRefresh = true;
-        this.mResultObtained = false;
-        this.mDialogOpen = true;
+        boolean doRefresh = true;
+        mResultObtained = false;
+        mDialogOpen = true;
         final PromptBehavior promptBehavior = prompt == 0 ? PromptBehavior.Always : PromptBehavior.Auto;
-        /*if (prompt != 2) {
+        if (prompt != 2) {
             doRefresh = false;
-        }*/
+        }
+        boolean finalDoRefresh = doRefresh;
         MainActivity.mInstance.runOnUiThread(() -> {
             AuthenticationContext unused = mAuthenticationContext = new AuthenticationContext(MainActivity.mInstance, "https://login.windows.net/common", true);
-            if (doRefresh) {
+            if (finalDoRefresh) {
                 mAuthenticationContext.acquireTokenSilent("https://meeservices.minecraft.net", "b36b1432-1a1c-4c82-9b76-24de1cab42f2", mUserId, getAdalCallback());
             } else {
                 mAuthenticationContext.acquireToken(MainActivity.mInstance, "https://meeservices.minecraft.net", "b36b1432-1a1c-4c82-9b76-24de1cab42f2", "urn:ietf:wg:oauth:2.0:oob", "", promptBehavior, "", getAdalCallback());
@@ -98,7 +97,7 @@ public class ActiveDirectorySignIn implements ActivityListener {
     public void clearCookies() {
         CookieManager cookieManager = CookieManager.getInstance();
         if (Build.VERSION.SDK_INT >= 21) {
-            cookieManager.removeAllCookies((ValueCallback<Boolean>) null);
+            cookieManager.removeAllCookies(null);
             cookieManager.flush();
             return;
         }
@@ -107,6 +106,12 @@ public class ActiveDirectorySignIn implements ActivityListener {
         cookieManager.removeAllCookie();
         syncManager.stopSync();
         syncManager.sync();
+    }
+
+    @NotNull
+    @Contract(" -> new")
+    public static ActiveDirectorySignIn createActiveDirectorySignIn() {
+        return new ActiveDirectorySignIn();
     }
 
     public AuthenticationCallback<AuthenticationResult> getAdalCallback() {

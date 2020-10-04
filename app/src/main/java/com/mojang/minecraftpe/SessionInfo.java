@@ -2,6 +2,8 @@ package com.mojang.minecraftpe;
 
 import android.annotation.SuppressLint;
 
+import com.microsoft.aad.adal.AuthenticationConstants;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.text.ParsePosition;
@@ -19,6 +21,14 @@ public class SessionInfo {
     public Date recordDate = null;
     public String sessionId = null;
     public boolean valid = false;
+
+    public String toString() {
+        return toString(getDateFormat());
+    }
+
+    public String toString(SimpleDateFormat dateFormat) {
+        return valid ? sessionId + AuthenticationConstants.Broker.CHALLENGE_REQUEST_CERT_AUTH_DELIMETER + buildId + AuthenticationConstants.Broker.CHALLENGE_REQUEST_CERT_AUTH_DELIMETER + dateFormat.format(recordDate) : "<null>";
+    }
 
     public SessionInfo() {
     }
@@ -46,7 +56,7 @@ public class SessionInfo {
     public static SessionInfo fromString(String s, SimpleDateFormat dateFormat) {
         SessionInfo result = new SessionInfo();
         if (!(s == null || s.length() == 0)) {
-            String[] parts = s.split(";");
+            String[] parts = s.split(AuthenticationConstants.Broker.CHALLENGE_REQUEST_CERT_AUTH_DELIMETER);
             if (parts.length != 3) {
                 throw new IllegalArgumentException("Invalid SessionInfo string '" + s + "', must be 3 parts split by ';'");
             }
@@ -63,16 +73,8 @@ public class SessionInfo {
 
     @NotNull
     public static SimpleDateFormat getDateFormat() {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat result = new SimpleDateFormat("MM/dd/yyyy-HH:mm:ss");
+        SimpleDateFormat result = new SimpleDateFormat("MM/dd/yyyy-HH:mm:ss");
         result.setTimeZone(TimeZone.getTimeZone("UTC"));
         return result;
-    }
-
-    public String toString() {
-        return toString(getDateFormat());
-    }
-
-    public String toString(SimpleDateFormat dateFormat) {
-        return valid ? sessionId + ";" + buildId + ";" + dateFormat.format(recordDate) : "<null>";
     }
 }

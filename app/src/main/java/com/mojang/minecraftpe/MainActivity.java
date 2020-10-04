@@ -64,6 +64,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.appsflyer.AppsFlyerLib;
+import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.mcpelauncher.services.SoundService;
 import com.mojang.minecraftpe.platforms.Platform;
 
@@ -360,17 +361,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         AppsFlyerLib.getInstance().trackEvent(getApplicationContext(), eventName, eventValue);
     }
 
-    /*public void trackPurchaseEvent(String contentId, String contentType, String revenue, String playerId, String playerSessionId, String currencyCode, String eventName) {
-        Map<String, Object> eventValue = new HashMap<String, Object>();
-        eventValue.put("player_session_id", playerSessionId);
-        eventValue.put("client_id", playerId);
-        eventValue.put("af_revenue", revenue);
-        eventValue.put("af_content_type", contentType);
-        eventValue.put("af_content_id", contentId);
-        eventValue.put("af_currency", currencyCode);
-        Log.d("ModdedPE", contentId + ":" + revenue + ":" + playerId + ":" +playerSessionId + ":" + currencyCode + ":" + eventName );
-    }*/
-
     public void sendBrazeEvent(String eventName) {
     }
 
@@ -455,6 +445,8 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         _fromOnCreate = true;
         textInputWidget = createTextWidget();
         findViewById(16908290).getRootView().addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> nativeResize(right - left, bottom - top));
+        java.net.CookieManager cookieManager = new java.net.CookieManager();
+        java.net.CookieHandler.setDefault(cookieManager);
         /**********************************
          * Bg music                       *
          **********************************/
@@ -1035,12 +1027,10 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
     }
 
     public void quit() {
-        runOnUiThread(() -> finish());
+        runOnUiThread(this::finish);
     }
 
     public String getFormattedDateString(int s) {
-        DateFormat dateFormat = DateFormat;
-        dateFormat = DateFormat;
         return java.text.DateFormat.getDateInstance(3, initialUserLocale).format(new Date(((long) s) * 1000));
     }
 
@@ -1259,7 +1249,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         if (VERSION.SDK_INT >= 18) {
             return stat.getAvailableBytes();
         }
-        return (long) (stat.getAvailableBlocks() * stat.getBlockSize());
+        return stat.getAvailableBlocks() * stat.getBlockSize();
     }
 
     @SuppressLint({"DefaultLocale"})

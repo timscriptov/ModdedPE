@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class ImportService extends Service {
     final Messenger mMessenger = new Messenger(new IncomingHandler());
+    static final int MSG_CORRELATION_CHECK = 672;
+    static final int MSG_CORRELATION_RESPONSE = 837;
 
     public IBinder onBind(Intent intent) {
         return mMessenger.getBinder();
@@ -31,7 +33,7 @@ public class ImportService extends Service {
     class IncomingHandler extends Handler {
 
         public void handleMessage(@NotNull Message msg) {
-            if (msg.what == 672) {
+            if (msg.what == MSG_CORRELATION_CHECK) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 String deviceId = prefs.getString("deviceId", "?");
                 String lastSessionId = prefs.getString("LastDeviceSessionId", "");
@@ -42,7 +44,7 @@ public class ImportService extends Service {
                         b.putLong("time", timestamp);
                         b.putString("deviceId", deviceId);
                         b.putString("sessionId", lastSessionId);
-                        Message nmsg = Message.obtain(null, 837);
+                        Message nmsg = Message.obtain(null, MSG_CORRELATION_RESPONSE);
                         nmsg.setData(b);
                         try {
                             msg.replyTo.send(nmsg);

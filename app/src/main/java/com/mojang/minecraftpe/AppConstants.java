@@ -23,7 +23,7 @@ public class AppConstants {
     private static AsyncTask<Void, Object, String> loadIdentifiersTask;
 
     public static void loadFromContext(Context context) {
-        Log.i("ModdedPE", "CrashManager: AppConstants loadFromContext started");
+        Log.i("MinecraftPlatform", "CrashManager: AppConstants loadFromContext started");
         ANDROID_VERSION = Build.VERSION.RELEASE;
         ANDROID_BUILD = Build.DISPLAY;
         PHONE_MODEL = Build.MODEL;
@@ -38,9 +38,9 @@ public class AppConstants {
                 APP_PACKAGE = packageInfo.packageName;
                 APP_VERSION = packageInfo.versionCode;
                 APP_VERSION_NAME = packageInfo.versionName;
-                Log.i("ModdedPE", "CrashManager: AppConstants loadFromContext finished succesfully");
+                Log.i("MinecraftPlatform", "CrashManager: AppConstants loadFromContext finished succesfully");
             } catch (PackageManager.NameNotFoundException e) {
-                Log.w("ModdedPE", "CrashManager: Exception thrown when accessing the package info", e);
+                Log.w("MinecraftPlatform", "CrashManager: Exception thrown when accessing the package info", e);
             }
         }
     }

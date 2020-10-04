@@ -39,6 +39,8 @@ import com.mcal.mcpelauncher.fragments.MainStartFragment;
 import com.mcal.mcpelauncher.services.BackgroundSoundPlayer;
 import com.mcal.mcpelauncher.services.SoundService;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -177,7 +179,7 @@ public class MainActivity extends BaseActivity implements BackgroundSoundPlayer 
         setActionBarViewRight(burgerButton);
     }
 
-    private void switchViewPager(MenuItem item) {
+    private void switchViewPager(@NotNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item_main_page:
                 mMainViewPager.setCurrentItem(0, false);
