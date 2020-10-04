@@ -12,6 +12,15 @@
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
     </style>
 
+    <style name="AppErrorTheme" parent="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">#444444</item>
+        <item name="colorPrimaryDark">#212121</item>
+        <item name="colorOnPrimary">#FF448aff</item>
+        <item name="colorAccent">#FF448aff</item>
+        <item name="materialAlertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+    </style>
+
     <style name="TcuiDialog" parent="@android:style/Theme.DeviceDefault.NoActionBar">
         <item name="android:windowAnimationStyle">@style/TcuiDialogAnimations</item>
     </style>

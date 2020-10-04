@@ -21,4 +21,5 @@ package com.mcal.mcpelauncher.data;
  * @author https://github.com/TimScriptov
  */
 public final class Constants {
+    public static final String FLAVOR = "";
 }

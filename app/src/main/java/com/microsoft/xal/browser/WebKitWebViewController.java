@@ -12,6 +12,7 @@ import android.webkit.WebViewClient;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.mcal.mcpelauncher.data.Constants;
 import com.microsoft.aad.adal.AuthenticationConstants;
 
 /**
@@ -28,7 +29,6 @@ public class WebKitWebViewController extends AppCompatActivity {
     public static final String SHOW_TYPE = "SHOW_TYPE";
     public static final String START_URL = "START_URL";
     private static final String TAG = "WebKitWebViewController";
-    public static final String FLAVOR = "";
     private WebView m_webView;
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -41,8 +41,8 @@ public class WebKitWebViewController extends AppCompatActivity {
             finish();
             return;
         }
-        String startUrl = args.getString(START_URL, FLAVOR);
-        final String endUrl = args.getString(END_URL, FLAVOR);
+        String startUrl = args.getString(START_URL, Constants.FLAVOR);
+        final String endUrl = args.getString(END_URL, Constants.FLAVOR);
         if (startUrl.isEmpty() || endUrl.isEmpty()) {
             Log.e(TAG, "onCreate() Received invalid start or end URL.");
             setResult(RESULT_FAILED);

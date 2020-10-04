@@ -36,7 +36,7 @@ public class XalLogger implements AutoCloseable {
     public synchronized void Flush() {
         if (!m_logs.isEmpty()) {
             try {
-                nativeLogBatch(m_leastVerboseLevel.ToInt(), (LogEntry[]) m_logs.toArray(new LogEntry[m_logs.size()]));
+                nativeLogBatch(m_leastVerboseLevel.ToInt(), m_logs.toArray(new LogEntry[m_logs.size()]));
                 m_logs.clear();
                 m_leastVerboseLevel = LogLevel.Verbose;
             } catch (Exception | UnsatisfiedLinkError e) {

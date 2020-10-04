@@ -72,7 +72,7 @@ public class Ecdsa {
         KeyFactory factory = KeyFactory.getInstance("ECDSA", "SC");
         Ecdsa ecdsa = new Ecdsa();
         ecdsa.uniqueId = id;
-        ecdsa.keyPair = new KeyPair((ECPublicKey) factory.generatePublic(new X509EncodedKeySpec(pubData)), (ECPrivateKey) factory.generatePrivate(new PKCS8EncodedKeySpec(privData)));
+        ecdsa.keyPair = new KeyPair(factory.generatePublic(new X509EncodedKeySpec(pubData)), factory.generatePrivate(new PKCS8EncodedKeySpec(privData)));
         return ecdsa;
     }
 

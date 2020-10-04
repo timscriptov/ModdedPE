@@ -1,11 +1,11 @@
 package com.microsoft.xal.browser;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.microsoft.xal.logging.XalLogger;
 
 /**
  * 02.10.2020
@@ -15,15 +15,16 @@ import com.microsoft.xal.logging.XalLogger;
  */
 
 public class IntentHandler extends AppCompatActivity {
-    private final XalLogger m_logger = new XalLogger("IntentHandler");
+    public static final String TAG = "IntentHandler";
 
+    @SuppressLint("WrongConstant")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        m_logger.Important("onCreate() New intent received.");
-        m_logger.Flush();
+        Log.e(TAG, "onCreate() New intent received.");
         Intent intent = new Intent(this, WebView.class);
         intent.setData(getIntent().getData());
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.addFlags(603979776);
         startActivity(intent);
         finish();
     }

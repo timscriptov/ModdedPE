@@ -11,13 +11,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
 
+import com.mcal.mcpelauncher.data.Constants;
 import com.microsoft.aad.adal.AuthenticationConstants;
-import com.microsoft.aad.adal.BuildConfig;
-import com.microsoft.xal.logging.XalLogger;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +38,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author https://github.com/TimScriptov
  */
 
+
 public class WebView extends AppCompatActivity {
+    public static final String TAG = "WebView";
     public static final String CANCEL_DELAY = "CANCEL_DELAY";
     public static final String END_URL = "END_URL";
     public static final String IN_PROC_BROWSER = "IN_PROC_BROWSER";
@@ -56,7 +58,6 @@ public class WebView extends AppCompatActivity {
         customTabsAllowedBrowsers.put("com.sec.android.app.sbrowser", "nKUXDzgZGd/gRG/NqxixmhQ7MWM=");
     }
 
-    public final XalLogger m_logger = new XalLogger("WebView");
     private final Lock m_lock = new ReentrantLock();
     private String m_browserInfo = null;
     private long m_cancelDelay = 500;
@@ -72,16 +73,15 @@ public class WebView extends AppCompatActivity {
 
     @SuppressLint("WrongConstant")
     public static void showUrl(long operationId, Context context, @NotNull String startUrl, String endUrl, int showTypeInt, boolean useInProcBrowser, long cancelDelay) {
-        XalLogger logger = new XalLogger("WebView.showUrl()");
-        logger.Important("JNI call received.");
+        Log.e(TAG, "JNI call received.");
         if (startUrl.isEmpty() || endUrl.isEmpty()) {
-            logger.Error("Received invalid start or end URL.");
-            urlOperationFailed(operationId, false, (String) null);
+            Log.e(TAG, "Received invalid start or end URL.");
+            urlOperationFailed(operationId, false, null);
         } else {
             ShowUrlType showType = ShowUrlType.fromInt(showTypeInt);
             if (showType == null) {
-                logger.Error("Unrecognized show type received: " + showTypeInt);
-                urlOperationFailed(operationId, false, (String) null);
+                Log.e(TAG, "Unrecognized show type received: " + showTypeInt);
+                urlOperationFailed(operationId, false, null);
             } else {
                 Intent webIntent = new Intent(context, WebView.class);
                 Bundle args = new Bundle();
@@ -105,26 +105,25 @@ public class WebView extends AppCompatActivity {
     }
 
     public void onCreate(Bundle savedInstanceState) {
-        m_logger.Important("onCreate()");
+        Log.e(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
         if (getIntent().getData() == null) {
-            m_logger.Important("onCreate() Called with no data.");
+            Log.e(TAG, "onCreate() Called with no data.");
             Bundle args = getIntent().getExtras();
             if (args == null) {
-                m_logger.Error("onCreate() Created with no extras. Finishing.");
-                m_logger.Flush();
+                Log.e(TAG, "onCreate() Created with no extras. Finishing.");
                 setResult(RESULT_FAILED);
                 finish();
                 return;
             }
             m_operationId = args.getLong(OPERATION_ID);
             m_cancelDelay = args.getLong(CANCEL_DELAY, 500);
-            m_logger.Information("onCreate() received delay:" + this.m_cancelDelay);
-            String startUrl = args.getString(START_URL, BuildConfig.FLAVOR);
-            String endUrl = args.getString(END_URL, BuildConfig.FLAVOR);
+            Log.e(TAG, "onCreate() received delay:" + m_cancelDelay);
+            String startUrl = args.getString(START_URL, Constants.FLAVOR);
+            String endUrl = args.getString(END_URL, Constants.FLAVOR);
             if (startUrl.isEmpty() || endUrl.isEmpty()) {
-                m_logger.Error("onCreate() Received invalid start or end URL.");
-                finishOperation(WebResult.FAIL, (String) null);
+                Log.e(TAG, "onCreate() Received invalid start or end URL.");
+                finishOperation(WebResult.FAIL, null);
                 return;
             }
             ShowUrlType showType = (ShowUrlType) args.get(SHOW_TYPE);
@@ -135,11 +134,11 @@ public class WebView extends AppCompatActivity {
             @SuppressLint("WrongConstant") ResolveInfo defaultBrowser = getApplicationContext().getPackageManager().resolveActivity(new Intent("android.intent.action.VIEW", Uri.parse(AuthenticationConstants.Broker.REDIRECT_SSL_PREFIX)), 65536);
             String defaultBrowserPackageName = defaultBrowser == null ? null : defaultBrowser.activityInfo.packageName;
             if (useInProcBrowser) {
-                m_logger.Important("onCreate() Operation requested in-proc. Choosing WebKit strategy.");
+                Log.e(TAG, "onCreate() Operation requested in-proc. Choosing WebKit strategy.");
                 setBrowserInfo("webkit-inProcRequested", 0, "none");
                 startWebView(startUrl, endUrl, showType);
             } else if (defaultBrowserPackageName == null || defaultBrowserPackageName.equals("android")) {
-                m_logger.Important("onCreate() No default browser. Choosing WebKit strategy.");
+                Log.e(TAG, "onCreate() No default browser. Choosing WebKit strategy.");
                 setBrowserInfo("webkit-noDefault", 0, "none");
                 startWebView(startUrl, endUrl, showType);
             } else {
@@ -150,26 +149,25 @@ public class WebView extends AppCompatActivity {
                     versionCode = info.versionCode;
                     versionName = info.versionName;
                 } catch (PackageManager.NameNotFoundException e) {
-                    m_logger.Error("onCreate() Error in getPackageInfo(): " + e);
+                    Log.e(TAG, "onCreate() Error in getPackageInfo(): " + e);
                 }
                 if (!browserSupportsCustomTabs(defaultBrowserPackageName)) {
-                    m_logger.Important("onCreate() Default browser does not support custom tabs. Choosing WebKit strategy.");
+                    Log.e(TAG, "onCreate() Default browser does not support custom tabs. Choosing WebKit strategy.");
                     setBrowserInfo(defaultBrowserPackageName + "-noCustomTabs", versionCode, versionName);
                     startWebView(startUrl, endUrl, showType);
                 } else if (!browserAllowedForCustomTabs(defaultBrowserPackageName)) {
-                    m_logger.Important("onCreate() Default browser supports custom tabs, but is not allowed. Choosing WebKit strategy.");
+                    Log.e(TAG, "onCreate() Default browser supports custom tabs, but is not allowed. Choosing WebKit strategy.");
                     setBrowserInfo(defaultBrowserPackageName + "-customTabsNotAllowed", versionCode, versionName);
                     startWebView(startUrl, endUrl, showType);
                 } else {
-                    m_logger.Important("onCreate() Default browser supports custom tabs and is allowed. Choosing CustomTabs strategy.");
+                    Log.e(TAG, "onCreate() Default browser supports custom tabs and is allowed. Choosing CustomTabs strategy.");
                     setBrowserInfo(defaultBrowserPackageName + "-customTabsAllowed", versionCode, versionName);
                     startCustomTabsInBrowser(defaultBrowserPackageName, startUrl, endUrl, showType);
                 }
             }
         } else {
-            m_logger.Warning("onCreate() Called with data. Dropping flow and starting app's main activity.");
+            Log.e(TAG, "onCreate() Called with data. Dropping flow and starting app's main activity.");
             Intent mainActivityIntent = getApplicationContext().getPackageManager().getLaunchIntentForPackage(getApplicationContext().getPackageName());
-            m_logger.Flush();
             startActivity(mainActivityIntent);
             finish();
         }
@@ -177,10 +175,10 @@ public class WebView extends AppCompatActivity {
 
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        m_logger.Important("onNewIntent() New intent received.");
+        Log.e(TAG, "onNewIntent() New intent received.");
         Uri intentData = intent.getData();
         if (intentData == null) {
-            m_logger.Error("onNewIntent() New intent received with no data.");
+            Log.e(TAG, "onNewIntent() New intent received with no data.");
             finishOperation(WebResult.FAIL, (String) null);
             return;
         }
@@ -189,55 +187,54 @@ public class WebView extends AppCompatActivity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        m_logger.Important("onActivityResult() Result received.");
+        Log.e(TAG, "onActivityResult() Result received.");
         if (requestCode == 8053) {
             if (resultCode == -1) {
-                String endUrl = data.getExtras().getString(WebKitWebViewController.RESPONSE_KEY, BuildConfig.FLAVOR);
+                String endUrl = data.getExtras().getString(WebKitWebViewController.RESPONSE_KEY, Constants.FLAVOR);
                 if (endUrl.isEmpty()) {
-                    m_logger.Error("onActivityResult() Invalid final URL received from web view.");
+                    Log.e(TAG, "onActivityResult() Invalid final URL received from web view.");
                 } else {
                     finishOperation(WebResult.SUCCESS, endUrl);
                     return;
                 }
             } else if (resultCode == 0) {
-                finishOperation(WebResult.CANCEL, (String) null);
+                finishOperation(WebResult.CANCEL, null);
                 return;
             } else if (resultCode != 8054) {
-                m_logger.Warning("onActivityResult() Unrecognized result code received from web view:" + resultCode);
+                Log.e(TAG, "onActivityResult() Unrecognized result code received from web view:" + resultCode);
             }
-            finishOperation(WebResult.FAIL, (String) null);
+            finishOperation(WebResult.FAIL, null);
             return;
         }
-        m_logger.Warning("onActivityResult() Result received from unrecognized request.");
+        Log.e(TAG, "onActivityResult() Result received from unrecognized request.");
     }
 
     public void onResume() {
         super.onResume();
-        m_logger.Important("onResume() Activity resumed.");
+        Log.e(TAG, "onResume() Activity resumed.");
         if (m_cancelOperationOnResume) {
-            m_logger.Important("onResume() Starting timer to cancel operation.");
-            new Handler().postDelayed((Runnable) () -> {
-                m_logger.Important("WebView.onResume() Cancelling operation.");
-                finishOperation(WebResult.CANCEL, (String) null);
+            Log.e(TAG, "onResume() Starting timer to cancel operation.");
+            new Handler().postDelayed(() -> {
+                Log.e(TAG, "WebView.onResume() Cancelling operation.");
+                finishOperation(WebResult.CANCEL, null);
             }, m_cancelDelay);
         }
     }
 
     public void onPause() {
         super.onPause();
-        m_logger.Important("onPause() Activity paused.");
+        Log.e(TAG, "onPause() Activity paused.");
         m_cancelOperationOnResume = true;
     }
 
     public void onDestroy() {
         super.onDestroy();
-        m_logger.Important("onDestroy() Activity destroyed.");
+        Log.e(TAG, "onDestroy() Activity destroyed.");
         if (m_cancelOperationOnResume) {
-            m_logger.Important("onDestroy() Cancelling operation.");
-            finishOperation(WebResult.CANCEL, (String) null);
+            Log.e(TAG, "onDestroy() Cancelling operation.");
+            finishOperation(WebResult.CANCEL, null);
             return;
         }
-        m_logger.Flush();
     }
 
     private void startCustomTabsInBrowser(String browserPackageName, String startUrl, String endUrl, ShowUrlType showType) {
@@ -275,11 +272,9 @@ public class WebView extends AppCompatActivity {
         m_lock.unlock();
         finish();
         if (operationId == 0) {
-            m_logger.Error("finishOperation() called on completed web view.");
-            m_logger.Flush();
+            Log.e(TAG, "finishOperation() called on completed web view.");
             return;
         }
-        m_logger.Flush();
         switch (result) {
             case SUCCESS:
                 urlOperationSucceeded(operationId, finalUrl, m_sharedBrowserUsed, m_browserInfo);
@@ -297,7 +292,7 @@ public class WebView extends AppCompatActivity {
 
     private void setBrowserInfo(String packageName, int versionCode, String versionName) {
         m_browserInfo = String.format(Locale.US, "%s::%d::%s", new Object[]{packageName, Integer.valueOf(versionCode), versionName});
-        m_logger.Important("setBrowserInfo() Set browser info: " + this.m_browserInfo);
+        Log.e(TAG, "setBrowserInfo() Set browser info: " + this.m_browserInfo);
     }
 
     private boolean browserAllowedForCustomTabs(String browserPackageName) {
@@ -308,7 +303,7 @@ public class WebView extends AppCompatActivity {
         try {
             @SuppressLint("WrongConstant") PackageInfo packageInfo = getApplicationContext().getPackageManager().getPackageInfo(browserPackageName, 64);
             if (packageInfo == null) {
-                m_logger.Important("No package info found for package: " + browserPackageName);
+                Log.e(TAG, "No package info found for package: " + browserPackageName);
                 return false;
             }
             for (Signature signature : packageInfo.signatures) {
@@ -318,10 +313,10 @@ public class WebView extends AppCompatActivity {
             }
             return false;
         } catch (PackageManager.NameNotFoundException e) {
-            m_logger.Error("browserAllowedForCustomTabs() Error in getPackageInfo(): " + e);
+            Log.e(TAG, "browserAllowedForCustomTabs() Error in getPackageInfo(): " + e);
             return false;
         } catch (NoSuchAlgorithmException e2) {
-            m_logger.Error("browserAllowedForCustomTabs() Error in hashFromSignature(): " + e2);
+            Log.e(TAG, "browserAllowedForCustomTabs() Error in hashFromSignature(): " + e2);
             return false;
         }
     }
