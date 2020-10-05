@@ -1,4 +1,4 @@
-package com.microsoft.xal.browser;
+package com.mcal.mcpelauncher.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -7,14 +7,16 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.microsoft.xal.browser.WebView;
+
 /**
- * 02.10.2020
+ * 05.10.2020
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 
-public class IntentHandler extends AppCompatActivity {
+public class IntentHandlerActivity extends AppCompatActivity {
     public static final String TAG = "IntentHandler";
 
     @SuppressLint("WrongConstant")

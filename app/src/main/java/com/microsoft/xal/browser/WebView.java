@@ -16,6 +16,7 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
 
+import com.mcal.mcpelauncher.activities.XalLoginActivity;
 import com.mcal.mcpelauncher.data.Constants;
 import com.microsoft.aad.adal.AuthenticationConstants;
 
@@ -38,9 +39,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author https://github.com/TimScriptov
  */
 
-
 public class WebView extends AppCompatActivity {
     public static final String TAG = "WebView";
+    public static final String DEFAULT_BROWSER_INFO = "webkit";
     public static final String CANCEL_DELAY = "CANCEL_DELAY";
     public static final String END_URL = "END_URL";
     public static final String IN_PROC_BROWSER = "IN_PROC_BROWSER";
@@ -69,7 +70,7 @@ public class WebView extends AppCompatActivity {
 
     private static native void urlOperationFailed(long j, boolean z, String str);
 
-    private static native void urlOperationSucceeded(long j, String str, boolean z, String str2);
+    public static native void urlOperationSucceeded(long j, String str, boolean z, String str2);
 
     @SuppressLint("WrongConstant")
     public static void showUrl(long operationId, Context context, @NotNull String startUrl, String endUrl, int showTypeInt, boolean useInProcBrowser, long cancelDelay) {
@@ -190,7 +191,7 @@ public class WebView extends AppCompatActivity {
         Log.e(TAG, "onActivityResult() Result received.");
         if (requestCode == 8053) {
             if (resultCode == -1) {
-                String endUrl = data.getExtras().getString(WebKitWebViewController.RESPONSE_KEY, Constants.FLAVOR);
+                String endUrl = data.getExtras().getString(XalLoginActivity.RESPONSE_KEY, Constants.FLAVOR);
                 if (endUrl.isEmpty()) {
                     Log.e(TAG, "onActivityResult() Invalid final URL received from web view.");
                 } else {
@@ -255,7 +256,7 @@ public class WebView extends AppCompatActivity {
     private void startWebView(String startUrl, String endUrl, ShowUrlType showType) {
         m_cancelOperationOnResume = false;
         m_sharedBrowserUsed = false;
-        Intent webIntent = new Intent(getApplicationContext(), WebKitWebViewController.class);
+        Intent webIntent = new Intent(getApplicationContext(), XalLoginActivity.class);
         Bundle webViewArgs = new Bundle();
         webViewArgs.putString(START_URL, startUrl);
         webViewArgs.putString(END_URL, endUrl);

@@ -63,6 +63,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.google.android.gms:play-services-gcm:17.0.0'
     implementation 'com.google.android.gms:play-services-iid:17.0.0'
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
     implementation 'org.zeroturnaround:zt-zip:1.14'
     implementation 'com.anjlab.android.iab.v3:library:1.1.0'
     implementation 'org.jetbrains:annotations:19.0.0'

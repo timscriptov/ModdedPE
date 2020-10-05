@@ -276,7 +276,7 @@
         <!-- Xbox Live SDK -->
 
         <activity
-            android:name="com.microsoft.xal.browser.IntentHandler"
+            android:name="com.mcal.mcpelauncher.activities.IntentHandlerActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape"
@@ -301,7 +301,7 @@
             android:screenOrientation="sensorLandscape"
             android:configChanges="orientation" />
         <activity
-            android:name="com.microsoft.xal.browser.WebKitWebViewController"
+            android:name="com.mcal.mcpelauncher.activities.XalLoginActivity"
             android:screenOrientation="sensorLandscape"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize" />
 

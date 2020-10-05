@@ -64,6 +64,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.appsflyer.AppsFlyerLib;
+import com.mcal.mcpelauncher.ModdedPEApplication;
 import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.mcpelauncher.services.SoundService;
 import com.mojang.minecraftpe.platforms.Platform;
@@ -125,6 +126,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
     private Locale initialUserLocale;
     private long mCallback = 0;
     private SessionInfo mLastDeviceSessionInfo = null;
+
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
             mService = new Messenger(service);
