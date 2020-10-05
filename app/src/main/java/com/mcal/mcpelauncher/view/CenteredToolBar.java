@@ -10,6 +10,10 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 
+import com.mcal.mcpelauncher.R;
+
+import org.jetbrains.annotations.Nullable;
+
 /*
  * Copyright (C) 2018-2020 Тимашков Иван
  *
@@ -26,9 +30,6 @@ import androidx.appcompat.widget.Toolbar;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import com.mcal.mcpelauncher.R;
-
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Тимашков Иван

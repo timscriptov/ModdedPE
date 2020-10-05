@@ -2,6 +2,7 @@ package com.microsoft.xbox.idp.interop;
 
 import android.content.Context;
 import android.util.Log;
+
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,20 +20,12 @@ import java.util.Locale;
  */
 
 public class Interop {
+    public static final String TAG = "Interop";
     private static final String DNET_SCOPE = "open-user.auth.dnet.xboxlive.com";
     private static final String PACKAGE_NAME_TO_REMOVE = "com.microsoft.onlineid.sample";
     private static final String POLICY = "mbi_ssl";
     private static final String PROD_SCOPE = "open-user.auth.xboxlive.com";
-    public static final String TAG = "Interop";
     private static Context s_context;
-
-    public interface ErrorCallback {
-        void onError(int i, int i2, String str);
-    }
-
-    public interface EventInitializationCallback extends ErrorCallback {
-        void onSuccess();
-    }
 
     public static native boolean deinitializeInterop();
 
@@ -154,5 +147,13 @@ public class Interop {
         public int getId() {
             return mId;
         }
+    }
+
+    public interface ErrorCallback {
+        void onError(int i, int i2, String str);
+    }
+
+    public interface EventInitializationCallback extends ErrorCallback {
+        void onSuccess();
     }
 }

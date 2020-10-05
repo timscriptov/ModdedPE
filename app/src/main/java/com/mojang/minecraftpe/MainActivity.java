@@ -64,8 +64,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.appsflyer.AppsFlyerLib;
-import com.mcal.mcpelauncher.ModdedPEApplication;
-import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.mcpelauncher.services.SoundService;
 import com.mojang.minecraftpe.platforms.Platform;
 

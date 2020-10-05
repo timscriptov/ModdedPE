@@ -43,27 +43,9 @@ public final class ErrorHelper implements Parcelable {
     public static final int LOADER_NONE = -1;
     public static final int RC_ERROR_SCREEN = 63;
     private static final String TAG = ErrorHelper.class.getSimpleName();
-    private ActivityContext activityContext;
     public Bundle loaderArgs;
     public int loaderId;
-
-    public interface ActivityContext {
-        AppCompatActivity getActivity();
-
-        LoaderInfo getLoaderInfo(int i);
-
-        LoaderManager getLoaderManager();
-
-        void startActivityForResult(Intent intent, int i);
-    }
-
-    public interface LoaderInfo {
-        void clearCache(Object obj);
-
-        LoaderManager.LoaderCallbacks<?> getLoaderCallbacks();
-
-        boolean hasCachedData(Object obj);
-    }
+    private ActivityContext activityContext;
 
     public ErrorHelper() {
         loaderId = -1;
@@ -173,6 +155,24 @@ public final class ErrorHelper implements Parcelable {
             z = false;
         }
         return new ActivityResult(z);
+    }
+
+    public interface ActivityContext {
+        AppCompatActivity getActivity();
+
+        LoaderInfo getLoaderInfo(int i);
+
+        LoaderManager getLoaderManager();
+
+        void startActivityForResult(Intent intent, int i);
+    }
+
+    public interface LoaderInfo {
+        void clearCache(Object obj);
+
+        LoaderManager.LoaderCallbacks<?> getLoaderCallbacks();
+
+        boolean hasCachedData(Object obj);
     }
 
     public static class ActivityResult {

@@ -21,9 +21,9 @@ import org.jetbrains.annotations.NotNull;
  */
 
 public class ImportService extends Service {
-    final Messenger mMessenger = new Messenger(new IncomingHandler());
     static final int MSG_CORRELATION_CHECK = 672;
     static final int MSG_CORRELATION_RESPONSE = 837;
+    final Messenger mMessenger = new Messenger(new IncomingHandler());
 
     public IBinder onBind(Intent intent) {
         return mMessenger.getBinder();

@@ -22,7 +22,6 @@ import java.security.NoSuchProviderException;
 import java.security.Security;
 import java.security.Signature;
 import java.security.SignatureException;
-import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECGenParameterSpec;
 import java.security.spec.InvalidKeySpecException;

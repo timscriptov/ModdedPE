@@ -21,6 +21,9 @@ import org.jetbrains.annotations.Nullable;
  */
 
 public class XboxAppLinker {
+    public static final String XBOXAPP_BETA_PACKAGE = "com.microsoft.xboxone.smartglass.beta";
+    public static final String XBOXAPP_PACKAGE = "com.microsoft.xboxone.smartglass";
+    private static final String TAG = "XboxAppLinker";
     private static final String AMAZON_STORE_URI = "amzn://apps/android?p=";
     private static final String AMAZON_TABLET_STORE_PACKAGE = "com.amazon.venezia";
     private static final String AMAZON_UNDERGROUND_PACKAGE = "com.amazon.mShop.android";
@@ -29,9 +32,6 @@ public class XboxAppLinker {
     private static final String PLAY_STORE_PACKAGE = "com.android.vending";
     private static final String PLAY_STORE_URI = "market://details?id=";
     private static final String PLAY_STORE_WEB_URI = "https://play.google.com/store/apps/details?id=";
-    private static final String TAG = XboxAppLinker.class.getSimpleName();
-    public static final String XBOXAPP_BETA_PACKAGE = "com.microsoft.xboxone.smartglass.beta";
-    public static final String XBOXAPP_PACKAGE = "com.microsoft.xboxone.smartglass";
     public static boolean betaAppInstalled;
     public static boolean mainAppInstalled;
 

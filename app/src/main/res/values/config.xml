@@ -13,25 +13,6 @@
         <item>^1[.]16[.]20</item>
         <item>^1[.]16[.]40</item>
     </string-array>
-    <string name="app_game" translatable="false">Minecraft</string>
     <string name="app_name" translatable="false">ModdedPE</string>
-    <string name="app_name_trial" translatable="false">ModdedPE Trial</string>
-    <string name="app_name_demo" translatable="false">ModdedPE Demo</string>
-    <string name="app_name_short" translatable="false">ModdedPE</string>
-    <string name="app_name_short_trial" translatable="false">ModdedPE Trial</string>
-    <string name="app_name_short_demo" translatable="false">ModdedPE Demo</string>
-    <string name="xperiaplayoptimized_content" translatable="false">true</string>
-    <string name="facebook_app_id" translatable="false">221094574568058</string>
-    <string name="appcenter_android_id" translatable="false">c35d56a4-fe9c-4490-9d16-600825114d4b</string>
-    <string name="sdk_version_name" translatable="false">2.1.0510.1018</string>
-    <string name="com_appboy_api_key" translatable="false">6ce9b47c-2fd2-48e5-8ad2-4c1dbece4e09</string>
-    <string name="com_appboy_custom_endpoint" translatable="false">markab.iad-03.braze.com</string>
-    <string name="app_loading" translatable="false">Loading…</string>
-    <string name="broker_processing" translatable="false">Broker is processing</string>
-    <string name="http_auth_dialog_cancel" translatable="false">Cancel</string>
-    <string name="http_auth_dialog_login" translatable="false">Login</string>
-    <string name="http_auth_dialog_password" translatable="false">Password</string>
-    <string name="http_auth_dialog_title" translatable="false">Enter your credentials</string>
-    <string name="http_auth_dialog_username" translatable="false">Username</string>
-
+    <string name="app_game" translatable="false">Minecraft</string>
 </resources>
