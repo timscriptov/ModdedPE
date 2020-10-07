@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.microsoft.xbox.toolkit.ui.XLEClickableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/common_button_background"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:focusable="true"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="@dimen/changeFriendshipButtonWidth"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true">
+        <com.microsoft.xbox.toolkit.ui.CustomTypefaceTextView
+            android:textSize="16dp"
+            android:id="@+id/remove_friend_btn_icon"
+            android:layout_marginLeft="8dp"
+            android:text="@string/ic_RemoveFriend"
+            android:translationY="1dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content" />
+        <com.microsoft.xbox.toolkit.ui.CustomTypefaceTextView
+            android:textSize="18sp"
+            android:id="@+id/remove_friend_btn_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/Profile_Profile_RemoveFriend"
+            android:includeFontPadding="false" />
+    </LinearLayout>
+</com.microsoft.xbox.toolkit.ui.XLEClickableLayout>

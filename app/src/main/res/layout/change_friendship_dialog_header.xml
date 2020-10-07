@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="20dp"
+    android:layout_toRightOf="@id/change_friendship_profile_pic"
+    android:layout_alignParentRight="true"
+    android:layout_centerVertical="true">
+    <com.microsoft.xbox.toolkit.ui.CustomTypefaceTextView
+        android:textSize="@dimen/changeFriendshipDialogUserNameSize"
+        android:ellipsize="end"
+        android:layout_gravity="center|left"
+        android:id="@+id/gamertag_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1" />
+    <com.microsoft.xbox.toolkit.ui.CustomTypefaceTextView
+        android:textSize="@dimen/changeFriendshipDialogUserNameSize"
+        android:ellipsize="end"
+        android:layout_gravity="center|left"
+        android:id="@+id/realname_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <com.microsoft.xbox.toolkit.ui.CustomTypefaceTextView
+            android:textSize="15sp"
+            android:id="@+id/peoplehub_info_gamerscore_icon"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/detailsMarginTop"
+            android:text="@string/ic_GamerScore"
+            android:includeFontPadding="false"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content" />
+        <com.microsoft.xbox.toolkit.ui.CustomTypefaceTextView
+            android:textSize="15sp"
+            android:id="@+id/peoplehub_info_gamerscore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginBottom="1dp"
+            android:singleLine="true" />
+    </LinearLayout>
+</LinearLayout>

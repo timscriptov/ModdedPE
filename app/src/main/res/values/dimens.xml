@@ -1,5 +1,9 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <resources>
+    <dimen name="http_auth_dialog_padding_left">10dp</dimen>
+    <dimen name="http_auth_dialog_padding_right">10dp</dimen>
+    <dimen name="http_auth_dialog_padding_top">10dp</dimen>
+    <dimen name="http_auth_dialog_padding_bottom">20dp</dimen>
     <dimen name="com_facebook_auth_dialog_corner_radius">2.0dp</dimen>
     <dimen name="com_facebook_auth_dialog_corner_radius_oversized">4.0dp</dimen>
     <dimen name="com_facebook_button_corner_radius">2.0dp</dimen>

@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.mcal.mcpelauncher.data.Constants;
 import com.microsoft.aad.adal.AuthenticationConstants;
+import com.microsoft.xal.browser.ShowUrlType;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -24,63 +25,20 @@ import org.jetbrains.annotations.NotNull;
  * @author https://github.com/TimScriptov
  */
 
-public class XalLoginActivity extends AppCompatActivity {
+public class WebKitWebViewControllerActivity extends AppCompatActivity {
     public static final String END_URL = "END_URL";
     public static final String RESPONSE_KEY = "RESPONSE";
     public static final int RESULT_FAILED = 8054;
     public static final String SHOW_TYPE = "SHOW_TYPE";
     public static final String START_URL = "START_URL";
     private static final String TAG = "WebKitWebViewController";
-    private static String startUrl;
-    private static String endUrl;
+    public static String startUrl;
+    public static String endUrl;
+    public static long nativeOp;
     private WebView m_webView;
+    private boolean m_cancelOperationOnResume = true;
 
-    @SuppressLint("SetJavaScriptEnabled")
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        super.onCreate(savedInstanceState);
-        Bundle args = getIntent().getExtras();
-        if (args == null) {
-            Log.e(TAG, "onCreate() Called with no extras.");
-            setResult(RESULT_FAILED);
-            finish();
-            return;
-        }
-        startUrl = args.getString(START_URL, Constants.FLAVOR);
-        endUrl = args.getString(END_URL, Constants.FLAVOR);
-        if (startUrl.isEmpty() || endUrl.isEmpty()) {
-            Log.e(TAG, "onCreate() Received invalid start or end URL.");
-            setResult(RESULT_FAILED);
-            finish();
-            return;
-        }
-        com.microsoft.xal.browser.WebView.ShowUrlType showType = (com.microsoft.xal.browser.WebView.ShowUrlType) args.get(SHOW_TYPE);
-        if (showType == com.microsoft.xal.browser.WebView.ShowUrlType.CookieRemoval || showType == com.microsoft.xal.browser.WebView.ShowUrlType.CookieRemovalSkipIfSharedCredentials) {
-            Log.e(TAG, "onCreate() WebView invoked for cookie removal. Deleting cookies and finishing.");
-            deleteCookies("login.live.com", true);
-            deleteCookies("account.live.com", true);
-            deleteCookies("live.com", true);
-            deleteCookies("xboxlive.com", true);
-            deleteCookies("sisu.xboxlive.com", true);
-            Intent data = new Intent();
-            data.putExtra(RESPONSE_KEY, endUrl);
-            setResult(-1, data);
-            finish();
-            return;
-        }
-
-        m_webView = new android.webkit.WebView(this);
-        m_webView.getSettings().setJavaScriptEnabled(true);
-        if (Build.VERSION.SDK_INT >= 21) {
-            m_webView.getSettings().setMixedContentMode(2);
-        }
-        m_webView.setWebChromeClient(new CustomWebChromeClient());
-        m_webView.setWebViewClient(new CustomWebViewClient());
-        m_webView.loadUrl(startUrl);
-        setContentView(m_webView);
-    }
-
-    private void deleteCookies(String domain, boolean https) {
+    public static void deleteCookies(String domain, boolean https) {
         CookieManager cookieManager = CookieManager.getInstance();
         String fullDomain = (https ? AuthenticationConstants.Broker.REDIRECT_SSL_PREFIX : "http://") + domain;
         String cookieBlob = cookieManager.getCookie(fullDomain);
@@ -105,20 +63,65 @@ public class XalLoginActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        nativeOp = getIntent().getLongExtra("native_op", 0);
+        Bundle args = getIntent().getExtras();
+        if (args == null) {
+            Log.e(TAG, "onCreate() Called with no extras.");
+            setResult(RESULT_FAILED);
+            finish();
+            return;
+        }
+        startUrl = args.getString(START_URL, Constants.FLAVOR);
+        endUrl = args.getString(END_URL, Constants.FLAVOR);
+        if (startUrl.isEmpty() || endUrl.isEmpty()) {
+            Log.e(TAG, "onCreate() Received invalid start or end URL.");
+            setResult(RESULT_FAILED);
+            finish();
+            return;
+        }
+        ShowUrlType showType = (ShowUrlType) args.get(SHOW_TYPE);
+        if (showType == ShowUrlType.CookieRemoval || showType == ShowUrlType.CookieRemovalSkipIfSharedCredentials) {
+            Log.e(TAG, "onCreate() WebView invoked for cookie removal. Deleting cookies and finishing.");
+            deleteCookies("login.live.com", true);
+            deleteCookies("account.live.com", true);
+            deleteCookies("live.com", true);
+            deleteCookies("xboxlive.com", true);
+            deleteCookies("sisu.xboxlive.com", true);
+            Intent data = new Intent();
+            data.putExtra(RESPONSE_KEY, endUrl);
+            setResult(-1, data);
+            finish();
+            return;
+        }
+
+        m_webView = new WebView(this);
+        m_webView.getSettings().setJavaScriptEnabled(true);
+        if (Build.VERSION.SDK_INT >= 21) {
+            m_webView.getSettings().setMixedContentMode(2);
+        }
+        m_webView.setWebChromeClient(new CustomWebChromeClient());
+        m_webView.setWebViewClient(new CustomWebViewClient());
+        m_webView.loadUrl(startUrl);
+        setContentView(m_webView);
+    }
+
     public class CustomWebChromeClient extends WebChromeClient {
-        public void onProgressChanged(android.webkit.WebView wv, int progress) {
+        public void onProgressChanged(WebView wv, int progress) {
             setProgress(progress * 100);
         }
     }
 
     public class CustomWebViewClient extends WebViewClient {
-        public boolean shouldOverrideUrlLoading(android.webkit.WebView wv, @NotNull String url) {
+        public boolean shouldOverrideUrlLoading(WebView wv, @NotNull String url) {
             if (!url.startsWith(endUrl, 0)) {
                 return false;
             }
             Log.e(TAG, "WebKitWebViewController found end URL. Ending UI flow.");
             Intent data = new Intent();
-            data.putExtra(XalLoginActivity.RESPONSE_KEY, url);
+            data.putExtra(WebKitWebViewControllerActivity.RESPONSE_KEY, url);
             setResult(-1, data);
             finish();
             return true;

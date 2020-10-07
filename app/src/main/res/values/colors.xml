@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <color name="colorAccent">#FF448aff</color>
 
     <!-- Minecraft -->
+    <color name="msal_loading" tools:override="true">#0078D4</color>
     <color name="com_facebook_blue">#3b5998</color>
     <color name="com_facebook_messenger_blue">#0084ff</color>
     <color name="com_facebook_likeview_text_color">#6a7180</color>

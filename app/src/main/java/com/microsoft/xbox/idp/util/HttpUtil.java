@@ -3,7 +3,7 @@ package com.microsoft.xbox.idp.util;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.microsoft.aad.adal.WebRequestHandler;
+import com.microsoft.identity.common.adal.internal.net.WebRequestHandler;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

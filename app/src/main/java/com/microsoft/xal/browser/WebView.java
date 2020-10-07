@@ -16,13 +16,11 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
 
-import com.mcal.mcpelauncher.activities.XalLoginActivity;
+import com.mcal.mcpelauncher.activities.WebKitWebViewControllerActivity;
 import com.mcal.mcpelauncher.data.Constants;
 import com.microsoft.aad.adal.AuthenticationConstants;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -50,6 +48,7 @@ public class WebView extends AppCompatActivity {
     public static final String SHOW_TYPE = "SHOW_TYPE";
     public static final String START_URL = "START_URL";
     public static final int WEB_KIT_WEB_VIEW_REQUEST = 8053;
+
     private static final Map<String, String> customTabsAllowedBrowsers = new HashMap();
 
     static {
@@ -66,15 +65,20 @@ public class WebView extends AppCompatActivity {
     private long m_operationId = 0;
     private boolean m_sharedBrowserUsed = false;
 
-    private static native void urlOperationCanceled(long j, boolean z, String str);
+    private static String hashFromSignature(@NotNull Signature signature) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA");
+        digest.update(signature.toByteArray());
+        return Base64.encodeToString(digest.digest(), 2);
+    }
 
-    private static native void urlOperationFailed(long j, boolean z, String str);
+    public static native void urlOperationCanceled(long j, boolean z, String str);
+
+    public static native void urlOperationFailed(long j, boolean z, String str);
 
     public static native void urlOperationSucceeded(long j, String str, boolean z, String str2);
 
     @SuppressLint("WrongConstant")
     public static void showUrl(long operationId, Context context, @NotNull String startUrl, String endUrl, int showTypeInt, boolean useInProcBrowser, long cancelDelay) {
-        Log.e(TAG, "JNI call received.");
         if (startUrl.isEmpty() || endUrl.isEmpty()) {
             Log.e(TAG, "Received invalid start or end URL.");
             urlOperationFailed(operationId, false, null);
@@ -97,12 +101,6 @@ public class WebView extends AppCompatActivity {
                 context.startActivity(webIntent);
             }
         }
-    }
-
-    private static String hashFromSignature(@NotNull Signature signature) throws NoSuchAlgorithmException {
-        MessageDigest digest = MessageDigest.getInstance("SHA");
-        digest.update(signature.toByteArray());
-        return Base64.encodeToString(digest.digest(), 2);
     }
 
     public void onCreate(Bundle savedInstanceState) {
@@ -132,7 +130,7 @@ public class WebView extends AppCompatActivity {
             if (showType == ShowUrlType.NonAuthFlow) {
                 useInProcBrowser = true;
             }
-            @SuppressLint("WrongConstant") ResolveInfo defaultBrowser = getApplicationContext().getPackageManager().resolveActivity(new Intent("android.intent.action.VIEW", Uri.parse(AuthenticationConstants.Broker.REDIRECT_SSL_PREFIX)), 65536);
+            @SuppressLint("WrongConstant") ResolveInfo defaultBrowser = this.getPackageManager().resolveActivity(new Intent("android.intent.action.VIEW", Uri.parse(AuthenticationConstants.Broker.REDIRECT_SSL_PREFIX)), 65536);
             String defaultBrowserPackageName = defaultBrowser == null ? null : defaultBrowser.activityInfo.packageName;
             if (useInProcBrowser) {
                 Log.e(TAG, "onCreate() Operation requested in-proc. Choosing WebKit strategy.");
@@ -146,7 +144,7 @@ public class WebView extends AppCompatActivity {
                 int versionCode = -1;
                 String versionName = "unknown";
                 try {
-                    PackageInfo info = getApplicationContext().getPackageManager().getPackageInfo(defaultBrowserPackageName, 0);
+                    PackageInfo info = this.getPackageManager().getPackageInfo(defaultBrowserPackageName, 0);
                     versionCode = info.versionCode;
                     versionName = info.versionName;
                 } catch (PackageManager.NameNotFoundException e) {
@@ -168,7 +166,7 @@ public class WebView extends AppCompatActivity {
             }
         } else {
             Log.e(TAG, "onCreate() Called with data. Dropping flow and starting app's main activity.");
-            Intent mainActivityIntent = getApplicationContext().getPackageManager().getLaunchIntentForPackage(getApplicationContext().getPackageName());
+            Intent mainActivityIntent = this.getPackageManager().getLaunchIntentForPackage(this.getPackageName());
             startActivity(mainActivityIntent);
             finish();
         }
@@ -180,7 +178,7 @@ public class WebView extends AppCompatActivity {
         Uri intentData = intent.getData();
         if (intentData == null) {
             Log.e(TAG, "onNewIntent() New intent received with no data.");
-            finishOperation(WebResult.FAIL, (String) null);
+            finishOperation(WebResult.FAIL, null);
             return;
         }
         finishOperation(WebResult.SUCCESS, intentData.toString());
@@ -191,7 +189,7 @@ public class WebView extends AppCompatActivity {
         Log.e(TAG, "onActivityResult() Result received.");
         if (requestCode == 8053) {
             if (resultCode == -1) {
-                String endUrl = data.getExtras().getString(XalLoginActivity.RESPONSE_KEY, Constants.FLAVOR);
+                String endUrl = data.getExtras().getString(WebKitWebViewControllerActivity.RESPONSE_KEY, Constants.FLAVOR);
                 if (endUrl.isEmpty()) {
                     Log.e(TAG, "onActivityResult() Invalid final URL received from web view.");
                 } else {
@@ -256,7 +254,7 @@ public class WebView extends AppCompatActivity {
     private void startWebView(String startUrl, String endUrl, ShowUrlType showType) {
         m_cancelOperationOnResume = false;
         m_sharedBrowserUsed = false;
-        Intent webIntent = new Intent(getApplicationContext(), XalLoginActivity.class);
+        Intent webIntent = new Intent(this, WebKitWebViewControllerActivity.class);
         Bundle webViewArgs = new Bundle();
         webViewArgs.putString(START_URL, startUrl);
         webViewArgs.putString(END_URL, endUrl);
@@ -278,13 +276,13 @@ public class WebView extends AppCompatActivity {
         }
         switch (result) {
             case SUCCESS:
-                urlOperationSucceeded(operationId, finalUrl, m_sharedBrowserUsed, m_browserInfo);
+                com.microsoft.xal.browser.WebView.urlOperationSucceeded(operationId, finalUrl, m_sharedBrowserUsed, DEFAULT_BROWSER_INFO);
                 return;
             case CANCEL:
-                urlOperationCanceled(operationId, m_sharedBrowserUsed, m_browserInfo);
+                com.microsoft.xal.browser.WebView.urlOperationCanceled(operationId, m_sharedBrowserUsed, DEFAULT_BROWSER_INFO);
                 return;
             case FAIL:
-                urlOperationFailed(operationId, m_sharedBrowserUsed, m_browserInfo);
+                com.microsoft.xal.browser.WebView.urlOperationFailed(operationId, m_sharedBrowserUsed, DEFAULT_BROWSER_INFO);
                 return;
             default:
                 return;
@@ -293,7 +291,7 @@ public class WebView extends AppCompatActivity {
 
     private void setBrowserInfo(String packageName, int versionCode, String versionName) {
         m_browserInfo = String.format(Locale.US, "%s::%d::%s", new Object[]{packageName, Integer.valueOf(versionCode), versionName});
-        Log.e(TAG, "setBrowserInfo() Set browser info: " + this.m_browserInfo);
+        Log.e(TAG, "setBrowserInfo() Set browser info: " + m_browserInfo);
     }
 
     private boolean browserAllowedForCustomTabs(String browserPackageName) {
@@ -302,7 +300,7 @@ public class WebView extends AppCompatActivity {
             return false;
         }
         try {
-            @SuppressLint("WrongConstant") PackageInfo packageInfo = getApplicationContext().getPackageManager().getPackageInfo(browserPackageName, 64);
+            @SuppressLint("WrongConstant") PackageInfo packageInfo = this.getPackageManager().getPackageInfo(browserPackageName, 64);
             if (packageInfo == null) {
                 Log.e(TAG, "No package info found for package: " + browserPackageName);
                 return false;
@@ -323,42 +321,12 @@ public class WebView extends AppCompatActivity {
     }
 
     private boolean browserSupportsCustomTabs(String packageName) {
-        //for (ResolveInfo handler : getApplicationContext().getPackageManager().queryIntentServices(new Intent("androidx.browser.customtabs.CustomTabsService"), 0)) {
-        for (ResolveInfo handler : getApplicationContext().getPackageManager().queryIntentServices(new Intent("android.support.customtabs.action.CustomTabsService"), 0)) {
+        //for (ResolveInfo handler : this.getPackageManager().queryIntentServices(new Intent("androidx.browser.customtabs.CustomTabsService"), 0)) {
+        for (ResolveInfo handler : this.getPackageManager().queryIntentServices(new Intent("android.support.customtabs.action.CustomTabsService"), 0)) {
             if (handler.serviceInfo.packageName.equals(packageName)) {
                 return true;
             }
         }
         return false;
-    }
-
-    private enum WebResult {
-        SUCCESS,
-        FAIL,
-        CANCEL
-    }
-
-    public enum ShowUrlType {
-        Normal,
-        CookieRemoval,
-        CookieRemovalSkipIfSharedCredentials,
-        NonAuthFlow;
-
-        @Nullable
-        @Contract(pure = true)
-        public static ShowUrlType fromInt(int val) {
-            switch (val) {
-                case 0:
-                    return Normal;
-                case 1:
-                    return CookieRemoval;
-                case 2:
-                    return CookieRemovalSkipIfSharedCredentials;
-                case 3:
-                    return NonAuthFlow;
-                default:
-                    return null;
-            }
-        }
     }
 }

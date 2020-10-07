@@ -294,16 +294,20 @@
             </intent-filter>
         </activity>
 
+
         <activity
+            android:theme="@style/AppErrorTheme"
+            android:name="com.mcal.mcpelauncher.activities.WebKitWebViewControllerActivity"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize" />
+
+        <activity
+            android:theme="@style/AppErrorTheme"
             android:name="com.microsoft.xal.browser.WebView"
             android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape"
             android:configChanges="orientation" />
-        <activity
-            android:name="com.mcal.mcpelauncher.activities.XalLoginActivity"
-            android:screenOrientation="sensorLandscape"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize" />
 
     </application>
 
