@@ -1,0 +1,42 @@
+package com.microsoft.xbox.toolkit.network;
+
+import com.microsoft.xbox.toolkit.XLEThread;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+
+/**
+ * 08.10.2020
+ *
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
+public class XLEThreadPool {
+    public static XLEThreadPool biOperationsThreadPool = new XLEThreadPool(false, 1, "XLEPerfMarkerOperationsPool");
+    public static XLEThreadPool nativeOperationsThreadPool = new XLEThreadPool(true, 4, "XLENativeOperationsPool");
+    public static XLEThreadPool networkOperationsThreadPool = new XLEThreadPool(false, 3, "XLENetworkOperationsPool");
+    public static XLEThreadPool textureThreadPool = new XLEThreadPool(false, 1, "XLETexturePool");
+    public String name;
+    private ExecutorService executor;
+
+    public XLEThreadPool(boolean singleThread, final int priority, String newname) {
+        name = newname;
+        ThreadFactory factory = arg0 -> {
+            Thread t = new XLEThread(arg0, name);
+            t.setDaemon(true);
+            t.setPriority(priority);
+            return t;
+        };
+        if (singleThread) {
+            executor = Executors.newSingleThreadExecutor(factory);
+        } else {
+            executor = Executors.newCachedThreadPool(factory);
+        }
+    }
+
+    public void run(Runnable runnable) {
+        executor.execute(runnable);
+    }
+}

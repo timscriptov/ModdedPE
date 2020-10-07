@@ -52,9 +52,9 @@ public class HttpClientRequest {
         if (body != null && body.length != 0) {
             requestBuilder = requestBuilder.method(method, RequestBody.create(MediaType.parse(contentType), body));
         } else if ("POST".equals(method) || "PUT".equals(method)) {
-            requestBuilder = requestBuilder.method(method, RequestBody.create((MediaType) null, NO_BODY));
+            requestBuilder = requestBuilder.method(method, RequestBody.create(null, NO_BODY));
         } else {
-            requestBuilder = requestBuilder.method(method, (RequestBody) null);
+            requestBuilder = requestBuilder.method(method, null);
         }
     }
 
