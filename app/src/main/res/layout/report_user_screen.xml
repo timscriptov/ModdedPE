@@ -46,7 +46,7 @@
             android:text="@string/ProfileCard_Report_SubmitButton"
             android:layout_weight="1.0" />
     </LinearLayout>
-    <EditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:textColor="@color/XboxWhite"
         android:textColorHint="@color/white_60_percent"
         android:gravity="center|left|top"

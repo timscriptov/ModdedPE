@@ -22,10 +22,13 @@
 -keep class org.spongycastle.** { *; }
 -keep class com.mojang.** { *; }
 -keep class org.fmod.** { *; }
--keep class Microsoft.** { *; }
--keep class net.hockeyapp.** { *; }
--keep class MS.** { *; }
 -keep class com.microsoft.** { *; }
+-keep class com.microsoft.xal.androidjava.DeviceInfo { *; }
+-keep class com.microsoft.xal.browser.WebView { *; }
+-keep class com.microsoft.xal.crypto.EccPubKey { *; }
+-keep class com.microsoft.xal.crypto.Ecdsa { *; }
+-keep class com.microsoft.xal.crypto.SecureRandom { *; }
+-keep class com.microsoft.xal.crypto.ShaHasher { *; }
 -keep class com.google.** { *; }
 -keep class com.googleplay.** { *; }
 -keep class com.facebook.** { *; }

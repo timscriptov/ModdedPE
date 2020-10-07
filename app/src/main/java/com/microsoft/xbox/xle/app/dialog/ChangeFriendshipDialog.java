@@ -61,7 +61,6 @@ public class ChangeFriendshipDialog extends XLEManagedDialog {
         vm = vm2;
     }
 
-    /* access modifiers changed from: protected */
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(1);

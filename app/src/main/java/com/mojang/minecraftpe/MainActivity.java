@@ -1566,7 +1566,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
     public void initializeXboxLive(long xalInitArgs, long xblInitArgs) {
         final long j = xalInitArgs;
         final long j2 = xblInitArgs;
-        runOnUiThread(() -> MainActivity.this.nativeInitializeXboxLive(j, j2));
+        runOnUiThread(() -> nativeInitializeXboxLive(j, j2));
     }
 
     enum MessageConnectionStatus {

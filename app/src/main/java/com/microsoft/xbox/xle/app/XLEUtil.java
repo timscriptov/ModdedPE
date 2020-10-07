@@ -47,11 +47,7 @@ public class XLEUtil {
     }
 
     public static void showKeyboard(final View view, int delayMS) {
-        ThreadManager.UIThreadPostDelayed(new Runnable() {
-            public void run() {
-                ((InputMethodManager) XboxTcuiSdk.getSystemService("input_method")).showSoftInput(view, 1);
-            }
-        }, delayMS);
+        ThreadManager.UIThreadPostDelayed(() -> ((InputMethodManager) XboxTcuiSdk.getSystemService("input_method")).showSoftInput(view, 1), delayMS);
     }
 
     public static <T> boolean isNullOrEmpty(Iterable<T> collection) {
