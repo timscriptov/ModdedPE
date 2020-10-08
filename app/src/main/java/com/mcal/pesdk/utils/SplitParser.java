@@ -53,20 +53,22 @@ public class SplitParser {
         }
 
         try {
-            if (mcpe(mContext) != null) {
-                String split_path = Arrays.asList(mcpe(mContext).splitPublicSourceDirs).get(0);
-                byte[] buffer = new byte[2048];
-                for (String so : minecraftLibs) {
-                    InputStream is = new ZipFile(split_path).getInputStream(new ZipEntry("lib/" + Build.CPU_ABI + "/" + so));
-                    FileOutputStream fos = new FileOutputStream(arm64 + "/" + so);
-                    do {
-                        int numread = is.read(buffer);
-                        if (numread <= 0) {
-                            break;
-                        }
-                        fos.write(buffer, 0, numread);
-                    } while (true);
-                    fos.close();
+            if(SplitParser.isBundle(mContext)) {
+                if (mcpe(mContext) != null) {
+                    String split_path = Arrays.asList(mcpe(mContext).splitPublicSourceDirs).get(0);
+                    byte[] buffer = new byte[2048];
+                    for (String so : minecraftLibs) {
+                        InputStream is = new ZipFile(split_path).getInputStream(new ZipEntry("lib/" + Build.CPU_ABI + "/" + so));
+                        FileOutputStream fos = new FileOutputStream(arm64 + "/" + so);
+                        do {
+                            int numread = is.read(buffer);
+                            if (numread <= 0) {
+                                break;
+                            }
+                            fos.write(buffer, 0, numread);
+                        } while (true);
+                        fos.close();
+                    }
                 }
             }
         } catch (Exception e) {

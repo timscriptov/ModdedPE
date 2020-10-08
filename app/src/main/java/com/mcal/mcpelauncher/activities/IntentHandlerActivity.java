@@ -17,7 +17,7 @@ import com.microsoft.xal.browser.WebView;
  */
 
 public class IntentHandlerActivity extends AppCompatActivity {
-    public static final String TAG = "IntentHandler";
+    public static final String TAG = "IntentHandlerActivity";
 
     @SuppressLint("WrongConstant")
     public void onCreate(Bundle savedInstanceState) {

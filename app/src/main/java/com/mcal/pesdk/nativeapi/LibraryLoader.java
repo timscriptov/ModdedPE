@@ -30,7 +30,7 @@ public class LibraryLoader {
     private static native void nativeOnNModAPILoaded(String libPath);
 
     @SuppressLint("UnsafeDynamicallyLoadedCode")
-    static public void loadSubstrate(String mcLibsPath) {
+    static public void loadSubstrate() {
         System.loadLibrary("substrate");
         //System.load(new File(mcLibsPath, "libsubstrate.so").getAbsolutePath());
     }

@@ -34,9 +34,7 @@ public class WebKitWebViewControllerActivity extends AppCompatActivity {
     private static final String TAG = "WebKitWebViewController";
     public static String startUrl;
     public static String endUrl;
-    public static long nativeOp;
     private WebView m_webView;
-    private boolean m_cancelOperationOnResume = true;
 
     public static void deleteCookies(String domain, boolean https) {
         CookieManager cookieManager = CookieManager.getInstance();
@@ -66,7 +64,6 @@ public class WebKitWebViewControllerActivity extends AppCompatActivity {
     @SuppressLint("SetJavaScriptEnabled")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        nativeOp = getIntent().getLongExtra("native_op", 0);
         Bundle args = getIntent().getExtras();
         if (args == null) {
             Log.e(TAG, "onCreate() Called with no extras.");
