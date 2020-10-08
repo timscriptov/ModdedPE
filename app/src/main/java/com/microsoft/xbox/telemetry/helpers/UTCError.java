@@ -4,6 +4,13 @@ import com.microsoft.xbox.idp.ui.ErrorActivity;
 import com.microsoft.xbox.telemetry.utc.ClientError;
 import com.microsoft.xbox.telemetry.utc.model.UTCNames;
 
+/**
+ * 08.10.2020
+ *
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public class UTCError {
     private static final String UINEEDEDERROR = "Client Error Type - UI Needed";
 

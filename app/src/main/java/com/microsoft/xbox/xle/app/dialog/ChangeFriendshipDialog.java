@@ -5,8 +5,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.mcal.mcpelauncher.R;
 import com.microsoft.xbox.telemetry.helpers.UTCChangeRelationship;
@@ -48,7 +49,7 @@ public class ChangeFriendshipDialog extends XLEManagedDialog {
     private CustomTypefaceTextView gamertag;
     private FastProgressBar overlayLoadingIndicator;
     private ViewModelBase previousVM;
-    private TextView profileAccountTier;
+    private AppCompatTextView profileAccountTier;
     private CustomTypefaceTextView profileGamerScore;
     private XLEUniversalImageView profilePic;
     private CustomTypefaceTextView realName;

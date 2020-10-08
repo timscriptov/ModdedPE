@@ -2,7 +2,6 @@ package com.microsoft.xbox.toolkit;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.view.View;
 import android.widget.Toast;
 
 import com.microsoft.xbox.toolkit.ui.BlockingScreen;

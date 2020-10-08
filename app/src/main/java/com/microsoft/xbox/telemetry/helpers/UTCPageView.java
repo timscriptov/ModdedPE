@@ -5,6 +5,13 @@ import com.microsoft.xbox.telemetry.utc.PageView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * 08.10.2020
+ *
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public class UTCPageView {
     private static ArrayList<String> pages = new ArrayList<>();
 

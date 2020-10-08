@@ -17,13 +17,11 @@ android {
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
         }
     }
-
     externalNativeBuild {
         ndkBuild {
             path 'src/main/cpp/Android.mk'
         }
     }
-
     buildTypes {
         release {
             minifyEnabled true
@@ -31,11 +29,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/INDEX.LIST'
+        exclude("META-INF/*.kotlin_module")
+    }
     lintOptions {
         checkReleaseBuilds false
-        // Or, if you prefer, you can continue to check for errors in release builds,
-        // but continue the build even when errors are found:
         abortOnError false
     }
     compileOptions {
@@ -65,10 +72,15 @@ dependencies {
     implementation 'com.google.android.gms:play-services-gcm:17.0.0'
     implementation 'com.google.android.gms:play-services-iid:17.0.0'
     implementation 'com.google.firebase:firebase-messaging:20.3.0'
+
     implementation 'org.zeroturnaround:zt-zip:1.14'
     implementation 'com.anjlab.android.iab.v3:library:1.1.0'
     implementation 'org.jetbrains:annotations:19.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.10"
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+    implementation 'org.apache.httpcomponents:httpmime:4.5.13'
+
+    implementation 'org.simpleframework:simple-xml:2.7.1'
 
     implementation 'io.github.inflationx:calligraphy3:3.1.1'
     implementation 'io.github.inflationx:viewpump:2.0.2'

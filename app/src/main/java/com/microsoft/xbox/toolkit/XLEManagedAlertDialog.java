@@ -1,8 +1,9 @@
 package com.microsoft.xbox.toolkit;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+
+import androidx.appcompat.app.AlertDialog;
 
 /**
  * 08.10.2020

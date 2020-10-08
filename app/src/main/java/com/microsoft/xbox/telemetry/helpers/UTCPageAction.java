@@ -4,6 +4,13 @@ import com.microsoft.xbox.telemetry.utc.PageAction;
 
 import java.util.HashMap;
 
+/**
+ * 08.10.2020
+ *
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public class UTCPageAction {
     public static void track(String actionName, CharSequence activityTitle) {
         track(actionName, UTCPageView.getCurrentPage(), activityTitle, new HashMap());

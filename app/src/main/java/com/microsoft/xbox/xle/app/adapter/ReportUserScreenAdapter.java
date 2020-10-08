@@ -5,8 +5,9 @@ import android.os.Build;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Spinner;
+
+import androidx.appcompat.widget.AppCompatEditText;
 
 import com.mcal.mcpelauncher.R;
 import com.microsoft.xbox.telemetry.helpers.UTCReportUser;
@@ -26,7 +27,7 @@ import com.microsoft.xboxtcui.XboxTcuiSdk;
  */
 
 public class ReportUserScreenAdapter extends AdapterBase {
-    public EditText optionalText = ((EditText) findViewById(R.id.report_user_text));
+    public AppCompatEditText optionalText = ((AppCompatEditText) findViewById(R.id.report_user_text));
     public ReportUserScreenViewModel viewModel;
     private XLEButton cancelButton = ((XLEButton) findViewById(R.id.report_user_cancel));
     private Spinner reasonSpinner = ((Spinner) findViewById(R.id.report_user_reason));

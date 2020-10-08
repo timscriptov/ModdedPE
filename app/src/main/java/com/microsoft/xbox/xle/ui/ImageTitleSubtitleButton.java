@@ -5,8 +5,9 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.accessibility.AccessibilityNodeInfo;
-import android.widget.Button;
 import android.widget.LinearLayout;
+
+import androidx.appcompat.widget.AppCompatButton;
 
 import com.mcal.mcpelauncher.R;
 import com.microsoft.xbox.toolkit.JavaUtil;
@@ -63,6 +64,6 @@ public class ImageTitleSubtitleButton extends LinearLayout {
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
         super.onInitializeAccessibilityNodeInfo(info);
         info.setClickable(true);
-        info.setClassName(Button.class.getName());
+        info.setClassName(AppCompatButton.class.getName());
     }
 }

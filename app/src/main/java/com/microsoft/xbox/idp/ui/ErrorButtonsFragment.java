@@ -1,11 +1,11 @@
 package com.microsoft.xbox.idp.ui;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import com.mcal.mcpelauncher.R;
@@ -31,7 +31,7 @@ public class ErrorButtonsFragment extends BaseFragment implements View.OnClickLi
     };
     private Callbacks callbacks = NO_OP_CALLBACKS;
 
-    public void onAttach(Activity activity) {
+    public void onAttach(AppCompatActivity activity) {
         super.onAttach(activity);
         callbacks = (Callbacks) activity;
     }

@@ -3,7 +3,8 @@ package com.microsoft.xbox.xle.app;
 import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.microsoft.xbox.toolkit.DialogManager;
 import com.microsoft.xbox.toolkit.ThreadManager;
@@ -21,7 +22,7 @@ import java.util.Date;
 
 public class XLEUtil {
     @SuppressLint("WrongConstant")
-    public static void updateAndShowTextViewUnlessEmpty(TextView textView, CharSequence text) {
+    public static void updateAndShowTextViewUnlessEmpty(AppCompatTextView textView, CharSequence text) {
         if (textView == null) {
             return;
         }
@@ -33,7 +34,7 @@ public class XLEUtil {
         textView.setVisibility(0);
     }
 
-    public static void updateTextAndVisibilityIfNotNull(TextView textView, CharSequence text, int visibility) {
+    public static void updateTextAndVisibilityIfNotNull(AppCompatTextView textView, CharSequence text, int visibility) {
         if (textView != null) {
             textView.setText(text);
             textView.setVisibility(visibility);

@@ -1,6 +1,6 @@
 package com.microsoft.xbox.xle.app.activity.Profile;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 
 import com.mcal.mcpelauncher.R;
 import com.microsoft.xbox.service.model.FollowersData;
@@ -315,7 +315,7 @@ public class ProfileScreenViewModel extends ViewModelBase {
         return false;
     }
 
-    public void onLoadUserProfileCompleted(AsyncActionStatus status) {
+    public void onLoadUserProfileCompleted(@NotNull AsyncActionStatus status) {
         isLoadingUserProfile = false;
         switch (status) {
             case SUCCESS:

@@ -1,5 +1,14 @@
 package com.microsoft.xbox.telemetry.helpers;
 
+import org.jetbrains.annotations.Nullable;
+
+/**
+ * 08.10.2020
+ *
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public class UTCEventTracker {
 
     public static void callTrackWrapper(UTCEventDelegate delegate) {
@@ -10,6 +19,7 @@ public class UTCEventTracker {
         }
     }
 
+    @Nullable
     public static String callStringTrackWrapper(UTCStringEventDelegate delegate) {
         try {
             return delegate.call();

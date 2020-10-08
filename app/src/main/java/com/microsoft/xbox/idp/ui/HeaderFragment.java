@@ -1,7 +1,6 @@
 package com.microsoft.xbox.idp.ui;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.Loader;
 import android.graphics.Bitmap;
@@ -12,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
@@ -105,7 +105,7 @@ public class HeaderFragment extends BaseFragment implements View.OnClickListener
     };
     private Callbacks callbacks = NO_OP_CALLBACKS;
 
-    public void onAttach(Activity activity) {
+    public void onAttach(AppCompatActivity activity) {
         super.onAttach(activity);
         if (assertionsDisabled || (activity instanceof Callbacks)) {
             callbacks = (Callbacks) activity;

@@ -6,10 +6,11 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.accessibility.AccessibilityNodeInfo;
-import android.widget.Button;
 import android.widget.Checkable;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.mcal.mcpelauncher.R;
 import com.microsoft.xbox.toolkit.XLERValueHelper;
@@ -28,8 +29,8 @@ public class IconFontToggleButton extends LinearLayout implements Checkable {
     private boolean checked;
     private String checkedIcon;
     private String checkedText;
-    private TextView iconTextView;
-    private TextView labelTextView;
+    private AppCompatTextView iconTextView;
+    private AppCompatTextView labelTextView;
     private String uncheckedIcon;
     private String uncheckedText;
 
@@ -50,8 +51,8 @@ public class IconFontToggleButton extends LinearLayout implements Checkable {
     @SuppressLint("WrongConstant")
     private void initViews(@NotNull Context context, AttributeSet attrs) {
         ((LayoutInflater) context.getSystemService("layout_inflater")).inflate(R.layout.iconfont_toggle_btn_view, this, true);
-        iconTextView = (TextView) findViewById(R.id.iconfont_toggle_btn_icon);
-        labelTextView = (TextView) findViewById(R.id.iconfont_toggle_btn_text);
+        iconTextView = (AppCompatTextView) findViewById(R.id.iconfont_toggle_btn_icon);
+        labelTextView = (AppCompatTextView) findViewById(R.id.iconfont_toggle_btn_text);
         TypedArray a = context.obtainStyledAttributes(attrs, XLERValueHelper.getStyleableRValueArray("CustomTypeface"));
         String typeface = a.getString(XLERValueHelper.getStyleableRValue("CustomTypeface_typefaceSource"));
         a.recycle();
@@ -101,7 +102,7 @@ public class IconFontToggleButton extends LinearLayout implements Checkable {
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
         super.onInitializeAccessibilityNodeInfo(info);
         info.setClickable(true);
-        info.setClassName(Button.class.getName());
+        info.setClassName(AppCompatButton.class.getName());
     }
 
     public void setCheckedText(String text) {
