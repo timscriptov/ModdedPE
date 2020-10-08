@@ -431,7 +431,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
     @SuppressLint({"WrongConstant", "ResourceType"})
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        nativeRegisterThis();
+        nativeRegisterThis(); // Deleted in Minecraf 1.16.100.58
         displayMetrics = new DisplayMetrics();
         platform = Platform.createPlatform(true);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -1097,6 +1097,10 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
             return false;
         }
         return true;
+    }
+
+    public boolean isOnWifi() {
+        return ((ConnectivityManager) getSystemService("connectivity")).getNetworkInfo(1).isConnectedOrConnecting();
     }
 
     public void setSession(String sessionId) {

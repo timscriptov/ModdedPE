@@ -37,8 +37,6 @@
 
     <application
         android:name="com.mcal.mcpelauncher.ModdedPEApplication"
-        android:usesCleartextTraffic="true"
-        android:networkSecurityConfig="@xml/network_security_config"
         android:allowBackup="false"
         android:fullBackupContent="false"
         android:debuggable="false"
@@ -220,6 +218,23 @@
                 <category
                     android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            <intent-filter>
+                <action
+                    android:name="xbox_live_game_invite" />
+                <action
+                    android:name="xbox_live_achievement_unlock" />
+                <category
+                    android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.VIEW" />
+                <category
+                    android:name="android.intent.category.DEFAULT" />
+                <category
+                    android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="minecraft" />
+            </intent-filter>
             <!-- intent-filter>
                 <action
                     android:name="android.intent.action.VIEW" />
@@ -272,6 +287,41 @@
         <service
             android:name="com.mojang.minecraftpe.ImportService"
             android:exported="true" />
+
+        <meta-data
+            android:name="xperiaplayoptimized_content"
+            android:resource="@string/xperiaplayoptimized_content" />
+        <meta-data
+            android:name="game_display_name"
+            android:resource="@string/app_name" />
+        <meta-data
+            android:name="game_icon"
+            android:resource="@mipmap/ic_launcher_round" />
+        <meta-data
+            android:name="appcenter_android_id"
+            android:value="@string/appcenter_android_id" />
+        <receiver
+            android:name="com.appsflyer.SingleInstallBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action
+                    android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+        <uses-library
+            android:name="xperiaplaycertified"
+            android:required="false" />
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND"
+            android:exported="true">
+            <intent-filter>
+                <action
+                    android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category
+                    android:name="com.mojang.minecraftpe" />
+            </intent-filter>
+        </receiver>
 
         <!-- Xbox Live SDK -->
 

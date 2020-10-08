@@ -3,6 +3,7 @@
     <color name="colorAccent">#FF448aff</color>
 
     <!-- Minecraft -->
+    <color name="mojang_red">#ef323d</color>
     <color name="msal_loading" tools:override="true">#0078D4</color>
     <color name="com_facebook_blue">#3b5998</color>
     <color name="com_facebook_messenger_blue">#0084ff</color>
