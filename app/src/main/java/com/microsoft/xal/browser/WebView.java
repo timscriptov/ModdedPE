@@ -22,6 +22,8 @@ import com.microsoft.aad.adal.AuthenticationConstants;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -130,7 +132,7 @@ public class WebView extends AppCompatActivity {
             if (showType == ShowUrlType.NonAuthFlow) {
                 useInProcBrowser = true;
             }
-            @SuppressLint("WrongConstant") ResolveInfo defaultBrowser = this.getPackageManager().resolveActivity(new Intent("android.intent.action.VIEW", Uri.parse(AuthenticationConstants.Broker.REDIRECT_SSL_PREFIX)), 65536);
+            @SuppressLint("WrongConstant") ResolveInfo defaultBrowser = getPackageManager().resolveActivity(new Intent("android.intent.action.VIEW", Uri.parse(AuthenticationConstants.Broker.REDIRECT_SSL_PREFIX)), 65536);
             String defaultBrowserPackageName = defaultBrowser == null ? null : defaultBrowser.activityInfo.packageName;
             if (useInProcBrowser) {
                 Log.e(TAG, "onCreate() Operation requested in-proc. Choosing WebKit strategy.");
@@ -144,7 +146,7 @@ public class WebView extends AppCompatActivity {
                 int versionCode = -1;
                 String versionName = "unknown";
                 try {
-                    PackageInfo info = this.getPackageManager().getPackageInfo(defaultBrowserPackageName, 0);
+                    PackageInfo info = getPackageManager().getPackageInfo(defaultBrowserPackageName, 0);
                     versionCode = info.versionCode;
                     versionName = info.versionName;
                 } catch (PackageManager.NameNotFoundException e) {
@@ -166,7 +168,7 @@ public class WebView extends AppCompatActivity {
             }
         } else {
             Log.e(TAG, "onCreate() Called with data. Dropping flow and starting app's main activity.");
-            Intent mainActivityIntent = this.getPackageManager().getLaunchIntentForPackage(this.getPackageName());
+            Intent mainActivityIntent = getPackageManager().getLaunchIntentForPackage(getPackageName());
             startActivity(mainActivityIntent);
             finish();
         }
@@ -300,7 +302,7 @@ public class WebView extends AppCompatActivity {
             return false;
         }
         try {
-            @SuppressLint("WrongConstant") PackageInfo packageInfo = this.getPackageManager().getPackageInfo(browserPackageName, 64);
+            @SuppressLint("WrongConstant") PackageInfo packageInfo = getPackageManager().getPackageInfo(browserPackageName, 64);
             if (packageInfo == null) {
                 Log.e(TAG, "No package info found for package: " + browserPackageName);
                 return false;

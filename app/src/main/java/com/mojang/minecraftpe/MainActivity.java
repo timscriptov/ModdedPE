@@ -65,6 +65,7 @@ import androidx.core.content.ContextCompat;
 
 import com.appsflyer.AppsFlyerLib;
 import com.mcal.mcpelauncher.services.SoundService;
+import com.mojang.minecraftpe.input.InputDeviceManager;
 import com.mojang.minecraftpe.platforms.Platform;
 
 import org.fmod.FMOD;
@@ -116,7 +117,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
     Messenger mService = null;
     Platform platform;
     TextInputProxyEditTextbox textInputWidget;
-    private Context mMinecraftAPKContext;
     private boolean _fromOnCreate = false;
     private int _userInputStatus = -1;
     private String[] _userInputText = null;
@@ -124,6 +124,8 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
     private Locale initialUserLocale;
     private long mCallback = 0;
     private SessionInfo mLastDeviceSessionInfo = null;
+    private InputDeviceManager deviceManager;
+
 
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
@@ -225,13 +227,13 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
     }
 
     public SessionInfo getLastDeviceSessionInfo() {
-        if (this.mLastDeviceSessionInfo == null) {
-            this.mLastDeviceSessionInfo = SessionInfo.fromString(PreferenceManager.getDefaultSharedPreferences(this).getString("last-session-info", ""));
-            Log.i("ModdedPE", "getLastDeviceSessionInfo was null and now: " + this.mLastDeviceSessionInfo.toString());
+        if (mLastDeviceSessionInfo == null) {
+            mLastDeviceSessionInfo = SessionInfo.fromString(PreferenceManager.getDefaultSharedPreferences(this).getString("last-session-info", ""));
+            Log.i("ModdedPE", "getLastDeviceSessionInfo was null and now: " + mLastDeviceSessionInfo.toString());
         } else {
-            Log.i("ModdedPE", "getLastDeviceSessionInfo was not null with: " + this.mLastDeviceSessionInfo.toString());
+            Log.i("ModdedPE", "getLastDeviceSessionInfo was not null with: " + mLastDeviceSessionInfo.toString());
         }
-        return this.mLastDeviceSessionInfo;
+        return mLastDeviceSessionInfo;
     }
 
     public void setLastDeviceSessionInfo(@NotNull SessionInfo info) {
@@ -436,11 +438,16 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         platform = Platform.createPlatform(true);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         FMOD.init(this);
+        deviceManager = InputDeviceManager.create(this);
         platform.onAppStart(getWindow().getDecorView());
         mHasStoragePermission = ContextCompat.checkSelfPermission(this, "android.permission.WRITE_EXTERNAL_STORAGE") == 0;
+        headsetConnectionReceiver = new HeadsetConnectionReceiver();
+
         nativeSetHeadphonesConnected(((AudioManager) getSystemService("audio")).isWiredHeadsetOn());
         clipboardManager = (ClipboardManager) getSystemService("clipboard");
         initialUserLocale = Locale.getDefault();
+        AppConstants.loadFromContext(getApplicationContext());
+        SessionInfo lastDeviceSessionInfo = getLastDeviceSessionInfo();
         mInstance = this;
         _fromOnCreate = true;
         textInputWidget = createTextWidget();
@@ -500,7 +507,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
                     } else if ("file".equalsIgnoreCase(scheme)) {
                         nativeProcessIntentUriQuery("fileIntent", uri.getPath() + "&" + uri.getPath());
                     } else if ("content".equalsIgnoreCase(scheme)) {
-                        File file = new File(getApplicationContext().getCacheDir() + "/" + new File(uri.getPath()).getName());
+                        File file = new File(getApplicationContext().getCacheDir() + com.appsflyer.share.Constants.URL_PATH_DELIMITER + new File(uri.getPath()).getName());
                         try {
                             InputStream input = getContentResolver().openInputStream(uri);
                             try {
@@ -535,15 +542,14 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
                                     Log.e("ModdedPE", "IOException while closing input stream\n" + ioe22.toString());
                                 }
                             } catch (Throwable th) {
-                                th.printStackTrace();
                                 try {
                                     input.close();
                                 } catch (IOException ioe23) {
                                     Log.e("ModdedPE", "IOException while closing input stream\n" + ioe23.toString());
                                 }
+                                throw th;
                             }
                         } catch (IOException ioe3) {
-                            ioe3.printStackTrace();
                             Log.e("ModdedPE", "IOException while opening file from content intent\n" + ioe3.toString());
                         }
                     }
@@ -554,13 +560,13 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
                     String command = json2.getString("Command");
                     if (command.equals("keyboardResult")) {
                         nativeSetTextboxText(json2.getString("Text"));
-                    } else if (command.equals("fileDialogResult") && this.mFileDialogCallback != 0) {
+                    } else if (command.equals("fileDialogResult") && mFileDialogCallback != 0) {
                         if (json2.getString("Result").equals("Ok")) {
-                            nativeOnPickImageSuccess(this.mFileDialogCallback, json2.getString("Path"));
+                            nativeOnPickImageSuccess(mFileDialogCallback, json2.getString("Path"));
                         } else {
-                            nativeOnPickImageCanceled(this.mFileDialogCallback);
+                            nativeOnPickImageCanceled(mFileDialogCallback);
                         }
-                        this.mFileDialogCallback = 0;
+                        mFileDialogCallback = 0;
                     }
                 } catch (JSONException e2) {
                     Log.d("ModdedPE", "JSONObject exception:" + e2.toString());
@@ -568,6 +574,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
             }
         }
     }
+
 
     public boolean dispatchKeyEvent(@NotNull KeyEvent event) {
         if (nativeKeyHandler(event.getKeyCode(), event.getAction())) {
@@ -1099,6 +1106,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         return true;
     }
 
+    @SuppressLint("WrongConstant")
     public boolean isOnWifi() {
         return ((ConnectivityManager) getSystemService("connectivity")).getNetworkInfo(1).isConnectedOrConnecting();
     }
@@ -1260,8 +1268,9 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
     public void onStart() {
         Log.d("ModdedPE", "onStart");
         super.onStart();
-        if (this._fromOnCreate) {
-            this._fromOnCreate = false;
+        deviceManager.register();
+        if (_fromOnCreate) {
+            _fromOnCreate = false;
             processIntent(getIntent());
         }
         /**********************************
@@ -1324,16 +1333,16 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         }).start();
     */
 
-        registerReceiver(this.headsetConnectionReceiver, new IntentFilter("android.intent.action.HEADSET_PLUG"));
+        registerReceiver(headsetConnectionReceiver, new IntentFilter("android.intent.action.HEADSET_PLUG"));
         if (isTextWidgetActive()) {
-            String oldText = this.textInputWidget.getText().toString();
-            int maxNumCharacters = this.textInputWidget.allowedLength;
-            if ((this.textInputWidget.getInputType() & 2) == 2) {
+            String oldText = textInputWidget.getText().toString();
+            int maxNumCharacters = textInputWidget.allowedLength;
+            if ((textInputWidget.getInputType() & 2) == 2) {
                 numbersOnly = true;
             } else {
                 numbersOnly = false;
             }
-            if ((this.textInputWidget.getInputType() & 131072) == 131072) {
+            if ((textInputWidget.getInputType() & 131072) == 131072) {
                 isMultiline = true;
             } else {
                 isMultiline = false;
@@ -1341,7 +1350,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
             dismissTextWidget();
             showKeyboard(oldText, maxNumCharacters, false, numbersOnly, isMultiline);
         }
-        for (ActivityListener listener : this.mActivityListeners) {
+        for (ActivityListener listener : mActivityListeners) {
             listener.onResume();
         }
     }
@@ -1359,7 +1368,8 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         Log.d("MinecraftPE", "onStop");
         nativeStopThis();
         super.onStop();
-        for (ActivityListener listener : this.mActivityListeners) {
+        deviceManager.unregister();
+        for (ActivityListener listener : mActivityListeners) {
             listener.onStop();
         }
         /**********************************
@@ -1448,6 +1458,8 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String[] filePathColumn = new String[]{"_data"};
+        Cursor cursor;
         super.onActivityResult(requestCode, resultCode, data);
         for (ActivityListener listener : mActivityListeners) {
             listener.onActivityResult(requestCode, resultCode, data);
@@ -1457,15 +1469,11 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         }
         if (resultCode == -1 && data != null) {
             Uri selectedImage = data.getData();
-            if (selectedImage != null) {
-                String[] filePathColumn = new String[]{"_data"};
-                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                if (cursor != null) {
-                    cursor.moveToFirst();
-                    nativeOnPickImageSuccess(mCallback, cursor.getString(cursor.getColumnIndex(filePathColumn[0])));
-                    mCallback = 0;
-                    cursor.close();
-                }
+            if (selectedImage != null && (cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null)) != null) {
+                cursor.moveToFirst();
+                nativeOnPickImageSuccess(mCallback, cursor.getString(cursor.getColumnIndex(filePathColumn[0])));
+                this.mCallback = 0;
+                cursor.close();
             }
         } else if (mCallback != 0) {
             nativeOnPickImageCanceled(mCallback);
@@ -1568,9 +1576,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
     }
 
     public void initializeXboxLive(long xalInitArgs, long xblInitArgs) {
-        final long j = xalInitArgs;
-        final long j2 = xblInitArgs;
-        runOnUiThread(() -> nativeInitializeXboxLive(j, j2));
+        runOnUiThread(() -> nativeInitializeXboxLive(xalInitArgs, xblInitArgs));
     }
 
     enum MessageConnectionStatus {
