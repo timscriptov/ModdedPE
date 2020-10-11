@@ -18,6 +18,8 @@ package com.mcal.pesdk.nmod;
 
 import android.content.Context;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 
 /**
@@ -45,7 +47,7 @@ class NModFilePathManager {
         return new File(mContext.getFilesDir().getAbsolutePath() + File.separator + FILEPATH_DIR_NAME_NMOD_JSON_PACKS);
     }
 
-    File getNModJsonPath(NMod nmod) {
+    File getNModJsonPath(@NotNull NMod nmod) {
         return new File(getNModJsonDir(), nmod.getPackageName());
     }
 
@@ -53,7 +55,7 @@ class NModFilePathManager {
         return new File(mContext.getFilesDir().getAbsolutePath() + File.separator + FILEPATH_DIR_NAME_NMOD_TEXT_PACKS);
     }
 
-    File getNModTextPath(NMod nmod) {
+    File getNModTextPath(@NotNull NMod nmod) {
         return new File(getNModTextDir(), nmod.getPackageName());
     }
 
@@ -73,7 +75,7 @@ class NModFilePathManager {
         return new File(mContext.getFilesDir().getAbsolutePath() + File.separator + FILEPATH_DIR_NAME_NMOD_ICON);
     }
 
-    File getNModIconPath(NMod nmod) {
+    File getNModIconPath(@NotNull NMod nmod) {
         return new File(getNModIconDir().getAbsolutePath() + File.separator + nmod.getPackageName());
     }
 }

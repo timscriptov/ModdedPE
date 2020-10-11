@@ -17,7 +17,6 @@
 package com.mcal.mcpelauncher.activities;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
@@ -37,7 +37,6 @@ import com.mcal.pesdk.nmod.NMod;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * @author Тимашков Иван
@@ -51,7 +50,7 @@ public class NModPackagePickerActivity extends BaseActivity {
     private UIHandler mUIHandler = new UIHandler();
     private ArrayList<NMod> nmods = new ArrayList<>();
 
-    public static void startThisActivity(Activity context) {
+    public static void startThisActivity(AppCompatActivity context) {
         Intent intent = new Intent(context, NModPackagePickerActivity.class);
         context.startActivityForResult(intent, REQUEST_PICK_PACKAGE);
     }
@@ -115,12 +114,7 @@ public class NModPackagePickerActivity extends BaseActivity {
     private class PackageListAdapter extends BaseAdapter {
 
         public PackageListAdapter() {
-            Collections.sort(nmods, new Comparator<NMod>() {
-                @Override
-                public int compare(NMod o1, NMod o2) {
-                    return o1.getName().compareToIgnoreCase(o2.getName());
-                }
-            });
+            Collections.sort(nmods, (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
         }
 
         @Override
@@ -151,23 +145,17 @@ public class NModPackagePickerActivity extends BaseActivity {
             name.setText(nmod.getName());
             AppCompatTextView pkgname = baseCardView.findViewById(R.id.nmod_picker_package_item_card_view_text_package_name);
             pkgname.setText(nmod.getPackageName());
-            baseCardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View p1) {
-                    Intent intent = new Intent();
-                    Bundle extras = new Bundle();
-                    extras.putString(TAG_PACKAGE_NAME, nmod.getPackageName());
-                    intent.putExtras(extras);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
+            baseCardView.setOnClickListener(p11 -> {
+                Intent intent = new Intent();
+                Bundle extras = new Bundle();
+                extras.putString(TAG_PACKAGE_NAME, nmod.getPackageName());
+                intent.putExtras(extras);
+                setResult(RESULT_OK, intent);
+                finish();
             });
-            baseCardView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View p1) {
-                    NModDescriptionActivity.startThisActivity(NModPackagePickerActivity.this, nmod);
-                    return false;
-                }
+            baseCardView.setOnLongClickListener(p112 -> {
+                NModDescriptionActivity.startThisActivity(NModPackagePickerActivity.this, nmod);
+                return false;
             });
             return baseCardView;
         }

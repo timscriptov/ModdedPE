@@ -18,6 +18,9 @@ package com.mcal.pesdk.nmod;
 
 import android.content.Context;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -87,7 +90,7 @@ class NModManager {
         }
     }
 
-    private void forEachItemToAddNMod(ArrayList<String> list, boolean enabled) {
+    private void forEachItemToAddNMod(@NotNull ArrayList<String> list, boolean enabled) {
         for (String packageName : list) {
             try {
                 String zippedNModPath = new NModFilePathManager(mContext).getNModsDir() + File.separator + packageName;
@@ -140,6 +143,7 @@ class NModManager {
         }
     }
 
+    @Nullable
     private NMod getImportedNMod(String pkgname) {
         for (NMod nmod : mAllNMods)
             if (nmod.getPackageName().equals(pkgname))
@@ -171,7 +175,7 @@ class NModManager {
         }
     }
 
-    void setEnabled(NMod nmod) {
+    void setEnabled(@NotNull NMod nmod) {
         if (nmod.isBugPack())
             return;
         NModDataLoader dataloader = new NModDataLoader(mContext);

@@ -63,13 +63,17 @@ public class MainStartFragment extends BaseFragment {
 
     private void startMinecraft() {
         if (Preferences.isSafeMode()) {
-            new AlertDialog.Builder(getActivity()).setTitle(R.string.safe_mode_on_title).setMessage(R.string.safe_mode_on_message).
-                    setPositiveButton(android.R.string.ok, (p1, p2) -> {
-                        Intent intent = new Intent(getActivity(), PreloadActivity.class);
-                        startActivity(intent);
-                        getActivity().finish();
-                        p1.dismiss();
-                    }).setNegativeButton(android.R.string.cancel, (p1, p2) -> p1.dismiss()).show();
+            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+            dialog.setTitle(R.string.safe_mode_on_title);
+            dialog.setMessage(R.string.safe_mode_on_message);
+            dialog.setPositiveButton(android.R.string.ok, (p1, p2) -> {
+                Intent intent = new Intent(getActivity(), PreloadActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+                p1.dismiss();
+            });
+            dialog.setNegativeButton(android.R.string.cancel, (p1, p2) -> p1.dismiss());
+            dialog.show();
         } else {
             startActivity(new Intent(getActivity(), PreloadActivity.class));
             getActivity().finish();

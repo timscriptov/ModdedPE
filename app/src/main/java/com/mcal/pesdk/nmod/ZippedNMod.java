@@ -23,6 +23,8 @@ import android.graphics.BitmapFactory;
 
 import com.mcal.pesdk.ABIInfo;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -56,18 +58,15 @@ public class ZippedNMod extends NMod {
 
         try {
             mAssets = AssetManager.class.newInstance();
-        } catch (InstantiationException e) {
-        } catch (IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
         }
 
         try {
             Method method = AssetManager.class.getMethod("addAssetPath", String.class);
             method.invoke(mAssets, file.getPath());
-        } catch (NoSuchMethodException e) {
-        } catch (SecurityException e) {
-        } catch (InvocationTargetException e) {
-        } catch (IllegalAccessException e) {
-        } catch (IllegalArgumentException e) {
+        } catch (NoSuchMethodException | SecurityException | InvocationTargetException | IllegalArgumentException | IllegalAccessException e) {
+            e.printStackTrace();
         }
         preload();
     }
@@ -93,7 +92,6 @@ public class ZippedNMod extends NMod {
                 libInputStream.close();
                 writerStream.close();
             }
-
         }
 
         zipInput.close();
@@ -134,6 +132,7 @@ public class ZippedNMod extends NMod {
         return mFilePath.getPath();
     }
 
+    @NotNull
     private String getNativeLibsPath() {
         return new NModFilePathManager(mContext).getNModLibsDir() + File.separator + getPackageName();
     }

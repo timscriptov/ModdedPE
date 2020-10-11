@@ -22,7 +22,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.View;
 
 import androidx.appcompat.widget.AppCompatTextView;
 
@@ -77,7 +76,7 @@ public class ImportNModActivity extends BaseActivity {
 
     private void onFailedViewMoreClicked() {
         setContentView(R.layout.nmod_importer_failed);
-        AppCompatTextView errorText = (AppCompatTextView) findViewById(R.id.nmod_importer_failed_text_view);
+        AppCompatTextView errorText = findViewById(R.id.nmod_importer_failed_text_view);
         errorText.setText(getString(R.string.nmod_import_failed_full_info_message, new Object[]{mFailedInfo.toTypeString(), mFailedInfo.getCause().toString()}));
     }
 
@@ -92,7 +91,6 @@ public class ImportNModActivity extends BaseActivity {
         @Override
         public void run() {
             super.run();
-
             try {
                 ZippedNMod zippedNMod = getPESdk().getNModAPI().archiveZippedNMod(mTargetFile.getAbsolutePath());
                 getPESdk().getNModAPI().importNMod(zippedNMod);
@@ -117,26 +115,14 @@ public class ImportNModActivity extends BaseActivity {
             super.handleMessage(msg);
             if (msg.what == MSG_SUCCEED) {
                 setContentView(R.layout.nmod_importer_succeed);
-                findViewById(R.id.import_succeed_view_more_button).setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View p1) {
-                        onViewMoreClicked();
-                    }
-                });
+                findViewById(R.id.import_succeed_view_more_button).setOnClickListener(p1 -> onViewMoreClicked());
                 mTargetNMod = (NMod) msg.obj;
             } else if (msg.what == MSG_FAILED) {
                 setContentView(R.layout.nmod_importer_failed_msg);
-                findViewById(R.id.import_failed_view_more_button).setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View p1) {
-                        onFailedViewMoreClicked();
-                    }
-                });
+                findViewById(R.id.import_failed_view_more_button).setOnClickListener(p1 -> onFailedViewMoreClicked());
                 mFailedInfo = (ExtractFailedException) msg.obj;
                 setTitle(R.string.nmod_import_failed);
-                AppCompatTextView errorText = (AppCompatTextView) findViewById(R.id.nmod_import_failed_title_text_view);
+                AppCompatTextView errorText = findViewById(R.id.nmod_import_failed_title_text_view);
                 switch (mFailedInfo.getType()) {
                     case ExtractFailedException.TYPE_DECODE_FAILED:
                         errorText.setText(R.string.nmod_import_failed_message_decode);

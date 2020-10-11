@@ -19,6 +19,8 @@ package com.mcal.pesdk.nmod;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 /**
@@ -35,7 +37,8 @@ class NModDataLoader {
         mContext = context;
     }
 
-    private static ArrayList<String> toArrayList(String str) {
+    @NotNull
+    private static ArrayList<String> toArrayList(@NotNull String str) {
         String[] mStr = str.split("/");
         ArrayList<String> list = new ArrayList<>();
         for (String strElement : mStr) {
@@ -86,7 +89,7 @@ class NModDataLoader {
         return mContext.getSharedPreferences(TAG_SHARED_PREFERENCE, Context.MODE_PRIVATE);
     }
 
-    private void addNewEnabled(NMod nmod) {
+    private void addNewEnabled(@NotNull NMod nmod) {
         SharedPreferences preferences = getSharedPreferences();
         ArrayList<String> enabledList = getEnabledList();
         ArrayList<String> disableList = getDisabledList();
@@ -99,7 +102,7 @@ class NModDataLoader {
         editor.apply();
     }
 
-    private void removeEnabled(NMod nmod) {
+    private void removeEnabled(@NotNull NMod nmod) {
         SharedPreferences preferences = getSharedPreferences();
         ArrayList<String> enabledList = getEnabledList();
         ArrayList<String> disableList = getDisabledList();
@@ -112,7 +115,7 @@ class NModDataLoader {
         editor.apply();
     }
 
-    void upNMod(NMod nmod) {
+    void upNMod(@NotNull NMod nmod) {
         SharedPreferences preferences = getSharedPreferences();
         ArrayList<String> enabledList = getEnabledList();
         int index = enabledList.indexOf(nmod.getPackageName());
@@ -130,7 +133,7 @@ class NModDataLoader {
         editor.apply();
     }
 
-    void downNMod(NMod nmod) {
+    void downNMod(@NotNull NMod nmod) {
         SharedPreferences preferences = getSharedPreferences();
         ArrayList<String> enabledList = getEnabledList();
         int index = enabledList.indexOf(nmod.getPackageName());

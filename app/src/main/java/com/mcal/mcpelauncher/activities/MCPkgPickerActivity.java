@@ -17,9 +17,6 @@
 package com.mcal.mcpelauncher.activities;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -33,6 +30,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
@@ -53,7 +52,7 @@ public class MCPkgPickerActivity extends BaseActivity {
     private UIHandler mUIHandler = new UIHandler();
     private List<PackageInfo> mInstalledPackages = null;
 
-    public static void startThisActivity(Activity context) {
+    public static void startThisActivity(AppCompatActivity context) {
         Intent intent = new Intent(context, MCPkgPickerActivity.class);
         context.startActivityForResult(intent, REQUEST_PICK_PACKAGE);
     }
@@ -68,12 +67,7 @@ public class MCPkgPickerActivity extends BaseActivity {
         View loading_view = findViewById(R.id.pkg_picker_package_loading_view);
         loading_view.setVisibility(View.VISIBLE);
 
-        findViewById(R.id.pkg_picker_reset_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View p1) {
-                onResetClicked();
-            }
-        });
+        findViewById(R.id.pkg_picker_reset_button).setOnClickListener(p1 -> onResetClicked());
         new LoadingThread().start();
     }
 
@@ -97,23 +91,20 @@ public class MCPkgPickerActivity extends BaseActivity {
     }
 
     private void onResetClicked() {
-        new AlertDialog.Builder(this).setTitle(R.string.pick_tips_title).setMessage(R.string.pick_tips_reset_message).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface p1, int p2) {
-                p1.dismiss();
-                Intent intent = new Intent();
-                Bundle extras = new Bundle();
-                extras.putString("package_name", "com.mojang.minecraftpe");
-                intent.putExtras(extras);
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-        }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface p1, int p2) {
-                p1.dismiss();
-            }
-        }).show();
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
+        dialog.setTitle(R.string.pick_tips_title);
+        dialog.setMessage(R.string.pick_tips_reset_message);
+        dialog.setPositiveButton(android.R.string.ok, (p1, p2) -> {
+            p1.dismiss();
+            Intent intent = new Intent();
+            Bundle extras = new Bundle();
+            extras.putString("package_name", "com.mojang.minecraftpe");
+            intent.putExtras(extras);
+            setResult(RESULT_OK, intent);
+            finish();
+        });
+        dialog.setNegativeButton(android.R.string.cancel, (p1, p2) -> p1.dismiss());
+        dialog.show();
     }
 
     @SuppressLint("HandlerLeak")
@@ -135,12 +126,14 @@ public class MCPkgPickerActivity extends BaseActivity {
             try {
                 Thread.sleep(2500);
             } catch (InterruptedException e) {
+                e.printStackTrace();
             }
             mInstalledPackages = getPackageManager().getInstalledPackages(PackageManager.GET_CONFIGURATIONS);
-            if (mInstalledPackages != null && mInstalledPackages.size() > 0)
+            if (mInstalledPackages != null && mInstalledPackages.size() > 0) {
                 mUIHandler.sendEmptyMessage(MSG_SHOW_LIST_VIEW);
-            else
+            } else {
                 mUIHandler.sendEmptyMessage(MSG_SHOW_UNFOUND_VIEW);
+            }
         }
     }
 
@@ -191,29 +184,21 @@ public class MCPkgPickerActivity extends BaseActivity {
             name.setText(pkg.applicationInfo.loadLabel(getPackageManager()));
             AppCompatTextView pkgname = baseCardView.findViewById(R.id.pkg_picker_package_item_card_view_text_package_name);
             pkgname.setText(pkg.packageName);
-            baseCardView.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View p1) {
-                    new AlertDialog.Builder(MCPkgPickerActivity.this).setTitle(R.string.pick_tips_title).setMessage(getString(R.string.pick_tips_message, new Object[]{pkg.packageName, pkg.applicationInfo.loadLabel(getPackageManager())})).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface p1, int p2) {
-                            p1.dismiss();
-                            Intent intent = new Intent();
-                            Bundle extras = new Bundle();
-                            extras.putString("package_name", pkg.packageName);
-                            intent.putExtras(extras);
-                            setResult(RESULT_OK, intent);
-                            finish();
-                        }
-                    }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface p1, int p2) {
-                            p1.dismiss();
-                        }
-                    }).show();
-                }
+            baseCardView.setOnClickListener(p113 -> {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(MCPkgPickerActivity.this, R.style.AlertDialogTheme);
+                dialog.setTitle(R.string.pick_tips_title);
+                dialog.setMessage(getString(R.string.pick_tips_message, new Object[]{pkg.packageName, pkg.applicationInfo.loadLabel(getPackageManager())}));
+                dialog.setPositiveButton(android.R.string.ok, (p11, p21) -> {
+                    p11.dismiss();
+                    Intent intent = new Intent();
+                    Bundle extras = new Bundle();
+                    extras.putString("package_name", pkg.packageName);
+                    intent.putExtras(extras);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                });
+                dialog.setNegativeButton(android.R.string.cancel, (p112, p212) -> p112.dismiss());
+                dialog.show();
             });
             return baseCardView;
         }

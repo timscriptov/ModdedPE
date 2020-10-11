@@ -18,8 +18,6 @@ package com.mcal.mcpelauncher.fragments;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -37,6 +35,7 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -100,7 +99,10 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
     public void onStart() {
         super.onStart();
         if (mDataPreloader == null && !getPESdk().isInited()) {
-            mReloadDialog = new AlertDialog.Builder(getActivity()).setTitle(R.string.main_reloading_title).setView(R.layout.moddedpe_main_reload_dialog).setCancelable(false).create();
+            AlertDialog.Builder mReloadDialog = new AlertDialog.Builder(getActivity());
+            mReloadDialog.setTitle(R.string.main_reloading_title);
+            mReloadDialog.setView(R.layout.moddedpe_main_reload_dialog);
+            mReloadDialog.setCancelable(false);
             mReloadDialog.show();
             mDataPreloader = new DataPreloader(this);
             mDataPreloader.preload(getActivity().getApplicationContext());
@@ -115,7 +117,7 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == AppCompatActivity.RESULT_OK) {
             if (requestCode == NModPackagePickerActivity.REQUEST_PICK_PACKAGE) {
                 //picked from package
                 onPickedNModFromPackage(data.getExtras().getString(NModPackagePickerActivity.TAG_PACKAGE_NAME));
@@ -187,12 +189,9 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
     }
 
     public void showPickNModFailedDialog(@NotNull ExtractFailedException archiveFailedException) {
-        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity()).setTitle(R.string.nmod_import_failed).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface p1, int p2) {
-                p1.dismiss();
-            }
-        });
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
+        alertBuilder.setTitle(R.string.nmod_import_failed);
+        alertBuilder.setPositiveButton(android.R.string.ok, (p1, p2) -> p1.dismiss());
         switch (archiveFailedException.getType()) {
             case ExtractFailedException.TYPE_DECODE_FAILED:
                 alertBuilder.setMessage(R.string.nmod_import_failed_message_decode);
@@ -224,18 +223,13 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
         }
         if (archiveFailedException.getCause() != null) {
             final ExtractFailedException fArchiveFailedException = archiveFailedException;
-            alertBuilder.setNegativeButton(R.string.nmod_import_failed_button_full_info, new DialogInterface.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface p1, int p2) {
-                    p1.dismiss();
-                    new AlertDialog.Builder(getActivity()).setTitle(R.string.nmod_import_failed_full_info_title).setMessage(getActivity().getResources().getString(R.string.nmod_import_failed_full_info_message, new Object[]{fArchiveFailedException.toTypeString(), fArchiveFailedException.getCause().toString()})).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface p1_, int p2) {
-                            p1_.dismiss();
-                        }
-                    }).show();
-                }
+            alertBuilder.setNegativeButton(R.string.nmod_import_failed_button_full_info, (p1, p2) -> {
+                p1.dismiss();
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                dialog.setTitle(R.string.nmod_import_failed_full_info_title);
+                dialog.setMessage(getActivity().getResources().getString(R.string.nmod_import_failed_full_info_message, fArchiveFailedException.toTypeString(), fArchiveFailedException.getCause().toString()));
+                dialog.setPositiveButton(android.R.string.ok, (p1_, p21) -> p1_.dismiss());
+                dialog.show();
             });
         }
         alertBuilder.show();
@@ -257,15 +251,11 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
     private void showBugDialog(@NotNull NMod nmod) {
         if (!nmod.isBugPack())
             return;
-        new AlertDialog.Builder(getActivity()).setTitle(R.string.load_fail_title).setMessage(getString(R.string.load_fail_msg, new Object[]{nmod.getLoadException().toTypeString(), nmod.getLoadException().getCause().toString()})).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface p1, int p2) {
-                p1.dismiss();
-            }
-
-
-        }).show();
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+        dialog.setTitle(R.string.load_fail_title);
+        dialog.setMessage(getString(R.string.load_fail_msg, nmod.getLoadException().toTypeString(), nmod.getLoadException().getCause().toString()));
+        dialog.setPositiveButton(android.R.string.ok, (p1, p2) -> p1.dismiss());
+        dialog.show();
     }
 
     @NotNull
@@ -279,19 +269,14 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
     @NotNull
     private View createAddNewView() {
         View convertView = LayoutInflater.from(getActivity()).inflate(R.layout.moddedpe_nmod_item_new, null);
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View p1) {
-                onAddNewNMod();
-            }
-        });
+        convertView.setOnClickListener(p1 -> onAddNewNMod());
         return convertView;
     }
 
     @NotNull
     private View createDisabledNModView(NMod nmod_) {
         final NMod nmod = nmod_;
-        View convertView = null;
+        View convertView;
         if (nmod.isBugPack()) {
             convertView = LayoutInflater.from(getActivity()).inflate(R.layout.moddedpe_nmod_item_bugged, null);
             AppCompatTextView textTitle = convertView.findViewById(R.id.nmod_bugged_item_card_view_text_name);
@@ -304,31 +289,19 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
                 nmodIcon = BitmapFactory.decodeResource(getResources(), R.drawable.mcd_null_pack);
             imageIcon.setImageBitmap(nmodIcon);
             AppCompatImageButton infoButton = convertView.findViewById(R.id.nmod_bugged_info);
-            View.OnClickListener onInfoClickedListener = new View.OnClickListener() {
-                @Override
-                public void onClick(View p1) {
-                    showBugDialog(nmod);
-                }
-            };
+            View.OnClickListener onInfoClickedListener = p1 -> showBugDialog(nmod);
             AppCompatImageButton deleteButton = convertView.findViewById(R.id.nmod_bugged_delete);
-            deleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View p1) {
-                    new AlertDialog.Builder(getActivity()).setTitle(R.string.nmod_delete_title).setMessage(R.string.nmod_delete_message).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface p1, int p2) {
-                            getPESdk().getNModAPI().removeImportedNMod(nmod);
-                            refreshNModDatas();
-                            p1.dismiss();
-                        }
-                    }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface p1, int p2) {
-                            p1.dismiss();
-                        }
-                    }).show();
-                }
+            deleteButton.setOnClickListener(p1 -> {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                dialog.setTitle(R.string.nmod_delete_title);
+                dialog.setMessage(R.string.nmod_delete_message);
+                dialog.setPositiveButton(android.R.string.ok, (p112, p2) -> {
+                    getPESdk().getNModAPI().removeImportedNMod(nmod);
+                    refreshNModDatas();
+                    p112.dismiss();
+                });
+                dialog.setNegativeButton(android.R.string.cancel, (p11, p2) -> p11.dismiss());
+                dialog.show();
             });
             infoButton.setOnClickListener(onInfoClickedListener);
             convertView.setOnClickListener(onInfoClickedListener);
@@ -345,46 +318,31 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
             nmodIcon = BitmapFactory.decodeResource(getResources(), R.drawable.mcd_null_pack);
         imageIcon.setImageBitmap(nmodIcon);
         AppCompatImageButton addButton = convertView.findViewById(R.id.nmod_disabled_add);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View p1) {
-                getPESdk().getNModAPI().setEnabled(nmod, true);
-                refreshNModDatas();
-            }
+        addButton.setOnClickListener(p1 -> {
+            getPESdk().getNModAPI().setEnabled(nmod, true);
+            refreshNModDatas();
         });
         AppCompatImageButton deleteButton = convertView.findViewById(R.id.nmod_disabled_delete);
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View p1) {
-                new AlertDialog.Builder(getActivity()).setTitle(R.string.nmod_delete_title).setMessage(R.string.nmod_delete_message).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface p1, int p2) {
-                        getPESdk().getNModAPI().removeImportedNMod(nmod);
-                        refreshNModDatas();
-                        p1.dismiss();
-                    }
-                }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface p1, int p2) {
-                        p1.dismiss();
-                    }
-                }).show();
-            }
+        deleteButton.setOnClickListener(p1 -> {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+            dialog.setTitle(R.string.nmod_delete_title);
+            dialog.setMessage(R.string.nmod_delete_message);
+            dialog.setPositiveButton(android.R.string.ok, (p114, p2) -> {
+                getPESdk().getNModAPI().removeImportedNMod(nmod);
+                refreshNModDatas();
+                p114.dismiss();
+            });
+            dialog.setNegativeButton(android.R.string.cancel, (p113, p2) -> p113.dismiss());
+            dialog.show();
         });
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View p1) {
-                NModDescriptionActivity.startThisActivity(getActivity(), nmod);
-            }
-        });
+        convertView.setOnClickListener(p1 -> NModDescriptionActivity.startThisActivity(getActivity(), nmod));
         return convertView;
     }
 
     @NotNull
     private View createEnabledNModView(NMod nmod_) {
         final NMod nmod = nmod_;
-        View convertView = null;
+        View convertView;
         if (nmod.isBugPack()) {
             convertView = LayoutInflater.from(getActivity()).inflate(R.layout.moddedpe_nmod_item_bugged, null);
             AppCompatTextView textTitle = convertView.findViewById(R.id.nmod_bugged_item_card_view_text_name);
@@ -397,31 +355,19 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
                 nmodIcon = BitmapFactory.decodeResource(getResources(), R.drawable.mcd_null_pack);
             imageIcon.setImageBitmap(nmodIcon);
             AppCompatImageButton infoButton = convertView.findViewById(R.id.nmod_bugged_info);
-            View.OnClickListener onInfoClickedListener = new View.OnClickListener() {
-                @Override
-                public void onClick(View p1) {
-                    showBugDialog(nmod);
-                }
-            };
+            View.OnClickListener onInfoClickedListener = p1 -> showBugDialog(nmod);
             AppCompatImageButton deleteButton = convertView.findViewById(R.id.nmod_bugged_delete);
-            deleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View p1) {
-                    new AlertDialog.Builder(getActivity()).setTitle(R.string.nmod_delete_title).setMessage(R.string.nmod_delete_message).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface p1, int p2) {
-                            getPESdk().getNModAPI().removeImportedNMod(nmod);
-                            refreshNModDatas();
-                            p1.dismiss();
-                        }
-                    }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface p1, int p2) {
-                            p1.dismiss();
-                        }
-                    }).show();
-                }
+            deleteButton.setOnClickListener(p1 -> {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                dialog.setTitle(R.string.nmod_delete_title);
+                dialog.setMessage(R.string.nmod_delete_message);
+                dialog.setPositiveButton(android.R.string.ok, (p11, p2) -> {
+                    getPESdk().getNModAPI().removeImportedNMod(nmod);
+                    refreshNModDatas();
+                    p11.dismiss();
+                });
+                dialog.setNegativeButton(android.R.string.cancel, (p112, p2) -> p112.dismiss());
+                dialog.show();
             });
             infoButton.setOnClickListener(onInfoClickedListener);
             convertView.setOnClickListener(onInfoClickedListener);
@@ -438,54 +384,38 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
             nmodIcon = BitmapFactory.decodeResource(getResources(), R.drawable.mcd_null_pack);
         imageIcon.setImageBitmap(nmodIcon);
         AppCompatImageButton minusButton = convertView.findViewById(R.id.nmod_enabled_minus);
-        minusButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View p1) {
-                getPESdk().getNModAPI().setEnabled(nmod, false);
-                refreshNModDatas();
-            }
+        minusButton.setOnClickListener(p1 -> {
+            getPESdk().getNModAPI().setEnabled(nmod, false);
+            refreshNModDatas();
         });
         AppCompatImageButton downButton = convertView.findViewById(R.id.nmod_enabled_arrow_down);
-        downButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View p1) {
-                getPESdk().getNModAPI().downPosNMod(nmod);
-                refreshNModDatas();
-            }
+        downButton.setOnClickListener(p1 -> {
+            getPESdk().getNModAPI().downPosNMod(nmod);
+            refreshNModDatas();
         });
         AppCompatImageButton upButton = convertView.findViewById(R.id.nmod_enabled_arrow_up);
-        upButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View p1) {
-                getPESdk().getNModAPI().upPosNMod(nmod);
-                refreshNModDatas();
-            }
+        upButton.setOnClickListener(p1 -> {
+            getPESdk().getNModAPI().upPosNMod(nmod);
+            refreshNModDatas();
         });
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View p1) {
-                NModDescriptionActivity.startThisActivity(getActivity(), nmod);
-            }
-        });
+        convertView.setOnClickListener(p1 -> NModDescriptionActivity.startThisActivity(getActivity(), nmod));
         return convertView;
     }
 
     private void onAddNewNMod() {
-        new AlertDialog.Builder(getActivity()).setTitle(R.string.nmod_add_new_title).setMessage(R.string.nmod_add_new_message).setNegativeButton(R.string.nmod_add_new_pick_installed, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface p1, int p2) {
-                NModPackagePickerActivity.startThisActivity(getActivity());
-                p1.dismiss();
-            }
-        }).setPositiveButton(R.string.nmod_add_new_pick_storage, new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface p1, int p2) {
-                if (checkPermissions())
-                    NModFilePickerActivity.startThisActivity(getActivity());
-                p1.dismiss();
-            }
-        }).show();
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+        dialog.setTitle(R.string.nmod_add_new_title);
+        dialog.setMessage(R.string.nmod_add_new_message);
+        dialog.setNegativeButton(R.string.nmod_add_new_pick_installed, (p1, p2) -> {
+            NModPackagePickerActivity.startThisActivity((AppCompatActivity) getActivity());
+            p1.dismiss();
+        });
+        dialog.setPositiveButton(R.string.nmod_add_new_pick_storage, (p1, p2) -> {
+            if (checkPermissions())
+                NModFilePickerActivity.startThisActivity((AppCompatActivity) getActivity());
+            p1.dismiss();
+        });
+        dialog.show();
     }
 
     private boolean checkPermissions() {
@@ -509,7 +439,7 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
                 }
             }
             if (isAllGranted) {
-                NModFilePickerActivity.startThisActivity(getActivity());
+                NModFilePickerActivity.startThisActivity((AppCompatActivity) getActivity());
             } else {
                 showPermissionDinedDialog();
             }
@@ -520,18 +450,15 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.permission_grant_failed_title);
         builder.setMessage(R.string.permission_grant_failed_message);
-        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent();
-                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                intent.addCategory(Intent.CATEGORY_DEFAULT);
-                intent.setData(Uri.parse("package:" + getActivity().getPackageName()));
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                startActivity(intent);
-            }
+        builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            intent.setData(Uri.parse("package:" + getActivity().getPackageName()));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+            startActivity(intent);
         });
         builder.setNegativeButton(android.R.string.cancel, null);
         builder.show();
@@ -564,21 +491,18 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
                     mProcessingDialog = null;
                     break;
                 case MSG_SHOW_SUCCEED_DIALOG:
-
-                    new AlertDialog.Builder(getActivity()).setTitle(R.string.nmod_import_succeed_title).setMessage(R.string.nmod_import_succeed_message).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface p1, int p2) {
-                            p1.dismiss();
-                        }
-                    }).show();
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                    dialog.setTitle(R.string.nmod_import_succeed_title);
+                    dialog.setMessage(R.string.nmod_import_succeed_message);
+                    dialog.setPositiveButton(android.R.string.ok, (p1, p2) -> p1.dismiss());
+                    dialog.show();
                     break;
                 case MSG_SHOW_REPLACED_DIALOG:
-                    new AlertDialog.Builder(getActivity()).setTitle(R.string.nmod_import_replaced_title).setMessage(R.string.nmod_import_replaced_message).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface p1, int p2) {
-                            p1.dismiss();
-                        }
-                    }).show();
+                    AlertDialog.Builder dialog1 = new AlertDialog.Builder(getActivity());
+                    dialog1.setTitle(R.string.nmod_import_replaced_title);
+                    dialog1.setMessage(R.string.nmod_import_replaced_message);
+                    dialog1.setPositiveButton(android.R.string.ok, (p1, p2) -> p1.dismiss());
+                    dialog1.show();
                     break;
                 case MSG_SHOW_FAILED_DIALOG:
                     showPickNModFailedDialog((ExtractFailedException) msg.obj);

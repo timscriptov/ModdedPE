@@ -16,7 +16,6 @@
 package com.mcal.mcpelauncher.fragments;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -24,6 +23,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -82,7 +82,7 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
         mDataPathPreference = findPreference("data_saved_path");
         mDataPathPreference.setOnPreferenceClickListener(p1 -> {
             if (checkPermissions())
-                DirPickerActivity.startThisActivity(getActivity());
+                DirPickerActivity.startThisActivity((AppCompatActivity) getActivity());
             return true;
         });
 
@@ -95,7 +95,7 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
 
         mPkgPreference = findPreference("game_pkg_name");
         mPkgPreference.setOnPreferenceClickListener(p1 -> {
-            MCPkgPickerActivity.startThisActivity(getActivity());
+            MCPkgPickerActivity.startThisActivity((AppCompatActivity) getActivity());
             return true;
         });
 
@@ -114,9 +114,6 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
         });
         mNightModeePreference.setChecked(Preferences.isNightMode());
 
-
-        //Toast.makeText(getContext(), "Для применения настроек перезапустите приложение!", Toast.LENGTH_SHORT).show();
-
         ListPreference mLanguagePreference = findPreference("language");
         mLanguagePreference.setOnPreferenceChangeListener((p1, p2) -> {
             int type = Integer.parseInt((String) p2);
@@ -134,14 +131,14 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == DirPickerActivity.REQUEST_PICK_DIR && resultCode == Activity.RESULT_OK) {
+        if (requestCode == DirPickerActivity.REQUEST_PICK_DIR && resultCode == AppCompatActivity.RESULT_OK) {
             String dir = data.getExtras().getString(DirPickerActivity.TAG_DIR_PATH);
             Preferences.setDataSavedPath(dir);
             if (dir.equals(LauncherOptions.STRING_VALUE_DEFAULT))
                 Snackbar.make(getActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_reset_data_path), 2500).show();
             else
                 Snackbar.make(getActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_data_path, dir), 2500).show();
-        } else if (requestCode == MCPkgPickerActivity.REQUEST_PICK_PACKAGE && resultCode == Activity.RESULT_OK) {
+        } else if (requestCode == MCPkgPickerActivity.REQUEST_PICK_PACKAGE && resultCode == AppCompatActivity.RESULT_OK) {
             String pkgName = data.getExtras().getString("package_name");
             Preferences.setMinecraftPackageName(pkgName);
             if (pkgName.equals(LauncherOptions.STRING_VALUE_DEFAULT))
@@ -208,7 +205,7 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
             }
 
             if (isAllGranted) {
-                DirPickerActivity.startThisActivity(getActivity());
+                DirPickerActivity.startThisActivity((AppCompatActivity) getActivity());
             } else {
                 showPermissionDinedDialog();
             }

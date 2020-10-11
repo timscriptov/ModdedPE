@@ -24,6 +24,9 @@ import android.graphics.BitmapFactory;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -83,8 +86,9 @@ public abstract class NMod {
         return obj instanceof NMod && getPackageName().equals(((NMod) obj).getPackageName());
     }
 
+    @Nullable
     public final Bitmap createBannerImage() throws LoadFailedException {
-        Bitmap ret = null;
+        Bitmap ret;
         try {
             if (mInfo == null || mInfo.banner_image_path == null)
                 return null;
@@ -172,6 +176,7 @@ public abstract class NMod {
         mWarnings.add(warning);
     }
 
+    @NotNull
     public final ArrayList<NModWarning> getWarnings() {
         ArrayList<NModWarning> newArray = new ArrayList<>();
         newArray.addAll(mWarnings);
@@ -197,9 +202,9 @@ public abstract class NMod {
     }
 
     final void preload() {
-        this.mBugExpection = null;
+        mBugExpection = null;
 
-        this.mIcon = createIcon();
+        mIcon = createIcon();
 
         try {
             InputStream input = createInfoInputStream();

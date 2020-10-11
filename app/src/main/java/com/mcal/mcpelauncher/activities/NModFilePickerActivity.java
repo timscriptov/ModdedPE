@@ -17,7 +17,6 @@
 package com.mcal.mcpelauncher.activities;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,6 +30,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.cardview.widget.CardView;
@@ -43,7 +43,6 @@ import org.zeroturnaround.zip.ZipUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * @author Тимашков Иван
@@ -57,11 +56,11 @@ public class NModFilePickerActivity extends BaseActivity {
     private ArrayList<File> filesInCurrentPath;
     private SelectHandler mSelectHandler = new SelectHandler();
 
-    public static void startThisActivity(Activity context, @NotNull File path) {
+    public static void startThisActivity(AppCompatActivity context, @NotNull File path) {
         startThisActivity(context, path.getPath());
     }
 
-    public static void startThisActivity(Activity context, String path) {
+    public static void startThisActivity(AppCompatActivity context, String path) {
         Intent intent = new Intent(context, NModFilePickerActivity.class);
         Bundle extras = new Bundle();
         extras.putString(TAG_FILE_PATH, path);
@@ -69,7 +68,7 @@ public class NModFilePickerActivity extends BaseActivity {
         context.startActivityForResult(intent, REQUEST_PICK_FILE);
     }
 
-    public static void startThisActivity(Activity context) {
+    public static void startThisActivity(AppCompatActivity context) {
         startThisActivity(context, Environment.getExternalStorageDirectory().getPath());
     }
 
@@ -125,7 +124,7 @@ public class NModFilePickerActivity extends BaseActivity {
 
     private void openDirectory(File directory) {
         currentPath = directory;
-        filesInCurrentPath = new ArrayList<File>();
+        filesInCurrentPath = new ArrayList<>();
 
         File[] unmanagedFilesInCurrentDirectory = currentPath.listFiles();
         if (unmanagedFilesInCurrentDirectory != null) {
@@ -153,15 +152,12 @@ public class NModFilePickerActivity extends BaseActivity {
 
     private class FileAdapter extends BaseAdapter {
         public FileAdapter() {
-            Collections.sort(filesInCurrentPath, new Comparator<File>() {
-                @Override
-                public int compare(File o1, File o2) {
-                    if (o1.isDirectory() & o2.isFile()) {
-                        return -1;
-                    } else if (o1.isFile() & o2.isDirectory()) {
-                        return 1;
-                    } else return o1.getName().compareToIgnoreCase(o2.getName());
-                }
+            Collections.sort(filesInCurrentPath, (o1, o2) -> {
+                if (o1.isDirectory() & o2.isFile()) {
+                    return -1;
+                } else if (o1.isFile() & o2.isDirectory()) {
+                    return 1;
+                } else return o1.getName().compareToIgnoreCase(o2.getName());
             });
         }
 
@@ -196,12 +192,7 @@ public class NModFilePickerActivity extends BaseActivity {
                     AppCompatTextView textFileName = cardView.findViewById(R.id.nmod_picker_item_card_view_text_name);
                     textFileName.setText("...");
 
-                    cardView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View p1) {
-                            select(null);
-                        }
-                    });
+                    cardView.setOnClickListener(p11 -> select(null));
                 } else {
                     final File currentCardViewFile = filesInCurrentPath.get(--p1);
                     AppCompatImageView fileImage = cardView.findViewById(R.id.nmod_picker_item_card_view_image_view);
@@ -217,12 +208,7 @@ public class NModFilePickerActivity extends BaseActivity {
                     AppCompatTextView textFileName = cardView.findViewById(R.id.nmod_picker_item_card_view_text_name);
                     textFileName.setText(currentCardViewFile.getName());
 
-                    cardView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View p1) {
-                            select(currentCardViewFile);
-                        }
-                    });
+                    cardView.setOnClickListener(p112 -> select(currentCardViewFile));
                 }
             } else {
                 if (filesInCurrentPath.size() > 0) {
@@ -236,13 +222,7 @@ public class NModFilePickerActivity extends BaseActivity {
                     AppCompatTextView textFileName = cardView.findViewById(R.id.nmod_picker_item_card_view_text_name);
                     textFileName.setText(currentCardViewFile.getName());
 
-                    cardView.setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View p1) {
-                            select(currentCardViewFile);
-                        }
-                    });
+                    cardView.setOnClickListener(p113 -> select(currentCardViewFile));
                 } else {
                     AppCompatImageView fileImage = cardView.findViewById(R.id.nmod_picker_item_card_view_image_view);
                     fileImage.setImageResource(R.drawable.ic_folder_outline);
@@ -250,12 +230,7 @@ public class NModFilePickerActivity extends BaseActivity {
                     AppCompatTextView textFileName = cardView.findViewById(R.id.nmod_picker_item_card_view_text_name);
                     textFileName.setText(android.R.string.cancel);
 
-                    cardView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View p1) {
-                            openDirectory(Environment.getExternalStorageDirectory());
-                        }
-                    });
+                    cardView.setOnClickListener(p114 -> openDirectory(Environment.getExternalStorageDirectory()));
                 }
             }
             return cardView;

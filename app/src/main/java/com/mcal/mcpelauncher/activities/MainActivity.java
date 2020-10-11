@@ -17,7 +17,6 @@
 package com.mcal.mcpelauncher.activities;
 
 import android.content.ComponentName;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -106,7 +105,7 @@ public class MainActivity extends BaseActivity implements BackgroundSoundPlayer 
 
         MainFragmentPagerAdapter pagerAdapter = new MainFragmentPagerAdapter(fragment_list, titles_list);
 
-        mMainViewPager = (ViewPager) findViewById(R.id.moddedpe_main_view_pager);
+        mMainViewPager = findViewById(R.id.moddedpe_main_view_pager);
         mMainViewPager.setAdapter(pagerAdapter);
         mMainViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -163,20 +162,14 @@ public class MainActivity extends BaseActivity implements BackgroundSoundPlayer 
         super.setDefaultActionBar();
 
         final View burgerButton = getLayoutInflater().inflate(R.layout.moddedpe_ui_button_menu, null);
-        burgerButton.findViewById(R.id.moddedpe_ui_button_item_image_button).setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View p1) {
-                PopupMenu popup = new PopupMenu(MainActivity.this, burgerButton);
-                popup.getMenuInflater().inflate(R.menu.moddedpe_main_menu, popup.getMenu());
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switchViewPager(item);
-                        return true;
-                    }
-                });
-                popup.show();
-            }
+        burgerButton.findViewById(R.id.moddedpe_ui_button_item_image_button).setOnClickListener(p1 -> {
+            PopupMenu popup = new PopupMenu(MainActivity.this, burgerButton);
+            popup.getMenuInflater().inflate(R.menu.moddedpe_main_menu, popup.getMenu());
+            popup.setOnMenuItemClickListener(item -> {
+                switchViewPager(item);
+                return true;
+            });
+            popup.show();
         });
         setActionBarViewRight(burgerButton);
     }
@@ -209,12 +202,11 @@ public class MainActivity extends BaseActivity implements BackgroundSoundPlayer 
 
         String errorString = Preferences.getOpenGameFailed();
         if (errorString != null) {
-            new AlertDialog.Builder(this).setTitle(R.string.launch_failed_title).setMessage(getString(R.string.launch_failed_message, new Object[]{errorString})).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            }).show();
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
+            dialog.setTitle(R.string.launch_failed_title);
+            dialog.setMessage(getString(R.string.launch_failed_message, new Object[]{errorString}));
+            dialog.setPositiveButton(android.R.string.ok, (dialog1, which) -> dialog1.dismiss());
+            dialog.show();
             Preferences.setOpenGameFailed(null);
         }
         play();

@@ -27,6 +27,8 @@ import android.graphics.drawable.Drawable;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -50,7 +52,7 @@ class NModExtractor {
     private Context mContext;
 
     NModExtractor(Context context) {
-        this.mContext = context;
+        mContext = context;
     }
 
     PackagedNMod archiveFromInstalledPackage(String packageName) throws ExtractFailedException {
@@ -183,6 +185,7 @@ class NModExtractor {
         }
     }
 
+    @NotNull
     private File copyCachedNModToData(File cachedNModFile, String packageName) throws ExtractFailedException {
         try {
             File finalFileDir = new NModFilePathManager(mContext).getNModsDir();
@@ -214,6 +217,7 @@ class NModExtractor {
                 PackagedNMod packagedNMod = archiveFromInstalledPackage(info.packageName);
                 list.add(packagedNMod);
             } catch (ExtractFailedException e) {
+                e.printStackTrace();
             }
         }
         return list;

@@ -17,9 +17,7 @@
 package com.mcal.mcpelauncher.activities;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -28,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.cardview.widget.CardView;
@@ -100,12 +99,7 @@ public class NModLoadFailActivity extends BaseActivity {
         ListView errorListView = findViewById(R.id.nmod_load_failed_list_view);
         errorListView.setAdapter(new ViewAdapter());
 
-        findViewById(R.id.load_failed_next_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View p1) {
-                onNextClicked();
-            }
-        });
+        findViewById(R.id.load_failed_next_button).setOnClickListener(p1 -> onNextClicked());
     }
 
     private void onNextClicked() {
@@ -153,17 +147,12 @@ public class NModLoadFailActivity extends BaseActivity {
                 imageViewIcon.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.mcd_null_pack));
             }
             final int index = p1;
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View p1) {
-                    new AlertDialog.Builder(NModLoadFailActivity.this).setTitle(R.string.load_fail_title).setMessage(getString(R.string.load_fail_msg, new Object[]{mTypeStrings.get(index), mMessages.get(index)})).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface p1, int p2) {
-                            p1.dismiss();
-                        }
-                    }).show();
-                }
+            view.setOnClickListener(p112 -> {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(NModLoadFailActivity.this, R.style.AlertDialogTheme);
+                dialog.setTitle(R.string.load_fail_title);
+                dialog.setMessage(getString(R.string.load_fail_msg, new Object[]{mTypeStrings.get(index), mMessages.get(index)}));
+                dialog.setPositiveButton(android.R.string.ok, (p11, p21) -> p11.dismiss());
+                dialog.show();
             });
             return view;
         }

@@ -16,6 +16,8 @@
  */
 package com.mcal.pesdk.nmod;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,7 +55,8 @@ class JSONMerger {
         }
     }
 
-    private static JSONObject mergeObject(JSONObject object1, JSONObject object2) throws JSONException {
+    @Contract("_, _ -> param1")
+    private static JSONObject mergeObject(JSONObject object1, @NotNull JSONObject object2) throws JSONException {
         Iterator iterator = object2.keys();
         for (; iterator.hasNext(); ) {
             String name = (String) iterator.next();
@@ -62,7 +65,8 @@ class JSONMerger {
         return object1;
     }
 
-    private static JSONArray mergeArray(JSONArray array1, JSONArray array2) throws JSONException {
+    @Contract("_, _ -> param1")
+    private static JSONArray mergeArray(JSONArray array1, @NotNull JSONArray array2) throws JSONException {
         for (int index = 0; index < array2.length(); ++index) {
             judgeTypeAndPut(array1, array2, index);
         }
@@ -103,7 +107,7 @@ class JSONMerger {
             throw new JSONException("ERROR:CANNOT JUDGE ITEM TYPE.");
     }
 
-    private static boolean isTypeJSONArray(JSONObject src, String key) {
+    private static boolean isTypeJSONArray(@NotNull JSONObject src, String key) {
         try {
             src.getJSONArray(key);
             return true;
@@ -112,7 +116,7 @@ class JSONMerger {
         }
     }
 
-    private static boolean isTypeJSONObject(JSONObject src, String key) {
+    private static boolean isTypeJSONObject(@NotNull JSONObject src, String key) {
         try {
             src.getJSONObject(key);
             return true;
@@ -121,7 +125,7 @@ class JSONMerger {
         }
     }
 
-    private static boolean isTypeJSONString(JSONObject src, String key) {
+    private static boolean isTypeJSONString(@NotNull JSONObject src, String key) {
         try {
             src.getString(key);
             return true;
@@ -130,7 +134,7 @@ class JSONMerger {
         }
     }
 
-    private static boolean isTypeJSONInteger(JSONObject src, String key) {
+    private static boolean isTypeJSONInteger(@NotNull JSONObject src, String key) {
         try {
             src.getInt(key);
             return true;
@@ -139,7 +143,7 @@ class JSONMerger {
         }
     }
 
-    private static boolean isTypeJSONArray(JSONArray src, int index) {
+    private static boolean isTypeJSONArray(@NotNull JSONArray src, int index) {
         try {
             src.getJSONArray(index);
             return true;
@@ -148,7 +152,7 @@ class JSONMerger {
         }
     }
 
-    private static boolean isTypeJSONObject(JSONArray src, int index) {
+    private static boolean isTypeJSONObject(@NotNull JSONArray src, int index) {
         try {
             src.getJSONObject(index);
             return true;
@@ -157,7 +161,7 @@ class JSONMerger {
         }
     }
 
-    private static boolean isTypeJSONString(JSONArray src, int index) {
+    private static boolean isTypeJSONString(@NotNull JSONArray src, int index) {
         try {
             src.getString(index);
             return true;
@@ -166,7 +170,7 @@ class JSONMerger {
         }
     }
 
-    private static boolean isTypeJSONInteger(JSONArray src, int index) {
+    private static boolean isTypeJSONInteger(@NotNull JSONArray src, int index) {
         try {
             src.getInt(index);
             return true;

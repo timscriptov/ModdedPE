@@ -89,22 +89,22 @@ public class NModDescriptionActivity extends BaseActivity {
         setTitle(name);
         setActionBarButtonCloseRight();
 
-        AppCompatImageView iconImage = (AppCompatImageView) findViewById(R.id.moddedpenmoddescriptionImageViewIcon);
+        AppCompatImageView iconImage = findViewById(R.id.moddedpenmoddescriptionImageViewIcon);
         iconImage.setImageBitmap(icon);
 
-        AppCompatTextView textViewName = (AppCompatTextView) findViewById(R.id.moddedpenmoddescriptionTextViewNModName);
+        AppCompatTextView textViewName = findViewById(R.id.moddedpenmoddescriptionTextViewNModName);
         textViewName.setText(name);
-        AppCompatTextView textViewPackageName = (AppCompatTextView) findViewById(R.id.moddedpenmoddescriptionTextViewNModPackageName);
+        AppCompatTextView textViewPackageName = findViewById(R.id.moddedpenmoddescriptionTextViewNModPackageName);
         textViewPackageName.setText(nmodPackageName);
-        AppCompatTextView textViewDescription = (AppCompatTextView) findViewById(R.id.moddedpenmoddescriptionTextViewDescription);
+        AppCompatTextView textViewDescription = findViewById(R.id.moddedpenmoddescriptionTextViewDescription);
         textViewDescription.setText(description == null ? getString(R.string.nmod_description_unknow) : description);
-        AppCompatTextView textViewAuthor = (AppCompatTextView) findViewById(R.id.moddedpenmoddescriptionTextViewAuthor);
+        AppCompatTextView textViewAuthor = findViewById(R.id.moddedpenmoddescriptionTextViewAuthor);
         textViewAuthor.setText(author == null ? getString(R.string.nmod_description_unknow) : author);
-        AppCompatTextView textViewVersionName = (AppCompatTextView) findViewById(R.id.moddedpenmoddescriptionTextViewVersionName);
+        AppCompatTextView textViewVersionName = findViewById(R.id.moddedpenmoddescriptionTextViewVersionName);
         textViewVersionName.setText(version_name == null ? getString(R.string.nmod_description_unknow) : version_name);
-        AppCompatTextView textViewWhatsNew = (AppCompatTextView) findViewById(R.id.moddedpenmoddescriptionTextViewWhatsNew);
+        AppCompatTextView textViewWhatsNew = findViewById(R.id.moddedpenmoddescriptionTextViewWhatsNew);
         textViewWhatsNew.setText(change_log == null ? getString(R.string.nmod_description_unknow) : change_log);
-        AppCompatTextView textViewMinecraftVersionName = (AppCompatTextView) findViewById(R.id.moddedpenmoddescriptionTextViewMinecraftVersionName);
+        AppCompatTextView textViewMinecraftVersionName = findViewById(R.id.moddedpenmoddescriptionTextViewMinecraftVersionName);
         textViewMinecraftVersionName.setText(minecraft_version_name == null ? getString(R.string.nmod_description_unknow) : minecraft_version_name);
     }
 }

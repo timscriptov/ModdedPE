@@ -109,6 +109,7 @@ public class HTTPRequest {
                 try {
                     is.close();
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }

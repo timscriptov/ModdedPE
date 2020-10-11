@@ -18,6 +18,9 @@ package com.mcal.pesdk.nmod;
 
 import android.content.Context;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 /**
@@ -30,9 +33,9 @@ public final class NModAPI {
     private NModExtractor mExtractor;
 
     public NModAPI(Context context) {
-        this.mContext = context;
-        this.mNModManager = new NModManager(context);
-        this.mExtractor = new NModExtractor(context);
+        mContext = context;
+        mNModManager = new NModManager(context);
+        mExtractor = new NModExtractor(context);
     }
 
     public ZippedNMod archiveZippedNMod(String filePath) throws ExtractFailedException {
@@ -92,6 +95,8 @@ public final class NModAPI {
         return extractor.archiveFromInstalledPackage(packageName);
     }
 
+    @NotNull
+    @Contract(pure = true)
     public String getVersionName() {
         return "1.4.1";
     }

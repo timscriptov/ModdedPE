@@ -17,8 +17,6 @@
 package com.mcal.mcpelauncher.activities;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -31,6 +29,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.cardview.widget.CardView;
@@ -43,7 +42,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * @author Тимашков Иван
@@ -57,11 +55,11 @@ public class DirPickerActivity extends BaseActivity {
     private ArrayList<File> filesInCurrentPath;
     private SelectHandler mSelectHandler = new SelectHandler();
 
-    public static void startThisActivity(Activity context, @NotNull File path) {
+    public static void startThisActivity(AppCompatActivity context, @NotNull File path) {
         startThisActivity(context, path.getPath());
     }
 
-    public static void startThisActivity(Activity context, String path) {
+    public static void startThisActivity(AppCompatActivity context, String path) {
         Intent intent = new Intent(context, DirPickerActivity.class);
         Bundle extras = new Bundle();
         extras.putString(TAG_DIR_PATH, path);
@@ -69,7 +67,7 @@ public class DirPickerActivity extends BaseActivity {
         context.startActivityForResult(intent, REQUEST_PICK_DIR);
     }
 
-    public static void startThisActivity(Activity context) {
+    public static void startThisActivity(AppCompatActivity context) {
         startThisActivity(context, Environment.getExternalStorageDirectory().getPath());
     }
 
@@ -78,20 +76,8 @@ public class DirPickerActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.moddedpe_dir_picker);
 
-        findViewById(R.id.moddedpe_dir_picker_fab_reset).setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View p1) {
-                onResetClicked();
-            }
-        });
-        findViewById(R.id.moddedpe_dir_picker_fab_select).setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View p1) {
-                onSelectThisClicked();
-            }
-        });
+        findViewById(R.id.moddedpe_dir_picker_fab_reset).setOnClickListener(p1 -> onResetClicked());
+        findViewById(R.id.moddedpe_dir_picker_fab_select).setOnClickListener(p1 -> onSelectThisClicked());
 
         setResult(RESULT_CANCELED, new Intent());
         setActionBarButtonCloseRight();
@@ -130,29 +116,20 @@ public class DirPickerActivity extends BaseActivity {
     }
 
     private void onResetClicked() {
-        new AlertDialog.Builder(this).setTitle(R.string.dir_picker_reset_warning_title).setMessage(R.string.dir_picker_reset_warning_message).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface p1, int p2) {
-                p1.dismiss();
-                Intent data = new Intent();
-                Bundle extras = new Bundle();
-                extras.putString(TAG_DIR_PATH, LauncherOptions.STRING_VALUE_DEFAULT);
-                data.putExtras(extras);
-                setResult(RESULT_OK, data);
-                finish();
-            }
-
-
-        }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface p1, int p2) {
-                p1.dismiss();
-            }
-
-
-        }).show();
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
+        dialog.setTitle(R.string.dir_picker_reset_warning_title);
+        dialog.setMessage(R.string.dir_picker_reset_warning_message);
+        dialog.setPositiveButton(android.R.string.ok, (p1, p2) -> {
+            p1.dismiss();
+            Intent data = new Intent();
+            Bundle extras = new Bundle();
+            extras.putString(TAG_DIR_PATH, LauncherOptions.STRING_VALUE_DEFAULT);
+            data.putExtras(extras);
+            setResult(RESULT_OK, data);
+            finish();
+        });
+        dialog.setNegativeButton(android.R.string.cancel, (p1, p2) -> p1.dismiss());
+        dialog.show();
     }
 
     private void select(File file_arg) {
@@ -175,7 +152,7 @@ public class DirPickerActivity extends BaseActivity {
 
     private void openDirectory(File directory) {
         currentPath = directory;
-        filesInCurrentPath = new ArrayList<File>();
+        filesInCurrentPath = new ArrayList<>();
 
         File[] unmanagedFilesInCurrentDirectory = currentPath.listFiles();
         if (unmanagedFilesInCurrentDirectory != null) {
@@ -185,18 +162,15 @@ public class DirPickerActivity extends BaseActivity {
             }
         }
 
-        Collections.sort(filesInCurrentPath, new Comparator<File>() {
-            @Override
-            public int compare(File o1, File o2) {
-                if (o1.isDirectory() & o2.isFile()) {
-                    return -1;
-                } else if (o1.isFile() & o2.isDirectory()) {
-                    return 1;
-                } else return o1.getName().compareToIgnoreCase(o2.getName());
-            }
+        Collections.sort(filesInCurrentPath, (o1, o2) -> {
+            if (o1.isDirectory() & o2.isFile()) {
+                return -1;
+            } else if (o1.isFile() & o2.isDirectory()) {
+                return 1;
+            } else return o1.getName().compareToIgnoreCase(o2.getName());
         });
 
-        ListView fileListView = (ListView) findViewById(R.id.picker_dir_list_view);
+        ListView fileListView = findViewById(R.id.picker_dir_list_view);
         fileListView.setAdapter(new FileAdapter());
     }
 
@@ -232,15 +206,7 @@ public class DirPickerActivity extends BaseActivity {
                     AppCompatTextView textFileName = cardView.findViewById(R.id.nmod_picker_item_card_view_text_name);
                     textFileName.setText("...");
 
-                    cardView.setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View p1) {
-                            select(null);
-                        }
-
-
-                    });
+                    cardView.setOnClickListener(p11 -> select(null));
                 } else {
                     final File currentCardViewFile = filesInCurrentPath.get(--p1);
                     AppCompatImageView fileImage = cardView.findViewById(R.id.nmod_picker_item_card_view_image_view);
@@ -249,15 +215,7 @@ public class DirPickerActivity extends BaseActivity {
                     AppCompatTextView textFileName = cardView.findViewById(R.id.nmod_picker_item_card_view_text_name);
                     textFileName.setText(currentCardViewFile.getName());
 
-                    cardView.setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View p1) {
-                            select(currentCardViewFile);
-                        }
-
-
-                    });
+                    cardView.setOnClickListener(p112 -> select(currentCardViewFile));
                 }
             } else {
                 final File currentCardViewFile = filesInCurrentPath.get(p1);
@@ -266,19 +224,10 @@ public class DirPickerActivity extends BaseActivity {
                 AppCompatTextView textFileName = cardView.findViewById(R.id.nmod_picker_item_card_view_text_name);
                 textFileName.setText(currentCardViewFile.getName());
 
-                cardView.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View p1) {
-                        select(currentCardViewFile);
-                    }
-
-
-                });
+                cardView.setOnClickListener(p113 -> select(currentCardViewFile));
             }
             return cardView;
         }
-
     }
 
     @SuppressLint("HandlerLeak")
