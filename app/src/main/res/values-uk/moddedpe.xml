@@ -167,4 +167,5 @@
     <string name="permission_grant_failed_title">Не вдалося отримати дозволи</string>
     <string name="permission_grant_failed_message">Чи не вдалося отрмати дозвіл: Зміна даних на USB-накопичувачі. Перейдіть на сторінку налаштувань, щоб надати відповідні дозволи.</string>
 
+    <string name="rate">Оценить</string>
 </resources>

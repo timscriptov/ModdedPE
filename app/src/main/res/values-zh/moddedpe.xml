@@ -88,6 +88,8 @@
     <string name="preferences_summary_music">Background music while playing</string>
     <string name="preferences_title_moddedpe_texture_pack">ModdedPE Texture Pack</string>
     <string name="preferences_summary_moddedpe_texture_pack">默认的《ModdedPE》图形，现已新增了时尚的新材质！</string>
+    <string name="preferences_title_desktop_gui">Use Desktop GUI</string>
+    <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
     <string name="preferences_title_xbox">Войти в Xbox</string>
     <string name="preferences_summary_xbox">Вам будет доступен тестовый аккаунт Xbox</string>
     <string name="preferences_title_servers">Новые сервера</string>
@@ -165,4 +167,6 @@
     <!--Permissions-->
     <string name="permission_grant_failed_title">獲取權限失敗</string>
     <string name="permission_grant_failed_message">無法獲取權限：讀取外部存儲。請在設置頁面授予ModdedPE相關權限。</string>
+
+    <string name="rate">Rate</string>
 </resources>

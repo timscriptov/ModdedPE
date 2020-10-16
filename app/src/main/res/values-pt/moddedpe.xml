@@ -168,4 +168,5 @@
     <string name="permission_grant_failed_title">Permission Grant Failed</string>
     <string name="permission_grant_failed_message">Cannot grant permission: read external storage. Please go to the settings page to grant the relevant permissions.</string>
 
+    <string name="rate">Rate</string>
 </resources>

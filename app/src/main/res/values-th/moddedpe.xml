@@ -95,7 +95,6 @@
     <string name="preferences_summary_servers">В игре появится много новых серверов</string>
 
     <!--Open Game Dialog-->
-    <string name="opengame_loading">Waiting for the Game to Open&#8230;</string>
     <string name="preloading_initing">Initiating Launcher</string>
     <string name="preloading_initing_info">--NModAPI Version: %1$s\n--Minecraft PE Version: %2$s</string>
     <string name="preloading_initing_info_safe_mode">--Safe Mode On\n--Minecraft PE Version: %1$s</string>
@@ -167,4 +166,6 @@
     <!--Permissions-->
     <string name="permission_grant_failed_title">การขออนุญาตล้มเหลว</string>
     <string name="permission_grant_failed_message">ไม่สามารถขออนุญาต: อ่านหน่วยความจำภายนอก โปรดไปที่หน้าการตั้งค่าเพื่อขออนุญาตเกี่ยวข้อง</string>
+
+    <string name="rate">Rate</string>
 </resources>

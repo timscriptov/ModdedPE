@@ -168,4 +168,5 @@
     <string name="permission_grant_failed_title">Permission d\'accès au stockage déniée.</string>
     <string name="permission_grant_failed_message">ModdedPE N\'a pas pu accéder à la permission: Lire les informations du stockage interne/externe. S\'il vous plaît veuillez vous rendre dans les "informations de l\'applications">autorisations de l\'application>stockage.</string>
 
+    <string name="rate">Rate</string>
 </resources>

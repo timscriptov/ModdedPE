@@ -28,6 +28,7 @@ import com.mcal.mcpelauncher.BuildConfig;
 import com.mcal.mcpelauncher.R;
 import com.mcal.mcpelauncher.activities.PreloadActivity;
 import com.mcal.mcpelauncher.data.Preferences;
+import com.mcal.mcpelauncher.ui.view.Dialogs;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -40,6 +41,10 @@ public class MainStartFragment extends BaseFragment {
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.moddedpe_main, null);
         view.findViewById(R.id.moddedpe_main_play_button).setOnClickListener(p1 -> onPlayClicked());
+        if (!Preferences.getRated()) {
+            Dialogs.rate(getContext());
+        }
+
         return view;
     }
 

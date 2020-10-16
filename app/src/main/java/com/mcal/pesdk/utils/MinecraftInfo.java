@@ -80,7 +80,7 @@ public class MinecraftInfo {
     }
 
     public String getMinecraftPackageNativeLibraryDir() {
-        if ((mMCContext.getApplicationInfo().nativeLibraryDir).length() == 0) {
+        if (SplitParser.isBundle(mMCContext)) {
             return mContext.getCacheDir().getPath() + "/lib/" + Build.CPU_ABI;
         } else {
             return mMCContext.getApplicationInfo().nativeLibraryDir;

@@ -168,5 +168,6 @@
     <string name="permission_grant_failed_title">Рұқсат алу орындалмады</string>
     <string name="permission_grant_failed_message">Рұқсат беру орындалмады:Деректерді өзгерту үшін USB-флэш жадынан,баптаулар бетіне өтіңіз,параметрлерді ұсыну үшін тиісті рұқсат.</string>
 
+    <string name="rate">Rate</string>
 </resources>
 

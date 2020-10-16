@@ -88,6 +88,8 @@
     <string name="preferences_summary_music">游戏时播放的后台音乐</string>
     <string name="preferences_title_moddedpe_texture_pack">材质包</string>
     <string name="preferences_summary_moddedpe_texture_pack">现已新增了时尚的新材质</string>
+    <string name="preferences_title_desktop_gui">Use Desktop GUI</string>
+    <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
     <string name="preferences_title_xbox">Войти в Xbox</string>
     <string name="preferences_summary_xbox">Вам будет доступен тестовый аккаунт Xbox</string>
     <string name="preferences_title_servers">Новые сервера</string>
@@ -99,7 +101,6 @@
     <string name="preloading_initing_info_safe_mode">--安全模式开启\n--Minecraft PE版本：%1$s</string>
     <string name="preloading_initing_loading_libs">加载动态链接库</string>
     <string name="preloading_loading_lib_substrate">--加载libsubstrate.so</string>
-    <string name="preloading_loading_lib_gnustl_shared">--加载libgnustl_shared.so</string>
     <string name="preloading_loading_lib_game_launcher">--加载liblauncher-core.so</string>
     <string name="preloading_loading_lib_fmod">--加载libfmod.so</string>
     <string name="preloading_loading_lib_minecraftpe">--加载libminecraftpe.so</string>
@@ -165,4 +166,6 @@
     <!--Permissions-->
     <string name="permission_grant_failed_title">获取权限失败</string>
     <string name="permission_grant_failed_message">无法获取权限：读取外部存储。请在设置页面授予ModdedPE相关权限。</string>
+
+    <string name="rate">Rate</string>
 </resources>

@@ -166,4 +166,5 @@
     <string name="permission_grant_failed_title">Не удалось получить разрешения</string>
     <string name="permission_grant_failed_message">Не удалось предоставить разрешение: Изменение данных на USB-накопителе. Перейдите на страницу настроек, чтобы предоставить соответствующие разрешение.</string>
 
+    <string name="rate">Оценить</string>
 </resources>

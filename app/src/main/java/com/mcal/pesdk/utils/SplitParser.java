@@ -53,7 +53,7 @@ public class SplitParser {
         }
 
         try {
-            if(SplitParser.isBundle(mContext)) {
+            //if(SplitParser.isBundle(mContext)) {
                 if (mcpe(mContext) != null) {
                     String split_path = Arrays.asList(mcpe(mContext).splitPublicSourceDirs).get(0);
                     byte[] buffer = new byte[2048];
@@ -70,7 +70,7 @@ public class SplitParser {
                         fos.close();
                     }
                 }
-            }
+            //}
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -78,7 +78,7 @@ public class SplitParser {
 
     @Contract(pure = true)
     public static boolean isBundle(@NotNull Context mContext) {
-        return mcpe(mContext).splitPublicSourceDirs.length != 0;
+        return mContext.getApplicationInfo().splitPublicSourceDirs != null && mContext.getApplicationInfo().splitPublicSourceDirs.length > 0;
     }
 
     private static ApplicationInfo mcpe(@NotNull Context mContext) {

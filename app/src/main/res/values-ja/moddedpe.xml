@@ -176,4 +176,5 @@
     <string name="enable_warning_unsupported_message">NMod %1$s はまだMinecraft PE %2$s をサポートしていません。NModをアップデートしてください %1$s.</string>
     <string name="enable_warning_unsupported_message_if_next">NMod %1$s はまだMinecraft PE %2$s をサポートしていません。有効化することはできますがクラッシュや不具合の原因になるかもしれません。</string>
 
+    <string name="rate">Rate</string>
 </resources>
