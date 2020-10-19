@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
 
-import com.microsoft.aad.adal.BuildConfig;
-
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -57,9 +55,9 @@ public class Ecdsa {
             editor.apply();
             return null;
         }
-        String pubKeyStr = preferences.getString("public", BuildConfig.FLAVOR);
-        String privKeyStr = preferences.getString("private", BuildConfig.FLAVOR);
-        String id = preferences.getString("id", BuildConfig.FLAVOR);
+        String pubKeyStr = preferences.getString("public", "");
+        String privKeyStr = preferences.getString("private", "");
+        String id = preferences.getString("id", "");
         if (pubKeyStr.isEmpty() || privKeyStr.isEmpty() || id.isEmpty()) {
             SharedPreferences.Editor editor2 = preferences.edit();
             editor2.clear();

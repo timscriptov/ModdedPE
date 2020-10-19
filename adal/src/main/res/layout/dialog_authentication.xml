@@ -1,33 +1,36 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <WebView
         android:id="@+id/com_microsoft_aad_adal_webView1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:paddingLeft="0dp"
         android:paddingTop="0dp"
         android:paddingRight="0dp"
-        android:paddingBottom="0dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-    <androidx.appcompat.widget.AppCompatEditText
+        android:paddingBottom="0dp" />
+
+    <EditText
         android:id="@+id/com_microsoft_aad_adal_editDummyText"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="86dp"
+        android:layout_alignStart="@+id/com_microsoft_aad_adal_webView1"
+        android:layout_alignBottom="@+id/com_microsoft_aad_adal_webView1"
+        android:layout_marginStart="86dp"
         android:layout_marginBottom="124dp"
         android:ems="10"
-        android:layout_alignLeft="@id/com_microsoft_aad_adal_webView1"
-        android:layout_alignBottom="@id/com_microsoft_aad_adal_webView1"
         android:inputType="textEmailAddress"
-        android:layout_marginStart="86dp"
-        android:layout_alignStart="@id/com_microsoft_aad_adal_webView1" />
+        android:visibility="gone"
+        tools:ignore="Autofill,LabelFor" />
+
     <ProgressBar
         android:id="@+id/com_microsoft_aad_adal_progressBar"
+        style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        style="?android:attr/progressBarStyleLarge" />
+        android:layout_centerVertical="true" />
+
 </RelativeLayout>
