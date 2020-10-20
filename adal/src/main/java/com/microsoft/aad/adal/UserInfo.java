@@ -26,6 +26,8 @@ package com.microsoft.aad.adal;
 import android.net.Uri;
 import android.os.Bundle;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -91,7 +93,7 @@ public class UserInfo implements Serializable {
      * Constructor for creating {@link UserInfo} from {@link IdToken}.
      * @param idToken The {@link IdToken} to create {@link UserInfo}.
      */
-    public UserInfo(IdToken idToken) {
+    public UserInfo(@NotNull IdToken idToken) {
 
         mUniqueId = null;
         mDisplayableId = null;
@@ -130,7 +132,8 @@ public class UserInfo implements Serializable {
      * @param bundle The {@link Bundle} that broker returns.
      * @return {@link UserInfo} created from the bundle result.
      */
-    static UserInfo getUserInfoFromBrokerResult(final Bundle bundle) {
+    @NotNull
+    static UserInfo getUserInfoFromBrokerResult(@NotNull final Bundle bundle) {
         // Broker has one user and related to ADFS WPJ user. It does not return
         // idtoken
         String userid = bundle.getString(AuthenticationConstants.Broker.ACCOUNT_USERINFO_USERID);

@@ -2,7 +2,6 @@
 <resources>
 
     <!--Titles-->
-    <string name="menu_title">Menü</string>
     <string name="manage_nmod_title">NModları Yönet</string>
     <string name="settings_title">Ayarlar</string>
     <string name="about_title">Hakkında</string>
@@ -30,7 +29,6 @@
     <string name="nmod_import_failed_message_invalid_package_name">Manifest dosyasında geçersiz paket adı tanımlı."package_name" elementi Java dilinde olmalı.</string>
     <string name="nmod_import_failed_message_no_package_name">nmod_manifest.json dosyasında paket adı bulunamadı.Lütfen "package_name" elementini ekleyin.</string>
     <string name="nmod_import_failed_message_inequal_package_name">AndroidManifest.xml ve nmod_manifest.json dosyasında farklı paket isimleri tanımlı.ModdedPE hangi paket ismini kullanacağına karar veremiyor!</string>
-    <string name="nmod_import_failed_message_redundant_manifest">ModdedPE iki tane nmod_manifest.json dosyası buldu.Hangi dosyayı okuması gerektiğini bilemiyor.Lütfen birini silin.(/nmod_manifest.json veya /assets/nmod_manifest.json)</string>
     <string name="nmod_import_failed_button_full_info">Hata bilgisi</string>
     <string name="nmod_import_replaced_title">yeniden yerleştirildi</string>
     <string name="nmod_import_replaced_message">ModdedPE daha önce aktarılmış , aynı isme sahip bir NMod buldu.Yeni NMod başarılı bir şekilde eskisinin yerine aktarıldı.</string>
@@ -41,7 +39,6 @@
     <string name="nmod_import_failed_full_info_message">Hata türü:\n%1$s\nHata mesajı:\n%2$s</string>
     <string name="nmod_add_new">Yeni</string>
     <string name="nmod_add_new_title">Yeni</string>
-    <string name="nmod_export">Dışarı aktar</string>
     <string name="nmod_add_new_message">NMod\'u nereden seçmek istiyorsunuz?</string>
     <string name="nmod_add_new_pick_installed">Uygulamalar</string>
     <string name="nmod_add_new_pick_storage">Depolama</string>
@@ -57,7 +54,6 @@
     <string name="nmod_imported_view_more">Daha fazlasını göster</string>
 
     <!--About-->
-    <string name="about_license">Lisanslar</string>
     <string name="about_copyright_owner">Copyright © MCAL, Nextdev.</string>
     <string name="about_author">Иван Тимашков ve Listerily tarafından yapıldı</string>
     <string name="about_translators">Çevirmenler</string>
@@ -86,14 +82,8 @@
     <string name="preferences_summary_language">Dili değiştir.</string>
     <string name="preferences_title_music">Music</string>
     <string name="preferences_summary_music">Background music while playing</string>
-    <string name="preferences_title_moddedpe_texture_pack">ModdedPE Texture Pack</string>
-    <string name="preferences_summary_moddedpe_texture_pack">The default ModdedPE graphics, now updated with stylish new textures!</string>
     <string name="preferences_title_desktop_gui">Use Desktop GUI</string>
     <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
-    <string name="preferences_title_xbox">Войти в Xbox</string>
-    <string name="preferences_summary_xbox">Вам будет доступен тестовый аккаунт Xbox</string>
-    <string name="preferences_title_servers">Новые сервера</string>
-    <string name="preferences_summary_servers">В игре появится много новых серверов</string>
 
     <!--Open Game Dialog-->
     <string name="preloading_initing">Başlatılıyor</string>
@@ -104,7 +94,6 @@
     <string name="preloading_loading_lib_game_launcher">--liblauncher-core.so yükleniyor</string>
     <string name="preloading_loading_lib_fmod">--libfmod.so yükleniyor</string>
     <string name="preloading_loading_lib_minecraftpe">--libminecraftpe.so yükleniyor</string>
-    <string name="preloading_loading_lib_nmodapi">--libnmod-core.so yükleniyor</string>
     <string name="preloading_initing_loading_libs_done">Native Kütüphaneleri yüklemesi tamamlandı.</string>
     <string name="preloading_nmod_start_loading">NMods yükleniyor</string>
     <string name="preloading_nmod_loaded">--NMod: %1$s yüklendi</string>
@@ -160,9 +149,6 @@
     <string name="launch_failed_message">Üzgünüz, ModdedPE oyunu başlatırken başlatıcının çökmesine neden olan bir hata buldu. Bu sorun devam ederse ModdedPE \ \'nin uygulama verilerini silin. \nHata Mesajı:%1$s</string>
 
     <!--Enable Warnings-->
-    <string name="enable_warning_unsupported_title">Unsupported Version</string>
-    <string name="enable_warning_unsupported_message">NMod %1$s hasn\'t support Minecraft PE %2$s yet.Please update NMod %1$s.</string>
-    <string name="enable_warning_unsupported_message_if_next">NMod %1$s hasn\'t support Minecraft PE %2$s yet.You can enable it but may cause issues or crashes.</string>
 
     <!--Permissions-->
     <string name="permission_grant_failed_title">Permission Grant Failed</string>

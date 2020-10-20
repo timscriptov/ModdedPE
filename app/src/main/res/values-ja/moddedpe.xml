@@ -2,7 +2,6 @@
 <resources>
 
     <!--Titles-->
-    <string name="menu_title">メニュー</string>
     <string name="manage_nmod_title">NModの管理</string>
     <string name="settings_title">設定</string>
     <string name="about_title">About</string>
@@ -30,7 +29,6 @@
     <string name="nmod_import_failed_message_invalid_package_name">マニフェストで定義しているパッケージ名は無効です。要素である"package_name"は、Java方式のパッケージ名でなければいけません。</string>
     <string name="nmod_import_failed_message_no_package_name">nmod_manifest.jsonでパッケージ名が見つかりませんでした。"package_name"(String)の要素が追加してください。</string>
     <string name="nmod_import_failed_message_inequal_package_name">AndroidManifest.xmlとnmod_manifest.jsonで定義されているパッケージ名は等しくありません。ModdedPEは使用するパッケージ名を決定できませんでした。</string>
-    <string name="nmod_import_failed_message_redundant_manifest">ModdedPEはこのファイル内に２つのnmod_manifest.jsonを見つけたため、どのファイルを読めばいいのかわかりませんでした。１つ削除してください。(/nmod_manifest.json or /assets/nmod_manifest.json)</string>
     <string name="nmod_import_failed_button_full_info">エラーの情報</string>
     <string name="nmod_import_replaced_title">置き換えました</string>
     <string name="nmod_import_replaced_message">ModdedPEは同じパッケージ名でインポートされたNModを見つけました。新しいものを正常にインポートし、置き換えました。</string>
@@ -41,7 +39,6 @@
     <string name="nmod_import_failed_full_info_message">エラータイプ:\n%1$s\nエラーメッセージ:\n%2$s</string>
     <string name="nmod_add_new">新しく追加</string>
     <string name="nmod_add_new_title">新しく追加…</string>
-    <string name="nmod_export">エクスポート</string>
     <string name="nmod_add_new_message">どこからNModを選びますか？</string>
     <string name="nmod_add_new_pick_installed">インストール済みのアプリ</string>
     <string name="nmod_add_new_pick_storage">ストレージ</string>
@@ -57,7 +54,6 @@
     <string name="nmod_imported_view_more">もっと見るにはボタンをクリックしてください。</string>
 
     <!--About-->
-    <string name="about_license">ライセンス</string>
     <string name="about_copyright_owner">Copyright © MCAL, Nextdev.</string>
     <string name="about_author">MADE BY Тимашков Иван と Listerily</string>
     <string name="about_translators">翻訳者</string>
@@ -86,14 +82,8 @@
     <string name="preferences_summary_language">言語を変更します。</string>
     <string name="preferences_title_music">Music</string>
     <string name="preferences_summary_music">Background music while playing</string>
-    <string name="preferences_title_moddedpe_texture_pack">ModdedPE Texture Pack</string>
-    <string name="preferences_summary_moddedpe_texture_pack">デフォルトの ModdedPE のグラフィックが、スタイリッシュな新規テクスチャで生まれ変わりました!</string>
     <string name="preferences_title_desktop_gui">Use Desktop GUI</string>
     <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
-    <string name="preferences_title_xbox">Войти в Xbox</string>
-    <string name="preferences_summary_xbox">Вам будет доступен тестовый аккаунт Xbox</string>
-    <string name="preferences_title_servers">Новые сервера</string>
-    <string name="preferences_summary_servers">В игре появится много новых серверов</string>
 
     <!--Open Game Dialog-->
     <string name="preloading_initing">ランチャーを起動中</string>
@@ -104,7 +94,6 @@
     <string name="preloading_loading_lib_game_launcher">--liblauncher-core.soを読み込み中</string>
     <string name="preloading_loading_lib_fmod">--libfmod.soを読み込み中</string>
     <string name="preloading_loading_lib_minecraftpe">--libminecraftpe.soを読み込み中</string>
-    <string name="preloading_loading_lib_nmodapi">--libnmod-core.soを読み込み中</string>
     <string name="preloading_initing_loading_libs_done">ネイティブライブラリの読み込みが完了しました。</string>
     <string name="preloading_nmod_start_loading">NModを読み込み中</string>
     <string name="preloading_nmod_loaded">--NModを読み込みました: %1$s</string>
@@ -172,9 +161,6 @@
     <string name="permission_grant_failed_message">外部ストレージを読む権限を取得できませんでした。[設定]ページでModdedPEのストレージアクセス権限を許可してください。</string>
 
     <!--Enable Warnings-->
-    <string name="enable_warning_unsupported_title">サポートしていないバージョン</string>
-    <string name="enable_warning_unsupported_message">NMod %1$s はまだMinecraft PE %2$s をサポートしていません。NModをアップデートしてください %1$s.</string>
-    <string name="enable_warning_unsupported_message_if_next">NMod %1$s はまだMinecraft PE %2$s をサポートしていません。有効化することはできますがクラッシュや不具合の原因になるかもしれません。</string>
 
     <string name="rate">Rate</string>
 </resources>

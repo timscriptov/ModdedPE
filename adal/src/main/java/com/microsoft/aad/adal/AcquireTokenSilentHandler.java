@@ -25,6 +25,9 @@ package com.microsoft.aad.adal;
 import android.content.Context;
 import android.util.Log;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 
@@ -309,6 +312,7 @@ class AcquireTokenSilentHandler {
     /**
      * Attempt to use MRRT. 
      */
+    @Nullable
     private AuthenticationResult useMRRT() throws AuthenticationException {
         final String methodName = ":useMRRT";
         Logger.v(TAG + methodName, "Send request to use MRRT for new AT.");
@@ -324,7 +328,8 @@ class AcquireTokenSilentHandler {
     /**
      * Acquire token with retrieved token cache item and update cache. 
      */
-    private AuthenticationResult acquireTokenWithCachedItem(final TokenCacheItem cachedItem)
+    @Nullable
+    private AuthenticationResult acquireTokenWithCachedItem(@NotNull final TokenCacheItem cachedItem)
             throws AuthenticationException {
         final String methodName = ":acquireTokenWithCachedItem";
         if (StringExtensions.isNullOrBlank(cachedItem.getRefreshToken())) {

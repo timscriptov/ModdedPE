@@ -28,6 +28,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 
@@ -88,7 +90,7 @@ final class AcquireTokenInteractiveRequest {
      * @return {@link AuthenticationResult} for acquire token request with grant_type as code.
      * @throws AuthenticationException
      */
-    AuthenticationResult acquireTokenWithAuthCode(final String url) throws AuthenticationException {
+    @NotNull AuthenticationResult acquireTokenWithAuthCode(final String url) throws AuthenticationException {
         final String methodName = ":acquireTokenWithAuthCode";
         Logger.v(TAG + methodName, "Start token acquisition with auth code.", mAuthRequest.getLogInfo(), null);
 
@@ -160,6 +162,7 @@ final class AcquireTokenInteractiveRequest {
     /**
      * Get intent to start authentication activity.
      */
+    @NotNull
     private Intent getAuthenticationActivityIntent() {
         final Intent intent = new Intent();
         if (AuthenticationSettings.INSTANCE.getActivityPackageName() != null) {
@@ -185,6 +188,7 @@ final class AcquireTokenInteractiveRequest {
         return resolveInfo != null;
     }
 
+    @NotNull
     private String getCorrelationInfo() {
         return String.format(" CorrelationId: %s", mAuthRequest.getCorrelationId().toString());
     }

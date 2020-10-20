@@ -26,6 +26,8 @@ package com.microsoft.aad.adal;
 import android.annotation.SuppressLint;
 import android.util.Log;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -152,7 +154,7 @@ public class Logger {
     /**
      * Send logs to logcat as the default logging if developer doesn't turn off the logcat logging.
      */
-    private void sendLogcatLogs(final String tag, final LogLevel logLevel, final String message) {
+    private void sendLogcatLogs(final String tag, @NotNull final LogLevel logLevel, final String message) {
         // Append additional message to the message part for logcat logging
         switch (logLevel) {
             case Error:
@@ -175,6 +177,7 @@ public class Logger {
         }
     }
 
+    @NotNull
     private static String addMoreInfo(String message) {
         if (!StringExtensions.isNullOrBlank(message)) {
             return getUTCDateTimeAsString() + "-" + getInstance().mCorrelationId + "-" + message
@@ -189,8 +192,8 @@ public class Logger {
      * Format the log message. Depends on the developer setting, the log message could be sent to logcat
      * or the external logger set by the calling app.
      */
-    private void log(String tag, String message, String additionalMessage, LogLevel logLevel,
-                           ADALError errorCode, Throwable throwable) {
+    private void log(String tag, String message, String additionalMessage, @NotNull LogLevel logLevel,
+                     ADALError errorCode, Throwable throwable) {
         if (logLevel.compareTo(mLogLevel) > 0) {
             return;
         }
@@ -362,6 +365,7 @@ public class Logger {
         }
     }
 
+    @NotNull
     private static String getCodeName(ADALError code) {
         if (code != null) {
             return code.name();
@@ -370,6 +374,7 @@ public class Logger {
         return "";
     }
 
+    @NotNull
     @SuppressLint("SimpleDateFormat")
     private static String getUTCDateTimeAsString() {
         final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);

@@ -25,6 +25,8 @@ package com.microsoft.aad.adal;
 
 import com.google.gson.JsonSyntaxException;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -153,7 +155,7 @@ final class DRSMetadataRequestor extends AbstractMetadataRequestor<DRSMetadata, 
     }
 
     @Override
-    DRSMetadata parseMetadata(final HttpWebResponse response) throws AuthenticationException {
+    DRSMetadata parseMetadata(@NotNull final HttpWebResponse response) throws AuthenticationException {
         Logger.v(TAG, "Parsing DRS metadata response");
         try {
             return parser().fromJson(response.getBody(), DRSMetadata.class);
@@ -169,7 +171,7 @@ final class DRSMetadataRequestor extends AbstractMetadataRequestor<DRSMetadata, 
      * @param domain the domain to use in the request
      * @return the DRS metadata URL to query
      */
-    String buildRequestUrlByType(final Type type, final String domain) {
+    @NotNull String buildRequestUrlByType(final Type type, final String domain) {
         // All DRS urls begin the same
         StringBuilder requestUrl = new StringBuilder(DRS_URL_PREFIX);
 

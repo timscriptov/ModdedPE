@@ -26,6 +26,10 @@ package com.microsoft.aad.adal;
 import android.net.Uri;
 import android.util.Base64;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -40,7 +44,7 @@ import java.util.StringTokenizer;
 
 final class StringExtensions {
     /** The Constant ENCODING_UTF8. */
-    public static final String ENCODING_UTF8 = "UTF_8";
+    public static final String ENCODING_UTF8 = "UTF-8";
 
     private static final String TAG = StringExtensions.class.getSimpleName();
 
@@ -94,6 +98,8 @@ final class StringExtensions {
         return URLDecoder.decode(source, ENCODING_UTF8);
     }
 
+    @NotNull
+    @Contract("_ -> new")
     static String encodeBase64URLSafeString(final byte[] bytes)
             throws UnsupportedEncodingException {
         return new String(
@@ -122,6 +128,7 @@ final class StringExtensions {
         return authority;
     }
 
+    @NotNull
     static HashMap<String, String> getUrlParameters(String finalUrl) {
         Uri response = Uri.parse(finalUrl);
         String fragment = response.getFragment();
@@ -134,6 +141,7 @@ final class StringExtensions {
         return parameters;
     }
 
+    @NotNull
     static List<String> getStringTokens(final String items, final String delimiter) {
         final StringTokenizer st = new StringTokenizer(items, delimiter);
         final List<String> itemList = new ArrayList<>();
@@ -147,7 +155,8 @@ final class StringExtensions {
         return itemList;
     }
     
-    static ArrayList<String> splitWithQuotes(String input, char delimiter) {
+    @NotNull
+    static ArrayList<String> splitWithQuotes(@NotNull String input, char delimiter) {
         final ArrayList<String> items = new ArrayList<>();
 
         int startIndex = 0;
@@ -174,6 +183,7 @@ final class StringExtensions {
         return items;
     }
 
+    @Nullable
     static String removeQuoteInHeaderValue(String value) {
         if (!isNullOrBlank(value)) {
             return value.replace("\"", "");
@@ -189,7 +199,7 @@ final class StringExtensions {
      * @param prefix prefix to check the above string
      * @return boolean true if the string starts with prefix and has some body after it.
      */
-    static boolean hasPrefixInHeader(final String value, final String prefix) {
+    static boolean hasPrefixInHeader(@NotNull final String value, final String prefix) {
         return value.startsWith(prefix) && value.length() > prefix.length() + 2
                 && Character.isWhitespace(value.charAt(prefix.length()));
     }

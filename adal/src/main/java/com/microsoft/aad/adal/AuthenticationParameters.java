@@ -26,6 +26,9 @@ package com.microsoft.aad.adal;
 import android.content.Context;
 import android.os.Handler;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -338,6 +341,8 @@ public class AuthenticationParameters {
          * @throws ResourceAuthenticationChallengeException If a parsing error is encountered or
          *                                                  the String is malformed.
          */
+        @NotNull
+        @Contract("_ -> new")
         static Challenge parseChallenge(final String challenge) throws ResourceAuthenticationChallengeException {
             final String methodName = ":parseChallenge";
             if (StringExtensions.isNullOrBlank(challenge)) {
@@ -361,6 +366,7 @@ public class AuthenticationParameters {
          * @throws ResourceAuthenticationChallengeException If a parsing error is encountered or
          *                                                  the String is malformed.
          */
+        @NotNull
         private static String parseScheme(String challenge) throws ResourceAuthenticationChallengeException {
             final String methodName = ":parseScheme";
 
@@ -402,6 +408,7 @@ public class AuthenticationParameters {
          * @throws ResourceAuthenticationChallengeException If a parsing error is encountered or
          *                                                  the String is malformed.
          */
+        @NotNull
         private static Map<String, String> parseParams(String challengeSansScheme) throws ResourceAuthenticationChallengeException {
             final String methodName = ":parseParams";
             if (StringExtensions.isNullOrBlank(challengeSansScheme)) {
@@ -463,6 +470,7 @@ public class AuthenticationParameters {
          * @throws ResourceAuthenticationChallengeException If a parsing error is encountered or
          *                                                  the String is malformed.
          */
+        @NotNull
         static List<Challenge> parseChallenges(final String strChallenges) throws ResourceAuthenticationChallengeException {
             final String methodName = ":parseChallenges";
 
@@ -500,6 +508,7 @@ public class AuthenticationParameters {
          * @param challenges The challenge values to parse.
          * @return A List of separated challenges.
          */
+        @NotNull
         private static List<String> separateChallenges(final String challenges) throws ResourceAuthenticationChallengeException {
             final String methodName = ":separateChallenges";
 
@@ -538,7 +547,7 @@ public class AuthenticationParameters {
          *                               scheme element.
          * @param outStrings             The output array, modified in-place.
          */
-        private static void writeParsedChallenges(String[] splitOnUnquotedCommas, List<String> tokensContainingScheme, String[] outStrings) {
+        private static void writeParsedChallenges(@NotNull String[] splitOnUnquotedCommas, List<String> tokensContainingScheme, String[] outStrings) {
             int ii = -1; // Out-value index
             for (final String token : splitOnUnquotedCommas) {
                 if (tokensContainingScheme.contains(token)) {
@@ -555,7 +564,7 @@ public class AuthenticationParameters {
          *
          * @param outStrings The String array to sanitize.
          */
-        private static void sanitizeParsedSuffixes(String[] outStrings) {
+        private static void sanitizeParsedSuffixes(@NotNull String[] outStrings) {
             for (int jj = 0; jj < outStrings.length; jj++) {
                 if (outStrings[jj].endsWith(SUFFIX_COMMA)) {
                     outStrings[jj] = outStrings[jj].substring(0, outStrings[jj].length() - 2);
@@ -569,7 +578,8 @@ public class AuthenticationParameters {
          * @param strArry The String array to inspect.
          * @return A List of scheme-containing String tokens.
          */
-        private static List<String> extractTokensContainingScheme(final String[] strArry) throws ResourceAuthenticationChallengeException {
+        @NotNull
+        private static List<String> extractTokensContainingScheme(@NotNull final String[] strArry) throws ResourceAuthenticationChallengeException {
             final List<String> tokensContainingScheme = new ArrayList<>();
 
             for (final String token : strArry) {
@@ -608,7 +618,7 @@ public class AuthenticationParameters {
          *
          * @param strArray The target String[].
          */
-        private static void sanitizeWhitespace(String[] strArray) {
+        private static void sanitizeWhitespace(@NotNull String[] strArray) {
             final String methodName = ":sanitizeWhitespace";
             Logger.v(TAG + methodName, "Sanitizing whitespace");
             for (int ii = 0; ii < strArray.length; ii++) {
@@ -617,7 +627,8 @@ public class AuthenticationParameters {
         }
     }
 
-    private static AuthenticationParameters parseResponse(HttpWebResponse webResponse) throws ResourceAuthenticationChallengeException {
+    @NotNull
+    private static AuthenticationParameters parseResponse(@NotNull HttpWebResponse webResponse) throws ResourceAuthenticationChallengeException {
         // Depending on the service side implementation for this resource
         if (webResponse.getStatusCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
             Map<String, List<String>> responseHeaders = webResponse.getResponseHeaders();

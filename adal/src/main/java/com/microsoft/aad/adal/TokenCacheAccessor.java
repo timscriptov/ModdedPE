@@ -24,6 +24,9 @@ package com.microsoft.aad.adal;
 
 import com.microsoft.aad.adal.AuthenticationResult.AuthenticationStatus;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -173,7 +176,7 @@ class TokenCacheAccessor {
         return item;
     }
 
-    TokenCacheItem getStaleToken(AuthenticationRequest authRequest) throws AuthenticationException {
+    TokenCacheItem getStaleToken(@NotNull AuthenticationRequest authRequest) throws AuthenticationException {
         final String methodName = ":getStaleToken";
         final TokenCacheItem accessTokenItem;
 
@@ -261,7 +264,7 @@ class TokenCacheAccessor {
      * 3) if refresh with FRT, clear RT with (U,A) 
      * @throws AuthenticationException 
      */
-    void removeTokenCacheItem(final TokenCacheItem tokenCacheItem, final String resource)
+    void removeTokenCacheItem(@NotNull final TokenCacheItem tokenCacheItem, final String resource)
             throws AuthenticationException {
         final String methodName = ":removeTokenCacheItem";
         final CacheEvent cacheEvent = new CacheEvent(EventStrings.TOKEN_CACHE_DELETE);
@@ -379,7 +382,8 @@ class TokenCacheAccessor {
     /**
      * @return List of keys to remove when using regular RT to send refresh token request. 
      */
-    private List<String> getKeyListToRemoveForRT(final TokenCacheItem cachedItem) {
+    @NotNull
+    private List<String> getKeyListToRemoveForRT(@NotNull final TokenCacheItem cachedItem) {
         final List<String> keysToRemove = new ArrayList<>();
         keysToRemove.add(CacheKey.createCacheKeyForRTEntry(mAuthority, cachedItem.getResource(), cachedItem.getClientId(), null));
         if (cachedItem.getUserInfo() != null) {
@@ -393,7 +397,8 @@ class TokenCacheAccessor {
     /**
      * @return List of keys to remove when using MRRT to send refresh token request. 
      */
-    private List<String> getKeyListToRemoveForMRRT(final TokenCacheItem cachedItem) {
+    @NotNull
+    private List<String> getKeyListToRemoveForMRRT(@NotNull final TokenCacheItem cachedItem) {
         final List<String> keysToRemove = new ArrayList<>();
         
         keysToRemove.add(CacheKey.createCacheKeyForMRRT(mAuthority, cachedItem.getClientId(), null));
@@ -408,7 +413,8 @@ class TokenCacheAccessor {
     /**
      * @return List of keys to remove when using FRT to send refresh token request. 
      */
-    private List<String> getKeyListToRemoveForFRT(final TokenCacheItem cachedItem) {
+    @NotNull
+    private List<String> getKeyListToRemoveForFRT(@NotNull final TokenCacheItem cachedItem) {
         final List<String> keysToRemove = new ArrayList<>();
         if (cachedItem.getUserInfo() != null) {
             keysToRemove.add(CacheKey.createCacheKeyForFRT(mAuthority, cachedItem.getFamilyClientId(), cachedItem.getUserInfo().getDisplayableId()));
@@ -446,6 +452,7 @@ class TokenCacheAccessor {
         }
     }
 
+    @NotNull
     private CacheEvent startCacheTelemetryRequest(String tokenType) {
         final CacheEvent cacheEvent = new CacheEvent(EventStrings.TOKEN_CACHE_LOOKUP);
         cacheEvent.setTokenType(tokenType);
@@ -466,6 +473,7 @@ class TokenCacheAccessor {
         return item;
     }
 
+    @Nullable
     private TokenCacheItem getTokenCacheItemFromPassedInAuthority(final String resource, final String clientId, final String familyClientId,
                                                                   final String user, final TokenEntryType type) throws MalformedURLException {
         if (getAuthorityUrlWithPreferredCache().equalsIgnoreCase(mAuthority)) {
@@ -476,6 +484,7 @@ class TokenCacheAccessor {
         return mTokenCacheStore.getItem(cacheKeyWithPassedInAuthority);
     }
 
+    @Nullable
     private TokenCacheItem getTokenCacheItemFromAliasedHost(final String resource, final String clientId, final String familyClientId,
                                                             final String user, final TokenEntryType type) throws MalformedURLException {
 
@@ -506,8 +515,9 @@ class TokenCacheAccessor {
         return tokenCacheItemForAliasedHost;
     }
 
+    @Nullable
     private String getCacheKey(final String authority, final String resource, final String clientId, final String user,
-                               final String familyClientId, final TokenEntryType type) {
+                               final String familyClientId, @NotNull final TokenEntryType type) {
         final String cacheKey;
         switch (type) {
             case REGULAR_TOKEN_ENTRY:

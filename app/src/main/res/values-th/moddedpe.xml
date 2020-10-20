@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Titles-->
-    <string name="menu_title">เมนู</string>
     <string name="manage_nmod_title">การจัดการ NMods</string>
     <string name="settings_title">การตั้งค่า</string>
     <string name="about_title">เกี่ยวกับ</string>
@@ -29,7 +28,6 @@
     <string name="nmod_import_failed_message_invalid_package_name">ชื่อ package ไม่ถูกต้องตามที่กำหนดใน manifest.Element "package_name" ต้องเป็น java-styled package name.</string>
     <string name="nmod_import_failed_message_no_package_name">ไม่พบชื่อ Package ใน nmod_manifest.json.โปรดเพิ่ม element "package_name"(String).</string>
     <string name="nmod_import_failed_message_inequal_package_name">เจอความไม่ตรงกันกับชื่อ package ที่กำหนดใน AndroidManifest.xml และ nmod_manifest.json.ModdedPE ไม่สามารถรู้ไดว่าจะต้องใช้อันใหน.</string>
-    <string name="nmod_import_failed_message_redundant_manifest">ModdedPE พบ nmod_manifest.json 2 อันในไฟล์นี้แต่ไม่รู้ว่าจะอ่านอันใหน โปรดลบอันใดอันหนึ่ง(/nmod_manifest.json หรือ /assets/nmod_manifest.json)</string>
     <string name="nmod_import_failed_button_full_info">ข้อมูล Error</string>
     <string name="nmod_import_replaced_title">แทนที่</string>
     <string name="nmod_import_replaced_message">ModdedPE พบว่ามี NMod ถูกนำเข้าอยู่แล้ว ModdedPE จะนำเข้า NMod ที่ใหม่กว่าแทนที่ NMod ตัวเก่า</string>
@@ -40,7 +38,6 @@
     <string name="nmod_import_failed_full_info_message">Error Type:\n%1$s\nError Message:\n%2$s</string>
     <string name="nmod_add_new">เพิ่มใหม่</string>
     <string name="nmod_add_new_title">เพิ่มใหม่&#8230;</string>
-    <string name="nmod_export">ส่งออก</string>
     <string name="nmod_add_new_message">ต้องการเพิ่ม NMod จากที่ใหน?</string>
     <string name="nmod_add_new_pick_installed">แอป</string>
     <string name="nmod_add_new_pick_storage">หน่วยความจำ</string>
@@ -56,7 +53,6 @@
     <string name="nmod_imported_view_more">กดปุ่มเพื่อดูเพิ่มเติม</string>
 
     <!--About-->
-    <string name="about_license">Licenses</string>
     <string name="about_copyright_owner">Copyright © MCAL, Nextdev.</string>
     <string name="about_author">MADE BY Тимашков Иван and Listerily</string>
     <string name="about_translators">Translators</string>
@@ -85,14 +81,8 @@
     <string name="preferences_summary_language">เปลี่ยนภาษา</string>
     <string name="preferences_title_music">Music</string>
     <string name="preferences_summary_music">Background music while playing</string>
-    <string name="preferences_title_moddedpe_texture_pack">ModdedPE Texture Pack</string>
-    <string name="preferences_summary_moddedpe_texture_pack">The default ModdedPE graphics, now updated with stylish new textures!</string>
     <string name="preferences_title_desktop_gui">Use Desktop GUI</string>
     <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
-    <string name="preferences_title_xbox">Войти в Xbox</string>
-    <string name="preferences_summary_xbox">Вам будет доступен тестовый аккаунт Xbox</string>
-    <string name="preferences_title_servers">Новые сервера</string>
-    <string name="preferences_summary_servers">В игре появится много новых серверов</string>
 
     <!--Open Game Dialog-->
     <string name="preloading_initing">Initiating Launcher</string>
@@ -103,7 +93,6 @@
     <string name="preloading_loading_lib_game_launcher">--Loading liblauncher-core.so</string>
     <string name="preloading_loading_lib_fmod">--Loading libfmod.so</string>
     <string name="preloading_loading_lib_minecraftpe">--Loading libminecraftpe.so</string>
-    <string name="preloading_loading_lib_nmodapi">--Loading libnmod-core.so</string>
     <string name="preloading_initing_loading_libs_done">Loading Native Libs Done</string>
     <string name="preloading_nmod_start_loading">Loading NMods</string>
     <string name="preloading_nmod_loaded">--Loaded NMod: %1$s</string>
@@ -159,9 +148,6 @@
     <string name="launch_failed_message">ขออภัย, ModdeddPE กระตุ้น error ในขณะที่เปิดตัวเกมทำให้เกมเด้ง ถ้าปัญหานี้ยังคงอยู่ ให้ทำการล้่างข้อมูลของแอป ModdedPE, \nError Message:%1$s</string>
 
     <!--Enable Warnings-->
-    <string name="enable_warning_unsupported_title">เวอร์ชันไม่รองรับ</string>
-    <string name="enable_warning_unsupported_message">NMod %1$s ไม่รองรับ MinecraftPE %2$s .โปรดอัปเดท NMod %1$s.</string>
-    <string name="enable_warning_unsupported_message_if_next">NMod %1$s ไม่รองรับ MinecraftPE %2$s คุณสามารถเปิดใช้งานได้แต่อาจก่อให้เกิดปัญหาและเกมเด้ง.</string>
 
     <!--Permissions-->
     <string name="permission_grant_failed_title">การขออนุญาตล้มเหลว</string>

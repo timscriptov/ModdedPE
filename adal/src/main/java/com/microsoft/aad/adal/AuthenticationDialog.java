@@ -37,6 +37,8 @@ import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AlertDialog;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.UnsupportedEncodingException;
 
 @SuppressLint({
@@ -230,7 +232,7 @@ class AuthenticationDialog {
             mHandlerInView.post(item);
         }
 
-        public void processRedirectUrl(final WebView view, String url) {
+        public void processRedirectUrl(@NotNull final WebView view, String url) {
             Intent resultIntent = new Intent();
             resultIntent.putExtra(AuthenticationConstants.Browser.RESPONSE_FINAL_URL, url);
             resultIntent.putExtra(AuthenticationConstants.Browser.RESPONSE_REQUEST_INFO, mRequest);

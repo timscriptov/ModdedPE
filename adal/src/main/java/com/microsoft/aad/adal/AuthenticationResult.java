@@ -23,6 +23,7 @@
 
 package com.microsoft.aad.adal;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 
 import java.io.Serializable;
@@ -153,6 +154,7 @@ public class AuthenticationResult implements Serializable {
      * @param cacheItem TokenCacheItem to be converted.
      * @return AuthenticationResult
      */
+    @NotNull
     static AuthenticationResult createResult(final TokenCacheItem cacheItem) {
 
         if (cacheItem == null) {
@@ -169,12 +171,14 @@ public class AuthenticationResult implements Serializable {
         return result;
     }
 
+    @NotNull
     static AuthenticationResult createResultForInitialRequest() {
         AuthenticationResult result = new AuthenticationResult();
         result.mInitialRequest = true;
         return result;
     }
     
+    @NotNull
     static AuthenticationResult createExtendedLifeTimeResult(final TokenCacheItem accessTokenItem) {
         final AuthenticationResult retryResult = createResult(accessTokenItem);
         retryResult.setExpiresOn(retryResult.getExtendedExpiresOn());

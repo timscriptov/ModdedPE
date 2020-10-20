@@ -2,7 +2,6 @@
 <resources>
 
     <!--Titles-->
-    <string name="menu_title">Menu</string>
     <string name="manage_nmod_title">Gerenciar NMods</string>
     <string name="settings_title">Configurações</string>
     <string name="about_title">Sobre</string>
@@ -30,7 +29,6 @@
     <string name="nmod_import_failed_message_invalid_package_name">Nome do pacote inválido definido em manifest.Element "package_name" deve ser um nome de pacote com estilo java.</string>
     <string name="nmod_import_failed_message_no_package_name">Nenhum nome do pacote encontrado em nmod_manifest.json.Por favor, adicione o elemento "package_name" (String).</string>
     <string name="nmod_import_failed_message_inequal_package_name">O nome do pacote definido no AndroidManifest.xml e nmod_manifest.json são iguais.ModdedPE não pôde decidir qual nome do pacote usar.</string>
-    <string name="nmod_import_failed_message_redundant_manifest">ModdedPE encontrou dois nmod_manifest.json neste arquivo, mas não sabia qual deles ler. Por favor elimine um. (/ Nmod_manifest.json ou /assets/nmod_manifest.json)</string>
     <string name="nmod_import_failed_button_full_info">Informação de Erro</string>
     <string name="nmod_import_replaced_title">Substituído</string>
     <string name="nmod_import_replaced_message">Modded encontrou um NMod importado com o mesmo nome do pacote. O novo foi importado com êxito e substituiu o antigo.</string>
@@ -41,7 +39,6 @@
     <string name="nmod_import_failed_full_info_message">Tipo de erro:\n%1$s\nMensagem de erro:\n%2$s</string>
     <string name="nmod_add_new">Adicionar Novo</string>
     <string name="nmod_add_new_title">Adicionar Novo&#8320;</string>
-    <string name="nmod_export">Exportar</string>
     <string name="nmod_add_new_message">De onde você deseja escolher o NMod?</string>
     <string name="nmod_add_new_pick_installed">Aplicativos</string>
     <string name="nmod_add_new_pick_storage">Armazenamento</string>
@@ -57,7 +54,6 @@
     <string name="nmod_imported_view_more">Clique no botão para ver mais.</string>
 
     <!--About-->
-    <string name="about_license">Licenças</string>
     <string name="about_copyright_owner">Direito autoral © MCAL, Nextdev.</string>
     <string name="about_author">FEITO POR Иван Тимашков e Listerily</string>
     <string name="about_translators">Tradutores</string>
@@ -86,14 +82,8 @@
     <string name="preferences_summary_language">Selecione a línguagem aqui.</string>
     <string name="preferences_title_music">Music</string>
     <string name="preferences_summary_music">Background music while playing</string>
-    <string name="preferences_title_moddedpe_texture_pack">ModdedPE Texture Pack</string>
-    <string name="preferences_summary_moddedpe_texture_pack">Os gráficos padrão do ModdedPE estão atualizados com novas texturas cheias de estilo!</string>
     <string name="preferences_title_desktop_gui">Use Desktop GUI</string>
     <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
-    <string name="preferences_title_xbox">Войти в Xbox</string>
-    <string name="preferences_summary_xbox">Вам будет доступен тестовый аккаунт Xbox</string>
-    <string name="preferences_title_servers">Новые сервера</string>
-    <string name="preferences_summary_servers">В игре появится много новых серверов</string>
 
     <!--Open Game Dialog-->
     <string name="preloading_initing">Inicializando Launcher</string>
@@ -104,7 +94,6 @@
     <string name="preloading_loading_lib_game_launcher">--Carregando liblauncher-core.so</string>
     <string name="preloading_loading_lib_fmod">--Carregando libfmod.so</string>
     <string name="preloading_loading_lib_minecraftpe">--Carregando libminecraftpe.so</string>
-    <string name="preloading_loading_lib_nmodapi">--Carregando libnmod-core.so</string>
     <string name="preloading_initing_loading_libs_done">Carregando Native Libs</string>
     <string name="preloading_nmod_start_loading">Carregando NMods</string>
     <string name="preloading_nmod_loaded">--Carregado NMod: %1$s</string>
@@ -160,9 +149,6 @@
     <string name="launch_failed_message">Sorry, ModdeddPE triggers an error when opening the game, causing the initiator to crash. If this problem persists, clear ModdedPE\'s application data.\nError Message:%1$s</string>
 
     <!--Enable Warnings-->
-    <string name="enable_warning_unsupported_title">Unsupported Version</string>
-    <string name="enable_warning_unsupported_message">NMod %1$s hasn\'t support Minecraft PE %2$s yet.Please update NMod %1$s.</string>
-    <string name="enable_warning_unsupported_message_if_next">NMod %1$s hasn\'t support Minecraft PE %2$s yet.You can enable it but may cause issues or crashes.</string>
 
     <!--Permissions-->
     <string name="permission_grant_failed_title">Permission Grant Failed</string>

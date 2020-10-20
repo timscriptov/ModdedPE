@@ -171,6 +171,8 @@ public final class CacheKey implements Serializable {
      * @param userId User id for the key to store regular RT entry.
      * @return The cache key for regular RT entry.
      */
+    @NotNull
+    @Contract("null, _, _, _ -> fail; !null, _, null, _ -> fail")
     public static String createCacheKeyForRTEntry(final String authority, final String resource,
                                                   final String clientId, final String userId) {
         return createCacheKey(authority, resource, clientId, false, userId, null);
@@ -183,6 +185,8 @@ public final class CacheKey implements Serializable {
      * @param userId The user id used to create the cache key.
      * @return The cache key for MRRT entry.
      */
+    @NotNull
+    @Contract("null, _, _ -> fail; !null, null, _ -> fail")
     public static String createCacheKeyForMRRT(final String authority, final String clientId, final String userId) {
         return createCacheKey(authority, null, clientId, true, userId, null);
     }

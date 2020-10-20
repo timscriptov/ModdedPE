@@ -27,6 +27,8 @@ import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.os.Build;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Wrapper class for UsageStatsManager.
  */
@@ -56,7 +58,7 @@ public class UsageStatsManagerWrapper {
      * @return true if the app is inactive
      */
     @TargetApi(Build.VERSION_CODES.M)
-    public boolean isAppInactive(final Context connectionContext) {
+    public boolean isAppInactive(@NotNull final Context connectionContext) {
         return ((UsageStatsManager) connectionContext.getSystemService(Context.USAGE_STATS_SERVICE)).isAppInactive(connectionContext.getPackageName());
     }
 }

@@ -26,6 +26,9 @@ package com.microsoft.aad.adal;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Internal class handling the logic for acquire token with Broker app(Either Company Portal or Azure Authenticator).
  * Including the logic for silent flow and interactive flow.
@@ -49,7 +52,7 @@ final class AcquireTokenWithBrokerRequest {
      * Acquire token silently via broker. This is via account manager API call.
      * see {@link BrokerProxy#getAuthTokenInBackground(AuthenticationRequest, BrokerEvent)} for details.
      */
-    AuthenticationResult acquireTokenWithBrokerSilent()
+    @Nullable AuthenticationResult acquireTokenWithBrokerSilent()
             throws AuthenticationException {
         final String methodName = ":acquireTokenWithBrokerSilent";
         mAuthRequest.setVersion(AuthenticationContext.getVersionName());
@@ -132,6 +135,7 @@ final class AcquireTokenWithBrokerRequest {
         Logger.i(TAG + methodName, brokerLogging, "");
     }
 
+    @NotNull
     private BrokerEvent startBrokerTelemetryRequest(final String brokerEventName) {
         final BrokerEvent brokerEvent = new BrokerEvent(brokerEventName);
         brokerEvent.setRequestId(mAuthRequest.getTelemetryRequestId());

@@ -2,7 +2,6 @@
 <resources>
 
     <!--Titles-->
-    <string name="menu_title">Меню</string>
     <string name="manage_nmod_title">NMods Дұрыстау</string>
     <string name="settings_title">Опции</string>
     <string name="about_title">Программа жайлы</string>
@@ -30,7 +29,6 @@
     <string name="nmod_import_failed_message_invalid_package_name">Пакет аты дұрыс емес manifest. Элемент "package_name" java-стилінде болуы керек.</string>
     <string name="nmod_import_failed_message_no_package_name">Пакет аты nmod_manifest.json табылған жоқ. Өтінемін,  "package_name"(строка) элементін қосыңыз.</string>
     <string name="nmod_import_failed_message_inequal_package_name">Әртүрлі пакеттер аттары табылды AndroidManifest.xml және nmod_manifest.json. ModdedPE қабылдай алмады, қандай пакет атын қолданазыз ?</string>
-    <string name="nmod_import_failed_message_redundant_manifest">ModdedPE осы файлада екі nmod_manifest.json тапты, бірақ біреуінде таңдай алмады. Өтінемін, біреуін өшіріп тастауыңызды сұраймын.(/nmod_manifest.json или /assets/nmod_manifest.json)</string>
     <string name="nmod_import_failed_button_full_info">Қателік туралы мәлімет</string>
     <string name="nmod_import_replaced_title">Ауыстырылды</string>
     <string name="nmod_import_replaced_message">ModdedPE импортталған тауып алды NМod ұқсас атымен.Жаңа мод импортталды, ескі мод орнына.</string>
@@ -41,7 +39,6 @@
     <string name="nmod_import_failed_full_info_message">Ошибка түоі:\n%1$s\n Хаттама ошибки:\n%2$s</string>
     <string name="nmod_add_new">Жаңасын қосу</string>
     <string name="nmod_add_new_title">Жаңасын қосу…</string>
-    <string name="nmod_export">Экспорт</string>
     <string name="nmod_add_new_message"> Сіз NMod қайда таңдайсыз ?</string>
     <string name="nmod_add_new_pick_installed">Приложение</string>
     <string name="nmod_add_new_pick_storage">Құрылғы</string>
@@ -57,7 +54,6 @@
     <string name="nmod_imported_view_more">Бұдан да көп білу үшін, батырманы басыңыз!</string>
 
     <!--About-->
-    <string name="about_license">Лицензиялар</string>
     <string name="about_copyright_owner">Copyright © MCAL, Nextdev.</string>
     <string name="about_author">Приложениені жасаған Тимашкова Иван және Listerily</string>
     <string name="about_translators">Аудармашылар</string>
@@ -86,14 +82,8 @@
     <string name="preferences_summary_language">Лаунчердің тілін ауыстыру.</string>
     <string name="preferences_title_music">Music</string>
     <string name="preferences_summary_music">Background music while playing</string>
-    <string name="preferences_title_moddedpe_texture_pack">ModdedPE Texture Pack</string>
-    <string name="preferences_summary_moddedpe_texture_pack">ModdedPE графикалық моделі стандартты стильді текстуралармен жаңартылған!</string>
     <string name="preferences_title_desktop_gui">Use Desktop GUI</string>
     <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
-    <string name="preferences_title_xbox">Войти в Xbox</string>
-    <string name="preferences_summary_xbox">Вам будет доступен тестовый аккаунт Xbox</string>
-    <string name="preferences_title_servers">Новые сервера</string>
-    <string name="preferences_summary_servers">В игре появится много новых серверов</string>
 
     <!--Open Game Dialog-->
     <string name="preloading_initing">Лаунчерді қосамыз</string>
@@ -104,7 +94,6 @@
     <string name="preloading_loading_lib_game_launcher">--liblauncher-core.so Жүктелуде</string>
     <string name="preloading_loading_lib_fmod">--libfmod.so Жүктелуде</string>
     <string name="preloading_loading_lib_minecraftpe">--libminecraftpe.so Жүктелуде</string>
-    <string name="preloading_loading_lib_nmodapi">--libnmod-core.so Жүктелуде</string>
     <string name="preloading_initing_loading_libs_done">Жүктелу Native Libs аяқталды</string>
     <string name="preloading_nmod_start_loading">Жүктелу NMods</string>
     <string name="preloading_nmod_loaded">--Жүктелді NMod: %1$s</string>
@@ -160,9 +149,6 @@
     <string name="launch_failed_message">Өкінішке орай, ModdedPE ойынды ашқан кезде ошибка шығарып тұр. Бұл қателікті шешу үшін приложения ModdedPE данныйын очистить етіп көріңіз. \nХаттама ошибки:%1$s</string>
 
     <!--Enable Warnings-->
-    <string name="enable_warning_unsupported_title">Қабылдалынбайтын версия</string>
-    <string name="enable_warning_unsupported_message">NMOD %1$s әзірше қабылдамайды Minecraft %2$s.Өтінеміз NMod обновить етіңыз %1$s.</string>
-    <string name="enable_warning_unsupported_message_if_next">NMod %1$s әзірше қабылдамайды Minecraft %2$s. Вы можете включить его, но могут быть проблемы или сбои.</string>
 
     <!--Permissions-->
     <string name="permission_grant_failed_title">Рұқсат алу орындалмады</string>

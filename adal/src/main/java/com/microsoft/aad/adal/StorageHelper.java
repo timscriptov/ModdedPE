@@ -30,6 +30,9 @@ import android.os.Build;
 import android.security.KeyPairGeneratorSpec;
 import android.util.Base64;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -373,7 +376,7 @@ public class StorageHelper {
      * @throws GeneralSecurityException
      * @throws IOException
      */
-    private synchronized SecretKey getKey(final String keyVersion) throws GeneralSecurityException, IOException {
+    private synchronized SecretKey getKey(@NotNull final String keyVersion) throws GeneralSecurityException, IOException {
         switch (keyVersion) {
         case VERSION_USER_DEFINED : 
             return getSecretKey(AuthenticationSettings.INSTANCE.getSecretKeyData());
@@ -430,6 +433,8 @@ public class StorageHelper {
     /**
      * Read KeyPair from AndroidKeyStore. 
      */
+    @NotNull
+    @Contract(" -> new")
     private synchronized KeyPair readKeyPair() throws GeneralSecurityException, IOException {
         final String methodName = ":readKeyPair";
         if (!doesKeyPairExist()) {
@@ -483,8 +488,9 @@ public class StorageHelper {
         return isKeyStoreCertAliasExisted;
     }
 
+    @NotNull
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    private AlgorithmParameterSpec getKeyPairGeneratorSpec(final Context context, final Date start, final Date end) {
+    private AlgorithmParameterSpec getKeyPairGeneratorSpec(@NotNull final Context context, final Date start, final Date end) {
         final String certInfo = String.format(Locale.ROOT, "CN=%s, OU=%s", KEY_STORE_CERT_ALIAS,
                 context.getPackageName());
         return new KeyPairGeneratorSpec.Builder(context)
@@ -496,6 +502,8 @@ public class StorageHelper {
                 .build();
     }
 
+    @NotNull
+    @Contract("null -> fail; !null -> new")
     private SecretKey getSecretKey(final byte[] rawBytes) {
         if (rawBytes == null) {
             throw new IllegalArgumentException("rawBytes");
@@ -511,7 +519,8 @@ public class StorageHelper {
      * @return SecretKey
      * @throws NoSuchAlgorithmException
      */
-    private SecretKey getHMacKey(final SecretKey key) throws NoSuchAlgorithmException {
+    @NotNull
+    private SecretKey getHMacKey(@NotNull final SecretKey key) throws NoSuchAlgorithmException {
         // Some keys may not produce byte[] with getEncoded
         final byte[] encodedKey = key.getEncoded();
         if (encodedKey != null) {
@@ -526,7 +535,7 @@ public class StorageHelper {
         return (char) ('a' + ENCODE_VERSION.length());
     }
 
-    private void assertHMac(final byte[] digest, final int start, final int end, final byte[] calculated)
+    private void assertHMac(final byte[] digest, final int start, final int end, @NotNull final byte[] calculated)
             throws DigestException {
         if (calculated.length != (end - start)) { //NOPMD
             throw new IllegalArgumentException("Unexpected HMAC length");
@@ -645,6 +654,7 @@ public class StorageHelper {
         }
     }
 
+    @NotNull
     private byte[] readKeyData() throws IOException {
         final File keyFile = new File(mContext.getDir(mContext.getPackageName(), Context.MODE_PRIVATE),
                 ADALKS);

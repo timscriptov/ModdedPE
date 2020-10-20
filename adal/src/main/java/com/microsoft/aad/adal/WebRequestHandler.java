@@ -25,6 +25,9 @@ package com.microsoft.aad.adal;
 
 import android.os.Build;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
@@ -76,6 +79,8 @@ public class WebRequestHandler implements IWebRequestHandler {
         return request.send();
     }
 
+    @NotNull
+    @Contract("_ -> param1")
     private Map<String, String> updateHeaders(final Map<String, String> headers) {
 
         if (mRequestCorrelationId != null) {

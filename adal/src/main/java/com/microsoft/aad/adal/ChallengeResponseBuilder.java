@@ -23,6 +23,8 @@
 
 package com.microsoft.aad.adal;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -114,6 +116,7 @@ class ChallengeResponseBuilder {
         return getDeviceCertResponse(request);
     }
 
+    @NotNull
     private ChallengeResponse getDeviceCertResponse(ChallengeRequest request) throws AuthenticationException {
         ChallengeResponse response = getNoDeviceCertResponse(request);
         response.mSubmitUrl = request.mSubmitUrl;
@@ -154,7 +157,7 @@ class ChallengeResponseBuilder {
         return certClass != null;
     }
 
-    private IDeviceCertificate getWPJAPIInstance(Class<IDeviceCertificate> certClazz)
+    private IDeviceCertificate getWPJAPIInstance(@NotNull Class<IDeviceCertificate> certClazz)
             throws AuthenticationException {
         final IDeviceCertificate deviceCertProxy;
         final Constructor<?> constructor;
@@ -169,7 +172,8 @@ class ChallengeResponseBuilder {
         return deviceCertProxy;
     }
 
-    private ChallengeResponse getNoDeviceCertResponse(final ChallengeRequest request) {
+    @NotNull
+    private ChallengeResponse getNoDeviceCertResponse(@NotNull final ChallengeRequest request) {
         ChallengeResponse response = new ChallengeResponse();
         response.mSubmitUrl = request.mSubmitUrl;
         response.mAuthorizationHeaderValue = String.format("%s Context=\"%s\",Version=\"%s\"",
@@ -178,6 +182,7 @@ class ChallengeResponseBuilder {
         return response;
     }
 
+    @NotNull
     private ChallengeRequest getChallengeRequestFromHeader(final String headerValue)
             throws UnsupportedEncodingException, AuthenticationException {
         final String methodName = ":getChallengeRequestFromHeader";
@@ -251,8 +256,8 @@ class ChallengeResponseBuilder {
         return challenge;
     }
 
-    private void validateChallengeRequest(Map<String, String> headerItems,
-            boolean redirectFormat) throws AuthenticationException {
+    private void validateChallengeRequest(@NotNull Map<String, String> headerItems,
+                                          boolean redirectFormat) throws AuthenticationException {
         if (!(headerItems.containsKey(RequestField.Nonce.name()) || headerItems
                 .containsKey(RequestField.Nonce.name().toLowerCase(Locale.US)))) {
             throw new AuthenticationException(ADALError.DEVICE_CERTIFICATE_REQUEST_INVALID, "Nonce");
@@ -275,6 +280,7 @@ class ChallengeResponseBuilder {
         }
     }
 
+    @NotNull
     private ChallengeRequest getChallengeRequest(final String redirectUri)
             throws AuthenticationException {
         final String methodName = ":getChallengeRequest";

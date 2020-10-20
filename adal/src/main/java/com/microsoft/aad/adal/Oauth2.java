@@ -30,6 +30,8 @@ import android.util.Base64;
 
 import com.microsoft.aad.adal.ChallengeResponseBuilder.ChallengeResponse;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -229,7 +231,7 @@ class Oauth2 {
         return message;
     }
 
-    public AuthenticationResult processUIResponseParams(Map<String, String> response) throws AuthenticationException {
+    public AuthenticationResult processUIResponseParams(@NotNull Map<String, String> response) throws AuthenticationException {
 
         final AuthenticationResult result;
 
@@ -609,6 +611,7 @@ class Oauth2 {
         return result;
     }
 
+    @Nullable
     private AuthenticationResult retry(String requestMessage, Map<String, String> headers) throws IOException, AuthenticationException {
         final String methodName = ":retry";
         //retry once if there is an observation of a network timeout by the client 
@@ -627,6 +630,7 @@ class Oauth2 {
         return null;
     }
 
+    @Nullable
     public static String decodeProtocolState(String encodedState) throws UnsupportedEncodingException {
 
         if (!StringExtensions.isNullOrBlank(encodedState)) {
@@ -643,6 +647,7 @@ class Oauth2 {
         return Base64.encodeToString(state.getBytes("UTF-8"), Base64.NO_PADDING | Base64.URL_SAFE);
     }
 
+    @NotNull
     private Map<String, String> getRequestHeaders() {
         final Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");
@@ -655,7 +660,7 @@ class Oauth2 {
      * @param webResponse the web response from which authentication result will be constructed
      * @return AuthenticationResult
      */
-    private AuthenticationResult processTokenResponse(HttpWebResponse webResponse, final HttpEvent httpEvent)
+    private AuthenticationResult processTokenResponse(@NotNull HttpWebResponse webResponse, final HttpEvent httpEvent)
             throws AuthenticationException {
         final String methodName = ":processTokenResponse";
         AuthenticationResult result;
@@ -754,6 +759,7 @@ class Oauth2 {
         return processUIResponseParams(responseItems);
     }
 
+    @NotNull
     private HttpEvent startHttpEvent() {
         final HttpEvent httpEvent = new HttpEvent(EventStrings.HTTP_EVENT);
         httpEvent.setRequestId(mRequest.getTelemetryRequestId());

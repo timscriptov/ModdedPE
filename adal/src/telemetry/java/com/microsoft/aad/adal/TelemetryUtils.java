@@ -23,6 +23,8 @@
 
 package com.microsoft.aad.adal;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -58,6 +60,7 @@ final class TelemetryUtils {
         );
     }
 
+    @Nullable
     static CliTelemInfo parseXMsCliTelemHeader(final String headerValue) {
         // if the header isn't present, do nothing
         if (StringExtensions.isNullOrBlank(headerValue)) {

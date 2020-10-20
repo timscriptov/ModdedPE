@@ -28,6 +28,8 @@ import android.os.Build;
 import android.os.Debug;
 import android.os.Process;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.IOException;
@@ -203,6 +205,7 @@ class HttpWebRequest {
      * @return The converted string
      * @throws IOException Thrown when failing to access inputStream stream.
      */
+    @NotNull
     private static String convertStreamToString(InputStream inputStream) throws IOException {
         BufferedReader reader = null;
         try {

@@ -32,6 +32,9 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.RemoteException;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,7 +74,7 @@ final class BrokerAccountServiceHandler {
      * Get Broker users is a blocking call, cannot be executed on the main thread.
      * @return An array of {@link UserInfo}s in the broker. If no user exists in the broker, empty array will be returned.
      */
-    UserInfo[] getBrokerUsers(final Context context) throws IOException {
+    @NotNull UserInfo[] getBrokerUsers(final Context context) throws IOException {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         final AtomicReference<Bundle> userBundle = new AtomicReference<>(null);
         final AtomicReference<Throwable> exception = new AtomicReference<>(null);
@@ -256,6 +259,7 @@ final class BrokerAccountServiceHandler {
         }, null);
     }
 
+    @Nullable
     public static Intent getIntentForBrokerAccountService(final Context context) {
         final BrokerProxy brokerProxy = new BrokerProxy(context);
         final String brokerAppName = brokerProxy.getCurrentActiveBrokerPackageName();
@@ -271,7 +275,8 @@ final class BrokerAccountServiceHandler {
         return brokerAccountServiceToBind;
     }
 
-    private Map<String, String> prepareGetAuthTokenRequestData(final Context context, final Bundle requestBundle) {
+    @NotNull
+    private Map<String, String> prepareGetAuthTokenRequestData(final Context context, @NotNull final Bundle requestBundle) {
         final Set<String> requestBundleKeys = requestBundle.keySet();
 
         final Map<String, String> requestData = new HashMap<>();
@@ -288,6 +293,7 @@ final class BrokerAccountServiceHandler {
         return requestData;
     }
 
+    @NotNull
     private UserInfo[] convertUserInfoBundleToArray(final Bundle usersBundle) {
         if (usersBundle == null) {
             Logger.v(TAG, "No user info returned from broker account service.");

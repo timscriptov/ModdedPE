@@ -37,6 +37,8 @@ import android.util.SparseArray;
 
 import com.microsoft.aad.adal.AuthenticationRequest.UserIdentifierType;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -1076,6 +1078,8 @@ public class AuthenticationContext {
         Logger.setCorrelationId(requestCorrelationId);
     }
 
+    @NotNull
+    @Contract("null -> fail; !null -> new")
     private IWindowComponent wrapActivity(final Activity activity) {
         if (activity == null) {
             throw new IllegalArgumentException("activity");
@@ -1171,10 +1175,13 @@ public class AuthenticationContext {
         return redirectUri;
     }
 
+    @NotNull
+    @Contract("_ -> new")
     private AcquireTokenRequest createAcquireTokenRequest(final APIEvent apiEvent) {
         return new AcquireTokenRequest(mContext, this, apiEvent);
     }
 
+    @NotNull
     private static String extractAuthority(String authority) {
         if (!StringExtensions.isNullOrBlank(authority)) {
 
@@ -1345,7 +1352,7 @@ public class AuthenticationContext {
      * If request has correlationID, ADAL should report that instead of current
      * CorrelationId.
      */
-    String getCorrelationInfoFromWaitingRequest(final AuthenticationRequestState waitingRequest) {
+    String getCorrelationInfoFromWaitingRequest(@NotNull final AuthenticationRequestState waitingRequest) {
         UUID requestCorrelationID = getRequestCorrelationId();
         if (waitingRequest.getRequest() != null) {
             requestCorrelationID = waitingRequest.getRequest().getCorrelationId();
@@ -1359,6 +1366,8 @@ public class AuthenticationContext {
      *
      * @return The current SDK version.
      */
+    @NotNull
+    @Contract(pure = true)
     public static String getVersionName() {
         // Package manager does not report for ADAL
         // AndroidManifest files are not merged, so it is returning hard coded
@@ -1392,6 +1401,7 @@ public class AuthenticationContext {
         }
     }
 
+    @NotNull
     private APIEvent createApiEvent(Context context, String clientId, String requestId, String apiId) {
         final APIEvent apiEvent = new APIEvent(EventStrings.API_EVENT, context, clientId);
         apiEvent.setRequestId(requestId);

@@ -25,6 +25,8 @@ package com.microsoft.aad.adal;
 
 import android.util.Pair;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +61,7 @@ final class HttpEvent extends DefaultEvent {
         setProperty(EventStrings.HTTP_API_VERSION, apiVersion);
     }
 
-    void setHttpPath(final URL httpPath) {
+    void setHttpPath(@NotNull final URL httpPath) {
         final String authority = httpPath.getAuthority();
         if (!Discovery.getValidHosts().contains(authority)) {
             return;
@@ -135,7 +137,7 @@ final class HttpEvent extends DefaultEvent {
      * @param dispatchMap the Map that is filled with the aggregated event properties
      */
     @Override
-    public void processEvent(final Map<String, String> dispatchMap) {
+    public void processEvent(@NotNull final Map<String, String> dispatchMap) {
         final String countObject = dispatchMap.get(EventStrings.HTTP_EVENT_COUNT);
 
         if (countObject == null) {

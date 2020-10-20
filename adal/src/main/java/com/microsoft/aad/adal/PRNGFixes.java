@@ -35,6 +35,9 @@ package com.microsoft.aad.adal;
 import android.os.Build;
 import android.os.Process;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -307,6 +310,7 @@ final class PRNGFixes {
      * Generates a device- and invocation-specific seed to be mixed into the
      * Linux PRNG.
      */
+    @NotNull
     private static byte[] generateSeed() {
         try {
             ByteArrayOutputStream seedBuffer = new ByteArrayOutputStream();
@@ -328,6 +332,7 @@ final class PRNGFixes {
      * 
      * @return serial number or {@code null} if not available.
      */
+    @Nullable
     private static String getDeviceSerialNumber() {
         // We're using the Reflection API because Build.SERIAL is only available
         // since API Level 9 (Gingerbread, Android 2.3).

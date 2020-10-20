@@ -54,6 +54,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.gson.Gson;
 import com.microsoft.aad.adal.AuthenticationResult.AuthenticationStatus;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -431,7 +433,7 @@ public class AuthenticationActivity extends AppCompatActivity {
     /**
      * Return error to caller and finish this activity.
      */
-    private void returnError(ADALError errorCode, String argument) {
+    private void returnError(@NotNull ADALError errorCode, String argument) {
         // Set result back to account manager call
         Logger.w(TAG, "Argument error:" + argument);
         Intent resultIntent = new Intent();
@@ -702,7 +704,7 @@ public class AuthenticationActivity extends AppCompatActivity {
 
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         @Override
-        public void onReceivedClientCertRequest(WebView view, final ClientCertRequest request) {
+        public void onReceivedClientCertRequest(WebView view, @NotNull final ClientCertRequest request) {
             final String methodName = ":onReceivedClientCertRequest";
             Logger.v(TAG + methodName, "Webview receives client TLS request.");
 
@@ -779,7 +781,7 @@ public class AuthenticationActivity extends AppCompatActivity {
         }
     }
 
-    private void returnResult(int resultcode, Intent intent) {
+    private void returnResult(int resultcode, @NotNull Intent intent) {
         // Set result back to account manager call
         this.setAccountAuthenticatorResult(intent.getExtras());
         this.setResult(resultcode, intent);
@@ -852,7 +854,7 @@ public class AuthenticationActivity extends AppCompatActivity {
         }
 
         @Override
-        protected TokenTaskResult doInBackground(String... urlItems) {
+        protected TokenTaskResult doInBackground(@NotNull String... urlItems) {
             Oauth2 oauthRequest = new Oauth2(mRequest, mRequestHandler, mJWSBuilder);
             TokenTaskResult result = new TokenTaskResult();
             try {
@@ -1049,7 +1051,7 @@ public class AuthenticationActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(TokenTaskResult result) {
+        protected void onPostExecute(@NotNull TokenTaskResult result) {
             Logger.v(TAG, "Token task returns the result");
             displaySpinner(false);
             Intent intent = new Intent();

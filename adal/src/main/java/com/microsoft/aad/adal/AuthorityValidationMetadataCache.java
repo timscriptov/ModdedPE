@@ -23,6 +23,8 @@
 
 package com.microsoft.aad.adal;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -59,7 +61,7 @@ final class AuthorityValidationMetadataCache {
         // Utility class, no public constructor
     }
 
-    static boolean containsAuthorityHost(final URL authorityUrl) {
+    static boolean containsAuthorityHost(@NotNull final URL authorityUrl) {
         return sAadAuthorityHostMetadata.containsKey(authorityUrl.getHost().toLowerCase(Locale.US));
     }
 
@@ -67,11 +69,11 @@ final class AuthorityValidationMetadataCache {
         return containsAuthorityHost(authorityUrl) && getCachedInstanceDiscoveryMetadata(authorityUrl).isValidated();
     }
 
-    static InstanceDiscoveryMetadata getCachedInstanceDiscoveryMetadata(final URL authorityUrl) {
+    static InstanceDiscoveryMetadata getCachedInstanceDiscoveryMetadata(@NotNull final URL authorityUrl) {
         return sAadAuthorityHostMetadata.get(authorityUrl.getHost().toLowerCase(Locale.US));
     }
 
-    static void processInstanceDiscoveryMetadata(final URL authorityUrl, final Map<String, String> discoveryResponse) throws JSONException {
+    static void processInstanceDiscoveryMetadata(@NotNull final URL authorityUrl, @NotNull final Map<String, String> discoveryResponse) throws JSONException {
         final String methodName = ":processInstanceDiscoveryMetadata";
         final boolean isTenantDiscoveryEndpointReturned = discoveryResponse.containsKey(TENANT_DISCOVERY_ENDPOINT);
         final String metadata = discoveryResponse.get(META_DATA);
@@ -92,10 +94,11 @@ final class AuthorityValidationMetadataCache {
         processInstanceDiscoveryResponse(metadata);
     }
 
-    static void updateInstanceDiscoveryMap(final String host, final InstanceDiscoveryMetadata metadata) {
+    static void updateInstanceDiscoveryMap(@NotNull final String host, final InstanceDiscoveryMetadata metadata) {
         sAadAuthorityHostMetadata.put(host.toLowerCase(Locale.US), metadata);
     }
 
+    @NotNull
     static Map<String, InstanceDiscoveryMetadata> getAuthorityValidationMetadataCache() {
         return Collections.unmodifiableMap(sAadAuthorityHostMetadata);
     }
@@ -115,7 +118,9 @@ final class AuthorityValidationMetadataCache {
         }
     }
 
-    private static InstanceDiscoveryMetadata processSingleJsonArray(final JSONObject jsonObject) throws JSONException {
+    @NotNull
+    @Contract("_ -> new")
+    private static InstanceDiscoveryMetadata processSingleJsonArray(@NotNull final JSONObject jsonObject) throws JSONException {
         final String preferredNetwork = jsonObject.getString(PREFERRED_NETWORK);
         final String preferredCache = jsonObject.getString(PREFERRED_CACHE);
         final JSONArray aliasArray = jsonObject.getJSONArray(ALIASES);

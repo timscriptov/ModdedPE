@@ -25,6 +25,8 @@ package com.microsoft.aad.adal;
 
 import android.util.Pair;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -70,6 +72,7 @@ public final class Telemetry {
         sAllowPii = allowFlag;
     }
 
+    @NotNull
     static String registerNewRequest() {
         return UUID.randomUUID().toString();
     }

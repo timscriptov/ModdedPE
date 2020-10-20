@@ -23,6 +23,8 @@
 
 package com.microsoft.aad.adal;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -100,11 +102,11 @@ public class MemoryTokenCacheStore implements ITokenCacheStore {
         }
     }
 
-    private synchronized void writeObject(ObjectOutputStream out) throws IOException {
+    private synchronized void writeObject(@NotNull ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
     }
 
-    private void readObject(ObjectInputStream inputStream) throws IOException,
+    private void readObject(@NotNull ObjectInputStream inputStream) throws IOException,
             ClassNotFoundException {
         inputStream.defaultReadObject();
 

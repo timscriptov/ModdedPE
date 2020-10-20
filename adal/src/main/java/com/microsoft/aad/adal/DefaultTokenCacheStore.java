@@ -35,6 +35,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
@@ -121,6 +124,7 @@ public class DefaultTokenCacheStore implements ITokenCacheStore, ITokenStoreQuer
         return sHelper;
     }
 
+    @Nullable
     private String encrypt(String value) {
         try {
             return getStorageHelper().encrypt(value);
@@ -131,6 +135,7 @@ public class DefaultTokenCacheStore implements ITokenCacheStore, ITokenStoreQuer
         return null;
     }
 
+    @Nullable
     private String decrypt(final String key, final String value) {
         if (StringExtensions.isNullOrBlank(key)) {
             throw new IllegalArgumentException("key is null or blank");
@@ -364,6 +369,7 @@ public class DefaultTokenCacheStore implements ITokenCacheStore, ITokenStoreQuer
 
     private static final int TOKEN_VALIDITY_WINDOW = 10;
 
+    @NotNull
     private static Calendar getTokenValidityTime() {
         Calendar timeAhead = Calendar.getInstance();
         timeAhead.add(Calendar.SECOND, TOKEN_VALIDITY_WINDOW);

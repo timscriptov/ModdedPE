@@ -25,6 +25,7 @@ package com.microsoft.aad.adal;
 
 import android.util.Base64;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -124,6 +125,7 @@ class IdToken {
         return mPasswordChangeUrl;
     }
 
+    @NotNull
     private Map<String, String> parseJWT(final String idtoken) throws AuthenticationException {
         final String methodName = ":parseJWT";
         final String idbody = extractJWTBody(idtoken);
@@ -146,7 +148,8 @@ class IdToken {
         }
     }
 
-    private String extractJWTBody(final String idToken) throws AuthenticationException {
+    @NotNull
+    private String extractJWTBody(@NotNull final String idToken) throws AuthenticationException {
         final int firstDot = idToken.indexOf('.');
         final int secondDot = idToken.indexOf('.', firstDot + 1);
         final int invalidDot = idToken.indexOf('.', secondDot + 1);

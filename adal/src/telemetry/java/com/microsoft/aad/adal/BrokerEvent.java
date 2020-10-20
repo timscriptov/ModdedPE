@@ -25,6 +25,8 @@ package com.microsoft.aad.adal;
 
 import android.util.Pair;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.Map;
 
@@ -84,7 +86,7 @@ final class BrokerEvent extends DefaultEvent {
     }
 
     @Override
-    public void processEvent(final Map<String, String> dispatchMap) {
+    public void processEvent(@NotNull final Map<String, String> dispatchMap) {
         final List<Pair<String, String>> eventList = getEventList();
 
         dispatchMap.put(EventStrings.BROKER_APP_USED, Boolean.toString(true));

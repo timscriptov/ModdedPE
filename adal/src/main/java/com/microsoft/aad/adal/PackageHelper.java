@@ -33,6 +33,8 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
 import android.util.Base64;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
@@ -113,6 +115,7 @@ class PackageHelper {
      * @param signatureDigest   application signature 
      * @return broker redirect url
      */
+    @NotNull
     public static String getBrokerRedirectUrl(final String packageName, final String signatureDigest) {
         if (!StringExtensions.isNullOrBlank(packageName)
                 && !StringExtensions.isNullOrBlank(signatureDigest)) {

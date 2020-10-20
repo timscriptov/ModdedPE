@@ -24,6 +24,8 @@ package com.microsoft.aad.adal;
 
 import android.net.Uri;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
@@ -46,12 +48,13 @@ final class Utility {
         return date;
     }
 
-    static boolean isClaimsChallengePresent(final AuthenticationRequest request) {
+    static boolean isClaimsChallengePresent(@NotNull final AuthenticationRequest request) {
         // if developer pass claims down through extra qp, we should also skip cache.
         return !StringExtensions.isNullOrBlank(request.getClaimsChallenge());
     }
 
-    static URL constructAuthorityUrl(final URL originalAuthority, final String host) throws MalformedURLException {
+    @NotNull
+    static URL constructAuthorityUrl(@NotNull final URL originalAuthority, final String host) throws MalformedURLException {
         final String path = originalAuthority.getPath().replaceFirst("/", "");
         final Uri.Builder builder = new Uri.Builder().scheme(originalAuthority.getProtocol()).authority(host).appendPath(path);
         return new URL(builder.build().toString());

@@ -27,6 +27,8 @@ import android.content.Context;
 import android.os.Build;
 import android.os.PowerManager;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Wrapper class for PowerManager.
  */
@@ -56,7 +58,7 @@ public class PowerManagerWrapper {
      * @return true if the device is in doze/idle mode
      */
     @TargetApi(Build.VERSION_CODES.M)
-    public boolean isDeviceIdleMode(final Context connectionContext) {
+    public boolean isDeviceIdleMode(@NotNull final Context connectionContext) {
         return ((PowerManager) connectionContext.getSystemService(Context.POWER_SERVICE)).isDeviceIdleMode();
     }
 

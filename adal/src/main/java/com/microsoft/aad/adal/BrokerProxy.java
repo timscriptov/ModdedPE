@@ -49,6 +49,7 @@ import android.util.Base64;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 
 import java.io.ByteArrayInputStream;
@@ -264,6 +265,7 @@ class BrokerProxy implements IBrokerProxy {
         return true;
     }
 
+    @NotNull
     private String checkPermission(final String permissionName) {
         final PackageManager pm = mContext.getPackageManager();
         if (pm.checkPermission(permissionName, mContext.getPackageName()) != PackageManager.PERMISSION_GRANTED) {
@@ -341,6 +343,7 @@ class BrokerProxy implements IBrokerProxy {
         return getResultFromBrokerResponse(bundleResult, request);
     }
 
+    @Nullable
     private Bundle getAuthTokenFromAccountManager(final AuthenticationRequest request, final Bundle requestBundle) throws AuthenticationException {
         // if there is not any user added to account, it returns empty
         final String methodName = ":getAuthTokenFromAccountManager";
@@ -420,7 +423,7 @@ class BrokerProxy implements IBrokerProxy {
         return infos != null && infos.size() > 0;
     }
 
-    private Account getTargetAccount(final AuthenticationRequest request) {
+    private Account getTargetAccount(@NotNull final AuthenticationRequest request) {
         final String methodName = ":getTargetAccount";
         Account targetAccount = null;
         final Account[] accountList = mAcctManager.getAccountsByType(AuthenticationConstants.Broker.BROKER_ACCOUNT_TYPE);
@@ -443,6 +446,7 @@ class BrokerProxy implements IBrokerProxy {
         return targetAccount;
     }
 
+    @NotNull
     private AuthenticationResult getResultFromBrokerResponse(final Bundle bundleResult, final AuthenticationRequest request)
             throws AuthenticationException {
         final String methodName = ":getResultFromBrokerResponse";
@@ -704,7 +708,8 @@ class BrokerProxy implements IBrokerProxy {
         return "VersionName=" + packageInfo.versionName + ";VersonCode=" + packageInfo.versionCode + ".";
     }
 
-    private Bundle getBrokerOptions(final AuthenticationRequest request) {
+    @NotNull
+    private Bundle getBrokerOptions(@NotNull final AuthenticationRequest request) {
         Bundle brokerOptions = new Bundle();
         // request needs to be parcelable to send across process
         brokerOptions.putInt(AuthenticationConstants.Browser.REQUEST_ID, request.getRequestId());

@@ -23,6 +23,9 @@
 
 package com.microsoft.aad.adal;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -130,6 +133,7 @@ public class TokenCacheItem implements Serializable {
      *                   
      * @return TokenCacheItem
      */
+    @NotNull
     public static TokenCacheItem createRegularTokenCacheItem(final String authority, final String resource, final String clientId, final AuthenticationResult authResult) {
         final TokenCacheItem item = new TokenCacheItem(authority, authResult);
         item.setClientId(clientId);
@@ -148,6 +152,7 @@ public class TokenCacheItem implements Serializable {
      * 
      * @return TokenCacheItem
      */
+    @NotNull
     public static TokenCacheItem createMRRTTokenCacheItem(final String authority, final String clientId, final AuthenticationResult authResult) {
         final TokenCacheItem item = new TokenCacheItem(authority, authResult);
         item.setClientId(clientId);
@@ -164,6 +169,8 @@ public class TokenCacheItem implements Serializable {
      *                   
      * @return TokenCacheItem
      */
+    @NotNull
+    @Contract("_, _ -> new")
     public static TokenCacheItem createFRRTTokenCacheItem(final String authority, final AuthenticationResult authResult) {
         return new TokenCacheItem(authority, authResult);
     }

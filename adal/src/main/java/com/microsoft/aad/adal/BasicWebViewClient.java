@@ -36,6 +36,8 @@ import android.webkit.WebViewClient;
 
 import com.microsoft.aad.adal.ChallengeResponseBuilder.ChallengeResponse;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -180,7 +182,7 @@ abstract class BasicWebViewClient extends WebViewClient {
 
     @Override
     //Give the host application a chance to take over the control when a new url is about to be loaded in the current WebView.
-    public boolean shouldOverrideUrlLoading(final WebView view, String url) {
+    public boolean shouldOverrideUrlLoading(final WebView view, @NotNull String url) {
         final String methodName = ":shouldOverrideUrlLoading";
         Logger.v(TAG + methodName, "Navigation is detected");
         if (url.startsWith(AuthenticationConstants.Broker.PKEYAUTH_REDIRECT)) {
@@ -300,7 +302,7 @@ abstract class BasicWebViewClient extends WebViewClient {
         return mCallingContext;
     }
     
-    protected void openLinkInBrowser(String url) {
+    protected void openLinkInBrowser(@NotNull String url) {
         String link = url
                 .replace(AuthenticationConstants.Broker.BROWSER_EXT_PREFIX, "https://");
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));

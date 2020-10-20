@@ -26,6 +26,8 @@ package com.microsoft.aad.adal;
 import android.content.Context;
 import android.net.Uri;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -136,7 +138,7 @@ final class Discovery {
         }
     }
 
-    private static void validateADFS(final URL authorizationEndpoint, final String domain)
+    private static void validateADFS(@NotNull final URL authorizationEndpoint, final String domain)
             throws AuthenticationException {
         // Maps & Sets of URLs perform domain name resolution for equals() & hashCode()
         // To prevent this from happening, store/consult the cache using the URI value
@@ -247,6 +249,7 @@ final class Discovery {
         }
     }
 
+    @NotNull
     private Map<String, String> sendRequest(final URL queryUrl) throws IOException, JSONException, AuthenticationException {
 
         Logger.v(TAG, "Sending discovery request to query url. ", "queryUrl: " + queryUrl, null);
@@ -304,6 +307,7 @@ final class Discovery {
      * @return true if tenant discovery endpoint is reported. false otherwise.
      * @throws JSONException
      */
+    @NotNull
     private Map<String, String> parseResponse(HttpWebResponse webResponse) throws JSONException {
         return HashMapExtensions.getJsonResponse(webResponse);
     }
@@ -315,7 +319,8 @@ final class Discovery {
      * @param authorizationEndpointUrl converts the endpoint URL to authorization endpoint
      * @return https://hostname/common
      */
-    private String getAuthorizationCommonEndpoint(final URL authorizationEndpointUrl) {
+    @NotNull
+    private String getAuthorizationCommonEndpoint(@NotNull final URL authorizationEndpointUrl) {
         return new Uri.Builder().scheme("https")
                 .authority(authorizationEndpointUrl.getHost())
                 .appendPath(AUTHORIZATION_COMMON_ENDPOINT).build().toString();
@@ -329,6 +334,8 @@ final class Discovery {
      * @return URL
      * @throws MalformedURLException
      */
+    @NotNull
+    @Contract("_, _ -> new")
     private URL buildQueryString(final String instance, final String authorizationEndpointUrl)
             throws MalformedURLException {
 

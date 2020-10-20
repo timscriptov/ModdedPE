@@ -30,6 +30,8 @@ import android.provider.Settings.Secure;
 import android.text.TextUtils;
 import android.util.Pair;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -120,7 +122,7 @@ class DefaultEvent implements IEvents {
     }
 
     @SuppressLint("HardwareIds")
-    void setDefaults(final Context context, final String clientId) {
+    void setDefaults(@NotNull final Context context, final String clientId) {
         sClientId = clientId;
         sApplicationName = context.getPackageName();
         try {

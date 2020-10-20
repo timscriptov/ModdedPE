@@ -30,6 +30,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
@@ -190,7 +191,7 @@ class AcquireTokenRequest {
         }
     }
 
-    private void performAuthorityValidation(final AuthenticationRequest authenticationRequest, final URL authorityUrl)
+    private void performAuthorityValidation(@NotNull final AuthenticationRequest authenticationRequest, final URL authorityUrl)
             throws AuthenticationException {
         // validate authority
         final String methodName = ":performAuthorityValidation";
@@ -559,7 +560,7 @@ class AcquireTokenRequest {
      * If the redirectUri from the client does not match the valid redirectUri, the client app would not jump
      * to the login page. redirectUri format %PREFIX://%PACKAGE_NAME/%SIGNATURE
      */
-    private void verifyBrokerRedirectUri(final AuthenticationRequest request) throws UsageAuthenticationException {
+    private void verifyBrokerRedirectUri(@NotNull final AuthenticationRequest request) throws UsageAuthenticationException {
         final String methodName = ":verifyBrokerRedirectUri";
         final String inputUri = request.getRedirectUri();
         final String actualRedirectUri = mAuthContext.getRedirectUriForBroker();

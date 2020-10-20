@@ -31,6 +31,9 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -53,6 +56,7 @@ public final class DateTimeAdapter implements JsonDeserializer<Date>, JsonSerial
     private final DateFormat mEnUs24HourFormat = buildEnUs24HourDateFormat();
     private final DateFormat mLocal24HourFormat = buildLocal24HourDateFormat();
 
+    @NotNull
     private static DateFormat buildIso8601Format() {
         DateFormat iso8601Format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
         iso8601Format.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -62,6 +66,8 @@ public final class DateTimeAdapter implements JsonDeserializer<Date>, JsonSerial
     /**
      * Add new en-us date format for parsing date string if it doesn't contain AM/PM.
      */
+    @NotNull
+    @Contract(" -> new")
     private static DateFormat buildEnUs24HourDateFormat() {
         return new SimpleDateFormat("MMM dd, yyyy HH:mm:ss", Locale.US);
     }
@@ -69,6 +75,8 @@ public final class DateTimeAdapter implements JsonDeserializer<Date>, JsonSerial
     /**
      * Add new local date format when parsing date string if it doesn't contain AM/PM.
      */
+    @NotNull
+    @Contract(" -> new")
     private static DateFormat buildLocal24HourDateFormat() {
         return new SimpleDateFormat("MMM dd, yyyy HH:mm:ss", Locale.getDefault());
     }
@@ -84,8 +92,8 @@ public final class DateTimeAdapter implements JsonDeserializer<Date>, JsonSerial
      * {@inheritDoc}
      */
     @Override
-    public synchronized Date deserialize(JsonElement json, Type typeOfT,
-            JsonDeserializationContext context) throws JsonParseException {
+    public synchronized Date deserialize(@NotNull JsonElement json, Type typeOfT,
+                                         JsonDeserializationContext context) throws JsonParseException {
         final String methodName = ":deserialize";
         String jsonString = json.getAsString();
 
@@ -131,6 +139,8 @@ public final class DateTimeAdapter implements JsonDeserializer<Date>, JsonSerial
     /**
      * {@inheritDoc}
      */
+    @NotNull
+    @Contract("_, _, _ -> new")
     @Override
     public synchronized JsonElement serialize(Date src, Type typeOfSrc,
             JsonSerializationContext context) {

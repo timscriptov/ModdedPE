@@ -28,6 +28,8 @@ import android.util.Base64;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -182,6 +184,7 @@ class JWSBuilder implements IJWSBuilder {
      * @param input the data that needs to be signed
      * @return String signed string
      */
+    @NotNull
     private static String sign(RSAPrivateKey privateKey, final byte[] input) throws AuthenticationException {
         final Signature signer;
         try {

@@ -59,8 +59,9 @@ public final class TokenCacheItemSerializationAdapater
         return jsonObj;
     }
 
+    @NotNull
     @Override
-    public TokenCacheItem deserialize(JsonElement json, Type type, JsonDeserializationContext context)
+    public TokenCacheItem deserialize(@NotNull JsonElement json, Type type, JsonDeserializationContext context)
             throws JsonParseException {
         final JsonObject srcJsonObj = json.getAsJsonObject();
         throwIfParameterMissing(srcJsonObj, OAuth2.AUTHORITY);
@@ -87,7 +88,7 @@ public final class TokenCacheItemSerializationAdapater
         return tokenCacheItem;
     }
 
-    private void throwIfParameterMissing(JsonObject json, String name) {
+    private void throwIfParameterMissing(@NotNull JsonObject json, String name) {
         if (!json.has(name)) {
             throw new JsonParseException(TAG + "Attribute " + name + " is missing for deserialization.");
         }
