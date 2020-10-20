@@ -81,11 +81,8 @@ dependencies {
     //noinspection DuplicatePlatformClasses
     implementation 'org.apache.httpcomponents:httpclient:4.5.13'
     implementation 'org.apache.httpcomponents:httpmime:4.5.13'
-
     implementation 'org.simpleframework:simple-xml:2.7.1'
 
-    implementation 'io.github.inflationx:calligraphy3:3.1.1'
-    implementation 'io.github.inflationx:viewpump:2.0.2'
     implementation 'com.madgag.spongycastle:pkix:1.54.0.0'
     implementation 'com.squareup.okhttp3:okhttp:4.8.1'
 }
