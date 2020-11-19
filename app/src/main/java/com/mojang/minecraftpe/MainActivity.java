@@ -272,7 +272,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
 
     private native void setUpBreakpad(String str, String str2);
 
-
     public native boolean isAndroidTrial();
 
     public native boolean isBrazeEnabled();
@@ -311,8 +310,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
 
     public native void nativeProcessIntentUriQuery(String str, String str2);
 
-    public native void nativeRegisterThis();
-
     public native void nativeResize(int i, int i2);
 
     public native void nativeReturnKeyPressed();
@@ -330,8 +327,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     public native void nativeStoragePermissionRequestResult(boolean z, int i);
 
     public native void nativeSuspend();
-
-    public native void nativeUnregisterThis();
 
     public void onRequestComplete(int requestId, long userData, int httpStatusOrNegativeError, String content) {
         nativeWebRequestCompleted(requestId, userData, httpStatusOrNegativeError, content);
@@ -1471,7 +1466,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         for (ActivityListener listener : new ArrayList<>(this.mActivityListeners)) {
             listener.onDestroy();
         }
-        nativeUnregisterThis();
         nativeOnDestroy();
         super.onDestroy();
         System.exit(0);
