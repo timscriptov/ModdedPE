@@ -69,5 +69,5 @@ dependencies {
     androidTestImplementation "com.google.dexmaker:dexmaker-mockito:1.2"
 
     // Test Dependencies
-    testImplementation("junit:junit:4.12")
+    testImplementation("junit:junit:4.13.1")
 }
