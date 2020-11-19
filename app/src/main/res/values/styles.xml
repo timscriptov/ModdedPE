@@ -12,6 +12,10 @@
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
     </style>
 
+    <style name="SplashScreen" parent="@android:style/Theme.NoTitleBar.Fullscreen">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+    </style>
+
     <style name="AppErrorTheme" parent="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
         <item name="colorPrimary">#444444</item>
         <item name="colorPrimaryDark">#212121</item>

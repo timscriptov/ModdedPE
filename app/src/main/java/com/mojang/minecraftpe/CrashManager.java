@@ -3,23 +3,40 @@ package com.mojang.minecraftpe;
 import android.annotation.SuppressLint;
 import android.util.Log;
 
+import com.appboy.ui.inappmessage.jsinterface.AppboyInAppMessageHtmlUserJavascriptInterface;
+
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * @author Тимашков Иван
@@ -27,123 +44,282 @@ import java.util.UUID;
  */
 
 public class CrashManager {
-    private static native String getSentryParameters(String str, String str2, int i);
+    public static final String FILENAME_SEQUENCE_SEPARATOR = "-";
+    private static final int MAX_CONCURRENT_UPLOADS = 4;
+    private String mCrashUploadURI = null;
+    private SessionInfo mCurrentSession = null;
+    private ConcurrentLinkedQueue<String> mDumpFileQueue = null;
+    private String mDumpFilesPath = null;
+    private String mExceptionUploadURI = null;
+    private CrashManagerOwner mOwner = null;
+    private Thread.UncaughtExceptionHandler mPreviousUncaughtExceptionHandler = null;
+    private SentryEndpointConfig mSentryEndpointConfig = null;
+    private String mSentrySessionParameters = null;
+    private String mUserId = null;
 
-    @NotNull
-    public static Map<String, Date> handlePreviousDumps(String dumpFilesPath, String crashUploadURI, String gameVersion, String userId) {
-        Log.d("ModdedPE", "CrashManager: handlePreviousDumps: Device ID: " + userId);
-        Map<String, Date> crashReportsSent = new HashMap<>();
-        for (String dumpFilename : searchForDumpFiles(dumpFilesPath)) {
-            String sessionID = dumpFilename.replace(".dmp", "");
-            String sentryParametersJSON = getSentryParameters(userId, sessionID, AppConstants.APP_VERSION);
-            Log.d("ModdedPE", "CrashManager: Located this dump file: " + dumpFilename);
-            Date timestamp = getFileTimestamp(dumpFilesPath, dumpFilename);
-            String logFilename = createLogFile(dumpFilesPath, formatTimestamp(timestamp), userId, sessionID);
-            if (logFilename != null) {
-                crashReportsSent.put(sessionID, timestamp);
-                uploadDumpAndLogAsync(crashUploadURI, dumpFilesPath, dumpFilename, logFilename, gameVersion, userId, sessionID, sentryParametersJSON);
-            }
-        }
-        return crashReportsSent;
+    private static native String getSentryParameters(String str, String str2, String str3, String str4, String str5, String str6, int i);
+
+    private String getSentryParametersJSON(@NotNull SessionInfo sessionInfo) {
+        return getSentryParameters(this.mOwner.getCachedDeviceId(this), sessionInfo.sessionId, sessionInfo.buildId, sessionInfo.commitId, sessionInfo.branchId, sessionInfo.flavor, sessionInfo.appVersion);
     }
 
-    @Nullable
-    public static String createLogFile(String dumpFilesPath, String formattedDumpTimestamp, String userId, String lastDeviceSessionId) {
-        Date now = new Date();
+    public CrashManager(CrashManagerOwner crashManagerOwner, String str, String str2, SentryEndpointConfig sentryEndpointConfig, SessionInfo sessionInfo) {
+        mOwner = crashManagerOwner;
+        mDumpFilesPath = str;
+        mUserId = str2;
+        mSentryEndpointConfig = sentryEndpointConfig;
+        mCurrentSession = sessionInfo;
+        mDumpFileQueue = new ConcurrentLinkedQueue<>();
+        mSentrySessionParameters = getSentryParametersJSON(mCurrentSession);
+        mCrashUploadURI = mSentryEndpointConfig.url + "/api/" + mSentryEndpointConfig.projectId + "/minidump/?sentry_key=" + mSentryEndpointConfig.publicKey;
+        mExceptionUploadURI = mSentryEndpointConfig.url + "/api/" + mSentryEndpointConfig.projectId + "/store/?sentry_version=7&sentry_key=" + mSentryEndpointConfig.publicKey;
+    }
+
+    public void installGlobalExceptionHandler() {
+        mPreviousUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler((thread, th) -> handleUncaughtException(thread, th));
+    }
+
+    public void handleUncaughtException(Thread thread, @NotNull Throwable th) {
+        Thread.setDefaultUncaughtExceptionHandler(mPreviousUncaughtExceptionHandler);
+        Log.e("MCPE", "In handleUncaughtException()");
         try {
-            String filename = UUID.randomUUID().toString();
-            String path = dumpFilesPath + "/" + filename + ".faketrace";
-            Log.d("ModdedPE", "CrashManager: Writing unhandled exception information to: " + path);
-            Log.d("ModdedPE", "CrashManager: Dump timestamp: " + formattedDumpTimestamp);
-            BufferedWriter write = new BufferedWriter(new FileWriter(path));
-            write.write("Package: " + AppConstants.APP_PACKAGE + "\n");
-            write.write("Version Code: " + String.valueOf(AppConstants.APP_VERSION) + "\n");
-            write.write("Version Name: " + AppConstants.APP_VERSION_NAME + "\n");
-            write.write("Android: " + AppConstants.ANDROID_VERSION + "\n");
-            write.write("Manufacturer: " + AppConstants.PHONE_MANUFACTURER + "\n");
-            write.write("Model: " + AppConstants.PHONE_MODEL + "\n");
-            write.write("DeviceId: " + userId + "\n");
-            write.write("DeviceSessionId: " + lastDeviceSessionId + "\n");
-            write.write("Dmp timestamp: " + formattedDumpTimestamp + "\n");
-            write.write("Upload Date: " + now + "\n");
-            write.write("\n");
-            write.write("MinidumpContainer");
-            write.flush();
-            write.close();
-            return filename + ".faketrace";
+            JSONObject jSONObject = new JSONObject(mSentrySessionParameters);
+            String replaceAll = UUID.randomUUID().toString().toLowerCase().replaceAll(FILENAME_SEQUENCE_SEPARATOR, "");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+            String format = simpleDateFormat.format(new Date());
+            jSONObject.put("event_id", replaceAll);
+            jSONObject.put("timestamp", format);
+            jSONObject.put("logger", "na");
+            jSONObject.put("platform", "java");
+            JSONObject jSONObject2 = new JSONObject();
+            jSONObject2.put("type", th.getClass().getName());
+            jSONObject2.put(AppboyInAppMessageHtmlUserJavascriptInterface.JS_BRIDGE_ATTRIBUTE_VALUE, th.getMessage());
+            JSONObject jSONObject3 = new JSONObject();
+            JSONArray jSONArray = new JSONArray();
+            StackTraceElement[] stackTrace = th.getStackTrace();
+            for (int length = stackTrace.length - 1; length >= 0; length--) {
+                StackTraceElement stackTraceElement = stackTrace[length];
+                JSONObject jSONObject4 = new JSONObject();
+                jSONObject4.put("filename", stackTraceElement.getFileName());
+                jSONObject4.put("function", stackTraceElement.getMethodName());
+                jSONObject4.put("module", stackTraceElement.getClassName());
+                jSONObject4.put("in_app", stackTraceElement.getClassName().startsWith("com.mojang"));
+                if (stackTraceElement.getLineNumber() > 0) {
+                    jSONObject4.put("lineno", stackTraceElement.getLineNumber());
+                }
+                jSONArray.put(jSONObject4);
+            }
+            jSONObject3.put("frames", jSONArray);
+            jSONObject2.put("stacktrace", jSONObject3);
+            jSONObject.put("exception", jSONObject2);
+            String str = mDumpFilesPath + "/" + mCurrentSession.sessionId + ".except";
+            Log.d("ModdedPE", "CrashManager: Writing unhandled exception information to: " + str);
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(str));
+            outputStreamWriter.write(jSONObject.toString(4));
+            outputStreamWriter.close();
+        } catch (JSONException e) {
+            Log.e("ModdedPE", "JSON exception: " + e.toString());
+        } catch (IOException e2) {
+            Log.e("ModdedPE", "IO exception: " + e2.toString());
+        }
+        this.mPreviousUncaughtExceptionHandler.uncaughtException(thread, th);
+    }
+
+    private @Nullable HttpResponse uploadException(File file, String str) {
+        try {
+            Log.i("ModdedPE", "CrashManager: reading exception file at " + str);
+            String str2 = "";
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+            while (true) {
+                String readLine = bufferedReader.readLine();
+                if (readLine != null) {
+                    str2 = str2 + readLine + "\n";
+                } else {
+                    Log.i("ModdedPE", "Sending exception by HTTP to " + this.mExceptionUploadURI);
+                    DefaultHttpClient defaultHttpClient = new DefaultHttpClient();
+                    HttpPost httpPost = new HttpPost(this.mExceptionUploadURI);
+                    httpPost.setEntity(new StringEntity(str2));
+                    return defaultHttpClient.execute(httpPost);
+                }
+            }
         } catch (Exception e) {
-            Log.w("MinecraftPlatform", "CrashManager: failed to create accompanying log file");
+            Log.w("ModdedPE", "CrashManager: Error uploading exception: " + e.toString());
+            e.printStackTrace();
             return null;
         }
     }
 
-    public static void uploadDumpAndLogAsync(String crashUploadURI, String dumpFilesPath, String dumpFilename, String logFilename, String gameVersion, String userId, String lastDeviceSessionId, String sentryParametersJSON) {
-        final String str = dumpFilesPath;
-        final String str2 = dumpFilename;
-        final String str3 = logFilename;
-        final String str4 = crashUploadURI;
-        final String str5 = sentryParametersJSON;
-        new Thread() {
-            public void run() {
-                File dumpFile = new File(str, str2);
-                File logFile = new File(str, str3);
-                try {
-                    Log.i("ModdedPE", "CrashManager: uploading " + str2);
-                    DefaultHttpClient httpClient = new DefaultHttpClient();
-                    HttpPost httpPost = new HttpPost(str4);
-                    MultipartEntity entity = new MultipartEntity();
-                    entity.addPart("upload_file_minidump", new FileBody(dumpFile));
-                    Log.d("ModdedPE", "CrashManager: sentry parameters: " + str5);
-                    entity.addPart("sentry", new StringBody(str5));
-                    entity.addPart("log", new FileBody(logFile));
-                    httpPost.setEntity(entity);
-                    httpClient.execute(httpPost);
-                    Log.d("ModdedPE", "CrashManager: Executed dump file upload with no exception: " + str2);
-                } catch (Exception e) {
-                    Log.w("ModdedPE", "CrashManager: Error uploading dump file: " + str2);
-                    e.printStackTrace();
-                } finally {
-                    CrashManager.deleteWithLogging(dumpFile);
-                    CrashManager.deleteWithLogging(logFile);
+    public void handlePreviousDumps() {
+        Log.d("ModdedPE", "CrashManager: handlePreviousDumps: Device ID: " + mUserId);
+        mDumpFileQueue.addAll(Arrays.asList(searchForDumpFiles(mDumpFilesPath, ".dmp")));
+        mDumpFileQueue.addAll(Arrays.asList(searchForDumpFiles(mDumpFilesPath, ".except")));
+        int min = Math.min(mDumpFileQueue.size(), 4);
+        for (int i = 0; i < min; i++) {
+            new Thread() {
+                public void run() {
+                    handlePreviousDumpsWorkerThread();
                 }
-                Log.v("ModdedPE", "CrashManager: exiting upload thread");
-            }
-        }.start();
-        Log.v("ModdedPE", "CrashManager: upload thread started");
-    }
-
-    public static void deleteWithLogging(@NotNull File toBeDeleted) {
-        if (toBeDeleted.delete()) {
-            Log.d("ModdedPE", "CrashManager: Deleted file " + toBeDeleted.getName());
-        } else {
-            Log.w("ModdedPE", "CrashManager: Couldn't delete file" + toBeDeleted.getName());
+            }.start();
         }
     }
 
-    @NotNull
-    public static String formatTimestamp(Date timestamp) {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return sdf.format(timestamp);
+    public void handlePreviousDumpsWorkerThread() {
+        HttpResponse httpResponse;
+        while (true) {
+            String poll = mDumpFileQueue.poll();
+            if (poll != null) {
+                File file = new File(mDumpFilesPath, poll);
+                boolean z = true;
+                if (poll.endsWith(".dmp")) {
+                    httpResponse = uploadMinidump(file, poll);
+                } else {
+                    httpResponse = uploadException(file, poll);
+                }
+                if (httpResponse != null) {
+                    int statusCode = httpResponse.getStatusLine().getStatusCode();
+                    if (statusCode == 200) {
+                        Log.i("ModdedPE", "Successfully uploaded dump file " + poll);
+                    } else if (statusCode == 429) {
+                        Header firstHeader = httpResponse.getFirstHeader("Retry-After");
+                        if (firstHeader != null) {
+                            int parseInt = Integer.parseInt(firstHeader.getValue());
+                            Log.w("ModdedPE", "Received Too Many Requests response, retrying after " + parseInt + com.appboy.Constants.APPBOY_PUSH_SUMMARY_TEXT_KEY);
+                            try {
+                                Thread.sleep((parseInt * 1000));
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            mDumpFileQueue.add(poll);
+                            z = false;
+                        } else {
+                            Log.w("ModdedPE", "Received Too Many Requests response with no Retry-After header, so dropping event " + poll);
+                        }
+                    } else {
+                        Log.e("ModdedPE", "Unrecognied HTTP response: \"" + httpResponse.getStatusLine() + "\", dropping event " + poll);
+                    }
+                } else {
+                    Log.e("ModdedPE", "An error occurred uploading an event; dropping event " + poll);
+                }
+                if (z) {
+                    deleteWithLogging(file);
+                }
+            } else {
+                return;
+            }
+        }
     }
 
-    private static Date getFileTimestamp(String dumpFilesPath, String filename) {
+    private HttpResponse uploadMinidump(File file, @NotNull String str) {
+        Log.d("ModdedPE", "CrashManager: Located this dump file: " + str);
+        String replace = str.replace(".dmp", "");
+        Date fileTimestamp = getFileTimestamp(mDumpFilesPath, str);
+        SessionInfo findSessionInfoForCrash = mOwner.findSessionInfoForCrash(this, replace);
+        HttpResponse httpResponse = null;
+        if (findSessionInfoForCrash != null) {
+            String createLogFile = createLogFile(mDumpFilesPath, formatTimestamp(fileTimestamp), mUserId, findSessionInfoForCrash.sessionId);
+            if (createLogFile != null) {
+                File file2 = file;
+                String str2 = str;
+                httpResponse = uploadDumpAndLog(file2, mCrashUploadURI, mDumpFilesPath, str2, createLogFile, findSessionInfoForCrash.gameVersionName, mUserId, findSessionInfoForCrash.sessionId, getSentryParametersJSON(findSessionInfoForCrash));
+            } else {
+                Log.e("ModdedPE", "CrashManager: Could not generate log file for previously crashed session " + replace);
+            }
+            findSessionInfoForCrash.crashTimestamp = fileTimestamp;
+            mOwner.notifyCrashUploadCompleted(this, findSessionInfoForCrash);
+        } else {
+            Log.e("ModdedPE", "CrashManager: Could not locate session information for previously crashed session " + replace);
+        }
+        return httpResponse;
+    }
+
+    public static @Nullable String createLogFile(String str, String str2, String str3, String str4) {
         Date date = new Date();
         try {
-            return new Date(new File(dumpFilesPath + "/" + filename).lastModified());
+            String uuid = UUID.randomUUID().toString();
+            String str5 = str + "/" + uuid + ".faketrace";
+            Log.d("ModdedPE", "CrashManager: Writing unhandled exception information to: " + str5);
+            Log.d("ModdedPE", "CrashManager: Dump timestamp: " + str2);
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(str5));
+            bufferedWriter.write("Package: " + AppConstants.APP_PACKAGE + "\n");
+            bufferedWriter.write("Version Code: " + String.valueOf(AppConstants.APP_VERSION) + "\n");
+            bufferedWriter.write("Version Name: " + AppConstants.APP_VERSION_NAME + "\n");
+            bufferedWriter.write("Android: " + AppConstants.ANDROID_VERSION + "\n");
+            bufferedWriter.write("Manufacturer: " + AppConstants.PHONE_MANUFACTURER + "\n");
+            bufferedWriter.write("Model: " + AppConstants.PHONE_MODEL + "\n");
+            bufferedWriter.write("DeviceId: " + str3 + "\n");
+            bufferedWriter.write("DeviceSessionId: " + str4 + "\n");
+            bufferedWriter.write("Dmp timestamp: " + str2 + "\n");
+            bufferedWriter.write("Upload Date: " + date + "\n");
+            bufferedWriter.write("\n");
+            bufferedWriter.write("MinidumpContainer");
+            bufferedWriter.flush();
+            bufferedWriter.close();
+            return uuid + ".faketrace";
+        } catch (Exception unused) {
+            Log.w("ModdedPE", "CrashManager: failed to create accompanying log file");
+            return null;
+        }
+    }
+
+    public static HttpResponse uploadDumpAndLog(File file, String str, String str2, String str3, String str4, String str5, String str6, String str7, String str8) {
+        File file2 = new File(str2, str4);
+        HttpResponse httpResponse = null;
+        try {
+            Log.i("ModdedPE", "CrashManager: uploading " + str3);
+            DefaultHttpClient defaultHttpClient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost(str);
+            MultipartEntity multipartEntity = new MultipartEntity();
+            multipartEntity.addPart("upload_file_minidump", new FileBody(file));
+            Log.d("ModdedPE", "CrashManager: sentry parameters: " + str8);
+            multipartEntity.addPart("sentry", new StringBody(str8));
+            multipartEntity.addPart("log", new FileBody(file2));
+            httpPost.setEntity(multipartEntity);
+            httpResponse = defaultHttpClient.execute(httpPost);
+            Log.d("ModdedPE", "CrashManager: Executed dump file upload with no exception: " + str3);
         } catch (Exception e) {
-            Log.w("ModdedPE", "CrashManager: Error getting dump timestamp: " + filename);
+            Log.w("ModdedPE", "CrashManager: Error uploading dump file: " + str3);
+            e.printStackTrace();
+        } catch (Throwable th) {
+            deleteWithLogging(file2);
+            throw th;
+        }
+        deleteWithLogging(file2);
+        return httpResponse;
+    }
+
+    private static void deleteWithLogging(@NotNull File file) {
+        if (file.delete()) {
+            Log.d("ModdedPE", "CrashManager: Deleted file " + file.getName());
+            return;
+        }
+        Log.w("ModdedPE", "CrashManager: Couldn't delete file" + file.getName());
+    }
+
+    public static @NotNull String formatTimestamp(Date date) {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return simpleDateFormat.format(date);
+    }
+
+    private static Date getFileTimestamp(String str, String str2) {
+        Date date = new Date();
+        try {
+            return new Date(new File(str + "/" + str2).lastModified());
+        } catch (Exception e) {
+            Log.w("ModdedPE", "CrashManager: Error getting dump timestamp: " + str2);
             e.printStackTrace();
             return date;
         }
     }
 
-    private static String[] searchForDumpFiles(String dumpFilesPath) {
-        if (dumpFilesPath != null) {
-            Log.d("ModdedPE", "CrashManager: Searching for dump files in " + dumpFilesPath);
-            File dir = new File(dumpFilesPath + "/");
-            if (dir.mkdir() || dir.exists()) {
-                return dir.list((dir1, name) -> name.endsWith(".dmp"));
+    private static String[] searchForDumpFiles(String str, final String str2) {
+        if (str != null) {
+            Log.d("ModdedPE", "CrashManager: Searching for dump files in " + str);
+            File file = new File(str + "/");
+            if (file.mkdir() || file.exists()) {
+                return file.list((file1, str1) -> str1.endsWith(str2));
             }
             return new String[0];
         }

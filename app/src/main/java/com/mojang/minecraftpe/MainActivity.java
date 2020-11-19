@@ -47,6 +47,7 @@ import android.provider.MediaStore.Images.Media;
 import android.provider.Settings.Secure;
 import android.speech.tts.TextToSpeech;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -88,6 +89,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -98,7 +100,9 @@ import java.util.UUID;
  * @author https://github.com/TimScriptov
  */
 
-public class MainActivity extends NativeActivity implements OnKeyListener {
+public class MainActivity extends NativeActivity implements OnKeyListener, CrashManagerOwner {
+    private static final String SESSION_HISTORY_SEP = "&";
+    private static final String SESSION_HISTORY_KEY = "session-history";
     public static MainActivity mInstance = null;
     private static boolean _isPowerVr = false;
     private static boolean mHasStoragePermission = false;
@@ -125,7 +129,9 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
     private long mCallback = 0;
     private SessionInfo mLastDeviceSessionInfo = null;
     private InputDeviceManager deviceManager;
-
+    private SessionInfo mCurrentSession = null;
+    private ArrayList<SessionInfo> mSessionHistory = null;
+    private CrashManager mCrashManager = null;
 
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
@@ -244,13 +250,13 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         this.mLastDeviceSessionInfo = info;
     }
 
-    public void setLastDeviceSessionInfo(String sessionId, String buildId) {
-        setLastDeviceSessionInfo(new SessionInfo(sessionId, buildId));
-    }
-
     public boolean supportsNonTouchscreen() {
         return isXperiaPlay();
     }
+
+    private static native void nativeConfigureNewSession(SessionInfo sessionInfo);
+
+    private static native void nativeWaitCrashManagementSetupComplete();
 
     public native void nativeInitializeXboxLive(long j, long j2);
 
@@ -264,7 +270,8 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
 
     native void nativeWebRequestCompleted(int requestId, long userData, int httpStatusOrNegativeError, String content);
 
-    public native void setUpBreakpad(String str);
+    private native void setUpBreakpad(String str, String str2);
+
 
     public native boolean isAndroidTrial();
 
@@ -430,11 +437,86 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         return mHardwareInformation;
     }
 
+    public void initializeCrashManager() {
+        AppConstants.loadFromContext(getApplicationContext());
+        SessionInfo sessionInfo = new SessionInfo();
+        mCurrentSession = sessionInfo;
+        nativeConfigureNewSession(sessionInfo);
+        mCurrentSession.updateJavaConstants(this);
+        loadSessionHistory();
+        saveNewSession(mCurrentSession);
+        File file = new File(getFilesDir(), "/minidumps");
+        file.mkdir();
+        Log.v("MinecraftPlatform", "Minidump directory is: " + file.getAbsolutePath());
+        Log.i("MinecraftPlatform", "Setting up crash handler");
+        CrashManager crashManager = new CrashManager((CrashManagerOwner) this, file.getAbsolutePath(), getCachedDeviceId(), isAndroidTrial() ? new SentryEndpointConfig("https://sentry.io", "2308440", "668bc09f7bcf461796ea07c1006076fe") : new SentryEndpointConfig("https://sentry.io", "2277697", "1c3f5cbd723a4a84879059d260b19ef6"), mCurrentSession);
+        mCrashManager = crashManager;
+        crashManager.installGlobalExceptionHandler();
+        setUpBreakpad(file.getAbsolutePath(), mCurrentSession.sessionId);
+    }
+
+    private void loadSessionHistory() {
+        mSessionHistory = new ArrayList<>();
+        String string = PreferenceManager.getDefaultSharedPreferences(this).getString(SESSION_HISTORY_KEY, "");
+        if (string.length() > 0) {
+            for (String fromString : string.split(SESSION_HISTORY_SEP)) {
+                try {
+                    mSessionHistory.add(SessionInfo.fromString(fromString));
+                } catch (IllegalArgumentException e) {
+                    Log.i("ModdedPE", "loadSessionHistory: failed to decode session history item: " + e.toString());
+                }
+            }
+            Log.i("ModdedPE", "loadSessionHistory: decoded " + mSessionHistory.size() + " items");
+            return;
+        }
+        Log.i("ModdedPE", "loadSessionHistory: no history found");
+    }
+
+    private void saveSessionHistory() {
+        ArrayList arrayList = new ArrayList();
+        for (SessionInfo sessionInfo : mSessionHistory) {
+            arrayList.add(sessionInfo.toString());
+        }
+        String join = TextUtils.join(SESSION_HISTORY_SEP, arrayList);
+        SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        edit.putString(SESSION_HISTORY_KEY, join);
+        edit.apply();
+        Log.i("ModdedPE", "saveSessionHistory: " + mSessionHistory.size() + " entries saved");
+    }
+
+    private void saveNewSession(SessionInfo sessionInfo) {
+        mSessionHistory.add(sessionInfo);
+        for (int size = mSessionHistory.size() - 20; size > 0; size--) {
+            mSessionHistory.remove(0);
+        }
+        saveSessionHistory();
+    }
+
+    public SessionInfo findSessionInfoForCrash(CrashManager crashManager, String str) {
+        for (int size = mSessionHistory.size() - 1; size >= 0; size--) {
+            if (mSessionHistory.get(size).sessionId.equals(str)) {
+                return mSessionHistory.get(size);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String getCachedDeviceId(CrashManager crashManager) {
+        return getCachedDeviceId();
+    }
+
+
+    @Override
+    public void notifyCrashUploadCompleted(CrashManager crashManager, @NotNull SessionInfo sessionInfo) {
+        fireCrashedTelemetry(sessionInfo.sessionId, sessionInfo.buildId, CrashManager.formatTimestamp(sessionInfo.crashTimestamp));
+    }
+
     @SuppressLint({"WrongConstant", "ResourceType"})
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        nativeRegisterThis(); // Deleted in Minecraf 1.16.100.58
-        displayMetrics = new DisplayMetrics();
+        nativeWaitCrashManagementSetupComplete();
+        //displayMetrics = new DisplayMetrics();
         platform = Platform.createPlatform(true);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         FMOD.init(this);
@@ -447,13 +529,10 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         clipboardManager = (ClipboardManager) getSystemService("clipboard");
         initialUserLocale = Locale.getDefault();
         AppConstants.loadFromContext(getApplicationContext());
-        SessionInfo lastDeviceSessionInfo = getLastDeviceSessionInfo();
         mInstance = this;
         _fromOnCreate = true;
         textInputWidget = createTextWidget();
         findViewById(16908290).getRootView().addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> nativeResize(right - left, bottom - top));
-        java.net.CookieManager cookieManager = new java.net.CookieManager();
-        java.net.CookieHandler.setDefault(cookieManager);
         /**********************************
          * Bg music                       *
          **********************************/

@@ -18,4 +18,5 @@
     <color name="textGray3">#ff888888</color>
     <color name="XboxWhite">@android:color/white</color>
     <color name="backgroundColor">@color/XboxOneGreen</color>
+    <color name="mojang_red">#FF0000</color>
 </resources>

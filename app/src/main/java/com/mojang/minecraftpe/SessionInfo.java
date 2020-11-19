@@ -1,78 +1,130 @@
 package com.mojang.minecraftpe;
 
-import com.microsoft.aad.adal.AuthenticationConstants;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.pm.PackageManager;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.io.Serializable;
 
 /**
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 
-public class SessionInfo {
-    public String buildId = null;
-    public Date recordDate = null;
-    public String sessionId = null;
-    public boolean valid = false;
+public class SessionInfo implements Serializable {
+    private static final String NOT_YET_CONFIGURED = "Not yet configured";
+    private static final String SEP = ";";
+    public int appVersion;
+    public String branchId;
+    public String buildId;
+    public String commitId;
+    public transient Date crashTimestamp;
+    public String flavor;
+    public String gameVersionName;
+    public Date recordDate;
+    public String sessionId;
 
     public SessionInfo() {
-    }
-
-    public SessionInfo(String aSessionId, String aBuildId) {
-        sessionId = aSessionId;
-        buildId = aBuildId;
+        sessionId = null;
+        buildId = null;
+        commitId = null;
+        branchId = null;
+        flavor = null;
+        gameVersionName = null;
+        appVersion = 0;
+        recordDate = null;
+        crashTimestamp = null;
+        sessionId = NOT_YET_CONFIGURED;
+        buildId = NOT_YET_CONFIGURED;
+        commitId = NOT_YET_CONFIGURED;
+        branchId = NOT_YET_CONFIGURED;
+        flavor = NOT_YET_CONFIGURED;
+        gameVersionName = NOT_YET_CONFIGURED;
         recordDate = new Date();
-        valid = true;
     }
 
-    public SessionInfo(String aSessionId, String aBuildId, Date aRecordDate) {
-        sessionId = aSessionId;
-        buildId = aBuildId;
-        recordDate = aRecordDate;
-        valid = true;
+    public SessionInfo(String str, String str2, String str3, String str4, String str5, String str6, int i, Date date) {
+        sessionId = null;
+        buildId = null;
+        commitId = null;
+        branchId = null;
+        flavor = null;
+        gameVersionName = null;
+        appVersion = 0;
+        recordDate = null;
+        crashTimestamp = null;
+        sessionId = str;
+        buildId = str2;
+        commitId = str3;
+        branchId = str4;
+        flavor = str5;
+        gameVersionName = str6;
+        appVersion = i;
+        recordDate = date;
     }
 
-    @NotNull
-    public static SessionInfo fromString(String s) {
-        return fromString(s, getDateFormat());
+    public void setContents(Context context, String str, String str2, String str3, String str4, String str5) {
+        sessionId = str;
+        buildId = str2;
+        commitId = str3;
+        branchId = str4;
+        flavor = str5;
+        updateJavaConstants(context);
     }
 
-    @NotNull
-    public static SessionInfo fromString(String s, SimpleDateFormat dateFormat) {
-        SessionInfo result = new SessionInfo();
-        if (!(s == null || s.length() == 0)) {
-            String[] parts = s.split(AuthenticationConstants.Broker.CHALLENGE_REQUEST_CERT_AUTH_DELIMETER);
-            if (parts.length != 3) {
-                throw new IllegalArgumentException("Invalid SessionInfo string '" + s + "', must be 3 parts split by ';'");
-            }
-            result.sessionId = parts[0];
-            result.buildId = parts[1];
-            result.recordDate = dateFormat.parse(parts[2], new ParsePosition(0));
-            if (result.recordDate == null) {
-                throw new IllegalArgumentException("Failed to parse date/time in SessionInfo string '" + s + "'");
-            }
-            result.valid = true;
+    public void updateJavaConstants(@NotNull Context context) {
+        appVersion = AppConstants.APP_VERSION;
+        try {
+            gameVersionName = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException unused) {
+            gameVersionName = "Not found";
         }
-        return result;
     }
 
-    @NotNull
-    public static SimpleDateFormat getDateFormat() {
-        SimpleDateFormat result = new SimpleDateFormat("MM/dd/yyyy-HH:mm:ss");
-        result.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return result;
+    public static @NotNull SessionInfo fromString(String str) {
+        SessionInfo sessionInfo = new SessionInfo();
+        if (str == null || str.length() == 0) {
+            throw new IllegalArgumentException("Empty SessionInfo string");
+        }
+        String[] split = str.split(";");
+        if (split.length == 8) {
+            sessionInfo.sessionId = split[0];
+            sessionInfo.buildId = split[1];
+            sessionInfo.commitId = split[2];
+            sessionInfo.branchId = split[3];
+            sessionInfo.flavor = split[4];
+            sessionInfo.gameVersionName = split[5];
+            try {
+                sessionInfo.appVersion = Integer.parseInt(split[6]);
+                Date parse = getDateFormat().parse(split[7], new ParsePosition(0));
+                sessionInfo.recordDate = parse;
+                if (parse != null) {
+                    return sessionInfo;
+                }
+                throw new IllegalArgumentException("Failed to parse date/time in SessionInfo string '" + str + "'");
+            } catch (NumberFormatException unused) {
+                throw new IllegalArgumentException("Failed to convert app version '" + split[6] + "' into an integer");
+            }
+        } else {
+            throw new IllegalArgumentException("Invalid SessionInfo string '" + str + "', must be 8 parts split by '" + ";" + "'");
+        }
     }
 
     public String toString() {
-        return toString(getDateFormat());
+        return sessionId + ";" + buildId + ";" + commitId + ";" + branchId + ";" + flavor + ";" + gameVersionName + ";" + appVersion + ";" + getDateFormat().format(recordDate);
     }
 
-    public String toString(SimpleDateFormat dateFormat) {
-        return valid ? sessionId + AuthenticationConstants.Broker.CHALLENGE_REQUEST_CERT_AUTH_DELIMETER + buildId + AuthenticationConstants.Broker.CHALLENGE_REQUEST_CERT_AUTH_DELIMETER + dateFormat.format(recordDate) : "<null>";
+    public static @NotNull SimpleDateFormat getDateFormat() {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy-HH:mm:ss");
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return simpleDateFormat;
     }
 }

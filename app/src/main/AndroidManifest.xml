@@ -204,7 +204,7 @@
         <!-- Minecraft -->
 
         <activity
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:theme="@style/SplashScreen"
             android:name="com.mojang.minecraftpe.MainActivity"
             android:debuggable="false"
             android:excludeFromRecents="false"
