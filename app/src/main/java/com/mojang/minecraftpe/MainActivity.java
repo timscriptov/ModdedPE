@@ -254,21 +254,11 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         return isXperiaPlay();
     }
 
+    private native void fireCrashedTelemetry(String str, String str2, String str3);
+
     private static native void nativeConfigureNewSession(SessionInfo sessionInfo);
 
     private static native void nativeWaitCrashManagementSetupComplete();
-
-    public native void nativeInitializeXboxLive(long j, long j2);
-
-    public native void fireCrashedTelemetry(String str, String str2, String str3);
-
-    native String nativeScreenIsPresentInStack(String str);
-
-    native void nativeLoginData(String accessToken, String clientId, String profileId, String profileName);
-
-    native void nativeTypeCharacter(String character);
-
-    native void nativeWebRequestCompleted(int requestId, long userData, int httpStatusOrNegativeError, String content);
 
     private native void setUpBreakpad(String str, String str2);
 
@@ -300,6 +290,8 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
 
     public native String nativeGetLogText(String str);
 
+    public native void nativeInitializeXboxLive(long j, long j2);
+
     public native boolean nativeKeyHandler(int i, int i2);
 
     public native void nativeOnDestroy();
@@ -327,10 +319,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     public native void nativeStoragePermissionRequestResult(boolean z, int i);
 
     public native void nativeSuspend();
-
-    public void onRequestComplete(int requestId, long userData, int httpStatusOrNegativeError, String content) {
-        nativeWebRequestCompleted(requestId, userData, httpStatusOrNegativeError, content);
-    }
 
     public void launchUri(String uri) {
         startActivity(new Intent("android.intent.action.VIEW", Uri.parse(uri)));
@@ -419,10 +407,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
             edit.putInt("correlationAttempts", attempts - 1);
             edit.apply();
         }
-    }
-
-    public String getHockeyAppDevId() {
-        return null;
     }
 
     public HardwareInformation getHardwareInfo() {
@@ -1639,13 +1623,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
             }
         }
         return false;
-    }
-
-    public String MC_ScreenIsPresentInStack(String expectedName) {
-        if (isPublishBuild()) {
-            return "";
-        }
-        return nativeScreenIsPresentInStack(expectedName);
     }
 
     public void initializeXboxLive(long xalInitArgs, long xblInitArgs) {
