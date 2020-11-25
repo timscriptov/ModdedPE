@@ -159,6 +159,8 @@
     <!--Permissions-->
     <string name="permission_grant_failed_title">許可されていません</string>
     <string name="permission_grant_failed_message">外部ストレージを読む権限を取得できませんでした。[設定]ページでModdedPEのストレージアクセス権限を許可してください。</string>
+    <string name="scoped_storage_title">Android 11 R changes</string>
+    <string name="scoped_storage_msg">Android 11 introduce a new file-management way called \"Scoped Storage\". You need to grant a special permission!</string>
 
     <!--Enable Warnings-->
 

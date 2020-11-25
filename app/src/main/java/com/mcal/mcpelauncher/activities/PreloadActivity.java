@@ -60,11 +60,6 @@ public class PreloadActivity extends BaseActivity {
         new PreloadThread().start();
     }
 
-    @Override
-    public void onBackPressed() {
-
-    }
-
     private void writeNewText(String text) {
         Message message = new Message();
         message.obj = text;

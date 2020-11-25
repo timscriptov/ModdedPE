@@ -153,6 +153,8 @@
     <!--Permissions-->
     <string name="permission_grant_failed_title">獲取權限失敗</string>
     <string name="permission_grant_failed_message">無法獲取權限：讀取外部存儲。請在設置頁面授予ModdedPE相關權限。</string>
+    <string name="scoped_storage_title">Android 11 R changes</string>
+    <string name="scoped_storage_msg">Android 11 introduce a new file-management way called \"Scoped Storage\". You need to grant a special permission!</string>
 
     <string name="rate">Rate</string>
 </resources>

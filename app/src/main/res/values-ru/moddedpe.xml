@@ -151,6 +151,8 @@
     <!--Permissions-->
     <string name="permission_grant_failed_title">Не удалось получить разрешения</string>
     <string name="permission_grant_failed_message">Не удалось предоставить разрешение: Изменение данных на USB-накопителе. Перейдите на страницу настроек, чтобы предоставить соответствующие разрешение.</string>
+    <string name="scoped_storage_title">Изменения в Android 11 R</string>
+    <string name="scoped_storage_msg">В Android 11 появился новый способ управления файлами под названием \"Scoped Storage\". Вам необходимо предоставить специальное разрешение!</string>
 
     <string name="rate">Оценить</string>
 </resources>

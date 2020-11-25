@@ -19,7 +19,9 @@ package com.mcal.mcpelauncher.activities;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +39,7 @@ import com.mcal.mcpelauncher.fragments.MainSettingsFragment;
 import com.mcal.mcpelauncher.fragments.MainStartFragment;
 import com.mcal.mcpelauncher.services.BackgroundSoundPlayer;
 import com.mcal.mcpelauncher.services.SoundService;
+import com.mcal.mcpelauncher.ui.view.Dialogs;
 import com.mcal.mcpelauncher.utils.ExceptionHandler;
 
 import org.jetbrains.annotations.NotNull;
@@ -140,6 +143,10 @@ public class MainActivity extends BaseActivity implements BackgroundSoundPlayer 
         if (!bound && Preferences.isBackgroundMusic()) {
             bind();
         }
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q && !Environment.isExternalStorageManager()) {
+            Dialogs.showScopedStorageDialog(this);
+        }
     }
 
 
@@ -175,19 +182,15 @@ public class MainActivity extends BaseActivity implements BackgroundSoundPlayer 
     }
 
     private void switchViewPager(@NotNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.item_main_page:
-                mMainViewPager.setCurrentItem(0, false);
-                break;
-            case R.id.item_manage_nmods:
-                mMainViewPager.setCurrentItem(1, false);
-                break;
-            case R.id.item_launcher_settings:
-                mMainViewPager.setCurrentItem(2, false);
-                break;
+        int id = item.getItemId();
+        if (id == R.id.item_main_page) {
+            mMainViewPager.setCurrentItem(0, false);
+        } else if (id == R.id.item_manage_nmods) {
+            mMainViewPager.setCurrentItem(1, false);
+        } else if (id == R.id.item_launcher_settings) {
+            mMainViewPager.setCurrentItem(2, false);
         }
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -199,7 +202,6 @@ public class MainActivity extends BaseActivity implements BackgroundSoundPlayer 
     @Override
     protected void onStart() {
         super.onStart();
-
         String errorString = Preferences.getOpenGameFailed();
         if (errorString != null) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.AlertDialogTheme);

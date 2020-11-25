@@ -97,30 +97,4 @@ public class AboutActivity extends BaseActivity implements BillingProcessor.IBil
         super.onActivityResult(requestCode, resultCode, data);
         bp.handleActivityResult(requestCode, resultCode, data);
     }
-
-    @SuppressLint({"DefaultLocale"})
-    public void onStart() {
-        Log.d("ModdedPE", "onStart");
-        super.onStart();
-    }
-
-    public void onResume() {
-        Log.d("ModdedPE", "onResume");
-        super.onResume();
-    }
-
-    public void onPause() {
-        Log.d("ModdedPE", "onPause");
-        super.onPause();
-    }
-
-    public void onStop() {
-        Log.d("ModdedPE", "onStop");
-        super.onStop();
-    }
-
-    public void onDestroy() {
-        Log.d("ModdedPE", "onDestroy");
-        super.onDestroy();
-    }
 }

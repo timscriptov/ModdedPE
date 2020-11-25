@@ -109,7 +109,6 @@ public class ImportNModActivity extends BaseActivity {
 
     @SuppressLint("HandlerLeak")
     private class UIHandler extends Handler {
-
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);

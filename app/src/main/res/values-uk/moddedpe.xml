@@ -152,6 +152,8 @@
     <!--Permissions-->
     <string name="permission_grant_failed_title">Не вдалося отримати дозволи</string>
     <string name="permission_grant_failed_message">Чи не вдалося отрмати дозвіл: Зміна даних на USB-накопичувачі. Перейдіть на сторінку налаштувань, щоб надати відповідні дозволи.</string>
+    <string name="scoped_storage_title">Изменения в Android 11 R</string>
+    <string name="scoped_storage_msg">В Android 11 появился новый способ управления файлами под названием \"Scoped Storage\". Вам необходимо предоставить специальное разрешение!</string>
 
     <string name="rate">Оценить</string>
 </resources>

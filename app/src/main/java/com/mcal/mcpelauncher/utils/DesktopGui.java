@@ -1,7 +1,5 @@
 package com.mcal.mcpelauncher.utils;
 
-import android.os.Environment;
-
 import com.mcal.mcpelauncher.data.Preferences;
 
 import org.zeroturnaround.zip.commons.FileUtils;
@@ -12,7 +10,7 @@ import java.io.IOException;
 
 public class DesktopGui {
     public static void run() {
-        File optionsFileDir = new File(Environment.getExternalStorageDirectory() + "/games/com.mojang/minecraftpe");
+        File optionsFileDir = new File(ScopedStorage.getStorageDirectory() + "/games/com.mojang/minecraftpe");
         File optionsFile = new File(optionsFileDir + "/options.txt");
 
         if (!optionsFileDir.exists()) {

@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.view.MenuItem;
@@ -36,6 +35,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.cardview.widget.CardView;
 
 import com.mcal.mcpelauncher.R;
+import com.mcal.mcpelauncher.utils.ScopedStorage;
 
 import org.jetbrains.annotations.NotNull;
 import org.zeroturnaround.zip.ZipUtil;
@@ -69,7 +69,7 @@ public class NModFilePickerActivity extends BaseActivity {
     }
 
     public static void startThisActivity(AppCompatActivity context) {
-        startThisActivity(context, Environment.getExternalStorageDirectory().getPath());
+        startThisActivity(context, ScopedStorage.getStorageDirectory().getPath());
     }
 
     @Override
@@ -87,7 +87,7 @@ public class NModFilePickerActivity extends BaseActivity {
             t.printStackTrace();
         }
         if (pathString == null)
-            pathString = Environment.getExternalStorageDirectory().getAbsolutePath();
+            pathString = ScopedStorage.getStorageDirectory().getAbsolutePath();
         currentPath = new File(pathString);
 
         openDirectory(currentPath);
@@ -230,7 +230,7 @@ public class NModFilePickerActivity extends BaseActivity {
                     AppCompatTextView textFileName = cardView.findViewById(R.id.nmod_picker_item_card_view_text_name);
                     textFileName.setText(android.R.string.cancel);
 
-                    cardView.setOnClickListener(p114 -> openDirectory(Environment.getExternalStorageDirectory()));
+                    cardView.setOnClickListener(p114 -> openDirectory(ScopedStorage.getStorageDirectory()));
                 }
             }
             return cardView;

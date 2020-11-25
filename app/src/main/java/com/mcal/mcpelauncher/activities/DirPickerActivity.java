@@ -19,7 +19,6 @@ package com.mcal.mcpelauncher.activities;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.view.MenuItem;
@@ -35,6 +34,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.cardview.widget.CardView;
 
 import com.mcal.mcpelauncher.R;
+import com.mcal.mcpelauncher.utils.ScopedStorage;
 import com.mcal.pesdk.utils.LauncherOptions;
 
 import org.jetbrains.annotations.NotNull;
@@ -68,7 +68,7 @@ public class DirPickerActivity extends BaseActivity {
     }
 
     public static void startThisActivity(AppCompatActivity context) {
-        startThisActivity(context, Environment.getExternalStorageDirectory().getPath());
+        startThisActivity(context, ScopedStorage.getStorageDirectory().getPath());
     }
 
     @Override
@@ -89,7 +89,7 @@ public class DirPickerActivity extends BaseActivity {
             t.printStackTrace();
         }
         if (pathString == null)
-            pathString = Environment.getExternalStorageDirectory().getAbsolutePath();
+            pathString = ScopedStorage.getStorageDirectory().getAbsolutePath();
         currentPath = new File(pathString);
 
         openDirectory(currentPath);

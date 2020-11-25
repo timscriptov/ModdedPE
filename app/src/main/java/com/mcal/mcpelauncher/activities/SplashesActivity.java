@@ -18,11 +18,16 @@ package com.mcal.mcpelauncher.activities;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings;
 import android.view.View;
 
+import androidx.appcompat.app.AlertDialog;
+
+import com.mcal.mcpelauncher.BuildConfig;
 import com.mcal.mcpelauncher.R;
 import com.mcal.mcpelauncher.utils.DataPreloader;
 import com.mcal.mcpelauncher.utils.PreloadingFinishedListener;

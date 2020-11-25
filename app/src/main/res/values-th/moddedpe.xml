@@ -152,6 +152,8 @@
     <!--Permissions-->
     <string name="permission_grant_failed_title">การขออนุญาตล้มเหลว</string>
     <string name="permission_grant_failed_message">ไม่สามารถขออนุญาต: อ่านหน่วยความจำภายนอก โปรดไปที่หน้าการตั้งค่าเพื่อขออนุญาตเกี่ยวข้อง</string>
+    <string name="scoped_storage_title">Android 11 R changes</string>
+    <string name="scoped_storage_msg">Android 11 introduce a new file-management way called \"Scoped Storage\". You need to grant a special permission!</string>
 
     <string name="rate">Rate</string>
 </resources>

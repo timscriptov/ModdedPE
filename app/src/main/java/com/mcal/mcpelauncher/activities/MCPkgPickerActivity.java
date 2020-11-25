@@ -138,11 +138,9 @@ public class MCPkgPickerActivity extends BaseActivity {
     }
 
     private class PackageListAdapter extends BaseAdapter {
-
         public PackageListAdapter() {
             Collections.sort(mInstalledPackages, new Comparator<PackageInfo>() {
                 PackageManager pm = getPackageManager();
-
                 @Override
                 public int compare(PackageInfo o1, PackageInfo o2) {
                     return pm.getApplicationLabel(o1.applicationInfo).toString().compareToIgnoreCase(pm.getApplicationLabel(o2.applicationInfo).toString());
@@ -175,7 +173,6 @@ public class MCPkgPickerActivity extends BaseActivity {
                 if (appIcon == null)
                     appIcon = BitmapFactory.decodeResource(getResources(), R.drawable.mcd_null_pack);
                 imageView.setImageBitmap(appIcon);
-
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }

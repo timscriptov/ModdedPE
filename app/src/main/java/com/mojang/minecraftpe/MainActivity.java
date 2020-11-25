@@ -10,6 +10,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -61,11 +62,14 @@ import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.appsflyer.AppsFlyerLib;
+import com.mcal.mcpelauncher.BuildConfig;
 import com.mcal.mcpelauncher.services.SoundService;
+import com.mojang.android.StringValue;
 import com.mojang.minecraftpe.input.InputDeviceManager;
 import com.mojang.minecraftpe.platforms.Platform;
 
@@ -73,6 +77,7 @@ import org.fmod.FMOD;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.spongycastle.asn1.cmp.PKIFailureInfo;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -83,6 +88,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -132,6 +138,8 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     private SessionInfo mCurrentSession = null;
     private ArrayList<SessionInfo> mSessionHistory = null;
     private CrashManager mCrashManager = null;
+    private AlertDialog mDialog;
+    private ArrayList<StringValue> _userInputValues = new ArrayList<>();
 
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
@@ -533,6 +541,50 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         /**********************************
          * Bg music                        *
          **********************************/
+    }
+
+
+    private void createAlertDialog(boolean z, boolean z2, boolean z3) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("");
+        if (z3) {
+            builder.setCancelable(false);
+        }
+        builder.setOnCancelListener(dialogInterface -> onDialogCanceled());
+        if (z) {
+            builder.setPositiveButton("Ok", (dialogInterface, i) -> onDialogCompleted());
+        }
+        if (z2) {
+            builder.setNegativeButton("Cancel", (dialogInterface, i) -> onDialogCanceled());
+        }
+        AlertDialog create = builder.create();
+        mDialog = create;
+        create.setOwnerActivity(this);
+    }
+
+    public void onDialogCanceled() {
+        _userInputStatus = 0;
+    }
+
+    @SuppressLint("WrongConstant")
+    public void onDialogCompleted() {
+        int size = _userInputValues.size();
+        _userInputText = new String[size];
+        for (int i = 0; i < size; i++) {
+            _userInputText[i] = _userInputValues.get(i).getStringValue();
+        }
+        for (String str : _userInputText) {
+            PrintStream printStream = System.out;
+            printStream.println("js: " + str);
+        }
+        _userInputStatus = 1;
+        ((InputMethodManager) getSystemService("input_method")).showSoftInput(getCurrentFocus(), 1);
+    }
+
+    public void throwRuntimeExceptionFromNative(final String str) {
+        new Handler(getMainLooper()).post(() -> {
+            throw new RuntimeException(str);
+        });
     }
 
     public void onNewIntent(Intent intent) {
@@ -1390,26 +1442,17 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
                     Gravity.TOP | Gravity.LEFT | Gravity.CENTER_VERTICAL, 0, 0));
         }).start();
     */
-
-        registerReceiver(headsetConnectionReceiver, new IntentFilter("android.intent.action.HEADSET_PLUG"));
+        registerReceiver(this.headsetConnectionReceiver, new IntentFilter("android.intent.action.HEADSET_PLUG"));
         if (isTextWidgetActive()) {
-            String oldText = textInputWidget.getText().toString();
-            int maxNumCharacters = textInputWidget.allowedLength;
-            if ((textInputWidget.getInputType() & 2) == 2) {
-                numbersOnly = true;
-            } else {
-                numbersOnly = false;
-            }
-            if ((textInputWidget.getInputType() & 131072) == 131072) {
-                isMultiline = true;
-            } else {
-                isMultiline = false;
-            }
+            String obj = this.textInputWidget.getText().toString();
+            int i = this.textInputWidget.allowedLength;
+            boolean z = (this.textInputWidget.getInputType() & 2) == 2;
+            boolean z2 = (this.textInputWidget.getInputType() & PKIFailureInfo.unsupportedVersion) == 131072;
             dismissTextWidget();
-            showKeyboard(oldText, maxNumCharacters, false, numbersOnly, isMultiline);
+            showKeyboard(obj, i, false, z, z2);
         }
-        for (ActivityListener listener : mActivityListeners) {
-            listener.onResume();
+        for (ActivityListener onResume : this.mActivityListeners) {
+            onResume.onResume();
         }
     }
 
@@ -1503,15 +1546,16 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     }
 
     public void pickImage(long callback) {
-        this.mCallback = callback;
+        mCallback = callback;
         try {
             startActivityForResult(new Intent("android.intent.action.PICK", Media.EXTERNAL_CONTENT_URI), 1);
-        } catch (ActivityNotFoundException ignored) {
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
     public void setFileDialogCallback(long callback) {
-        this.mFileDialogCallback = callback;
+        mFileDialogCallback = callback;
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1529,7 +1573,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
             if (selectedImage != null && (cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null)) != null) {
                 cursor.moveToFirst();
                 nativeOnPickImageSuccess(mCallback, cursor.getString(cursor.getColumnIndex(filePathColumn[0])));
-                this.mCallback = 0;
+                mCallback = 0;
                 cursor.close();
             }
         } else if (mCallback != 0) {

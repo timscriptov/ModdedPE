@@ -109,11 +109,6 @@ public class NModLoadFailActivity extends BaseActivity {
         finish();
     }
 
-    @Override
-    public void onBackPressed() {
-
-    }
-
     private class ViewAdapter extends BaseAdapter {
         @Override
         public int getCount() {

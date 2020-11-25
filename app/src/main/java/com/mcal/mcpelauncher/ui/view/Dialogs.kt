@@ -20,9 +20,11 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.widget.RatingBar
 import androidx.appcompat.app.AlertDialog
+import com.mcal.mcpelauncher.BuildConfig
 import com.mcal.mcpelauncher.R
 import com.mcal.mcpelauncher.data.Preferences
 
@@ -53,5 +55,17 @@ object Dialogs {
             dialog1.cancel()
         }
         dialog.show()
+    }
+
+    @JvmStatic
+    fun showScopedStorageDialog(context: Context) {
+        AlertDialog.Builder(context)
+                .setTitle(R.string.scoped_storage_title)
+                .setMessage(R.string.scoped_storage_msg)
+                .setPositiveButton(R.string.settings_title) { p1, p2 ->
+                    val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, Uri.parse("package:" + BuildConfig.APPLICATION_ID))
+                    context.startActivity(intent)
+                }
+                .create().show()
     }
 }
