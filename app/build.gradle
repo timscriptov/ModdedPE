@@ -10,8 +10,8 @@ android {
         applicationId "com.mcal.mcpelauncher"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 971610101
-        versionName "1.16.101.01"
+        versionCode 971620002
+        versionName "1.16.200.02"
         multiDexEnabled true
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
@@ -54,6 +54,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':substrate')
+    implementation project(':xhook')
     implementation project(':nmod')
     implementation project(':adal')
     implementation 'androidx.appcompat:appcompat:1.2.0'
@@ -63,7 +64,7 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.1.1'
 	implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 	implementation 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
-    implementation "androidx.browser:browser:1.2.0"
+    implementation "androidx.browser:browser:1.3.0"
     implementation "androidx.core:core-ktx:1.3.2"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'

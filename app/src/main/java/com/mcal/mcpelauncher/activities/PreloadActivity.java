@@ -105,6 +105,11 @@ public class PreloadActivity extends BaseActivity {
                     }
 
                     @Override
+                    public void onLoadXHookLib() {
+                        writeNewText(getString(R.string.preloading_loading_lib_xhook));
+                    }
+
+                    @Override
                     public void onLoadMinecraftPELib() {
                         writeNewText(getString(R.string.preloading_loading_lib_minecraftpe));
                     }

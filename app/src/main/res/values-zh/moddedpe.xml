@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!--Titles-->
     <string name="manage_nmod_title">管理NMod</string>
@@ -91,6 +91,7 @@
     <string name="preloading_initing_info_safe_mode">--安全模式開啟\n--Minecraft PE版本：%1$s</string>
     <string name="preloading_initing_loading_libs">加載動態鏈接庫</string>
     <string name="preloading_loading_lib_substrate">--加載libsubstrate.so</string>
+    <string name="preloading_loading_lib_xhook">--加載libxhook.so</string>
     <string name="preloading_loading_lib_game_launcher">--加載liblauncher-core.so</string>
     <string name="preloading_loading_lib_fmod">--加載libfmod.so</string>
     <string name="preloading_loading_lib_minecraftpe">--加載libminecraftpe.so</string>
@@ -101,7 +102,7 @@
     <string name="preloading_nmod_loaded_failed">--裝載失敗：%1$s</string>
     <string name="preloading_finished">正在打開遊戲</string>
 
-    <string-array name="preloading_tips_text">
+    <string-array name="preloading_tips_text" tools:ignore="InconsistentArrays">
         <item>你造麽，APK類型的NMod不安裝也可以導入的呢。</item>
         <item>其實NMod全稱是Native-Mod啦~（才不是Naive-Mod什麽的！</item>
         <item>如果您可以登陸GooglePlay，歡迎給我們貢獻小小的一個下載量(๑•̀ω•́๑)</item>

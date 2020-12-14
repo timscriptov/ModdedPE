@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!--Titles-->
     <string name="manage_nmod_title">NMods Дұрыстау</string>
@@ -91,6 +91,7 @@
     <string name="preloading_initing_info_safe_mode">--Қауіпсіздік режимін қосу.\n--Версия Minecraft PE: %1$s</string>
     <string name="preloading_initing_loading_libs">Native Libs Жүктелуде</string>
     <string name="preloading_loading_lib_substrate">-- ibsubstrate.so Жүктелуде</string>
+    <string name="preloading_loading_lib_xhook">--libxhook.so Жүктелуде</string>
     <string name="preloading_loading_lib_game_launcher">--liblauncher-core.so Жүктелуде</string>
     <string name="preloading_loading_lib_fmod">--libfmod.so Жүктелуде</string>
     <string name="preloading_loading_lib_minecraftpe">--libminecraftpe.so Жүктелуде</string>
@@ -101,7 +102,7 @@
     <string name="preloading_nmod_finish_loading">Жүктелу NMods аяқталды</string>
     <string name="preloading_finished">Ойын қосылуда…</string>
 
-    <string-array name="preloading_tips_text">
+    <string-array name="preloading_tips_text" tools:ignore="InconsistentArrays">
         <item>APK форматындағы NMods тағыда импортталуы мүмкін.</item>
         <item>Ал сіз білесіз бе? Басты қосымшалар бетте, оңға немесе солға өзгерту үшін айналдыруға болады.</item>
         <item>NMods импорттау файлдар арқылы жақсырақ, приложениеге қарағанда.</item>
@@ -120,7 +121,7 @@
 
     <!--Main Activity-->
     <string name="main_play">Ойнау</string>
-    <string name="main_reloading_title">Қайта жүктелуде...</string>
+    <string name="main_reloading_title">Қайта жүктелуде…</string>
     <string name="main_default_minecraft_title">Minecraft PE : Әдеттегідей</string>
     <string name="no_available_mcpe_version_found">ModdedPE сәйкес келмейтін версяны тапты Minecraft PE (%1$s).(ModdedPE совместим с %2$s!)\nЕгер сіз қосуды жалғастырсаңыз ModdedPE шығып кетуі мүмкін.</string>
     <string name="no_available_mcpe_version_found_title">Minecraft PE версиясы келмейді!</string>

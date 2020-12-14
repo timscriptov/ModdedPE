@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!--Titles-->
     <string name="manage_nmod_title">NModları Yönet</string>
@@ -91,6 +91,7 @@
     <string name="preloading_initing_info_safe_mode">--Güvenli Mod Açık\n--Minecraft PE Versiyonu: %1$s</string>
     <string name="preloading_initing_loading_libs">Native Kütüphaneleri Yükleniyor&#8320;</string>
     <string name="preloading_loading_lib_substrate">--libsubstrate.so yükleniyor</string>
+    <string name="preloading_loading_lib_xhook">--libxhook.so yükleniyor</string>
     <string name="preloading_loading_lib_game_launcher">--liblauncher-core.so yükleniyor</string>
     <string name="preloading_loading_lib_fmod">--libfmod.so yükleniyor</string>
     <string name="preloading_loading_lib_minecraftpe">--libminecraftpe.so yükleniyor</string>
@@ -101,7 +102,7 @@
     <string name="preloading_nmod_finish_loading">NMod\'ları yükleme tamamlandı</string>
     <string name="preloading_finished">Oyun Başlatılıyor</string>
 
-    <string-array name="preloading_tips_text">
+    <string-array name="preloading_tips_text" tools:ignore="InconsistentArrays">
         <item>APK formatındaki NMod\'lar​ aktarabilirsiniz~</item>
         <item>Biliyor musunuz?Ana Sayfada sağa yada sola elinizi kaydırarak sayfayı değiştirebilirsiniz.</item>
         <item>Uygulamaları seçmek yerine dosyaları seçerek Mod\'ları daha iyi aktarırsınız.</item>

@@ -36,6 +36,11 @@ public class LibraryLoader {
     }
 
     @SuppressLint("UnsafeDynamicallyLoadedCode")
+    static public void loadXHook() {
+        System.loadLibrary("xhook");
+    }
+
+    @SuppressLint("UnsafeDynamicallyLoadedCode")
     static public void loadLauncher(String mcLibsPath) {
         System.loadLibrary("launcher-core");
         //System.load(new File(mcLibsPath, "liblauncher-core.so").getAbsolutePath());

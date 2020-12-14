@@ -16,6 +16,7 @@
  */
 package com.mcal.pesdk;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -77,6 +78,9 @@ public class Preloader {
             mPreloadListener.onLoadNativeLibs();
             mPreloadListener.onLoadSubstrateLib();
             LibraryLoader.loadSubstrate();
+
+            mPreloadListener.onLoadXHookLib();
+            LibraryLoader.loadXHook();
 
             mPreloadListener.onLoadFModLib();
             LibraryLoader.loadFMod(mPESdk.getMinecraftInfo().getMinecraftPackageNativeLibraryDir());
@@ -145,6 +149,7 @@ public class Preloader {
         mPreloadListener.onFinish(mBundle);
     }
 
+    @SuppressLint("UnsafeDynamicallyLoadedCode")
     private boolean loadNMod(Context context, @NotNull NMod nmod, NMod.NModPreloadBean preloadDataItem) {
         MinecraftInfo minecraftInfo = mPESdk.getMinecraftInfo();
 
@@ -232,6 +237,9 @@ public class Preloader {
         }
 
         public void onLoadSubstrateLib() {
+        }
+
+        public void onLoadXHookLib() {
         }
 
         public void onLoadGameLauncherLib() {

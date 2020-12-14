@@ -1,1 +1,1 @@
-include ':app', ':substrate', ':nmod', ':adal'
+include ':app', ':substrate', ':nmod', ':adal', ':xhook'

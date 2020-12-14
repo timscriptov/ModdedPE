@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!--Titles-->
     <string name="manage_nmod_title">Manage NMods</string>
@@ -91,6 +91,7 @@
     <string name="preloading_initing_info_safe_mode">--Safe Mode On\n--Minecraft PE Version: %1$s</string>
     <string name="preloading_initing_loading_libs">Loading Native Libs</string>
     <string name="preloading_loading_lib_substrate">--Loading libsubstrate.so</string>
+    <string name="preloading_loading_lib_xhook">--Loading libxhook.so</string>
     <string name="preloading_loading_lib_game_launcher">--Loading liblauncher-core.so</string>
     <string name="preloading_loading_lib_fmod">--Loading libfmod.so</string>
     <string name="preloading_loading_lib_minecraftpe">--Loading libminecraftpe.so</string>
@@ -101,7 +102,7 @@
     <string name="preloading_nmod_finish_loading">Loading NMods Done</string>
     <string name="preloading_finished">Starting Game&#8230;</string>
 
-    <string-array name="preloading_tips_text">
+    <string-array name="preloading_tips_text" tools:ignore="InconsistentArrays">
         <item>APK formatted nmod can also be imported~</item>
         <item>Do you know? You can scroll left or right to chage page in the Main Page.</item>
         <item>You\'d better import NMods by picking files rather than picking applications.</item>
