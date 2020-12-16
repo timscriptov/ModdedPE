@@ -34,6 +34,10 @@ public final class Preferences {
         preferences = PreferenceManager.getDefaultSharedPreferences(ModdedPEApplication.getContext());
     }
 
+    public static boolean getXHookSkyColor() {
+        return preferences.getBoolean("xhook_sky_color", false);
+    }
+
     public static boolean getRated() {
         return preferences.getBoolean("isRated", false);
     }

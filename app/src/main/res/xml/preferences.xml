@@ -13,6 +13,12 @@
             android:summary="@string/preferences_summary_safe_mode"
             android:title="@string/preferences_title_safe_mode" />
         <androidx.preference.SwitchPreference
+            android:icon="@drawable/ic_sun"
+            android:defaultValue="false"
+            android:key="xhook_sky_color"
+            android:summary="Enable it on to paint the sky red"
+            android:title="Sky Color Red" />
+        <androidx.preference.SwitchPreference
             android:icon="@drawable/ic_theme"
             android:defaultValue="false"
             android:key="night_mode"

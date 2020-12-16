@@ -40,6 +40,10 @@ public class LibraryLoader {
         System.loadLibrary("xhook");
     }
 
+    public static void loadXHookSkyColor() {
+        System.loadLibrary("xhook-skycolor");
+    }
+
     @SuppressLint("UnsafeDynamicallyLoadedCode")
     static public void loadLauncher(String mcLibsPath) {
         System.loadLibrary("launcher-core");

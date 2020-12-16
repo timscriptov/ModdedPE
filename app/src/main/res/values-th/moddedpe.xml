@@ -91,6 +91,7 @@
     <string name="preloading_initing_loading_libs">Loading Native Libs</string>
     <string name="preloading_loading_lib_substrate">--Loading libsubstrate.so</string>
     <string name="preloading_loading_lib_xhook">--Loading libxhook.so</string>
+    \<string name="preloading_loading_lib_xhook_skycolor">--Loading libxhook-skycolor.so</string>
     <string name="preloading_loading_lib_game_launcher">--Loading liblauncher-core.so</string>
     <string name="preloading_loading_lib_fmod">--Loading libfmod.so</string>
     <string name="preloading_loading_lib_minecraftpe">--Loading libminecraftpe.so</string>

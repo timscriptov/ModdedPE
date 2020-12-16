@@ -16,6 +16,8 @@
         <item>^1[.]16[.]100[.]04</item>
         <item>^1[.]16[.]101</item>
         <item>^1[.]16[.]101[.]01</item>
+        <item>^1[.]16[.]200[.]02</item>
+        <item>^1[.]16[.]201[.]01</item>
     </string-array>
     <string name="app_name" translatable="false">ModdedPE</string>
     <string name="app_game" translatable="false">Minecraft</string>

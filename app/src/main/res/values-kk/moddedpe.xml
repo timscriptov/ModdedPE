@@ -92,6 +92,7 @@
     <string name="preloading_initing_loading_libs">Native Libs Жүктелуде</string>
     <string name="preloading_loading_lib_substrate">-- ibsubstrate.so Жүктелуде</string>
     <string name="preloading_loading_lib_xhook">--libxhook.so Жүктелуде</string>
+    <string name="preloading_loading_lib_xhook_skycolor">--libxhook-skycolor.so Жүктелуде</string>
     <string name="preloading_loading_lib_game_launcher">--liblauncher-core.so Жүктелуде</string>
     <string name="preloading_loading_lib_fmod">--libfmod.so Жүктелуде</string>
     <string name="preloading_loading_lib_minecraftpe">--libminecraftpe.so Жүктелуде</string>

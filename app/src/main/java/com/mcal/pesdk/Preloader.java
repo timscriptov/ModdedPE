@@ -23,6 +23,7 @@ import android.os.Bundle;
 import com.google.gson.Gson;
 import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.pesdk.nativeapi.LibraryLoader;
+import com.mcal.pesdk.nativeapi.NativeHandler;
 import com.mcal.pesdk.nmod.LoadFailedException;
 import com.mcal.pesdk.nmod.NMod;
 import com.mcal.pesdk.nmod.NModJSONEditor;
@@ -76,11 +77,6 @@ public class Preloader {
             SplitParser.parse(context);
 
             mPreloadListener.onLoadNativeLibs();
-            mPreloadListener.onLoadSubstrateLib();
-            LibraryLoader.loadSubstrate();
-
-            mPreloadListener.onLoadXHookLib();
-            LibraryLoader.loadXHook();
 
             mPreloadListener.onLoadFModLib();
             LibraryLoader.loadFMod(mPESdk.getMinecraftInfo().getMinecraftPackageNativeLibraryDir());
@@ -90,6 +86,18 @@ public class Preloader {
 
             mPreloadListener.onLoadMinecraftPELib();
             LibraryLoader.loadMinecraftPE(mPESdk.getMinecraftInfo().getMinecraftPackageNativeLibraryDir());
+
+            mPreloadListener.onLoadSubstrateLib();
+            LibraryLoader.loadSubstrate();
+
+            mPreloadListener.onLoadXHookLib();
+            LibraryLoader.loadXHook();
+
+            if(Preferences.getXHookSkyColor()) {
+                mPreloadListener.onLoadXHookSkyColorLib();
+                LibraryLoader.loadXHookSkyColor();
+            }
+
             mPreloadListener.onLoadGameLauncherLib();
             LibraryLoader.loadLauncher(mPESdk.getMinecraftInfo().getMinecraftPackageNativeLibraryDir());
             if (!safeMode) {
@@ -240,6 +248,9 @@ public class Preloader {
         }
 
         public void onLoadXHookLib() {
+        }
+
+        public void onLoadXHookSkyColorLib() {
         }
 
         public void onLoadGameLauncherLib() {

@@ -12,5 +12,5 @@ LOCAL_SRC_FILES  := xhook.c \
 LOCAL_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_CFLAGS     := -Wall -Wextra -Werror -fvisibility=hidden
 LOCAL_CONLYFLAGS := -std=c11
-LOCAL_LDLIBS     := -llog
+LOCAL_LDLIBS    := -llog
 include $(BUILD_SHARED_LIBRARY)

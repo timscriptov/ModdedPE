@@ -92,6 +92,7 @@
     <string name="preloading_initing_loading_libs">ネイティブライブラリを読み込み中</string>
     <string name="preloading_loading_lib_substrate">--libsubstrate.soを読み込み中</string>
     <string name="preloading_loading_lib_xhook">--libxhook.soを読み込み中</string>
+    <string name="preloading_loading_lib_xhook_skycolor">--libxhook-skycolor.soを読み込み中</string>
     <string name="preloading_loading_lib_game_launcher">--liblauncher-core.soを読み込み中</string>
     <string name="preloading_loading_lib_fmod">--libfmod.soを読み込み中</string>
     <string name="preloading_loading_lib_minecraftpe">--libminecraftpe.soを読み込み中</string>
