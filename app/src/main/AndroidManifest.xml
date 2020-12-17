@@ -192,6 +192,84 @@
             android:theme="@style/AppErrorTheme"
             android:name=".activities.ExceptionActivity" />
 
+        <activity
+            android:icon="@drawable/ic_sun"
+            android:roundIcon="@drawable/ic_sun"
+            android:theme="@style/AppTheme"
+            android:name="com.mcal.mcpelauncher.activities.AddonInstallerActivity"
+            android:debuggable="false"
+            android:excludeFromRecents="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
+            android:alwaysRetainTaskState="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.VIEW" />
+                <category
+                    android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action
+                    android:name="xbox_live_game_invite" />
+                <action
+                    android:name="xbox_live_achievement_unlock" />
+                <category
+                    android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.VIEW" />
+                <category
+                    android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+                <data android:host="*" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:pathPattern=".*\.mcworld" />
+                <data
+                    android:pathPattern=".*\..*\.mcworld" />
+                <data
+                    android:pathPattern=".*\..*\..*\.mcworld" />
+                <data
+                    android:pathPattern=".*\..*\..*\..*\.mcworld" />
+                <data
+                    android:pathPattern=".*\..*\..*\..*\..*\.mcworld" />
+                <data android:pathPattern=".*\.mcpack" />
+                <data
+                    android:pathPattern=".*\..*\.mcpack" />
+                <data
+                    android:pathPattern=".*\..*\..*\.mcpack" />
+                <data
+                    android:pathPattern=".*\..*\..*\..*\.mcpack" />
+                <data
+                    android:pathPattern=".*\..*\..*\..*\..*\.mcpack" />
+                <data android:pathPattern=".*\.mcaddon" />
+                <data
+                    android:pathPattern=".*\..*\.mcaddon" />
+                <data
+                    android:pathPattern=".*\..*\..*\.mcaddon" />
+                <data
+                    android:pathPattern=".*\..*\..*\..*\.mcaddon" />
+                <data
+                    android:pathPattern=".*\..*\..*\..*\..*\.mcaddon" />
+                <data
+                    android:pathPattern=".*\.mctemplate" />
+                <data
+                    android:pathPattern=".*\..*\.mctemplate" />
+                <data
+                    android:pathPattern=".*\..*\..*\.mctemplate" />
+                <data
+                    android:pathPattern=".*\..*\..*\..*\.mctemplate" />
+                <data
+                    android:pathPattern=".*\..*\..*\..*\..*\.mctemplate" />
+            </intent-filter>
+        </activity>
+
         <service android:name="com.mcal.mcpelauncher.services.SoundService" />
 
         <provider

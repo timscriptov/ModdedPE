@@ -6,7 +6,7 @@
 #include <dlfcn.h>
 #include <string>
 #include <minecraft/Color.h>
-#include "../../../../xhook/src/main/cpp/xhook.h"
+#include "xhook.h"
 
 //struct GuiData {
 //    void displayClientMessage(std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> > const&);

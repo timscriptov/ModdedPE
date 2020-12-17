@@ -53,7 +53,7 @@ public class SplitParser {
         }
 
         try {
-            //if(SplitParser.isBundle(mContext)) {
+            if(SplitParser.isBundle(mContext)) {
                 if (mcpe(mContext) != null) {
                     String split_path = Arrays.asList(mcpe(mContext).splitPublicSourceDirs).get(0);
                     byte[] buffer = new byte[2048];
@@ -70,7 +70,7 @@ public class SplitParser {
                         fos.close();
                     }
                 }
-            //}
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

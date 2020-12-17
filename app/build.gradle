@@ -55,8 +55,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':substrate')
     implementation project(':xhook')
-    implementation project(':xhook_test')
-    implementation project(':nmod')
     implementation project(':adal')
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.cardview:cardview:1.0.0'
