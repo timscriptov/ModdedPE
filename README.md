@@ -1,4 +1,6 @@
 [![License Info](https://img.shields.io/badge/license-GNU_GPLv3-blue.svg?style=flat-square)](https://github.com/TimScriptov/ModdedPE) [![Play Store Info](https://img.shields.io/badge/Play_Store-v1.16.100.04-blue.svg?style=flat-square)](https://play.google.com/store/apps/details?id=com.mcal.mcpelauncher)
+
+The fresh code is in the [ModdedPE-JAVA branch][6]
 # ModdedPE!
 ![logo][1]
 --------
@@ -35,3 +37,4 @@ The Open Source NModAPI will help you a lot:)<br>
 [3]: https://github.com/elmurzaev
 [4]: https://github.com/iqiyi/xHook
 [5]: http://www.cydiasubstrate.com/
+[6]: https://github.com/TimScriptov/ModdedPE/tree/ModdedPE-JAVA
