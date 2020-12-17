@@ -1,6 +1,6 @@
 [![License Info](https://img.shields.io/badge/license-GNU_GPLv3-blue.svg?style=flat-square)](https://github.com/TimScriptov/ModdedPE) [![Play Store Info](https://img.shields.io/badge/Play_Store-v1.16.100.04-blue.svg?style=flat-square)](https://play.google.com/store/apps/details?id=com.mcal.mcpelauncher)
 
-The fresh code is in the [ModdedPE-JAVA branch][6]
+The fresh code is in the [ModdedPE-JAVA][6] branch
 # ModdedPE!
 ![logo][1]
 --------
