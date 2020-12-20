@@ -43,8 +43,8 @@ import java.util.zip.ZipFile;
 public class SplitParser {
     @SuppressLint("StaticFieldLeak")
     public static Context mContext;
-
     private static final String[] minecraftLibs = new String[]{"libminecraftpe.so", "libc++_shared.so", "libfmod.so"};
+    private static String MC_PACKAGE_NAME = "com.mojang.minecraftpe";
 
     public static void parse(Context context) {
         mContext = context;
@@ -58,7 +58,7 @@ public class SplitParser {
         if (!arm64.exists()) {
             arm64.mkdir();
         }
-        
+
         try {
             if(isBundle()) {
                 if (mcpe() != null) {
@@ -99,12 +99,8 @@ public class SplitParser {
     }
 
     public static @Nullable Context mcContext() {
-        String mMinecraftPackageName = "com.mojang.minecraftpe";
-        if (!Preferences.getMinecraftPEPackageName().equals("com.mojang.minecraftpe"))
-            mMinecraftPackageName = Preferences.getMinecraftPEPackageName();
-
         try {
-            return mContext.createPackageContext(mMinecraftPackageName, Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);
+            return mContext.createPackageContext(MC_PACKAGE_NAME, Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
             return null;

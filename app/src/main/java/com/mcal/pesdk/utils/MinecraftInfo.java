@@ -23,6 +23,8 @@ import android.os.Build;
 
 import com.mcal.mcpelauncher.data.Preferences;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,15 +38,11 @@ public class MinecraftInfo {
     private Context mContext;
     private Context mMCContext;
 
-    public MinecraftInfo(Context context) {
+    public MinecraftInfo(@NotNull Context context) {
         this.mContext = context;
 
-        String mMinecraftPackageName = MC_PACKAGE_NAME;
-        if (!Preferences.getMinecraftPEPackageName().equals("com.mojang.minecraftpe"))
-            mMinecraftPackageName = Preferences.getMinecraftPEPackageName();
-
         try {
-            mMCContext = context.createPackageContext(mMinecraftPackageName, Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);
+            mMCContext = context.createPackageContext(MC_PACKAGE_NAME, Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
