@@ -45,17 +45,17 @@ public class AssetOverrideManager {
         }
     }
 
-    static AssetOverrideManager getInstance() {
+    public static AssetOverrideManager getInstance() {
         if (mInstance == null)
             return mInstance = new AssetOverrideManager();
         return mInstance;
     }
 
-    static void newInstance() {
+    public static void newInstance() {
         mInstance = new AssetOverrideManager();
     }
 
-    void addAssetOverride(String packageResourcePath) {
+    public void addAssetOverride(String packageResourcePath) {
         try {
             Method method = AssetManager.class.getMethod("addAssetPath", String.class);
             method.invoke(mLocalAssetManager, packageResourcePath);

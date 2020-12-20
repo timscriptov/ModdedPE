@@ -59,7 +59,7 @@ public final class Preferences {
     }
 
     public static boolean DesktopGui() {
-        return preferences.getBoolean("safe_mode", false);
+        return preferences.getBoolean("desktop_gui", false);
     }
 
     public static boolean isSafeMode() {

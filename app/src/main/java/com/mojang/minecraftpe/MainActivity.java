@@ -500,7 +500,8 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     }
 
     @SuppressLint({"WrongConstant", "ResourceType"})
-    public void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         nativeWaitCrashManagementSetupComplete();
         //displayMetrics = new DisplayMetrics();

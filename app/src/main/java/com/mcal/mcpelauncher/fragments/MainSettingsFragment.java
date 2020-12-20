@@ -68,7 +68,7 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
 
         SwitchPreference mDesktopGuiPreference = findPreference("desktop_gui");
         mDesktopGuiPreference.setOnPreferenceChangeListener((p1, p2) -> {
-            DesktopGui.run();
+            DesktopGui.run(getContext());
             return true;
         });
 

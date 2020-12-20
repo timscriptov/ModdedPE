@@ -19,6 +19,7 @@ package com.mcal.pesdk;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.mcal.mcpelauncher.data.Preferences;
@@ -237,53 +238,70 @@ public class Preloader {
     }
 
     public static class PreloadListener {
+        public static String TAG = "PreloadListener";
+
         public void onStart() {
+            Log.e(TAG, "onStart()");
         }
 
         public void onLoadNativeLibs() {
+            Log.e(TAG, "onLoadNativeLibs()");
         }
 
         public void onLoadSubstrateLib() {
+            Log.e(TAG, "onLoadSubstrateLib()");
         }
 
         public void onLoadXHookLib() {
+            Log.e(TAG, "onLoadXHookLib()");
         }
 
         public void onLoadXHookSkyColorLib() {
+            Log.e(TAG, "onLoadXHookSkyColorLib()");
         }
 
         public void onLoadGameLauncherLib() {
+            Log.e(TAG, "onLoadGameLauncherLib()");
         }
 
         public void onLoadFModLib() {
+            Log.e(TAG, "onLoadFModLib()");
         }
 
         public void onLoadMinecraftPELib() {
+            Log.e(TAG, "onLoadMinecraftPELib()");
         }
 
         public void onLoadCppSharedLib() {
-
+            Log.e(TAG, "onLoadCppSharedLib()");
         }
 
         public void onLoadPESdkLib() {
+            Log.e(TAG, "onLoadPESdkLib()");
         }
 
         public void onFinishedLoadingNativeLibs() {
+            Log.e(TAG, "onFinishedLoadingNativeLibs()");
         }
 
         public void onStartLoadingAllNMods() {
+            Log.e(TAG, "onStartLoadingAllNMods()");
         }
 
         public void onNModLoaded(NMod nmod) {
+            Log.e(TAG, "onNModLoaded()");
         }
 
         public void onFailedLoadingNMod(NMod nmod) {
+            Log.e(TAG, "onFailedLoadingNMod()");
         }
 
         public void onFinishedLoadingAllNMods() {
+            Log.e(TAG, "onFinishedLoadingAllNMods()");
         }
 
         public void onFinish(Bundle bundle) {
+            Log.e(TAG, "onFinish()");
         }
     }
 }

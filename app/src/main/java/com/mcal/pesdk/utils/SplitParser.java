@@ -16,6 +16,7 @@
  */
 package com.mcal.pesdk.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -25,6 +26,7 @@ import com.mcal.mcpelauncher.data.Preferences;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,9 +41,14 @@ import java.util.zip.ZipFile;
  * @author Vologhat
  */
 public class SplitParser {
-    private static String[] minecraftLibs = new String[]{"libminecraftpe.so", "libc++_shared.so", "libfmod.so"};
+    @SuppressLint("StaticFieldLeak")
+    public static Context mContext;
 
-    public static void parse(@NotNull Context mContext) {
+    private static final String[] minecraftLibs = new String[]{"libminecraftpe.so", "libc++_shared.so", "libfmod.so"};
+
+    public static void parse(Context context) {
+        mContext = context;
+
         File lib = new File(mContext.getCacheDir().getPath() + "/lib");
         if (!lib.exists()) {
             lib.mkdir();
@@ -51,11 +58,11 @@ public class SplitParser {
         if (!arm64.exists()) {
             arm64.mkdir();
         }
-
+        
         try {
-            if(SplitParser.isBundle(mContext)) {
-                if (mcpe(mContext) != null) {
-                    String split_path = Arrays.asList(mcpe(mContext).splitPublicSourceDirs).get(0);
+            if(isBundle()) {
+                if (mcpe() != null) {
+                    String split_path = Arrays.asList(mcpe().splitPublicSourceDirs).get(0);
                     byte[] buffer = new byte[2048];
                     for (String so : minecraftLibs) {
                         InputStream is = new ZipFile(split_path).getInputStream(new ZipEntry("lib/" + Build.CPU_ABI + "/" + so));
@@ -77,11 +84,11 @@ public class SplitParser {
     }
 
     @Contract(pure = true)
-    public static boolean isBundle(@NotNull Context mContext) {
-        return mContext.getApplicationInfo().splitPublicSourceDirs != null && mContext.getApplicationInfo().splitPublicSourceDirs.length > 0;
+    public static boolean isBundle() {
+        return mContext.getApplicationInfo().splitPublicSourceDirs != null && mcContext().getApplicationInfo().splitPublicSourceDirs.length > 0;
     }
 
-    private static ApplicationInfo mcpe(@NotNull Context mContext) {
+    private static ApplicationInfo mcpe() {
         ApplicationInfo mcpe = null;
         try {
             mcpe = mContext.getPackageManager().getPackageInfo(Preferences.getMinecraftPEPackageName(), 0).applicationInfo;
@@ -89,5 +96,18 @@ public class SplitParser {
             e.printStackTrace();
         }
         return mcpe;
+    }
+
+    public static @Nullable Context mcContext() {
+        String mMinecraftPackageName = "com.mojang.minecraftpe";
+        if (!Preferences.getMinecraftPEPackageName().equals("com.mojang.minecraftpe"))
+            mMinecraftPackageName = Preferences.getMinecraftPEPackageName();
+
+        try {
+            return mContext.createPackageContext(mMinecraftPackageName, Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
