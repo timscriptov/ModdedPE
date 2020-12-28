@@ -3,8 +3,8 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion '30.0.2'
-    ndkVersion '21.0.6113669'
+    buildToolsVersion '30.0.3'
+    ndkVersion '22.0.7026061'
 
     defaultConfig {
         applicationId "com.mcal.mcpelauncher"
@@ -72,7 +72,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.google.android.gms:play-services-gcm:17.0.0'
     implementation 'com.google.android.gms:play-services-iid:17.0.0'
-    implementation 'com.google.firebase:firebase-messaging:21.0.0'
+    implementation 'com.google.firebase:firebase-messaging:21.0.1'
 
     implementation 'org.zeroturnaround:zt-zip:1.14'
     implementation 'com.anjlab.android.iab.v3:library:1.1.0'

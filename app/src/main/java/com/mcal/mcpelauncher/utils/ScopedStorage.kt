@@ -14,19 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.mcpelauncher.utils;
+package com.mcal.mcpelauncher.utils
 
-import android.os.Environment;
-
-import java.io.File;
+import android.os.Environment
+import java.io.File
 
 /**
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-
-public class ScopedStorage {
-    public static File getStorageDirectory() {
-        return Environment.getExternalStorageDirectory();
-    }
+object ScopedStorage {
+    @JvmStatic
+    val storageDirectory: File
+        get() = Environment.getExternalStorageDirectory()
 }
