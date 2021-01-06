@@ -33,8 +33,6 @@ import java.util.regex.Pattern;
  * @author https://github.com/TimScriptov
  */
 public class MinecraftInfo {
-    private static String MC_PACKAGE_NAME = "com.mojang.minecraftpe";
-
     private Context mContext;
     private Context mMCContext;
 
@@ -42,7 +40,7 @@ public class MinecraftInfo {
         this.mContext = context;
 
         try {
-            mMCContext = context.createPackageContext(MC_PACKAGE_NAME, Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);
+            mMCContext = context.createPackageContext(Preferences.getMinecraftPEPackageName(), Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

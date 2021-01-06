@@ -16,6 +16,8 @@
  */
 package com.mcal.pesdk;
 
+import android.os.Build;
+
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -24,8 +26,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ABIInfo {
     @NotNull
-    public static String getTargetABIType() {
-        String property = System.getProperty("os.arch");
-        return (property.equals("i686") || property.startsWith("x86")) ? "x86" : "armeabi-v7a";
+    public static String getABI() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            return Build.SUPPORTED_ABIS[0];
+        } else {
+            return Build.CPU_ABI;
+        }
     }
 }

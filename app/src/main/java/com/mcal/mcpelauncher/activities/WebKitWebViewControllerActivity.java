@@ -17,6 +17,7 @@
 package com.mcal.mcpelauncher.activities;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,9 +27,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.mcal.mcpelauncher.data.Constants;
 import com.microsoft.aad.adal.AuthenticationConstants;
 import com.microsoft.xal.browser.ShowUrlType;
 
@@ -41,7 +39,7 @@ import org.jetbrains.annotations.NotNull;
  * @author https://github.com/TimScriptov
  */
 
-public class WebKitWebViewControllerActivity extends AppCompatActivity {
+public class WebKitWebViewControllerActivity extends Activity {
     public static final String END_URL = "END_URL";
     public static final String RESPONSE_KEY = "RESPONSE";
     public static final int RESULT_FAILED = 8054;
@@ -87,8 +85,8 @@ public class WebKitWebViewControllerActivity extends AppCompatActivity {
             finish();
             return;
         }
-        startUrl = args.getString(START_URL, Constants.FLAVOR);
-        endUrl = args.getString(END_URL, Constants.FLAVOR);
+        startUrl = args.getString(START_URL, "");
+        endUrl = args.getString(END_URL, "");
         if (startUrl.isEmpty() || endUrl.isEmpty()) {
             Log.e(TAG, "onCreate() Received invalid start or end URL.");
             setResult(RESULT_FAILED);
@@ -139,5 +137,6 @@ public class WebKitWebViewControllerActivity extends AppCompatActivity {
             finish();
             return true;
         }
+
     }
 }

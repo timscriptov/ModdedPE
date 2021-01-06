@@ -21,5 +21,7 @@ package com.mcal.mcpelauncher.data;
  * @author https://github.com/TimScriptov
  */
 public final class Constants {
-    public static final String FLAVOR = "";
+    public static final String STRING_VALUE_DEFAULT = "default";
+    public static final String NMOD_DATA_TAG = "nmod_data";
+    public static final String NMOD_API_VERSION = "1.4.1";
 }

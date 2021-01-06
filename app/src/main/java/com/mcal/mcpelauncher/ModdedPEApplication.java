@@ -60,10 +60,6 @@ public class ModdedPEApplication extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        //FileUtils.extract(base, "libc++_shared.so");
-        //FileUtils.extract(base, "libsubstrate.so");
-        //FileUtils.extract(base, "liblauncher-core.so");
-        //FileUtils.extract(base, "libnmod-core.so");
     }
 
     @Override

@@ -38,11 +38,11 @@ import com.mcal.mcpelauncher.activities.AboutActivity;
 import com.mcal.mcpelauncher.activities.DirPickerActivity;
 import com.mcal.mcpelauncher.activities.MCPkgPickerActivity;
 import com.mcal.mcpelauncher.activities.SplashesActivity;
+import com.mcal.mcpelauncher.data.Constants;
 import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.mcpelauncher.services.BackgroundSoundPlayer;
 import com.mcal.mcpelauncher.utils.DesktopGui;
 import com.mcal.mcpelauncher.utils.I18n;
-import com.mcal.pesdk.utils.LauncherOptions;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -134,14 +134,14 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
         if (requestCode == DirPickerActivity.REQUEST_PICK_DIR && resultCode == AppCompatActivity.RESULT_OK) {
             String dir = data.getExtras().getString(DirPickerActivity.TAG_DIR_PATH);
             Preferences.setDataSavedPath(dir);
-            if (dir.equals(LauncherOptions.STRING_VALUE_DEFAULT))
+            if (dir.equals(Constants.STRING_VALUE_DEFAULT))
                 Snackbar.make(getActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_reset_data_path), 2500).show();
             else
                 Snackbar.make(getActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_data_path, dir), 2500).show();
         } else if (requestCode == MCPkgPickerActivity.REQUEST_PICK_PACKAGE && resultCode == AppCompatActivity.RESULT_OK) {
             String pkgName = data.getExtras().getString("package_name");
             Preferences.setMinecraftPackageName(pkgName);
-            if (pkgName.equals(LauncherOptions.STRING_VALUE_DEFAULT))
+            if (pkgName.equals(Constants.STRING_VALUE_DEFAULT))
                 Snackbar.make(getActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_reset_pkg_name), 2500).show();
             else
                 Snackbar.make(getActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_pkg_name, pkgName), 2500).show();

@@ -10,7 +10,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -67,7 +66,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.appsflyer.AppsFlyerLib;
-import com.mcal.mcpelauncher.BuildConfig;
 import com.mcal.mcpelauncher.services.SoundService;
 import com.mojang.android.StringValue;
 import com.mojang.minecraftpe.input.InputDeviceManager;
@@ -95,7 +93,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -240,6 +237,10 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         }
     }
 
+    private static native void nativeConfigureNewSession(SessionInfo sessionInfo);
+
+    private static native void nativeWaitCrashManagementSetupComplete();
+
     public SessionInfo getLastDeviceSessionInfo() {
         if (mLastDeviceSessionInfo == null) {
             mLastDeviceSessionInfo = SessionInfo.fromString(PreferenceManager.getDefaultSharedPreferences(this).getString("last-session-info", ""));
@@ -263,10 +264,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     }
 
     private native void fireCrashedTelemetry(String str, String str2, String str3);
-
-    private static native void nativeConfigureNewSession(SessionInfo sessionInfo);
-
-    private static native void nativeWaitCrashManagementSetupComplete();
 
     private native void setUpBreakpad(String str, String str2);
 

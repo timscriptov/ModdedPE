@@ -32,7 +32,6 @@ public class LibraryLoader {
     @SuppressLint("UnsafeDynamicallyLoadedCode")
     static public void loadSubstrate() {
         System.loadLibrary("substrate");
-        //System.load(new File(mcLibsPath, "libsubstrate.so").getAbsolutePath());
     }
 
     @SuppressLint("UnsafeDynamicallyLoadedCode")
@@ -47,7 +46,6 @@ public class LibraryLoader {
     @SuppressLint("UnsafeDynamicallyLoadedCode")
     static public void loadLauncher(String mcLibsPath) {
         System.loadLibrary("launcher-core");
-        //System.load(new File(mcLibsPath, "liblauncher-core.so").getAbsolutePath());
         nativeOnLauncherLoaded(mcLibsPath + "/" + "libminecraftpe.so");
     }
 
@@ -64,13 +62,11 @@ public class LibraryLoader {
     @SuppressLint("UnsafeDynamicallyLoadedCode")
     static public void loadCppShared(String mcLibsPath) {
         System.load(new File(mcLibsPath, "libc++_shared.so").getAbsolutePath());
-        //System.loadLibrary("c++_shared");
     }
 
     @SuppressLint("UnsafeDynamicallyLoadedCode")
     static public void loadNModAPI(String mcLibsPath) {
         System.loadLibrary("nmod-core");
-        //System.load(new File(mcLibsPath, "libnmod-core.so").getAbsolutePath());
         nativeOnNModAPILoaded(mcLibsPath + "/" + "libminecraftpe.so");
     }
 }

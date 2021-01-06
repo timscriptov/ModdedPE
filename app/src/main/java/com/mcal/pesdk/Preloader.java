@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.mcal.mcpelauncher.data.Constants;
 import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.pesdk.nativeapi.LibraryLoader;
 import com.mcal.pesdk.nmod.LoadFailedException;
@@ -93,7 +94,7 @@ public class Preloader {
             mPreloadListener.onLoadXHookLib();
             LibraryLoader.loadXHook();
 
-            if(Preferences.getXHookSkyColor()) {
+            if (Preferences.getXHookSkyColor()) {
                 mPreloadListener.onLoadXHookSkyColorLib();
                 LibraryLoader.loadXHookSkyColor();
             }
@@ -149,10 +150,10 @@ public class Preloader {
 
             mPreloadData.assets_packs_path = mAssetsArrayList.toArray(new String[0]);
             mPreloadData.loaded_libs = mLoadedNativeLibs.toArray(new String[0]);
-            mBundle.putString(PreloadingInfo.NMOD_DATA_TAG, gson.toJson(mPreloadData));
+            mBundle.putString(Constants.NMOD_DATA_TAG, gson.toJson(mPreloadData));
             mPreloadListener.onFinishedLoadingAllNMods();
         } else
-            mBundle.putString(PreloadingInfo.NMOD_DATA_TAG, gson.toJson(new Preloader.NModPreloadData()));
+            mBundle.putString(Constants.NMOD_DATA_TAG, gson.toJson(new Preloader.NModPreloadData()));
 
         mPreloadListener.onFinish(mBundle);
     }

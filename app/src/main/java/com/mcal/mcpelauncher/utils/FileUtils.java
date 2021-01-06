@@ -2,7 +2,8 @@ package com.mcal.mcpelauncher.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
+
+import com.mcal.pesdk.ABIInfo;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -14,25 +15,17 @@ import java.io.InputStream;
 public class FileUtils {
     @SuppressLint("UnsafeDynamicallyLoadedCode")
     public static void extract(@NotNull Context context, String so) {
-        String abi = Build.CPU_ABI;
+        String abi = ABIInfo.getABI();
         File lib = new File(context.getCacheDir().getPath() + "/lib");
         if (!lib.exists()) {
             lib.mkdir();
         }
 
-        File path = new File(lib + "/" + Build.CPU_ABI);
+        File path = new File(lib + "/" + ABIInfo.getABI());
         if (!path.exists()) {
             path.mkdir();
         }
-        if (abi.contains("armeabi")) {
-            extract(context, "armeabi-v7a/" + so, path + "/" + so);
-        } else if (abi.contains("arm64")) {
-            extract(context, "arm64-v8a/" + so, path + "/" + so);
-        } else if (abi.contains("x86")) {
-            extract(context, "x86/" + so, path + "/" + so);
-        } else if (abi.contains("x86_64")) {
-            extract(context, "x86_64/" + so, path + "/" + so);
-        }
+        extract(context, ABIInfo.getABI() + "/" + so, path + "/" + so);
     }
 
     public static void extract(@NotNull Context context, String input, String output) {

@@ -9,20 +9,20 @@ public enum ShowUrlType {
     CookieRemovalSkipIfSharedCredentials,
     NonAuthFlow;
 
-    @Nullable
     @Contract(pure = true)
-    public static ShowUrlType fromInt(int val) {
-        switch (val) {
-            case 0:
-                return Normal;
-            case 1:
-                return CookieRemoval;
-            case 2:
-                return CookieRemovalSkipIfSharedCredentials;
-            case 3:
-                return NonAuthFlow;
-            default:
-                return null;
+    public static @Nullable ShowUrlType fromInt(int val) {
+        if (val == 0) {
+            return Normal;
         }
+        if (val == 1) {
+            return CookieRemoval;
+        }
+        if (val == 2) {
+            return CookieRemovalSkipIfSharedCredentials;
+        }
+        if (val != 3) {
+            return null;
+        }
+        return NonAuthFlow;
     }
 }

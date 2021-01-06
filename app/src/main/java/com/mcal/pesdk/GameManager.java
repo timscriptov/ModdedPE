@@ -20,6 +20,7 @@ import android.content.res.AssetManager;
 import android.os.Bundle;
 
 import com.google.gson.Gson;
+import com.mcal.mcpelauncher.data.Constants;
 import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.pesdk.nativeapi.NativeUtils;
 import com.mcal.pesdk.nmod.NModLib;
@@ -52,7 +53,7 @@ public class GameManager {
             Gson gson = new Gson();
             Bundle data = activity.getIntent().getExtras();
 
-            Preloader.NModPreloadData preloadData = gson.fromJson(data.getString(PreloadingInfo.NMOD_DATA_TAG), Preloader.NModPreloadData.class);
+            Preloader.NModPreloadData preloadData = gson.fromJson(data.getString(Constants.NMOD_DATA_TAG), Preloader.NModPreloadData.class);
 
             for (String assetsPath : preloadData.assets_packs_path)
                 AssetOverrideManager.addAssetOverride(activity.getAssets(), assetsPath);
@@ -69,7 +70,7 @@ public class GameManager {
         if (Preferences.isSafeMode())
             return;
         Gson gson = new Gson();
-        Preloader.NModPreloadData preloadData = gson.fromJson(activity.getIntent().getExtras().getString(PreloadingInfo.NMOD_DATA_TAG), Preloader.NModPreloadData.class);
+        Preloader.NModPreloadData preloadData = gson.fromJson(activity.getIntent().getExtras().getString(Constants.NMOD_DATA_TAG), Preloader.NModPreloadData.class);
 
         String[] loadedNModLibs = preloadData.loaded_libs;
         for (String nativeLibName : loadedNModLibs) {

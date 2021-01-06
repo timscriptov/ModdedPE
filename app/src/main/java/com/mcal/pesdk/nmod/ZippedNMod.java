@@ -79,7 +79,7 @@ public class ZippedNMod extends NMod {
 
         new File(getNativeLibsPath()).mkdirs();
         while ((entry = zipInput.getNextEntry()) != null) {
-            if (!entry.isDirectory() && entry.getName().startsWith("lib" + File.separator + ABIInfo.getTargetABIType() + File.separator)) {
+            if (!entry.isDirectory() && entry.getName().startsWith("lib" + File.separator + ABIInfo.getABI() + File.separator)) {
                 InputStream libInputStream = mZipFile.getInputStream(entry);
                 int byteRead;
                 byte[] buffer = new byte[1024];

@@ -82,8 +82,8 @@ public class DesktopGui {
     }
 
     public static void reWrite(@NotNull String fileContent, File filePath, String i) throws IOException {
-            FileWriter writer = new FileWriter(filePath);
-            writer.write(fileContent.replaceFirst("gfx_guiscale_offset:(\\d|-\\d)", "gfx_guiscale_offset:" + i));
-            writer.flush();
+        FileWriter writer = new FileWriter(filePath);
+        writer.write(fileContent.replaceFirst("gfx_guiscale_offset:(\\d|-\\d)", "gfx_guiscale_offset:" + i));
+        writer.flush();
     }
 }

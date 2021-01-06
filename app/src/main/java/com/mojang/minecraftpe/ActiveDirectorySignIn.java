@@ -9,7 +9,6 @@ import com.microsoft.aad.adal.AuthenticationCallback;
 import com.microsoft.aad.adal.AuthenticationCancelError;
 import com.microsoft.aad.adal.AuthenticationContext;
 import com.microsoft.aad.adal.AuthenticationResult;
-import com.microsoft.aad.adal.IWindowComponent;
 import com.microsoft.aad.adal.PromptBehavior;
 
 import org.jetbrains.annotations.Contract;

@@ -141,6 +141,7 @@ public class MCPkgPickerActivity extends BaseActivity {
         public PackageListAdapter() {
             Collections.sort(mInstalledPackages, new Comparator<PackageInfo>() {
                 PackageManager pm = getPackageManager();
+
                 @Override
                 public int compare(PackageInfo o1, PackageInfo o2) {
                     return pm.getApplicationLabel(o1.applicationInfo).toString().compareToIgnoreCase(pm.getApplicationLabel(o2.applicationInfo).toString());

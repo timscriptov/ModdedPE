@@ -18,6 +18,8 @@ package com.mcal.pesdk.nmod;
 
 import android.content.Context;
 
+import com.mcal.mcpelauncher.data.Constants;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -98,6 +100,6 @@ public final class NModAPI {
     @NotNull
     @Contract(pure = true)
     public String getVersionName() {
-        return "1.4.1";
+        return Constants.NMOD_API_VERSION;
     }
 }

@@ -1,11 +1,5 @@
 package com.mojang.minecraftpe;
 
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
-
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -13,6 +7,10 @@ import android.content.pm.PackageManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * @author Тимашков Иван
@@ -71,24 +69,6 @@ public class SessionInfo implements Serializable {
         recordDate = date;
     }
 
-    public void setContents(Context context, String str, String str2, String str3, String str4, String str5) {
-        sessionId = str;
-        buildId = str2;
-        commitId = str3;
-        branchId = str4;
-        flavor = str5;
-        updateJavaConstants(context);
-    }
-
-    public void updateJavaConstants(@NotNull Context context) {
-        appVersion = AppConstants.APP_VERSION;
-        try {
-            gameVersionName = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-        } catch (PackageManager.NameNotFoundException unused) {
-            gameVersionName = "Not found";
-        }
-    }
-
     public static @NotNull SessionInfo fromString(String str) {
         SessionInfo sessionInfo = new SessionInfo();
         if (str == null || str.length() == 0) {
@@ -118,13 +98,31 @@ public class SessionInfo implements Serializable {
         }
     }
 
-    public String toString() {
-        return sessionId + ";" + buildId + ";" + commitId + ";" + branchId + ";" + flavor + ";" + gameVersionName + ";" + appVersion + ";" + getDateFormat().format(recordDate);
-    }
-
     public static @NotNull SimpleDateFormat getDateFormat() {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy-HH:mm:ss");
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return simpleDateFormat;
+    }
+
+    public void setContents(Context context, String str, String str2, String str3, String str4, String str5) {
+        sessionId = str;
+        buildId = str2;
+        commitId = str3;
+        branchId = str4;
+        flavor = str5;
+        updateJavaConstants(context);
+    }
+
+    public void updateJavaConstants(@NotNull Context context) {
+        appVersion = AppConstants.APP_VERSION;
+        try {
+            gameVersionName = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException unused) {
+            gameVersionName = "Not found";
+        }
+    }
+
+    public String toString() {
+        return sessionId + ";" + buildId + ";" + commitId + ";" + branchId + ";" + flavor + ";" + gameVersionName + ";" + appVersion + ";" + getDateFormat().format(recordDate);
     }
 }

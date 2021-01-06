@@ -34,8 +34,8 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.cardview.widget.CardView;
 
 import com.mcal.mcpelauncher.R;
+import com.mcal.mcpelauncher.data.Constants;
 import com.mcal.mcpelauncher.utils.ScopedStorage;
-import com.mcal.pesdk.utils.LauncherOptions;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -123,7 +123,7 @@ public class DirPickerActivity extends BaseActivity {
             p1.dismiss();
             Intent data = new Intent();
             Bundle extras = new Bundle();
-            extras.putString(TAG_DIR_PATH, LauncherOptions.STRING_VALUE_DEFAULT);
+            extras.putString(TAG_DIR_PATH, Constants.STRING_VALUE_DEFAULT);
             data.putExtras(extras);
             setResult(RESULT_OK, data);
             finish();

@@ -17,17 +17,10 @@
 package com.mcal.mcpelauncher.activities;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.Settings;
 import android.view.View;
 
-import androidx.appcompat.app.AlertDialog;
-
-import com.mcal.mcpelauncher.BuildConfig;
 import com.mcal.mcpelauncher.R;
 import com.mcal.mcpelauncher.utils.DataPreloader;
 import com.mcal.mcpelauncher.utils.PreloadingFinishedListener;
@@ -43,12 +36,6 @@ public class SplashesActivity extends BaseActivity implements PreloadingFinished
         setContentView(R.layout.moddedpe_splashes);
 
         initInstance();
-
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Settings.ACTION_MANAGE_OVERLAY_PERMISSION) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, Settings.ACTION_MANAGE_OVERLAY_PERMISSION}, 1);
-            }
-        }
     }
 
     @Override

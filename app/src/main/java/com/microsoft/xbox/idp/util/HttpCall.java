@@ -13,11 +13,11 @@ public class HttpCall {
     private final long id;
 
     public HttpCall(String method, String endpoint, String pathAndQuery) {
-        id = create(method, endpoint, pathAndQuery, true);
+        this.id = create(method, endpoint, pathAndQuery, true);
     }
 
     public HttpCall(String method, String endpoint, String pathAndQuery, boolean addDefaultHeaders) {
-        id = create(method, endpoint, pathAndQuery, addDefaultHeaders);
+        this.id = create(method, endpoint, pathAndQuery, addDefaultHeaders);
     }
 
     private static native long create(String str, String str2, String str3, boolean z);
