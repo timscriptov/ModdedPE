@@ -20,9 +20,11 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.widget.RatingBar
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import com.mcal.mcpelauncher.BuildConfig
 import com.mcal.mcpelauncher.R
@@ -34,6 +36,9 @@ import com.mcal.mcpelauncher.data.Preferences
  */
 object Dialogs {
 
+    /**
+     * Диалог с просьбой оценить приложение
+     */
     @JvmStatic
     fun rate(context: Context) {
         val v = LayoutInflater.from(context).inflate(R.layout.rate, null)
@@ -44,10 +49,10 @@ object Dialogs {
         dialog.setPositiveButton(android.R.string.ok) { dialog1: DialogInterface, _: Int ->
             if (ratingBar.rating > 3) {
                 context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.mcal.mcpelauncher")))
-                Preferences.getRated()
+                Preferences.rated
                 dialog1.cancel()
             } else {
-                Preferences.setRated(true)
+                Preferences.rated = true
                 dialog1.cancel()
             }
         }
@@ -57,6 +62,10 @@ object Dialogs {
         dialog.show()
     }
 
+    /**
+     * Диалог с просьбой предоставить дополнительное разрешение на Android 11
+     */
+    @RequiresApi(Build.VERSION_CODES.R)
     @JvmStatic
     fun showScopedStorageDialog(context: Context) {
         AlertDialog.Builder(context)

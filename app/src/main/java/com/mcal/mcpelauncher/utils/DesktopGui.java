@@ -58,7 +58,7 @@ public class DesktopGui {
             e.printStackTrace();
         }
 
-        if (Preferences.DesktopGui()) {
+        if (Preferences.isDesktopGui()) {
             try {
                 reWrite(fileContent, pathOptionsFile, "-1");
                 reWrite(xFileContent, xpathOptionsFile, "-1");

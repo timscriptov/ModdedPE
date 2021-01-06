@@ -29,7 +29,7 @@ object I18n {
     fun setLanguage(context: Activity) {
         val defaultLocale = context.resources.configuration.locale
         val config = context.resources.configuration
-        when (Preferences.getLanguageType()) {
+        when (Preferences.languageType) {
             0 -> config.setLocale(Locale.getDefault())
             1 -> config.setLocale(Locale.ENGLISH)
             2 -> config.setLocale(Locale.SIMPLIFIED_CHINESE)

@@ -44,6 +44,10 @@ public class SplitParser {
     @SuppressLint("StaticFieldLeak")
     public static Context mContext;
 
+    /**
+     * Извлечение C++ библиотек из Minecraft
+     * @param context
+     */
     public static void parse(Context context) {
         mContext = context;
 
@@ -58,7 +62,7 @@ public class SplitParser {
         }
 
         try {
-            if (isBundle()) {
+            if (isAppBundle()) {
                 if (getMinecraftApplicationInfo() != null) {
                     String split_path = Arrays.asList(getMinecraftApplicationInfo().splitPublicSourceDirs).get(0);
                     byte[] buffer = new byte[2048];
@@ -81,8 +85,12 @@ public class SplitParser {
         }
     }
 
+    /**
+     * Проверка формата приложения на App Bundle
+     * @return
+     */
     @Contract(pure = true)
-    public static boolean isBundle() {
+    public static boolean isAppBundle() {
         return mContext.getApplicationInfo().splitPublicSourceDirs != null && getMinecraftContext().getApplicationInfo().splitPublicSourceDirs.length > 0;
     }
 

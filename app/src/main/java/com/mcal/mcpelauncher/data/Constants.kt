@@ -14,14 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.mcpelauncher.data;
+package com.mcal.mcpelauncher.data
 
 /**
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-public final class Constants {
-    public static final String STRING_VALUE_DEFAULT = "default";
-    public static final String NMOD_DATA_TAG = "nmod_data";
-    public static final String NMOD_API_VERSION = "1.4.1";
+object Constants {
+    const val STRING_VALUE_DEFAULT = "default"
+    const val NMOD_DATA_TAG = "nmod_data"
+    const val NMOD_API_VERSION = "1.4.1"
 }
