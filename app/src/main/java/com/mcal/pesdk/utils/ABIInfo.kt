@@ -14,23 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.pesdk;
+package com.mcal.pesdk.utils
 
-import android.os.Build;
-
-import org.jetbrains.annotations.NotNull;
+import android.os.Build
 
 /**
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-public class ABIInfo {
-    @NotNull
-    public static String getABI() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            return Build.SUPPORTED_ABIS[0];
+object ABIInfo {
+    @JvmStatic
+    val aBI: String
+        get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Build.SUPPORTED_ABIS[0]
         } else {
-            return Build.CPU_ABI;
+            Build.CPU_ABI
         }
-    }
 }

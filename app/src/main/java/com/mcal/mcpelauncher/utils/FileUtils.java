@@ -3,7 +3,7 @@ package com.mcal.mcpelauncher.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import com.mcal.pesdk.ABIInfo;
+import com.mcal.pesdk.utils.ABIInfo;
 
 import org.jetbrains.annotations.NotNull;
 

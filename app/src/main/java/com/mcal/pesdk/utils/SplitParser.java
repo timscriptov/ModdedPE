@@ -22,7 +22,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 
 import com.mcal.mcpelauncher.data.Preferences;
-import com.mcal.pesdk.ABIInfo;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;

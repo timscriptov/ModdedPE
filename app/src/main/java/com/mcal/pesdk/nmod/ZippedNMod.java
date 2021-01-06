@@ -21,7 +21,7 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.mcal.pesdk.ABIInfo;
+import com.mcal.pesdk.utils.ABIInfo;
 
 import org.jetbrains.annotations.NotNull;
 
