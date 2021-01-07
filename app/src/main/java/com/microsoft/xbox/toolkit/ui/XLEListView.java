@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.widget.ListView;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -17,19 +17,18 @@ public class XLEListView extends ListView {
         super(context);
     }
 
-    public XLEListView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public XLEListView(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
     }
 
-    public XLEListView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public XLEListView(Context context, AttributeSet attributeSet, int i) {
+        super(context, attributeSet, i);
     }
 
     public void dispatchDraw(Canvas canvas) {
         try {
             super.dispatchDraw(canvas);
-        } catch (IndexOutOfBoundsException e) {
-            e.printStackTrace();
+        } catch (IndexOutOfBoundsException unused) {
         }
     }
 }

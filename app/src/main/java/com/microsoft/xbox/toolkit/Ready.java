@@ -1,7 +1,7 @@
 package com.microsoft.xbox.toolkit;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -13,16 +13,16 @@ public class Ready {
 
     public boolean getIsReady() {
         boolean z;
-        synchronized (syncObj) {
-            z = ready;
+        synchronized (this.syncObj) {
+            z = this.ready;
         }
         return z;
     }
 
     public void setReady() {
-        synchronized (syncObj) {
-            ready = true;
-            syncObj.notifyAll();
+        synchronized (this.syncObj) {
+            this.ready = true;
+            this.syncObj.notifyAll();
         }
     }
 
@@ -30,18 +30,18 @@ public class Ready {
         waitForReady(0);
     }
 
-    public void waitForReady(int timeoutMs) {
-        synchronized (syncObj) {
-            if (!ready) {
-                if (timeoutMs > 0) {
+    public void waitForReady(int i) {
+        synchronized (this.syncObj) {
+            if (!this.ready) {
+                if (i > 0) {
                     try {
-                        syncObj.wait((long) timeoutMs);
+                        this.syncObj.wait((long) i);
                     } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
+                        e.printStackTrace();
                     }
                 } else {
                     try {
-                        syncObj.wait();
+                        this.syncObj.wait();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -51,8 +51,8 @@ public class Ready {
     }
 
     public void reset() {
-        synchronized (syncObj) {
-            ready = false;
+        synchronized (this.syncObj) {
+            this.ready = false;
         }
     }
 }

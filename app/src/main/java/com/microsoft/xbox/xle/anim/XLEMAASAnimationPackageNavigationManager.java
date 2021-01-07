@@ -10,7 +10,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -23,11 +23,11 @@ public class XLEMAASAnimationPackageNavigationManager extends MAASAnimation {
     @Element(required = false)
     public XLEMAASAnimationPackageDirection forward;
 
-    public XLEAnimation compile(MAAS.MAASAnimationType type, boolean backward2, View targetView) {
-        XLEMAASAnimationPackageDirection direction = backward2 ? backward : forward;
-        if (direction == null) {
+    public XLEAnimation compile(MAAS.MAASAnimationType mAASAnimationType, boolean z, View view) {
+        XLEMAASAnimationPackageDirection xLEMAASAnimationPackageDirection = z ? this.backward : this.forward;
+        if (xLEMAASAnimationPackageDirection == null) {
             return null;
         }
-        return direction.compile(type, targetView);
+        return xLEMAASAnimationPackageDirection.compile(mAASAnimationType, view);
     }
 }

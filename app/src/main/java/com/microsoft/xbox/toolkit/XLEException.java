@@ -2,8 +2,10 @@ package com.microsoft.xbox.toolkit;
 
 import android.annotation.SuppressLint;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -14,57 +16,55 @@ public class XLEException extends Exception {
     private boolean isHandled;
     private Object userObject;
 
-    public XLEException(long errorCode2) {
-        this(errorCode2, null, null, null);
+    public XLEException(long j) {
+        this(j, (String) null, (Throwable) null, (Object) null);
     }
 
-    public XLEException(long errorCode2, String message) {
-        this(errorCode2, message, null, null);
+    public XLEException(long j, String str) {
+        this(j, str, (Throwable) null, (Object) null);
     }
 
-    public XLEException(long errorCode2, Throwable innerException) {
-        this(errorCode2, null, innerException, null);
+    public XLEException(long j, Throwable th) {
+        this(j, (String) null, th, (Object) null);
     }
 
-    public XLEException(long errorCode2, String message, Throwable innerException) {
-        this(errorCode2, null, innerException, null);
+    public XLEException(long j, String str, Throwable th) {
+        this(j, (String) null, th, (Object) null);
     }
 
-    public XLEException(long errorCode2, String message, Throwable innerException, Object userObject2) {
-        super(message, innerException);
-        errorCode = errorCode2;
-        userObject = userObject2;
-        isHandled = false;
+    public XLEException(long j, String str, Throwable th, Object obj) {
+        super(str, th);
+        this.errorCode = j;
+        this.userObject = obj;
+        this.isHandled = false;
     }
 
     public long getErrorCode() {
-        return errorCode;
+        return this.errorCode;
     }
 
     public Object getUserObject() {
-        return userObject;
+        return this.userObject;
     }
 
     public boolean getIsHandled() {
-        return isHandled;
+        return this.isHandled;
     }
 
-    public void setIsHandled(boolean isHandled2) {
-        isHandled = isHandled2;
+    public void setIsHandled(boolean z) {
+        this.isHandled = z;
     }
 
     @SuppressLint("DefaultLocale")
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(String.format("XLEException ErrorCode: %d; ErrorMessage: %s \n\n", new Object[]{Long.valueOf(errorCode), getMessage()}));
+    public @NotNull String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("XLEException ErrorCode: %d; ErrorMessage: %s \n\n", new Object[]{Long.valueOf(this.errorCode), getMessage()}));
         if (getCause() != null) {
-            builder.append(String.format("\t Cause ErrorMessage: %s, StackTrace: ", new Object[]{getCause().toString()}));
-            StackTraceElement[] stackTrace = getCause().getStackTrace();
-            int length = stackTrace.length;
-            for (int i = 0; i < length; i++) {
-                builder.append("\n\n \t " + stackTrace[i].toString());
+            sb.append(String.format("\t Cause ErrorMessage: %s, StackTrace: ", new Object[]{getCause().toString()}));
+            for (StackTraceElement stackTraceElement : getCause().getStackTrace()) {
+                sb.append("\n\n \t " + stackTraceElement.toString());
             }
         }
-        return builder.toString();
+        return sb.toString();
     }
 }

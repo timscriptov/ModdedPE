@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -23,31 +23,28 @@ public class UTCReportUser {
         XLEAssert.assertFalse("Called trackPeopleHubView without set activityTitle", currentActivityTitle.toString().equals(""));
     }
 
-    @NotNull
-    public static HashMap<String, Object> getAdditionalInfo(String targetXUID) {
-        HashMap<String, Object> additionalInfo = new HashMap<>();
-        additionalInfo.put(UTCDeepLink.TARGET_XUID_KEY, "x:" + targetXUID);
-        return additionalInfo;
+    public static @NotNull HashMap<String, Object> getAdditionalInfo(String str) {
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put(UTCDeepLink.TARGET_XUID_KEY, "x:" + str);
+        return hashMap;
     }
 
-    public static void trackReportView(final CharSequence activityTitle, final String targetXUID) {
+    public static void trackReportView(final CharSequence charSequence, final String str) {
         UTCEventTracker.callTrackWrapper(() -> {
-            CharSequence unused = UTCReportUser.currentActivityTitle = activityTitle;
-            String unused2 = UTCReportUser.currentXUID = targetXUID;
-            UTCPageView.track(UTCNames.PageView.PeopleHub.ReportView, UTCReportUser.currentActivityTitle, UTCReportUser.getAdditionalInfo(targetXUID));
+            UTCPageView.track(UTCNames.PageView.PeopleHub.ReportView, UTCReportUser.currentActivityTitle, UTCReportUser.getAdditionalInfo(str));
         });
     }
 
-    public static void trackReportDialogOK(String reason) {
+    public static void trackReportDialogOK(String str) {
         verifyTrackedDefaults();
-        trackReportDialogOK(currentActivityTitle, currentXUID, reason);
+        trackReportDialogOK(currentActivityTitle, currentXUID, str);
     }
 
-    public static void trackReportDialogOK(final CharSequence activityTitle, final String targetXUID, final String reason) {
+    public static void trackReportDialogOK(final CharSequence charSequence, final String str, final String str2) {
         UTCEventTracker.callTrackWrapper(() -> {
-            HashMap<String, Object> additionalInfo = UTCReportUser.getAdditionalInfo(targetXUID);
-            additionalInfo.put("reason", reason);
-            UTCPageAction.track(UTCNames.PageAction.PeopleHub.ReportOK, activityTitle, additionalInfo);
+            HashMap access$200 = UTCReportUser.getAdditionalInfo(str);
+            access$200.put("reason", str2);
+            UTCPageAction.track(UTCNames.PageAction.PeopleHub.ReportOK, charSequence, access$200);
         });
     }
 }

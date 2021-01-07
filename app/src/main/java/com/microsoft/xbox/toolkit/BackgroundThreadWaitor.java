@@ -10,7 +10,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -30,30 +30,34 @@ public class BackgroundThreadWaitor {
         return instance;
     }
 
-    public void waitForReady(int timeoutMs) {
+    public void waitForReady(int i) {
         XLEAssert.assertTrue(ThreadManager.UIThread != Thread.currentThread());
-        ThreadManager.UIThreadPost(() -> updateWaitReady());
-        waitReady.waitForReady(timeoutMs);
+        ThreadManager.UIThreadPost(new Runnable() {
+            public void run() {
+                BackgroundThreadWaitor.this.updateWaitReady();
+            }
+        });
+        this.waitReady.waitForReady(i);
     }
 
-    public void setBlocking(WaitType type, int expireMs) {
+    public void setBlocking(WaitType waitType, int i) {
         XLEAssert.assertTrue(ThreadManager.UIThread == Thread.currentThread());
-        blockingTable.put(type, new WaitObject(type, expireMs));
+        this.blockingTable.put(waitType, new WaitObject(waitType, (long) i));
         updateWaitReady();
     }
 
-    public void clearBlocking(WaitType type) {
+    public void clearBlocking(WaitType waitType) {
         XLEAssert.assertTrue(ThreadManager.UIThread == Thread.currentThread());
-        blockingTable.remove(type);
+        this.blockingTable.remove(waitType);
         updateWaitReady();
     }
 
-    public void setChangedCallback(BackgroundThreadWaitorChangedCallback callback) {
-        blockingChangedCallback = callback;
+    public void setChangedCallback(BackgroundThreadWaitorChangedCallback backgroundThreadWaitorChangedCallback) {
+        this.blockingChangedCallback = backgroundThreadWaitorChangedCallback;
     }
 
     public boolean isBlocking() {
-        return !waitReady.getIsReady();
+        return !this.waitReady.getIsReady();
     }
 
     public void updateWaitReady() {
@@ -87,24 +91,24 @@ public class BackgroundThreadWaitor {
         }
     }
 
-    public void postRunnableAfterReady(Runnable r) {
+    public void postRunnableAfterReady(Runnable runnable) {
         XLEAssert.assertTrue(ThreadManager.UIThread == Thread.currentThread());
-        if (r != null) {
+        if (runnable != null) {
             if (!isBlocking()) {
-                r.run();
+                runnable.run();
             } else {
-                waitingRunnables.add(r);
+                this.waitingRunnables.add(runnable);
             }
         }
     }
 
     private void drainWaitingRunnables() {
         XLEAssert.assertTrue(ThreadManager.UIThread == Thread.currentThread());
-        Iterator<Runnable> it = waitingRunnables.iterator();
+        Iterator<Runnable> it = this.waitingRunnables.iterator();
         while (it.hasNext()) {
             it.next().run();
         }
-        waitingRunnables.clear();
+        this.waitingRunnables.clear();
     }
 
     public enum WaitType {
@@ -123,13 +127,13 @@ public class BackgroundThreadWaitor {
         public WaitType type;
         private long expires;
 
-        public WaitObject(WaitType type2, long expireMs) {
-            type = type2;
-            expires = SystemClock.uptimeMillis() + expireMs;
+        public WaitObject(WaitType waitType, long j) {
+            this.type = waitType;
+            this.expires = SystemClock.uptimeMillis() + j;
         }
 
         public boolean isExpired() {
-            return expires < SystemClock.uptimeMillis();
+            return this.expires < SystemClock.uptimeMillis();
         }
     }
 }

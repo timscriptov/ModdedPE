@@ -1,12 +1,11 @@
 package com.microsoft.xbox.idp.ui;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
+import android.widget.Button;
 
 import com.mcal.mcpelauncher.R;
 import com.microsoft.xbox.idp.compat.BaseFragment;
@@ -14,7 +13,7 @@ import com.microsoft.xbox.idp.compat.BaseFragment;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 05.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -31,37 +30,37 @@ public class ErrorButtonsFragment extends BaseFragment implements View.OnClickLi
     };
     private Callbacks callbacks = NO_OP_CALLBACKS;
 
-    public void onAttach(AppCompatActivity activity) {
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
-        callbacks = (Callbacks) activity;
+        this.callbacks = (Callbacks) activity;
     }
 
     public void onDetach() {
         super.onDetach();
-        callbacks = NO_OP_CALLBACKS;
+        this.callbacks = NO_OP_CALLBACKS;
     }
 
-    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.xbid_fragment_error_buttons, container, false);
+    public View onCreateView(@NotNull LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+        return layoutInflater.inflate(R.layout.xbid_fragment_error_buttons, viewGroup, false);
     }
 
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        AppCompatButton leftButton = view.findViewById(R.id.xbid_error_left_button);
-        leftButton.setOnClickListener(this);
+    public void onViewCreated(View view, Bundle bundle) {
+        super.onViewCreated(view, bundle);
+        Button button = (Button) view.findViewById(R.id.xbid_error_left_button);
+        button.setOnClickListener(this);
         view.findViewById(R.id.xbid_error_right_button).setOnClickListener(this);
-        Bundle args = getArguments();
-        if (args != null && args.containsKey(ARG_LEFT_ERROR_BUTTON_STRING_ID)) {
-            leftButton.setText(args.getInt(ARG_LEFT_ERROR_BUTTON_STRING_ID));
+        Bundle arguments = getArguments();
+        if (arguments != null && arguments.containsKey(ARG_LEFT_ERROR_BUTTON_STRING_ID)) {
+            button.setText(arguments.getInt(ARG_LEFT_ERROR_BUTTON_STRING_ID));
         }
     }
 
-    public void onClick(@NotNull View v) {
-        int id = v.getId();
+    public void onClick(@NotNull View view) {
+        int id = view.getId();
         if (id == R.id.xbid_error_left_button) {
-            callbacks.onClickedLeftButton();
+            this.callbacks.onClickedLeftButton();
         } else if (id == R.id.xbid_error_right_button) {
-            callbacks.onClickedRightButton();
+            this.callbacks.onClickedRightButton();
         }
     }
 

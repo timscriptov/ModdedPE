@@ -3,7 +3,7 @@ package com.microsoft.xbox.toolkit.ui;
 import com.microsoft.xbox.toolkit.XLEFileCacheItemKey;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -13,37 +13,38 @@ public class TextureManagerScaledNetworkBitmapRequest implements XLEFileCacheIte
     public final TextureBindingOption bindingOption;
     public final String url;
 
-    public TextureManagerScaledNetworkBitmapRequest(String url2) {
-        this(url2, new TextureBindingOption());
+    public TextureManagerScaledNetworkBitmapRequest(String str) {
+        this(str, new TextureBindingOption());
     }
 
-    public TextureManagerScaledNetworkBitmapRequest(String url2, TextureBindingOption option) {
-        url = url2;
-        bindingOption = option;
+    public TextureManagerScaledNetworkBitmapRequest(String str, TextureBindingOption textureBindingOption) {
+        this.url = str;
+        this.bindingOption = textureBindingOption;
     }
 
-    public boolean equals(Object rhsuntyped) {
-        if (this == rhsuntyped) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (!(rhsuntyped instanceof TextureManagerScaledNetworkBitmapRequest)) {
+        if (!(obj instanceof TextureManagerScaledNetworkBitmapRequest)) {
             return false;
         }
-        TextureManagerScaledNetworkBitmapRequest rhs = (TextureManagerScaledNetworkBitmapRequest) rhsuntyped;
-        if (!url.equals(rhs.url) || !bindingOption.equals(rhs.bindingOption)) {
+        TextureManagerScaledNetworkBitmapRequest textureManagerScaledNetworkBitmapRequest = (TextureManagerScaledNetworkBitmapRequest) obj;
+        if (!this.url.equals(textureManagerScaledNetworkBitmapRequest.url) || !this.bindingOption.equals(textureManagerScaledNetworkBitmapRequest.bindingOption)) {
             return false;
         }
         return true;
     }
 
     public int hashCode() {
-        if (url == null) {
+        String str = this.url;
+        if (str == null) {
             return 0;
         }
-        return url.hashCode();
+        return str.hashCode();
     }
 
     public String getKeyString() {
-        return url;
+        return this.url;
     }
 }

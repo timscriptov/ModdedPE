@@ -1,7 +1,7 @@
 package com.microsoft.xbox.idp.services;
 
 /**
- * 05.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -11,12 +11,16 @@ class EndpointsDnet implements Endpoints {
     EndpointsDnet() {
     }
 
-    public String profile() {
-        return "https://profile.dnet.xboxlive.com";
-    }
-
     public String accounts() {
         return "https://accounts.dnet.xboxlive.com";
+    }
+
+    public String privacy() {
+        return "https://privacy.dnet.xboxlive.com";
+    }
+
+    public String profile() {
+        return "https://profile.dnet.xboxlive.com";
     }
 
     public String userAccount() {
@@ -25,9 +29,5 @@ class EndpointsDnet implements Endpoints {
 
     public String userManagement() {
         return "https://user.mgt.dnet.xboxlive.com";
-    }
-
-    public String privacy() {
-        return "https://privacy.dnet.xboxlive.com";
     }
 }

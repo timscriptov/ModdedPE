@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 05.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -22,9 +22,8 @@ import java.util.Map;
 
 public final class Privacy {
 
-    @NotNull
-    public static GsonBuilder registerAdapters(@NotNull GsonBuilder gson) {
-        return gson.registerTypeAdapter(new TypeToken<Map<Key, Value>>() {
+    public static @NotNull GsonBuilder registerAdapters(@NotNull GsonBuilder gsonBuilder) {
+        return gsonBuilder.registerTypeAdapter(new TypeToken<Map<Key, Value>>() {
         }.getType(), new SettingsAdapter());
     }
 
@@ -62,11 +61,10 @@ public final class Privacy {
     public static class Settings {
         public Map<Key, Value> settings;
 
-        @NotNull
-        public static Settings newWithMap() {
-            Settings s = new Settings();
-            s.settings = new HashMap();
-            return s;
+        public static @NotNull Settings newWithMap() {
+            Settings settings2 = new Settings();
+            settings2.settings = new HashMap();
+            return settings2;
         }
 
         public boolean isSettingSet(Key key) {
@@ -82,28 +80,28 @@ public final class Privacy {
         private SettingsAdapter() {
         }
 
-        public void write(JsonWriter out, @NotNull Map<Key, Value> value) throws IOException {
-            Setting[] settings = new Setting[value.size()];
-            int idx = -1;
-            for (Map.Entry<Key, Value> e : value.entrySet()) {
-                Setting s = new Setting();
-                s.setting = e.getKey();
-                s.value = e.getValue();
-                idx++;
-                settings[idx] = s;
+        public void write(JsonWriter jsonWriter, @NotNull Map<Key, Value> map) throws IOException {
+            Setting[] settingArr = new Setting[map.size()];
+            int i = -1;
+            for (Map.Entry next : map.entrySet()) {
+                Setting setting = new Setting();
+                setting.setting = (Key) next.getKey();
+                setting.value = (Value) next.getValue();
+                i++;
+                settingArr[i] = setting;
             }
-            new Gson().toJson(settings, Setting[].class, out);
+            new Gson().toJson(settingArr, Setting[].class, jsonWriter);
         }
 
-        public Map<Key, Value> read(JsonReader in) throws IOException {
-            Setting[] settings = new Gson().fromJson(in, Setting[].class);
-            Map<Key, Value> map = new HashMap<>();
-            for (Setting s : settings) {
-                if (!(s.setting == null || s.value == null)) {
-                    map.put(s.setting, s.value);
+        public Map<Key, Value> read(JsonReader jsonReader) throws IOException {
+            Setting[] settingArr = (Setting[]) new Gson().fromJson(jsonReader, Setting[].class);
+            HashMap hashMap = new HashMap();
+            for (Setting setting : settingArr) {
+                if (!(setting.setting == null || setting.value == null)) {
+                    hashMap.put(setting.setting, setting.value);
                 }
             }
-            return map;
+            return hashMap;
         }
     }
 }

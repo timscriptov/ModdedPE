@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov

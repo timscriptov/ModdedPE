@@ -90,7 +90,7 @@ public class SplitParser {
      */
     @Contract(pure = true)
     public static boolean isAppBundle() {
-        return mContext.getApplicationInfo().splitPublicSourceDirs != null && getMinecraftContext().getApplicationInfo().splitPublicSourceDirs.length > 0;
+        return getMinecraftContext().getApplicationInfo().splitPublicSourceDirs != null && getMinecraftContext().getApplicationInfo().splitPublicSourceDirs.length > 0;
     }
 
     private static @Nullable ApplicationInfo getMinecraftApplicationInfo() {

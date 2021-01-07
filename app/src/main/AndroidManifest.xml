@@ -335,27 +335,26 @@
         <!-- Xbox Live SDK -->
 
         <activity
-            android:name="com.mcal.mcpelauncher.activities.IntentHandlerActivity"
+            android:name="com.microsoft.xal.browser.XalLoginActivity"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize" />
+
+        <!-- activity
+            android:name="com.microsoft.xal.browser.IntentHandler"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape"
             android:configChanges="orientation">
             <intent-filter>
-                <action
-                    android:name="android.intent.action.VIEW" />
-                <data
-                    android:scheme="ms-xal-0000000048183522"
-                    android:host="auth" />
-                <category
-                    android:name="android.intent.category.DEFAULT" />
-                <category
-                    android:name="android.intent.category.BROWSABLE" />
+                <action android:name="android.intent.action.VIEW"/>
+                <data android:scheme="ms-xal-0000000048183522" android:host="auth"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
             </intent-filter>
         </activity>
 
-
         <activity
-            android:name="com.mcal.mcpelauncher.activities.WebKitWebViewControllerActivity"
+            android:name="com.microsoft.xal.browser.WebKitWebViewController"
             android:screenOrientation="sensorLandscape"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize" />
 
@@ -364,7 +363,7 @@
             android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape"
-            android:configChanges="orientation" />
+            android:configChanges="orientation" / -->
 
     </application>
 

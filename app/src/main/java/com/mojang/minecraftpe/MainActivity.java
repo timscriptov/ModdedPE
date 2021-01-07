@@ -585,104 +585,112 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         });
     }
 
-    public void onNewIntent(Intent intent) {
+    /*public void onNewIntent(Intent intent) {
         setIntent(intent);
         processIntent(intent);
-    }
+    }*/
 
-    private void processIntent(Intent intent) {
+    /*private void processIntent(Intent intent) {
+        StringBuilder sb;
         if (intent != null) {
-            String extraCmd = intent.getStringExtra("intent_cmd");
-            if (extraCmd == null || extraCmd.length() <= 0) {
+            String stringExtra = intent.getStringExtra("intent_cmd");
+            if (stringExtra == null || stringExtra.length() <= 0) {
                 String action = intent.getAction();
-                String type = intent.getType();
+                intent.getType();
                 if ("xbox_live_game_invite".equals(action)) {
-                    String json = intent.getStringExtra("xbl");
-                    Log.d("ModdedPE", "[XboxLive] Received Invite " + json);
-                    nativeProcessIntentUriQuery(action, json);
+                    String stringExtra2 = intent.getStringExtra("xbl");
+                    Log.d("MCPE", "[XboxLive] Received Invite " + stringExtra2);
+                    nativeProcessIntentUriQuery(action, stringExtra2);
+                    return;
                 } else if ("android.intent.action.VIEW".equals(action) || "org.chromium.arc.intent.action.VIEW".equals(action)) {
                     String scheme = intent.getScheme();
-                    Uri uri = intent.getData();
-                    if (uri == null) {
-                        return;
-                    }
-                    if ("minecraft".equalsIgnoreCase(scheme) || "minecraftedu".equalsIgnoreCase(scheme)) {
-                        String host = uri.getHost();
-                        String query = uri.getQuery();
-                        if (host != null || query != null) {
-                            nativeProcessIntentUriQuery(host, query);
-                        }
-                    } else if ("file".equalsIgnoreCase(scheme)) {
-                        nativeProcessIntentUriQuery("fileIntent", uri.getPath() + "&" + uri.getPath());
-                    } else if ("content".equalsIgnoreCase(scheme)) {
-                        File file = new File(getApplicationContext().getCacheDir() + com.appsflyer.share.Constants.URL_PATH_DELIMITER + new File(uri.getPath()).getName());
-                        try {
-                            InputStream input = getContentResolver().openInputStream(uri);
+                    Uri data2 = intent.getData();
+                    if (data2 != null) {
+                        if ("minecraft".equalsIgnoreCase(scheme) || "minecraftedu".equalsIgnoreCase(scheme)) {
+                            String host = data2.getHost();
+                            String query = data2.getQuery();
+                            if (host != null || query != null) {
+                                nativeProcessIntentUriQuery(host, query);
+                                return;
+                            }
+                            return;
+                        } else if ("file".equalsIgnoreCase(scheme)) {
+                            nativeProcessIntentUriQuery("fileIntent", data2.getPath() + SESSION_HISTORY_SEP + data2.getPath());
+                            return;
+                        } else if ("content".equalsIgnoreCase(scheme)) {
+                            String name = new File(data2.getPath()).getName();
+                            File file = new File(getApplicationContext().getCacheDir() + "/" + name);
                             try {
-                                OutputStream output = new FileOutputStream(file);
-                                byte[] tmp = new byte[1048576];
-                                while (true) {
-                                    int size = input.read(tmp);
-                                    if (size != -1) {
-                                        output.write(tmp, 0, size);
-                                    } else {
-                                        output.close();
-                                        nativeProcessIntentUriQuery("contentIntent", uri.getPath() + "&" + file.getAbsolutePath());
-                                        try {
-                                            input.close();
-                                            return;
-                                        } catch (IOException ioe2) {
-                                            Log.e("ModdedPE", "IOException while closing input stream\n" + ioe2.toString());
-                                            return;
+                                InputStream openInputStream = getContentResolver().openInputStream(data2);
+                                try {
+                                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                                    byte[] bArr = new byte[1048576];
+                                    while (true) {
+                                        int read = openInputStream.read(bArr);
+                                        if (read != -1) {
+                                            fileOutputStream.write(bArr, 0, read);
+                                        } else {
+                                            fileOutputStream.close();
+                                            nativeProcessIntentUriQuery("contentIntent", data2.getPath() + SESSION_HISTORY_SEP + file.getAbsolutePath());
+                                            try {
+                                                openInputStream.close();
+                                                return;
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
                                         }
                                     }
-                                }
-                            } catch (IOException ioe) {
-                                Log.e("ModdedPE", "IOException while copying file from content intent\n" + ioe.toString());
-                                try {
+                                } catch (IOException e2) {
+                                    Log.e("MCPE", "IOException while copying file from content intent\n" + e2.toString());
                                     file.delete();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
+                                    openInputStream.close();
+                                    return;
+                                } catch (Throwable th) {
+                                    try {
+                                        openInputStream.close();
+                                    } catch (IOException e3) {
+                                        Log.e("MCPE", "IOException while closing input stream\n" + e3.toString());
+                                    }
+                                    throw th;
                                 }
-                                try {
-                                    input.close();
-                                } catch (IOException ioe22) {
-                                    Log.e("ModdedPE", "IOException while closing input stream\n" + ioe22.toString());
-                                }
-                            } catch (Throwable th) {
-                                try {
-                                    input.close();
-                                } catch (IOException ioe23) {
-                                    Log.e("ModdedPE", "IOException while closing input stream\n" + ioe23.toString());
-                                }
-                                throw th;
+                            } catch (IOException e4) {
+                                Log.e("MCPE", "IOException while opening file from content intent\n" + e4.toString());
+                                return;
                             }
-                        } catch (IOException ioe3) {
-                            Log.e("ModdedPE", "IOException while opening file from content intent\n" + ioe3.toString());
+                        } else {
+                            return;
                         }
+                    } else {
+                        return;
                     }
+                } else {
+                    return;
                 }
             } else {
                 try {
-                    JSONObject json2 = new JSONObject(extraCmd);
-                    String command = json2.getString("Command");
-                    if (command.equals("keyboardResult")) {
-                        nativeSetTextboxText(json2.getString("Text"));
-                    } else if (command.equals("fileDialogResult") && mFileDialogCallback != 0) {
-                        if (json2.getString("Result").equals("Ok")) {
-                            nativeOnPickImageSuccess(mFileDialogCallback, json2.getString("Path"));
+                    JSONObject jSONObject = new JSONObject(stringExtra);
+                    String string = jSONObject.getString("Command");
+                    if (string.equals("keyboardResult")) {
+                        nativeSetTextboxText(jSONObject.getString("Text"));
+                        return;
+                    } else if (string.equals("fileDialogResult") && this.mFileDialogCallback != 0) {
+                        if (jSONObject.getString("Result").equals("Ok")) {
+                            nativeOnPickImageSuccess(this.mFileDialogCallback, jSONObject.getString("Path"));
                         } else {
-                            nativeOnPickImageCanceled(mFileDialogCallback);
+                            nativeOnPickImageCanceled(this.mFileDialogCallback);
                         }
-                        mFileDialogCallback = 0;
+                        this.mFileDialogCallback = 0;
+                        return;
+                    } else {
+                        return;
                     }
-                } catch (JSONException e2) {
-                    Log.d("ModdedPE", "JSONObject exception:" + e2.toString());
+                } catch (JSONException e5) {
+                    Log.d("MCPE", "JSONObject exception:" + e5.toString());
+                    return;
                 }
             }
         }
-    }
-
+    }*/
 
     public boolean dispatchKeyEvent(@NotNull KeyEvent event) {
         if (nativeKeyHandler(event.getKeyCode(), event.getAction())) {
@@ -1379,7 +1387,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         deviceManager.register();
         if (_fromOnCreate) {
             _fromOnCreate = false;
-            processIntent(getIntent());
+            //processIntent(getIntent());
         }
         /**********************************
          * Bg music                       *

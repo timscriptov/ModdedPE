@@ -15,7 +15,7 @@ import com.microsoft.xbox.toolkit.ui.CustomTypefaceTextView;
 import com.microsoft.xbox.xle.app.XLEUtil;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -31,32 +31,32 @@ public class IconFontSubTextButton extends LinearLayout {
         this(context, (AttributeSet) null);
     }
 
-    public IconFontSubTextButton(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+    public IconFontSubTextButton(Context context, AttributeSet attributeSet) {
+        this(context, attributeSet, 0);
     }
 
-    public IconFontSubTextButton(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
+    public IconFontSubTextButton(Context context, AttributeSet attributeSet, int i) {
+        super(context, attributeSet, i);
         LayoutInflater.from(context).inflate(R.layout.icon_font_subtext_button, this, true);
-        iconTextView = findViewById(R.id.icon_font_subtext_icon);
-        iconFrameLayout = findViewById(R.id.icon_font_subtext_btn_icon_bg);
-        titleTextView = findViewById(R.id.icon_font_subtext_btn_title);
-        subtitleTextView = findViewById(R.id.icon_font_subtext_btn_subtitle);
-        TypedArray a = context.obtainStyledAttributes(attrs, XLERValueHelper.getStyleableRValueArray("IconFontSubTextButton"));
-        String iconUri = a.getString(XLERValueHelper.getStyleableRValue("IconFontSubTextButton_icon_uri"));
-        String title = a.getString(XLERValueHelper.getStyleableRValue("IconFontSubTextButton_text_title"));
-        String subtitle = a.getString(XLERValueHelper.getStyleableRValue("IconFontSubTextButton_text_subtitle"));
-        iconFrameLayout.setBackgroundColor(a.getColor(XLERValueHelper.getStyleableRValue("IconFontSubTextButton_icon_bg"), 0));
-        a.recycle();
-        XLEUtil.updateTextAndVisibilityIfNotNull(iconTextView, iconUri, 0);
-        XLEUtil.updateTextAndVisibilityIfNotNull(titleTextView, title, 0);
-        XLEUtil.updateTextAndVisibilityIfNotNull(subtitleTextView, subtitle, 0);
+        this.iconTextView = (CustomTypefaceTextView) findViewById(R.id.icon_font_subtext_icon);
+        this.iconFrameLayout = (FrameLayout) findViewById(R.id.icon_font_subtext_btn_icon_bg);
+        this.titleTextView = (CustomTypefaceTextView) findViewById(R.id.icon_font_subtext_btn_title);
+        this.subtitleTextView = (CustomTypefaceTextView) findViewById(R.id.icon_font_subtext_btn_subtitle);
+        TypedArray obtainStyledAttributes = context.obtainStyledAttributes(attributeSet, XLERValueHelper.getStyleableRValueArray("IconFontSubTextButton"));
+        String string = obtainStyledAttributes.getString(XLERValueHelper.getStyleableRValue("IconFontSubTextButton_icon_uri"));
+        String string2 = obtainStyledAttributes.getString(XLERValueHelper.getStyleableRValue("IconFontSubTextButton_text_title"));
+        String string3 = obtainStyledAttributes.getString(XLERValueHelper.getStyleableRValue("IconFontSubTextButton_text_subtitle"));
+        this.iconFrameLayout.setBackgroundColor(obtainStyledAttributes.getColor(XLERValueHelper.getStyleableRValue("IconFontSubTextButton_icon_bg"), 0));
+        obtainStyledAttributes.recycle();
+        XLEUtil.updateTextAndVisibilityIfNotNull(this.iconTextView, string, 0);
+        XLEUtil.updateTextAndVisibilityIfNotNull(this.titleTextView, string2, 0);
+        XLEUtil.updateTextAndVisibilityIfNotNull(this.subtitleTextView, string3, 0);
         setFocusable(true);
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
-        super.onInitializeAccessibilityNodeInfo(info);
-        info.setClickable(true);
-        info.setClassName(Button.class.getName());
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        accessibilityNodeInfo.setClickable(true);
+        accessibilityNodeInfo.setClassName(Button.class.getName());
     }
 }

@@ -3,7 +3,7 @@ package com.microsoft.xbox.toolkit;
 import com.microsoft.xbox.toolkit.network.XLEThreadPool;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -17,7 +17,7 @@ public abstract class NetworkAsyncTask<T> extends XLEAsyncTask<T> {
         super(XLEThreadPool.networkOperationsThreadPool);
     }
 
-    public NetworkAsyncTask(XLEThreadPool threadPool) {
+    public NetworkAsyncTask(XLEThreadPool xLEThreadPool) {
         super(XLEThreadPool.networkOperationsThreadPool);
     }
 
@@ -29,31 +29,31 @@ public abstract class NetworkAsyncTask<T> extends XLEAsyncTask<T> {
 
     public abstract void onNoAction();
 
-    public void load(boolean forceLoad2) {
-        forceLoad = forceLoad2;
+    public void load(boolean z) {
+        this.forceLoad = z;
         execute();
     }
 
     public final T doInBackground() {
         try {
             return loadDataInBackground();
-        } catch (Exception e) {
+        } catch (Exception unused) {
             return onError();
         }
     }
 
     public void execute() {
         XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
-        if (cancelled) {
-        }
-        shouldExecute = checkShouldExecute();
-        if (shouldExecute || forceLoad) {
-            isBusy = true;
+        boolean z = this.cancelled;
+        boolean checkShouldExecute = checkShouldExecute();
+        this.shouldExecute = checkShouldExecute;
+        if (checkShouldExecute || this.forceLoad) {
+            this.isBusy = true;
             onPreExecute();
             super.executeBackground();
             return;
         }
         onNoAction();
-        isBusy = false;
+        this.isBusy = false;
     }
 }

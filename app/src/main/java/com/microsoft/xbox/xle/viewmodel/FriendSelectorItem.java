@@ -7,7 +7,7 @@ import com.microsoft.xbox.service.model.UserProfileData;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -17,59 +17,54 @@ public final class FriendSelectorItem extends FollowersData {
     private static final long serialVersionUID = 5799344980951867134L;
     private boolean selected;
 
-    public FriendSelectorItem(FollowersData friend) {
-        super(friend);
-        selected = false;
+    public FriendSelectorItem(FollowersData followersData) {
+        super(followersData);
+        this.selected = false;
     }
 
     public FriendSelectorItem(@NotNull ProfileModel profileModel) {
-        xuid = profileModel.getXuid();
-        userProfileData = new UserProfileData();
-        userProfileData.gamerTag = profileModel.getGamerTag();
-        userProfileData.xuid = profileModel.getXuid();
-        userProfileData.profileImageUrl = profileModel.getGamerPicImageUrl();
-        userProfileData.gamerScore = profileModel.getGamerScore();
-        userProfileData.appDisplayName = profileModel.getAppDisplayName();
-        userProfileData.accountTier = profileModel.getAccountTier();
-        userProfileData.gamerRealName = profileModel.getRealName();
+        this.xuid = profileModel.getXuid();
+        this.userProfileData = new UserProfileData();
+        this.userProfileData.gamerTag = profileModel.getGamerTag();
+        this.userProfileData.xuid = profileModel.getXuid();
+        this.userProfileData.profileImageUrl = profileModel.getGamerPicImageUrl();
+        this.userProfileData.gamerScore = profileModel.getGamerScore();
+        this.userProfileData.appDisplayName = profileModel.getAppDisplayName();
+        this.userProfileData.accountTier = profileModel.getAccountTier();
+        this.userProfileData.gamerRealName = profileModel.getRealName();
     }
 
     public void toggleSelection() {
-        selected = !selected;
+        this.selected = !this.selected;
     }
 
     public boolean getIsSelected() {
-        return selected;
+        return this.selected;
     }
 
-    public void setSelected(boolean value) {
-        selected = value;
+    public void setSelected(boolean z) {
+        this.selected = z;
     }
 
     public int hashCode() {
-        return ((userProfileData == null || userProfileData.gamerTag == null) ? 0 : userProfileData.gamerTag.hashCode()) + 31;
+        return 31 + ((this.userProfileData == null || this.userProfileData.gamerTag == null) ? 0 : this.userProfileData.gamerTag.hashCode());
     }
 
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        FriendSelectorItem other = (FriendSelectorItem) obj;
-        if (userProfileData == null || userProfileData.gamerTag == null) {
-            if (other.userProfileData == null && other.userProfileData.gamerTag == null) {
-                return true;
+        FriendSelectorItem friendSelectorItem = (FriendSelectorItem) obj;
+        if (this.userProfileData == null || this.userProfileData.gamerTag == null) {
+            if (!(friendSelectorItem.userProfileData == null && friendSelectorItem.userProfileData.gamerTag == null)) {
+                return false;
             }
+        } else if (!this.userProfileData.gamerTag.equals(friendSelectorItem.userProfileData.gamerTag)) {
             return false;
-        } else if (!userProfileData.gamerTag.equals(other.userProfileData.gamerTag)) {
-            return false;
-        } else {
-            return true;
         }
+        return true;
     }
 }

@@ -3,7 +3,7 @@ package com.microsoft.xbox.service.model.privacy;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -28,10 +28,10 @@ public class PrivacySettings {
         ShareIdentityTransitively,
         CanShareIdentity;
 
-        public static PrivacySettingId getPrivacySettingId(String id) {
-            for (PrivacySettingId status : values()) {
-                if (status.name().equalsIgnoreCase(id)) {
-                    return status;
+        public static PrivacySettingId getPrivacySettingId(String str) {
+            for (PrivacySettingId privacySettingId : values()) {
+                if (privacySettingId.name().equalsIgnoreCase(str)) {
+                    return privacySettingId;
                 }
             }
             return None;
@@ -45,10 +45,10 @@ public class PrivacySettings {
         FriendCategoryShareIdentity,
         Blocked;
 
-        public static PrivacySettingValue getPrivacySettingValue(String value) {
-            for (PrivacySettingValue status : values()) {
-                if (status.name().equalsIgnoreCase(value)) {
-                    return status;
+        public static PrivacySettingValue getPrivacySettingValue(String str) {
+            for (PrivacySettingValue privacySettingValue : values()) {
+                if (privacySettingValue.name().equalsIgnoreCase(str)) {
+                    return privacySettingValue;
                 }
             }
             return NotSet;
@@ -64,24 +64,26 @@ public class PrivacySettings {
         public PrivacySetting() {
         }
 
-        public PrivacySetting(@NotNull PrivacySettingId settingId2, @NotNull PrivacySettingValue value2) {
-            setting = settingId2.name();
-            value = value2.name();
+        public PrivacySetting(@NotNull PrivacySettingId privacySettingId, @NotNull PrivacySettingValue privacySettingValue) {
+            this.setting = privacySettingId.name();
+            this.value = privacySettingValue.name();
         }
 
         public PrivacySettingId getPrivacySettingId() {
-            settingId = PrivacySettingId.getPrivacySettingId(setting);
-            return settingId;
+            PrivacySettingId privacySettingId = PrivacySettingId.getPrivacySettingId(this.setting);
+            this.settingId = privacySettingId;
+            return privacySettingId;
         }
 
-        public void setPrivacySettingId(@NotNull PrivacySettingId settingId2) {
-            setting = settingId2.name();
-            settingId = settingId2;
+        public void setPrivacySettingId(@NotNull PrivacySettingId privacySettingId) {
+            this.setting = privacySettingId.name();
+            this.settingId = privacySettingId;
         }
 
         public PrivacySettingValue getPrivacySettingValue() {
-            settingValue = PrivacySettingValue.getPrivacySettingValue(value);
-            return settingValue;
+            PrivacySettingValue privacySettingValue = PrivacySettingValue.getPrivacySettingValue(this.value);
+            this.settingValue = privacySettingValue;
+            return privacySettingValue;
         }
     }
 }

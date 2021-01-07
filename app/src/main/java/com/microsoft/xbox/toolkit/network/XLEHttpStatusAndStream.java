@@ -5,7 +5,7 @@ import org.apache.http.Header;
 import java.io.InputStream;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -19,12 +19,12 @@ public class XLEHttpStatusAndStream {
     public InputStream stream = null;
 
     public void close() {
-        if (stream != null) {
+        InputStream inputStream = this.stream;
+        if (inputStream != null) {
             try {
-                stream.close();
-                stream = null;
-            } catch (Exception e) {
-                e.printStackTrace();
+                inputStream.close();
+                this.stream = null;
+            } catch (Exception unused) {
             }
         }
     }

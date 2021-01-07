@@ -1,7 +1,7 @@
 package com.microsoft.xbox.toolkit;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -13,30 +13,30 @@ public class AsyncResult<T> {
     private final Object sender;
     private AsyncActionStatus status;
 
-    public AsyncResult(T result2, Object sender2, XLEException exception2) {
-        this(result2, sender2, exception2, exception2 == null ? AsyncActionStatus.SUCCESS : AsyncActionStatus.FAIL);
+    public AsyncResult(T t, Object obj, XLEException xLEException) {
+        this(t, obj, xLEException, xLEException == null ? AsyncActionStatus.SUCCESS : AsyncActionStatus.FAIL);
     }
 
-    public AsyncResult(T result2, Object sender2, XLEException exception2, AsyncActionStatus status2) {
-        sender = sender2;
-        exception = exception2;
-        result = result2;
-        status = status2;
+    public AsyncResult(T t, Object obj, XLEException xLEException, AsyncActionStatus asyncActionStatus) {
+        this.sender = obj;
+        this.exception = xLEException;
+        this.result = t;
+        this.status = asyncActionStatus;
     }
 
     public Object getSender() {
-        return sender;
+        return this.sender;
     }
 
     public XLEException getException() {
-        return exception;
+        return this.exception;
     }
 
     public T getResult() {
-        return result;
+        return this.result;
     }
 
     public AsyncActionStatus getStatus() {
-        return status;
+        return this.status;
     }
 }

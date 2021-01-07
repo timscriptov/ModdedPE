@@ -15,7 +15,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -69,60 +69,56 @@ public class UTCDateConverterGson {
     }
 
     public static class UTCDateConverterJSONDeserializer implements JsonDeserializer<Date> {
-        public Date deserialize(@NotNull JsonElement json, Type typeOfT, JsonDeserializationContext context) {
-            return UTCDateConverterGson.convert(json.getAsJsonPrimitive().getAsString());
+        public Date deserialize(@NotNull JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) {
+            return UTCDateConverterGson.convert(jsonElement.getAsJsonPrimitive().getAsString());
         }
     }
 
     public static class UTCDateConverterShortDateFormatJSONDeserializer implements JsonDeserializer<Date> {
-        public Date deserialize(@NotNull JsonElement json, Type typeOfT, JsonDeserializationContext context) {
-            String raw = json.getAsJsonPrimitive().getAsString();
+        public Date deserialize(@NotNull JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) {
+            String asString = jsonElement.getAsJsonPrimitive().getAsString();
             UTCDateConverterGson.shortDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
             try {
-                return UTCDateConverterGson.shortDateFormat.parse(raw);
-            } catch (ParseException e) {
+                return UTCDateConverterGson.shortDateFormat.parse(asString);
+            } catch (ParseException unused) {
                 return null;
             }
         }
     }
 
     public static class UTCDateConverterShortDateAlternateFormatJSONDeserializer implements JsonDeserializer<Date> {
-        public Date deserialize(@NotNull JsonElement json, Type typeOfT, JsonDeserializationContext context) {
-            String raw = json.getAsJsonPrimitive().getAsString();
-            Date result = null;
+        public Date deserialize(@NotNull JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) {
+            Date date;
+            String asString = jsonElement.getAsJsonPrimitive().getAsString();
             TimeZone timeZone = TimeZone.getTimeZone("GMT");
             UTCDateConverterGson.shortDateFormat.setTimeZone(timeZone);
             try {
-                result = UTCDateConverterGson.shortDateFormat.parse(raw);
-            } catch (ParseException e) {
-                e.printStackTrace();
+                date = UTCDateConverterGson.shortDateFormat.parse(asString);
+            } catch (ParseException unused) {
+                date = null;
             }
-            if (result == null || result.getYear() + 1900 >= 2000) {
-                return result;
+            if (date == null || date.getYear() + 1900 >= 2000) {
+                return date;
             }
             UTCDateConverterGson.shortDateAlternateFormat.setTimeZone(timeZone);
             try {
-                return UTCDateConverterGson.shortDateAlternateFormat.parse(raw);
-            } catch (ParseException e2) {
-                return result;
+                return UTCDateConverterGson.shortDateAlternateFormat.parse(asString);
+            } catch (ParseException unused2) {
+                return date;
             }
         }
     }
 
     public static class UTCRoundtripDateConverterJSONDeserializer implements JsonDeserializer<Date> {
-        public Date deserialize(@NotNull JsonElement json, Type typeOfT, JsonDeserializationContext context) {
-            String raw = json.getAsJsonPrimitive().getAsString();
-            if (raw.endsWith("Z")) {
-                raw = raw.replace("Z", "");
+        public Date deserialize(@NotNull JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) {
+            String asString = jsonElement.getAsJsonPrimitive().getAsString();
+            if (asString.endsWith("Z")) {
+                asString = asString.replace("Z", "");
             }
-            TimeZone timeZone = null;
-            if (0 == 0) {
-                timeZone = TimeZone.getTimeZone("GMT");
-            }
-            UTCDateConverterGson.defaultFormatNoMs.setTimeZone(timeZone);
+            UTCDateConverterGson.defaultFormatNoMs.setTimeZone(TimeZone.getTimeZone("GMT"));
             try {
-                return UTCDateConverterGson.defaultFormatNoMs.parse(raw);
-            } catch (ParseException e) {
+                return UTCDateConverterGson.defaultFormatNoMs.parse(asString);
+            } catch (ParseException unused) {
                 return null;
             }
         }

@@ -10,7 +10,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -23,11 +23,11 @@ public class XLEMAASAnimationPackageDirection extends MAASAnimation {
     @Element(required = false)
     public XLEMAASAnimation outAnimation;
 
-    public XLEAnimation compile(MAAS.MAASAnimationType type, View targetView) {
-        XLEMAASAnimation anim = type == MAAS.MAASAnimationType.ANIMATE_IN ? inAnimation : outAnimation;
-        if (anim == null) {
+    public XLEAnimation compile(MAAS.MAASAnimationType mAASAnimationType, View view) {
+        XLEMAASAnimation xLEMAASAnimation = mAASAnimationType == MAAS.MAASAnimationType.ANIMATE_IN ? this.inAnimation : this.outAnimation;
+        if (xLEMAASAnimation == null) {
             return null;
         }
-        return anim.compile(targetView);
+        return xLEMAASAnimation.compile(view);
     }
 }

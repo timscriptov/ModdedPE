@@ -8,57 +8,55 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 
 public class UrlUtil {
-    public static URI getEncodedUri(String oldUrl) {
-        if (oldUrl == null || oldUrl.length() == 0) {
+    public static URI getEncodedUri(String str) {
+        if (str == null || str.length() == 0) {
             return null;
         }
-        return getEncodedUriNonNull(oldUrl);
+        return getEncodedUriNonNull(str);
     }
 
-    @Nullable
-    public static URI getEncodedUriNonNull(String oldUrl) {
+    public static @Nullable URI getEncodedUriNonNull(String str) {
         try {
-            URL url = new URL(oldUrl);
+            URL url = new URL(str);
             return new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
-        } catch (URISyntaxException | MalformedURLException e) {
+        } catch (MalformedURLException | URISyntaxException unused) {
             return null;
         }
     }
 
-    @Nullable
-    public static URI getUri(String encodedUrl) {
-        if (JavaUtil.isNullOrEmpty(encodedUrl)) {
+    public static @Nullable URI getUri(String str) {
+        if (JavaUtil.isNullOrEmpty(str)) {
             return null;
         }
         try {
-            return new URI(encodedUrl);
-        } catch (Exception e) {
+            return new URI(str);
+        } catch (Exception unused) {
             return null;
         }
     }
 
-    public static String encodeUrl(String oldUrl) {
-        URI uri;
-        if (oldUrl == null || oldUrl.length() == 0 || (uri = getEncodedUri(oldUrl)) == null) {
+    public static String encodeUrl(String str) {
+        URI encodedUri;
+        if (str == null || str.length() == 0 || (encodedUri = getEncodedUri(str)) == null) {
             return null;
         }
-        return uri.toString();
+        return encodedUri.toString();
     }
 
-    public static boolean UrisEqualCaseInsensitive(URI lhs, URI rhs) {
-        if (lhs == rhs) {
+    public static boolean UrisEqualCaseInsensitive(URI uri, URI uri2) {
+        if (uri == uri2) {
             return true;
         }
-        if (lhs == null || rhs == null) {
+        if (uri == null || uri2 == null) {
             return false;
         }
-        return JavaUtil.stringsEqualCaseInsensitive(lhs.toString(), rhs.toString());
+        return JavaUtil.stringsEqualCaseInsensitive(uri.toString(), uri2.toString());
     }
 }

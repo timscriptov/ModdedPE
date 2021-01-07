@@ -54,7 +54,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -106,12 +106,11 @@ public class ProfileModel extends ModelBase<ProfileData> {
     private boolean sharingRealNameTransitively;
     private SingleEntryLoadingStatus submitFeedbackForUserLoadingStatus = new SingleEntryLoadingStatus();
 
-    private ProfileModel(String xuid2) {
-        xuid = xuid2;
+    private ProfileModel(String str) {
+        this.xuid = str;
     }
 
-    @Nullable
-    public static ProfileModel getMeProfileModel() {
+    public static @Nullable ProfileModel getMeProfileModel() {
         if (ProjectSpecificDataProvider.getInstance().getXuidString() == null) {
             return null;
         }
@@ -121,28 +120,28 @@ public class ProfileModel extends ModelBase<ProfileData> {
         return meProfileInstance;
     }
 
-    public static ProfileModel getProfileModel(String xuid2) {
-        if (JavaUtil.isNullOrEmpty(xuid2)) {
+    public static ProfileModel getProfileModel(String str) {
+        if (JavaUtil.isNullOrEmpty(str)) {
             throw new IllegalArgumentException();
-        } else if (JavaUtil.stringsEqualCaseInsensitive(xuid2, ProjectSpecificDataProvider.getInstance().getXuidString())) {
+        } else if (JavaUtil.stringsEqualCaseInsensitive(str, ProjectSpecificDataProvider.getInstance().getXuidString())) {
             if (meProfileInstance == null) {
-                meProfileInstance = new ProfileModel(xuid2);
+                meProfileInstance = new ProfileModel(str);
             }
             return meProfileInstance;
         } else {
-            ProfileModel model = profileModelCache.get(xuid2);
-            if (model != null) {
-                return model;
+            ProfileModel profileModel = profileModelCache.get(str);
+            if (profileModel != null) {
+                return profileModel;
             }
-            ProfileModel model2 = new ProfileModel(xuid2);
-            profileModelCache.put(xuid2, model2);
-            return model2;
+            ProfileModel profileModel2 = new ProfileModel(str);
+            profileModelCache.put(str, profileModel2);
+            return profileModel2;
         }
     }
 
-    public static boolean isMeXuid(String xuid2) {
-        String myXuid = ProjectSpecificDataProvider.getInstance().getXuidString();
-        return (myXuid == null || xuid2 == null || xuid2.compareToIgnoreCase(myXuid) != 0) ? false : true;
+    public static boolean isMeXuid(String str) {
+        String xuidString = ProjectSpecificDataProvider.getInstance().getXuidString();
+        return (xuidString == null || str == null || str.compareToIgnoreCase(xuidString) != 0) ? false : true;
     }
 
     public static int getDefaultColor() {
@@ -157,26 +156,30 @@ public class ProfileModel extends ModelBase<ProfileData> {
         return hasPrivilege(XPrivilegeConstants.XPRIVILEGE_COMMUNICATIONS);
     }
 
-    private static boolean hasPrivilege(String prv) {
+    private static boolean hasPrivilege(String str) {
         String privileges = ProjectSpecificDataProvider.getInstance().getPrivileges();
-        return !JavaUtil.isNullOrEmpty(privileges) && privileges.contains(prv);
+        return !JavaUtil.isNullOrEmpty(privileges) && privileges.contains(str);
     }
 
     public static void reset() {
         XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
-        Enumeration<ProfileModel> e = profileModelCache.elements();
-        while (e.hasMoreElements()) {
-            e.nextElement().clearObserver();
+        Enumeration<ProfileModel> elements = profileModelCache.elements();
+        while (elements.hasMoreElements()) {
+            elements.nextElement().clearObserver();
         }
-        if (meProfileInstance != null) {
-            meProfileInstance.clearObserver();
+        ProfileModel profileModel = meProfileInstance;
+        if (profileModel != null) {
+            profileModel.clearObserver();
             meProfileInstance = null;
         }
         profileModelCache = new ThreadSafeFixedSizeHashtable<>(20);
     }
 
+    public void onSubmitFeedbackForUserCompleted(AsyncResult<Boolean> asyncResult) {
+    }
+
     public String getXuid() {
-        return xuid;
+        return this.xuid;
     }
 
     public String getAccountTier() {
@@ -200,22 +203,24 @@ public class ProfileModel extends ModelBase<ProfileData> {
     }
 
     public String getRealName() {
-        if (shareRealName) {
+        if (this.shareRealName) {
             return getProfileSettingValue(UserProfileSetting.RealName);
         }
         return null;
     }
 
     private String getProfileImageUrl() {
-        if (profileImageUrl != null) {
-            return profileImageUrl;
+        String str = this.profileImageUrl;
+        if (str != null) {
+            return str;
         }
-        profileImageUrl = getProfileSettingValue(UserProfileSetting.GameDisplayPicRaw);
-        return profileImageUrl;
+        String profileSettingValue = getProfileSettingValue(UserProfileSetting.GameDisplayPicRaw);
+        this.profileImageUrl = profileSettingValue;
+        return profileSettingValue;
     }
 
     public ArrayList<FollowersData> getFollowingData() {
-        return following;
+        return this.following;
     }
 
     public String getGamerPicImageUrl() {
@@ -223,568 +228,576 @@ public class ProfileModel extends ModelBase<ProfileData> {
     }
 
     public int getNumberOfFollowing() {
-        if (profileSummary != null) {
-            return profileSummary.targetFollowingCount;
+        ProfileSummaryResultContainer.ProfileSummaryResult profileSummaryResult = this.profileSummary;
+        if (profileSummaryResult != null) {
+            return profileSummaryResult.targetFollowingCount;
         }
         return 0;
     }
 
     public int getNumberOfFollowers() {
-        if (profileSummary != null) {
-            return profileSummary.targetFollowerCount;
+        ProfileSummaryResultContainer.ProfileSummaryResult profileSummaryResult = this.profileSummary;
+        if (profileSummaryResult != null) {
+            return profileSummaryResult.targetFollowerCount;
         }
         return 0;
     }
 
     public int getPreferedColor() {
-        if (profileUser == null || profileUser.colors == null) {
+        IUserProfileResult.ProfileUser profileUser2 = this.profileUser;
+        if (profileUser2 == null || profileUser2.colors == null) {
             return getDefaultColor();
         }
-        return profileUser.colors.getPrimaryColor();
+        return this.profileUser.colors.getPrimaryColor();
     }
 
     public ArrayList<URI> getWatermarkUris() {
-        ArrayList<URI> uriArrayList = new ArrayList<>();
-        String tenureLevel = getProfileSettingValue(UserProfileSetting.TenureLevel);
-        if (!JavaUtil.isNullOrEmpty(tenureLevel) && !tenureLevel.equalsIgnoreCase("0")) {
+        ArrayList<URI> arrayList = new ArrayList<>();
+        String profileSettingValue = getProfileSettingValue(UserProfileSetting.TenureLevel);
+        if (!JavaUtil.isNullOrEmpty(profileSettingValue) && !profileSettingValue.equalsIgnoreCase("0")) {
             try {
                 String tenureWatermarkUrlFormat = XboxLiveEnvironment.Instance().getTenureWatermarkUrlFormat();
                 Object[] objArr = new Object[1];
-                if (tenureLevel.length() == 1) {
-                    tenureLevel = "0" + tenureLevel;
+                if (profileSettingValue.length() == 1) {
+                    profileSettingValue = "0" + profileSettingValue;
                 }
-                objArr[0] = tenureLevel;
-                uriArrayList.add(new URI(String.format(tenureWatermarkUrlFormat, objArr)));
-            } catch (URISyntaxException ex) {
-                XLEAssert.fail("Failed to create URI for tenure watermark: " + ex.toString());
+                objArr[0] = profileSettingValue;
+                arrayList.add(new URI(String.format(tenureWatermarkUrlFormat, objArr)));
+            } catch (URISyntaxException e) {
+                XLEAssert.fail("Failed to create URI for tenure watermark: " + e.toString());
             }
         }
-        String otherWatermarks = getProfileSettingValue(UserProfileSetting.Watermarks);
-        if (!JavaUtil.isNullOrEmpty(otherWatermarks)) {
-            for (String watermark : otherWatermarks.split("\\|")) {
+        String profileSettingValue2 = getProfileSettingValue(UserProfileSetting.Watermarks);
+        if (!JavaUtil.isNullOrEmpty(profileSettingValue2)) {
+            for (String str : profileSettingValue2.split("\\|")) {
                 try {
-                    uriArrayList.add(new URI(XboxLiveEnvironment.Instance().getWatermarkUrl(watermark)));
-                } catch (URISyntaxException ex2) {
-                    XLEAssert.fail("Failed to create URI for watermark " + watermark + " : " + ex2.toString());
+                    arrayList.add(new URI(XboxLiveEnvironment.Instance().getWatermarkUrl(str)));
+                } catch (URISyntaxException e2) {
+                    XLEAssert.fail("Failed to create URI for watermark " + str + " : " + e2.toString());
                 }
             }
         }
-        return uriArrayList;
+        return arrayList;
     }
 
     public boolean isMeProfile() {
-        return isMeXuid(xuid);
+        return isMeXuid(this.xuid);
     }
 
     public boolean isCallerFollowingTarget() {
-        return profileSummary != null && profileSummary.isCallerFollowingTarget;
+        ProfileSummaryResultContainer.ProfileSummaryResult profileSummaryResult = this.profileSummary;
+        return profileSummaryResult != null && profileSummaryResult.isCallerFollowingTarget;
     }
 
     public boolean isTargetFollowingCaller() {
-        return profileSummary != null && profileSummary.isTargetFollowingCaller;
+        ProfileSummaryResultContainer.ProfileSummaryResult profileSummaryResult = this.profileSummary;
+        return profileSummaryResult != null && profileSummaryResult.isTargetFollowingCaller;
     }
 
     public boolean hasCallerMarkedTargetAsFavorite() {
-        return profileSummary != null && profileSummary.hasCallerMarkedTargetAsFavorite;
+        ProfileSummaryResultContainer.ProfileSummaryResult profileSummaryResult = this.profileSummary;
+        return profileSummaryResult != null && profileSummaryResult.hasCallerMarkedTargetAsFavorite;
     }
 
     public boolean hasCallerMarkedTargetAsIdentityShared() {
-        return profileSummary != null && profileSummary.hasCallerMarkedTargetAsIdentityShared;
+        ProfileSummaryResultContainer.ProfileSummaryResult profileSummaryResult = this.profileSummary;
+        return profileSummaryResult != null && profileSummaryResult.hasCallerMarkedTargetAsIdentityShared;
     }
 
     public ProfileSummaryResultContainer.ProfileSummaryResult getProfileSummaryData() {
-        return profileSummary;
+        return this.profileSummary;
     }
 
     public String getShareRealNameStatus() {
-        return shareRealNameStatus;
+        return this.shareRealNameStatus;
     }
 
     public String getGamerTag() {
         return getProfileSettingValue(UserProfileSetting.Gamertag);
     }
 
-    @Nullable
-    private String getProfileSettingValue(UserProfileSetting settingId) {
-        if (!(profileUser == null || profileUser.settings == null)) {
-            Iterator<IUserProfileResult.Settings> it = profileUser.settings.iterator();
-            while (it.hasNext()) {
-                IUserProfileResult.Settings setting = it.next();
-                if (setting.id != null && setting.id.equals(settingId.toString())) {
-                    return setting.value;
-                }
+    private @Nullable String getProfileSettingValue(UserProfileSetting userProfileSetting) {
+        IUserProfileResult.ProfileUser profileUser2 = this.profileUser;
+        if (profileUser2 == null || profileUser2.settings == null) {
+            return null;
+        }
+        Iterator<IUserProfileResult.Settings> it = this.profileUser.settings.iterator();
+        while (it.hasNext()) {
+            IUserProfileResult.Settings next = it.next();
+            if (next.id != null && next.id.equals(userProfileSetting.toString())) {
+                return next.value;
             }
         }
         return null;
     }
 
     public NeverListResultContainer.NeverListResult getNeverListData() {
-        return neverList;
+        return this.neverList;
     }
 
     public MutedListResultContainer.MutedListResult getMutedList() {
-        return mutedList;
+        return this.mutedList;
     }
 
     public IFollowerPresenceResult.UserPresence getPresenceData() {
-        return presenceData;
+        return this.presenceData;
     }
 
     public int getMaturityLevel() {
-        if (profileUser != null) {
-            return profileUser.getMaturityLevel();
+        IUserProfileResult.ProfileUser profileUser2 = this.profileUser;
+        if (profileUser2 != null) {
+            return profileUser2.getMaturityLevel();
         }
         return 0;
     }
 
-    public void setFirstName(String firstName2) {
-        firstName = firstName2;
+    public void setFirstName(String str) {
+        this.firstName = str;
     }
 
-    public void setLastName(String lastName2) {
-        lastName = lastName2;
+    public void setLastName(String str) {
+        this.lastName = str;
     }
 
     public ArrayList<FollowersData> getFavorites() {
-        return favorites;
+        return this.favorites;
     }
 
     public IPeopleHubResult.PeopleHubPersonSummary getPeopleHubPersonSummary() {
-        return peopleHubPersonSummary;
+        return this.peopleHubPersonSummary;
     }
 
     public AddFollowingUserResponseContainer.AddFollowingUserResponse getAddUserToFollowingResult() {
-        return addUserToFollowingResponse;
+        return this.addUserToFollowingResponse;
     }
 
     public IPeopleHubResult.PeopleHubPeopleSummary getPeopleHubRecommendationsRawData() {
-        return peopleHubRecommendationsRaw;
+        return this.peopleHubRecommendationsRaw;
     }
 
     public boolean shouldRefreshProfileSummary() {
-        return XLEUtil.shouldRefresh(lastRefreshProfileSummary, lifetime);
+        return XLEUtil.shouldRefresh(this.lastRefreshProfileSummary, this.lifetime);
     }
 
     public boolean shouldRefreshPresenceData() {
-        return XLEUtil.shouldRefresh(lastRefreshPresenceData, lifetime);
+        return XLEUtil.shouldRefresh(this.lastRefreshPresenceData, this.lifetime);
     }
 
-    public void loadAsync(boolean forceRefresh) {
-        loadInternal(forceRefresh, UpdateType.MeProfileData, new GetProfileRunner(this, xuid, false));
+    public void loadAsync(boolean z) {
+        loadInternal(z, UpdateType.MeProfileData, new GetProfileRunner(this, this.xuid, false));
     }
 
-    public AsyncResult<ProfileData> loadSync(boolean forceRefresh) {
-        return loadSync(forceRefresh, false);
+    public AsyncResult<ProfileData> loadSync(boolean z) {
+        return loadSync(z, false);
     }
 
-    public AsyncResult<ProfileData> loadSync(boolean forceRefresh, boolean loadEssentialsOnly) {
-        return super.loadData(forceRefresh, new GetProfileRunner(this, xuid, loadEssentialsOnly));
+    public AsyncResult<ProfileData> loadSync(boolean z, boolean z2) {
+        return super.loadData(z, new GetProfileRunner(this, this.xuid, z2));
     }
 
-    public AsyncResult<IFollowerPresenceResult.UserPresence> loadPresenceData(boolean forceRefresh) {
-        if (presenceDataLoadingStatus == null) {
-            presenceDataLoadingStatus = new SingleEntryLoadingStatus();
+    public AsyncResult<IFollowerPresenceResult.UserPresence> loadPresenceData(boolean z) {
+        if (this.presenceDataLoadingStatus == null) {
+            this.presenceDataLoadingStatus = new SingleEntryLoadingStatus();
         }
-        return DataLoadUtil.Load(forceRefresh, 180000, lastRefreshPresenceData, presenceDataLoadingStatus, new GetPresenceDataRunner(this, xuid));
+        return DataLoadUtil.Load(z, 180000, this.lastRefreshPresenceData, this.presenceDataLoadingStatus, new GetPresenceDataRunner(this, this.xuid));
     }
 
-    public AsyncResult<IPeopleHubResult.PeopleHubPeopleSummary> loadPeopleHubRecommendations(boolean forceRefresh) {
+    public AsyncResult<IPeopleHubResult.PeopleHubPeopleSummary> loadPeopleHubRecommendations(boolean z) {
         XLEAssert.assertIsNotUIThread();
-        XLEAssert.assertNotNull(xuid);
-        return DataLoadUtil.Load(forceRefresh, 180000, lastRefreshPeopleHubRecommendations, new SingleEntryLoadingStatus(), new GetPeopleHubRecommendationRunner(this, xuid));
+        XLEAssert.assertNotNull(this.xuid);
+        return DataLoadUtil.Load(z, 180000, this.lastRefreshPeopleHubRecommendations, new SingleEntryLoadingStatus(), new GetPeopleHubRecommendationRunner(this, this.xuid));
     }
 
-    public AsyncResult<Boolean> removeUserFromShareIdentity(boolean forceRefresh, ArrayList<String> users) {
+    public AsyncResult<Boolean> removeUserFromShareIdentity(boolean z, ArrayList<String> arrayList) {
         XLEAssert.assertIsNotUIThread();
-        XLEAssert.assertNotNull(xuid);
-        return DataLoadUtil.Load(forceRefresh, lifetime, null, removingUserFromShareIdentityListLoadingStatus, new RemoveUsersFromShareIdentityListRunner(this, users));
+        XLEAssert.assertNotNull(this.xuid);
+        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.removingUserFromShareIdentityListLoadingStatus, new RemoveUsersFromShareIdentityListRunner(this, arrayList));
     }
 
-    public AsyncResult<Boolean> addUserToShareIdentity(boolean forceRefresh, ArrayList<String> users) {
+    public AsyncResult<Boolean> addUserToShareIdentity(boolean z, ArrayList<String> arrayList) {
         XLEAssert.assertIsNotUIThread();
-        XLEAssert.assertNotNull(xuid);
-        return DataLoadUtil.Load(forceRefresh, lifetime, null, addingUserToShareIdentityListLoadingStatus, new AddUsersToShareIdentityListRunner(this, users));
+        XLEAssert.assertNotNull(this.xuid);
+        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.addingUserToShareIdentityListLoadingStatus, new AddUsersToShareIdentityListRunner(this, arrayList));
     }
 
-    public AsyncResult<Boolean> addUserToFavoriteList(boolean forceRefresh, String favoriteUserXuid) {
+    public AsyncResult<Boolean> addUserToFavoriteList(boolean z, String str) {
         XLEAssert.assertIsNotUIThread();
-        XLEAssert.assertNotNull(xuid);
-        XLEAssert.assertNotNull(favoriteUserXuid);
-        return DataLoadUtil.Load(forceRefresh, lifetime, null, addingUserToFavoriteListLoadingStatus, new AddUserToFavoriteListRunner(this, favoriteUserXuid));
+        XLEAssert.assertNotNull(this.xuid);
+        XLEAssert.assertNotNull(str);
+        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.addingUserToFavoriteListLoadingStatus, new AddUserToFavoriteListRunner(this, str));
     }
 
-    public AsyncResult<Boolean> removeUserFromFavoriteList(boolean forceRefresh, String favoriteUserXuid) {
+    public AsyncResult<Boolean> removeUserFromFavoriteList(boolean z, String str) {
         XLEAssert.assertIsNotUIThread();
-        XLEAssert.assertNotNull(xuid);
-        XLEAssert.assertNotNull(favoriteUserXuid);
-        return DataLoadUtil.Load(forceRefresh, lifetime, null, removingUserFromFavoriteListLoadingStatus, new RemoveUserFromFavoriteListRunner(this, favoriteUserXuid));
+        XLEAssert.assertNotNull(this.xuid);
+        XLEAssert.assertNotNull(str);
+        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.removingUserFromFavoriteListLoadingStatus, new RemoveUserFromFavoriteListRunner(this, str));
     }
 
-    public AsyncResult<AddFollowingUserResponseContainer.AddFollowingUserResponse> addUserToFollowingList(boolean forceRefresh, String followingUserXuid) {
+    public AsyncResult<AddFollowingUserResponseContainer.AddFollowingUserResponse> addUserToFollowingList(boolean z, String str) {
         XLEAssert.assertIsNotUIThread();
-        XLEAssert.assertNotNull(xuid);
-        XLEAssert.assertNotNull(followingUserXuid);
-        return DataLoadUtil.Load(forceRefresh, lifetime, null, addingUserToFollowingListLoadingStatus, new AddUserToFollowingListRunner(this, followingUserXuid));
+        XLEAssert.assertNotNull(this.xuid);
+        XLEAssert.assertNotNull(str);
+        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.addingUserToFollowingListLoadingStatus, new AddUserToFollowingListRunner(this, str));
     }
 
-    public AsyncResult<ProfileSummaryResultContainer.ProfileSummaryResult> loadProfileSummary(boolean forceRefresh) {
-        if (profileSummaryLoadingStatus == null) {
-            profileSummaryLoadingStatus = new SingleEntryLoadingStatus();
+    public AsyncResult<ProfileSummaryResultContainer.ProfileSummaryResult> loadProfileSummary(boolean z) {
+        if (this.profileSummaryLoadingStatus == null) {
+            this.profileSummaryLoadingStatus = new SingleEntryLoadingStatus();
         }
-        return DataLoadUtil.Load(forceRefresh, lifetime, lastRefreshProfileSummary, profileSummaryLoadingStatus, new GetProfileSummaryRunner(this, xuid));
+        return DataLoadUtil.Load(z, this.lifetime, this.lastRefreshProfileSummary, this.profileSummaryLoadingStatus, new GetProfileSummaryRunner(this, this.xuid));
     }
 
-    public AsyncResult<Boolean> removeUserFromFollowingList(boolean forceRefresh, String followingUserXuid) {
+    public AsyncResult<Boolean> removeUserFromFollowingList(boolean z, String str) {
         XLEAssert.assertIsNotUIThread();
-        XLEAssert.assertNotNull(xuid);
-        XLEAssert.assertNotNull(followingUserXuid);
-        return DataLoadUtil.Load(forceRefresh, lifetime, null, removingUserFromFollowingListLoadingStatus, new RemoveUserFromFollowingListRunner(this, followingUserXuid));
+        XLEAssert.assertNotNull(this.xuid);
+        XLEAssert.assertNotNull(str);
+        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.removingUserFromFollowingListLoadingStatus, new RemoveUserFromFollowingListRunner(this, str));
     }
 
-    public AsyncResult<NeverListResultContainer.NeverListResult> loadUserNeverList(boolean forceRefresh) {
-        return DataLoadUtil.Load(forceRefresh, lifetime, lastRefreshNeverList, neverListLoadingStatus, new GetNeverListRunner(this, xuid));
+    public AsyncResult<NeverListResultContainer.NeverListResult> loadUserNeverList(boolean z) {
+        return DataLoadUtil.Load(z, this.lifetime, this.lastRefreshNeverList, this.neverListLoadingStatus, new GetNeverListRunner(this, this.xuid));
     }
 
-    public AsyncResult<Boolean> addUserToNeverList(boolean forceRefresh, String blockUserXuid) {
+    public AsyncResult<Boolean> addUserToNeverList(boolean z, String str) {
         XLEAssert.assertIsNotUIThread();
-        XLEAssert.assertNotNull(xuid);
-        XLEAssert.assertNotNull(blockUserXuid);
-        return DataLoadUtil.Load(forceRefresh, lifetime, null, addingUserToNeverListLoadingStatus, new PutUserToNeverListRunner(this, xuid, blockUserXuid));
+        XLEAssert.assertNotNull(this.xuid);
+        XLEAssert.assertNotNull(str);
+        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.addingUserToNeverListLoadingStatus, new PutUserToNeverListRunner(this, this.xuid, str));
     }
 
-    public AsyncResult<Boolean> removeUserFromNeverList(boolean forceRefresh, String unblockUserXuid) {
+    public AsyncResult<Boolean> removeUserFromNeverList(boolean z, String str) {
         XLEAssert.assertIsNotUIThread();
-        XLEAssert.assertNotNull(xuid);
-        XLEAssert.assertNotNull(unblockUserXuid);
-        return DataLoadUtil.Load(forceRefresh, lifetime, null, removingUserFromNeverListLoadingStatus, new RemoveUserFromNeverListRunner(this, xuid, unblockUserXuid));
+        XLEAssert.assertNotNull(this.xuid);
+        XLEAssert.assertNotNull(str);
+        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.removingUserFromNeverListLoadingStatus, new RemoveUserFromNeverListRunner(this, this.xuid, str));
     }
 
-    public AsyncResult<MutedListResultContainer.MutedListResult> loadUserMutedList(boolean forceRefresh) {
-        return DataLoadUtil.Load(forceRefresh, lifetime, lastRefreshMutedList, mutedListLoadingStatus, new GetMutedListRunner(this, xuid));
+    public AsyncResult<MutedListResultContainer.MutedListResult> loadUserMutedList(boolean z) {
+        return DataLoadUtil.Load(z, this.lifetime, this.lastRefreshMutedList, this.mutedListLoadingStatus, new GetMutedListRunner(this, this.xuid));
     }
 
-    public AsyncResult<Boolean> addUserToMutedList(boolean forceRefresh, String mutedUserXuid) {
+    public AsyncResult<Boolean> addUserToMutedList(boolean z, String str) {
         XLEAssert.assertIsNotUIThread();
-        XLEAssert.assertNotNull(xuid);
-        XLEAssert.assertNotNull(mutedUserXuid);
-        return DataLoadUtil.Load(forceRefresh, lifetime, null, addingUserToMutedListLoadingStatus, new PutUserToMutedListRunner(this, xuid, mutedUserXuid));
+        XLEAssert.assertNotNull(this.xuid);
+        XLEAssert.assertNotNull(str);
+        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.addingUserToMutedListLoadingStatus, new PutUserToMutedListRunner(this, this.xuid, str));
     }
 
-    public AsyncResult<Boolean> removeUserFromMutedList(boolean forceRefresh, String mutedUserXuid) {
+    public AsyncResult<Boolean> removeUserFromMutedList(boolean z, String str) {
         XLEAssert.assertIsNotUIThread();
-        XLEAssert.assertNotNull(xuid);
-        XLEAssert.assertNotNull(mutedUserXuid);
-        return DataLoadUtil.Load(forceRefresh, lifetime, null, removingUserFromMutedListLoadingStatus, new RemoveUserFromMutedListRunner(this, xuid, mutedUserXuid));
+        XLEAssert.assertNotNull(this.xuid);
+        XLEAssert.assertNotNull(str);
+        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.removingUserFromMutedListLoadingStatus, new RemoveUserFromMutedListRunner(this, this.xuid, str));
     }
 
-    public AsyncResult<Boolean> submitFeedbackForUser(boolean forceRefresh, FeedbackType feedbackType, String textReason) {
+    public AsyncResult<Boolean> submitFeedbackForUser(boolean z, FeedbackType feedbackType, String str) {
         XLEAssert.assertIsNotUIThread();
-        XLEAssert.assertNotNull(xuid);
-        return DataLoadUtil.Load(forceRefresh, lifetime, null, submitFeedbackForUserLoadingStatus, new SubmitFeedbackForUserRunner(this, xuid, feedbackType, textReason));
+        XLEAssert.assertNotNull(this.xuid);
+        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.submitFeedbackForUserLoadingStatus, new SubmitFeedbackForUserRunner(this, this.xuid, feedbackType, str));
     }
 
-    private void onGetPeopleHubPersonDataCompleted(@NotNull AsyncResult<IPeopleHubResult.PeopleHubPersonSummary> result) {
-        if (result.getStatus() == AsyncActionStatus.SUCCESS) {
-            peopleHubPersonSummary = result.getResult();
+    private void onGetPeopleHubPersonDataCompleted(@NotNull AsyncResult<IPeopleHubResult.PeopleHubPersonSummary> asyncResult) {
+        if (asyncResult.getStatus() == AsyncActionStatus.SUCCESS) {
+            this.peopleHubPersonSummary = asyncResult.getResult();
         }
     }
 
     public ArrayList<FollowingSummaryResult.People> getProfileFollowingSummaryData() {
-        return followingSummaries;
+        return this.followingSummaries;
     }
 
-    public void setProfileFollowingSummaryData(ArrayList<FollowingSummaryResult.People> people) {
-        followingSummaries = people;
+    public void setProfileFollowingSummaryData(ArrayList<FollowingSummaryResult.People> arrayList) {
+        this.followingSummaries = arrayList;
     }
 
-    public void onRemoveUserFromShareIdentityCompleted(@NotNull AsyncResult<Boolean> result, ArrayList<String> xuids) {
-        if (result.getStatus() == AsyncActionStatus.SUCCESS && result.getResult().booleanValue()) {
-            Iterator<String> it = xuids.iterator();
+    public void onRemoveUserFromShareIdentityCompleted(@NotNull AsyncResult<Boolean> asyncResult, ArrayList<String> arrayList) {
+        if (asyncResult.getStatus() == AsyncActionStatus.SUCCESS && asyncResult.getResult().booleanValue()) {
+            Iterator<String> it = arrayList.iterator();
             while (it.hasNext()) {
-                ProfileSummaryResultContainer.ProfileSummaryResult p = getProfileModel(it.next()).getProfileSummaryData();
-                if (p != null) {
-                    p.hasCallerMarkedTargetAsIdentityShared = false;
+                ProfileSummaryResultContainer.ProfileSummaryResult profileSummaryData = getProfileModel(it.next()).getProfileSummaryData();
+                if (profileSummaryData != null) {
+                    profileSummaryData.hasCallerMarkedTargetAsIdentityShared = false;
                 }
             }
-            ProfileModel meModel = getMeProfileModel();
-            ArrayList<FollowingSummaryResult.People> followingSummaries2 = meModel.getProfileFollowingSummaryData();
-            if (!XLEUtil.isNullOrEmpty(followingSummaries2)) {
-                Iterator<String> it2 = xuids.iterator();
+            ProfileModel meProfileModel = getMeProfileModel();
+            ArrayList<FollowingSummaryResult.People> profileFollowingSummaryData = meProfileModel.getProfileFollowingSummaryData();
+            if (!XLEUtil.isNullOrEmpty(profileFollowingSummaryData)) {
+                Iterator<String> it2 = arrayList.iterator();
                 while (it2.hasNext()) {
-                    String xuid2 = it2.next();
-                    Iterator<FollowingSummaryResult.People> it3 = followingSummaries2.iterator();
+                    String next = it2.next();
+                    Iterator<FollowingSummaryResult.People> it3 = profileFollowingSummaryData.iterator();
                     while (true) {
                         if (!it3.hasNext()) {
                             break;
                         }
-                        FollowingSummaryResult.People person = it3.next();
-                        if (person.xuid.equalsIgnoreCase(xuid2)) {
-                            person.isIdentityShared = false;
+                        FollowingSummaryResult.People next2 = it3.next();
+                        if (next2.xuid.equalsIgnoreCase(next)) {
+                            next2.isIdentityShared = false;
                             break;
                         }
                     }
                 }
-                meModel.setProfileFollowingSummaryData(followingSummaries2);
+                meProfileModel.setProfileFollowingSummaryData(profileFollowingSummaryData);
             }
         }
     }
 
-    public void onAddUserToShareIdentityCompleted(@NotNull AsyncResult<Boolean> result, ArrayList<String> xuids) {
-        if (result.getStatus() == AsyncActionStatus.SUCCESS && result.getResult().booleanValue()) {
-            Iterator<String> it = xuids.iterator();
+    public void onAddUserToShareIdentityCompleted(@NotNull AsyncResult<Boolean> asyncResult, ArrayList<String> arrayList) {
+        if (asyncResult.getStatus() == AsyncActionStatus.SUCCESS && asyncResult.getResult().booleanValue()) {
+            Iterator<String> it = arrayList.iterator();
             while (it.hasNext()) {
-                ProfileSummaryResultContainer.ProfileSummaryResult p = getProfileModel(it.next()).getProfileSummaryData();
-                if (p != null) {
-                    p.hasCallerMarkedTargetAsIdentityShared = true;
+                ProfileSummaryResultContainer.ProfileSummaryResult profileSummaryData = getProfileModel(it.next()).getProfileSummaryData();
+                if (profileSummaryData != null) {
+                    profileSummaryData.hasCallerMarkedTargetAsIdentityShared = true;
                 }
             }
-            ProfileModel meModel = getMeProfileModel();
-            ArrayList<FollowingSummaryResult.People> followingSummaries2 = meModel.getProfileFollowingSummaryData();
-            if (!XLEUtil.isNullOrEmpty(followingSummaries2)) {
-                Iterator<String> it2 = xuids.iterator();
+            ProfileModel meProfileModel = getMeProfileModel();
+            ArrayList<FollowingSummaryResult.People> profileFollowingSummaryData = meProfileModel.getProfileFollowingSummaryData();
+            if (!XLEUtil.isNullOrEmpty(profileFollowingSummaryData)) {
+                Iterator<String> it2 = arrayList.iterator();
                 while (it2.hasNext()) {
-                    String xuid2 = it2.next();
-                    Iterator<FollowingSummaryResult.People> it3 = followingSummaries2.iterator();
+                    String next = it2.next();
+                    Iterator<FollowingSummaryResult.People> it3 = profileFollowingSummaryData.iterator();
                     while (true) {
                         if (!it3.hasNext()) {
                             break;
                         }
-                        FollowingSummaryResult.People person = it3.next();
-                        if (person.xuid.equalsIgnoreCase(xuid2)) {
-                            person.isIdentityShared = true;
+                        FollowingSummaryResult.People next2 = it3.next();
+                        if (next2.xuid.equalsIgnoreCase(next)) {
+                            next2.isIdentityShared = true;
                             break;
                         }
                     }
                 }
-                meModel.setProfileFollowingSummaryData(followingSummaries2);
+                meProfileModel.setProfileFollowingSummaryData(profileFollowingSummaryData);
             }
         }
     }
 
-    public void onAddUserToFavoriteListCompleted(@NotNull AsyncResult<Boolean> result, String xuid2) {
-        if (result.getStatus() == AsyncActionStatus.SUCCESS && result.getResult().booleanValue() && following != null) {
-            ArrayList<FollowersData> newFavoritesData = new ArrayList<>();
-            Iterator<FollowersData> it = following.iterator();
+    public void onAddUserToFavoriteListCompleted(@NotNull AsyncResult<Boolean> asyncResult, String str) {
+        if (asyncResult.getStatus() == AsyncActionStatus.SUCCESS && asyncResult.getResult().booleanValue() && this.following != null) {
+            ArrayList<FollowersData> arrayList = new ArrayList<>();
+            Iterator<FollowersData> it = this.following.iterator();
             while (it.hasNext()) {
-                FollowersData fdata = it.next();
-                if (fdata.xuid.equals(xuid2)) {
-                    fdata.isFavorite = true;
+                FollowersData next = it.next();
+                if (next.xuid.equals(str)) {
+                    next.isFavorite = true;
                 }
-                if (fdata.isFavorite) {
-                    newFavoritesData.add(fdata);
+                if (next.isFavorite) {
+                    arrayList.add(next);
                 }
             }
-            Collections.sort(newFavoritesData, new FollowingAndFavoritesComparator());
-            favorites = newFavoritesData;
+            Collections.sort(arrayList, new FollowingAndFavoritesComparator());
+            this.favorites = arrayList;
             notifyObservers(new AsyncResult(new UpdateData(UpdateType.UpdateFriend, true), this, (XLEException) null));
         }
     }
 
-    public void onRemoveUserFromFavoriteListCompleted(@NotNull AsyncResult<Boolean> result, String xuid2) {
-        if (result.getStatus() == AsyncActionStatus.SUCCESS && result.getResult().booleanValue() && following != null) {
-            ArrayList<FollowersData> newFavoritesData = new ArrayList<>();
-            Iterator<FollowersData> it = following.iterator();
+    public void onRemoveUserFromFavoriteListCompleted(@NotNull AsyncResult<Boolean> asyncResult, String str) {
+        if (asyncResult.getStatus() == AsyncActionStatus.SUCCESS && asyncResult.getResult().booleanValue() && this.following != null) {
+            ArrayList<FollowersData> arrayList = new ArrayList<>();
+            Iterator<FollowersData> it = this.following.iterator();
             while (it.hasNext()) {
-                FollowersData fdata = it.next();
-                if (fdata.xuid.equals(xuid2)) {
-                    fdata.isFavorite = false;
+                FollowersData next = it.next();
+                if (next.xuid.equals(str)) {
+                    next.isFavorite = false;
                 }
-                if (fdata.isFavorite) {
-                    newFavoritesData.add(fdata);
+                if (next.isFavorite) {
+                    arrayList.add(next);
                 }
             }
-            favorites = newFavoritesData;
+            this.favorites = arrayList;
             notifyObservers(new AsyncResult(new UpdateData(UpdateType.UpdateFriend, true), this, (XLEException) null));
         }
     }
 
-    public void onAddUserToFollowingListCompleted(@NotNull AsyncResult<AddFollowingUserResponseContainer.AddFollowingUserResponse> result, String xuid2) {
-        ProfileModel newUserProfileModel = getProfileModel(xuid2);
-        XLEAssert.assertNotNull(newUserProfileModel);
-        addUserToFollowingResponse = result.getResult();
-        if (result.getStatus() == AsyncActionStatus.SUCCESS && addUserToFollowingResponse != null && addUserToFollowingResponse.getAddFollowingRequestStatus()) {
-            boolean isAlreadyFollowing = false;
-            ArrayList<FollowersData> newFollowersData = new ArrayList<>();
-            if (following != null) {
-                Iterator<FollowersData> it = following.iterator();
+    public void onAddUserToFollowingListCompleted(@NotNull AsyncResult<AddFollowingUserResponseContainer.AddFollowingUserResponse> asyncResult, String str) {
+        AddFollowingUserResponseContainer.AddFollowingUserResponse addFollowingUserResponse;
+        boolean z;
+        ProfileModel profileModel = getProfileModel(str);
+        XLEAssert.assertNotNull(profileModel);
+        this.addUserToFollowingResponse = asyncResult.getResult();
+        if (asyncResult.getStatus() == AsyncActionStatus.SUCCESS && (addFollowingUserResponse = this.addUserToFollowingResponse) != null && addFollowingUserResponse.getAddFollowingRequestStatus()) {
+            ArrayList<FollowersData> arrayList = new ArrayList<>();
+            ArrayList<FollowersData> arrayList2 = this.following;
+            if (arrayList2 != null) {
+                Iterator<FollowersData> it = arrayList2.iterator();
+                z = false;
                 while (it.hasNext()) {
-                    FollowersData fdata = it.next();
-                    newFollowersData.add(fdata);
-                    if (fdata.xuid.equals(xuid2)) {
-                        isAlreadyFollowing = true;
+                    FollowersData next = it.next();
+                    arrayList.add(next);
+                    if (next.xuid.equals(str)) {
+                        z = true;
                     }
                 }
+            } else {
+                z = false;
             }
-            if (!isAlreadyFollowing) {
-                FollowersData newFollowingUser = new FollowersData();
-                newFollowingUser.xuid = xuid2;
-                newFollowingUser.isFavorite = false;
-                newFollowingUser.status = UserStatus.Offline;
-                newFollowingUser.userProfileData = new UserProfileData();
-                newFollowingUser.userProfileData.accountTier = newUserProfileModel.getAccountTier();
-                newFollowingUser.userProfileData.appDisplayName = newUserProfileModel.getAppDisplayName();
-                newFollowingUser.userProfileData.gamerScore = newUserProfileModel.getGamerScore();
-                newFollowingUser.userProfileData.gamerTag = newUserProfileModel.getGamerTag();
-                newFollowingUser.userProfileData.profileImageUrl = newUserProfileModel.getProfileImageUrl();
-                newFollowersData.add(newFollowingUser);
-                Collections.sort(newFollowersData, new FollowingAndFavoritesComparator());
+            if (!z) {
+                FollowersData followersData = new FollowersData();
+                followersData.xuid = str;
+                followersData.isFavorite = false;
+                followersData.status = UserStatus.Offline;
+                followersData.userProfileData = new UserProfileData();
+                followersData.userProfileData.accountTier = profileModel.getAccountTier();
+                followersData.userProfileData.appDisplayName = profileModel.getAppDisplayName();
+                followersData.userProfileData.gamerScore = profileModel.getGamerScore();
+                followersData.userProfileData.gamerTag = profileModel.getGamerTag();
+                followersData.userProfileData.profileImageUrl = profileModel.getProfileImageUrl();
+                arrayList.add(followersData);
+                Collections.sort(arrayList, new FollowingAndFavoritesComparator());
             }
-            following = newFollowersData;
+            this.following = arrayList;
             notifyObservers(new AsyncResult(new UpdateData(UpdateType.UpdateFriend, true), this, (XLEException) null));
-        } else if (result.getStatus() != AsyncActionStatus.SUCCESS || (addUserToFollowingResponse.code != 1028 && !addUserToFollowingResponse.getAddFollowingRequestStatus())) {
-            addUserToFollowingResponse = null;
+        } else if (asyncResult.getStatus() != AsyncActionStatus.SUCCESS || (this.addUserToFollowingResponse.code != 1028 && !this.addUserToFollowingResponse.getAddFollowingRequestStatus())) {
+            this.addUserToFollowingResponse = null;
         }
     }
 
-    public void onGetProfileSummaryCompleted(@NotNull AsyncResult<ProfileSummaryResultContainer.ProfileSummaryResult> result) {
-        if (result.getStatus() == AsyncActionStatus.SUCCESS) {
-            lastRefreshProfileSummary = new Date();
-            profileSummary = result.getResult();
+    public void onGetProfileSummaryCompleted(@NotNull AsyncResult<ProfileSummaryResultContainer.ProfileSummaryResult> asyncResult) {
+        if (asyncResult.getStatus() == AsyncActionStatus.SUCCESS) {
+            this.lastRefreshProfileSummary = new Date();
+            this.profileSummary = asyncResult.getResult();
             notifyObservers(new AsyncResult(new UpdateData(UpdateType.ActivityAlertsSummary, true), this, (XLEException) null));
         }
     }
 
-    public void onRemoveUserFromFollowingListCompleted(@NotNull AsyncResult<Boolean> result, String xuid2) {
-        if (result.getStatus() == AsyncActionStatus.SUCCESS && result.getResult().booleanValue() && following != null) {
-            ArrayList<FollowersData> newFollowersData = new ArrayList<>();
-            ArrayList<FollowersData> newFavoritesData = new ArrayList<>();
-            Iterator<FollowersData> it = following.iterator();
+    public void onRemoveUserFromFollowingListCompleted(@NotNull AsyncResult<Boolean> asyncResult, String str) {
+        if (asyncResult.getStatus() == AsyncActionStatus.SUCCESS && asyncResult.getResult().booleanValue() && this.following != null) {
+            ArrayList<FollowersData> arrayList = new ArrayList<>();
+            ArrayList<FollowersData> arrayList2 = new ArrayList<>();
+            Iterator<FollowersData> it = this.following.iterator();
             while (it.hasNext()) {
-                FollowersData fData = it.next();
-                if (!fData.xuid.equals(xuid2)) {
-                    newFollowersData.add(fData);
-                    if (fData.isFavorite) {
-                        newFavoritesData.add(fData);
+                FollowersData next = it.next();
+                if (!next.xuid.equals(str)) {
+                    arrayList.add(next);
+                    if (next.isFavorite) {
+                        arrayList2.add(next);
                     }
                 }
             }
-            following = newFollowersData;
-            favorites = newFavoritesData;
+            this.following = arrayList;
+            this.favorites = arrayList2;
             notifyObservers(new AsyncResult(new UpdateData(UpdateType.UpdateFriend, true), this, (XLEException) null));
         }
     }
 
-    public void onGetPresenceDataCompleted(@NotNull AsyncResult<IFollowerPresenceResult.UserPresence> result) {
-        if (result.getStatus() == AsyncActionStatus.SUCCESS) {
-            lastRefreshPresenceData = new Date();
-            presenceData = result.getResult();
+    public void onGetPresenceDataCompleted(@NotNull AsyncResult<IFollowerPresenceResult.UserPresence> asyncResult) {
+        if (asyncResult.getStatus() == AsyncActionStatus.SUCCESS) {
+            this.lastRefreshPresenceData = new Date();
+            this.presenceData = asyncResult.getResult();
         }
     }
 
-    public void onGetNeverListCompleted(@NotNull AsyncResult<NeverListResultContainer.NeverListResult> result) {
-        if (result.getStatus() == AsyncActionStatus.SUCCESS) {
-            NeverListResultContainer.NeverListResult data = result.getResult();
-            lastRefreshNeverList = new Date();
-            if (data != null) {
-                neverList = data;
+    public void onGetNeverListCompleted(@NotNull AsyncResult<NeverListResultContainer.NeverListResult> asyncResult) {
+        if (asyncResult.getStatus() == AsyncActionStatus.SUCCESS) {
+            NeverListResultContainer.NeverListResult result = asyncResult.getResult();
+            this.lastRefreshNeverList = new Date();
+            if (result != null) {
+                this.neverList = result;
             } else {
-                neverList = new NeverListResultContainer.NeverListResult();
+                this.neverList = new NeverListResultContainer.NeverListResult();
             }
         }
     }
 
-    public void onPutUserToNeverListCompleted(@NotNull AsyncResult<Boolean> result, String xuid2) {
-        if (result.getStatus() == AsyncActionStatus.SUCCESS && result.getResult().booleanValue()) {
-            if (neverList == null) {
-                neverList = new NeverListResultContainer.NeverListResult();
+    public void onPutUserToNeverListCompleted(@NotNull AsyncResult<Boolean> asyncResult, String str) {
+        if (asyncResult.getStatus() == AsyncActionStatus.SUCCESS && asyncResult.getResult().booleanValue()) {
+            if (this.neverList == null) {
+                this.neverList = new NeverListResultContainer.NeverListResult();
             }
-            if (!neverList.contains(xuid2)) {
-                neverList.add(xuid2);
+            if (!this.neverList.contains(str)) {
+                this.neverList.add(str);
             }
         }
     }
 
-    public void onRemoveUserFromNeverListCompleted(@NotNull AsyncResult<Boolean> result, String xuid2) {
-        if (result.getStatus() == AsyncActionStatus.SUCCESS && result.getResult().booleanValue() && neverList != null && neverList.contains(xuid2)) {
-            neverList.remove(xuid2);
+    public void onRemoveUserFromNeverListCompleted(@NotNull AsyncResult<Boolean> asyncResult, String str) {
+        NeverListResultContainer.NeverListResult neverListResult;
+        if (asyncResult.getStatus() == AsyncActionStatus.SUCCESS && asyncResult.getResult().booleanValue() && (neverListResult = this.neverList) != null && neverListResult.contains(str)) {
+            this.neverList.remove(str);
         }
     }
 
-    public void onGetMutedListCompleted(@NotNull AsyncResult<MutedListResultContainer.MutedListResult> result) {
-        if (result.getStatus() == AsyncActionStatus.SUCCESS) {
-            MutedListResultContainer.MutedListResult data = result.getResult();
-            lastRefreshMutedList = new Date();
-            if (data != null) {
-                mutedList = data;
+    public void onGetMutedListCompleted(@NotNull AsyncResult<MutedListResultContainer.MutedListResult> asyncResult) {
+        if (asyncResult.getStatus() == AsyncActionStatus.SUCCESS) {
+            MutedListResultContainer.MutedListResult result = asyncResult.getResult();
+            this.lastRefreshMutedList = new Date();
+            if (result != null) {
+                this.mutedList = result;
             } else {
-                mutedList = new MutedListResultContainer.MutedListResult();
+                this.mutedList = new MutedListResultContainer.MutedListResult();
             }
         }
     }
 
-    public void onPutUserToMutedListCompleted(@NotNull AsyncResult<Boolean> result, String xuid2) {
-        if (result.getStatus() == AsyncActionStatus.SUCCESS && result.getResult().booleanValue()) {
-            if (mutedList == null) {
-                mutedList = new MutedListResultContainer.MutedListResult();
+    public void onPutUserToMutedListCompleted(@NotNull AsyncResult<Boolean> asyncResult, String str) {
+        if (asyncResult.getStatus() == AsyncActionStatus.SUCCESS && asyncResult.getResult().booleanValue()) {
+            if (this.mutedList == null) {
+                this.mutedList = new MutedListResultContainer.MutedListResult();
             }
-            if (!mutedList.contains(xuid2)) {
-                mutedList.add(xuid2);
+            if (!this.mutedList.contains(str)) {
+                this.mutedList.add(str);
             }
         }
     }
 
-    public void onRemoveUserFromMutedListCompleted(@NotNull AsyncResult<Boolean> result, String xuid2) {
-        if (result.getStatus() == AsyncActionStatus.SUCCESS && result.getResult().booleanValue() && mutedList != null && mutedList.contains(xuid2)) {
-            mutedList.remove(xuid2);
+    public void onRemoveUserFromMutedListCompleted(@NotNull AsyncResult<Boolean> asyncResult, String str) {
+        MutedListResultContainer.MutedListResult mutedListResult;
+        if (asyncResult.getStatus() == AsyncActionStatus.SUCCESS && asyncResult.getResult().booleanValue() && (mutedListResult = this.mutedList) != null && mutedListResult.contains(str)) {
+            this.mutedList.remove(str);
         }
     }
 
-    public void onSubmitFeedbackForUserCompleted(AsyncResult<Boolean> asyncResult) {
-    }
-
-    public void onGetPeopleHubRecommendationsCompleted(@NotNull AsyncResult<IPeopleHubResult.PeopleHubPeopleSummary> result) {
-        if (result.getStatus() == AsyncActionStatus.SUCCESS) {
-            IPeopleHubResult.PeopleHubPeopleSummary data = result.getResult();
-            if (data == null) {
-                peopleHubRecommendationsRaw = null;
-                peopleHubRecommendations = null;
+    public void onGetPeopleHubRecommendationsCompleted(@NotNull AsyncResult<IPeopleHubResult.PeopleHubPeopleSummary> asyncResult) {
+        if (asyncResult.getStatus() == AsyncActionStatus.SUCCESS) {
+            IPeopleHubResult.PeopleHubPeopleSummary result = asyncResult.getResult();
+            if (result == null) {
+                this.peopleHubRecommendationsRaw = null;
+                this.peopleHubRecommendations = null;
                 return;
             }
-            peopleHubRecommendationsRaw = data;
-            lastRefreshPeopleHubRecommendations = new Date();
+            this.peopleHubRecommendationsRaw = result;
+            this.lastRefreshPeopleHubRecommendations = new Date();
         }
     }
 
-    private void buildRecommendationsList(boolean showLinkToFacebbokButton) {
-        peopleHubRecommendations = new ArrayList<>();
-        if (showLinkToFacebbokButton) {
-            peopleHubRecommendations.add(0, new RecommendationsPeopleData(true, FollowersData.DummyType.DUMMY_LINK_TO_FACEBOOK));
+    private void buildRecommendationsList(boolean z) {
+        this.peopleHubRecommendations = new ArrayList<>();
+        if (z) {
+            this.peopleHubRecommendations.add(0, new RecommendationsPeopleData(true, FollowersData.DummyType.DUMMY_LINK_TO_FACEBOOK));
         }
-        if (peopleHubRecommendationsRaw != null && !XLEUtil.isNullOrEmpty(peopleHubRecommendationsRaw.people)) {
-            Iterator<IPeopleHubResult.PeopleHubPersonSummary> it = peopleHubRecommendationsRaw.people.iterator();
+        IPeopleHubResult.PeopleHubPeopleSummary peopleHubPeopleSummary = this.peopleHubRecommendationsRaw;
+        if (peopleHubPeopleSummary != null && !XLEUtil.isNullOrEmpty(peopleHubPeopleSummary.people)) {
+            Iterator<IPeopleHubResult.PeopleHubPersonSummary> it = this.peopleHubRecommendationsRaw.people.iterator();
             while (it.hasNext()) {
-                peopleHubRecommendations.add(new RecommendationsPeopleData(it.next()));
+                this.peopleHubRecommendations.add(new RecommendationsPeopleData(it.next()));
             }
         }
     }
 
     public void updateWithNewData(AsyncResult<ProfileData> asyncResult) {
-        ProfileData profileData;
-        boolean z;
+        ProfileData result;
         XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
         super.updateWithNewData(asyncResult);
-        if (asyncResult.getStatus() == AsyncActionStatus.SUCCESS && (profileData = asyncResult.getResult()) != null) {
-            if (isMeProfile()) {
-                z = profileData.getShareRealName();
-            } else {
-                z = true;
-            }
-            shareRealName = z;
-            shareRealNameStatus = profileData.getShareRealNameStatus();
-            Log.i("ProfileModel", "shareRealNameStatus: " + shareRealNameStatus);
-            sharingRealNameTransitively = profileData.getSharingRealNameTransitively();
-            IUserProfileResult.UserProfileResult userProfileResult = profileData.getProfileResult();
-            if (!(userProfileResult == null || userProfileResult.profileUsers == null)) {
-                profileUser = userProfileResult.profileUsers.get(0);
-                profileImageUrl = null;
+        if (asyncResult.getStatus() == AsyncActionStatus.SUCCESS && (result = asyncResult.getResult()) != null) {
+            this.shareRealName = isMeProfile() ? result.getShareRealName() : true;
+            this.shareRealNameStatus = result.getShareRealNameStatus();
+            Log.i("ProfileModel", "shareRealNameStatus: " + this.shareRealNameStatus);
+            this.sharingRealNameTransitively = result.getSharingRealNameTransitively();
+            IUserProfileResult.UserProfileResult profileResult = result.getProfileResult();
+            if (!(profileResult == null || profileResult.profileUsers == null)) {
+                this.profileUser = profileResult.profileUsers.get(0);
+                this.profileImageUrl = null;
             }
         }
         notifyObservers(new AsyncResult(new UpdateData(UpdateType.ProfileData, true), this, asyncResult.getException()));
     }
 
-    public void updateWithProfileData(AsyncResult<ProfileData> asyncResult, boolean attemptedToLoadEssentialDataOnly) {
+    public void updateWithProfileData(AsyncResult<ProfileData> asyncResult, boolean z) {
         updateWithNewData(asyncResult);
-        if (attemptedToLoadEssentialDataOnly) {
+        if (z) {
             invalidateData();
         }
     }
@@ -794,86 +807,96 @@ public class ProfileModel extends ModelBase<ProfileData> {
         private ProfileModel caller;
         private boolean loadEssentialsOnly;
 
-        public GetProfileRunner(ProfileModel caller2, String xuid2, boolean loadEssentialsOnly2) {
-            caller = caller2;
-            xuid = xuid2;
-            loadEssentialsOnly = loadEssentialsOnly2;
+        public GetProfileRunner(ProfileModel profileModel, String str, boolean z) {
+            this.caller = profileModel;
+            this.xuid = str;
+            this.loadEssentialsOnly = z;
         }
 
-        public ProfileData buildData() throws XLEException {
-            final ISLSServiceManager serviceManager = ServiceManagerFactory.getInstance().getSLSServiceManager();
-            ArrayList<String> xuids = new ArrayList<>();
-            xuids.add(xuid);
-            IUserProfileResult.UserProfileResult response = serviceManager.getUserProfileInfo(UserProfileRequest.getUserProfileRequestBody(new UserProfileRequest(xuids, loadEssentialsOnly)));
-            if (ProjectSpecificDataProvider.getInstance().getXuidString().equalsIgnoreCase(xuid)) {
-                if (!(response == null || response.profileUsers == null || response.profileUsers.size() <= 0)) {
-                    final IUserProfileResult.ProfileUser profileUser = response.profileUsers.get(0);
-                    profileUser.setPrivilieges(serviceManager.getXTokenPrivileges());
-                    try {
-                        String url = profileUser.getSettingValue(UserProfileSetting.PreferredColor);
-                        if (url != null && url.length() > 0) {
-                            profileUser.colors = serviceManager.getProfilePreferredColor(url);
-                        }
-                    } catch (Throwable th) {
-                        th.printStackTrace();
-                    }
-                    XLEThreadPool.networkOperationsThreadPool.run(() -> {
-                        try {
-                            FamilySettings familySettings = serviceManager.getFamilySettings(GetProfileRunner.this.xuid);
-                            if (familySettings != null && familySettings.familyUsers != null) {
-                                for (int i = 0; i < familySettings.familyUsers.size(); i++) {
-                                    if (familySettings.familyUsers.get(i).xuid.equalsIgnoreCase(GetProfileRunner.this.xuid)) {
-                                        profileUser.canViewTVAdultContent = familySettings.familyUsers.get(i).canViewTVAdultContent;
-                                        profileUser.setmaturityLevel(familySettings.familyUsers.get(i).maturityLevel);
-                                        return;
-                                    }
-                                }
-                            }
-                        } catch (Throwable th) {
-                            th.printStackTrace();
-                        }
-                    });
-                }
-            } else if (!(response == null || response.profileUsers == null || response.profileUsers.size() <= 0)) {
-                IUserProfileResult.ProfileUser profileUser2 = response.profileUsers.get(0);
-                try {
-                    String url2 = profileUser2.getSettingValue(UserProfileSetting.PreferredColor);
-                    if (url2 != null && url2.length() > 0) {
-                        profileUser2.colors = serviceManager.getProfilePreferredColor(url2);
-                    }
-                } catch (Throwable th2) {
-                    th2.printStackTrace();
-                }
-            }
-            boolean shareRealName = false;
-            String shareRealNameStatus = null;
-            boolean sharingRealNameTransitively = false;
-            if (xuid != null && xuid.compareToIgnoreCase(ProjectSpecificDataProvider.getInstance().getXuidString()) == 0) {
-                try {
-                    PrivacySettingsResult privacyResult = serviceManager.getUserProfilePrivacySettings();
-                    shareRealNameStatus = privacyResult.getShareRealNameStatus();
-                    if (ShareRealNameSettingFilter.Blocked.toString().compareTo(shareRealNameStatus) != 0) {
-                        shareRealName = true;
-                    } else {
-                        shareRealName = false;
-                    }
-                    sharingRealNameTransitively = privacyResult.getSharingRealNameTransitively();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            return new ProfileData(response, shareRealName, shareRealNameStatus, sharingRealNameTransitively);
+        public long getDefaultErrorCode() {
+            return XLEErrorCode.FAILED_TO_GET_USER_PROFILE_INFO;
         }
 
         public void onPreExecute() {
         }
 
-        public void onPostExcute(AsyncResult<ProfileData> result) {
-            caller.updateWithProfileData(result, loadEssentialsOnly);
+        public ProfileData buildData() throws XLEException {
+            boolean z;
+            boolean z2;
+            PrivacySettingsResult userProfilePrivacySettings;
+            final ISLSServiceManager sLSServiceManager = ServiceManagerFactory.getInstance().getSLSServiceManager();
+            ArrayList arrayList = new ArrayList();
+            arrayList.add(this.xuid);
+            IUserProfileResult.UserProfileResult userProfileInfo = sLSServiceManager.getUserProfileInfo(UserProfileRequest.getUserProfileRequestBody(new UserProfileRequest((ArrayList<String>) arrayList, this.loadEssentialsOnly)));
+            boolean z3 = false;
+            if (ProjectSpecificDataProvider.getInstance().getXuidString().equalsIgnoreCase(this.xuid)) {
+                if (!(userProfileInfo == null || userProfileInfo.profileUsers == null || userProfileInfo.profileUsers.size() <= 0)) {
+                    final IUserProfileResult.ProfileUser profileUser = userProfileInfo.profileUsers.get(0);
+                    profileUser.setPrivilieges(sLSServiceManager.getXTokenPrivileges());
+                    try {
+                        String settingValue = profileUser.getSettingValue(UserProfileSetting.PreferredColor);
+                        if (settingValue != null && settingValue.length() > 0) {
+                            profileUser.colors = sLSServiceManager.getProfilePreferredColor(settingValue);
+                        }
+                    } catch (Throwable unused) {
+                    }
+                    XLEThreadPool.networkOperationsThreadPool.run(new Runnable() {
+                        public void run() {
+                            try {
+                                FamilySettings familySettings = sLSServiceManager.getFamilySettings(GetProfileRunner.this.xuid);
+                                if (familySettings != null && familySettings.familyUsers != null) {
+                                    for (int i = 0; i < familySettings.familyUsers.size(); i++) {
+                                        if (familySettings.familyUsers.get(i).xuid.equalsIgnoreCase(GetProfileRunner.this.xuid)) {
+                                            profileUser.canViewTVAdultContent = familySettings.familyUsers.get(i).canViewTVAdultContent;
+                                            profileUser.setmaturityLevel(familySettings.familyUsers.get(i).maturityLevel);
+                                            return;
+                                        }
+                                    }
+                                }
+                            } catch (Throwable unused) {
+                            }
+                        }
+                    });
+                }
+            } else if (!(userProfileInfo == null || userProfileInfo.profileUsers == null || userProfileInfo.profileUsers.size() <= 0)) {
+                IUserProfileResult.ProfileUser profileUser2 = userProfileInfo.profileUsers.get(0);
+                try {
+                    String settingValue2 = profileUser2.getSettingValue(UserProfileSetting.PreferredColor);
+                    if (settingValue2 != null && settingValue2.length() > 0) {
+                        profileUser2.colors = sLSServiceManager.getProfilePreferredColor(settingValue2);
+                    }
+                } catch (Throwable unused2) {
+                }
+            }
+            String str = null;
+            String str2 = this.xuid;
+            if (str2 != null && str2.compareToIgnoreCase(ProjectSpecificDataProvider.getInstance().getXuidString()) == 0) {
+                try {
+                    userProfilePrivacySettings = sLSServiceManager.getUserProfilePrivacySettings();
+                    str = userProfilePrivacySettings.getShareRealNameStatus();
+                    z2 = ShareRealNameSettingFilter.Blocked.toString().compareTo(str) != 0;
+                } catch (Exception unused3) {
+                    z2 = false;
+                    z3 = z2;
+                    z = false;
+                    return new ProfileData(userProfileInfo, z3, str, z);
+                }
+                try {
+                    z = userProfilePrivacySettings.getSharingRealNameTransitively();
+                    z3 = z2;
+                } catch (Exception unused4) {
+                    z3 = z2;
+                    z = false;
+                    return new ProfileData(userProfileInfo, z3, str, z);
+                }
+                return new ProfileData(userProfileInfo, z3, str, z);
+            }
+            z = false;
+            return new ProfileData(userProfileInfo, z3, str, z);
         }
 
-        public long getDefaultErrorCode() {
-            return XLEErrorCode.FAILED_TO_GET_USER_PROFILE_INFO;
+        public void onPostExcute(AsyncResult<ProfileData> asyncResult) {
+            this.caller.updateWithProfileData(asyncResult, this.loadEssentialsOnly);
         }
     }
 
@@ -881,8 +904,8 @@ public class ProfileModel extends ModelBase<ProfileData> {
         private FollowingAndFavoritesComparator() {
         }
 
-        public int compare(@NotNull FollowersData object1, @NotNull FollowersData object2) {
-            return object1.userProfileData.appDisplayName.compareToIgnoreCase(object2.userProfileData.appDisplayName);
+        public int compare(@NotNull FollowersData followersData, @NotNull FollowersData followersData2) {
+            return followersData.userProfileData.appDisplayName.compareToIgnoreCase(followersData2.userProfileData.appDisplayName);
         }
     }
 
@@ -890,24 +913,24 @@ public class ProfileModel extends ModelBase<ProfileData> {
         private ProfileModel caller;
         private ArrayList<String> userIds;
 
-        public RemoveUsersFromShareIdentityListRunner(ProfileModel caller2, ArrayList<String> users) {
-            caller = caller2;
-            userIds = users;
-        }
-
-        public Boolean buildData() throws XLEException {
-            return Boolean.valueOf(ServiceManagerFactory.getInstance().getSLSServiceManager().removeFriendFromShareIdentitySetting(caller.xuid, AddShareIdentityRequest.getAddShareIdentityRequestBody(new AddShareIdentityRequest(userIds))));
-        }
-
-        public void onPreExecute() {
+        public RemoveUsersFromShareIdentityListRunner(ProfileModel profileModel, ArrayList<String> arrayList) {
+            this.caller = profileModel;
+            this.userIds = arrayList;
         }
 
         public long getDefaultErrorCode() {
             return XLEErrorCode.FAILED_TO_REMOVE_FROM_SHARE_IDENTIY;
         }
 
-        public void onPostExcute(AsyncResult<Boolean> result) {
-            caller.onRemoveUserFromShareIdentityCompleted(result, userIds);
+        public void onPreExecute() {
+        }
+
+        public Boolean buildData() throws XLEException {
+            return Boolean.valueOf(ServiceManagerFactory.getInstance().getSLSServiceManager().removeFriendFromShareIdentitySetting(this.caller.xuid, AddShareIdentityRequest.getAddShareIdentityRequestBody(new AddShareIdentityRequest(this.userIds))));
+        }
+
+        public void onPostExcute(AsyncResult<Boolean> asyncResult) {
+            this.caller.onRemoveUserFromShareIdentityCompleted(asyncResult, this.userIds);
         }
     }
 
@@ -915,24 +938,24 @@ public class ProfileModel extends ModelBase<ProfileData> {
         private ProfileModel caller;
         private ArrayList<String> userIds;
 
-        public AddUsersToShareIdentityListRunner(ProfileModel caller2, ArrayList<String> users) {
-            caller = caller2;
-            userIds = users;
-        }
-
-        public Boolean buildData() throws XLEException {
-            return Boolean.valueOf(ServiceManagerFactory.getInstance().getSLSServiceManager().addFriendToShareIdentitySetting(caller.xuid, AddShareIdentityRequest.getAddShareIdentityRequestBody(new AddShareIdentityRequest(userIds))));
-        }
-
-        public void onPreExecute() {
+        public AddUsersToShareIdentityListRunner(ProfileModel profileModel, ArrayList<String> arrayList) {
+            this.caller = profileModel;
+            this.userIds = arrayList;
         }
 
         public long getDefaultErrorCode() {
             return XLEErrorCode.FAILED_TO_ADD_TO_SHARE_IDENTIY;
         }
 
-        public void onPostExcute(AsyncResult<Boolean> result) {
-            caller.onAddUserToShareIdentityCompleted(result, userIds);
+        public void onPreExecute() {
+        }
+
+        public Boolean buildData() throws XLEException {
+            return Boolean.valueOf(ServiceManagerFactory.getInstance().getSLSServiceManager().addFriendToShareIdentitySetting(this.caller.xuid, AddShareIdentityRequest.getAddShareIdentityRequestBody(new AddShareIdentityRequest(this.userIds))));
+        }
+
+        public void onPostExcute(AsyncResult<Boolean> asyncResult) {
+            this.caller.onAddUserToShareIdentityCompleted(asyncResult, this.userIds);
         }
     }
 
@@ -940,26 +963,26 @@ public class ProfileModel extends ModelBase<ProfileData> {
         private ProfileModel caller;
         private String favoriteUserXuid;
 
-        public AddUserToFavoriteListRunner(ProfileModel caller2, String favoriteUserXuid2) {
-            caller = caller2;
-            favoriteUserXuid = favoriteUserXuid2;
+        public AddUserToFavoriteListRunner(ProfileModel profileModel, String str) {
+            this.caller = profileModel;
+            this.favoriteUserXuid = str;
         }
 
-        public Boolean buildData() throws XLEException {
-            ArrayList<String> xuids = new ArrayList<>();
-            xuids.add(favoriteUserXuid);
-            return Boolean.valueOf(ServiceManagerFactory.getInstance().getSLSServiceManager().addUserToFavoriteList(FavoriteListRequest.getFavoriteListRequestBody(new FavoriteListRequest(xuids))));
+        public long getDefaultErrorCode() {
+            return XLEErrorCode.FAILED_TO_ADD_USER_TO_FAVORITELIST;
         }
 
         public void onPreExecute() {
         }
 
-        public void onPostExcute(AsyncResult<Boolean> result) {
-            caller.onAddUserToFavoriteListCompleted(result, favoriteUserXuid);
+        public Boolean buildData() throws XLEException {
+            ArrayList arrayList = new ArrayList();
+            arrayList.add(this.favoriteUserXuid);
+            return Boolean.valueOf(ServiceManagerFactory.getInstance().getSLSServiceManager().addUserToFavoriteList(FavoriteListRequest.getFavoriteListRequestBody(new FavoriteListRequest(arrayList))));
         }
 
-        public long getDefaultErrorCode() {
-            return XLEErrorCode.FAILED_TO_ADD_USER_TO_FAVORITELIST;
+        public void onPostExcute(AsyncResult<Boolean> asyncResult) {
+            this.caller.onAddUserToFavoriteListCompleted(asyncResult, this.favoriteUserXuid);
         }
     }
 
@@ -967,26 +990,26 @@ public class ProfileModel extends ModelBase<ProfileData> {
         private ProfileModel caller;
         private String favoriteUserXuid;
 
-        public RemoveUserFromFavoriteListRunner(ProfileModel caller2, String favoriteUserXuid2) {
-            caller = caller2;
-            favoriteUserXuid = favoriteUserXuid2;
+        public RemoveUserFromFavoriteListRunner(ProfileModel profileModel, String str) {
+            this.caller = profileModel;
+            this.favoriteUserXuid = str;
         }
 
-        public Boolean buildData() throws XLEException {
-            ArrayList<String> xuids = new ArrayList<>();
-            xuids.add(favoriteUserXuid);
-            return Boolean.valueOf(ServiceManagerFactory.getInstance().getSLSServiceManager().removeUserFromFavoriteList(FavoriteListRequest.getFavoriteListRequestBody(new FavoriteListRequest(xuids))));
+        public long getDefaultErrorCode() {
+            return XLEErrorCode.FAILED_TO_REMOVE_USER_FROM_FAVORITELIST;
         }
 
         public void onPreExecute() {
         }
 
-        public void onPostExcute(AsyncResult<Boolean> result) {
-            caller.onRemoveUserFromFavoriteListCompleted(result, favoriteUserXuid);
+        public Boolean buildData() throws XLEException {
+            ArrayList arrayList = new ArrayList();
+            arrayList.add(this.favoriteUserXuid);
+            return Boolean.valueOf(ServiceManagerFactory.getInstance().getSLSServiceManager().removeUserFromFavoriteList(FavoriteListRequest.getFavoriteListRequestBody(new FavoriteListRequest(arrayList))));
         }
 
-        public long getDefaultErrorCode() {
-            return XLEErrorCode.FAILED_TO_REMOVE_USER_FROM_FAVORITELIST;
+        public void onPostExcute(AsyncResult<Boolean> asyncResult) {
+            this.caller.onRemoveUserFromFavoriteListCompleted(asyncResult, this.favoriteUserXuid);
         }
     }
 
@@ -994,26 +1017,26 @@ public class ProfileModel extends ModelBase<ProfileData> {
         private ProfileModel caller;
         private String followingUserXuid;
 
-        public AddUserToFollowingListRunner(ProfileModel caller2, String followingUserXuid2) {
-            caller = caller2;
-            followingUserXuid = followingUserXuid2;
+        public AddUserToFollowingListRunner(ProfileModel profileModel, String str) {
+            this.caller = profileModel;
+            this.followingUserXuid = str;
         }
 
-        public AddFollowingUserResponseContainer.AddFollowingUserResponse buildData() throws XLEException {
-            ArrayList<String> xuids = new ArrayList<>();
-            xuids.add(followingUserXuid);
-            return ServiceManagerFactory.getInstance().getSLSServiceManager().addUserToFollowingList(FavoriteListRequest.getFavoriteListRequestBody(new FavoriteListRequest(xuids)));
+        public long getDefaultErrorCode() {
+            return XLEErrorCode.FAILED_TO_ADD_FRIEND;
         }
 
         public void onPreExecute() {
         }
 
-        public void onPostExcute(AsyncResult<AddFollowingUserResponseContainer.AddFollowingUserResponse> result) {
-            caller.onAddUserToFollowingListCompleted(result, followingUserXuid);
+        public AddFollowingUserResponseContainer.AddFollowingUserResponse buildData() throws XLEException {
+            ArrayList arrayList = new ArrayList();
+            arrayList.add(this.followingUserXuid);
+            return ServiceManagerFactory.getInstance().getSLSServiceManager().addUserToFollowingList(FavoriteListRequest.getFavoriteListRequestBody(new FavoriteListRequest(arrayList)));
         }
 
-        public long getDefaultErrorCode() {
-            return XLEErrorCode.FAILED_TO_ADD_FRIEND;
+        public void onPostExcute(AsyncResult<AddFollowingUserResponseContainer.AddFollowingUserResponse> asyncResult) {
+            this.caller.onAddUserToFollowingListCompleted(asyncResult, this.followingUserXuid);
         }
     }
 
@@ -1021,24 +1044,24 @@ public class ProfileModel extends ModelBase<ProfileData> {
         private ProfileModel caller;
         private String xuid;
 
-        public GetProfileSummaryRunner(ProfileModel caller2, String xuid2) {
-            caller = caller2;
-            xuid = xuid2;
+        public GetProfileSummaryRunner(ProfileModel profileModel, String str) {
+            this.caller = profileModel;
+            this.xuid = str;
         }
 
-        public ProfileSummaryResultContainer.ProfileSummaryResult buildData() throws XLEException {
-            return ServiceManagerFactory.getInstance().getSLSServiceManager().getProfileSummaryInfo(xuid);
+        public long getDefaultErrorCode() {
+            return XLEErrorCode.FAILED_TO_GET_USER_PROFILE_INFO;
         }
 
         public void onPreExecute() {
         }
 
-        public void onPostExcute(AsyncResult<ProfileSummaryResultContainer.ProfileSummaryResult> result) {
-            caller.onGetProfileSummaryCompleted(result);
+        public ProfileSummaryResultContainer.ProfileSummaryResult buildData() throws XLEException {
+            return ServiceManagerFactory.getInstance().getSLSServiceManager().getProfileSummaryInfo(this.xuid);
         }
 
-        public long getDefaultErrorCode() {
-            return XLEErrorCode.FAILED_TO_GET_USER_PROFILE_INFO;
+        public void onPostExcute(AsyncResult<ProfileSummaryResultContainer.ProfileSummaryResult> asyncResult) {
+            this.caller.onGetProfileSummaryCompleted(asyncResult);
         }
     }
 
@@ -1046,26 +1069,26 @@ public class ProfileModel extends ModelBase<ProfileData> {
         private ProfileModel caller;
         private String followingUserXuid;
 
-        public RemoveUserFromFollowingListRunner(ProfileModel caller2, String followingUserXuid2) {
-            caller = caller2;
-            followingUserXuid = followingUserXuid2;
+        public RemoveUserFromFollowingListRunner(ProfileModel profileModel, String str) {
+            this.caller = profileModel;
+            this.followingUserXuid = str;
         }
 
-        public Boolean buildData() throws XLEException {
-            ArrayList<String> xuids = new ArrayList<>();
-            xuids.add(followingUserXuid);
-            return Boolean.valueOf(ServiceManagerFactory.getInstance().getSLSServiceManager().removeUserFromFollowingList(FavoriteListRequest.getFavoriteListRequestBody(new FavoriteListRequest(xuids))));
+        public long getDefaultErrorCode() {
+            return XLEErrorCode.FAILED_TO_REMOVE_FRIEND;
         }
 
         public void onPreExecute() {
         }
 
-        public void onPostExcute(AsyncResult<Boolean> result) {
-            caller.onRemoveUserFromFollowingListCompleted(result, followingUserXuid);
+        public Boolean buildData() throws XLEException {
+            ArrayList arrayList = new ArrayList();
+            arrayList.add(this.followingUserXuid);
+            return Boolean.valueOf(ServiceManagerFactory.getInstance().getSLSServiceManager().removeUserFromFollowingList(FavoriteListRequest.getFavoriteListRequestBody(new FavoriteListRequest(arrayList))));
         }
 
-        public long getDefaultErrorCode() {
-            return XLEErrorCode.FAILED_TO_REMOVE_FRIEND;
+        public void onPostExcute(AsyncResult<Boolean> asyncResult) {
+            this.caller.onRemoveUserFromFollowingListCompleted(asyncResult, this.followingUserXuid);
         }
     }
 
@@ -1073,24 +1096,24 @@ public class ProfileModel extends ModelBase<ProfileData> {
         private ProfileModel caller;
         private String xuid;
 
-        public GetPresenceDataRunner(ProfileModel caller2, String xuid2) {
-            caller = caller2;
-            xuid = xuid2;
+        public GetPresenceDataRunner(ProfileModel profileModel, String str) {
+            this.caller = profileModel;
+            this.xuid = str;
         }
 
         public IFollowerPresenceResult.UserPresence buildData() throws XLEException {
             return null;
         }
 
+        public long getDefaultErrorCode() {
+            return XLEErrorCode.FAILED_TO_GET_PROFILE_PRESENCE_DATA;
+        }
+
         public void onPreExecute() {
         }
 
-        public void onPostExcute(AsyncResult<IFollowerPresenceResult.UserPresence> result) {
-            caller.onGetPresenceDataCompleted(result);
-        }
-
-        public long getDefaultErrorCode() {
-            return XLEErrorCode.FAILED_TO_GET_PROFILE_PRESENCE_DATA;
+        public void onPostExcute(AsyncResult<IFollowerPresenceResult.UserPresence> asyncResult) {
+            this.caller.onGetPresenceDataCompleted(asyncResult);
         }
     }
 
@@ -1098,24 +1121,24 @@ public class ProfileModel extends ModelBase<ProfileData> {
         private ProfileModel caller;
         private String xuid;
 
-        public GetNeverListRunner(ProfileModel caller2, String xuid2) {
-            caller = caller2;
-            xuid = xuid2;
+        public GetNeverListRunner(ProfileModel profileModel, String str) {
+            this.caller = profileModel;
+            this.xuid = str;
         }
 
-        public NeverListResultContainer.NeverListResult buildData() throws XLEException {
-            return ServiceManagerFactory.getInstance().getSLSServiceManager().getNeverListInfo(xuid);
+        public long getDefaultErrorCode() {
+            return XLEErrorCode.FAILED_TO_GET_NEVERLIST_DATA;
         }
 
         public void onPreExecute() {
         }
 
-        public void onPostExcute(AsyncResult<NeverListResultContainer.NeverListResult> result) {
-            caller.onGetNeverListCompleted(result);
+        public NeverListResultContainer.NeverListResult buildData() throws XLEException {
+            return ServiceManagerFactory.getInstance().getSLSServiceManager().getNeverListInfo(this.xuid);
         }
 
-        public long getDefaultErrorCode() {
-            return XLEErrorCode.FAILED_TO_GET_NEVERLIST_DATA;
+        public void onPostExcute(AsyncResult<NeverListResultContainer.NeverListResult> asyncResult) {
+            this.caller.onGetNeverListCompleted(asyncResult);
         }
     }
 
@@ -1124,25 +1147,25 @@ public class ProfileModel extends ModelBase<ProfileData> {
         private ProfileModel caller;
         private String xuid;
 
-        public PutUserToNeverListRunner(ProfileModel caller2, String xuid2, String blockUserXuid2) {
-            caller = caller2;
-            xuid = xuid2;
-            blockUserXuid = blockUserXuid2;
+        public PutUserToNeverListRunner(ProfileModel profileModel, String str, String str2) {
+            this.caller = profileModel;
+            this.xuid = str;
+            this.blockUserXuid = str2;
         }
 
-        public Boolean buildData() throws XLEException {
-            return Boolean.valueOf(ServiceManagerFactory.getInstance().getSLSServiceManager().addUserToNeverList(xuid, NeverListRequest.getNeverListRequestBody(new NeverListRequest(Long.parseLong(blockUserXuid)))));
+        public long getDefaultErrorCode() {
+            return XLEErrorCode.FAILED_TO_BLOCK_USER;
         }
 
         public void onPreExecute() {
         }
 
-        public void onPostExcute(AsyncResult<Boolean> result) {
-            caller.onPutUserToNeverListCompleted(result, blockUserXuid);
+        public Boolean buildData() throws XLEException {
+            return Boolean.valueOf(ServiceManagerFactory.getInstance().getSLSServiceManager().addUserToNeverList(this.xuid, NeverListRequest.getNeverListRequestBody(new NeverListRequest(Long.parseLong(this.blockUserXuid)))));
         }
 
-        public long getDefaultErrorCode() {
-            return XLEErrorCode.FAILED_TO_BLOCK_USER;
+        public void onPostExcute(AsyncResult<Boolean> asyncResult) {
+            this.caller.onPutUserToNeverListCompleted(asyncResult, this.blockUserXuid);
         }
     }
 
@@ -1151,25 +1174,25 @@ public class ProfileModel extends ModelBase<ProfileData> {
         private String unblockUserXuid;
         private String xuid;
 
-        public RemoveUserFromNeverListRunner(ProfileModel caller2, String xuid2, String unblockUserXuid2) {
-            caller = caller2;
-            xuid = xuid2;
-            unblockUserXuid = unblockUserXuid2;
+        public RemoveUserFromNeverListRunner(ProfileModel profileModel, String str, String str2) {
+            this.caller = profileModel;
+            this.xuid = str;
+            this.unblockUserXuid = str2;
         }
 
-        public Boolean buildData() throws XLEException {
-            return Boolean.valueOf(ServiceManagerFactory.getInstance().getSLSServiceManager().removeUserFromNeverList(xuid, NeverListRequest.getNeverListRequestBody(new NeverListRequest(Long.parseLong(unblockUserXuid)))));
+        public long getDefaultErrorCode() {
+            return XLEErrorCode.FAILED_TO_REMOVE_USER_FROM_NEVERLIST;
         }
 
         public void onPreExecute() {
         }
 
-        public void onPostExcute(AsyncResult<Boolean> result) {
-            caller.onRemoveUserFromNeverListCompleted(result, unblockUserXuid);
+        public Boolean buildData() throws XLEException {
+            return Boolean.valueOf(ServiceManagerFactory.getInstance().getSLSServiceManager().removeUserFromNeverList(this.xuid, NeverListRequest.getNeverListRequestBody(new NeverListRequest(Long.parseLong(this.unblockUserXuid)))));
         }
 
-        public long getDefaultErrorCode() {
-            return XLEErrorCode.FAILED_TO_REMOVE_USER_FROM_NEVERLIST;
+        public void onPostExcute(AsyncResult<Boolean> asyncResult) {
+            this.caller.onRemoveUserFromNeverListCompleted(asyncResult, this.unblockUserXuid);
         }
     }
 
@@ -1177,24 +1200,24 @@ public class ProfileModel extends ModelBase<ProfileData> {
         private ProfileModel caller;
         private String xuid;
 
-        public GetMutedListRunner(ProfileModel caller2, String xuid2) {
-            caller = caller2;
-            xuid = xuid2;
+        public GetMutedListRunner(ProfileModel profileModel, String str) {
+            this.caller = profileModel;
+            this.xuid = str;
         }
 
-        public MutedListResultContainer.MutedListResult buildData() throws XLEException {
-            return ServiceManagerFactory.getInstance().getSLSServiceManager().getMutedListInfo(xuid);
+        public long getDefaultErrorCode() {
+            return XLEErrorCode.FAILED_TO_GET_MUTED_LIST;
         }
 
         public void onPreExecute() {
         }
 
-        public void onPostExcute(AsyncResult<MutedListResultContainer.MutedListResult> result) {
-            caller.onGetMutedListCompleted(result);
+        public MutedListResultContainer.MutedListResult buildData() throws XLEException {
+            return ServiceManagerFactory.getInstance().getSLSServiceManager().getMutedListInfo(this.xuid);
         }
 
-        public long getDefaultErrorCode() {
-            return XLEErrorCode.FAILED_TO_GET_MUTED_LIST;
+        public void onPostExcute(AsyncResult<MutedListResultContainer.MutedListResult> asyncResult) {
+            this.caller.onGetMutedListCompleted(asyncResult);
         }
     }
 
@@ -1203,25 +1226,25 @@ public class ProfileModel extends ModelBase<ProfileData> {
         private String mutedUserXuid;
         private String xuid;
 
-        public PutUserToMutedListRunner(ProfileModel caller2, String xuid2, String mutedUserXuid2) {
-            caller = caller2;
-            xuid = xuid2;
-            mutedUserXuid = mutedUserXuid2;
+        public PutUserToMutedListRunner(ProfileModel profileModel, String str, String str2) {
+            this.caller = profileModel;
+            this.xuid = str;
+            this.mutedUserXuid = str2;
         }
 
-        public Boolean buildData() throws XLEException {
-            return Boolean.valueOf(ServiceManagerFactory.getInstance().getSLSServiceManager().addUserToMutedList(xuid, MutedListRequest.getNeverListRequestBody(new MutedListRequest(Long.parseLong(mutedUserXuid)))));
+        public long getDefaultErrorCode() {
+            return XLEErrorCode.FAILED_TO_MUTE_USER;
         }
 
         public void onPreExecute() {
         }
 
-        public void onPostExcute(AsyncResult<Boolean> result) {
-            caller.onPutUserToMutedListCompleted(result, mutedUserXuid);
+        public Boolean buildData() throws XLEException {
+            return Boolean.valueOf(ServiceManagerFactory.getInstance().getSLSServiceManager().addUserToMutedList(this.xuid, MutedListRequest.getNeverListRequestBody(new MutedListRequest(Long.parseLong(this.mutedUserXuid)))));
         }
 
-        public long getDefaultErrorCode() {
-            return XLEErrorCode.FAILED_TO_MUTE_USER;
+        public void onPostExcute(AsyncResult<Boolean> asyncResult) {
+            this.caller.onPutUserToMutedListCompleted(asyncResult, this.mutedUserXuid);
         }
     }
 
@@ -1230,25 +1253,25 @@ public class ProfileModel extends ModelBase<ProfileData> {
         private String unmutedUserXuid;
         private String xuid;
 
-        public RemoveUserFromMutedListRunner(ProfileModel caller2, String xuid2, String unmutedUserXuid2) {
-            caller = caller2;
-            xuid = xuid2;
-            unmutedUserXuid = unmutedUserXuid2;
+        public RemoveUserFromMutedListRunner(ProfileModel profileModel, String str, String str2) {
+            this.caller = profileModel;
+            this.xuid = str;
+            this.unmutedUserXuid = str2;
         }
 
-        public Boolean buildData() throws XLEException {
-            return Boolean.valueOf(ServiceManagerFactory.getInstance().getSLSServiceManager().removeUserFromMutedList(xuid, MutedListRequest.getNeverListRequestBody(new MutedListRequest(Long.parseLong(unmutedUserXuid)))));
+        public long getDefaultErrorCode() {
+            return XLEErrorCode.FAILED_TO_UNMUTE_USER;
         }
 
         public void onPreExecute() {
         }
 
-        public void onPostExcute(AsyncResult<Boolean> result) {
-            caller.onRemoveUserFromMutedListCompleted(result, unmutedUserXuid);
+        public Boolean buildData() throws XLEException {
+            return ServiceManagerFactory.getInstance().getSLSServiceManager().removeUserFromMutedList(this.xuid, MutedListRequest.getNeverListRequestBody(new MutedListRequest(Long.parseLong(this.unmutedUserXuid))));
         }
 
-        public long getDefaultErrorCode() {
-            return XLEErrorCode.FAILED_TO_UNMUTE_USER;
+        public void onPostExcute(AsyncResult<Boolean> asyncResult) {
+            this.caller.onRemoveUserFromMutedListCompleted(asyncResult, this.unmutedUserXuid);
         }
     }
 
@@ -1258,26 +1281,26 @@ public class ProfileModel extends ModelBase<ProfileData> {
         private String textReason;
         private String xuid;
 
-        public SubmitFeedbackForUserRunner(ProfileModel caller2, String xuid2, FeedbackType feedbackType2, String textReason2) {
-            caller = caller2;
-            xuid = xuid2;
-            feedbackType = feedbackType2;
-            textReason = textReason2;
+        public SubmitFeedbackForUserRunner(ProfileModel profileModel, String str, FeedbackType feedbackType2, String str2) {
+            this.caller = profileModel;
+            this.xuid = str;
+            this.feedbackType = feedbackType2;
+            this.textReason = str2;
         }
 
-        public Boolean buildData() throws XLEException {
-            return Boolean.valueOf(ServiceManagerFactory.getInstance().getSLSServiceManager().submitFeedback(xuid, SubmitFeedbackRequest.getSubmitFeedbackRequestBody(new SubmitFeedbackRequest(Long.parseLong(xuid), (String) null, feedbackType, textReason, (String) null, (String) null))));
+        public long getDefaultErrorCode() {
+            return XLEErrorCode.FAILED_TO_SUBMIT_FEEDBACK;
         }
 
         public void onPreExecute() {
         }
 
-        public void onPostExcute(AsyncResult<Boolean> result) {
-            caller.onSubmitFeedbackForUserCompleted(result);
+        public Boolean buildData() throws XLEException {
+            return Boolean.valueOf(ServiceManagerFactory.getInstance().getSLSServiceManager().submitFeedback(this.xuid, SubmitFeedbackRequest.getSubmitFeedbackRequestBody(new SubmitFeedbackRequest(Long.parseLong(this.xuid), (String) null, this.feedbackType, this.textReason, (String) null, (String) null))));
         }
 
-        public long getDefaultErrorCode() {
-            return XLEErrorCode.FAILED_TO_SUBMIT_FEEDBACK;
+        public void onPostExcute(AsyncResult<Boolean> asyncResult) {
+            this.caller.onSubmitFeedbackForUserCompleted(asyncResult);
         }
     }
 
@@ -1285,28 +1308,25 @@ public class ProfileModel extends ModelBase<ProfileData> {
         private ProfileModel caller;
         private String xuid;
 
-        public GetPeopleHubRecommendationRunner(ProfileModel caller2, String xuid2) {
-            caller = caller2;
-            xuid = xuid2;
+        public GetPeopleHubRecommendationRunner(ProfileModel profileModel, String str) {
+            this.caller = profileModel;
+            this.xuid = str;
         }
 
-        public IPeopleHubResult.PeopleHubPeopleSummary buildData() throws XLEException {
-            IPeopleHubResult.PeopleHubPeopleSummary result = new IPeopleHubResult.PeopleHubPeopleSummary();
-            if (JavaUtil.isNullOrEmpty(xuid) || !xuid.equalsIgnoreCase(ProjectSpecificDataProvider.getInstance().getXuidString())) {
-                return result;
-            }
-            return ServiceManagerFactory.getInstance().getSLSServiceManager().getPeopleHubRecommendations();
+        public long getDefaultErrorCode() {
+            return 11;
         }
 
         public void onPreExecute() {
         }
 
-        public void onPostExcute(AsyncResult<IPeopleHubResult.PeopleHubPeopleSummary> result) {
-            caller.onGetPeopleHubRecommendationsCompleted(result);
+        public IPeopleHubResult.PeopleHubPeopleSummary buildData() throws XLEException {
+            IPeopleHubResult.PeopleHubPeopleSummary peopleHubPeopleSummary = new IPeopleHubResult.PeopleHubPeopleSummary();
+            return (JavaUtil.isNullOrEmpty(this.xuid) || !this.xuid.equalsIgnoreCase(ProjectSpecificDataProvider.getInstance().getXuidString())) ? peopleHubPeopleSummary : ServiceManagerFactory.getInstance().getSLSServiceManager().getPeopleHubRecommendations();
         }
 
-        public long getDefaultErrorCode() {
-            return 11;
+        public void onPostExcute(AsyncResult<IPeopleHubResult.PeopleHubPeopleSummary> asyncResult) {
+            this.caller.onGetPeopleHubRecommendationsCompleted(asyncResult);
         }
     }
 }

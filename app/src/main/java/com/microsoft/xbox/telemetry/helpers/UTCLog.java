@@ -3,7 +3,7 @@ package com.microsoft.xbox.telemetry.helpers;
 import android.util.Log;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -12,21 +12,21 @@ import android.util.Log;
 public class UTCLog {
     static final String UTCLOGTAG = "UTCLOGGING";
 
-    public static void log(String message, Object... args) {
+    public static void log(String str, Object... objArr) {
         try {
-            StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-            if (ste.length > 3) {
-                String method = ste[3].getMethodName();
-                Log.d(UTCLOGTAG, String.format(String.format("%s: ", new Object[]{method}) + message, args));
+            StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+            if (stackTrace.length > 3) {
+                String methodName = stackTrace[3].getMethodName();
+                Log.d(UTCLOGTAG, String.format(String.format("%s: ", new Object[]{methodName}) + str, objArr));
                 return;
             }
-            Log.d(UTCLOGTAG, String.format(message, args));
-        } catch (Exception exception) {
-            UTCError.trackException(exception, "UTCLog.log");
-            if (exception.getMessage().equals("Format specifier: s")) {
-                Log.e(UTCLOGTAG, exception.getMessage());
+            Log.d(UTCLOGTAG, String.format(str, objArr));
+        } catch (Exception e) {
+            UTCError.trackException(e, "UTCLog.log");
+            if (e.getMessage().equals("Format specifier: s")) {
+                Log.e(UTCLOGTAG, e.getMessage());
             }
-            Log.e(UTCLOGTAG, exception.getMessage());
+            Log.e(UTCLOGTAG, e.getMessage());
         }
     }
 }

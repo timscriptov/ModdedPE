@@ -3,7 +3,7 @@ package com.microsoft.xbox.toolkit;
 import android.app.Dialog;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov

@@ -6,15 +6,15 @@ import org.apache.http.client.methods.HttpPost;
 import java.net.URI;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 
 public class HttpDeleteWithRequestBody extends HttpPost {
-    public HttpDeleteWithRequestBody(URI url) {
-        super(url);
+    public HttpDeleteWithRequestBody(URI uri) {
+        super(uri);
     }
 
     public String getMethod() {

@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * 05.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -14,68 +14,68 @@ import java.util.List;
 public class HttpHeaders {
     private final List<Header> headers = new ArrayList();
 
-    public void add(String key, String value) {
-        headers.add(new Header(key, value));
+    public void add(String str, String str2) {
+        this.headers.add(new Header(str, str2));
     }
 
     public Collection<Header> getAllHeaders() {
-        return headers;
+        return this.headers;
     }
 
-    public Header getFirstHeader(String key) {
-        if (key != null) {
-            for (Header h : headers) {
-                if (key.equals(h.key)) {
-                    return h;
-                }
+    public Header getFirstHeader(String str) {
+        if (str == null) {
+            return null;
+        }
+        for (Header next : this.headers) {
+            if (str.equals(next.key)) {
+                return next;
             }
         }
         return null;
     }
 
-    public Header getLastHeader(String key) {
-        if (key != null) {
-            for (int i = headers.size() - 1; i >= 0; i--) {
-                Header h = headers.get(i);
-                if (key.equals(h.key)) {
-                    return h;
-                }
+    public Header getLastHeader(String str) {
+        if (str == null) {
+            return null;
+        }
+        for (int size = this.headers.size() - 1; size >= 0; size--) {
+            Header header = this.headers.get(size);
+            if (str.equals(header.key)) {
+                return header;
             }
         }
         return null;
     }
 
     public String toString() {
-        StringBuilder b = new StringBuilder();
-        b.append("[ ");
-        for (Header h : headers) {
-            b.append(h);
+        StringBuilder sb = new StringBuilder();
+        sb.append("[ ");
+        for (Header append : this.headers) {
+            sb.append(append);
         }
-        b.append(" ]");
-        return b.toString();
+        sb.append(" ]");
+        return sb.toString();
     }
 
     public static class Header {
         public final String key;
         private final String value;
 
-        public Header(String key2, String value2) {
-            key = key2;
-            value = value2;
+        public Header(String str, String str2) {
+            this.key = str;
+            this.value = str2;
         }
 
         public String getKey() {
-            return key;
+            return this.key;
         }
 
         public String getValue() {
-            return value;
+            return this.value;
         }
 
         public String toString() {
-            StringBuilder b = new StringBuilder();
-            b.append("{ ").append("\"").append(key).append("\": ").append("\"").append(value).append("\"").append(" }");
-            return b.toString();
+            return "{ " + "\"" + this.key + "\": " + "\"" + this.value + "\"" + " }";
         }
     }
 }

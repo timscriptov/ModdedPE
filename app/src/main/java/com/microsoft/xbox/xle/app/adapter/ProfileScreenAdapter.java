@@ -18,7 +18,7 @@ import com.microsoft.xbox.xle.viewmodel.AdapterBase;
 import com.microsoft.xboxtcui.XboxAppDeepLinker;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -42,41 +42,43 @@ public class ProfileScreenAdapter extends AdapterBase {
     private CustomTypefaceTextView viewInXboxAppSubTextView = ((CustomTypefaceTextView) findViewById(R.id.profile_view_in_xbox_app_subtext));
 
     @SuppressLint("WrongConstant")
-    public ProfileScreenAdapter(ProfileScreenViewModel viewModel2) {
-        super(viewModel2);
-        viewModel = viewModel2;
-        viewInXboxAppButton.setVisibility(0);
-        viewInXboxAppButton.setEnabled(true);
-        viewInXboxAppButton.setChecked(true);
-        if (viewModel.isMeProfile()) {
-            followButton.setVisibility(8);
-            muteButton.setVisibility(8);
-            blockButton.setVisibility(8);
-            reportButton.setVisibility(8);
-            viewInXboxAppSubTextView.setText(R.string.Profile_ViewInXboxApp_Details_MeProfile);
+    public ProfileScreenAdapter(ProfileScreenViewModel profileScreenViewModel) {
+        super(profileScreenViewModel);
+        this.viewModel = profileScreenViewModel;
+        this.viewInXboxAppButton.setVisibility(0);
+        this.viewInXboxAppButton.setEnabled(true);
+        this.viewInXboxAppButton.setChecked(true);
+        if (this.viewModel.isMeProfile()) {
+            this.followButton.setVisibility(8);
+            this.muteButton.setVisibility(8);
+            this.blockButton.setVisibility(8);
+            this.reportButton.setVisibility(8);
+            this.viewInXboxAppSubTextView.setText(R.string.Profile_ViewInXboxApp_Details_MeProfile);
             return;
         }
-        followButton.setVisibility(0);
-        followButton.setEnabled(true);
-        muteButton.setVisibility(0);
-        muteButton.setEnabled(true);
-        muteButton.setChecked(false);
-        blockButton.setVisibility(0);
-        blockButton.setEnabled(false);
-        reportButton.setVisibility(0);
-        reportButton.setEnabled(true);
-        reportButton.setChecked(false);
-        viewInXboxAppSubTextView.setText(R.string.Profile_ViewInXboxApp_Details_YouProfile);
+        this.followButton.setVisibility(0);
+        this.followButton.setEnabled(true);
+        this.muteButton.setVisibility(0);
+        this.muteButton.setEnabled(true);
+        this.muteButton.setChecked(false);
+        this.blockButton.setVisibility(0);
+        this.blockButton.setEnabled(false);
+        this.reportButton.setVisibility(0);
+        this.reportButton.setEnabled(true);
+        this.reportButton.setChecked(false);
+        this.viewInXboxAppSubTextView.setText(R.string.Profile_ViewInXboxApp_Details_YouProfile);
     }
 
     @SuppressLint("WrongConstant")
     public void onStart() {
         super.onStart();
-        if (followButton != null) {
-            followButton.setOnClickListener(v -> viewModel.navigateToChangeRelationship());
+        IconFontToggleButton iconFontToggleButton = this.followButton;
+        if (iconFontToggleButton != null) {
+            iconFontToggleButton.setOnClickListener(view -> viewModel.navigateToChangeRelationship());
         }
-        if (muteButton != null) {
-            muteButton.setOnClickListener(v -> {
+        IconFontToggleButton iconFontToggleButton2 = this.muteButton;
+        if (iconFontToggleButton2 != null) {
+            iconFontToggleButton2.setOnClickListener(view -> {
                 muteButton.toggle();
                 muteButton.setEnabled(false);
                 if (muteButton.isChecked()) {
@@ -88,8 +90,9 @@ public class ProfileScreenAdapter extends AdapterBase {
                 viewModel.unmuteUser();
             });
         }
-        if (blockButton != null) {
-            blockButton.setOnClickListener(v -> {
+        IconFontToggleButton iconFontToggleButton3 = this.blockButton;
+        if (iconFontToggleButton3 != null) {
+            iconFontToggleButton3.setOnClickListener(view -> {
                 blockButton.toggle();
                 blockButton.setEnabled(false);
                 if (blockButton.isChecked()) {
@@ -101,97 +104,74 @@ public class ProfileScreenAdapter extends AdapterBase {
                 viewModel.unblockUser();
             });
         }
-        if (reportButton != null) {
-            reportButton.setOnClickListener(v -> {
+        IconFontToggleButton iconFontToggleButton4 = this.reportButton;
+        if (iconFontToggleButton4 != null) {
+            iconFontToggleButton4.setOnClickListener(view -> {
                 UTCPeopleHub.trackReport();
                 viewModel.showReportDialog();
             });
         }
-        if (viewInXboxAppButton == null) {
+        if (this.viewInXboxAppButton == null) {
             return;
         }
         if (XboxAppDeepLinker.appDeeplinkingSupported()) {
-            viewInXboxAppButton.setOnClickListener(v -> {
+            this.viewInXboxAppButton.setOnClickListener(view -> {
                 UTCPeopleHub.trackViewInXboxApp();
-                viewModel.launchXboxApp();
+                ProfileScreenAdapter.this.viewModel.launchXboxApp();
             });
             return;
         }
-        viewInXboxAppButton.setVisibility(8);
-        viewInXboxAppSubTextView.setVisibility(8);
+        this.viewInXboxAppButton.setVisibility(8);
+        this.viewInXboxAppSubTextView.setVisibility(8);
     }
 
     @SuppressLint("WrongConstant")
     public void updateViewOverride() {
-        int i;
-        boolean pendingBlockChange;
-        boolean z;
-        boolean z2;
-        boolean z3 = true;
-        if (rootView != null) {
-            rootView.setBackgroundColor(viewModel.getPreferredColor());
+        XLERootView xLERootView = this.rootView;
+        if (xLERootView != null) {
+            xLERootView.setBackgroundColor(this.viewModel.getPreferredColor());
         }
-        loadingProgressBar.setVisibility(viewModel.isBusy() ? 0 : 8);
-        ScrollView scrollView = contentScrollView;
-        if (viewModel.isBusy()) {
-            i = 8;
-        } else {
-            i = 0;
+        boolean z = false;
+        this.loadingProgressBar.setVisibility(this.viewModel.isBusy() ? 0 : 8);
+        this.contentScrollView.setVisibility(this.viewModel.isBusy() ? 8 : 0);
+        XLERoundedUniversalImageView xLERoundedUniversalImageView = this.gamerPicImageView;
+        if (xLERoundedUniversalImageView != null) {
+            xLERoundedUniversalImageView.setImageURI2(ImageUtil.getMedium(this.viewModel.getGamerPicUrl()), R.drawable.gamerpic_missing, R.drawable.gamerpic_missing);
         }
-        scrollView.setVisibility(i);
-        if (gamerPicImageView != null) {
-            gamerPicImageView.setImageURI2(ImageUtil.getMedium(viewModel.getGamerPicUrl()), R.drawable.gamerpic_missing, R.drawable.gamerpic_missing);
-        }
-        if (realNameTextView != null) {
-            String realName = viewModel.getRealName();
+        if (this.realNameTextView != null) {
+            String realName = this.viewModel.getRealName();
             if (!JavaUtil.isNullOrEmpty(realName)) {
-                realNameTextView.setText(realName);
-                realNameTextView.setVisibility(0);
+                this.realNameTextView.setText(realName);
+                this.realNameTextView.setVisibility(0);
             } else {
-                realNameTextView.setVisibility(8);
+                this.realNameTextView.setVisibility(8);
             }
         }
-        if (!(gamerscoreTextView == null || gamerscoreIconTextView == null)) {
-            String gamerScore = viewModel.getGamerScore();
+        if (!(this.gamerscoreTextView == null || this.gamerscoreIconTextView == null)) {
+            String gamerScore = this.viewModel.getGamerScore();
             if (!JavaUtil.isNullOrEmpty(gamerScore)) {
-                XLEUtil.updateTextAndVisibilityIfNotNull(gamerscoreTextView, gamerScore, 0);
-                XLEUtil.updateVisibilityIfNotNull(gamerscoreIconTextView, 0);
+                XLEUtil.updateTextAndVisibilityIfNotNull(this.gamerscoreTextView, gamerScore, 0);
+                XLEUtil.updateVisibilityIfNotNull(this.gamerscoreIconTextView, 0);
             }
         }
-        if (gamertagTextView != null) {
-            String gamerTag = viewModel.getGamerTag();
+        if (this.gamertagTextView != null) {
+            String gamerTag = this.viewModel.getGamerTag();
             if (!JavaUtil.isNullOrEmpty(gamerTag)) {
-                XLEUtil.updateTextAndVisibilityIfNotNull(gamertagTextView, gamerTag, 0);
+                XLEUtil.updateTextAndVisibilityIfNotNull(this.gamertagTextView, gamerTag, 0);
             }
         }
-        if (!viewModel.isMeProfile()) {
-            if (viewModel.getIsAddingUserToBlockList() || viewModel.getIsRemovingUserFromBlockList()) {
-                pendingBlockChange = true;
-            } else {
-                pendingBlockChange = false;
-            }
-            followButton.setChecked(viewModel.isCallerFollowingTarget());
-            IconFontToggleButton iconFontToggleButton = followButton;
-            if (pendingBlockChange || viewModel.getIsBlocked()) {
-                z = false;
-            } else {
+        if (!this.viewModel.isMeProfile()) {
+            boolean z2 = this.viewModel.getIsAddingUserToBlockList() || this.viewModel.getIsRemovingUserFromBlockList();
+            this.followButton.setChecked(this.viewModel.isCallerFollowingTarget());
+            this.followButton.setEnabled(!z2 && !this.viewModel.getIsBlocked());
+            this.muteButton.setChecked(this.viewModel.getIsMuted());
+            IconFontToggleButton iconFontToggleButton = this.muteButton;
+            if (!this.viewModel.getIsAddingUserToMutedList() && !this.viewModel.getIsRemovingUserFromMutedList()) {
                 z = true;
             }
             iconFontToggleButton.setEnabled(z);
-            muteButton.setChecked(viewModel.getIsMuted());
-            IconFontToggleButton iconFontToggleButton2 = muteButton;
-            if (viewModel.getIsAddingUserToMutedList() || viewModel.getIsRemovingUserFromMutedList()) {
-                z2 = false;
-            } else {
-                z2 = true;
-            }
-            iconFontToggleButton2.setEnabled(z2);
-            blockButton.setChecked(viewModel.getIsBlocked());
-            IconFontToggleButton iconFontToggleButton3 = blockButton;
-            if (pendingBlockChange) {
-                z3 = false;
-            }
-            iconFontToggleButton3.setEnabled(z3);
+            this.blockButton.setChecked(this.viewModel.getIsBlocked());
+            this.blockButton.setEnabled(!z2);
         }
     }
 }

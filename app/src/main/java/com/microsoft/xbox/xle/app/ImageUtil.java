@@ -1,5 +1,7 @@
 package com.microsoft.xbox.xle.app;
 
+import android.annotation.SuppressLint;
+
 import com.microsoft.xboxtcui.XboxTcuiSdk;
 
 import org.jetbrains.annotations.Nullable;
@@ -8,7 +10,7 @@ import org.spongycastle.crypto.tls.CipherSuite;
 import java.net.URI;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -25,203 +27,184 @@ public class ImageUtil {
     public static final String resizeFormatterSizeOnly = "&w=%d&h=%d";
     public static final String resizeFormatterWithPadding = "&mode=padding&w=%d&h=%d&format=png";
 
-    public static URI getURI(URI url, int width, int height) {
-        return formatURI(url, width, height);
+    public static URI getURI(URI uri, int i, int i2) {
+        return formatURI(uri, i, i2);
     }
 
-    public static URI getURI(String url, int width, int heigth) {
-        URI uri = formatString(url, width, heigth);
-        if (uri == null) {
-            return createUri(url);
-        }
-        return uri;
+    public static URI getURI(String str, int i, int i2) {
+        URI formatString = formatString(str, i, i2);
+        return formatString == null ? createUri(str) : formatString;
     }
 
-    public static URI getTiny(URI url) {
-        return formatURI(url, 100, 100);
+    public static URI getTiny(URI uri) {
+        return formatURI(uri, 100, 100);
     }
 
-    public static URI getTiny(String url) {
-        URI uri = formatString(url, 100, 100);
-        if (uri == null) {
-            return createUri(url);
-        }
-        return uri;
+    public static URI getTiny(String str) {
+        URI formatString = formatString(str, 100, 100);
+        return formatString == null ? createUri(str) : formatString;
     }
 
-    public static URI getTiny3X4(URI url) {
-        return formatURI(url, 85, 120);
+    public static URI getTiny3X4(URI uri) {
+        return formatURI(uri, 85, 120);
     }
 
-    public static URI getTiny3X4(String url) {
-        return formatString(url, 85, 120);
+    public static URI getTiny3X4(String str) {
+        return formatString(str, 85, 120);
     }
 
-    public static URI getTiny4X3(URI url) {
-        return formatURI(url, 120, 90);
+    public static URI getTiny4X3(URI uri) {
+        return formatURI(uri, 120, 90);
     }
 
-    public static URI getTiny4X3(String url) {
-        return formatString(url, 120, 90);
+    public static URI getTiny4X3(String str) {
+        return formatString(str, 120, 90);
     }
 
-    public static URI getTiny2X1(URI url) {
-        return formatURI(url, CipherSuite.TLS_RSA_WITH_SEED_CBC_SHA, 84);
+    public static URI getTiny2X1(URI uri) {
+        return formatURI(uri, CipherSuite.TLS_RSA_WITH_SEED_CBC_SHA, 84);
     }
 
-    public static URI getTiny2X1(String url) {
-        return formatString(url, CipherSuite.TLS_RSA_WITH_SEED_CBC_SHA, 84);
+    public static URI getTiny2X1(String str) {
+        return formatString(str, CipherSuite.TLS_RSA_WITH_SEED_CBC_SHA, 84);
     }
 
-    public static URI getSmall(URI url) {
-        return formatURI(url, 200, 200);
+    public static URI getSmall(URI uri) {
+        return formatURI(uri, 200, 200);
     }
 
-    public static URI getSmall(String url) {
-        URI uri = formatString(url, 200, 200);
-        if (uri != null || url == null) {
-            return uri;
-        }
-        return createUri(url);
+    public static URI getSmall(String str) {
+        URI formatString = formatString(str, 200, 200);
+        return (formatString != null || str == null) ? formatString : createUri(str);
     }
 
-    public static URI getSmall3X4(URI url) {
-        return formatURI(url, 215, 294);
+    public static URI getSmall3X4(URI uri) {
+        return formatURI(uri, 215, 294);
     }
 
-    public static URI getSmall3X4(String url) {
-        return formatString(url, 215, 294);
+    public static URI getSmall3X4(String str) {
+        return formatString(str, 215, 294);
     }
 
-    public static URI getSmall4X3(URI url) {
-        return formatURI(url, 275, 216);
+    public static URI getSmall4X3(URI uri) {
+        return formatURI(uri, 275, 216);
     }
 
-    public static URI getSmall4X3(String url) {
-        return formatString(url, 275, 216);
+    public static URI getSmall4X3(String str) {
+        return formatString(str, 275, 216);
     }
 
-    public static URI getSmall2X1(URI url) {
-        return formatURI(url, 243, CipherSuite.TLS_DH_anon_WITH_CAMELLIA_256_CBC_SHA);
+    public static URI getSmall2X1(URI uri) {
+        return formatURI(uri, 243, CipherSuite.TLS_DH_anon_WITH_CAMELLIA_256_CBC_SHA);
     }
 
-    public static URI getSmall2X1(String url) {
-        return formatString(url, 243, CipherSuite.TLS_DH_anon_WITH_CAMELLIA_256_CBC_SHA);
+    public static URI getSmall2X1(String str) {
+        return formatString(str, 243, CipherSuite.TLS_DH_anon_WITH_CAMELLIA_256_CBC_SHA);
     }
 
-    public static URI getMedium(URI url) {
+    public static URI getMedium(URI uri) {
         if (XboxTcuiSdk.getIsTablet()) {
-            return formatURI(url, 424, 424);
+            return formatURI(uri, 424, 424);
         }
-        return formatURI(url, 300, 300);
+        return formatURI(uri, 300, 300);
     }
 
-    public static URI getMedium(String url) {
+    public static URI getMedium(String str) {
         URI uri;
         if (XboxTcuiSdk.getIsTablet()) {
-            uri = formatString(url, 424, 424);
+            uri = formatString(str, 424, 424);
         } else {
-            uri = formatString(url, 300, 300);
+            uri = formatString(str, 300, 300);
         }
-        if (uri != null || url == null) {
-            return uri;
-        }
-        return createUri(url);
+        return (uri != null || str == null) ? uri : createUri(str);
     }
 
-    public static URI getMedium3X4(URI url) {
-        return formatURI(url, 426, LARGE_PHONE);
+    public static URI getMedium3X4(URI uri) {
+        return formatURI(uri, 426, LARGE_PHONE);
     }
 
-    public static URI getMedium3X4(String url) {
-        return formatString(url, 426, LARGE_PHONE);
+    public static URI getMedium3X4(String str) {
+        return formatString(str, 426, LARGE_PHONE);
     }
 
-    public static URI getMedium4X3(URI url) {
-        return formatURI(url, 562, 316);
+    public static URI getMedium4X3(URI uri) {
+        return formatURI(uri, 562, 316);
     }
 
-    public static URI getMedium4X3(String url) {
-        return formatString(url, 562, 316);
+    public static URI getMedium4X3(String str) {
+        return formatString(str, 562, 316);
     }
 
-    public static URI getMedium2X1(URI url) {
-        return formatURI(url, 480, 270);
+    public static URI getMedium2X1(URI uri) {
+        return formatURI(uri, 480, 270);
     }
 
-    public static URI getMedium2X1(String url) {
-        return formatString(url, 480, 270);
+    public static URI getMedium2X1(String str) {
+        return formatString(str, 480, 270);
     }
 
-    public static URI getLarge(URI url) {
+    public static URI getLarge(URI uri) {
         if (XboxTcuiSdk.getIsTablet()) {
-            return formatURI(url, LARGE_TABLET, LARGE_TABLET);
+            return formatURI(uri, LARGE_TABLET, LARGE_TABLET);
         }
-        return formatURI(url, LARGE_PHONE, LARGE_PHONE);
+        return formatURI(uri, LARGE_PHONE, LARGE_PHONE);
     }
 
-    public static URI getLarge(String url) {
+    public static URI getLarge(String str) {
         URI uri;
         if (XboxTcuiSdk.getIsTablet()) {
-            uri = formatString(url, LARGE_TABLET, LARGE_TABLET);
+            uri = formatString(str, LARGE_TABLET, LARGE_TABLET);
         } else {
-            uri = formatString(url, LARGE_PHONE, LARGE_PHONE);
+            uri = formatString(str, LARGE_PHONE, LARGE_PHONE);
         }
-        if (uri != null || url == null) {
-            return uri;
-        }
-        return createUri(url);
+        return (uri != null || str == null) ? uri : createUri(str);
     }
 
-    public static URI getLarge3X4(URI url) {
-        return formatURI(url, 720, 1080);
+    public static URI getLarge3X4(URI uri) {
+        return formatURI(uri, 720, 1080);
     }
 
-    public static URI getLarge3X4(String url) {
-        return formatString(url, 720, 1080);
+    public static URI getLarge3X4(String str) {
+        return formatString(str, 720, 1080);
     }
 
-    private static URI formatURI(URI url, int width, int height) {
-        if (url == null) {
+    private static URI formatURI(URI uri, int i, int i2) {
+        if (uri == null) {
             return null;
         }
-        URI newURI = formatString(url.toString(), width, height);
-        if (newURI != null) {
-            return newURI;
-        }
-        return url;
+        URI formatString = formatString(uri.toString(), i, i2);
+        return formatString == null ? uri : formatString;
     }
 
-    private static URI formatString(String url, int width, int height) {
-        if (url == null || !url.contains("images-eds")) {
+    @SuppressLint("DefaultLocale")
+    private static URI formatString(String str, int i, int i2) {
+        if (str == null || !str.contains("images-eds")) {
             return null;
         }
-        boolean hasWidth = url.contains("&w=");
-        boolean hasHeight = url.contains("&h=");
-        if (hasWidth && hasHeight) {
-            return createUri(url.replaceAll("w=[0-9]+", "w=" + width).replaceAll("h=[0-9]+", "h=" + height));
+        boolean contains = str.contains("&w=");
+        boolean contains2 = str.contains("&h=");
+        if (contains && contains2) {
+            String replaceAll = str.replaceAll("w=[0-9]+", "w=" + i);
+            return createUri(replaceAll.replaceAll("h=[0-9]+", "h=" + i2));
+        } else if (contains) {
+            return createUri(str.replaceAll("w=[0-9]+", "w=" + i) + "&h=" + i2);
+        } else if (contains2) {
+            return createUri(str.replaceAll("h=[0-9]+", "h=" + i2) + "&w=" + i);
+        } else if (str.contains("format=")) {
+            return createUri(str + String.format(resizeFormatterSizeOnly, new Object[]{Integer.valueOf(i), Integer.valueOf(i2)}));
+        } else {
+            return createUri(str + String.format(resizeFormatter, new Object[]{Integer.valueOf(i), Integer.valueOf(i2)}));
         }
-        if (hasWidth) {
-            return createUri(url.replaceAll("w=[0-9]+", "w=" + width) + "&h=" + height);
-        }
-        if (hasHeight) {
-            return createUri(url.replaceAll("h=[0-9]+", "h=" + height) + "&w=" + width);
-        }
-        if (url.contains("format=")) {
-            return createUri(url + String.format(resizeFormatterSizeOnly, new Object[]{Integer.valueOf(width), Integer.valueOf(height)}));
-        }
-        return createUri(url + String.format(resizeFormatter, new Object[]{Integer.valueOf(width), Integer.valueOf(height)}));
     }
 
-    private static URI createUri(String url) {
-        if (url == null) {
-            return null;
+    private static URI createUri(String str) {
+        if (str != null) {
+            try {
+                return URI.create(str);
+            } catch (IllegalArgumentException unused) {
+            }
         }
-        try {
-            return URI.create(url);
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
+        return null;
     }
 
     public static URI getUri(String url, ImageType imgType) {
@@ -301,11 +284,10 @@ public class ImageUtil {
         LARGE,
         LARGE_3X4;
 
-        @Nullable
-        public static ImageType fromString(String val) {
+        public static @Nullable ImageType fromString(String str) {
             try {
-                return valueOf(val);
-            } catch (IllegalArgumentException | NullPointerException e) {
+                return valueOf(str);
+            } catch (IllegalArgumentException | NullPointerException unused) {
                 return null;
             }
         }

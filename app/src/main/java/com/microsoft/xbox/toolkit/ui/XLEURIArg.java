@@ -3,7 +3,7 @@ package com.microsoft.xbox.toolkit.ui;
 import java.net.URI;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -14,10 +14,10 @@ public class XLEURIArg {
     private final int loadingResourceId;
     private final URI uri;
 
-    public XLEURIArg(URI uri2, int loadingResourceId2, int errorResourceId2) {
-        uri = uri2;
-        loadingResourceId = loadingResourceId2;
-        errorResourceId = errorResourceId2;
+    public XLEURIArg(URI uri2, int i, int i2) {
+        this.uri = uri2;
+        this.loadingResourceId = i;
+        this.errorResourceId = i2;
     }
 
     public XLEURIArg(URI uri2) {
@@ -25,46 +25,46 @@ public class XLEURIArg {
     }
 
     public URI getUri() {
-        return uri;
+        return this.uri;
     }
 
     public int getLoadingResourceId() {
-        return loadingResourceId;
+        return this.loadingResourceId;
     }
 
     public int getErrorResourceId() {
-        return errorResourceId;
+        return this.errorResourceId;
     }
 
     public TextureBindingOption getTextureBindingOption() {
-        return new TextureBindingOption(-1, -1, loadingResourceId, errorResourceId, false);
+        return new TextureBindingOption(-1, -1, this.loadingResourceId, this.errorResourceId, false);
     }
 
-    public boolean equals(Object o) {
-        if (o == null) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        if (o == this) {
+        if (obj == this) {
             return true;
         }
-        if (!(o instanceof XLEURIArg)) {
+        if (!(obj instanceof XLEURIArg)) {
             return false;
         }
-        XLEURIArg other = (XLEURIArg) o;
-        if (loadingResourceId != other.loadingResourceId || errorResourceId != other.errorResourceId) {
+        XLEURIArg xLEURIArg = (XLEURIArg) obj;
+        if (this.loadingResourceId != xLEURIArg.loadingResourceId || this.errorResourceId != xLEURIArg.errorResourceId) {
             return false;
         }
-        if (uri == other.uri || (uri != null && uri.equals(other.uri))) {
+        URI uri2 = this.uri;
+        URI uri3 = xLEURIArg.uri;
+        if (uri2 == uri3 || (uri2 != null && uri2.equals(uri3))) {
             return true;
         }
         return false;
     }
 
     public int hashCode() {
-        int hash = ((loadingResourceId + 13) * 17) + errorResourceId;
-        if (uri != null) {
-            return (hash * 23) + uri.hashCode();
-        }
-        return hash;
+        int i = ((13 + this.loadingResourceId) * 17) + this.errorResourceId;
+        URI uri2 = this.uri;
+        return uri2 != null ? (i * 23) + uri2.hashCode() : i;
     }
 }

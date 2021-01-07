@@ -20,7 +20,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 /**
- * 05.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -75,67 +75,65 @@ public class UTCDateConverter {
     }
 
     public static class UTCDateConverterJSONDeserializer implements JsonDeserializer<Date>, JsonSerializer<Date> {
-        public Date deserialize(@NotNull JsonElement json, Type typeOfT, JsonDeserializationContext context) {
-            return UTCDateConverter.convert(json.getAsJsonPrimitive().getAsString());
+        public Date deserialize(@NotNull JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) {
+            return UTCDateConverter.convert(jsonElement.getAsJsonPrimitive().getAsString());
         }
 
-        public JsonElement serialize(Date src, Type typeOfSrc, JsonSerializationContext context) {
-            return new JsonPrimitive(UTCDateConverter.defaultFormatNoMs.format(src));
+        public JsonElement serialize(Date date, Type type, JsonSerializationContext jsonSerializationContext) {
+            return new JsonPrimitive(UTCDateConverter.defaultFormatNoMs.format(date));
         }
     }
 
     public static class UTCDateConverterShortDateFormatJSONDeserializer implements JsonDeserializer<Date> {
-        public Date deserialize(@NotNull JsonElement json, Type typeOfT, JsonDeserializationContext context) {
-            String raw = json.getAsJsonPrimitive().getAsString();
+        public Date deserialize(@NotNull JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) {
+            String asString = jsonElement.getAsJsonPrimitive().getAsString();
             UTCDateConverter.shortDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
             try {
-                return UTCDateConverter.shortDateFormat.parse(raw);
-            } catch (ParseException e) {
-                Log.d(UTCDateConverter.TAG, "failed to parse date " + raw);
+                return UTCDateConverter.shortDateFormat.parse(asString);
+            } catch (ParseException unused) {
+                String access$200 = UTCDateConverter.TAG;
+                Log.d(access$200, "failed to parse date " + asString);
                 return null;
             }
         }
     }
 
     public static class UTCDateConverterShortDateAlternateFormatJSONDeserializer implements JsonDeserializer<Date> {
-        public Date deserialize(@NotNull JsonElement json, Type typeOfT, JsonDeserializationContext context) {
-            String raw = json.getAsJsonPrimitive().getAsString();
-            Date result = null;
+        public Date deserialize(@NotNull JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) {
+            Date date;
+            String asString = jsonElement.getAsJsonPrimitive().getAsString();
             TimeZone timeZone = TimeZone.getTimeZone("GMT");
             UTCDateConverter.shortDateFormat.setTimeZone(timeZone);
             try {
-                result = UTCDateConverter.shortDateFormat.parse(raw);
-            } catch (ParseException e) {
-                Log.d(UTCDateConverter.TAG, "failed to parse short date " + raw);
+                date = UTCDateConverter.shortDateFormat.parse(asString);
+            } catch (ParseException unused) {
+                Log.d(UTCDateConverter.TAG, "failed to parse short date " + asString);
+                date = null;
             }
-            if (result == null || result.getYear() + 1900 >= 2000) {
-                return result;
+            if (date == null || date.getYear() + 1900 >= 2000) {
+                return date;
             }
             UTCDateConverter.shortDateAlternateFormat.setTimeZone(timeZone);
             try {
-                return UTCDateConverter.shortDateAlternateFormat.parse(raw);
-            } catch (ParseException e2) {
-                Log.d(UTCDateConverter.TAG, "failed to parse alternate short date " + raw);
-                return result;
+                return UTCDateConverter.shortDateAlternateFormat.parse(asString);
+            } catch (ParseException unused2) {
+                Log.d(UTCDateConverter.TAG, "failed to parse alternate short date " + asString);
+                return date;
             }
         }
     }
 
     public static class UTCRoundtripDateConverterJSONDeserializer implements JsonDeserializer<Date> {
-        public Date deserialize(@NotNull JsonElement json, Type typeOfT, JsonDeserializationContext context) {
-            String raw = json.getAsJsonPrimitive().getAsString();
-            if (raw.endsWith("Z")) {
-                raw = raw.replace("Z", "");
+        public Date deserialize(@NotNull JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) {
+            String asString = jsonElement.getAsJsonPrimitive().getAsString();
+            if (asString.endsWith("Z")) {
+                asString = asString.replace("Z", "");
             }
-            TimeZone timeZone = null;
-            if (0 == 0) {
-                timeZone = TimeZone.getTimeZone("GMT");
-            }
-            UTCDateConverter.defaultFormatNoMs.setTimeZone(timeZone);
+            UTCDateConverter.defaultFormatNoMs.setTimeZone(TimeZone.getTimeZone("GMT"));
             try {
-                return UTCDateConverter.defaultFormatNoMs.parse(raw);
-            } catch (ParseException e) {
-                Log.d(UTCDateConverter.TAG, "failed to parse date " + raw);
+                return UTCDateConverter.defaultFormatNoMs.parse(asString);
+            } catch (ParseException unused) {
+                Log.d(UTCDateConverter.TAG, "failed to parse date " + asString);
                 return null;
             }
         }

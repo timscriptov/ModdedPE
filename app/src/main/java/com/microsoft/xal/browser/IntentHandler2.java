@@ -14,15 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.mcpelauncher.activities;
+package com.microsoft.xal.browser;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-
-import com.microsoft.xal.browser.WebView;
 
 /**
  * 05.10.2020
@@ -31,16 +28,14 @@ import com.microsoft.xal.browser.WebView;
  * @author https://github.com/TimScriptov
  */
 
-public class IntentHandlerActivity extends Activity {
-    public static final String TAG = "IntentHandlerActivity";
+public class IntentHandler2 extends Activity {
+    public static final String TAG = "IntentHandler";
 
     @SuppressLint("WrongConstant")
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.e(TAG, "onCreate() New intent received.");
-        Intent intent = new Intent(this, WebView.class);
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        Intent intent = new Intent(this, WebView2.class);
         intent.setData(getIntent().getData());
-        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.addFlags(603979776);
         startActivity(intent);
         finish();

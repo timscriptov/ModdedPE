@@ -1,12 +1,11 @@
 package com.microsoft.xbox.toolkit;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 
-import androidx.appcompat.app.AlertDialog;
-
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -19,16 +18,16 @@ public class XLEManagedAlertDialog extends AlertDialog implements IXLEManagedDia
         super(context);
     }
 
-    public IXLEManagedDialog.DialogType getDialogType() {
-        return dialogType;
-    }
-
-    public void setDialogType(IXLEManagedDialog.DialogType type) {
-        dialogType = type;
-    }
-
     public Dialog getDialog() {
         return this;
+    }
+
+    public IXLEManagedDialog.DialogType getDialogType() {
+        return this.dialogType;
+    }
+
+    public void setDialogType(IXLEManagedDialog.DialogType dialogType2) {
+        this.dialogType = dialogType2;
     }
 
     public void safeDismiss() {

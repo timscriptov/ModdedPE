@@ -6,7 +6,7 @@ import android.view.MotionEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -23,83 +23,89 @@ public class ButtonStateHandler {
     private int pressedImageHandle = -1;
     private ButtonStateHandlerRunnable pressedStateRunnable = null;
 
-    public void setDisabledImageHandle(int imageHandle) {
-        disabledImageHandle = imageHandle;
+    public void setDisabledImageHandle(int i) {
+        this.disabledImageHandle = i;
     }
 
-    public void setEnabledImageHandle(int imageHandle) {
-        enabledImageHandle = imageHandle;
+    public void setEnabledImageHandle(int i) {
+        this.enabledImageHandle = i;
     }
 
-    public void setPressedImageHandle(int imageHandle) {
-        pressedImageHandle = imageHandle;
+    public void setPressedImageHandle(int i) {
+        this.pressedImageHandle = i;
     }
 
     public boolean getDisabled() {
-        return disabled;
+        return this.disabled;
     }
 
-    public void setDisabled(boolean disabled2) {
-        disabled = disabled2;
+    public void setDisabled(boolean z) {
+        this.disabled = z;
     }
 
-    public void setEnabled(boolean enabled) {
-        disabled = !enabled;
+    public void setEnabled(boolean z) {
+        this.disabled = !z;
     }
 
-    public boolean onTouch(@NotNull MotionEvent event) {
-        boolean oldpressed = pressed;
-        if (event.getAction() == 0) {
-            pressed = true;
-        } else if (event.getAction() == 1) {
-            pressed = false;
-        } else if (event.getAction() == 3) {
-            pressed = false;
+    public boolean onTouch(@NotNull MotionEvent motionEvent) {
+        boolean z;
+        boolean z2 = this.pressed;
+        if (motionEvent.getAction() == 0) {
+            this.pressed = true;
+        } else if (motionEvent.getAction() == 1) {
+            this.pressed = false;
+        } else if (motionEvent.getAction() == 3) {
+            this.pressed = false;
         }
-        if (!(pressedStateRunnable == null || oldpressed == pressed)) {
-            pressedStateRunnable.onPressStateChanged(pressed);
+        ButtonStateHandlerRunnable buttonStateHandlerRunnable = this.pressedStateRunnable;
+        if (!(buttonStateHandlerRunnable == null || z2 == (z = this.pressed))) {
+            buttonStateHandlerRunnable.onPressStateChanged(z);
         }
         return false;
     }
 
-    public boolean onSizeChanged(int width, int height) {
-        boolean loadedNewImage = false;
-        if (disabledImage == null && disabledImageHandle != -1) {
-            loadedNewImage = true;
-            disabledImage = TextureManager.Instance().loadScaledResourceDrawable(disabledImageHandle);
+    public boolean onSizeChanged(int i, int i2) {
+        boolean z;
+        if (this.disabledImage != null || this.disabledImageHandle == -1) {
+            z = false;
+        } else {
+            this.disabledImage = TextureManager.Instance().loadScaledResourceDrawable(this.disabledImageHandle);
+            z = true;
         }
-        if (enabledImage == null && enabledImageHandle != -1) {
-            loadedNewImage = true;
-            enabledImage = TextureManager.Instance().loadScaledResourceDrawable(enabledImageHandle);
+        if (this.enabledImage == null && this.enabledImageHandle != -1) {
+            this.enabledImage = TextureManager.Instance().loadScaledResourceDrawable(this.enabledImageHandle);
+            z = true;
         }
-        if (pressedImage != null || pressedImageHandle == -1) {
-            return loadedNewImage;
+        if (this.pressedImage != null || this.pressedImageHandle == -1) {
+            return z;
         }
-        pressedImage = TextureManager.Instance().loadScaledResourceDrawable(pressedImageHandle);
+        this.pressedImage = TextureManager.Instance().loadScaledResourceDrawable(this.pressedImageHandle);
         return true;
     }
 
     public Drawable getImageDrawable() {
-        if (!pressed || pressedImageHandle == -1) {
-            if (!disabled || disabledImageHandle == -1) {
-                if (enabledImageHandle == -1 || enabledImage == null) {
-                    return null;
-                }
-                return enabledImage.getDrawable();
-            } else if (disabledImage != null) {
-                return disabledImage.getDrawable();
-            } else {
+        XLEBitmap.XLEBitmapDrawable xLEBitmapDrawable;
+        if (this.pressed && this.pressedImageHandle != -1) {
+            XLEBitmap.XLEBitmapDrawable xLEBitmapDrawable2 = this.pressedImage;
+            if (xLEBitmapDrawable2 == null) {
                 return null;
             }
-        } else if (pressedImage == null) {
+            return xLEBitmapDrawable2.getDrawable();
+        } else if (this.disabled && this.disabledImageHandle != -1) {
+            XLEBitmap.XLEBitmapDrawable xLEBitmapDrawable3 = this.disabledImage;
+            if (xLEBitmapDrawable3 == null) {
+                return null;
+            }
+            return xLEBitmapDrawable3.getDrawable();
+        } else if (this.enabledImageHandle == -1 || (xLEBitmapDrawable = this.enabledImage) == null) {
             return null;
         } else {
-            return pressedImage.getDrawable();
+            return xLEBitmapDrawable.getDrawable();
         }
     }
 
-    public void setPressedStateRunnable(ButtonStateHandlerRunnable runnable) {
-        pressedStateRunnable = runnable;
+    public void setPressedStateRunnable(ButtonStateHandlerRunnable buttonStateHandlerRunnable) {
+        this.pressedStateRunnable = buttonStateHandlerRunnable;
     }
 
     public interface ButtonStateHandlerRunnable {

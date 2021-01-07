@@ -5,7 +5,7 @@ import com.microsoft.xbox.idp.toolkit.ObjectLoader;
 import java.util.HashMap;
 
 /**
- * 05.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov

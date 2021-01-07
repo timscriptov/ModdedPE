@@ -4,7 +4,7 @@ import com.microsoft.xbox.service.network.managers.xblshared.ISLSServiceManager;
 import com.microsoft.xbox.service.network.managers.xblshared.SLSXsapiServiceManager;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -22,9 +22,9 @@ public class ServiceManagerFactory {
     }
 
     public ISLSServiceManager getSLSServiceManager() {
-        if (slsServiceManager == null) {
-            slsServiceManager = new SLSXsapiServiceManager();
+        if (this.slsServiceManager == null) {
+            this.slsServiceManager = new SLSXsapiServiceManager();
         }
-        return slsServiceManager;
+        return this.slsServiceManager;
     }
 }

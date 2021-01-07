@@ -3,8 +3,7 @@ package com.microsoft.xbox.xle.app;
 import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-
-import androidx.appcompat.widget.AppCompatTextView;
+import android.widget.TextView;
 
 import com.microsoft.xbox.toolkit.DialogManager;
 import com.microsoft.xbox.toolkit.ThreadManager;
@@ -14,7 +13,7 @@ import com.microsoft.xboxtcui.XboxTcuiSdk;
 import java.util.Date;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -22,52 +21,52 @@ import java.util.Date;
 
 public class XLEUtil {
     @SuppressLint("WrongConstant")
-    public static void updateAndShowTextViewUnlessEmpty(AppCompatTextView textView, CharSequence text) {
+    public static void updateAndShowTextViewUnlessEmpty(TextView textView, CharSequence charSequence) {
         if (textView == null) {
             return;
         }
-        if (text == null || text.length() <= 0) {
+        if (charSequence == null || charSequence.length() <= 0) {
             textView.setVisibility(8);
             return;
         }
-        textView.setText(text);
+        textView.setText(charSequence);
         textView.setVisibility(0);
     }
 
-    public static void updateTextAndVisibilityIfNotNull(AppCompatTextView textView, CharSequence text, int visibility) {
+    public static void updateTextAndVisibilityIfNotNull(TextView textView, CharSequence charSequence, int i) {
         if (textView != null) {
-            textView.setText(text);
-            textView.setVisibility(visibility);
+            textView.setText(charSequence);
+            textView.setVisibility(i);
         }
     }
 
-    public static void updateVisibilityIfNotNull(View view, int visibility) {
+    public static void updateVisibilityIfNotNull(View view, int i) {
         if (view != null) {
-            view.setVisibility(visibility);
+            view.setVisibility(i);
         }
     }
 
-    public static void showKeyboard(final View view, int delayMS) {
-        ThreadManager.UIThreadPostDelayed(() -> ((InputMethodManager) XboxTcuiSdk.getSystemService("input_method")).showSoftInput(view, 1), delayMS);
+    public static void showKeyboard(final View view, int i) {
+        ThreadManager.UIThreadPostDelayed((Runnable) () -> ((InputMethodManager) XboxTcuiSdk.getSystemService("input_method")).showSoftInput(view, 1), (long) i);
     }
 
-    public static <T> boolean isNullOrEmpty(Iterable<T> collection) {
-        return collection == null || !collection.iterator().hasNext();
+    public static <T> boolean isNullOrEmpty(Iterable<T> iterable) {
+        return iterable == null || !iterable.iterator().hasNext();
     }
 
-    public static <T> boolean isNullOrEmpty(T[] array) {
-        return array == null || array.length == 0;
+    public static <T> boolean isNullOrEmpty(T[] tArr) {
+        return tArr == null || tArr.length == 0;
     }
 
-    public static boolean shouldRefresh(Date lastRefreshTime, long lifetime) {
-        if (lastRefreshTime != null && new Date().getTime() - lastRefreshTime.getTime() <= lifetime) {
+    public static boolean shouldRefresh(Date date, long j) {
+        if (date != null && new Date().getTime() - date.getTime() <= j) {
             return false;
         }
         return true;
     }
 
-    public static void showOkCancelDialog(String title, String promptText, String okText, Runnable okHandler, String cancelText, Runnable cancelHandler) {
-        XLEAssert.assertNotNull("You must supply cancel text if this is not a must-act dialog.", cancelText);
-        DialogManager.getInstance().showOkCancelDialog(title, promptText, okText, okHandler, cancelText, cancelHandler);
+    public static void showOkCancelDialog(String str, String str2, String str3, Runnable runnable, String str4, Runnable runnable2) {
+        XLEAssert.assertNotNull("You must supply cancel text if this is not a must-act dialog.", str4);
+        DialogManager.getInstance().showOkCancelDialog(str, str2, str3, runnable, str4, runnable2);
     }
 }

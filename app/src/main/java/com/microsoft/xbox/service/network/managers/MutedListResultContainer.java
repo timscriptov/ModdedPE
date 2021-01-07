@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -15,26 +15,26 @@ public final class MutedListResultContainer {
     public static class MutedListResult {
         public ArrayList<MutedUser> users = new ArrayList<>();
 
-        public void add(String xuid) {
-            users.add(new MutedUser(xuid));
+        public void add(String str) {
+            this.users.add(new MutedUser(str));
         }
 
-        public MutedUser remove(String xuid) {
-            Iterator<MutedUser> it = users.iterator();
+        public MutedUser remove(String str) {
+            Iterator<MutedUser> it = this.users.iterator();
             while (it.hasNext()) {
-                MutedUser user = it.next();
-                if (user.xuid.equalsIgnoreCase(xuid)) {
-                    users.remove(user);
-                    return user;
+                MutedUser next = it.next();
+                if (next.xuid.equalsIgnoreCase(str)) {
+                    this.users.remove(next);
+                    return next;
                 }
             }
             return null;
         }
 
-        public boolean contains(String xuid) {
-            Iterator<MutedUser> it = users.iterator();
+        public boolean contains(String str) {
+            Iterator<MutedUser> it = this.users.iterator();
             while (it.hasNext()) {
-                if (it.next().xuid.equalsIgnoreCase(xuid)) {
+                if (it.next().xuid.equalsIgnoreCase(str)) {
                     return true;
                 }
             }
@@ -45,8 +45,8 @@ public final class MutedListResultContainer {
     public static class MutedUser {
         public String xuid;
 
-        public MutedUser(String xuid2) {
-            xuid = xuid2;
+        public MutedUser(String str) {
+            this.xuid = str;
         }
     }
 }

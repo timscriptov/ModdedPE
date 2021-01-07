@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -21,67 +21,65 @@ public class UTCDeepLink {
     public static final String TARGET_TITLE_KEY = "targetTitleId";
     public static final String TARGET_XUID_KEY = "targetXUID";
 
-    @NotNull
-    private static String generateCorrelationId() {
+    private static @NotNull String generateCorrelationId() {
         return CommonData.getApplicationSession();
     }
 
-    @NotNull
-    public static HashMap<String, Object> getAdditionalInfo(String packageName) {
-        HashMap<String, Object> additionalInfo = new HashMap<>();
-        additionalInfo.put(DEEPLINK_KEY_NAME, generateCorrelationId());
-        additionalInfo.put(CALLING_APP_KEY, packageName);
-        return additionalInfo;
+    public static @NotNull HashMap<String, Object> getAdditionalInfo(String str) {
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put(DEEPLINK_KEY_NAME, generateCorrelationId());
+        hashMap.put(CALLING_APP_KEY, str);
+        return hashMap;
     }
 
-    public static String trackUserProfileLink(final CharSequence activityTitle, final String packageName, final String targetXuid) {
+    public static String trackUserProfileLink(final CharSequence charSequence, final String str, final String str2) {
         return UTCEventTracker.callStringTrackWrapper(() -> {
-            HashMap<String, Object> additionalInfo = UTCDeepLink.getAdditionalInfo(packageName);
-            additionalInfo.put(UTCDeepLink.TARGET_XUID_KEY, "x:" + targetXuid);
-            UTCPageAction.track(UTCNames.PageAction.DeepLink.UserProfile, activityTitle, additionalInfo);
-            return additionalInfo.get(UTCDeepLink.DEEPLINK_KEY_NAME).toString();
+            HashMap access$000 = UTCDeepLink.getAdditionalInfo(str);
+            access$000.put(UTCDeepLink.TARGET_XUID_KEY, "x:" + str2);
+            UTCPageAction.track(UTCNames.PageAction.DeepLink.UserProfile, charSequence, access$000);
+            return access$000.get(UTCDeepLink.DEEPLINK_KEY_NAME).toString();
         });
     }
 
-    public static String trackGameHubLink(final CharSequence activityTitle, final String packageName, final String titleId) {
+    public static String trackGameHubLink(final CharSequence charSequence, final String str, final String str2) {
         return UTCEventTracker.callStringTrackWrapper(() -> {
-            HashMap<String, Object> additionalInfo = UTCDeepLink.getAdditionalInfo(packageName);
-            additionalInfo.put(UTCDeepLink.TARGET_XUID_KEY, titleId);
-            UTCPageAction.track(UTCNames.PageAction.DeepLink.TitleHub, activityTitle, additionalInfo);
-            return additionalInfo.get(UTCDeepLink.DEEPLINK_KEY_NAME).toString();
+            HashMap access$000 = UTCDeepLink.getAdditionalInfo(str);
+            access$000.put(UTCDeepLink.TARGET_XUID_KEY, str2);
+            UTCPageAction.track(UTCNames.PageAction.DeepLink.TitleHub, charSequence, access$000);
+            return access$000.get(UTCDeepLink.DEEPLINK_KEY_NAME).toString();
         });
     }
 
-    public static String trackGameHubAchievementsLink(final CharSequence activityTitle, final String packageName, final String titleId) {
+    public static String trackGameHubAchievementsLink(final CharSequence charSequence, final String str, final String str2) {
         return UTCEventTracker.callStringTrackWrapper(() -> {
-            HashMap<String, Object> additionalInfo = UTCDeepLink.getAdditionalInfo(packageName);
-            additionalInfo.put(UTCDeepLink.TARGET_TITLE_KEY, titleId);
-            UTCPageAction.track(UTCNames.PageAction.DeepLink.TitleHub, activityTitle, additionalInfo);
-            return additionalInfo.get(UTCDeepLink.DEEPLINK_KEY_NAME).toString();
+            HashMap access$000 = UTCDeepLink.getAdditionalInfo(str);
+            access$000.put(UTCDeepLink.TARGET_TITLE_KEY, str2);
+            UTCPageAction.track(UTCNames.PageAction.DeepLink.TitleHub, charSequence, access$000);
+            return access$000.get(UTCDeepLink.DEEPLINK_KEY_NAME).toString();
         });
     }
 
-    public static String trackUserSettingsLink(final CharSequence activityTitle, final String packageName) {
+    public static String trackUserSettingsLink(final CharSequence charSequence, final String str) {
         return UTCEventTracker.callStringTrackWrapper(() -> {
-            HashMap<String, Object> additionalInfo = UTCDeepLink.getAdditionalInfo(packageName);
-            UTCPageAction.track(UTCNames.PageAction.DeepLink.UserSettings, activityTitle, additionalInfo);
-            return additionalInfo.get(UTCDeepLink.DEEPLINK_KEY_NAME).toString();
+            HashMap access$000 = UTCDeepLink.getAdditionalInfo(str);
+            UTCPageAction.track(UTCNames.PageAction.DeepLink.UserSettings, charSequence, access$000);
+            return access$000.get(UTCDeepLink.DEEPLINK_KEY_NAME).toString();
         });
     }
 
-    public static void trackUserSendToStore(final CharSequence activityTitle, final String packageName, final String intendedAction) {
+    public static void trackUserSendToStore(final CharSequence charSequence, final String str, final String str2) {
         UTCEventTracker.callTrackWrapper(() -> {
-            HashMap<String, Object> additionalInfo = UTCDeepLink.getAdditionalInfo(packageName);
-            additionalInfo.put(UTCDeepLink.INTENDED_ACTION_KEY, intendedAction);
-            UTCPageAction.track(UTCNames.PageAction.DeepLink.SendToStore, activityTitle, additionalInfo);
+            HashMap access$000 = UTCDeepLink.getAdditionalInfo(str);
+            access$000.put(UTCDeepLink.INTENDED_ACTION_KEY, str2);
+            UTCPageAction.track(UTCNames.PageAction.DeepLink.SendToStore, charSequence, access$000);
         });
     }
 
-    public static String trackFriendSuggestionsLink(final CharSequence activityTitle, final String packageName) {
+    public static String trackFriendSuggestionsLink(final CharSequence charSequence, final String str) {
         return UTCEventTracker.callStringTrackWrapper(() -> {
-            HashMap<String, Object> additionalInfo = UTCDeepLink.getAdditionalInfo(packageName);
-            UTCPageAction.track(UTCNames.PageAction.DeepLink.FriendSuggestions, activityTitle, additionalInfo);
-            return additionalInfo.get(UTCDeepLink.DEEPLINK_KEY_NAME).toString();
+            HashMap access$000 = UTCDeepLink.getAdditionalInfo(str);
+            UTCPageAction.track(UTCNames.PageAction.DeepLink.FriendSuggestions, charSequence, access$000);
+            return access$000.get(UTCDeepLink.DEEPLINK_KEY_NAME).toString();
         });
     }
 }

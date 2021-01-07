@@ -1,11 +1,10 @@
 package com.microsoft.xbox.idp.compat;
 
+import android.app.Activity;
 import android.app.Fragment;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 /**
- * 05.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -17,7 +16,7 @@ public abstract class BaseFragment extends Fragment {
     public static final String ARG_USER_PTR = "ARG_USER_PTR";
 
     public CharSequence getActivityTitle() {
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        Activity activity = getActivity();
         if (activity == null) {
             return null;
         }

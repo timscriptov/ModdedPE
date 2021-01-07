@@ -3,7 +3,7 @@ package com.microsoft.xbox.toolkit.anim;
 import android.view.animation.Interpolator;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -13,7 +13,11 @@ public class XLEInterpolator implements Interpolator {
     private EasingMode easingMode;
 
     public XLEInterpolator(EasingMode easingMode2) {
-        easingMode = easingMode2;
+        this.easingMode = easingMode2;
+    }
+
+    public float getInterpolationCore(float f) {
+        return f;
     }
 
     public float getInterpolation(float normalizedTime) {
@@ -33,9 +37,5 @@ public class XLEInterpolator implements Interpolator {
             default:
                 return normalizedTime;
         }
-    }
-
-    public float getInterpolationCore(float normalizedTime) {
-        return normalizedTime;
     }
 }

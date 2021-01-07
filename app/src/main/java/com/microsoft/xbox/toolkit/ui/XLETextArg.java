@@ -5,7 +5,7 @@ import android.graphics.Typeface;
 import com.microsoft.xbox.toolkit.system.SystemUtil;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -15,9 +15,9 @@ public class XLETextArg {
     private final Params params;
     private final String text;
 
-    public XLETextArg(String text2, Params params2) {
-        text = text2;
-        params = params2;
+    public XLETextArg(String str, Params params2) {
+        this.text = str;
+        this.params = params2;
     }
 
     public XLETextArg(Params params2) {
@@ -25,15 +25,15 @@ public class XLETextArg {
     }
 
     public String getText() {
-        return text;
+        return this.text;
     }
 
     public boolean hasText() {
-        return text != null;
+        return this.text != null;
     }
 
     public Params getParams() {
-        return params;
+        return this.params;
     }
 
     public static class Params {
@@ -48,45 +48,45 @@ public class XLETextArg {
             this((float) SystemUtil.SPtoPixels(8.0f), -1, Typeface.DEFAULT, 0, false, (Float) null);
         }
 
-        public Params(float textSize2, int color2, Typeface typeface2, int eraseColor2, boolean adjustForImageSize2, Float textAspectRatio2) {
-            textSize = textSize2;
-            color = color2;
-            typeface = typeface2;
-            eraseColor = eraseColor2;
-            adjustForImageSize = adjustForImageSize2;
-            textAspectRatio = textAspectRatio2;
+        public Params(float f, int i, Typeface typeface2, int i2, boolean z, Float f2) {
+            this.textSize = f;
+            this.color = i;
+            this.typeface = typeface2;
+            this.eraseColor = i2;
+            this.adjustForImageSize = z;
+            this.textAspectRatio = f2;
         }
 
         public float getTextSize() {
-            return textSize;
+            return this.textSize;
         }
 
         public int getColor() {
-            return color;
+            return this.color;
         }
 
         public Typeface getTypeface() {
-            return typeface;
+            return this.typeface;
         }
 
         public boolean hasEraseColor() {
-            return eraseColor != 0;
+            return this.eraseColor != 0;
         }
 
         public int getEraseColor() {
-            return eraseColor;
+            return this.eraseColor;
         }
 
         public boolean isAdjustForImageSize() {
-            return adjustForImageSize;
+            return this.adjustForImageSize;
         }
 
         public Float getTextAspectRatio() {
-            return textAspectRatio;
+            return this.textAspectRatio;
         }
 
         public boolean hasTextAspectRatio() {
-            return textAspectRatio != null;
+            return this.textAspectRatio != null;
         }
     }
 }

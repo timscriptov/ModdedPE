@@ -20,7 +20,7 @@ import org.apache.http.protocol.HTTP;
 import org.spongycastle.asn1.cmp.PKIFailureInfo;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -43,58 +43,60 @@ public class HttpClientFactory {
         this(false);
     }
 
-    public HttpClientFactory(boolean allowRedirects) {
-        connectionManager = null;
-        httpSyncObject = new Object();
-        client = null;
-        clientWithTimeoutOverride = null;
-        params = new BasicHttpParams();
+    public HttpClientFactory(boolean z) {
+        this.connectionManager = null;
+        this.httpSyncObject = new Object();
+        this.client = null;
+        this.clientWithTimeoutOverride = null;
+        this.params = new BasicHttpParams();
         SchemeRegistry schemeRegistry = new SchemeRegistry();
         schemeRegistry.register(new Scheme(HttpHost.DEFAULT_SCHEME_NAME, PlainSocketFactory.getSocketFactory(), 80));
         schemeRegistry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
-        HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-        HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
-        HttpProtocolParams.setUseExpectContinue(params, false);
-        HttpClientParams.setRedirecting(params, allowRedirects);
+        HttpProtocolParams.setVersion(this.params, HttpVersion.HTTP_1_1);
+        HttpProtocolParams.setContentCharset(this.params, HTTP.UTF_8);
+        HttpProtocolParams.setUseExpectContinue(this.params, false);
+        HttpClientParams.setRedirecting(this.params, z);
         if (XboxLiveEnvironment.Instance().getProxyEnabled()) {
-            params.setParameter(ConnRoutePNames.DEFAULT_PROXY, new HttpHost("itgproxy.redmond.corp.microsoft.com", 80));
+            this.params.setParameter(ConnRoutePNames.DEFAULT_PROXY, new HttpHost("itgproxy.redmond.corp.microsoft.com", 80));
         }
-        HttpConnectionParams.setConnectionTimeout(params, 40000);
-        HttpConnectionParams.setSoTimeout(params, 40000);
-        HttpConnectionParams.setSocketBufferSize(params, PKIFailureInfo.certRevoked);
-        ConnManagerParams.setMaxConnectionsPerRoute(params, new ConnPerRouteBean(16));
-        ConnManagerParams.setMaxTotalConnections(params, 32);
-        connectionManager = new ThreadSafeClientConnManager(params, schemeRegistry);
+        HttpConnectionParams.setConnectionTimeout(this.params, 40000);
+        HttpConnectionParams.setSoTimeout(this.params, 40000);
+        HttpConnectionParams.setSocketBufferSize(this.params, PKIFailureInfo.certRevoked);
+        ConnManagerParams.setMaxConnectionsPerRoute(this.params, new ConnPerRouteBean(16));
+        ConnManagerParams.setMaxTotalConnections(this.params, 32);
+        this.connectionManager = new ThreadSafeClientConnManager(this.params, schemeRegistry);
     }
 
-    public AbstractXLEHttpClient getHttpClient(int timeoutOverride) {
-        AbstractXLEHttpClient abstractXLEHttpClient;
-        synchronized (httpSyncObject) {
-            if (timeoutOverride <= 0) {
-                if (client == null) {
-                    client = new XLEHttpClient(connectionManager, params);
+    public void setHttpClient(AbstractXLEHttpClient abstractXLEHttpClient) {
+    }
+
+    public AbstractXLEHttpClient getHttpClient(int i) {
+        synchronized (this.httpSyncObject) {
+            if (i <= 0) {
+                if (this.client == null) {
+                    this.client = new XLEHttpClient(this.connectionManager, this.params);
                 }
-                abstractXLEHttpClient = client;
-            } else if (clientWithTimeoutOverride == null) {
-                HttpParams localParams = params.copy();
-                HttpConnectionParams.setConnectionTimeout(localParams, timeoutOverride * 1000);
-                HttpConnectionParams.setSoTimeout(localParams, timeoutOverride * 1000);
-                abstractXLEHttpClient = new XLEHttpClient(connectionManager, localParams);
+                AbstractXLEHttpClient abstractXLEHttpClient = this.client;
+                return abstractXLEHttpClient;
+            } else if (this.clientWithTimeoutOverride == null) {
+                HttpParams copy = this.params.copy();
+                int i2 = i * 1000;
+                HttpConnectionParams.setConnectionTimeout(copy, i2);
+                HttpConnectionParams.setSoTimeout(copy, i2);
+                XLEHttpClient xLEHttpClient = new XLEHttpClient(this.connectionManager, copy);
+                return xLEHttpClient;
             } else {
-                abstractXLEHttpClient = clientWithTimeoutOverride;
+                AbstractXLEHttpClient abstractXLEHttpClient2 = this.clientWithTimeoutOverride;
+                return abstractXLEHttpClient2;
             }
         }
-        return abstractXLEHttpClient;
     }
 
     public ClientConnectionManager getClientConnectionManager() {
-        return connectionManager;
+        return this.connectionManager;
     }
 
     public HttpParams getHttpParams() {
-        return params;
-    }
-
-    public void setHttpClient(AbstractXLEHttpClient httpClient) {
+        return this.params;
     }
 }

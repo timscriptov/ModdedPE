@@ -6,11 +6,10 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.accessibility.AccessibilityNodeInfo;
+import android.widget.Button;
 import android.widget.Checkable;
 import android.widget.LinearLayout;
-
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.AppCompatTextView;
+import android.widget.TextView;
 
 import com.mcal.mcpelauncher.R;
 import com.microsoft.xbox.toolkit.XLERValueHelper;
@@ -19,7 +18,7 @@ import com.microsoft.xbox.toolkit.ui.FontManager;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -29,8 +28,8 @@ public class IconFontToggleButton extends LinearLayout implements Checkable {
     private boolean checked;
     private String checkedIcon;
     private String checkedText;
-    private AppCompatTextView iconTextView;
-    private AppCompatTextView labelTextView;
+    private TextView iconTextView;
+    private TextView labelTextView;
     private String uncheckedIcon;
     private String uncheckedText;
 
@@ -38,78 +37,80 @@ public class IconFontToggleButton extends LinearLayout implements Checkable {
         super(context);
     }
 
-    public IconFontToggleButton(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        initViews(context, attrs);
+    public IconFontToggleButton(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
+        initViews(context, attributeSet);
     }
 
-    public IconFontToggleButton(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        initViews(context, attrs);
+    public IconFontToggleButton(Context context, AttributeSet attributeSet, int i) {
+        super(context, attributeSet, i);
+        initViews(context, attributeSet);
     }
 
     @SuppressLint("WrongConstant")
-    private void initViews(@NotNull Context context, AttributeSet attrs) {
+    private void initViews(@NotNull Context context, AttributeSet attributeSet) {
         ((LayoutInflater) context.getSystemService("layout_inflater")).inflate(R.layout.iconfont_toggle_btn_view, this, true);
-        iconTextView = (AppCompatTextView) findViewById(R.id.iconfont_toggle_btn_icon);
-        labelTextView = (AppCompatTextView) findViewById(R.id.iconfont_toggle_btn_text);
-        TypedArray a = context.obtainStyledAttributes(attrs, XLERValueHelper.getStyleableRValueArray("CustomTypeface"));
-        String typeface = a.getString(XLERValueHelper.getStyleableRValue("CustomTypeface_typefaceSource"));
-        a.recycle();
-        TypedArray a2 = context.obtainStyledAttributes(attrs, XLERValueHelper.getStyleableRValueArray("IconFontToggleButton"));
-        checkedText = a2.getString(XLERValueHelper.getStyleableRValue("IconFontToggleButton_text_checked"));
-        uncheckedText = a2.getString(XLERValueHelper.getStyleableRValue("IconFontToggleButton_text_unchecked"));
-        checkedIcon = a2.getString(XLERValueHelper.getStyleableRValue("IconFontToggleButton_icon_checked"));
-        uncheckedIcon = a2.getString(XLERValueHelper.getStyleableRValue("IconFontToggleButton_icon_unchecked"));
-        float iconSize = (float) a2.getDimensionPixelSize(XLERValueHelper.getStyleableRValue("IconFontToggleButton_icon_size"), -1);
-        if (iconSize != -1.0f) {
-            iconTextView.setTextSize(0, iconSize);
+        this.iconTextView = (TextView) findViewById(R.id.iconfont_toggle_btn_icon);
+        this.labelTextView = (TextView) findViewById(R.id.iconfont_toggle_btn_text);
+        TypedArray obtainStyledAttributes = context.obtainStyledAttributes(attributeSet, XLERValueHelper.getStyleableRValueArray("CustomTypeface"));
+        String string = obtainStyledAttributes.getString(XLERValueHelper.getStyleableRValue("CustomTypeface_typefaceSource"));
+        obtainStyledAttributes.recycle();
+        TypedArray obtainStyledAttributes2 = context.obtainStyledAttributes(attributeSet, XLERValueHelper.getStyleableRValueArray("IconFontToggleButton"));
+        this.checkedText = obtainStyledAttributes2.getString(XLERValueHelper.getStyleableRValue("IconFontToggleButton_text_checked"));
+        this.uncheckedText = obtainStyledAttributes2.getString(XLERValueHelper.getStyleableRValue("IconFontToggleButton_text_unchecked"));
+        this.checkedIcon = obtainStyledAttributes2.getString(XLERValueHelper.getStyleableRValue("IconFontToggleButton_icon_checked"));
+        this.uncheckedIcon = obtainStyledAttributes2.getString(XLERValueHelper.getStyleableRValue("IconFontToggleButton_icon_unchecked"));
+        float dimensionPixelSize = (float) obtainStyledAttributes2.getDimensionPixelSize(XLERValueHelper.getStyleableRValue("IconFontToggleButton_icon_size"), -1);
+        if (dimensionPixelSize != -1.0f) {
+            this.iconTextView.setTextSize(0, dimensionPixelSize);
         }
-        a2.recycle();
-        applyCustomTypeface(context, typeface);
+        obtainStyledAttributes2.recycle();
+        applyCustomTypeface(context, string);
         setFocusable(true);
     }
 
-    private void applyCustomTypeface(Context context, String typefaceSource) {
-        if (typefaceSource != null && labelTextView != null) {
-            labelTextView.setTypeface(FontManager.Instance().getTypeface(getContext(), typefaceSource));
+    private void applyCustomTypeface(Context context, String str) {
+        if (str != null && this.labelTextView != null) {
+            this.labelTextView.setTypeface(FontManager.Instance().getTypeface(getContext(), str));
         }
     }
 
     public boolean isChecked() {
-        return checked;
+        return this.checked;
     }
 
     @SuppressLint("WrongConstant")
-    public void setChecked(boolean checked2) {
-        checked = checked2;
+    public void setChecked(boolean z) {
+        this.checked = z;
         sendAccessibilityEvent(1);
-        if (labelTextView != null) {
-            labelTextView.setText(checked ? checkedText : uncheckedText);
-            labelTextView.setVisibility(0);
+        TextView textView = this.labelTextView;
+        if (textView != null) {
+            textView.setText(this.checked ? this.checkedText : this.uncheckedText);
+            this.labelTextView.setVisibility(0);
         }
-        if (iconTextView != null) {
-            iconTextView.setText(checked ? checkedIcon : uncheckedIcon);
-            iconTextView.setVisibility(0);
+        TextView textView2 = this.iconTextView;
+        if (textView2 != null) {
+            textView2.setText(this.checked ? this.checkedIcon : this.uncheckedIcon);
+            this.iconTextView.setVisibility(0);
         }
         invalidate();
     }
 
     public void toggle() {
-        setChecked(!checked);
+        setChecked(!this.checked);
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
-        super.onInitializeAccessibilityNodeInfo(info);
-        info.setClickable(true);
-        info.setClassName(AppCompatButton.class.getName());
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        accessibilityNodeInfo.setClickable(true);
+        accessibilityNodeInfo.setClassName(Button.class.getName());
     }
 
-    public void setCheckedText(String text) {
-        checkedText = text;
+    public void setCheckedText(String str) {
+        this.checkedText = str;
     }
 
-    public void setUncheckedText(String text) {
-        uncheckedText = text;
+    public void setUncheckedText(String str) {
+        this.uncheckedText = str;
     }
 }

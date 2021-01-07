@@ -3,7 +3,7 @@ package com.microsoft.xbox.toolkit;
 import java.util.HashMap;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -17,27 +17,27 @@ public class XLEAllocationTracker {
         return instance;
     }
 
-    private HashMap<String, Integer> getTagHash(String tag) {
-        if (!adapterCounter.containsKey(tag)) {
-            adapterCounter.put(tag, new HashMap());
+    public void debugDecrement(String str, String str2) {
+    }
+
+    public int debugGetOverallocatedCount(String str) {
+        return 0;
+    }
+
+    public int debugGetTotalCount(String str) {
+        return 0;
+    }
+
+    public void debugIncrement(String str, String str2) {
+    }
+
+    public void debugPrintOverallocated(String str) {
+    }
+
+    private HashMap<String, Integer> getTagHash(String str) {
+        if (!this.adapterCounter.containsKey(str)) {
+            this.adapterCounter.put(str, new HashMap());
         }
-        return adapterCounter.get(tag);
-    }
-
-    public void debugIncrement(String tag, String key) {
-    }
-
-    public void debugDecrement(String tag, String key) {
-    }
-
-    public int debugGetOverallocatedCount(String tag) {
-        return 0;
-    }
-
-    public int debugGetTotalCount(String tag) {
-        return 0;
-    }
-
-    public void debugPrintOverallocated(String tag) {
+        return this.adapterCounter.get(str);
     }
 }

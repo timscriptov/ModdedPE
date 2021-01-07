@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -42,10 +42,10 @@ public class XLEGlobalData {
     private long titleId;
 
     private XLEGlobalData() {
-        isOffline = true;
-        friendListUpdated = false;
-        launchTitleIsBrowser = false;
-        hideCollectionFilter = false;
+        this.isOffline = true;
+        this.friendListUpdated = false;
+        this.launchTitleIsBrowser = false;
+        this.hideCollectionFilter = false;
     }
 
     public static XLEGlobalData getInstance() {
@@ -53,198 +53,199 @@ public class XLEGlobalData {
     }
 
     public long getLastLoginError() {
-        long error = errorCodeForLogin;
-        errorCodeForLogin = 0;
-        return error;
+        long j = this.errorCodeForLogin;
+        this.errorCodeForLogin = 0;
+        return j;
     }
 
-    public void setLoginErrorCode(long errorCode) {
-        errorCodeForLogin = errorCode;
+    public void setLoginErrorCode(long j) {
+        this.errorCodeForLogin = j;
     }
 
     public String getSelectedGamertag() {
-        return selectedGamertag;
+        return this.selectedGamertag;
     }
 
-    public void setSelectedGamertag(String gamertag) {
-        selectedGamertag = gamertag;
+    public void setSelectedGamertag(String str) {
+        this.selectedGamertag = str;
     }
 
     public ArrayList<URI> getSelectedImages() {
-        return selectedImages;
+        return this.selectedImages;
     }
 
-    public void setSelectedImages(ArrayList<URI> imageUrl) {
-        selectedImages = imageUrl;
+    public void setSelectedImages(ArrayList<URI> arrayList) {
+        this.selectedImages = arrayList;
     }
 
     public String getSelectedXuid() {
-        if (JavaUtil.isNullOrEmpty(selectedXuid)) {
+        if (JavaUtil.isNullOrEmpty(this.selectedXuid)) {
             return ProjectSpecificDataProvider.getInstance().getXuidString();
         }
-        return selectedXuid;
+        return this.selectedXuid;
     }
 
-    public void setSelectedXuid(String xuid) {
-        selectedXuid = xuid;
+    public void setSelectedXuid(String str) {
+        this.selectedXuid = str;
     }
 
     public MultiSelection<FriendSelectorItem> getSelectedRecipients() {
-        if (selectedRecipients == null) {
-            selectedRecipients = new MultiSelection<>();
+        if (this.selectedRecipients == null) {
+            this.selectedRecipients = new MultiSelection<>();
         }
-        return selectedRecipients;
+        return this.selectedRecipients;
     }
 
-    public void AddForceRefresh(Class<? extends ViewModelBase> vmclass) {
+    public void AddForceRefresh(Class<? extends ViewModelBase> cls) {
         XLEAssert.assertIsUIThread();
-        if (forceRefreshVMs == null) {
-            forceRefreshVMs = new HashSet<>();
+        if (this.forceRefreshVMs == null) {
+            this.forceRefreshVMs = new HashSet<>();
         }
-        forceRefreshVMs.add(vmclass);
+        this.forceRefreshVMs.add(cls);
     }
 
-    public boolean CheckDrainShouldRefresh(Class<? extends ViewModelBase> vmclass) {
-        return forceRefreshVMs != null && forceRefreshVMs.remove(vmclass);
+    public boolean CheckDrainShouldRefresh(Class<? extends ViewModelBase> cls) {
+        HashSet<Class<? extends ViewModelBase>> hashSet = this.forceRefreshVMs;
+        return hashSet != null && hashSet.remove(cls);
     }
 
     public String getSelectedAchievementKey() {
-        return selectedAchievementKey;
+        return this.selectedAchievementKey;
     }
 
-    public void setSelectedAchievementKey(String key) {
-        selectedAchievementKey = key;
+    public void setSelectedAchievementKey(String str) {
+        this.selectedAchievementKey = str;
     }
 
     public String getSelectedDataSource() {
-        return selectedDataSource;
+        return this.selectedDataSource;
     }
 
-    public void setSelectedDataSource(String dataSource) {
-        selectedDataSource = dataSource;
+    public void setSelectedDataSource(String str) {
+        this.selectedDataSource = str;
     }
 
     public boolean getIsLoggedIn() {
-        return isLoggedIn;
+        return this.isLoggedIn;
     }
 
-    public void setLoggedIn(boolean value) {
-        isLoggedIn = value;
+    public void setLoggedIn(boolean z) {
+        this.isLoggedIn = z;
     }
 
     public boolean getShowLoginError() {
-        boolean val = showLoginError;
-        showLoginError = false;
-        return val;
+        boolean z = this.showLoginError;
+        this.showLoginError = false;
+        return z;
     }
 
-    public void setShowLoginError(boolean value) {
-        showLoginError = value;
+    public void setShowLoginError(boolean z) {
+        this.showLoginError = z;
     }
 
     public boolean getIsOffline() {
-        return isOffline;
+        return this.isOffline;
     }
 
-    public void setIsOffline(boolean value) {
-        isOffline = value;
+    public void setIsOffline(boolean z) {
+        this.isOffline = z;
     }
 
     public boolean getIsOnline() {
-        return !isOffline;
+        return !this.isOffline;
     }
 
     public void resetGlobalParameters() {
-        selectedGamertag = null;
-        selectedAchievementKey = null;
-        selectedDataSource = null;
-        isLoggedIn = false;
-        showLoginError = false;
-        isOffline = true;
-        searchTag = null;
-        selectedImages = null;
-        titleId = 0;
-        forceRefreshVMs = null;
+        this.selectedGamertag = null;
+        this.selectedAchievementKey = null;
+        this.selectedDataSource = null;
+        this.isLoggedIn = false;
+        this.showLoginError = false;
+        this.isOffline = true;
+        this.searchTag = null;
+        this.selectedImages = null;
+        this.titleId = 0;
+        this.forceRefreshVMs = null;
     }
 
     public boolean getFriendListUpdated() {
-        return friendListUpdated;
+        return this.friendListUpdated;
     }
 
-    public void setFriendListUpdated(boolean updated) {
-        friendListUpdated = updated;
+    public void setFriendListUpdated(boolean z) {
+        this.friendListUpdated = z;
     }
 
     public boolean getForceRefreshProfile() {
-        return forceRefreshProfile;
+        return this.forceRefreshProfile;
     }
 
-    public void setForceRefreshProfile(boolean forceRefresh) {
-        forceRefreshProfile = forceRefresh;
+    public void setForceRefreshProfile(boolean z) {
+        this.forceRefreshProfile = z;
     }
 
     public String getSearchTag() {
-        return searchTag;
+        return this.searchTag;
     }
 
-    public void setSearchTag(String searchTag2) {
-        if (searchTag2 == null || searchTag2.length() <= MAX_SEARCH_TEXT_LENGTH) {
-            searchTag = searchTag2;
+    public void setSearchTag(String str) {
+        if (str == null || str.length() <= MAX_SEARCH_TEXT_LENGTH) {
+            this.searchTag = str;
         } else {
-            searchTag = searchTag2.substring(0, MAX_SEARCH_TEXT_LENGTH);
+            this.searchTag = str.substring(0, MAX_SEARCH_TEXT_LENGTH);
         }
     }
 
     public Class<? extends ViewModelBase> getSearchFilterSetterClass() {
-        return searchFilterSetterClass;
+        return this.searchFilterSetterClass;
     }
 
     public boolean getAutoLoginStarted() {
-        return autoLoginStarted;
+        return this.autoLoginStarted;
     }
 
-    public void setAutoLoginStarted(boolean autoLoginStarted2) {
-        autoLoginStarted = autoLoginStarted2;
+    public void setAutoLoginStarted(boolean z) {
+        this.autoLoginStarted = z;
     }
 
     public Class<? extends ActivityBase> getDefaultScreenClass() {
-        return defaultScreenClass;
+        return this.defaultScreenClass;
     }
 
-    public void setDefaultScreenClass(Class<? extends ActivityBase> screenClass) {
-        defaultScreenClass = screenClass;
+    public void setDefaultScreenClass(Class<? extends ActivityBase> cls) {
+        this.defaultScreenClass = cls;
     }
 
     public boolean getLaunchTitleIsBrowser() {
-        return launchTitleIsBrowser;
+        return this.launchTitleIsBrowser;
     }
 
-    public void setLaunchTitleIsBrowser(boolean v) {
-        launchTitleIsBrowser = v;
+    public void setLaunchTitleIsBrowser(boolean z) {
+        this.launchTitleIsBrowser = z;
     }
 
     public String getPivotTitle() {
-        return pivotTitle;
+        return this.pivotTitle;
     }
 
-    public void setPivotTitle(String pivotTitle2) {
-        pivotTitle = pivotTitle2;
+    public void setPivotTitle(String str) {
+        this.pivotTitle = str;
     }
 
     public boolean getHideCollectionFilter() {
-        return hideCollectionFilter;
+        return this.hideCollectionFilter;
     }
 
-    public void setHideCollectionFilter(boolean isHide) {
-        hideCollectionFilter = isHide;
+    public void setHideCollectionFilter(boolean z) {
+        this.hideCollectionFilter = z;
     }
 
     public long getSelectedTitleId() {
-        return titleId;
+        return this.titleId;
     }
 
-    public void setSelectedTitleId(long titleId2) {
-        titleId = titleId2;
+    public void setSelectedTitleId(long j) {
+        this.titleId = j;
     }
 
     private static class XLEGlobalDataHolder {

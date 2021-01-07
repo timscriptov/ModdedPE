@@ -7,7 +7,7 @@ import android.view.animation.Transformation;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -18,23 +18,23 @@ public class HeightAnimation extends Animation {
     private int toValue;
     private View view;
 
-    public HeightAnimation(int from, int to) {
-        fromValue = from;
-        toValue = to;
-    }
-
-    public void setTargetView(@NotNull View targetView) {
-        view = targetView;
-        fromValue = targetView.getHeight();
-    }
-
-    public void applyTransformation(float interpolatedTime, Transformation t) {
-        int newDelta = (int) (((float) (toValue - fromValue)) * interpolatedTime);
-        view.getLayoutParams().height = fromValue + newDelta;
-        view.requestLayout();
+    public HeightAnimation(int i, int i2) {
+        this.fromValue = i;
+        this.toValue = i2;
     }
 
     public boolean willChangeBounds() {
         return true;
+    }
+
+    public void setTargetView(@NotNull View view2) {
+        this.view = view2;
+        this.fromValue = view2.getHeight();
+    }
+
+    public void applyTransformation(float f, Transformation transformation) {
+        int i = (int) (((float) (this.toValue - this.fromValue)) * f);
+        this.view.getLayoutParams().height = this.fromValue + i;
+        this.view.requestLayout();
     }
 }

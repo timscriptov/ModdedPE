@@ -13,7 +13,7 @@ import java.util.Iterator;
 import java.util.Stack;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -34,108 +34,25 @@ public class NavigationManager implements View.OnKeyListener {
     private Runnable transitionLambda;
 
     private NavigationManager() {
-        boolean z = true;
-        navigationParameters = new Stack<>();
-        navigationStack = new Stack<>();
-        currentAnimation = null;
-        animationState = NavigationManagerAnimationState.NONE;
-        transitionLambda = null;
-        goingBack = false;
-        transitionAnimate = true;
-        cannotNavigateTripwire = false;
-        callAfterAnimation = () -> OnAnimationEnd();
-        XLEAssert.assertTrue("You must access navigation manager on UI thread.", Thread.currentThread() != ThreadManager.UIThread ? false : z);
+        this.navigationParameters = new Stack<>();
+        this.navigationStack = new Stack<>();
+        this.currentAnimation = null;
+        this.animationState = NavigationManagerAnimationState.NONE;
+        this.transitionLambda = null;
+        boolean z = false;
+        this.goingBack = false;
+        this.transitionAnimate = true;
+        this.cannotNavigateTripwire = false;
+        this.callAfterAnimation = new Runnable() {
+            public void run() {
+                NavigationManager.this.OnAnimationEnd();
+            }
+        };
+        XLEAssert.assertTrue("You must access navigation manager on UI thread.", Thread.currentThread() == ThreadManager.UIThread ? true : z);
     }
 
     public static NavigationManager getInstance() {
         return NavigationManagerHolder.instance;
-    }
-
-    public ScreenLayout getCurrentActivity() {
-        if (navigationStack.empty()) {
-            return null;
-        }
-        return navigationStack.peek();
-    }
-
-    public String getCurrentActivityName() {
-        ScreenLayout ativity = getCurrentActivity();
-        if (ativity != null) {
-            return ativity.getName();
-        }
-        return null;
-    }
-
-    public ScreenLayout getPreviousActivity() {
-        if (navigationStack.empty() || navigationStack.size() <= 1) {
-            return null;
-        }
-        return (ScreenLayout) navigationStack.get(navigationStack.size() - 2);
-    }
-
-    public void setOnNavigatedListener(OnNavigatedListener listener) {
-        navigationListener = listener;
-    }
-
-    public void removeNaviationListener() {
-        navigationListener = null;
-    }
-
-    public void setNavigationCallbacks(NavigationCallbacks callbacks) {
-        navigationCallbacks = callbacks;
-    }
-
-    public void removeNavigationCallbacks() {
-        navigationCallbacks = null;
-    }
-
-    public ActivityParameters getActivityParameters() {
-        return getActivityParameters(0);
-    }
-
-    public ActivityParameters getActivityParameters(int depth) {
-        XLEAssert.assertTrue(depth >= 0 && depth < navigationParameters.size());
-        return (ActivityParameters) navigationParameters.get((navigationParameters.size() - depth) - 1);
-    }
-
-    public void NavigateTo(Class<? extends ScreenLayout> screenClass, boolean addToStack, ActivityParameters activityParameters) {
-        if (addToStack) {
-            try {
-                PushScreen(screenClass, activityParameters);
-            } catch (XLEException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                PopScreensAndReplace(1, screenClass, activityParameters);
-            } catch (XLEException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void NavigateTo(Class<? extends ScreenLayout> screenClass, boolean addToStack) {
-        NavigateTo(screenClass, addToStack, (ActivityParameters) null);
-    }
-
-    public boolean OnBackButtonPressed() {
-        boolean shouldFinishActivity = ShouldBackCloseApp();
-        if (getCurrentActivity() != null && !getCurrentActivity().onBackButtonPressed()) {
-            if (shouldFinishActivity) {
-                try {
-                    PopScreensAndReplace(1, (Class<? extends ScreenLayout>) null, false, false, false);
-                } catch (XLEException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                try {
-                    PopScreen();
-                } catch (XLEException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return shouldFinishActivity;
     }
 
     public boolean TEST_isAnimatingIn() {
@@ -146,29 +63,116 @@ public class NavigationManager implements View.OnKeyListener {
         return false;
     }
 
+    public ScreenLayout getCurrentActivity() {
+        if (this.navigationStack.empty()) {
+            return null;
+        }
+        return this.navigationStack.peek();
+    }
+
+    public String getCurrentActivityName() {
+        ScreenLayout currentActivity = getCurrentActivity();
+        if (currentActivity != null) {
+            return currentActivity.getName();
+        }
+        return null;
+    }
+
+    public ScreenLayout getPreviousActivity() {
+        if (this.navigationStack.empty() || this.navigationStack.size() <= 1) {
+            return null;
+        }
+        Stack<ScreenLayout> stack = this.navigationStack;
+        return (ScreenLayout) stack.get(stack.size() - 2);
+    }
+
+    public void setOnNavigatedListener(OnNavigatedListener onNavigatedListener) {
+        this.navigationListener = onNavigatedListener;
+    }
+
+    public void removeNaviationListener() {
+        this.navigationListener = null;
+    }
+
+    public void setNavigationCallbacks(NavigationCallbacks navigationCallbacks2) {
+        this.navigationCallbacks = navigationCallbacks2;
+    }
+
+    public void removeNavigationCallbacks() {
+        this.navigationCallbacks = null;
+    }
+
+    public ActivityParameters getActivityParameters() {
+        return getActivityParameters(0);
+    }
+
+    public ActivityParameters getActivityParameters(int i) {
+        XLEAssert.assertTrue(i >= 0 && i < this.navigationParameters.size());
+        Stack<ActivityParameters> stack = this.navigationParameters;
+        return (ActivityParameters) stack.get((stack.size() - i) - 1);
+    }
+
+    public void NavigateTo(Class<? extends ScreenLayout> cls, boolean z, ActivityParameters activityParameters) {
+        if (z) {
+            try {
+                PushScreen(cls, activityParameters);
+            } catch (XLEException unused) {
+            }
+        } else {
+            try {
+                PopScreensAndReplace(1, cls, activityParameters);
+            } catch (XLEException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void NavigateTo(Class<? extends ScreenLayout> cls, boolean z) {
+        NavigateTo(cls, z, (ActivityParameters) null);
+    }
+
+    public boolean OnBackButtonPressed() {
+        boolean ShouldBackCloseApp = ShouldBackCloseApp();
+        if (getCurrentActivity() != null && !getCurrentActivity().onBackButtonPressed()) {
+            if (ShouldBackCloseApp) {
+                try {
+                    PopScreensAndReplace(1, (Class<? extends ScreenLayout>) null, false, false, false);
+                } catch (XLEException unused) {
+                }
+            } else {
+                try {
+                    PopScreen();
+                } catch (XLEException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return ShouldBackCloseApp;
+    }
+
     public boolean isAnimating() {
         return this.animationState != NavigationManagerAnimationState.NONE;
     }
 
     public boolean ShouldBackCloseApp() {
-        return Size() <= 1 && animationState == NavigationManagerAnimationState.NONE;
+        return Size() <= 1 && this.animationState == NavigationManagerAnimationState.NONE;
     }
 
-    public boolean IsScreenOnStack(Class<? extends ScreenLayout> screenClass) {
-        Iterator it = navigationStack.iterator();
+    public boolean IsScreenOnStack(Class<? extends ScreenLayout> cls) {
+        Iterator it = this.navigationStack.iterator();
         while (it.hasNext()) {
-            if (((ScreenLayout) it.next()).getClass().equals(screenClass)) {
+            if (((ScreenLayout) it.next()).getClass().equals(cls)) {
                 return true;
             }
         }
         return false;
     }
 
-    public int CountPopsToScreen(Class<? extends ScreenLayout> screenClass) {
-        int TOP_ELEM = navigationStack.size() - 1;
-        for (int i = TOP_ELEM; i >= 0; i--) {
-            if (((ScreenLayout) navigationStack.get(i)).getClass().equals(screenClass)) {
-                return TOP_ELEM - i;
+    public int CountPopsToScreen(Class<? extends ScreenLayout> cls) {
+        int size = this.navigationStack.size() - 1;
+        for (int i = size; i >= 0; i--) {
+            if (((ScreenLayout) this.navigationStack.get(i)).getClass().equals(cls)) {
+                return size - i;
             }
         }
         return -1;
@@ -178,18 +182,18 @@ public class NavigationManager implements View.OnKeyListener {
         return this.navigationStack.size();
     }
 
-    public void RestartCurrentScreen(boolean animate) throws XLEException {
-        RestartCurrentScreen((ActivityParameters) null, animate);
+    public void RestartCurrentScreen(boolean z) throws XLEException {
+        RestartCurrentScreen((ActivityParameters) null, z);
     }
 
-    public void RestartCurrentScreen(ActivityParameters params, boolean animate) throws XLEException {
-        if (animationState == NavigationManagerAnimationState.ANIMATING_OUT) {
+    public void RestartCurrentScreen(ActivityParameters activityParameters, boolean z) throws XLEException {
+        if (this.animationState == NavigationManagerAnimationState.ANIMATING_OUT) {
             OnAnimationEnd();
-        } else if (animationState == NavigationManagerAnimationState.ANIMATING_IN) {
+        } else if (this.animationState == NavigationManagerAnimationState.ANIMATING_IN) {
             OnAnimationEnd();
-            PopScreensAndReplace(1, getCurrentActivity().getClass(), animate, true, true, params);
+            PopScreensAndReplace(1, getCurrentActivity().getClass(), z, true, true, activityParameters);
         } else {
-            PopScreensAndReplace(1, getCurrentActivity().getClass(), animate, true, true, params);
+            PopScreensAndReplace(1, getCurrentActivity().getClass(), z, true, true, activityParameters);
         }
     }
 
@@ -197,8 +201,8 @@ public class NavigationManager implements View.OnKeyListener {
         PopScreens(1);
     }
 
-    public void PopScreens(int popCount) throws XLEException {
-        PopScreensAndReplace(popCount, (Class<? extends ScreenLayout>) null);
+    public void PopScreens(int i) throws XLEException {
+        PopScreensAndReplace(i, (Class<? extends ScreenLayout>) null);
     }
 
     public void PopAllScreens() throws XLEException {
@@ -207,101 +211,103 @@ public class NavigationManager implements View.OnKeyListener {
         }
     }
 
-    public void PopTillScreenThenPush(Class<? extends ScreenLayout> target, Class<? extends ScreenLayout> newScreen, ActivityParameters params) throws XLEException {
-        int toPop = CountPopsToScreen(target);
-        if (toPop > 0) {
-            PopScreensAndReplace(toPop, newScreen, true, true, false, params);
-        } else if (toPop < 0) {
-            PopScreensAndReplace(0, newScreen, true, false, false, params);
+    public void PopTillScreenThenPush(Class<? extends ScreenLayout> cls, Class<? extends ScreenLayout> cls2, ActivityParameters activityParameters) throws XLEException {
+        int CountPopsToScreen = CountPopsToScreen(cls);
+        if (CountPopsToScreen > 0) {
+            PopScreensAndReplace(CountPopsToScreen, cls2, true, true, false, activityParameters);
+        } else if (CountPopsToScreen < 0) {
+            PopScreensAndReplace(0, cls2, true, false, false, activityParameters);
         } else {
-            PopScreensAndReplace(0, newScreen, true, false, false, params);
+            PopScreensAndReplace(0, cls2, true, false, false, activityParameters);
         }
     }
 
-    public void PopTillScreenThenPush(Class<? extends ScreenLayout> target, Class<? extends ScreenLayout> newScreen) throws XLEException {
-        PopTillScreenThenPush(target, newScreen, (ActivityParameters) null);
+    public void PopTillScreenThenPush(Class<? extends ScreenLayout> cls, Class<? extends ScreenLayout> cls2) throws XLEException {
+        PopTillScreenThenPush(cls, cls2, (ActivityParameters) null);
     }
 
-    public void GotoScreenWithPop(Class<? extends ScreenLayout> screenClass) throws XLEException {
-        int toPop = CountPopsToScreen(screenClass);
-        if (toPop > 0) {
-            PopScreensAndReplace(toPop, (Class<? extends ScreenLayout>) null, true, false, false);
-        } else if (toPop < 0) {
-            PopScreensAndReplace(Size(), screenClass, true, false, false);
+    public void GotoScreenWithPop(Class<? extends ScreenLayout> cls) throws XLEException {
+        int CountPopsToScreen = CountPopsToScreen(cls);
+        if (CountPopsToScreen > 0) {
+            PopScreensAndReplace(CountPopsToScreen, (Class<? extends ScreenLayout>) null, true, false, false);
+        } else if (CountPopsToScreen < 0) {
+            PopScreensAndReplace(Size(), cls, true, false, false);
         } else {
             RestartCurrentScreen(true);
         }
     }
 
-    public void GotoScreenWithPop(ActivityParameters activityParameters, Class<? extends ScreenLayout> newTop, Class<? extends ScreenLayout>... until) throws XLEException {
-        Class<? extends ScreenLayout> clsUntil = null;
-        int idxTop = navigationStack.size() - 1;
-        int pos = idxTop;
+    public void GotoScreenWithPop(ActivityParameters activityParameters, Class<? extends ScreenLayout> cls, Class<? extends ScreenLayout>... clsArr) throws XLEException {
+        Class<?> cls2;
+        int size = this.navigationStack.size() - 1;
+        int i = size;
         loop0:
         while (true) {
-            if (pos < 0) {
+            if (i < 0) {
+                cls2 = null;
                 break;
             }
-            Class<?> cls = ((ScreenLayout) navigationStack.get(pos)).getClass();
-            for (Class<? extends ScreenLayout> cls2 : until) {
-                if (cls2 == cls) {
-                    clsUntil = cls2;
+            Class<?> cls3 = ((ScreenLayout) this.navigationStack.get(i)).getClass();
+            int length = clsArr.length;
+            for (int i2 = 0; i2 < length; i2++) {
+                cls2 = clsArr[i2];
+                if (cls2 == cls3) {
                     break loop0;
                 }
             }
-            pos--;
+            i--;
         }
-        if (clsUntil == null) {
-            PopScreensAndReplace(Size(), newTop, true, true, false, activityParameters);
-        } else if (clsUntil != newTop) {
-            PopScreensAndReplace(idxTop - pos, newTop, true, true, false, activityParameters);
-        } else if (pos == idxTop) {
+        if (cls2 == null) {
+            PopScreensAndReplace(Size(), cls, true, true, false, activityParameters);
+        } else if (cls2 != cls) {
+            PopScreensAndReplace(size - i, cls, true, true, false, activityParameters);
+        } else if (i == size) {
             RestartCurrentScreen(activityParameters, false);
         } else {
-            PopScreensAndReplace(idxTop - pos, (Class<? extends ScreenLayout>) null, true, true, false, activityParameters);
+            PopScreensAndReplace(size - i, (Class<? extends ScreenLayout>) null, true, true, false, activityParameters);
         }
     }
 
-    public void GotoScreenWithPush(Class<? extends ScreenLayout> screenClass) throws XLEException {
-        int toPop = CountPopsToScreen(screenClass);
-        if (toPop > 0) {
-            PopScreensAndReplace(toPop, (Class<? extends ScreenLayout>) null, true, false, false);
-        } else if (toPop < 0) {
-            PopScreensAndReplace(0, screenClass, true, false, false);
+    public void GotoScreenWithPush(Class<? extends ScreenLayout> cls) throws XLEException {
+        int CountPopsToScreen = CountPopsToScreen(cls);
+        if (CountPopsToScreen > 0) {
+            PopScreensAndReplace(CountPopsToScreen, (Class<? extends ScreenLayout>) null, true, false, false);
+        } else if (CountPopsToScreen < 0) {
+            PopScreensAndReplace(0, cls, true, false, false);
         } else {
             RestartCurrentScreen(true);
         }
     }
 
-    public void GotoScreenWithPush(Class<? extends ScreenLayout> screenClass, ActivityParameters activityParameters) throws XLEException {
-        int toPop = CountPopsToScreen(screenClass);
-        if (toPop > 0) {
-            PopScreensAndReplace(toPop, (Class<? extends ScreenLayout>) null, true, false, false, activityParameters);
-        } else if (toPop < 0) {
-            PopScreensAndReplace(0, screenClass, true, false, false, activityParameters);
+    public void GotoScreenWithPush(Class<? extends ScreenLayout> cls, ActivityParameters activityParameters) throws XLEException {
+        int CountPopsToScreen = CountPopsToScreen(cls);
+        if (CountPopsToScreen > 0) {
+            PopScreensAndReplace(CountPopsToScreen, (Class<? extends ScreenLayout>) null, true, false, false, activityParameters);
+        } else if (CountPopsToScreen < 0) {
+            PopScreensAndReplace(0, cls, true, false, false, activityParameters);
         } else {
             RestartCurrentScreen(true);
         }
     }
 
-    public void PushScreen(Class<? extends ScreenLayout> screenClass, ActivityParameters activityParameters) throws XLEException {
-        PopScreensAndReplace(0, screenClass, true, false, false, activityParameters);
+    public void PushScreen(Class<? extends ScreenLayout> cls, ActivityParameters activityParameters) throws XLEException {
+        PopScreensAndReplace(0, cls, true, false, false, activityParameters);
     }
 
-    public void PushScreen(Class<? extends ScreenLayout> screenClass) throws XLEException {
-        PushScreen(screenClass, (ActivityParameters) null);
+    public void PushScreen(Class<? extends ScreenLayout> cls) throws XLEException {
+        PushScreen(cls, (ActivityParameters) null);
     }
 
-    public void PopScreensAndReplace(int popCount, Class<? extends ScreenLayout> newScreenClass, ActivityParameters activityParameters) throws XLEException {
-        PopScreensAndReplace(popCount, newScreenClass, true, true, false, activityParameters);
+    public void PopScreensAndReplace(int i, Class<? extends ScreenLayout> cls, ActivityParameters activityParameters) throws XLEException {
+        PopScreensAndReplace(i, cls, true, true, false, activityParameters);
     }
 
-    public void PopScreensAndReplace(int popCount, Class<? extends ScreenLayout> newScreenClass) throws XLEException {
-        PopScreensAndReplace(popCount, newScreenClass, (ActivityParameters) null);
+    public void PopScreensAndReplace(int i, Class<? extends ScreenLayout> cls) throws XLEException {
+        PopScreensAndReplace(i, cls, (ActivityParameters) null);
     }
 
-    public void PopScreensAndReplace(int popCount, Class<? extends ScreenLayout> newScreenClass, boolean animate, boolean isRestart) throws XLEException {
-        PopScreensAndReplace(popCount, newScreenClass, animate, true, isRestart);
+    public void PopScreensAndReplace(int i, Class<? extends ScreenLayout> cls, boolean z, boolean z2) throws XLEException {
+        PopScreensAndReplace(i, cls, z, true, z2);
     }
 
     public void PopScreensAndReplace(int popCount, Class<? extends ScreenLayout> newScreenClass, boolean animate, boolean goingBack2, boolean isRestart, ActivityParameters activityParameters) throws XLEException {
@@ -390,42 +396,44 @@ public class NavigationManager implements View.OnKeyListener {
         }
     }
 
-    public void PopScreensAndReplace(int popCount, Class<? extends ScreenLayout> newScreenClass, boolean animate, boolean goingBack2, boolean isRestart) throws XLEException {
-        PopScreensAndReplace(popCount, newScreenClass, animate, goingBack2, isRestart, (ActivityParameters) null);
+    public void PopScreensAndReplace(int i, Class<? extends ScreenLayout> cls, boolean z, boolean z2, boolean z3) throws XLEException {
+        PopScreensAndReplace(i, cls, z, z2, z3, (ActivityParameters) null);
     }
 
     public void onApplicationPause() {
-        for (int i = 0; i < navigationStack.size(); i++) {
-            ((ScreenLayout) navigationStack.get(i)).onApplicationPause();
+        for (int i = 0; i < this.navigationStack.size(); i++) {
+            ((ScreenLayout) this.navigationStack.get(i)).onApplicationPause();
         }
     }
 
     public void onApplicationResume() {
-        for (int i = 0; i < navigationStack.size(); i++) {
-            ((ScreenLayout) navigationStack.get(i)).onApplicationResume();
+        for (int i = 0; i < this.navigationStack.size(); i++) {
+            ((ScreenLayout) this.navigationStack.get(i)).onApplicationResume();
         }
     }
 
-    public void setAnimationBlocking(boolean animationBlocking) {
-        if (navigationCallbacks != null) {
-            navigationCallbacks.setAnimationBlocking(animationBlocking);
+    public void setAnimationBlocking(boolean z) {
+        NavigationCallbacks navigationCallbacks2 = this.navigationCallbacks;
+        if (navigationCallbacks2 != null) {
+            navigationCallbacks2.setAnimationBlocking(z);
         }
     }
 
-    private void Transition(boolean goingBack2, Runnable lambda, boolean animate) {
-        transitionLambda = lambda;
-        transitionAnimate = animate;
-        goingBack = goingBack2;
-        currentAnimation = getCurrentActivity() == null ? null : getCurrentActivity().getAnimateOut(goingBack2);
-        startAnimation(currentAnimation, NavigationManagerAnimationState.ANIMATING_OUT);
+    private void Transition(boolean z, Runnable runnable, boolean z2) {
+        this.transitionLambda = runnable;
+        this.transitionAnimate = z2;
+        this.goingBack = z;
+        XLEAnimationPackage animateOut = getCurrentActivity() == null ? null : getCurrentActivity().getAnimateOut(z);
+        this.currentAnimation = animateOut;
+        startAnimation(animateOut, NavigationManagerAnimationState.ANIMATING_OUT);
     }
 
-    private void ReplaceOnAnimationEnd(boolean goingBack2, Runnable lambda, boolean animate) {
-        XLEAssert.assertTrue(animationState == NavigationManagerAnimationState.ANIMATING_OUT || animationState == NavigationManagerAnimationState.ANIMATING_IN);
-        animationState = NavigationManagerAnimationState.ANIMATING_OUT;
-        transitionLambda = lambda;
-        transitionAnimate = animate;
-        goingBack = goingBack2;
+    private void ReplaceOnAnimationEnd(boolean z, Runnable runnable, boolean z2) {
+        XLEAssert.assertTrue(this.animationState == NavigationManagerAnimationState.ANIMATING_OUT || this.animationState == NavigationManagerAnimationState.ANIMATING_IN);
+        this.animationState = NavigationManagerAnimationState.ANIMATING_OUT;
+        this.transitionLambda = runnable;
+        this.transitionAnimate = z2;
+        this.goingBack = z;
     }
 
     public void OnAnimationEnd() {
@@ -456,22 +464,23 @@ public class NavigationManager implements View.OnKeyListener {
         }
     }
 
-    private void startAnimation(XLEAnimationPackage anim, NavigationManagerAnimationState state) {
-        animationState = state;
-        currentAnimation = anim;
-        if (navigationCallbacks != null) {
-            navigationCallbacks.setAnimationBlocking(true);
+    private void startAnimation(XLEAnimationPackage xLEAnimationPackage, NavigationManagerAnimationState navigationManagerAnimationState) {
+        this.animationState = navigationManagerAnimationState;
+        this.currentAnimation = xLEAnimationPackage;
+        NavigationCallbacks navigationCallbacks2 = this.navigationCallbacks;
+        if (navigationCallbacks2 != null) {
+            navigationCallbacks2.setAnimationBlocking(true);
         }
-        if (!transitionAnimate || anim == null) {
-            callAfterAnimation.run();
+        if (!this.transitionAnimate || xLEAnimationPackage == null) {
+            this.callAfterAnimation.run();
             return;
         }
-        anim.setOnAnimationEndRunnable(callAfterAnimation);
-        anim.startAnimation();
+        xLEAnimationPackage.setOnAnimationEndRunnable(this.callAfterAnimation);
+        xLEAnimationPackage.startAnimation();
     }
 
-    public boolean onKey(View v, int keyCode, KeyEvent event) {
-        if (keyCode != 4 || event.getAction() != 1) {
+    public boolean onKey(View view, int i, KeyEvent keyEvent) {
+        if (i != 4 || keyEvent.getAction() != 1) {
             return false;
         }
         if (!OnBackButtonPressed()) {
@@ -515,33 +524,27 @@ public class NavigationManager implements View.OnKeyListener {
     private class RestartRunner implements Runnable {
         private final ActivityParameters params;
 
-        public RestartRunner(ActivityParameters params2) {
-            params = params2;
+        public RestartRunner(ActivityParameters activityParameters) {
+            this.params = activityParameters;
         }
 
         public void run() {
-            boolean z = true;
-            boolean unused = cannotNavigateTripwire = true;
-            ScreenLayout from = getCurrentActivity();
-            XLEAssert.assertNotNull(from);
+            ScreenLayout currentActivity = getCurrentActivity();
+            XLEAssert.assertNotNull(currentActivity);
             getCurrentActivity().onSetInactive();
             getCurrentActivity().onPause();
             getCurrentActivity().onStop();
-            if (navigationParameters.isEmpty()) {
-                z = false;
-            }
-            XLEAssert.assertTrue("navigationParameters cannot be empty!", z);
+            XLEAssert.assertTrue("navigationParameters cannot be empty!", true ^ navigationParameters.isEmpty());
             navigationParameters.pop();
-            navigationParameters.push(params);
+            navigationParameters.push(this.params);
             getCurrentActivity().onStart();
             getCurrentActivity().onResume();
             getCurrentActivity().onSetActive();
             getCurrentActivity().onAnimateInStarted();
             XboxTcuiSdk.getActivity().invalidateOptionsMenu();
             if (navigationListener != null) {
-                navigationListener.onPageRestarted(from);
+                navigationListener.onPageRestarted(currentActivity);
             }
-            boolean unused2 = cannotNavigateTripwire = false;
         }
     }
 }

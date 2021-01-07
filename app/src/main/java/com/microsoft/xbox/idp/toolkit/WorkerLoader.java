@@ -1,12 +1,12 @@
 package com.microsoft.xbox.idp.toolkit;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Loader;
+import android.os.Build;
 import android.os.Handler;
 
 /**
- * 05.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -21,7 +21,7 @@ public abstract class WorkerLoader<D> extends Loader<D> {
 
     public WorkerLoader(Context context, Worker<D> worker2) {
         super(context);
-        worker = worker2;
+        this.worker = worker2;
     }
 
     public abstract boolean isDataReleased(D d);
@@ -29,10 +29,11 @@ public abstract class WorkerLoader<D> extends Loader<D> {
     public abstract void releaseData(D d);
 
     public void onStartLoading() {
-        if (result != null) {
-            deliverResult(result);
+        D d = this.result;
+        if (d != null) {
+            deliverResult(d);
         }
-        if (takeContentChanged() || result == null) {
+        if (takeContentChanged() || this.result == null) {
             forceLoad();
         }
     }
@@ -41,61 +42,59 @@ public abstract class WorkerLoader<D> extends Loader<D> {
         cancelLoadCompat();
     }
 
-    public void onCanceled(D data) {
-        if (data != null && !isDataReleased(data)) {
-            releaseData(data);
+    public void onCanceled(D d) {
+        if (d != null && !isDataReleased(d)) {
+            releaseData(d);
         }
     }
 
     public void onForceLoad() {
         super.onForceLoad();
         cancelLoadCompat();
-        synchronized (lock) {
-            resultListener = new ResultListenerImpl();
-            worker.start(resultListener);
+        synchronized (this.lock) {
+            ResultListenerImpl resultListenerImpl = new ResultListenerImpl();
+            this.resultListener = resultListenerImpl;
+            this.worker.start(resultListenerImpl);
         }
     }
 
     public boolean onCancelLoad() {
-        boolean z;
-        synchronized (lock) {
-            if (resultListener != null) {
-                worker.cancel();
-                resultListener = null;
-                z = true;
-            } else {
-                z = false;
+        synchronized (this.lock) {
+            if (this.resultListener == null) {
+                return false;
             }
+            this.worker.cancel();
+            this.resultListener = null;
+            return true;
         }
-        return z;
     }
 
-    public void deliverResult(D data) {
+    public void deliverResult(D d) {
         if (!isReset()) {
-            D oldResult = result;
-            result = data;
+            D d2 = this.result;
+            this.result = d;
             if (isStarted()) {
-                super.deliverResult(data);
+                super.deliverResult(d);
             }
-            if (oldResult != null && oldResult != data && !isDataReleased(oldResult)) {
-                releaseData(oldResult);
+            if (d2 != null && d2 != d && !isDataReleased(d2)) {
+                releaseData(d2);
             }
-        } else if (data != null) {
-            releaseData(data);
+        } else if (d != null) {
+            releaseData(d);
         }
     }
 
     public void onReset() {
         cancelLoadCompat();
-        if (result != null && !isDataReleased(result)) {
-            releaseData(result);
+        D d = this.result;
+        if (d != null && !isDataReleased(d)) {
+            releaseData(this.result);
         }
-        result = null;
+        this.result = null;
     }
 
-    @SuppressLint({"NewApi"})
     private boolean cancelLoadCompat() {
-        return cancelLoad();
+        return Build.VERSION.SDK_INT < 16 ? onCancelLoad() : cancelLoad();
     }
 
     public interface ResultListener<D> {
@@ -112,14 +111,14 @@ public abstract class WorkerLoader<D> extends Loader<D> {
         private ResultListenerImpl() {
         }
 
-        public void onResult(final D result) {
-            synchronized (lock) {
-                final boolean canceled = this != resultListener;
-                dispatcher.post(() -> {
-                    if (canceled) {
-                        onCanceled(result);
+        public void onResult(final D d) {
+            synchronized (WorkerLoader.this.lock) {
+                final boolean z = this != WorkerLoader.this.resultListener;
+                WorkerLoader.this.dispatcher.post(() -> {
+                    if (z) {
+                        onCanceled(d);
                     } else {
-                        deliverResult(result);
+                        deliverResult(d);
                     }
                 });
             }

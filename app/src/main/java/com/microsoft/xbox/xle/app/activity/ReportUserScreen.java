@@ -5,7 +5,7 @@ import com.microsoft.xbox.telemetry.helpers.UTCReportUser;
 import com.microsoft.xbox.xle.viewmodel.ReportUserScreenViewModel;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -14,21 +14,21 @@ import com.microsoft.xbox.xle.viewmodel.ReportUserScreenViewModel;
 public class ReportUserScreen extends ActivityBase {
     private ReportUserScreenViewModel reportUserScreenViewModel;
 
+    public String getActivityName() {
+        return "Report user";
+    }
+
     public void onCreate() {
         super.onCreate();
         onCreateContentView();
-        viewModel = new ReportUserScreenViewModel(this);
-        reportUserScreenViewModel = (ReportUserScreenViewModel) viewModel;
-        UTCReportUser.trackReportView(getName(), reportUserScreenViewModel.getXUID());
+        this.viewModel = new ReportUserScreenViewModel(this);
+        this.reportUserScreenViewModel = (ReportUserScreenViewModel) this.viewModel;
+        UTCReportUser.trackReportView(getName(), this.reportUserScreenViewModel.getXUID());
     }
 
     public void onStart() {
         super.onStart();
-        setBackgroundColor(reportUserScreenViewModel.getPreferredColor());
-    }
-
-    public String getActivityName() {
-        return "Report user";
+        setBackgroundColor(this.reportUserScreenViewModel.getPreferredColor());
     }
 
     public void onCreateContentView() {

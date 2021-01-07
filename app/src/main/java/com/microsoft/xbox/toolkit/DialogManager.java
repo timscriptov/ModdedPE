@@ -3,7 +3,7 @@ package com.microsoft.xbox.toolkit;
 import android.app.Dialog;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -20,154 +20,174 @@ public class DialogManager implements IProjectSpecificDialogManager {
         return instance;
     }
 
-    public IProjectSpecificDialogManager getManager() {
-        return manager;
+    private void checkProvider() {
     }
 
-    public void setManager(IProjectSpecificDialogManager manager2) {
-        manager = manager2;
+    public IProjectSpecificDialogManager getManager() {
+        return this.manager;
+    }
+
+    public void setManager(IProjectSpecificDialogManager iProjectSpecificDialogManager) {
+        this.manager = iProjectSpecificDialogManager;
     }
 
     public Dialog getVisibleDialog() {
         checkProvider();
-        if (manager != null) {
-            return manager.getVisibleDialog();
+        IProjectSpecificDialogManager iProjectSpecificDialogManager = this.manager;
+        if (iProjectSpecificDialogManager != null) {
+            return iProjectSpecificDialogManager.getVisibleDialog();
         }
         return null;
     }
 
     public boolean getIsBlocking() {
         checkProvider();
-        if (manager != null) {
-            return manager.getIsBlocking();
+        IProjectSpecificDialogManager iProjectSpecificDialogManager = this.manager;
+        if (iProjectSpecificDialogManager != null) {
+            return iProjectSpecificDialogManager.getIsBlocking();
         }
         return false;
     }
 
-    public void setEnabled(boolean value) {
+    public void setEnabled(boolean z) {
         checkProvider();
-        if (manager != null) {
-            manager.setEnabled(value);
+        IProjectSpecificDialogManager iProjectSpecificDialogManager = this.manager;
+        if (iProjectSpecificDialogManager != null) {
+            iProjectSpecificDialogManager.setEnabled(z);
         }
     }
 
-    public void showManagedDialog(IXLEManagedDialog dialog) {
+    public void showManagedDialog(IXLEManagedDialog iXLEManagedDialog) {
         checkProvider();
-        if (manager != null) {
-            manager.showManagedDialog(dialog);
+        IProjectSpecificDialogManager iProjectSpecificDialogManager = this.manager;
+        if (iProjectSpecificDialogManager != null) {
+            iProjectSpecificDialogManager.showManagedDialog(iXLEManagedDialog);
         }
     }
 
-    public void dismissManagedDialog(IXLEManagedDialog dialog) {
+    public void dismissManagedDialog(IXLEManagedDialog iXLEManagedDialog) {
         checkProvider();
-        if (manager != null) {
-            manager.dismissManagedDialog(dialog);
+        IProjectSpecificDialogManager iProjectSpecificDialogManager = this.manager;
+        if (iProjectSpecificDialogManager != null) {
+            iProjectSpecificDialogManager.dismissManagedDialog(iXLEManagedDialog);
         }
     }
 
-    public void onDialogStopped(IXLEManagedDialog dialog) {
+    public void onDialogStopped(IXLEManagedDialog iXLEManagedDialog) {
         checkProvider();
-        if (manager != null) {
-            manager.onDialogStopped(dialog);
+        IProjectSpecificDialogManager iProjectSpecificDialogManager = this.manager;
+        if (iProjectSpecificDialogManager != null) {
+            iProjectSpecificDialogManager.onDialogStopped(iXLEManagedDialog);
         }
     }
 
-    public void showFatalAlertDialog(String title, String promptText, String okText, Runnable okHandler) {
+    public void showFatalAlertDialog(String str, String str2, String str3, Runnable runnable) {
         checkProvider();
-        if (manager != null) {
-            manager.showFatalAlertDialog(title, promptText, okText, okHandler);
+        IProjectSpecificDialogManager iProjectSpecificDialogManager = this.manager;
+        if (iProjectSpecificDialogManager != null) {
+            iProjectSpecificDialogManager.showFatalAlertDialog(str, str2, str3, runnable);
         }
     }
 
-    public void showNonFatalAlertDialog(String title, String promptText, String okText, Runnable okHandler) {
+    public void showNonFatalAlertDialog(String str, String str2, String str3, Runnable runnable) {
         checkProvider();
-        if (manager != null) {
-            manager.showNonFatalAlertDialog(title, promptText, okText, okHandler);
+        IProjectSpecificDialogManager iProjectSpecificDialogManager = this.manager;
+        if (iProjectSpecificDialogManager != null) {
+            iProjectSpecificDialogManager.showNonFatalAlertDialog(str, str2, str3, runnable);
         }
     }
 
-    public void showOkCancelDialog(String title, String promptText, String okText, Runnable okHandler, String cancelText, Runnable cancelHandler) {
+    public void showOkCancelDialog(String str, String str2, String str3, Runnable runnable, String str4, Runnable runnable2) {
         checkProvider();
-        if (manager != null) {
-            manager.showOkCancelDialog(title, promptText, okText, okHandler, cancelText, cancelHandler);
+        IProjectSpecificDialogManager iProjectSpecificDialogManager = this.manager;
+        if (iProjectSpecificDialogManager != null) {
+            iProjectSpecificDialogManager.showOkCancelDialog(str, str2, str3, runnable, str4, runnable2);
         }
     }
 
-    public void showToast(int contentResId) {
+    public void showToast(int i) {
         checkProvider();
-        if (manager != null) {
-            manager.showToast(contentResId);
+        IProjectSpecificDialogManager iProjectSpecificDialogManager = this.manager;
+        if (iProjectSpecificDialogManager != null) {
+            iProjectSpecificDialogManager.showToast(i);
         }
     }
 
-    public void setBlocking(boolean visible, String statusText) {
+    public void setBlocking(boolean z, String str) {
         checkProvider();
-        if (manager != null) {
-            manager.setBlocking(visible, statusText);
+        IProjectSpecificDialogManager iProjectSpecificDialogManager = this.manager;
+        if (iProjectSpecificDialogManager != null) {
+            iProjectSpecificDialogManager.setBlocking(z, str);
         }
     }
 
-    public void setCancelableBlocking(boolean visible, String statusText, Runnable cancelRunnable) {
+    public void setCancelableBlocking(boolean z, String str, Runnable runnable) {
         checkProvider();
-        if (manager != null) {
-            manager.setCancelableBlocking(visible, statusText, cancelRunnable);
+        IProjectSpecificDialogManager iProjectSpecificDialogManager = this.manager;
+        if (iProjectSpecificDialogManager != null) {
+            iProjectSpecificDialogManager.setCancelableBlocking(z, str, runnable);
         }
     }
 
     public void forceDismissAll() {
         checkProvider();
-        if (manager != null) {
-            manager.forceDismissAll();
+        IProjectSpecificDialogManager iProjectSpecificDialogManager = this.manager;
+        if (iProjectSpecificDialogManager != null) {
+            iProjectSpecificDialogManager.forceDismissAll();
         }
     }
 
     public void dismissToast() {
         checkProvider();
-        if (manager != null) {
-            manager.dismissToast();
+        IProjectSpecificDialogManager iProjectSpecificDialogManager = this.manager;
+        if (iProjectSpecificDialogManager != null) {
+            iProjectSpecificDialogManager.dismissToast();
         }
     }
 
     public void forceDismissAlerts() {
         checkProvider();
-        if (manager != null) {
-            manager.forceDismissAlerts();
+        IProjectSpecificDialogManager iProjectSpecificDialogManager = this.manager;
+        if (iProjectSpecificDialogManager != null) {
+            iProjectSpecificDialogManager.forceDismissAlerts();
         }
     }
 
     public void dismissTopNonFatalAlert() {
         checkProvider();
-        if (manager != null) {
-            manager.dismissTopNonFatalAlert();
+        IProjectSpecificDialogManager iProjectSpecificDialogManager = this.manager;
+        if (iProjectSpecificDialogManager != null) {
+            iProjectSpecificDialogManager.dismissTopNonFatalAlert();
         }
     }
 
     public void dismissBlocking() {
         checkProvider();
-        if (manager != null) {
-            manager.dismissBlocking();
+        IProjectSpecificDialogManager iProjectSpecificDialogManager = this.manager;
+        if (iProjectSpecificDialogManager != null) {
+            iProjectSpecificDialogManager.dismissBlocking();
         }
     }
 
-    private void checkProvider() {
-    }
-
-    public void addManagedDialog(IXLEManagedDialog dialog) {
+    public void addManagedDialog(IXLEManagedDialog iXLEManagedDialog) {
         checkProvider();
-        if (manager != null) {
-            manager.addManagedDialog(dialog);
+        IProjectSpecificDialogManager iProjectSpecificDialogManager = this.manager;
+        if (iProjectSpecificDialogManager != null) {
+            iProjectSpecificDialogManager.addManagedDialog(iXLEManagedDialog);
         }
     }
 
     public void onApplicationPause() {
-        if (manager != null) {
-            manager.onApplicationPause();
+        IProjectSpecificDialogManager iProjectSpecificDialogManager = this.manager;
+        if (iProjectSpecificDialogManager != null) {
+            iProjectSpecificDialogManager.onApplicationPause();
         }
     }
 
     public void onApplicationResume() {
-        if (manager != null) {
-            manager.onApplicationResume();
+        IProjectSpecificDialogManager iProjectSpecificDialogManager = this.manager;
+        if (iProjectSpecificDialogManager != null) {
+            iProjectSpecificDialogManager.onApplicationResume();
         }
     }
 }

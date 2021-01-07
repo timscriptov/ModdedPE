@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -23,31 +23,28 @@ public class UTCPeopleHub {
         XLEAssert.assertFalse("Called trackPeopleHubView without set activityTitle", currentActivityTitle.toString().equals(""));
     }
 
-    @NotNull
-    public static HashMap<String, Object> getAdditionalInfo(String targetXUID) {
-        HashMap<String, Object> additionalInfo = new HashMap<>();
-        additionalInfo.put(UTCDeepLink.TARGET_XUID_KEY, "x:" + targetXUID);
-        return additionalInfo;
+    public static @NotNull HashMap<String, Object> getAdditionalInfo(String str) {
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put(UTCDeepLink.TARGET_XUID_KEY, "x:" + str);
+        return hashMap;
     }
 
-    public static void trackPeopleHubView(final CharSequence activityTitle, final String targetXUID, final boolean isMeView) {
+    public static void trackPeopleHubView(final CharSequence charSequence, final String str, final boolean z) {
         UTCEventTracker.callTrackWrapper(() -> {
-            String unused = UTCPeopleHub.currentXUID = targetXUID;
-            CharSequence unused2 = UTCPeopleHub.currentActivityTitle = activityTitle;
-            UTCPageView.track(isMeView ? UTCNames.PageView.PeopleHub.PeopleHubMeView : UTCNames.PageView.PeopleHub.PeopleHubYouView, UTCPeopleHub.currentActivityTitle, UTCPeopleHub.getAdditionalInfo(targetXUID));
+            UTCPageView.track(z ? UTCNames.PageView.PeopleHub.PeopleHubMeView : UTCNames.PageView.PeopleHub.PeopleHubYouView, UTCPeopleHub.currentActivityTitle, UTCPeopleHub.getAdditionalInfo(str));
         });
     }
 
-    public static void trackMute(boolean toBeMuted) {
+    public static void trackMute(boolean z) {
         verifyTrackedDefaults();
-        trackMute(currentActivityTitle, currentXUID, toBeMuted);
+        trackMute(currentActivityTitle, currentXUID, z);
     }
 
-    public static void trackMute(final CharSequence activityTitle, final String targetXUID, final boolean toBeMuted) {
+    public static void trackMute(final CharSequence charSequence, final String str, final boolean z) {
         UTCEventTracker.callTrackWrapper(() -> {
-            HashMap<String, Object> additionalInfo = UTCPeopleHub.getAdditionalInfo(targetXUID);
-            additionalInfo.put("isMuted", Boolean.valueOf(toBeMuted));
-            UTCPageAction.track(UTCNames.PageAction.PeopleHub.Mute, activityTitle, additionalInfo);
+            HashMap access$200 = UTCPeopleHub.getAdditionalInfo(str);
+            access$200.put("isMuted", Boolean.valueOf(z));
+            UTCPageAction.track(UTCNames.PageAction.PeopleHub.Mute, charSequence, access$200);
         });
     }
 
@@ -56,8 +53,8 @@ public class UTCPeopleHub {
         trackUnblock(currentActivityTitle, currentXUID);
     }
 
-    public static void trackUnblock(final CharSequence activityTitle, final String targetXUID) {
-        UTCEventTracker.callTrackWrapper(() -> UTCPageAction.track(UTCNames.PageAction.PeopleHub.Unblock, activityTitle, UTCPeopleHub.getAdditionalInfo(targetXUID)));
+    public static void trackUnblock(final CharSequence charSequence, final String str) {
+        UTCEventTracker.callTrackWrapper(() -> UTCPageAction.track(UTCNames.PageAction.PeopleHub.Unblock, charSequence, UTCPeopleHub.getAdditionalInfo(str)));
     }
 
     public static void trackBlock() {
@@ -65,8 +62,8 @@ public class UTCPeopleHub {
         trackBlock(currentActivityTitle, currentXUID);
     }
 
-    public static void trackBlock(final CharSequence activityTitle, final String targetXUID) {
-        UTCEventTracker.callTrackWrapper(() -> UTCPageAction.track(UTCNames.PageAction.PeopleHub.Block, activityTitle, UTCPeopleHub.getAdditionalInfo(targetXUID)));
+    public static void trackBlock(final CharSequence charSequence, final String str) {
+        UTCEventTracker.callTrackWrapper(() -> UTCPageAction.track(UTCNames.PageAction.PeopleHub.Block, charSequence, UTCPeopleHub.getAdditionalInfo(str)));
     }
 
     public static void trackBlockDialogComplete() {
@@ -74,8 +71,8 @@ public class UTCPeopleHub {
         trackBlockDialogComplete(currentActivityTitle, currentXUID);
     }
 
-    public static void trackBlockDialogComplete(final CharSequence activityTitle, final String targetXUID) {
-        UTCEventTracker.callTrackWrapper(() -> UTCPageAction.track(UTCNames.PageAction.PeopleHub.BlockOK, activityTitle, UTCPeopleHub.getAdditionalInfo(targetXUID)));
+    public static void trackBlockDialogComplete(final CharSequence charSequence, final String str) {
+        UTCEventTracker.callTrackWrapper(() -> UTCPageAction.track(UTCNames.PageAction.PeopleHub.BlockOK, charSequence, UTCPeopleHub.getAdditionalInfo(str)));
     }
 
     public static void trackReport() {
@@ -83,8 +80,8 @@ public class UTCPeopleHub {
         trackReport(currentActivityTitle, currentXUID);
     }
 
-    public static void trackReport(final CharSequence activityTitle, final String targetXUID) {
-        UTCEventTracker.callTrackWrapper(() -> UTCPageAction.track(UTCNames.PageAction.PeopleHub.Report, activityTitle, UTCPeopleHub.getAdditionalInfo(targetXUID)));
+    public static void trackReport(final CharSequence charSequence, final String str) {
+        UTCEventTracker.callTrackWrapper(() -> UTCPageAction.track(UTCNames.PageAction.PeopleHub.Report, charSequence, UTCPeopleHub.getAdditionalInfo(str)));
     }
 
     public static void trackViewInXboxApp() {
@@ -92,8 +89,8 @@ public class UTCPeopleHub {
         trackViewInXboxApp(currentActivityTitle, currentXUID);
     }
 
-    public static void trackViewInXboxApp(final CharSequence activityTitle, final String targetXUID) {
-        UTCEventTracker.callTrackWrapper(() -> UTCPageAction.track(UTCNames.PageAction.PeopleHub.ViewXboxApp, activityTitle, UTCPeopleHub.getAdditionalInfo(targetXUID)));
+    public static void trackViewInXboxApp(final CharSequence charSequence, final String str) {
+        UTCEventTracker.callTrackWrapper(() -> UTCPageAction.track(UTCNames.PageAction.PeopleHub.ViewXboxApp, charSequence, UTCPeopleHub.getAdditionalInfo(str)));
     }
 
     public static void trackViewInXboxAppDialogComplete() {
@@ -101,7 +98,7 @@ public class UTCPeopleHub {
         trackViewInXboxAppDialogComplete(currentActivityTitle, currentXUID);
     }
 
-    public static void trackViewInXboxAppDialogComplete(final CharSequence activityTitle, final String targetXUID) {
-        UTCEventTracker.callTrackWrapper(() -> UTCPageAction.track(UTCNames.PageAction.PeopleHub.ViewXboxAppOK, activityTitle, UTCPeopleHub.getAdditionalInfo(targetXUID)));
+    public static void trackViewInXboxAppDialogComplete(final CharSequence charSequence, final String str) {
+        UTCEventTracker.callTrackWrapper(() -> UTCPageAction.track(UTCNames.PageAction.PeopleHub.ViewXboxAppOK, charSequence, UTCPeopleHub.getAdditionalInfo(str)));
     }
 }

@@ -5,7 +5,7 @@ import android.app.LoaderManager;
 import com.microsoft.xbox.idp.toolkit.BitmapLoader;
 
 /**
- * 05.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -14,26 +14,26 @@ import com.microsoft.xbox.idp.toolkit.BitmapLoader;
 public class BitmapLoaderInfo implements ErrorHelper.LoaderInfo {
     private final LoaderManager.LoaderCallbacks<?> callbacks;
 
-    public BitmapLoaderInfo(LoaderManager.LoaderCallbacks<?> callbacks2) {
-        callbacks = callbacks2;
+    public BitmapLoaderInfo(LoaderManager.LoaderCallbacks<?> loaderCallbacks) {
+        this.callbacks = loaderCallbacks;
     }
 
     public LoaderManager.LoaderCallbacks<?> getLoaderCallbacks() {
-        return callbacks;
+        return this.callbacks;
     }
 
-    public void clearCache(Object key) {
-        BitmapLoader.Cache cache = CacheUtil.getBitmapCache();
-        synchronized (cache) {
-            cache.remove(key);
+    public void clearCache(Object obj) {
+        BitmapLoader.Cache bitmapCache = CacheUtil.getBitmapCache();
+        synchronized (bitmapCache) {
+            bitmapCache.remove(obj);
         }
     }
 
-    public boolean hasCachedData(Object key) {
+    public boolean hasCachedData(Object obj) {
         boolean z;
-        BitmapLoader.Cache cache = CacheUtil.getBitmapCache();
-        synchronized (cache) {
-            z = cache.get(key) != null;
+        BitmapLoader.Cache bitmapCache = CacheUtil.getBitmapCache();
+        synchronized (bitmapCache) {
+            z = bitmapCache.get(obj) != null;
         }
         return z;
     }

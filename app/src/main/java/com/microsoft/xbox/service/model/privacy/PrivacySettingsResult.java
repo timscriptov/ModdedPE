@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -20,40 +20,39 @@ public class PrivacySettingsResult {
     public PrivacySettingsResult() {
     }
 
-    public PrivacySettingsResult(ArrayList<PrivacySettings.PrivacySetting> settings2) {
-        settings = new ArrayList<>(settings2);
+    public PrivacySettingsResult(ArrayList<PrivacySettings.PrivacySetting> arrayList) {
+        this.settings = new ArrayList<>(arrayList);
     }
 
-    public static PrivacySettingsResult deserialize(String input) {
-        return GsonUtil.deserializeJson(input, PrivacySettingsResult.class);
+    public static PrivacySettingsResult deserialize(String str) {
+        return (PrivacySettingsResult) GsonUtil.deserializeJson(str, PrivacySettingsResult.class);
     }
 
-    @Nullable
-    public static String getPrivacySettingRequestBody(PrivacySettingsResult privacySettingsResult) {
+    public static @Nullable String getPrivacySettingRequestBody(PrivacySettingsResult privacySettingsResult) {
         try {
             return GsonUtil.toJsonString(privacySettingsResult);
-        } catch (Exception e) {
+        } catch (Exception unused) {
             return null;
         }
     }
 
     public String getShareRealNameStatus() {
-        Iterator<PrivacySettings.PrivacySetting> it = settings.iterator();
+        Iterator<PrivacySettings.PrivacySetting> it = this.settings.iterator();
         while (it.hasNext()) {
-            PrivacySettings.PrivacySetting s = it.next();
-            if (s.getPrivacySettingId() == PrivacySettings.PrivacySettingId.ShareIdentity) {
-                return s.value;
+            PrivacySettings.PrivacySetting next = it.next();
+            if (next.getPrivacySettingId() == PrivacySettings.PrivacySettingId.ShareIdentity) {
+                return next.value;
             }
         }
         return PrivacySettings.PrivacySettingValue.PeopleOnMyList.name();
     }
 
     public boolean getSharingRealNameTransitively() {
-        Iterator<PrivacySettings.PrivacySetting> it = settings.iterator();
+        Iterator<PrivacySettings.PrivacySetting> it = this.settings.iterator();
         while (it.hasNext()) {
-            PrivacySettings.PrivacySetting s = it.next();
-            if (s.getPrivacySettingId() == PrivacySettings.PrivacySettingId.ShareIdentityTransitively) {
-                return s.value.equalsIgnoreCase(PrivacySettings.PrivacySettingValue.Everyone.name());
+            PrivacySettings.PrivacySetting next = it.next();
+            if (next.getPrivacySettingId() == PrivacySettings.PrivacySettingId.ShareIdentityTransitively) {
+                return next.value.equalsIgnoreCase(PrivacySettings.PrivacySettingValue.Everyone.name());
             }
         }
         return false;

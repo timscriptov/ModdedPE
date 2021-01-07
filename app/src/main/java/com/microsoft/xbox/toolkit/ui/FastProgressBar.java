@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 import android.widget.ProgressBar;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -18,8 +18,8 @@ public class FastProgressBar extends ProgressBar {
     private int visibility;
 
     @SuppressLint("WrongConstant")
-    public FastProgressBar(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public FastProgressBar(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
         setEnabled(true);
         setVisibility(0);
     }
@@ -30,23 +30,23 @@ public class FastProgressBar extends ProgressBar {
     }
 
     @SuppressLint("WrongConstant")
-    public void setEnabled(boolean enabled) {
-        if (isEnabled != enabled) {
-            isEnabled = enabled;
-            if (!isEnabled) {
-                visibility = getVisibility();
+    public void setEnabled(boolean z) {
+        if (this.isEnabled != z) {
+            this.isEnabled = z;
+            if (!z) {
+                this.visibility = getVisibility();
                 super.setVisibility(8);
                 return;
             }
-            super.setVisibility(visibility);
+            super.setVisibility(this.visibility);
         }
     }
 
-    public void setVisibility(int v) {
-        if (isEnabled) {
-            super.setVisibility(v);
+    public void setVisibility(int i) {
+        if (this.isEnabled) {
+            super.setVisibility(i);
         } else {
-            visibility = v;
+            this.visibility = i;
         }
     }
 }

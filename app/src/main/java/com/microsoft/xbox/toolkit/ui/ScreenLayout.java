@@ -21,11 +21,13 @@ import com.microsoft.xbox.toolkit.anim.XLEAnimationPackage;
 import com.microsoft.xbox.toolkit.system.SystemUtil;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -52,95 +54,148 @@ public abstract class ScreenLayout extends FrameLayout {
         this(context, 0);
     }
 
-    public ScreenLayout(Context context, int orientation2) {
+    public ScreenLayout(Context context, int i) {
         super(context);
-        onLayoutChangedListener = null;
-        isEditable = false;
-        screenPercent = 100;
-        drawerEnabled = true;
-        allEventsEnabled = true;
-        Initialize(orientation2);
+        this.onLayoutChangedListener = null;
+        this.isEditable = false;
+        this.screenPercent = 100;
+        this.drawerEnabled = true;
+        this.allEventsEnabled = true;
+        Initialize(i);
     }
 
-    public ScreenLayout(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        onLayoutChangedListener = null;
-        isEditable = false;
-        screenPercent = 100;
-        drawerEnabled = true;
-        allEventsEnabled = true;
-        TypedArray a = context.obtainStyledAttributes(attrs, XLERValueHelper.getStyleableRValueArray("ScreenLayout"));
-        if (a.hasValue(XLERValueHelper.getStyleableRValue("ScreenLayout_screenDIPs"))) {
-            screenPercent = (int) ((((float) a.getDimensionPixelSize(XLERValueHelper.getStyleableRValue("ScreenLayout_screenDIPs"), SystemUtil.getScreenWidth())) / ((float) SystemUtil.getScreenWidth())) * 100.0f);
+    public ScreenLayout(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
+        this.onLayoutChangedListener = null;
+        this.isEditable = false;
+        this.screenPercent = 100;
+        this.drawerEnabled = true;
+        this.allEventsEnabled = true;
+        TypedArray obtainStyledAttributes = context.obtainStyledAttributes(attributeSet, XLERValueHelper.getStyleableRValueArray("ScreenLayout"));
+        if (obtainStyledAttributes.hasValue(XLERValueHelper.getStyleableRValue("ScreenLayout_screenDIPs"))) {
+            this.screenPercent = (int) ((((float) obtainStyledAttributes.getDimensionPixelSize(XLERValueHelper.getStyleableRValue("ScreenLayout_screenDIPs"), SystemUtil.getScreenWidth())) / ((float) SystemUtil.getScreenWidth())) * 100.0f);
         } else {
-            screenPercent = a.getInt(XLERValueHelper.getStyleableRValue("ScreenLayout_screenPercent"), -2);
+            this.screenPercent = obtainStyledAttributes.getInt(XLERValueHelper.getStyleableRValue("ScreenLayout_screenPercent"), -2);
         }
-        a.recycle();
+        obtainStyledAttributes.recycle();
         Initialize(7);
     }
 
-    public static void addViewThatCausesAndroidLeaks(View v) {
-        badList.add(v);
+    public static void addViewThatCausesAndroidLeaks(View view) {
+        badList.add(view);
     }
 
-    public static void removeViewAndWorkaroundAndroidLeaks(View v) {
-        boolean z;
-        boolean z2 = true;
-        if (v != null) {
-            ViewParent viewparent = v.getParent();
-            if (viewparent instanceof ViewGroup) {
-                ((ViewGroup) viewparent).removeAllViews();
-                if (v.getParent() == null) {
-                    z = true;
-                } else {
+    public static void removeViewAndWorkaroundAndroidLeaks(View view) {
+        if (view != null) {
+            ViewParent parent = view.getParent();
+            boolean z = true;
+            if (parent instanceof ViewGroup) {
+                ((ViewGroup) parent).removeAllViews();
+                XLEAssert.assertTrue(view.getParent() == null);
+            }
+            if (view instanceof ViewGroup) {
+                ViewGroup viewGroup = (ViewGroup) view;
+                viewGroup.removeAllViews();
+                viewGroup.destroyDrawingCache();
+                if (viewGroup.getChildCount() != 0) {
                     z = false;
                 }
                 XLEAssert.assertTrue(z);
             }
-            if (v instanceof ViewGroup) {
-                ViewGroup view = (ViewGroup) v;
-                view.removeAllViews();
-                view.destroyDrawingCache();
-                if (view.getChildCount() != 0) {
-                    z2 = false;
-                }
-                XLEAssert.assertTrue(z2);
-            }
         }
+    }
+
+    public void adjustBottomMargin(int i) {
     }
 
     public abstract void forceRefresh();
 
     public abstract void forceUpdateViewImmediately();
 
+    public XLEAnimationPackage getAnimateIn(boolean z) {
+        return null;
+    }
+
+    public XLEAnimationPackage getAnimateOut(boolean z) {
+        return null;
+    }
+
+    public String getContent() {
+        return null;
+    }
+
     public abstract String getName();
+
+    public String getRelativeId() {
+        return null;
+    }
+
+    public boolean isAnimateOnPop() {
+        return true;
+    }
+
+    public boolean isAnimateOnPush() {
+        return true;
+    }
+
+    public boolean isKeepPreviousScreen() {
+        return false;
+    }
+
+    public void onActivityResult(int i, int i2, Intent intent) {
+    }
 
     public abstract void onAnimateInCompleted();
 
     public abstract void onAnimateInStarted();
 
+    public void onApplicationPause() {
+    }
+
+    public void onApplicationResume() {
+    }
+
     public abstract boolean onBackButtonPressed();
 
-    public abstract void onRehydrateOverride();
-
-    public void Initialize(int orientation2) {
-        isReady = false;
-        isActive = false;
-        isStarted = false;
-        orientation = orientation2;
-    }
-
-    public void setContentView(int screenLayoutId) {
-        LayoutInflater.from(getContext()).inflate(screenLayoutId, this, true);
-    }
-
-    public void onRestart() {
+    public boolean onContextItemSelected(MenuItem menuItem) {
+        return false;
     }
 
     public void onCreate() {
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+    }
+
+    public abstract void onRehydrateOverride();
+
+    public void onRestart() {
+    }
+
+    public void onRestoreInstanceState(Bundle bundle) {
+    }
+
+    public void onSaveInstanceState(Bundle bundle) {
+    }
+
+    public void removeBottomMargin() {
+    }
+
+    public void resetBottomMargin() {
+    }
+
+    public void setScreenState(int i) {
+    }
+
+    public void Initialize(int i) {
+        this.isReady = false;
+        this.isActive = false;
+        this.isStarted = false;
+        this.orientation = i;
+    }
+
+    public void setContentView(int i) {
+        LayoutInflater.from(getContext()).inflate(i, this, true);
     }
 
     public Boolean getTrackPage() {
@@ -148,28 +203,19 @@ public abstract class ScreenLayout extends FrameLayout {
     }
 
     public void onStart() {
-        isStarted = true;
+        this.isStarted = true;
     }
 
     public void onResume() {
-        isReady = true;
-    }
-
-    public void onApplicationResume() {
-    }
-
-    public void onApplicationPause() {
+        this.isReady = true;
     }
 
     public void onPause() {
-        isReady = false;
+        this.isReady = false;
     }
 
     public void onStop() {
-        isStarted = false;
-    }
-
-    public void setScreenState(int state) {
+        this.isStarted = false;
     }
 
     public void onDestroy() {
@@ -177,12 +223,12 @@ public abstract class ScreenLayout extends FrameLayout {
     }
 
     public void onTombstone() {
-        isTombstoned = true;
+        this.isTombstoned = true;
         removeAllViewsAndWorkaroundAndroidLeaks();
     }
 
     public void onRehydrate() {
-        isTombstoned = false;
+        this.isTombstoned = false;
         onRehydrateOverride();
     }
 
@@ -190,113 +236,84 @@ public abstract class ScreenLayout extends FrameLayout {
         return getClass().getName();
     }
 
-    public void onSaveInstanceState(Bundle outState) {
-    }
-
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-    }
-
     public boolean getIsTombstoned() {
-        return isTombstoned;
+        return this.isTombstoned;
     }
 
     public boolean getIsReady() {
-        return isReady;
-    }
-
-    public XLEAnimationPackage getAnimateOut(boolean goingBack) {
-        return null;
-    }
-
-    public XLEAnimationPackage getAnimateIn(boolean goingBack) {
-        return null;
+        return this.isReady;
     }
 
     public boolean getIsActive() {
-        return isActive;
+        return this.isActive;
     }
 
     public boolean getIsStarted() {
-        return isStarted;
+        return this.isStarted;
     }
 
     public void onSetActive() {
-        isActive = true;
+        this.isActive = true;
     }
 
     public void onSetInactive() {
-        isActive = false;
+        this.isActive = false;
     }
 
-    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
-        if (onLayoutChangedListener != null) {
-            onLayoutChangedListener.run();
+    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        super.onLayout(z, i, i2, i3, i4);
+        Runnable runnable = this.onLayoutChangedListener;
+        if (runnable != null) {
+            runnable.run();
         }
     }
 
-    public boolean onInterceptHoverEvent(MotionEvent event) {
-        if (allEventsEnabled) {
-            return super.onInterceptHoverEvent(event);
-        }
-        return true;
-    }
-
-    public boolean onInterceptTouchEvent(MotionEvent event) {
-        if (allEventsEnabled) {
-            return super.onInterceptTouchEvent(event);
+    public boolean onInterceptHoverEvent(MotionEvent motionEvent) {
+        if (this.allEventsEnabled) {
+            return super.onInterceptHoverEvent(motionEvent);
         }
         return true;
     }
 
-    public boolean onTouchEvent(MotionEvent event) {
-        if (allEventsEnabled) {
-            return super.onTouchEvent(event);
+    public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+        if (this.allEventsEnabled) {
+            return super.onInterceptTouchEvent(motionEvent);
         }
         return true;
     }
 
-    public boolean onHoverEvent(MotionEvent event) {
-        if (allEventsEnabled) {
-            return super.onHoverEvent(event);
+    public boolean onTouchEvent(MotionEvent motionEvent) {
+        if (this.allEventsEnabled) {
+            return super.onTouchEvent(motionEvent);
         }
         return true;
     }
 
-    public void setOnLayoutChangedListener(Runnable r) {
-        onLayoutChangedListener = r;
+    public boolean onHoverEvent(MotionEvent motionEvent) {
+        if (this.allEventsEnabled) {
+            return super.onHoverEvent(motionEvent);
+        }
+        return true;
     }
 
-    public boolean onContextItemSelected(MenuItem item) {
-        return false;
-    }
-
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-    }
-
-    public void adjustBottomMargin(int bottomMargin) {
-    }
-
-    public void resetBottomMargin() {
-    }
-
-    public void removeBottomMargin() {
+    public void setOnLayoutChangedListener(Runnable runnable) {
+        this.onLayoutChangedListener = runnable;
     }
 
     public boolean getIsEditable() {
-        return isEditable;
+        return this.isEditable;
     }
 
-    public void setIsEditable(boolean isEditable2) {
-        isEditable = isEditable2;
+    public void setIsEditable(boolean z) {
+        this.isEditable = z;
     }
 
     public boolean getCanAutoLaunch() {
-        return !isEditable;
+        return !this.isEditable;
     }
 
     public boolean getShouldShowAppbar() {
-        return !isEditable;
+        return !this.isEditable;
     }
 
     private void removeAllViewsAndWorkaroundAndroidLeaks() {
@@ -310,55 +327,35 @@ public abstract class ScreenLayout extends FrameLayout {
     }
 
     public int getScreenPercent() {
-        return screenPercent;
+        return this.screenPercent;
     }
 
-    public ScreenLayout setScreenPercent(int val) {
-        this.screenPercent = val;
+    public ScreenLayout setScreenPercent(int i) {
+        this.screenPercent = i;
         return this;
     }
 
-    public String getContent() {
-        return null;
-    }
-
-    public String getRelativeId() {
-        return null;
-    }
-
     public boolean isDrawerEnabled() {
-        return drawerEnabled;
+        return this.drawerEnabled;
     }
 
-    public void setDrawerEnabled(boolean drawerEnabled2) {
-        drawerEnabled = drawerEnabled2;
+    public void setDrawerEnabled(boolean z) {
+        this.drawerEnabled = z;
     }
 
-    public void leaveScreen(Runnable leaveHandler) {
-        leaveHandler.run();
-    }
-
-    public boolean isAnimateOnPush() {
-        return true;
-    }
-
-    public boolean isAnimateOnPop() {
-        return true;
-    }
-
-    public boolean isKeepPreviousScreen() {
-        return false;
+    public void leaveScreen(@NotNull Runnable runnable) {
+        runnable.run();
     }
 
     public boolean isAllEventsEnabled() {
-        return allEventsEnabled;
+        return this.allEventsEnabled;
     }
 
-    public void setAllEventsEnabled(boolean enabled) {
-        allEventsEnabled = enabled;
+    public void setAllEventsEnabled(boolean z) {
+        this.allEventsEnabled = z;
     }
 
-    public View xleFindViewId(int id) {
-        return findViewById(id);
+    public View xleFindViewId(int i) {
+        return findViewById(i);
     }
 }

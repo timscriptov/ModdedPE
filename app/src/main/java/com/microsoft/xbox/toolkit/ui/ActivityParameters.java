@@ -3,7 +3,7 @@ package com.microsoft.xbox.toolkit.ui;
 import java.util.HashMap;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -22,28 +22,28 @@ public class ActivityParameters extends HashMap<String, Object> {
         return (String) get(ME_XUID);
     }
 
-    public void putMeXuid(String xuid) {
-        put(ME_XUID, xuid);
+    public void putMeXuid(String str) {
+        put(ME_XUID, str);
     }
 
     public String getSelectedProfile() {
         return (String) get(SELECTED_PROFILE);
     }
 
-    public void putSelectedProfile(String profileXuid) {
-        put(SELECTED_PROFILE, profileXuid);
+    public void putSelectedProfile(String str) {
+        put(SELECTED_PROFILE, str);
     }
 
     public String getPrivileges() {
         return (String) get(PRIVILEGES);
     }
 
-    public void putPrivileges(String privileges) {
-        put(PRIVILEGES, privileges);
+    public void putPrivileges(String str) {
+        put(PRIVILEGES, str);
     }
 
-    public void putFromScreen(ScreenLayout screen) {
-        put(FROM_SCREEN, screen);
+    public void putFromScreen(ScreenLayout screenLayout) {
+        put(FROM_SCREEN, screenLayout);
     }
 
     public boolean isForceReload() {
@@ -53,7 +53,7 @@ public class ActivityParameters extends HashMap<String, Object> {
         return false;
     }
 
-    public void putSourcePage(String pageName) {
-        put(ORIGINATING_PAGE, pageName);
+    public void putSourcePage(String str) {
+        put(ORIGINATING_PAGE, str);
     }
 }

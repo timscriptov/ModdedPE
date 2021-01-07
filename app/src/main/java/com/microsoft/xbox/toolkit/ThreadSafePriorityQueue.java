@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.PriorityQueue;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -15,29 +15,28 @@ public class ThreadSafePriorityQueue<T> {
     private PriorityQueue<T> queue = new PriorityQueue<>();
     private Object syncObject = new Object();
 
-    public void push(T v) {
-        synchronized (syncObject) {
-            if (!hashSet.contains(v)) {
-                queue.add(v);
-                hashSet.add(v);
-                syncObject.notifyAll();
+    public void push(T t) {
+        synchronized (this.syncObject) {
+            if (!this.hashSet.contains(t)) {
+                this.queue.add(t);
+                this.hashSet.add(t);
+                this.syncObject.notifyAll();
             }
         }
     }
 
     public T pop() {
-        T rv = null;
+        T t = null;
         try {
-            synchronized (syncObject) {
-                while (queue.isEmpty()) {
-                    syncObject.wait();
+            synchronized (this.syncObject) {
+                while (this.queue.isEmpty()) {
+                    this.syncObject.wait();
                 }
-                rv = queue.remove();
-                hashSet.remove(rv);
+                t = this.queue.remove();
+                this.hashSet.remove(t);
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (InterruptedException unused) {
         }
-        return rv;
+        return t;
     }
 }

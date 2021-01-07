@@ -9,7 +9,7 @@ import android.widget.RelativeLayout;
 import com.microsoft.xbox.toolkit.XLERValueHelper;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -19,18 +19,19 @@ public class SwitchPanelItem extends FrameLayout implements SwitchPanel.SwitchPa
     private final int INVALID_STATE_ID = -1;
     private int state;
 
-    public SwitchPanelItem(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        TypedArray a = context.obtainStyledAttributes(attrs, XLERValueHelper.getStyleableRValueArray("SwitchPanelItem"));
-        state = a.getInteger(XLERValueHelper.getStyleableRValue("SwitchPanelItem_state"), -1);
-        a.recycle();
-        if (state < 0) {
-            throw new IllegalArgumentException("You must specify the state attribute in the xml, and the value must be positive.");
+    public SwitchPanelItem(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
+        TypedArray obtainStyledAttributes = context.obtainStyledAttributes(attributeSet, XLERValueHelper.getStyleableRValueArray("SwitchPanelItem"));
+        this.state = obtainStyledAttributes.getInteger(XLERValueHelper.getStyleableRValue("SwitchPanelItem_state"), -1);
+        obtainStyledAttributes.recycle();
+        if (this.state >= 0) {
+            setLayoutParams(new RelativeLayout.LayoutParams(-1, -1));
+            return;
         }
-        setLayoutParams(new RelativeLayout.LayoutParams(-1, -1));
+        throw new IllegalArgumentException("You must specify the state attribute in the xml, and the value must be positive.");
     }
 
     public int getState() {
-        return state;
+        return this.state;
     }
 }

@@ -1,6 +1,5 @@
 package com.microsoft.xbox.toolkit;
 
-import android.annotation.SuppressLint;
 import android.graphics.Rect;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -28,7 +27,7 @@ import java.util.Random;
 import java.util.TimeZone;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -40,395 +39,372 @@ public class JavaUtil {
     private static final Date MIN_DATE = new Date(100, 1, 1);
     private static final NumberFormat PERCENT_FORMATTER = NumberFormat.getPercentInstance(Locale.getDefault());
 
-    public static String getShortClassName(@NotNull Class cls) {
-        String[] tokens = cls.getName().split("\\.");
-        return tokens[tokens.length - 1];
+    public static boolean containsFlag(int i, int i2) {
+        return (i & i2) == i2;
     }
 
-    public static boolean stringsEqual(String lhs, String rhs) {
-        if ((lhs == null && rhs == null) || lhs == rhs) {
+    public static void sleepDebug(long j) {
+    }
+
+    public static String getShortClassName(@NotNull Class cls) {
+        String[] split = cls.getName().split("\\.");
+        return split[split.length - 1];
+    }
+
+    public static boolean stringsEqual(String str, String str2) {
+        if ((str == null && str2 == null) || str == str2) {
             return true;
         }
-        return stringsEqualNonNull(lhs, rhs);
+        return stringsEqualNonNull(str, str2);
     }
 
-    public static boolean stringsEqualNonNull(String lhs, String rhs) {
+    public static boolean stringsEqualNonNull(String str, String str2) {
         boolean z = false;
-        if (lhs == null || rhs == null) {
+        if (str == null || str2 == null) {
             return false;
         }
-        if (!(lhs == null || rhs == null)) {
+        if (!(str == null || str2 == null)) {
             z = true;
         }
         XLEAssert.assertTrue(z);
-        return lhs.equals(rhs);
+        return str.equals(str2);
     }
 
-    public static boolean stringsEqualCaseInsensitive(String lhs, String rhs) {
+    public static boolean stringsEqualCaseInsensitive(String str, String str2) {
         boolean z = true;
-        if (lhs == rhs) {
+        if (str == str2) {
             return true;
         }
-        if (lhs == null || rhs == null) {
+        if (str == null || str2 == null) {
             return false;
         }
-        if (lhs == null || rhs == null) {
+        if (str == null || str2 == null) {
             z = false;
         }
         XLEAssert.assertTrue(z);
-        return lhs.equalsIgnoreCase(rhs);
+        return str.equalsIgnoreCase(str2);
     }
 
-    public static boolean stringsEqualNonNullCaseInsensitive(String lhs, String rhs) {
-        boolean z = true;
-        if (lhs == null || rhs == null) {
+    public static boolean stringsEqualNonNullCaseInsensitive(String str, String str2) {
+        boolean z = false;
+        if (str == null || str2 == null) {
             return false;
         }
-        if (lhs == rhs) {
+        if (str == str2) {
             return true;
         }
-        if (lhs == null || rhs == null) {
-            z = false;
+        if (!(str == null || str2 == null)) {
+            z = true;
         }
         XLEAssert.assertTrue(z);
-        return lhs.equalsIgnoreCase(rhs);
+        return str.equalsIgnoreCase(str2);
     }
 
-    public static boolean tryParseBoolean(String booleanString, boolean defaultValue) {
+    public static boolean tryParseBoolean(String str, boolean z) {
         try {
-            return Boolean.parseBoolean(booleanString);
-        } catch (Exception e) {
-            return defaultValue;
+            return Boolean.parseBoolean(str);
+        } catch (Exception unused) {
+            return z;
         }
     }
 
-    public static int tryParseInteger(String integerString, int defaultValue) {
+    public static int tryParseInteger(String str, int i) {
         try {
-            return Integer.parseInt(integerString);
-        } catch (Exception e) {
-            return defaultValue;
+            return Integer.parseInt(str);
+        } catch (Exception unused) {
+            return i;
         }
     }
 
-    public static long tryParseLong(String longString, long defaultValue) {
+    public static long tryParseLong(String str, long j) {
         try {
-            return Long.parseLong(longString);
-        } catch (Exception e) {
-            return defaultValue;
+            return Long.parseLong(str);
+        } catch (Exception unused) {
+            return j;
         }
     }
 
-    public static double tryParseDouble(String doubleString, double defaultValue) {
+    public static double tryParseDouble(String str, double d) {
         try {
-            return Double.parseDouble(doubleString);
-        } catch (Exception e) {
-            return defaultValue;
+            return Double.parseDouble(str);
+        } catch (Exception unused) {
+            return d;
         }
     }
 
-    @Nullable
-    public static String getLocalizedDateString(Date date) {
+    public static @Nullable String getLocalizedDateString(Date date) {
         try {
             return DateUtils.formatDateTime(XboxTcuiSdk.getApplicationContext(), date.getTime(), 131088);
-        } catch (Exception e) {
+        } catch (Exception unused) {
             return null;
         }
     }
 
-    public static String getTimeStringMMSS(long timeInSeconds) {
-        return DateUtils.formatElapsedTime(timeInSeconds);
+    public static String getTimeStringMMSS(long j) {
+        return DateUtils.formatElapsedTime(j);
     }
 
-    public static int parseInteger(String intString) {
+    public static int parseInteger(String str) {
         try {
-            return Integer.parseInt(intString, 10);
-        } catch (Exception e) {
+            return Integer.parseInt(str, 10);
+        } catch (Exception unused) {
             return 0;
         }
     }
 
-    private static boolean parseBoolean(String boolString) {
+    private static boolean parseBoolean(String str) {
         try {
-            return Boolean.parseBoolean(boolString);
-        } catch (Exception e) {
+            return Boolean.parseBoolean(str);
+        } catch (Exception unused) {
             return false;
         }
     }
 
-    public static long parseHexLong(String hexLong) {
-        if (hexLong == null) {
+    public static long parseHexLong(String str) {
+        if (str == null) {
             return 0;
         }
-        if (hexLong.startsWith(HEX_PREFIX)) {
-            return parseHexLongExpectHex(hexLong);
+        if (str.startsWith(HEX_PREFIX)) {
+            return parseHexLongExpectHex(str);
         }
         try {
-            return Long.parseLong(hexLong, 16);
-        } catch (Exception e) {
+            return Long.parseLong(str, 16);
+        } catch (Exception unused) {
             return 0;
         }
     }
 
-    private static long parseHexLongExpectHex(@NotNull String hexLong) {
-        XLEAssert.assertTrue(hexLong.startsWith(HEX_PREFIX));
+    private static long parseHexLongExpectHex(@NotNull String str) {
+        XLEAssert.assertTrue(str.startsWith(HEX_PREFIX));
         try {
-            return Long.parseLong(hexLong.substring(HEX_PREFIX.length()), 16);
-        } catch (Exception e) {
+            return Long.parseLong(str.substring(2), 16);
+        } catch (Exception unused) {
             return 0;
         }
     }
 
     public static boolean isNullOrEmpty(String str) {
-        if (str == null || str.length() == 0) {
-            return true;
-        }
-        return false;
+        return str == null || str.length() == 0;
     }
 
-    public static boolean isTouchPointInsideView(float touchRawX, float touchRawY, @NotNull View view) {
-        int[] coordinates = new int[2];
-        view.getLocationOnScreen(coordinates);
-        return new Rect(coordinates[0], coordinates[1], coordinates[0] + view.getWidth(), coordinates[1] + view.getHeight()).contains((int) touchRawX, (int) touchRawY);
+    public static boolean isTouchPointInsideView(float f, float f2, @NotNull View view) {
+        int[] iArr = new int[2];
+        view.getLocationOnScreen(iArr);
+        return new Rect(iArr[0], iArr[1], iArr[0] + view.getWidth(), iArr[1] + view.getHeight()).contains((int) f, (int) f2);
     }
 
-    @Nullable
-    public static String urlEncode(String src) {
+    public static @Nullable String urlEncode(String str) {
         try {
-            return URLEncoder.encode(src, HTTP.UTF_8);
-        } catch (UnsupportedEncodingException e) {
+            return URLEncoder.encode(str, HTTP.UTF_8);
+        } catch (UnsupportedEncodingException unused) {
             return null;
         }
     }
 
-    @Nullable
-    public static String urlDecode(String src) {
+    public static @Nullable String urlDecode(String str) {
         try {
-            return URLDecoder.decode(src, HTTP.UTF_8);
-        } catch (UnsupportedEncodingException e) {
+            return URLDecoder.decode(str, HTTP.UTF_8);
+        } catch (UnsupportedEncodingException unused) {
             return null;
         }
     }
 
-    public static String stringToUpper(String value) {
-        if (value == null) {
+    public static String stringToUpper(String str) {
+        if (str == null) {
             return null;
         }
-        return value.toUpperCase();
+        return str.toUpperCase();
     }
 
-    public static String stringToLower(String value) {
-        if (value == null) {
+    public static String stringToLower(String str) {
+        if (str == null) {
             return null;
         }
-        return value.toLowerCase();
+        return str.toLowerCase();
     }
 
-    public static boolean containsFlag(int value, int flagToCheck) {
-        return (value & flagToCheck) == flagToCheck;
+    public static @NotNull String concatenateStringsWithDelimiter(String str, String str2, String str3, String str4) {
+        return concatenateStringsWithDelimiter(str, str2, str3, str4, true);
     }
 
-    @NotNull
-    public static String concatenateStringsWithDelimiter(String str1, String str2, String str3, String delimiter) {
-        return concatenateStringsWithDelimiter(str1, str2, str3, delimiter, true);
-    }
-
-    @NotNull
-    public static String concatenateStringsWithDelimiter(String str1, String str2, String str3, String delimiter, boolean addSpaceBeforeDelimiter) {
-        String delimiter2 = (addSpaceBeforeDelimiter ? " " : "") + delimiter + " ";
+    public static @NotNull String concatenateStringsWithDelimiter(String str, String str2, String str3, String str4, boolean z) {
         StringBuilder sb = new StringBuilder();
-        if (!isNullOrEmpty(str1)) {
-            sb.append(str1);
+        sb.append(z ? " " : "");
+        sb.append(str4);
+        sb.append(" ");
+        String sb2 = sb.toString();
+        StringBuilder sb3 = new StringBuilder();
+        if (!isNullOrEmpty(str)) {
+            sb3.append(str);
         }
         if (!isNullOrEmpty(str2)) {
-            if (sb.length() > 0) {
-                sb.append(delimiter2);
+            if (sb3.length() > 0) {
+                sb3.append(sb2);
             }
-            sb.append(str2);
+            sb3.append(str2);
         }
         if (!isNullOrEmpty(str3)) {
-            if (sb.length() > 0) {
-                sb.append(delimiter2);
+            if (sb3.length() > 0) {
+                sb3.append(sb2);
             }
-            sb.append(str3);
+            sb3.append(str3);
         }
-        return sb.toString();
+        return sb3.toString();
     }
 
-    @NotNull
-    public static String concatenateStringsWithDelimiter(String delimiter, boolean addSpaceBeforeDelimiter, @NotNull String... strs) {
-        String delimiter2 = (addSpaceBeforeDelimiter ? " " : "") + delimiter + " ";
+    public static @NotNull String concatenateStringsWithDelimiter(String str, boolean z, String @NotNull ... strArr) {
         StringBuilder sb = new StringBuilder();
-        if (strs.length == 0) {
+        sb.append(z ? " " : "");
+        sb.append(str);
+        sb.append(" ");
+        String sb2 = sb.toString();
+        StringBuilder sb3 = new StringBuilder();
+        if (strArr.length == 0) {
             return "";
         }
-        for (int idx = 0; idx < strs.length; idx++) {
-            if (!isNullOrEmpty(strs[idx])) {
-                if (sb.length() > 0) {
-                    sb.append(delimiter2);
+        for (int i = 0; i < strArr.length; i++) {
+            if (!isNullOrEmpty(strArr[i])) {
+                if (sb3.length() > 0) {
+                    sb3.append(sb2);
                 }
-                sb.append(strs[idx]);
+                sb3.append(strArr[i]);
             }
         }
-        return sb.toString();
+        return sb3.toString();
     }
 
-    @NotNull
-    public static String concatenateUrlWithLinkAndParam(String link, String param, String tag) {
-        StringBuffer buffer = new StringBuffer();
-        if (!isNullOrEmpty(link)) {
-            buffer.append(link);
+    public static @NotNull String concatenateUrlWithLinkAndParam(String str, String str2, String str3) {
+        StringBuffer stringBuffer = new StringBuffer();
+        if (!isNullOrEmpty(str)) {
+            stringBuffer.append(str);
         }
-        if (!isNullOrEmpty(param)) {
-            if (buffer.length() > 0) {
-                buffer.append(tag);
+        if (!isNullOrEmpty(str2)) {
+            if (stringBuffer.length() > 0) {
+                stringBuffer.append(str3);
             }
-            buffer.append(param);
+            stringBuffer.append(str2);
         }
-        return buffer.toString();
+        return stringBuffer.toString();
     }
 
-    @Nullable
-    public static Date JSONDateToJavaDate(String input) {
-        if (isNullOrEmpty(input)) {
+    public static @Nullable Date JSONDateToJavaDate(String str) {
+        if (isNullOrEmpty(str)) {
             return null;
         }
-        XLEAssert.assertTrue(input.substring(0, 6).equals("/Date("));
-        int endidx = input.length();
-        if (input.substring(input.length() - 7, input.length()).equals("+0000)/")) {
-            endidx = input.length() - 7;
-        } else if (input.substring(input.length() - 2, input.length()).equals(")/")) {
-            endidx = input.length() - 2;
+        XLEAssert.assertTrue(str.substring(0, 6).equals("/Date("));
+        int length = str.length();
+        if (str.substring(str.length() - 7, str.length()).equals("+0000)/")) {
+            length = str.length() - 7;
+        } else if (str.substring(str.length() - 2, str.length()).equals(")/")) {
+            length = str.length() - 2;
         } else {
             XLEAssert.assertTrue(false);
         }
-        return new Date(Long.parseLong(input.substring(6, endidx)));
+        return new Date(Long.parseLong(str.substring(6, length)));
     }
 
-    @SuppressLint("DefaultLocale")
-    @NotNull
-    public static String JavaDateToJSONDate(Date javadate) {
-        Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
-        calendar.setTime(javadate);
-        return String.format("/Date(%d)/", new Object[]{Long.valueOf(calendar.getTimeInMillis())});
+    public static @NotNull String JavaDateToJSONDate(Date date) {
+        GregorianCalendar gregorianCalendar = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+        gregorianCalendar.setTime(date);
+        return String.format("/Date(%d)/", new Object[]{Long.valueOf(gregorianCalendar.getTimeInMillis())});
     }
 
-    @NotNull
-    public static <T> List<T> listIteratorToList(ListIterator<T> i) {
-        ArrayList<T> rv = new ArrayList<>();
-        while (i != null && i.hasNext()) {
-            rv.add(i.next());
+    public static <T> @NotNull List<T> listIteratorToList(ListIterator<T> listIterator) {
+        ArrayList arrayList = new ArrayList();
+        while (listIterator != null && listIterator.hasNext()) {
+            arrayList.add(listIterator.next());
         }
-        return rv;
+        return arrayList;
     }
 
-    public static String pluralize(int count, String zeroString, String oneString, String nString) {
-        switch (count) {
-            case 0:
-                return zeroString;
-            case 1:
-                return oneString;
-            default:
-                return String.format(nString, new Object[]{Integer.valueOf(count)});
+    public static String pluralize(int i, String str, String str2, String str3) {
+        if (i == 0) {
+            return str;
         }
+        if (i == 1) {
+            return str2;
+        }
+        return String.format(str3, new Object[]{Integer.valueOf(i)});
     }
 
-    public static int randInRange(@NotNull Random r, int min, int max) {
-        XLEAssert.assertTrue(max >= min);
-        return r.nextInt(max - min) + min;
+    public static int randInRange(@NotNull Random random, int i, int i2) {
+        XLEAssert.assertTrue(i2 >= i);
+        return i + random.nextInt(i2 - i);
     }
 
-    @NotNull
-    public static <T> ArrayList<T> sublistShuffle(ArrayList<T> srcarray, int dstsize) {
-        boolean z;
-        boolean z2 = true;
-        Random r = new Random();
-        ArrayList<T> rv = new ArrayList<>(dstsize);
-        if (!(srcarray == null || srcarray.size() == 0)) {
-            if (srcarray.size() >= dstsize) {
-                for (int i = 0; i < dstsize; i++) {
-                    int swapi = randInRange(r, i, srcarray.size());
-                    T tmp = srcarray.get(i);
-                    srcarray.set(i, srcarray.get(swapi));
-                    srcarray.set(swapi, tmp);
-                    rv.add(srcarray.get(i));
+    public static <T> @NotNull ArrayList<T> sublistShuffle(ArrayList<T> arrayList, int i) {
+        Random random = new Random();
+        ArrayList<T> arrayList2 = new ArrayList<>(i);
+        if (!(arrayList == null || arrayList.size() == 0)) {
+            boolean z = true;
+            if (arrayList.size() >= i) {
+                for (int i2 = 0; i2 < i; i2++) {
+                    int randInRange = randInRange(random, i2, arrayList.size());
+                    T t = arrayList.get(i2);
+                    arrayList.set(i2, arrayList.get(randInRange));
+                    arrayList.set(randInRange, t);
+                    arrayList2.add(arrayList.get(i2));
                 }
             } else {
-                if (srcarray.size() <= 0 || srcarray.size() >= dstsize) {
-                    z = false;
-                } else {
-                    z = true;
-                }
-                XLEAssert.assertTrue(z);
-                for (int i2 = 0; i2 < dstsize; i2++) {
-                    rv.add(srcarray.get(r.nextInt(srcarray.size())));
+                XLEAssert.assertTrue(arrayList.size() > 0 && arrayList.size() < i);
+                for (int i3 = 0; i3 < i; i3++) {
+                    arrayList2.add(arrayList.get(random.nextInt(arrayList.size())));
                 }
             }
-            if (rv.size() != dstsize) {
-                z2 = false;
+            if (arrayList2.size() != i) {
+                z = false;
             }
-            XLEAssert.assertTrue(z2);
+            XLEAssert.assertTrue(z);
         }
-        return rv;
+        return arrayList2;
     }
 
-    @NotNull
-    public static String formatInteger(int i) {
+    public static @NotNull String formatInteger(int i) {
         return INTEGER_FORMATTER.format((long) i);
     }
 
-    @NotNull
-    public static String formatPercent(float f) {
+    public static @NotNull String formatPercent(float f) {
         XLEAssert.assertTrue(f + " is not between 0 and 1", f >= 0.0f && f <= 1.0f);
         return PERCENT_FORMATTER.format((double) f);
     }
 
-    public static void sleepDebug(long ms) {
-    }
-
-    public static int[] concatIntArrays(int[]... arrays) {
-        if (arrays == null) {
+    public static int[] concatIntArrays(int[]... iArr) {
+        if (iArr == null) {
             return null;
         }
-        int finalSize = 0;
-        for (int[] a : arrays) {
-            finalSize += a.length;
+        int i = 0;
+        for (int[] length : iArr) {
+            i += length.length;
         }
-        int[] destArray = new int[finalSize];
-        int destPos = 0;
-        for (int[] a2 : arrays) {
-            System.arraycopy(a2, 0, destArray, destPos, a2.length);
-            destPos += a2.length;
+        int[] iArr2 = new int[i];
+        int i2 = 0;
+        for (int[] iArr3 : iArr) {
+            System.arraycopy(iArr3, 0, iArr2, i2, iArr3.length);
+            i2 += iArr3.length;
         }
-        return destArray;
+        return iArr2;
     }
 
-    public static <T> boolean DeepCompareArrayList(ArrayList<T> one, ArrayList<T> two) {
-        if (one == two) {
+    public static <T> boolean DeepCompareArrayList(ArrayList<T> arrayList, ArrayList<T> arrayList2) {
+        if (arrayList == arrayList2) {
             return true;
         }
-        if (one == null) {
-            if (two != null) {
-                return false;
-            }
-            return true;
-        } else if (two == null) {
+        if (arrayList == null) {
+            return arrayList2 == null;
+        }
+        if (arrayList2 == null || arrayList.size() != arrayList2.size()) {
             return false;
-        } else {
-            if (one.size() != two.size()) {
+        }
+        for (int i = 0; i < arrayList.size(); i++) {
+            if (!arrayList.get(i).equals(arrayList2.get(i))) {
                 return false;
             }
-            for (int i = 0; i < one.size(); i++) {
-                if (!one.get(i).equals(two.get(i))) {
-                    return false;
-                }
-            }
-            return true;
         }
+        return true;
     }
 
-    @NotNull
     @Contract(pure = true)
-    public static String surroundInQuotes(String str) {
+    public static @NotNull String surroundInQuotes(String str) {
         return "\"" + str + "\"";
     }
 
@@ -436,67 +412,67 @@ public class JavaUtil {
         if (str == null || str.length() == 0) {
             return str;
         }
-        String str2 = str;
         try {
             return URLEncoder.encode(URLDecoder.decode(str, HTTP.UTF_8), HTTP.UTF_8);
-        } catch (UnsupportedEncodingException e) {
-            return str2;
+        } catch (UnsupportedEncodingException unused) {
+            return str;
         }
     }
 
-    public static <T> boolean move(ArrayList<T> data, int fromPosition, int toPosition) {
-        if (data == null || !isPositionInRange(data, fromPosition) || !isPositionInRange(data, toPosition)) {
+    public static <T> boolean move(ArrayList<T> arrayList, int i, int i2) {
+        if (arrayList == null || !isPositionInRange(arrayList, i) || !isPositionInRange(arrayList, i2)) {
             return false;
         }
-        T dataFrom = data.get(fromPosition);
-        if (fromPosition < toPosition) {
-            for (int i = fromPosition; i < toPosition; i++) {
-                data.set(i, data.get(i + 1));
+        T t = arrayList.get(i);
+        if (i < i2) {
+            while (i < i2) {
+                int i3 = i + 1;
+                arrayList.set(i, arrayList.get(i3));
+                i = i3;
             }
         } else {
-            for (int i2 = fromPosition; i2 > toPosition; i2--) {
-                data.set(i2, data.get(i2 - 1));
+            while (i > i2) {
+                arrayList.set(i, arrayList.get(i - 1));
+                i--;
             }
         }
-        data.set(toPosition, dataFrom);
+        arrayList.set(i2, t);
         return true;
     }
 
-    private static <T> boolean isPositionInRange(ArrayList<T> data, int position) {
-        return position >= 0 && position < data.size();
+    private static <T> boolean isPositionInRange(ArrayList<T> arrayList, int i) {
+        return i >= 0 && i < arrayList.size();
     }
 
-    @NotNull
-    public static String getCurrentStackTraceAsString() {
-        StringBuilder builder = new StringBuilder();
-        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
-        if (elements != null) {
-            int length = elements.length;
-            for (int i = 0; i < length; i++) {
-                builder.append("\n\n \t " + elements[i].toString());
+    public static @NotNull String getCurrentStackTraceAsString() {
+        StringBuilder sb = new StringBuilder();
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        if (stackTrace != null) {
+            for (StackTraceElement stackTraceElement : stackTrace) {
+                sb.append("\n\n \t " + stackTraceElement.toString());
             }
         }
-        return builder.toString();
+        return sb.toString();
     }
 
-    public static Date convertToUTC(Date local) {
-        if (local == null) {
+    public static Date convertToUTC(Date date) {
+        if (date == null) {
             return null;
         }
-        TimeZone tz = TimeZone.getDefault();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(local);
-        cal.add(14, -tz.getOffset(local.getTime()));
-        return cal.getTime();
+        TimeZone timeZone = TimeZone.getDefault();
+        Calendar instance = Calendar.getInstance();
+        instance.setTime(date);
+        instance.add(14, -timeZone.getOffset(date.getTime()));
+        return instance.getTime();
     }
 
-    public static boolean setFieldValue(@NotNull Object to, String field, Object value) {
+    public static boolean setFieldValue(@NotNull Object obj, String str, Object obj2) {
         try {
-            Field f = to.getClass().getDeclaredField(field);
-            f.setAccessible(true);
-            f.set(to, value);
+            Field declaredField = obj.getClass().getDeclaredField(str);
+            declaredField.setAccessible(true);
+            declaredField.set(obj, obj2);
             return true;
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+        } catch (IllegalAccessException | NoSuchFieldException unused) {
             return false;
         }
     }

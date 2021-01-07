@@ -1,10 +1,12 @@
 package com.microsoft.xbox.idp.toolkit;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.InputStream;
 import java.util.Scanner;
 
 /**
- * 05.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -16,17 +18,17 @@ public class HttpError {
     private final String errorMessage;
     private final int httpStatus;
 
-    public HttpError(int errorCode2, int httpStatus2, String errorMessage2) {
-        errorCode = errorCode2;
-        httpStatus = httpStatus2;
-        errorMessage = errorMessage2;
+    public HttpError(int i, int i2, String str) {
+        errorCode = i;
+        httpStatus = i2;
+        errorMessage = str;
     }
 
-    public HttpError(int errorCode2, int httpStatus2, InputStream stream) {
-        errorCode = errorCode2;
-        httpStatus = httpStatus2;
-        Scanner errorScanner = new Scanner(stream).useDelimiter(INPUT_START_TOKEN);
-        errorMessage = errorScanner.hasNext() ? errorScanner.next() : "";
+    public HttpError(int i, int i2, InputStream inputStream) {
+        this.errorCode = i;
+        this.httpStatus = i2;
+        Scanner useDelimiter = new Scanner(inputStream).useDelimiter(INPUT_START_TOKEN);
+        this.errorMessage = useDelimiter.hasNext() ? useDelimiter.next() : "";
     }
 
     public int getErrorCode() {
@@ -41,9 +43,12 @@ public class HttpError {
         return errorMessage;
     }
 
-    public String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("errorCode: ").append(errorCode).append(", httpStatus: ").append(httpStatus).append(", errorMessage: ").append(errorMessage);
-        return sb.toString();
+    public @NotNull String toString() {
+        return "errorCode: " +
+                errorCode +
+                ", httpStatus: " +
+                httpStatus +
+                ", errorMessage: " +
+                errorMessage;
     }
 }

@@ -7,13 +7,14 @@ import com.microsoft.xbox.toolkit.XLEConstants;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -46,22 +47,22 @@ public interface IFollowerPresenceResult {
         private BroadcastRecord broadcastRecord;
         private boolean broadcastRecordSet;
 
-        public BroadcastRecord getBroadcastRecord(long titleId) {
-            if (!broadcastRecordSet) {
-                if ("Online".equalsIgnoreCase(state)) {
-                    Iterator<DeviceRecord> it = devices.iterator();
+        public BroadcastRecord getBroadcastRecord(long j) {
+            if (!this.broadcastRecordSet) {
+                if ("Online".equalsIgnoreCase(this.state)) {
+                    Iterator<DeviceRecord> it = this.devices.iterator();
                     loop0:
                     while (true) {
                         if (!it.hasNext()) {
                             break;
                         }
-                        DeviceRecord device = it.next();
-                        if (device.isXboxOne()) {
-                            Iterator<TitleRecord> it2 = device.titles.iterator();
+                        DeviceRecord next = it.next();
+                        if (next.isXboxOne()) {
+                            Iterator<TitleRecord> it2 = next.titles.iterator();
                             while (it2.hasNext()) {
-                                TitleRecord title = it2.next();
-                                if (title.id == titleId && title.isRunningInFullOrFill() && title.activity != null && title.activity.broadcast != null) {
-                                    broadcastRecord = title.activity.broadcast;
+                                TitleRecord next2 = it2.next();
+                                if (next2.id == j && next2.isRunningInFullOrFill() && next2.activity != null && next2.activity.broadcast != null) {
+                                    this.broadcastRecord = next2.activity.broadcast;
                                     break loop0;
                                 }
                             }
@@ -69,65 +70,65 @@ public interface IFollowerPresenceResult {
                         }
                     }
                 }
-                broadcastRecordSet = true;
+                this.broadcastRecordSet = true;
             }
-            return broadcastRecord;
+            return this.broadcastRecord;
         }
 
-        public int getBroadcastingViewerCount(long titleId) {
-            BroadcastRecord r = getBroadcastRecord(titleId);
-            if (r == null) {
+        public int getBroadcastingViewerCount(long j) {
+            BroadcastRecord broadcastRecord2 = getBroadcastRecord(j);
+            if (broadcastRecord2 == null) {
                 return 0;
             }
-            return r.viewers;
+            return broadcastRecord2.viewers;
         }
 
         public long getXboxOneNowPlayingTitleId() {
-            long result = -1;
-            if ("Online".equalsIgnoreCase(state)) {
-                Iterator<DeviceRecord> it = devices.iterator();
+            long j = -1;
+            if ("Online".equalsIgnoreCase(this.state)) {
+                Iterator<DeviceRecord> it = this.devices.iterator();
                 while (it.hasNext()) {
-                    DeviceRecord device = it.next();
-                    if (device.isXboxOne()) {
-                        Iterator<TitleRecord> it2 = device.titles.iterator();
+                    DeviceRecord next = it.next();
+                    if (next.isXboxOne()) {
+                        Iterator<TitleRecord> it2 = next.titles.iterator();
                         while (true) {
                             if (!it2.hasNext()) {
                                 break;
                             }
-                            TitleRecord title = it2.next();
-                            if (title.isRunningInFullOrFill()) {
-                                result = title.id;
+                            TitleRecord next2 = it2.next();
+                            if (next2.isRunningInFullOrFill()) {
+                                j = next2.id;
                                 break;
                             }
                         }
                     }
                 }
             }
-            return result;
+            return j;
         }
 
         public Date getXboxOneNowPlayingDate() {
-            Date result = null;
-            if ("Online".equalsIgnoreCase(state)) {
-                Iterator<DeviceRecord> it = devices.iterator();
+            Date date = null;
+            if ("Online".equalsIgnoreCase(this.state)) {
+                Iterator<DeviceRecord> it = this.devices.iterator();
                 while (it.hasNext()) {
-                    DeviceRecord device = it.next();
-                    if (device.isXboxOne()) {
-                        Iterator<TitleRecord> it2 = device.titles.iterator();
+                    DeviceRecord next = it.next();
+                    if (next.isXboxOne()) {
+                        Iterator<TitleRecord> it2 = next.titles.iterator();
                         while (true) {
                             if (!it2.hasNext()) {
                                 break;
                             }
-                            TitleRecord title = it2.next();
-                            if (title.isRunningInFullOrFill()) {
-                                result = title.lastModified;
+                            TitleRecord next2 = it2.next();
+                            if (next2.isRunningInFullOrFill()) {
+                                date = next2.lastModified;
                                 break;
                             }
                         }
                     }
                 }
             }
-            return result;
+            return date;
         }
     }
 
@@ -136,11 +137,11 @@ public interface IFollowerPresenceResult {
         public String type;
 
         public boolean isXboxOne() {
-            return "XboxOne".equalsIgnoreCase(type);
+            return "XboxOne".equalsIgnoreCase(this.type);
         }
 
         public boolean isXbox360() {
-            return "Xbox360".equalsIgnoreCase(type);
+            return "Xbox360".equalsIgnoreCase(this.type);
         }
     }
 
@@ -152,26 +153,25 @@ public interface IFollowerPresenceResult {
         public String placement;
 
         public boolean isRunningInFullOrFill() {
-            return "Full".equalsIgnoreCase(placement) || "Fill".equalsIgnoreCase(placement);
+            return "Full".equalsIgnoreCase(this.placement) || "Fill".equalsIgnoreCase(this.placement);
         }
 
         public boolean isDash() {
-            return id == XLEConstants.DASH_TITLE_ID;
+            return this.id == XLEConstants.DASH_TITLE_ID;
         }
     }
 
     public static class FollowersPresenceResult {
         public ArrayList<UserPresence> userPresence;
 
-        @Nullable
-        public static FollowersPresenceResult deserialize(InputStream stream) {
-            UserPresence[] data = GsonUtil.deserializeJson(stream, UserPresence[].class, Date.class, new UTCDateConverterGson.UTCDateConverterJSONDeserializer());
-            if (data == null) {
+        public static @Nullable FollowersPresenceResult deserialize(InputStream inputStream) {
+            UserPresence[] userPresenceArr = (UserPresence[]) GsonUtil.deserializeJson(inputStream, UserPresence[].class, (Type) Date.class, (Object) new UTCDateConverterGson.UTCDateConverterJSONDeserializer());
+            if (userPresenceArr == null) {
                 return null;
             }
-            FollowersPresenceResult result = new FollowersPresenceResult();
-            result.userPresence = new ArrayList<>(Arrays.asList(data));
-            return result;
+            FollowersPresenceResult followersPresenceResult = new FollowersPresenceResult();
+            followersPresenceResult.userPresence = new ArrayList<>(Arrays.asList(userPresenceArr));
+            return followersPresenceResult;
         }
     }
 }

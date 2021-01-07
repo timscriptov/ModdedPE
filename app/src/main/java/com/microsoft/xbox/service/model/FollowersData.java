@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -37,155 +37,154 @@ public class FollowersData implements Serializable {
     private Date timeStamp;
 
     public FollowersData() {
-        personSummary = null;
-        isCurrentlyPlaying = false;
-        isDummy = false;
-        isNew = false;
+        this.personSummary = null;
+        this.isCurrentlyPlaying = false;
+        this.isDummy = false;
+        this.isNew = false;
     }
 
-    public FollowersData(boolean isDummy2) {
-        this(isDummy2, DummyType.NOT_SET);
+    public FollowersData(boolean z) {
+        this(z, DummyType.NOT_SET);
     }
 
-    public FollowersData(boolean isDummy2, DummyType type) {
-        personSummary = null;
-        isCurrentlyPlaying = false;
-        isDummy = false;
-        isNew = false;
-        isDummy = isDummy2;
-        itemDummyType = type;
+    public FollowersData(boolean z, DummyType dummyType) {
+        this.personSummary = null;
+        this.isCurrentlyPlaying = false;
+        this.isDummy = false;
+        this.isNew = false;
+        this.isDummy = z;
+        this.itemDummyType = dummyType;
     }
 
-    public FollowersData(IPeopleHubResult.PeopleHubPersonSummary person) {
-        personSummary = null;
-        isCurrentlyPlaying = false;
-        isDummy = false;
-        isNew = false;
-        XLEAssert.assertNotNull(person);
-        personSummary = person;
-        xuid = person.xuid;
-        userProfileData = new UserProfileData(person);
-        isFavorite = person.isFavorite;
-        status = UserStatus.getStatusFromString(person.presenceState);
-        presenceString = person.presenceText;
-        if (person.titleHistory != null) {
-            titleId = person.titleHistory.TitleId;
-            timeStamp = person.titleHistory.LastTimePlayed;
+    public FollowersData(IPeopleHubResult.PeopleHubPersonSummary peopleHubPersonSummary) {
+        this.personSummary = null;
+        this.isCurrentlyPlaying = false;
+        this.isDummy = false;
+        this.isNew = false;
+        XLEAssert.assertNotNull(peopleHubPersonSummary);
+        this.personSummary = peopleHubPersonSummary;
+        this.xuid = peopleHubPersonSummary.xuid;
+        this.userProfileData = new UserProfileData(peopleHubPersonSummary);
+        this.isFavorite = peopleHubPersonSummary.isFavorite;
+        this.status = UserStatus.getStatusFromString(peopleHubPersonSummary.presenceState);
+        this.presenceString = peopleHubPersonSummary.presenceText;
+        if (peopleHubPersonSummary.titleHistory != null) {
+            this.titleId = peopleHubPersonSummary.titleHistory.TitleId;
+            this.timeStamp = peopleHubPersonSummary.titleHistory.LastTimePlayed;
         }
-        if (person.recentPlayer != null) {
-            recentPlayerText = person.recentPlayer.text;
-            if (!XLEUtil.isNullOrEmpty(person.recentPlayer.titles)) {
-                lastPlayedWithDateTime = person.recentPlayer.titles.get(0).lastPlayedWithDateTime;
+        if (peopleHubPersonSummary.recentPlayer != null) {
+            this.recentPlayerText = peopleHubPersonSummary.recentPlayer.text;
+            if (!XLEUtil.isNullOrEmpty(peopleHubPersonSummary.recentPlayer.titles)) {
+                this.lastPlayedWithDateTime = peopleHubPersonSummary.recentPlayer.titles.get(0).lastPlayedWithDateTime;
             }
         }
-        if (person.follower != null) {
-            followerText = person.follower.text;
+        if (peopleHubPersonSummary.follower != null) {
+            this.followerText = peopleHubPersonSummary.follower.text;
         }
-        if (person.titlePresence != null) {
-            isCurrentlyPlaying = person.titlePresence.IsCurrentlyPlaying;
-            presenceString = person.titlePresence.PresenceText;
+        if (peopleHubPersonSummary.titlePresence != null) {
+            this.isCurrentlyPlaying = peopleHubPersonSummary.titlePresence.IsCurrentlyPlaying;
+            this.presenceString = peopleHubPersonSummary.titlePresence.PresenceText;
         }
     }
 
     @Contract(pure = true)
-    public FollowersData(@NotNull FollowersData follower) {
-        personSummary = null;
-        isCurrentlyPlaying = false;
-        isDummy = false;
-        isNew = false;
-        xuid = follower.xuid;
-        isFavorite = follower.isFavorite;
-        status = follower.status;
-        presenceString = follower.presenceString;
-        titleId = follower.titleId;
-        userProfileData = follower.userProfileData;
-        isCurrentlyPlaying = follower.isCurrentlyPlaying;
-        timeStamp = follower.timeStamp;
-        isDummy = follower.isDummy;
+    public FollowersData(@NotNull FollowersData followersData) {
+        this.personSummary = null;
+        this.isCurrentlyPlaying = false;
+        this.isDummy = false;
+        this.isNew = false;
+        this.xuid = followersData.xuid;
+        this.isFavorite = followersData.isFavorite;
+        this.status = followersData.status;
+        this.presenceString = followersData.presenceString;
+        this.titleId = followersData.titleId;
+        this.userProfileData = followersData.userProfileData;
+        this.isCurrentlyPlaying = followersData.isCurrentlyPlaying;
+        this.timeStamp = followersData.timeStamp;
+        this.isDummy = followersData.isDummy;
     }
 
     public DummyType getItemDummyType() {
-        return itemDummyType;
+        return this.itemDummyType;
     }
 
-    public void setItemDummyType(DummyType type) {
-        isDummy = true;
-        itemDummyType = type;
+    public void setItemDummyType(DummyType dummyType) {
+        this.isDummy = true;
+        this.itemDummyType = dummyType;
     }
 
     public IPeopleHubResult.PeopleHubPersonSummary getPersonSummary() {
-        return personSummary;
+        return this.personSummary;
     }
 
     public int getGameScore() {
-        if (userProfileData != null) {
-            return Integer.parseInt(userProfileData.gamerScore);
+        UserProfileData userProfileData2 = this.userProfileData;
+        if (userProfileData2 != null) {
+            return Integer.parseInt(userProfileData2.gamerScore);
         }
         return 0;
     }
 
     public String getGamertag() {
-        if (userProfileData != null) {
-            return userProfileData.gamerTag;
-        }
-        return "";
+        UserProfileData userProfileData2 = this.userProfileData;
+        return userProfileData2 != null ? userProfileData2.gamerTag : "";
     }
 
     public String getGamerPicUrl() {
-        if (userProfileData != null) {
-            return userProfileData.profileImageUrl;
+        UserProfileData userProfileData2 = this.userProfileData;
+        if (userProfileData2 != null) {
+            return userProfileData2.profileImageUrl;
         }
         return null;
     }
 
     public String getGamerName() {
-        if (userProfileData != null) {
-            return userProfileData.appDisplayName;
-        }
-        return "";
+        UserProfileData userProfileData2 = this.userProfileData;
+        return userProfileData2 != null ? userProfileData2.appDisplayName : "";
     }
 
     public String getGamerRealName() {
-        if (userProfileData == null) {
+        UserProfileData userProfileData2 = this.userProfileData;
+        if (userProfileData2 == null) {
             return null;
         }
-        return userProfileData.gamerRealName;
+        return userProfileData2.gamerRealName;
     }
 
     public boolean getIsOnline() {
-        return status == UserStatus.Online;
+        return this.status == UserStatus.Online;
     }
 
     public Date getTimeStamp() {
-        return timeStamp;
+        return this.timeStamp;
     }
 
-    public void setTimeStamp(Date timeStamp2) {
-        timeStamp = timeStamp2;
+    public void setTimeStamp(Date date) {
+        this.timeStamp = date;
     }
 
     public boolean getIsDummy() {
-        return isDummy;
+        return this.isDummy;
     }
 
     public Date getLastPlayedWithDateTime() {
-        return lastPlayedWithDateTime;
+        return this.lastPlayedWithDateTime;
     }
 
     public String getRecentPlayerTitleText() {
-        return recentPlayerText;
+        return this.recentPlayerText;
     }
 
     public String getFollowersTitleText() {
-        return followerText;
+        return this.followerText;
     }
 
     public SearchResultPerson getSearchResultPerson() {
-        return searchResultPerson;
+        return this.searchResultPerson;
     }
 
-    public void setSearchResultPerson(SearchResultPerson srp) {
-        searchResultPerson = srp;
+    public void setSearchResultPerson(SearchResultPerson searchResultPerson2) {
+        this.searchResultPerson = searchResultPerson2;
     }
 
     public enum DummyType {

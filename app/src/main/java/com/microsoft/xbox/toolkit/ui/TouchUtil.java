@@ -6,34 +6,34 @@ import android.widget.AdapterView;
 import com.microsoft.xbox.toolkit.XLEAssert;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 
 public class TouchUtil {
-    public static View.OnClickListener createOnClickListener(View.OnClickListener listener) {
-        if (listener == null) {
+    public static View.OnClickListener createOnClickListener(View.OnClickListener onClickListener) {
+        if (onClickListener == null) {
             return null;
         }
-        XLEAssert.assertNotNull("Original listener is null.", listener);
-        return listener;
+        XLEAssert.assertNotNull("Original listener is null.", onClickListener);
+        return onClickListener;
     }
 
-    public static AdapterView.OnItemClickListener createOnItemClickListener(AdapterView.OnItemClickListener listener) {
-        if (listener == null) {
+    public static AdapterView.OnItemClickListener createOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {
+        if (onItemClickListener == null) {
             return null;
         }
-        XLEAssert.assertNotNull("Original listener is null.", listener);
-        return listener;
+        XLEAssert.assertNotNull("Original listener is null.", onItemClickListener);
+        return onItemClickListener;
     }
 
-    public static View.OnLongClickListener createOnLongClickListener(View.OnLongClickListener listener) {
-        if (listener == null) {
+    public static View.OnLongClickListener createOnLongClickListener(View.OnLongClickListener onLongClickListener) {
+        if (onLongClickListener == null) {
             return null;
         }
-        XLEAssert.assertNotNull("Original listener is null.", listener);
-        return listener;
+        XLEAssert.assertNotNull("Original listener is null.", onLongClickListener);
+        return onLongClickListener;
     }
 }

@@ -9,7 +9,7 @@ import java.io.File;
 import java.util.HashMap;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -20,60 +20,53 @@ public class XLEFileCacheManager {
     private static HashMap<String, XLEFileCache> sAllCaches = new HashMap<>();
     private static HashMap<XLEFileCache, File> sCacheRootDirMap = new HashMap<>();
 
-    public static synchronized XLEFileCache createCache(String subDirectory, int maxFileNumber) {
+    public static synchronized XLEFileCache createCache(String str, int i) {
         XLEFileCache createCache;
         synchronized (XLEFileCacheManager.class) {
-            createCache = createCache(subDirectory, maxFileNumber, true);
+            createCache = createCache(str, i, true);
         }
         return createCache;
     }
 
-    public static synchronized XLEFileCache createCache(String subDirectory, int maxFileNumber, boolean enabled) {
-        XLEFileCache xLEFileCache;
+    public static synchronized XLEFileCache createCache(String str, int i, boolean z) {
         synchronized (XLEFileCacheManager.class) {
-            if (maxFileNumber <= 0) {
-                throw new IllegalArgumentException("maxFileNumber must be > 0");
-            }
-            if (subDirectory != null) {
-                if (subDirectory.length() > 0) {
-                    XLEFileCache fileCache = sAllCaches.get(subDirectory);
-                    if (fileCache != null) {
-                        if (fileCache.maxFileNumber != maxFileNumber) {
+            if (i > 0) {
+                if (str != null) {
+                    if (str.length() > 0) {
+                        XLEFileCache xLEFileCache = sAllCaches.get(str);
+                        if (xLEFileCache == null) {
+                            if (!z) {
+                                XLEFileCache xLEFileCache2 = emptyFileCache;
+                                return xLEFileCache2;
+                            } else if (!SystemUtil.isSDCardAvailable()) {
+                                XLEFileCache xLEFileCache3 = emptyFileCache;
+                                return xLEFileCache3;
+                            } else {
+                                xLEFileCache = new XLEFileCache(str, i);
+                                File file = new File(XboxTcuiSdk.getActivity().getCacheDir(), str);
+                                if (!file.exists()) {
+                                    file.mkdirs();
+                                }
+                                xLEFileCache.size = file.list().length;
+                                sAllCaches.put(str, xLEFileCache);
+                                sCacheRootDirMap.put(xLEFileCache, file);
+                            }
+                        } else if (xLEFileCache.maxFileNumber != i) {
                             throw new IllegalArgumentException("The same subDirectory with different maxFileNumber already exist.");
                         }
-                        XLEFileCache xLEFileCache2 = fileCache;
-                        xLEFileCache = fileCache;
-                    } else if (!enabled) {
-                        xLEFileCache = emptyFileCache;
-                        XLEFileCache xLEFileCache3 = fileCache;
-                    } else if (!SystemUtil.isSDCardAvailable()) {
-                        xLEFileCache = emptyFileCache;
-                        XLEFileCache xLEFileCache4 = fileCache;
-                    } else {
-                        fileCache = new XLEFileCache(subDirectory, maxFileNumber);
-                        File rootDir = new File(XboxTcuiSdk.getActivity().getCacheDir(), subDirectory);
-                        if (!rootDir.exists()) {
-                            rootDir.mkdirs();
-                        }
-                        fileCache.size = rootDir.list().length;
-                        sAllCaches.put(subDirectory, fileCache);
-                        sCacheRootDirMap.put(fileCache, rootDir);
-                        XLEFileCache xLEFileCache22 = fileCache;
-                        xLEFileCache = fileCache;
                     }
                 }
+                throw new IllegalArgumentException("subDirectory must be not null and at least one character length");
             }
-            throw new IllegalArgumentException("subDirectory must be not null and at least one character length");
+            throw new IllegalArgumentException("maxFileNumber must be > 0");
         }
-        //return xLEFileCache;
     }
 
-    static File getCacheRootDir(XLEFileCache cache) {
-        return sCacheRootDirMap.get(cache);
+    static File getCacheRootDir(XLEFileCache xLEFileCache) {
+        return sCacheRootDirMap.get(xLEFileCache);
     }
 
-    @NotNull
-    public static String getCacheStatus() {
+    public static @NotNull String getCacheStatus() {
         return sAllCaches.values().toString();
     }
 }

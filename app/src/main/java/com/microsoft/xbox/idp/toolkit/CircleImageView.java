@@ -1,5 +1,6 @@
 package com.microsoft.xbox.idp.toolkit;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -10,25 +11,27 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.widget.ImageView;
 
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 05.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 
-public class CircleImageView extends androidx.appcompat.widget.AppCompatImageView {
-    static final boolean assertionsDisabled = (!CircleImageView.class.desiredAssertionStatus());
+@SuppressLint("AppCompatCustomView")
+public class CircleImageView extends ImageView {
+    static final /* synthetic */ boolean $assertionsDisabled = false;
 
-    public CircleImageView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public CircleImageView(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
     }
 
-    public CircleImageView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
+    public CircleImageView(Context context, AttributeSet attributeSet, int i) {
+        super(context, attributeSet, i);
     }
 
     public void onDraw(Canvas canvas) {
@@ -38,54 +41,51 @@ public class CircleImageView extends androidx.appcompat.widget.AppCompatImageVie
                 drawBitmap(canvas, ((BitmapDrawable) drawable).getBitmap());
                 return;
             }
-            Bitmap bmp = createBitmap(drawable);
+            Bitmap createBitmap = createBitmap(drawable);
             try {
-                drawBitmap(canvas, bmp);
+                drawBitmap(canvas, createBitmap);
             } finally {
-                bmp.recycle();
+                createBitmap.recycle();
             }
         }
     }
 
-    private Bitmap createBitmap(Drawable drawable) {
-        if (assertionsDisabled || (getWidth() > 0 && getHeight() > 0)) {
-            Bitmap output = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(output);
-            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-            drawable.draw(canvas);
-            return output;
-        }
-        throw new AssertionError();
+    private Bitmap createBitmap(@NotNull Drawable drawable) {
+        Bitmap createBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(createBitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return createBitmap;
     }
 
     private void drawBitmap(Canvas canvas, Bitmap bitmap) {
         if (bitmap != null && !bitmap.isRecycled()) {
-            int radius = Math.min(getWidth(), getHeight());
-            if (bitmap.getWidth() == radius && bitmap.getHeight() == radius) {
-                drawRoundBitmap(canvas, bitmap, radius);
+            int min = Math.min(getWidth(), getHeight());
+            if (bitmap.getWidth() == min && bitmap.getHeight() == min) {
+                drawRoundBitmap(canvas, bitmap, min);
                 return;
             }
-            Bitmap bmp = Bitmap.createScaledBitmap(bitmap, radius, radius, false);
+            Bitmap createScaledBitmap = Bitmap.createScaledBitmap(bitmap, min, min, false);
             try {
-                drawRoundBitmap(canvas, bmp, radius);
+                drawRoundBitmap(canvas, createScaledBitmap, min);
             } finally {
-                bmp.recycle();
+                createScaledBitmap.recycle();
             }
         }
     }
 
-    private void drawRoundBitmap(@NotNull Canvas canvas, Bitmap bitmap, int radius) {
-        Bitmap bmp = createRoundBitmap(bitmap, radius);
+    private void drawRoundBitmap(@NotNull Canvas canvas, Bitmap bitmap, int i) {
+        Bitmap createRoundBitmap = createRoundBitmap(bitmap, i);
         try {
-            canvas.drawBitmap(bmp, 0.0f, 0.0f, (Paint) null);
+            canvas.drawBitmap(createRoundBitmap, 0.0f, 0.0f, (Paint) null);
         } finally {
-            bmp.recycle();
+            createRoundBitmap.recycle();
         }
     }
 
-    private Bitmap createRoundBitmap(@NotNull Bitmap bitmap, int radius) {
-        Bitmap output = Bitmap.createBitmap(radius, radius, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
+    private Bitmap createRoundBitmap(@NotNull Bitmap bitmap, int i) {
+        Bitmap createBitmap = Bitmap.createBitmap(i, i, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(createBitmap);
         Paint paint = new Paint();
         Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
         paint.setAntiAlias(true);
@@ -95,6 +95,6 @@ public class CircleImageView extends androidx.appcompat.widget.AppCompatImageVie
         canvas.drawCircle(((float) (bitmap.getWidth() / 2)) + 0.7f, ((float) (bitmap.getHeight() / 2)) + 0.7f, ((float) (bitmap.getWidth() / 2)) + 0.1f, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rect, rect, paint);
-        return output;
+        return createBitmap;
     }
 }

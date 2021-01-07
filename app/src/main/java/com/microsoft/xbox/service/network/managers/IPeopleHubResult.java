@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -23,10 +23,10 @@ public interface IPeopleHubResult {
         FriendOfFriend,
         VIP;
 
-        public static RecommendationType getRecommendationType(String recommendationType) {
-            for (RecommendationType status : values()) {
-                if (status.name().equalsIgnoreCase(recommendationType)) {
-                    return status;
+        public static RecommendationType getRecommendationType(String str) {
+            for (RecommendationType recommendationType : values()) {
+                if (recommendationType.name().equalsIgnoreCase(str)) {
+                    return recommendationType;
                 }
             }
             return Unknown;
@@ -127,7 +127,7 @@ public interface IPeopleHubResult {
         public String Type;
 
         public RecommendationType getRecommendationType() {
-            return RecommendationType.getRecommendationType(Type);
+            return RecommendationType.getRecommendationType(this.Type);
         }
     }
 }

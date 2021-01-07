@@ -1,20 +1,21 @@
 package com.microsoft.xbox.toolkit.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
 import android.view.View;
-
-import androidx.appcompat.widget.AppCompatImageView;
+import android.widget.ImageView;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 
-public class XLEImageView extends AppCompatImageView {
+@SuppressLint("AppCompatCustomView")
+public class XLEImageView extends ImageView {
     public static final int IMAGE_ERROR = 2;
     public static final int IMAGE_FINAL = 0;
     public static final int IMAGE_LOADING = 1;
@@ -26,23 +27,23 @@ public class XLEImageView extends AppCompatImageView {
         this(context, (AttributeSet) null, 0);
     }
 
-    public XLEImageView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+    public XLEImageView(Context context, AttributeSet attributeSet) {
+        this(context, attributeSet, 0);
     }
 
-    public XLEImageView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        shouldAnimate = true;
-        isFinal = false;
+    public XLEImageView(Context context, AttributeSet attributeSet, int i) {
+        super(context, attributeSet, i);
+        this.shouldAnimate = true;
+        this.isFinal = false;
         setSoundEffectsEnabled(false);
     }
 
     public boolean getShouldAnimate() {
-        return shouldAnimate && !isFinal;
+        return this.shouldAnimate && !this.isFinal;
     }
 
-    public void setShouldAnimate(boolean value) {
-        shouldAnimate = value;
+    public void setShouldAnimate(boolean z) {
+        this.shouldAnimate = z;
     }
 
     public void setImageBitmap(Bitmap bitmap) {
@@ -51,17 +52,17 @@ public class XLEImageView extends AppCompatImageView {
         }
     }
 
-    public void setImageSource(Bitmap bitmap, int source) {
+    public void setImageSource(Bitmap bitmap, int i) {
         if (bitmap != null) {
             super.setImageBitmap(bitmap);
         }
     }
 
-    public void setFinal(boolean value) {
-        isFinal = value;
+    public void setFinal(boolean z) {
+        this.isFinal = z;
     }
 
-    public void setOnClickListener(View.OnClickListener listener) {
-        super.setOnClickListener(TouchUtil.createOnClickListener(listener));
+    public void setOnClickListener(View.OnClickListener onClickListener) {
+        super.setOnClickListener(TouchUtil.createOnClickListener(onClickListener));
     }
 }

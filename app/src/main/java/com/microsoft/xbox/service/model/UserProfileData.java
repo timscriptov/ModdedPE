@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -26,13 +26,13 @@ public class UserProfileData {
     }
 
     @Contract(pure = true)
-    public UserProfileData(@NotNull IPeopleHubResult.PeopleHubPersonSummary person) {
-        xuid = person.xuid;
-        profileImageUrl = person.displayPicRaw;
-        gamerTag = person.gamertag;
-        appDisplayName = person.displayName;
-        gamerRealName = person.realName;
-        gamerScore = person.gamerScore;
-        accountTier = person.xboxOneRep;
+    public UserProfileData(IPeopleHubResult.@NotNull PeopleHubPersonSummary peopleHubPersonSummary) {
+        this.xuid = peopleHubPersonSummary.xuid;
+        this.profileImageUrl = peopleHubPersonSummary.displayPicRaw;
+        this.gamerTag = peopleHubPersonSummary.gamertag;
+        this.appDisplayName = peopleHubPersonSummary.displayName;
+        this.gamerRealName = peopleHubPersonSummary.realName;
+        this.gamerScore = peopleHubPersonSummary.gamerScore;
+        this.accountTier = peopleHubPersonSummary.xboxOneRep;
     }
 }

@@ -7,7 +7,7 @@ import com.microsoft.xbox.telemetry.utc.model.UTCNames;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -18,8 +18,8 @@ public class UTCTelemetry {
 
     private static native void WriteEvent(String str);
 
-    public static void LogEvent(@NotNull CommonData event) {
-        WriteEvent(event.ToJson());
+    public static void LogEvent(@NotNull CommonData commonData) {
+        WriteEvent(commonData.ToJson());
     }
 
     public static String getErrorScreen(@NotNull ErrorActivity.ErrorScreen errorScreen) {

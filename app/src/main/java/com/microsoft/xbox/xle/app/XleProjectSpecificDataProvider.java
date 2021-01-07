@@ -19,7 +19,7 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -43,167 +43,41 @@ public class XleProjectSpecificDataProvider implements IProjectSpecificDataProvi
     private Set<String> videoBlocked = new HashSet();
 
     private XleProjectSpecificDataProvider() {
-        for (int i = 0; i < serviceLocales.length; i++) {
-            serviceLocaleMapTable.put(serviceLocales[i][0], serviceLocales[i][1]);
+        int i = 0;
+        while (true) {
+            String[][] strArr = this.serviceLocales;
+            if (i < strArr.length) {
+                this.serviceLocaleMapTable.put(strArr[i][0], strArr[i][1]);
+                i++;
+            } else {
+                this.serviceLocales = null;
+                return;
+            }
         }
-        serviceLocales = null;
     }
 
     public static XleProjectSpecificDataProvider getInstance() {
         return instance;
     }
 
-    public void ensureDisplayLocale() {
-        Locale mapLocale = null;
-        Locale deviceLocale = Locale.getDefault();
-        String localeStr = deviceLocale.toString();
-        String language = deviceLocale.getLanguage();
-        String region = deviceLocale.getCountry();
-        int i = 0;
-        while (true) {
-            if (i >= displayLocales.length) {
-                break;
-            } else if (!displayLocales[i][0].equals(localeStr)) {
-                i++;
-            } else if (!displayLocales[i][1].equals(language) || !displayLocales[i][2].equals(region)) {
-                mapLocale = new Locale(displayLocales[i][1], displayLocales[i][2]);
-            } else {
-                return;
-            }
-        }
-        if (mapLocale == null) {
-            int i2 = 0;
-            while (true) {
-                if (i2 >= displayLocales.length) {
-                    break;
-                } else if (displayLocales[i2][0].equals(language)) {
-                    mapLocale = new Locale(displayLocales[i2][1], displayLocales[i2][2]);
-                    break;
-                } else {
-                    i2++;
-                }
-            }
-        }
-        if (mapLocale != null) {
-            DisplayMetrics dm = XboxTcuiSdk.getResources().getDisplayMetrics();
-            Configuration conf = XboxTcuiSdk.getResources().getConfiguration();
-            conf.locale = mapLocale;
-            XboxTcuiSdk.getResources().updateConfiguration(conf, dm);
-        }
-    }
-
-    private void addRegions(String locales, Set<String> blockSet) {
-        if (!JavaUtil.isNullOrEmpty(locales)) {
-            String[] list = locales.split("[|]");
-            if (!XLEUtil.isNullOrEmpty(list)) {
-                blockSet.clear();
-                for (String region : list) {
-                    if (!JavaUtil.isNullOrEmpty(region)) {
-                        blockSet.add(region);
-                    }
-                }
-            }
-        }
-    }
-
-    public void processContentBlockedList(@NotNull SmartglassSettings settings) {
-        addRegions(settings.VIDEO_BLOCKED, videoBlocked);
-        addRegions(settings.MUSIC_BLOCKED, musicBlocked);
-        addRegions(settings.PURCHASE_BLOCKED, purchaseBlocked);
-        addRegions(settings.BLOCK_FEATURED_CHILD, blockFeaturedChild);
-        addRegions(settings.PROMOTIONAL_CONTENT_RESTRICTED_REGIONS, promotionalRestrictedRegions);
-        gotSettings = true;
-    }
-
-    public boolean gotSettings() {
-        return gotSettings;
-    }
-
-    public void setIsMeAdult(boolean isAdult) {
-        isMeAdult = isAdult;
-    }
-
-    public boolean isMeAdult() {
-        return isMeAdult;
-    }
-
-    public int getMeMaturityLevel() {
-        ProfileModel meProfile = ProfileModel.getMeProfileModel();
-        if (meProfile != null) {
-            return meProfile.getMaturityLevel();
-        }
-        return 0;
-    }
-
-    public String getRegion() {
-        return Locale.getDefault().getCountry();
-    }
-
-    public boolean isMusicBlocked() {
+    public boolean getAllowExplicitContent() {
         return true;
     }
 
-    public boolean isVideoBlocked() {
-        return true;
-    }
-
-    public boolean isPurchaseBlocked() {
-        return purchaseBlocked.contains(getRegion());
-    }
-
-    public boolean isFeaturedBlocked() {
-        return !isMeAdult() && blockFeaturedChild.contains(getRegion());
-    }
-
-    public boolean isPromotionalRestricted() {
-        return !isMeAdult() && promotionalRestrictedRegions.contains(getRegion());
-    }
-
-    public String getXuidString() {
-        return meXuid;
-    }
-
-    public void setXuidString(String xuid) {
-        meXuid = xuid;
-    }
-
-    public String getPrivileges() {
-        return privileges;
-    }
-
-    public void setPrivileges(String privileges2) {
-        privileges = privileges2;
-    }
-
-    public String getSCDRpsTicket() {
-        return scdRpsTicket;
-    }
-
-    public void setSCDRpsTicket(String ticket) {
-        scdRpsTicket = ticket;
-    }
-
-    public String getLegalLocale() {
-        return getConnectedLocale();
+    public String getAutoSuggestdDataSource() {
+        return "bbxall2";
     }
 
     public String getCombinedContentRating() {
         return "";
     }
 
-    public String getMembershipLevel() {
-        if (ProfileModel.getMeProfileModel().getAccountTier() == null) {
-            return "Gold";
-        }
-        return ProfileModel.getMeProfileModel().getAccountTier();
+    public String getCurrentSandboxID() {
+        return "PROD";
     }
 
-    public boolean getAllowExplicitContent() {
+    public boolean getIsForXboxOne() {
         return true;
-    }
-
-    public boolean getInitializeComplete() {
-        return getXuidString() != null;
     }
 
     public boolean getIsFreeAccount() {
@@ -214,12 +88,168 @@ public class XleProjectSpecificDataProvider implements IProjectSpecificDataProvi
         return true;
     }
 
+    public int getVersionCode() {
+        return 1;
+    }
+
+    public boolean isMusicBlocked() {
+        return true;
+    }
+
+    public boolean isVideoBlocked() {
+        return true;
+    }
+
+    public void ensureDisplayLocale() {
+        Locale locale;
+        Locale locale2 = Locale.getDefault();
+        String locale3 = locale2.toString();
+        String language = locale2.getLanguage();
+        String country = locale2.getCountry();
+        int i = 0;
+        while (true) {
+            String[][] strArr = displayLocales;
+            if (i >= strArr.length) {
+                locale = null;
+                break;
+            } else if (!strArr[i][0].equals(locale3)) {
+                i++;
+            } else if (!displayLocales[i][1].equals(language) || !displayLocales[i][2].equals(country)) {
+                String[][] strArr2 = displayLocales;
+                locale = new Locale(strArr2[i][1], strArr2[i][2]);
+            } else {
+                return;
+            }
+        }
+        if (locale == null) {
+            int i2 = 0;
+            while (true) {
+                String[][] strArr3 = displayLocales;
+                if (i2 >= strArr3.length) {
+                    break;
+                } else if (strArr3[i2][0].equals(language)) {
+                    String[][] strArr4 = displayLocales;
+                    locale = new Locale(strArr4[i2][1], strArr4[i2][2]);
+                    break;
+                } else {
+                    i2++;
+                }
+            }
+        }
+        if (locale != null) {
+            DisplayMetrics displayMetrics = XboxTcuiSdk.getResources().getDisplayMetrics();
+            Configuration configuration = XboxTcuiSdk.getResources().getConfiguration();
+            configuration.locale = locale;
+            XboxTcuiSdk.getResources().updateConfiguration(configuration, displayMetrics);
+        }
+    }
+
+    private void addRegions(String str, Set<String> set) {
+        if (!JavaUtil.isNullOrEmpty(str)) {
+            String[] split = str.split("[|]");
+            if (!XLEUtil.isNullOrEmpty(split)) {
+                set.clear();
+                for (String str2 : split) {
+                    if (!JavaUtil.isNullOrEmpty(str2)) {
+                        set.add(str2);
+                    }
+                }
+            }
+        }
+    }
+
+    public void processContentBlockedList(@NotNull SmartglassSettings smartglassSettings) {
+        addRegions(smartglassSettings.VIDEO_BLOCKED, this.videoBlocked);
+        addRegions(smartglassSettings.MUSIC_BLOCKED, this.musicBlocked);
+        addRegions(smartglassSettings.PURCHASE_BLOCKED, this.purchaseBlocked);
+        addRegions(smartglassSettings.BLOCK_FEATURED_CHILD, this.blockFeaturedChild);
+        addRegions(smartglassSettings.PROMOTIONAL_CONTENT_RESTRICTED_REGIONS, this.promotionalRestrictedRegions);
+        this.gotSettings = true;
+    }
+
+    public boolean gotSettings() {
+        return this.gotSettings;
+    }
+
+    public void setIsMeAdult(boolean z) {
+        this.isMeAdult = z;
+    }
+
+    public boolean isMeAdult() {
+        return this.isMeAdult;
+    }
+
+    public int getMeMaturityLevel() {
+        ProfileModel meProfileModel = ProfileModel.getMeProfileModel();
+        if (meProfileModel != null) {
+            return meProfileModel.getMaturityLevel();
+        }
+        return 0;
+    }
+
+    public String getRegion() {
+        return Locale.getDefault().getCountry();
+    }
+
+    public boolean isPurchaseBlocked() {
+        return this.purchaseBlocked.contains(getRegion());
+    }
+
+    public boolean isFeaturedBlocked() {
+        return !isMeAdult() && this.blockFeaturedChild.contains(getRegion());
+    }
+
+    public boolean isPromotionalRestricted() {
+        return !isMeAdult() && this.promotionalRestrictedRegions.contains(getRegion());
+    }
+
+    public String getXuidString() {
+        return this.meXuid;
+    }
+
+    public void setXuidString(String str) {
+        this.meXuid = str;
+    }
+
+    public String getPrivileges() {
+        return this.privileges;
+    }
+
+    public void setPrivileges(String str) {
+        this.privileges = str;
+    }
+
+    public String getSCDRpsTicket() {
+        return this.scdRpsTicket;
+    }
+
+    public void setSCDRpsTicket(String str) {
+        this.scdRpsTicket = str;
+    }
+
+    public String getLegalLocale() {
+        return getConnectedLocale();
+    }
+
+    public String getMembershipLevel() {
+        if (ProfileModel.getMeProfileModel().getAccountTier() == null) {
+            return "Gold";
+        }
+        return ProfileModel.getMeProfileModel().getAccountTier();
+    }
+
+    public boolean getInitializeComplete() {
+        return getXuidString() != null;
+    }
+
     public String getWindowsLiveClientId() {
         switch (XboxLiveEnvironment.Instance().getEnvironment()) {
             case PROD:
                 return "0000000048093EE3";
             case VINT:
+                return "0000000068036303";
             case DNET:
+                return "0000000068036303";
             case PARTNERNET:
                 return "0000000068036303";
             default:
@@ -230,52 +260,39 @@ public class XleProjectSpecificDataProvider implements IProjectSpecificDataProvi
     public String getVersionCheckUrl() {
         switch (XboxLiveEnvironment.Instance().getEnvironment()) {
             case PROD:
-            case PARTNERNET:
                 return "http://www.xbox.com/en-US/Platform/Android/XboxLIVE/sgversion";
-            case VINT:
-            case DNET:
+            case PARTNERNET:
                 return "http://www.rtm.vint.xbox.com/en-US/Platform/Android/XboxLIVE/sgversion";
+            case VINT:
+                return "http://www.rtm.vint.xbox.com/en-US/Platform/Android/XboxLIVE/sgversion";
+            case DNET:
+                return "http://www.xbox.com/en-US/Platform/Android/XboxLIVE/sgversion";
             default:
                 throw new UnsupportedOperationException();
         }
     }
 
-    public String getAutoSuggestdDataSource() {
-        return "bbxall2";
-    }
-
-    public void resetModels(boolean clearEverything) {
+    public void resetModels(boolean z) {
         ProfileModel.reset();
     }
 
-    public boolean getIsForXboxOne() {
-        return true;
-    }
-
-    public String getCurrentSandboxID() {
-        return "PROD";
-    }
-
     private String getDeviceLocale() {
-        Locale deviceLocale = Locale.getDefault();
-        String localeStr = deviceLocale.toString();
-        if (serviceLocaleMapTable.containsKey(localeStr)) {
-            return serviceLocaleMapTable.get(localeStr);
+        Locale locale = Locale.getDefault();
+        String locale2 = locale.toString();
+        if (this.serviceLocaleMapTable.containsKey(locale2)) {
+            return this.serviceLocaleMapTable.get(locale2);
         }
-        String region = deviceLocale.getCountry();
-        if (JavaUtil.isNullOrEmpty(region) || !serviceLocaleMapTable.containsKey(region)) {
-            return "en-US";
-        }
-        return serviceLocaleMapTable.get(region);
+        String country = locale.getCountry();
+        return (JavaUtil.isNullOrEmpty(country) || !this.serviceLocaleMapTable.containsKey(country)) ? "en-US" : this.serviceLocaleMapTable.get(country);
     }
 
     public boolean isDeviceLocaleKnown() {
-        Locale deviceLocale = Locale.getDefault();
-        if (serviceLocaleMapTable.containsKey(deviceLocale.toString())) {
+        Locale locale = Locale.getDefault();
+        if (this.serviceLocaleMapTable.containsKey(locale.toString())) {
             return true;
         }
-        String region = deviceLocale.getCountry();
-        if (JavaUtil.isNullOrEmpty(region) || !serviceLocaleMapTable.containsKey(region)) {
+        String country = locale.getCountry();
+        if (JavaUtil.isNullOrEmpty(country) || !this.serviceLocaleMapTable.containsKey(country)) {
             return false;
         }
         return true;
@@ -285,36 +302,35 @@ public class XleProjectSpecificDataProvider implements IProjectSpecificDataProvi
         return getDeviceLocale();
     }
 
-    public String getConnectedLocale(boolean fromEdsCall) {
+    public String getConnectedLocale(boolean z) {
         return getConnectedLocale();
-    }
-
-    public int getVersionCode() {
-        return 1;
     }
 
     public String getContentRestrictions() {
         String region = getRegion();
-        int maturityLevel = getMeMaturityLevel();
-        if (!JavaUtil.isNullOrEmpty(region) && maturityLevel != 255) {
-            String jsonString = GsonUtil.toJsonString(new ContentRestrictions(region, maturityLevel, isPromotionalRestricted()));
-            if (!JavaUtil.isNullOrEmpty(jsonString)) {
-                return Base64.encodeToString(jsonString.getBytes(), 2);
-            }
+        int meMaturityLevel = getMeMaturityLevel();
+        if (JavaUtil.isNullOrEmpty(region) || meMaturityLevel == 255) {
+            return null;
+        }
+        String jsonString = GsonUtil.toJsonString(new ContentRestrictions(region, meMaturityLevel, isPromotionalRestricted()));
+        if (!JavaUtil.isNullOrEmpty(jsonString)) {
+            return Base64.encodeToString(jsonString.getBytes(), 2);
         }
         return null;
     }
 
     private class ContentRestrictions {
-        public Data data = new Data();
+        public Data data;
         public int version = 2;
 
-        public ContentRestrictions(String region, int ageRating, boolean restrictPromotionalContent) {
-            data.geographicRegion = region;
-            Data data2 = data;
-            data.preferredAgeRating = ageRating;
-            data2.maxAgeRating = ageRating;
-            data.restrictPromotionalContent = restrictPromotionalContent;
+        public ContentRestrictions(String str, int i, boolean z) {
+            Data data2 = new Data();
+            this.data = data2;
+            data2.geographicRegion = str;
+            Data data3 = this.data;
+            data3.preferredAgeRating = i;
+            data3.maxAgeRating = i;
+            this.data.restrictPromotionalContent = z;
         }
 
         public class Data {

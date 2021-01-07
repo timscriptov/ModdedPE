@@ -1,7 +1,7 @@
 package com.microsoft.xbox.toolkit.ui;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -11,30 +11,30 @@ public class TextureManagerScaledResourceBitmapRequest {
     public final TextureBindingOption bindingOption;
     public final int resourceId;
 
-    public TextureManagerScaledResourceBitmapRequest(int resourceId2) {
-        this(resourceId2, new TextureBindingOption());
+    public TextureManagerScaledResourceBitmapRequest(int i) {
+        this(i, new TextureBindingOption());
     }
 
-    public TextureManagerScaledResourceBitmapRequest(int resourceId2, TextureBindingOption option) {
-        resourceId = resourceId2;
-        bindingOption = option;
+    public TextureManagerScaledResourceBitmapRequest(int i, TextureBindingOption textureBindingOption) {
+        this.resourceId = i;
+        this.bindingOption = textureBindingOption;
     }
 
-    public boolean equals(Object rhsuntyped) {
-        if (this == rhsuntyped) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (!(rhsuntyped instanceof TextureManagerScaledResourceBitmapRequest)) {
+        if (!(obj instanceof TextureManagerScaledResourceBitmapRequest)) {
             return false;
         }
-        TextureManagerScaledResourceBitmapRequest rhs = (TextureManagerScaledResourceBitmapRequest) rhsuntyped;
-        if (resourceId != rhs.resourceId || !bindingOption.equals(rhs.bindingOption)) {
+        TextureManagerScaledResourceBitmapRequest textureManagerScaledResourceBitmapRequest = (TextureManagerScaledResourceBitmapRequest) obj;
+        if (this.resourceId != textureManagerScaledResourceBitmapRequest.resourceId || !this.bindingOption.equals(textureManagerScaledResourceBitmapRequest.bindingOption)) {
             return false;
         }
         return true;
     }
 
     public int hashCode() {
-        return resourceId;
+        return this.resourceId;
     }
 }

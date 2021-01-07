@@ -29,6 +29,7 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -37,81 +38,61 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 
 public class SLSXsapiServiceManager implements ISLSServiceManager {
-    private static final String TAG = "SLSXsapiServiceManager";
+    private static final String TAG = SLSXsapiServiceManager.class.getSimpleName();
 
-    public FamilySettings getFamilySettings(String xuid) throws XLEException {
+    public FamilySettings getFamilySettings(String str) throws XLEException {
         return null;
     }
 
-    public boolean removeFriendFromShareIdentitySetting(String xuid, String postBody) throws XLEException {
-        boolean z;
+    public int[] getXTokenPrivileges() throws XLEException {
+        return new int[0];
+    }
+
+    public boolean removeFriendFromShareIdentitySetting(String str, String str2) throws XLEException {
         Log.i(TAG, "removeFriendFromShareIdentitySetting");
-        if (Thread.currentThread() != ThreadManager.UIThread) {
-            z = true;
-        } else {
-            z = false;
-        }
-        XLEAssert.assertTrue(z);
-        HttpCall httpCall = HttpUtil.appendCommonParameters(new HttpCall(HttpPost.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getRemoveUsersFromShareIdentityUrlFormat(), new Object[]{xuid}), ""), "4");
-        httpCall.setRequestBody(postBody);
-        boolean result = TcuiHttpUtil.getResponseSyncSucceeded(httpCall, Arrays.asList(new Integer[]{Integer.valueOf(HttpStatus.SC_NO_CONTENT)}));
-        TcuiHttpUtil.throwIfNullOrFalse(Boolean.valueOf(result));
-        return result;
+        XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
+        HttpCall appendCommonParameters = HttpUtil.appendCommonParameters(new HttpCall(HttpPost.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getRemoveUsersFromShareIdentityUrlFormat(), new Object[]{str}), ""), "4");
+        appendCommonParameters.setRequestBody(str2);
+        boolean responseSyncSucceeded = TcuiHttpUtil.getResponseSyncSucceeded(appendCommonParameters, Arrays.asList(new Integer[]{Integer.valueOf(HttpStatus.SC_NO_CONTENT)}));
+        TcuiHttpUtil.throwIfNullOrFalse(Boolean.valueOf(responseSyncSucceeded));
+        return responseSyncSucceeded;
     }
 
-    public boolean addFriendToShareIdentitySetting(String xuid, String postBody) throws XLEException {
-        boolean z;
+    public boolean addFriendToShareIdentitySetting(String str, String str2) throws XLEException {
         Log.i(TAG, "addFriendToShareIdentitySetting");
-        if (Thread.currentThread() != ThreadManager.UIThread) {
-            z = true;
-        } else {
-            z = false;
-        }
-        XLEAssert.assertTrue(z);
-        HttpCall httpCall = HttpUtil.appendCommonParameters(new HttpCall(HttpPost.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getAddFriendsToShareIdentityUrlFormat(), new Object[]{xuid}), ""), "4");
-        httpCall.setRequestBody(postBody);
-        boolean result = TcuiHttpUtil.getResponseSyncSucceeded(httpCall, Arrays.asList(new Integer[]{Integer.valueOf(HttpStatus.SC_NO_CONTENT)}));
-        TcuiHttpUtil.throwIfNullOrFalse(Boolean.valueOf(result));
-        return result;
+        XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
+        HttpCall appendCommonParameters = HttpUtil.appendCommonParameters(new HttpCall(HttpPost.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getAddFriendsToShareIdentityUrlFormat(), new Object[]{str}), ""), "4");
+        appendCommonParameters.setRequestBody(str2);
+        boolean responseSyncSucceeded = TcuiHttpUtil.getResponseSyncSucceeded(appendCommonParameters, Arrays.asList(new Integer[]{Integer.valueOf(HttpStatus.SC_NO_CONTENT)}));
+        TcuiHttpUtil.throwIfNullOrFalse(Boolean.valueOf(responseSyncSucceeded));
+        return responseSyncSucceeded;
     }
 
-    public boolean addUserToFavoriteList(String postBody) throws XLEException {
-        boolean z;
+    public boolean addUserToFavoriteList(String str) throws XLEException {
         Log.i(TAG, "addUserToFavoriteList");
-        if (Thread.currentThread() != ThreadManager.UIThread) {
-            z = true;
-        } else {
-            z = false;
-        }
-        XLEAssert.assertTrue(z);
-        HttpCall httpCall = HttpUtil.appendCommonParameters(new HttpCall(HttpPost.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getProfileFavoriteListUrl(), new Object[]{"add"}), ""), "1");
-        httpCall.setRequestBody(postBody);
-        boolean result = TcuiHttpUtil.getResponseSyncSucceeded(httpCall, Arrays.asList(new Integer[]{Integer.valueOf(HttpStatus.SC_NO_CONTENT)}));
-        TcuiHttpUtil.throwIfNullOrFalse(Boolean.valueOf(result));
-        return result;
+        XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
+        HttpCall appendCommonParameters = HttpUtil.appendCommonParameters(new HttpCall(HttpPost.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getProfileFavoriteListUrl(), new Object[]{"add"}), ""), "1");
+        appendCommonParameters.setRequestBody(str);
+        boolean responseSyncSucceeded = TcuiHttpUtil.getResponseSyncSucceeded(appendCommonParameters, Arrays.asList(new Integer[]{Integer.valueOf(HttpStatus.SC_NO_CONTENT)}));
+        TcuiHttpUtil.throwIfNullOrFalse(Boolean.valueOf(responseSyncSucceeded));
+        return responseSyncSucceeded;
     }
 
-    public boolean removeUserFromFavoriteList(String postBody) throws XLEException {
-        boolean z;
+    public boolean removeUserFromFavoriteList(String str) throws XLEException {
         Log.i(TAG, "removeUserFromFavoriteList");
-        if (Thread.currentThread() != ThreadManager.UIThread) {
-            z = true;
-        } else {
-            z = false;
-        }
-        XLEAssert.assertTrue(z);
-        HttpCall httpCall = HttpUtil.appendCommonParameters(new HttpCall(HttpPost.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getProfileFavoriteListUrl(), new Object[]{"remove"}), ""), "1");
-        httpCall.setRequestBody(postBody);
-        boolean result = TcuiHttpUtil.getResponseSyncSucceeded(httpCall, Arrays.asList(new Integer[]{Integer.valueOf(HttpStatus.SC_NO_CONTENT)}));
-        TcuiHttpUtil.throwIfNullOrFalse(Boolean.valueOf(result));
-        return result;
+        XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
+        HttpCall appendCommonParameters = HttpUtil.appendCommonParameters(new HttpCall(HttpPost.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getProfileFavoriteListUrl(), new Object[]{"remove"}), ""), "1");
+        appendCommonParameters.setRequestBody(str);
+        boolean responseSyncSucceeded = TcuiHttpUtil.getResponseSyncSucceeded(appendCommonParameters, Arrays.asList(new Integer[]{Integer.valueOf(HttpStatus.SC_NO_CONTENT)}));
+        TcuiHttpUtil.throwIfNullOrFalse(Boolean.valueOf(responseSyncSucceeded));
+        return responseSyncSucceeded;
     }
 
     public AddFollowingUserResponseContainer.AddFollowingUserResponse addUserToFollowingList(String postBody) throws XLEException {
@@ -151,249 +132,157 @@ public class SLSXsapiServiceManager implements ISLSServiceManager {
         return notifier.get().second;
     }
 
-    public ProfileSummaryResultContainer.ProfileSummaryResult getProfileSummaryInfo(String xuid) throws XLEException {
-        boolean z;
-        boolean z2;
+    public ProfileSummaryResultContainer.ProfileSummaryResult getProfileSummaryInfo(String str) throws XLEException {
         Log.i(TAG, "getProfileSummaryInfo");
-        if (Thread.currentThread() != ThreadManager.UIThread) {
-            z = true;
-        } else {
-            z = false;
-        }
-        XLEAssert.assertTrue(z);
-        if (!JavaUtil.isNullOrEmpty(xuid)) {
-            z2 = true;
-        } else {
-            z2 = false;
-        }
-        XLEAssert.assertTrue(z2);
-        ProfileSummaryResultContainer.ProfileSummaryResult result = TcuiHttpUtil.getResponseSync(HttpUtil.appendCommonParameters(new HttpCall(HttpGet.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getProfileSummaryUrlFormat(), new Object[]{xuid}), ""), "2"), ProfileSummaryResultContainer.ProfileSummaryResult.class);
-        TcuiHttpUtil.throwIfNullOrFalse(result);
-        return result;
+        XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
+        XLEAssert.assertTrue(!JavaUtil.isNullOrEmpty(str));
+        ProfileSummaryResultContainer.ProfileSummaryResult profileSummaryResult = (ProfileSummaryResultContainer.ProfileSummaryResult) TcuiHttpUtil.getResponseSync(HttpUtil.appendCommonParameters(new HttpCall(HttpGet.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getProfileSummaryUrlFormat(), new Object[]{str}), ""), "2"), ProfileSummaryResultContainer.ProfileSummaryResult.class);
+        TcuiHttpUtil.throwIfNullOrFalse(profileSummaryResult);
+        return profileSummaryResult;
     }
 
-    public boolean removeUserFromFollowingList(String postBody) throws XLEException {
-        boolean z;
+    public boolean removeUserFromFollowingList(String str) throws XLEException {
         Log.i(TAG, "removeUserFromFollowingList");
-        if (Thread.currentThread() != ThreadManager.UIThread) {
-            z = true;
-        } else {
-            z = false;
-        }
-        XLEAssert.assertTrue(z);
-        HttpCall httpCall = HttpUtil.appendCommonParameters(new HttpCall(HttpPost.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().updateProfileFollowingListUrl(), new Object[]{"remove"}), ""), "1");
-        httpCall.setRequestBody(postBody);
-        boolean result = TcuiHttpUtil.getResponseSyncSucceeded(httpCall, Arrays.asList(new Integer[]{Integer.valueOf(HttpStatus.SC_NO_CONTENT)}));
-        TcuiHttpUtil.throwIfNullOrFalse(Boolean.valueOf(result));
-        return result;
+        XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
+        HttpCall appendCommonParameters = HttpUtil.appendCommonParameters(new HttpCall(HttpPost.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().updateProfileFollowingListUrl(), new Object[]{"remove"}), ""), "1");
+        appendCommonParameters.setRequestBody(str);
+        boolean responseSyncSucceeded = TcuiHttpUtil.getResponseSyncSucceeded(appendCommonParameters, Arrays.asList(new Integer[]{Integer.valueOf(HttpStatus.SC_NO_CONTENT)}));
+        TcuiHttpUtil.throwIfNullOrFalse(Boolean.valueOf(responseSyncSucceeded));
+        return responseSyncSucceeded;
     }
 
-    public IUserProfileResult.UserProfileResult getUserProfileInfo(String postBody) throws XLEException {
+    public IUserProfileResult.UserProfileResult getUserProfileInfo(String str) throws XLEException {
         Log.i(TAG, "getUserProfileInfo");
         XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
         HttpCall httpCall = new HttpCall(HttpPost.METHOD_NAME, XboxLiveEnvironment.Instance().getUserProfileInfoUrl(), "");
         HttpUtil.appendCommonParameters(httpCall, XboxLiveEnvironment.USER_PROFILE_CONTRACT_VERSION);
-        httpCall.setRequestBody(postBody);
-        IUserProfileResult.UserProfileResult result = TcuiHttpUtil.getResponseSync(httpCall, IUserProfileResult.UserProfileResult.class);
-        TcuiHttpUtil.throwIfNullOrFalse(result);
-        return result;
+        httpCall.setRequestBody(str);
+        IUserProfileResult.UserProfileResult userProfileResult = (IUserProfileResult.UserProfileResult) TcuiHttpUtil.getResponseSync(httpCall, IUserProfileResult.UserProfileResult.class);
+        TcuiHttpUtil.throwIfNullOrFalse(userProfileResult);
+        return userProfileResult;
     }
 
-    public int[] getXTokenPrivileges() throws XLEException {
-        return new int[0];
-    }
-
-    public ProfilePreferredColor getProfilePreferredColor(String url) throws XLEException {
+    public ProfilePreferredColor getProfilePreferredColor(String str) throws XLEException {
         Log.i(TAG, "getProfilePreferredColor");
         XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
-        ProfilePreferredColor result = TcuiHttpUtil.getResponseSync(HttpUtil.appendCommonParameters(new HttpCall(HttpGet.METHOD_NAME, url, ""), "2"), ProfilePreferredColor.class);
-        TcuiHttpUtil.throwIfNullOrFalse(result);
-        return result;
+        ProfilePreferredColor profilePreferredColor = (ProfilePreferredColor) TcuiHttpUtil.getResponseSync(HttpUtil.appendCommonParameters(new HttpCall(HttpGet.METHOD_NAME, str, ""), "2"), ProfilePreferredColor.class);
+        TcuiHttpUtil.throwIfNullOrFalse(profilePreferredColor);
+        return profilePreferredColor;
     }
 
     public PrivacySettingsResult getUserProfilePrivacySettings() throws XLEException {
         Log.i(TAG, "getUserProfilePrivacySettings");
         XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
-        PrivacySettingsResult result = TcuiHttpUtil.getResponseSync(HttpUtil.appendCommonParameters(new HttpCall(HttpGet.METHOD_NAME, XboxLiveEnvironment.Instance().getUserProfileSettingUrlFormat(), ""), "4"), PrivacySettingsResult.class);
-        TcuiHttpUtil.throwIfNullOrFalse(result);
-        return result;
+        PrivacySettingsResult privacySettingsResult = (PrivacySettingsResult) TcuiHttpUtil.getResponseSync(HttpUtil.appendCommonParameters(new HttpCall(HttpGet.METHOD_NAME, XboxLiveEnvironment.Instance().getUserProfileSettingUrlFormat(), ""), "4"), PrivacySettingsResult.class);
+        TcuiHttpUtil.throwIfNullOrFalse(privacySettingsResult);
+        return privacySettingsResult;
     }
 
-    public NeverListResultContainer.NeverListResult getNeverListInfo(String xuid) throws XLEException {
-        boolean z;
-        boolean z2;
+    public NeverListResultContainer.NeverListResult getNeverListInfo(String str) throws XLEException {
         Log.i(TAG, "getNeverListInfo");
-        if (Thread.currentThread() != ThreadManager.UIThread) {
-            z = true;
-        } else {
-            z = false;
-        }
-        XLEAssert.assertTrue(z);
-        if (!JavaUtil.isNullOrEmpty(xuid)) {
-            z2 = true;
-        } else {
-            z2 = false;
-        }
-        XLEAssert.assertTrue(z2);
-        NeverListResultContainer.NeverListResult result = TcuiHttpUtil.getResponseSync(HttpUtil.appendCommonParameters(new HttpCall(HttpGet.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getProfileNeverListUrlFormat(), new Object[]{xuid}), ""), "1"), NeverListResultContainer.NeverListResult.class);
-        TcuiHttpUtil.throwIfNullOrFalse(result);
-        return result;
+        XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
+        XLEAssert.assertTrue(!JavaUtil.isNullOrEmpty(str));
+        NeverListResultContainer.NeverListResult neverListResult = (NeverListResultContainer.NeverListResult) TcuiHttpUtil.getResponseSync(HttpUtil.appendCommonParameters(new HttpCall(HttpGet.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getProfileNeverListUrlFormat(), new Object[]{str}), ""), "1"), NeverListResultContainer.NeverListResult.class);
+        TcuiHttpUtil.throwIfNullOrFalse(neverListResult);
+        return neverListResult;
     }
 
-    public boolean addUserToNeverList(String xuid, String postBody) throws XLEException {
-        boolean z;
+    public boolean addUserToNeverList(String str, String str2) throws XLEException {
         Log.i(TAG, "addUserToNeverList");
-        if (Thread.currentThread() != ThreadManager.UIThread) {
-            z = true;
-        } else {
-            z = false;
-        }
-        XLEAssert.assertTrue(z);
-        HttpCall httpCall = HttpUtil.appendCommonParameters(new HttpCall(HttpPut.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getProfileNeverListUrlFormat(), new Object[]{xuid}), ""), "1");
-        httpCall.setRequestBody(postBody);
-        boolean result = TcuiHttpUtil.getResponseSyncSucceeded(httpCall, new ArrayList(0));
-        TcuiHttpUtil.throwIfNullOrFalse(Boolean.valueOf(result));
-        return result;
+        XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
+        HttpCall appendCommonParameters = HttpUtil.appendCommonParameters(new HttpCall(HttpPut.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getProfileNeverListUrlFormat(), new Object[]{str}), ""), "1");
+        appendCommonParameters.setRequestBody(str2);
+        boolean responseSyncSucceeded = TcuiHttpUtil.getResponseSyncSucceeded(appendCommonParameters, new ArrayList(0));
+        TcuiHttpUtil.throwIfNullOrFalse(Boolean.valueOf(responseSyncSucceeded));
+        return responseSyncSucceeded;
     }
 
-    public boolean removeUserFromNeverList(String xuid, String postBody) throws XLEException {
-        boolean z;
+    public boolean removeUserFromNeverList(String str, String str2) throws XLEException {
         Log.i(TAG, "removeUserFromNeverList");
-        if (Thread.currentThread() != ThreadManager.UIThread) {
-            z = true;
-        } else {
-            z = false;
-        }
-        XLEAssert.assertTrue(z);
-        HttpCall httpCall = HttpUtil.appendCommonParameters(new HttpCall(HttpDelete.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getProfileNeverListUrlFormat(), new Object[]{xuid}), ""), "1");
-        httpCall.setRequestBody(postBody);
-        boolean result = TcuiHttpUtil.getResponseSyncSucceeded(httpCall, new ArrayList(0));
-        TcuiHttpUtil.throwIfNullOrFalse(Boolean.valueOf(result));
-        return result;
+        XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
+        HttpCall appendCommonParameters = HttpUtil.appendCommonParameters(new HttpCall(HttpDelete.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getProfileNeverListUrlFormat(), new Object[]{str}), ""), "1");
+        appendCommonParameters.setRequestBody(str2);
+        boolean responseSyncSucceeded = TcuiHttpUtil.getResponseSyncSucceeded(appendCommonParameters, new ArrayList(0));
+        TcuiHttpUtil.throwIfNullOrFalse(Boolean.valueOf(responseSyncSucceeded));
+        return responseSyncSucceeded;
     }
 
-    public MutedListResultContainer.MutedListResult getMutedListInfo(String xuid) throws XLEException {
-        boolean z;
-        boolean z2;
+    public MutedListResultContainer.MutedListResult getMutedListInfo(String str) throws XLEException {
         Log.i(TAG, "getMutedListInfo");
-        if (Thread.currentThread() != ThreadManager.UIThread) {
-            z = true;
-        } else {
-            z = false;
-        }
-        XLEAssert.assertTrue(z);
-        if (!JavaUtil.isNullOrEmpty(xuid)) {
-            z2 = true;
-        } else {
-            z2 = false;
-        }
-        XLEAssert.assertTrue(z2);
-        MutedListResultContainer.MutedListResult result = TcuiHttpUtil.getResponseSync(HttpUtil.appendCommonParameters(new HttpCall(HttpGet.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getMutedServiceUrlFormat(), new Object[]{xuid}), ""), "1"), MutedListResultContainer.MutedListResult.class);
-        TcuiHttpUtil.throwIfNullOrFalse(result);
-        return result;
+        XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
+        XLEAssert.assertTrue(!JavaUtil.isNullOrEmpty(str));
+        MutedListResultContainer.MutedListResult mutedListResult = (MutedListResultContainer.MutedListResult) TcuiHttpUtil.getResponseSync(HttpUtil.appendCommonParameters(new HttpCall(HttpGet.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getMutedServiceUrlFormat(), new Object[]{str}), ""), "1"), MutedListResultContainer.MutedListResult.class);
+        TcuiHttpUtil.throwIfNullOrFalse(mutedListResult);
+        return mutedListResult;
     }
 
-    public boolean addUserToMutedList(String xuid, String postBody) throws XLEException {
-        boolean z;
+    public boolean addUserToMutedList(String str, String str2) throws XLEException {
         Log.i(TAG, "addUserToMutedList");
-        if (Thread.currentThread() != ThreadManager.UIThread) {
-            z = true;
-        } else {
-            z = false;
-        }
-        XLEAssert.assertTrue(z);
-        HttpCall httpCall = HttpUtil.appendCommonParameters(new HttpCall(HttpPut.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getMutedServiceUrlFormat(), new Object[]{xuid}), ""), "1");
-        httpCall.setRequestBody(postBody);
-        boolean result = TcuiHttpUtil.getResponseSyncSucceeded(httpCall, new ArrayList(0));
-        TcuiHttpUtil.throwIfNullOrFalse(Boolean.valueOf(result));
-        return result;
+        XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
+        HttpCall appendCommonParameters = HttpUtil.appendCommonParameters(new HttpCall(HttpPut.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getMutedServiceUrlFormat(), new Object[]{str}), ""), "1");
+        appendCommonParameters.setRequestBody(str2);
+        boolean responseSyncSucceeded = TcuiHttpUtil.getResponseSyncSucceeded(appendCommonParameters, new ArrayList(0));
+        TcuiHttpUtil.throwIfNullOrFalse(Boolean.valueOf(responseSyncSucceeded));
+        return responseSyncSucceeded;
     }
 
-    public boolean removeUserFromMutedList(String xuid, String postBody) throws XLEException {
-        boolean z;
+    public boolean removeUserFromMutedList(String str, String str2) throws XLEException {
         Log.i(TAG, "removeUserFromMutedList");
-        if (Thread.currentThread() != ThreadManager.UIThread) {
-            z = true;
-        } else {
-            z = false;
-        }
-        XLEAssert.assertTrue(z);
-        HttpCall httpCall = HttpUtil.appendCommonParameters(new HttpCall(HttpDelete.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getMutedServiceUrlFormat(), new Object[]{xuid}), ""), "1");
-        httpCall.setRequestBody(postBody);
-        boolean result = TcuiHttpUtil.getResponseSyncSucceeded(httpCall, new ArrayList(0));
-        TcuiHttpUtil.throwIfNullOrFalse(Boolean.valueOf(result));
-        return result;
+        XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
+        HttpCall appendCommonParameters = HttpUtil.appendCommonParameters(new HttpCall(HttpDelete.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getMutedServiceUrlFormat(), new Object[]{str}), ""), "1");
+        appendCommonParameters.setRequestBody(str2);
+        boolean responseSyncSucceeded = TcuiHttpUtil.getResponseSyncSucceeded(appendCommonParameters, new ArrayList(0));
+        TcuiHttpUtil.throwIfNullOrFalse(Boolean.valueOf(responseSyncSucceeded));
+        return responseSyncSucceeded;
     }
 
-    public boolean submitFeedback(String xuid, String postBody) throws XLEException {
-        boolean z;
+    public boolean submitFeedback(String str, String str2) throws XLEException {
         Log.i(TAG, "submitFeedback");
-        if (Thread.currentThread() != ThreadManager.UIThread) {
-            z = true;
-        } else {
-            z = false;
-        }
-        XLEAssert.assertTrue(z);
-        HttpCall httpCall = HttpUtil.appendCommonParameters(new HttpCall(HttpPost.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getSubmitFeedbackUrlFormat(), new Object[]{xuid}), ""), "101");
-        httpCall.setRequestBody(postBody);
-        boolean result = TcuiHttpUtil.getResponseSyncSucceeded(httpCall, new ArrayList(HttpStatus.SC_ACCEPTED));
-        TcuiHttpUtil.throwIfNullOrFalse(Boolean.valueOf(result));
-        return result;
+        XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
+        HttpCall appendCommonParameters = HttpUtil.appendCommonParameters(new HttpCall(HttpPost.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getSubmitFeedbackUrlFormat(), new Object[]{str}), ""), "101");
+        appendCommonParameters.setRequestBody(str2);
+        boolean responseSyncSucceeded = TcuiHttpUtil.getResponseSyncSucceeded(appendCommonParameters, new ArrayList(HttpStatus.SC_ACCEPTED));
+        TcuiHttpUtil.throwIfNullOrFalse(Boolean.valueOf(responseSyncSucceeded));
+        return responseSyncSucceeded;
     }
 
-    public PrivacySettings.PrivacySetting getPrivacySetting(PrivacySettings.PrivacySettingId settingId) throws XLEException {
-        boolean z;
+    public PrivacySettings.PrivacySetting getPrivacySetting(PrivacySettings.@NotNull PrivacySettingId privacySettingId) throws XLEException {
         Log.i(TAG, "getPrivacySetting");
-        if (Thread.currentThread() != ThreadManager.UIThread) {
-            z = true;
-        } else {
-            z = false;
-        }
-        XLEAssert.assertTrue(z);
-        PrivacySettings.PrivacySetting result = TcuiHttpUtil.getResponseSync(HttpUtil.appendCommonParameters(new HttpCall(HttpGet.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getProfileSettingUrlFormat(), new Object[]{settingId.name()}), ""), "4"), PrivacySettings.PrivacySetting.class);
-        TcuiHttpUtil.throwIfNullOrFalse(result);
-        return result;
+        XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
+        PrivacySettings.PrivacySetting privacySetting = (PrivacySettings.PrivacySetting) TcuiHttpUtil.getResponseSync(HttpUtil.appendCommonParameters(new HttpCall(HttpGet.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getProfileSettingUrlFormat(), new Object[]{privacySettingId.name()}), ""), "4"), PrivacySettings.PrivacySetting.class);
+        TcuiHttpUtil.throwIfNullOrFalse(privacySetting);
+        return privacySetting;
     }
 
-    public boolean setPrivacySettings(PrivacySettingsResult settings) throws XLEException {
-        boolean z;
+    public boolean setPrivacySettings(PrivacySettingsResult privacySettingsResult) throws XLEException {
         Log.i(TAG, "setPrivacySettings");
-        if (Thread.currentThread() != ThreadManager.UIThread) {
-            z = true;
-        } else {
-            z = false;
-        }
-        XLEAssert.assertTrue(z);
-        HttpCall httpCall = HttpUtil.appendCommonParameters(new HttpCall(HttpPut.METHOD_NAME, XboxLiveEnvironment.Instance().getUserProfileSettingUrlFormat(), ""), "4");
-        httpCall.setRequestBody(PrivacySettingsResult.getPrivacySettingRequestBody(settings));
-        boolean result = TcuiHttpUtil.getResponseSyncSucceeded(httpCall, Arrays.asList(new Integer[]{Integer.valueOf(HttpStatus.SC_CREATED)}));
-        TcuiHttpUtil.throwIfNullOrFalse(Boolean.valueOf(result));
-        return result;
+        XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
+        HttpCall appendCommonParameters = HttpUtil.appendCommonParameters(new HttpCall(HttpPut.METHOD_NAME, XboxLiveEnvironment.Instance().getUserProfileSettingUrlFormat(), ""), "4");
+        appendCommonParameters.setRequestBody(PrivacySettingsResult.getPrivacySettingRequestBody(privacySettingsResult));
+        boolean responseSyncSucceeded = TcuiHttpUtil.getResponseSyncSucceeded(appendCommonParameters, Arrays.asList(new Integer[]{Integer.valueOf(HttpStatus.SC_CREATED)}));
+        TcuiHttpUtil.throwIfNullOrFalse(Boolean.valueOf(responseSyncSucceeded));
+        return responseSyncSucceeded;
     }
 
     public IPeopleHubResult.PeopleHubPeopleSummary getPeopleHubRecommendations() throws XLEException {
         Log.i(TAG, "getPeopleHubRecommendations");
         XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
-        HttpCall httpCall = HttpUtil.appendCommonParameters(new HttpCall(HttpGet.METHOD_NAME, XboxLiveEnvironment.Instance().getPeopleHubRecommendationsUrlFormat(), ""), "1");
-        httpCall.setCustomHeader("Accept-Language", ProjectSpecificDataProvider.getInstance().getLegalLocale());
-        httpCall.setCustomHeader("X-XBL-Contract-Version", "1");
-        httpCall.setCustomHeader("X-XBL-Market", ProjectSpecificDataProvider.getInstance().getRegion());
-        IPeopleHubResult.PeopleHubPeopleSummary result = TcuiHttpUtil.getResponseSync(httpCall, IPeopleHubResult.PeopleHubPeopleSummary.class);
-        TcuiHttpUtil.throwIfNullOrFalse(result);
-        return result;
+        HttpCall appendCommonParameters = HttpUtil.appendCommonParameters(new HttpCall(HttpGet.METHOD_NAME, XboxLiveEnvironment.Instance().getPeopleHubRecommendationsUrlFormat(), ""), "1");
+        appendCommonParameters.setCustomHeader("Accept-Language", ProjectSpecificDataProvider.getInstance().getLegalLocale());
+        appendCommonParameters.setCustomHeader("X-XBL-Contract-Version", "1");
+        appendCommonParameters.setCustomHeader("X-XBL-Market", ProjectSpecificDataProvider.getInstance().getRegion());
+        IPeopleHubResult.PeopleHubPeopleSummary peopleHubPeopleSummary = (IPeopleHubResult.PeopleHubPeopleSummary) TcuiHttpUtil.getResponseSync(appendCommonParameters, IPeopleHubResult.PeopleHubPeopleSummary.class);
+        TcuiHttpUtil.throwIfNullOrFalse(peopleHubPeopleSummary);
+        return peopleHubPeopleSummary;
     }
 
-    public IUserProfileResult.UserProfileResult SearchGamertag(String gamertag) throws XLEException {
-        boolean z = true;
+    public IUserProfileResult.UserProfileResult SearchGamertag(@NotNull String str) throws XLEException {
         Log.i(TAG, "SearchGamertag");
-        if (Thread.currentThread() == ThreadManager.UIThread) {
-            z = false;
-        }
-        XLEAssert.assertTrue(z);
+        XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
         try {
-            IUserProfileResult.UserProfileResult result = TcuiHttpUtil.getResponseSync(HttpUtil.appendCommonParameters(new HttpCall(HttpGet.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getGamertagSearchUrlFormat(), new Object[]{URLEncoder.encode(gamertag.toLowerCase(), "utf-8")}), ""), XboxLiveEnvironment.USER_PROFILE_CONTRACT_VERSION), IUserProfileResult.UserProfileResult.class);
-            TcuiHttpUtil.throwIfNullOrFalse(result);
-            return result;
+            IUserProfileResult.UserProfileResult userProfileResult = (IUserProfileResult.UserProfileResult) TcuiHttpUtil.getResponseSync(HttpUtil.appendCommonParameters(new HttpCall(HttpGet.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getGamertagSearchUrlFormat(), new Object[]{URLEncoder.encode(str.toLowerCase(), "utf-8")}), ""), XboxLiveEnvironment.USER_PROFILE_CONTRACT_VERSION), IUserProfileResult.UserProfileResult.class);
+            TcuiHttpUtil.throwIfNullOrFalse(userProfileResult);
+            return userProfileResult;
         } catch (UnsupportedEncodingException e) {
             throw new XLEException(15, (Throwable) e);
         }

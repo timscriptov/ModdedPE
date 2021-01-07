@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -35,95 +35,91 @@ public class ReportUserScreenViewModel extends ViewModelBase {
 
     public ReportUserScreenViewModel(ScreenLayout screenLayout) {
         super(screenLayout);
-        boolean z;
-        String profileXuid = NavigationManager.getInstance().getActivityParameters().getSelectedProfile();
-        XLEAssert.assertTrue(!JavaUtil.isNullOrEmpty(profileXuid));
-        if (JavaUtil.isNullOrEmpty(profileXuid)) {
+        String selectedProfile = NavigationManager.getInstance().getActivityParameters().getSelectedProfile();
+        XLEAssert.assertTrue(!JavaUtil.isNullOrEmpty(selectedProfile));
+        if (JavaUtil.isNullOrEmpty(selectedProfile)) {
             popScreenWithXuidError();
         }
-        model = ProfileModel.getProfileModel(profileXuid);
-        if (!JavaUtil.isNullOrEmpty(model.getGamerTag())) {
-            z = true;
-        } else {
-            z = false;
-        }
-        XLEAssert.assertTrue(z);
-        adapter = new ReportUserScreenAdapter(this);
+        ProfileModel profileModel = ProfileModel.getProfileModel(selectedProfile);
+        this.model = profileModel;
+        XLEAssert.assertTrue(!JavaUtil.isNullOrEmpty(profileModel.getGamerTag()));
+        this.adapter = new ReportUserScreenAdapter(this);
         FeedbackType[] feedbackTypeArr = new FeedbackType[7];
         feedbackTypeArr[0] = FeedbackType.UserContentPersonalInfo;
         feedbackTypeArr[1] = FeedbackType.FairPlayCheater;
-        feedbackTypeArr[2] = JavaUtil.isNullOrEmpty(model.getRealName()) ? FeedbackType.UserContentGamertag : FeedbackType.UserContentRealName;
+        feedbackTypeArr[2] = JavaUtil.isNullOrEmpty(this.model.getRealName()) ? FeedbackType.UserContentGamertag : FeedbackType.UserContentRealName;
         feedbackTypeArr[3] = FeedbackType.UserContentGamerpic;
         feedbackTypeArr[4] = FeedbackType.FairPlayQuitter;
         feedbackTypeArr[5] = FeedbackType.FairplayUnsporting;
         feedbackTypeArr[6] = FeedbackType.CommsAbusiveVoice;
-        feedbackReasons = feedbackTypeArr;
+        this.feedbackReasons = feedbackTypeArr;
     }
 
-    public boolean onBackButtonPressed() {
-        UTCPageView.removePage();
-        try {
-            NavigationManager.getInstance().PopScreensAndReplace(1, null, false, false, false, NavigationManager.getInstance().getActivityParameters());
-            return true;
-        } catch (XLEException e) {
-            return false;
-        }
-    }
-
-    public void onStartOverride() {
+    public void load(boolean z) {
     }
 
     public void onRehydrate() {
     }
 
+    public void onStartOverride() {
+    }
+
+    public boolean onBackButtonPressed() {
+        UTCPageView.removePage();
+        try {
+            NavigationManager.getInstance().PopScreensAndReplace(1, (Class<? extends ScreenLayout>) null, false, false, false, NavigationManager.getInstance().getActivityParameters());
+            return true;
+        } catch (XLEException unused) {
+            return false;
+        }
+    }
+
     public void onStopOverride() {
-        if (submitReportAsyncTask != null) {
-            submitReportAsyncTask.cancel();
+        SubmitReportAsyncTask submitReportAsyncTask2 = this.submitReportAsyncTask;
+        if (submitReportAsyncTask2 != null) {
+            submitReportAsyncTask2.cancel();
         }
     }
 
     public boolean isBusy() {
-        return isSubmittingReport;
-    }
-
-    public void load(boolean forceRefresh) {
+        return this.isSubmittingReport;
     }
 
     private void popScreenWithXuidError() {
         try {
             showError(R.string.Service_ErrorText);
             NavigationManager.getInstance().PopScreen();
-        } catch (XLEException e) {
+        } catch (XLEException unused) {
         }
     }
 
     public int getPreferredColor() {
-        return model.getPreferedColor();
+        return this.model.getPreferedColor();
     }
 
     public String getTitle() {
-        return String.format(XboxTcuiSdk.getResources().getString(R.string.ProfileCard_Report_InfoString_Android), new Object[]{model.getGamerTag()});
+        return String.format(XboxTcuiSdk.getResources().getString(R.string.ProfileCard_Report_InfoString_Android), new Object[]{this.model.getGamerTag()});
     }
 
     public ArrayList<String> getReasonTitles() {
-        ArrayList<String> titles = new ArrayList<>(feedbackReasons.length);
-        titles.add(XboxTcuiSdk.getResources().getString(R.string.ProfileCard_Report_SelectReason));
-        for (FeedbackType feedbackType : feedbackReasons) {
-            titles.add(feedbackType.getTitle());
+        ArrayList<String> arrayList = new ArrayList<>(this.feedbackReasons.length);
+        arrayList.add(XboxTcuiSdk.getResources().getString(R.string.ProfileCard_Report_SelectReason));
+        for (FeedbackType title : this.feedbackReasons) {
+            arrayList.add(title.getTitle());
         }
-        return titles;
+        return arrayList;
     }
 
     public boolean validReasonSelected() {
-        return selectedReason != null;
+        return this.selectedReason != null;
     }
 
     public FeedbackType getReason() {
-        return selectedReason;
+        return this.selectedReason;
     }
 
-    public void setReason(int position) {
-        selectedReason = position != 0 && position + -1 < feedbackReasons.length ? feedbackReasons[position - 1] : null;
+    public void setReason(int i) {
+        this.selectedReason = i != 0 && i + -1 < this.feedbackReasons.length ? this.feedbackReasons[i - 1] : null;
         updateAdapter();
     }
 
@@ -154,8 +150,9 @@ public class ReportUserScreenViewModel extends ViewModelBase {
         }
     }
 
+
     public String getXUID() {
-        return model.getXuid();
+        return this.model.getXuid();
     }
 
     private class SubmitReportAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
@@ -163,10 +160,10 @@ public class ReportUserScreenViewModel extends ViewModelBase {
         private ProfileModel model;
         private String textReason;
 
-        private SubmitReportAsyncTask(ProfileModel model2, FeedbackType feedbackType2, String textReason2) {
-            model = model2;
-            feedbackType = feedbackType2;
-            textReason = textReason2;
+        private SubmitReportAsyncTask(ProfileModel profileModel, FeedbackType feedbackType2, String str) {
+            this.model = profileModel;
+            this.feedbackType = feedbackType2;
+            this.textReason = str;
         }
 
         public boolean checkShouldExecute() {
@@ -176,17 +173,17 @@ public class ReportUserScreenViewModel extends ViewModelBase {
 
         public void onNoAction() {
             XLEAssert.assertIsUIThread();
-            onSubmitReportCompleted(AsyncActionStatus.NO_CHANGE);
+            ReportUserScreenViewModel.this.onSubmitReportCompleted(AsyncActionStatus.NO_CHANGE);
         }
 
         public void onPreExecute() {
             XLEAssert.assertIsUIThread();
-            boolean unused = isSubmittingReport = true;
-            updateAdapter();
+            boolean unused = ReportUserScreenViewModel.this.isSubmittingReport = true;
+            ReportUserScreenViewModel.this.updateAdapter();
         }
 
-        public void onPostExecute(AsyncActionStatus result) {
-            onSubmitReportCompleted(result);
+        public void onPostExecute(AsyncActionStatus asyncActionStatus) {
+            ReportUserScreenViewModel.this.onSubmitReportCompleted(asyncActionStatus);
         }
 
         public AsyncActionStatus onError() {
@@ -194,8 +191,8 @@ public class ReportUserScreenViewModel extends ViewModelBase {
         }
 
         public AsyncActionStatus loadDataInBackground() {
-            XLEAssert.assertNotNull(model);
-            return model.submitFeedbackForUser(forceLoad, feedbackType, textReason).getStatus();
+            XLEAssert.assertNotNull(this.model);
+            return this.model.submitFeedbackForUser(this.forceLoad, this.feedbackType, this.textReason).getStatus();
         }
     }
 }

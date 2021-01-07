@@ -13,79 +13,79 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 
 public class StreamUtil {
-    @Nullable
-    public static byte[] CreateByteArray(InputStream stream) {
-        ByteArrayOutputStream rv = new ByteArrayOutputStream();
+    public static byte @Nullable [] CreateByteArray(InputStream inputStream) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try {
-            CopyStream(rv, stream);
-            return rv.toByteArray();
-        } catch (IOException e) {
+            CopyStream(byteArrayOutputStream, inputStream);
+            return byteArrayOutputStream.toByteArray();
+        } catch (IOException unused) {
             return null;
         }
     }
 
-    public static void CopyStream(OutputStream output, @NotNull InputStream input) throws IOException {
-        byte[] buffer = new byte[16384];
+    public static void CopyStream(OutputStream outputStream, @NotNull InputStream inputStream) throws IOException {
+        byte[] bArr = new byte[16384];
         while (true) {
-            int readlen = input.read(buffer);
-            if (readlen > 0) {
-                output.write(buffer, 0, readlen);
+            int read = inputStream.read(bArr);
+            if (read > 0) {
+                outputStream.write(bArr, 0, read);
             } else {
-                output.flush();
+                outputStream.flush();
                 return;
             }
         }
     }
 
-    @Nullable
-    public static String ReadAsString(InputStream stream) {
-        StringBuilder builder = new StringBuilder();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+    public static @Nullable String ReadAsString(InputStream inputStream) {
+        StringBuilder sb = new StringBuilder();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         while (true) {
             try {
-                String line = reader.readLine();
-                if (line == null) {
-                    return builder.toString();
+                String readLine = bufferedReader.readLine();
+                if (readLine == null) {
+                    return sb.toString();
                 }
-                builder.append(line);
-                builder.append(10);
-            } catch (IOException e) {
+                sb.append(readLine);
+                sb.append(10);
+            } catch (IOException unused) {
                 return null;
             }
         }
     }
 
-    public static void consumeAndClose(InputStream stream) throws IOException {
-        InputStream s = new BufferedInputStream(stream);
+    public static void consumeAndClose(InputStream inputStream) throws IOException {
+        BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
         do {
             try {
             } finally {
-                s.close();
+                bufferedInputStream.close();
             }
-        } while (s.read() != -1);
+        } while (bufferedInputStream.read() != -1);
     }
 
-    @NotNull
     @Contract("null -> fail")
-    public static byte[] HexStringToByteArray(String hexString) {
-        if (hexString == null) {
-            throw new IllegalArgumentException("hexString invalid");
+    public static byte @NotNull [] HexStringToByteArray(String str) {
+        if (str != null) {
+            if (str.length() % 2 != 0) {
+                str = "0" + str;
+            }
+            int i = 0;
+            XLEAssert.assertTrue(str.length() % 2 == 0);
+            byte[] bArr = new byte[(str.length() / 2)];
+            while (i < str.length()) {
+                int i2 = i + 2;
+                bArr[i / 2] = Byte.parseByte(str.substring(i, i2), 16);
+                i = i2;
+            }
+            return bArr;
         }
-        if (hexString.length() % 2 != 0) {
-            hexString = "0" + hexString;
-        }
-        XLEAssert.assertTrue(hexString.length() % 2 == 0);
-        byte[] rv = new byte[(hexString.length() / 2)];
-        for (int i = 0; i < hexString.length(); i += 2) {
-            rv[i / 2] = Byte.parseByte(hexString.substring(i, i + 2), 16);
-        }
-        return rv;
+        throw new IllegalArgumentException("hexString invalid");
     }
 }

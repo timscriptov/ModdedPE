@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.HashSet;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -40,121 +40,117 @@ public class SystemSettingsModel extends ModelBase<Version> {
     private OnUpdateExistListener updateExistListener;
 
     private SystemSettingsModel() {
-        minRequiredOSVersion = 0;
-        minVersion = 0;
-        latestVersion = 0;
-        hiddenMruItems = new HashSet<>();
-        smartglassSettingsLoadingStatus = new SingleEntryLoadingStatus();
+        this.minRequiredOSVersion = 0;
+        this.minVersion = 0;
+        this.latestVersion = 0;
+        this.hiddenMruItems = new HashSet<>();
+        this.smartglassSettingsLoadingStatus = new SingleEntryLoadingStatus();
     }
 
     public static SystemSettingsModel getInstance() {
         return SystemSettingsModelContainer.instance;
     }
 
-    public void setOnUpdateExistListener(OnUpdateExistListener listener) {
-        updateExistListener = listener;
+    public void setOnUpdateExistListener(OnUpdateExistListener onUpdateExistListener) {
+        this.updateExistListener = onUpdateExistListener;
     }
 
-    public boolean getHasUpdate(int currentVersionCode) {
-        boolean z;
-        if (Thread.currentThread() == ThreadManager.UIThread) {
-            z = true;
-        } else {
-            z = false;
+    public boolean getHasUpdate(int i) {
+        XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
+        if (Build.VERSION.SDK_INT < this.minRequiredOSVersion || getLatestVersion() <= i) {
+            return false;
         }
-        XLEAssert.assertTrue(z);
-        return Build.VERSION.SDK_INT >= minRequiredOSVersion && getLatestVersion() > currentVersionCode;
+        return true;
     }
 
-    public boolean getMustUpdate(int currentVersionCode) {
-        boolean z;
-        if (Thread.currentThread() == ThreadManager.UIThread) {
-            z = true;
-        } else {
-            z = false;
+    public boolean getMustUpdate(int i) {
+        XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
+        if (Build.VERSION.SDK_INT < this.minRequiredOSVersion || getMinimumVersion() <= i) {
+            return false;
         }
-        XLEAssert.assertTrue(z);
-        return Build.VERSION.SDK_INT >= minRequiredOSVersion && getMinimumVersion() > currentVersionCode;
+        return true;
     }
 
     public int[] getRemoteControlSpecialTitleIds() {
-        return remoteControlSpecialTitleIds;
+        return this.remoteControlSpecialTitleIds;
     }
 
     public String getMarketUrl() {
-        return marketUrl;
+        return this.marketUrl;
     }
 
-    public boolean isInHiddenMruItems(String titleId) {
-        return hiddenMruItems.contains(titleId);
+    public boolean isInHiddenMruItems(String str) {
+        return this.hiddenMruItems.contains(str);
     }
 
     public int getLatestVersion() {
-        return latestVersion;
+        return this.latestVersion;
     }
 
     private int getMinimumVersion() {
-        return minVersion;
+        return this.minVersion;
     }
 
-    public void loadAsync(boolean forceRefresh) {
+    public void loadAsync(boolean z) {
         XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
-        DataLoadUtil.StartLoadFromUI(forceRefresh, lifetime, (Date) null, smartglassSettingsLoadingStatus, new GetSmartglassSettingsRunner(this));
+        DataLoadUtil.StartLoadFromUI(z, this.lifetime, (Date) null, this.smartglassSettingsLoadingStatus, new GetSmartglassSettingsRunner(this));
     }
 
-    public AsyncResult<SmartglassSettings> loadSystemSettings(boolean forceRefresh) {
-        return DataLoadUtil.Load(forceRefresh, lifetime, (Date) null, smartglassSettingsLoadingStatus, new GetSmartglassSettingsRunner(this));
+    public AsyncResult<SmartglassSettings> loadSystemSettings(boolean z) {
+        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.smartglassSettingsLoadingStatus, new GetSmartglassSettingsRunner(this));
     }
 
-    public void onGetSmartglassSettingsCompleted(@NotNull AsyncResult<SmartglassSettings> result) {
+    public void onGetSmartglassSettingsCompleted(@NotNull AsyncResult<SmartglassSettings> asyncResult) {
         XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
-        if (result.getStatus() == AsyncActionStatus.SUCCESS) {
-            smartglassSettings = result.getResult();
-            if (smartglassSettings != null) {
-                minRequiredOSVersion = smartglassSettings.ANDROID_VERSIONMINOS;
-                minVersion = smartglassSettings.ANDROID_VERSIONMIN;
-                latestVersion = smartglassSettings.ANDROID_VERSIONLATEST;
-                marketUrl = smartglassSettings.ANDROID_VERSIONURL;
-                populateHiddenMruItems(smartglassSettings.HIDDEN_MRU_ITEMS);
-                populateRemoteControlSpecialTitleIds(smartglassSettings.REMOTE_CONTROL_SPECIALS);
-                if (updateExistListener == null) {
+        if (asyncResult.getStatus() == AsyncActionStatus.SUCCESS) {
+            SmartglassSettings result = asyncResult.getResult();
+            this.smartglassSettings = result;
+            if (result != null) {
+                this.minRequiredOSVersion = result.ANDROID_VERSIONMINOS;
+                this.minVersion = this.smartglassSettings.ANDROID_VERSIONMIN;
+                this.latestVersion = this.smartglassSettings.ANDROID_VERSIONLATEST;
+                this.marketUrl = this.smartglassSettings.ANDROID_VERSIONURL;
+                populateHiddenMruItems(this.smartglassSettings.HIDDEN_MRU_ITEMS);
+                populateRemoteControlSpecialTitleIds(this.smartglassSettings.REMOTE_CONTROL_SPECIALS);
+                if (this.updateExistListener == null) {
                     return;
                 }
                 if (getMustUpdate(ProjectSpecificDataProvider.getInstance().getVersionCode())) {
-                    updateExistListener.onMustUpdate();
+                    this.updateExistListener.onMustUpdate();
                 } else if (getHasUpdate(ProjectSpecificDataProvider.getInstance().getVersionCode())) {
-                    updateExistListener.onOptionalUpdate();
+                    this.updateExistListener.onOptionalUpdate();
                 }
             }
         }
     }
 
-    private void populateHiddenMruItems(String list) {
-        String[] buf;
-        hiddenMruItems.clear();
-        if (list != null && (buf = list.split(",")) != null) {
-            for (String titleId : buf) {
-                hiddenMruItems.add(titleId);
+    private void populateHiddenMruItems(String str) {
+        String[] split;
+        this.hiddenMruItems.clear();
+        if (str != null && (split = str.split(",")) != null) {
+            for (String add : split) {
+                this.hiddenMruItems.add(add);
             }
         }
     }
 
-    private void populateRemoteControlSpecialTitleIds(String commaDelimited) {
-        String[] buf;
-        if (commaDelimited != null && (buf = commaDelimited.split(",")) != null) {
-            remoteControlSpecialTitleIds = new int[buf.length];
-            int length = buf.length;
-            int i = 0;
-            int index = 0;
-            while (i < length) {
-                int id = 0;
+    private void populateRemoteControlSpecialTitleIds(String str) {
+        String[] split;
+        int i;
+        if (str != null && (split = str.split(",")) != null) {
+            this.remoteControlSpecialTitleIds = new int[split.length];
+            int length = split.length;
+            int i2 = 0;
+            int i3 = 0;
+            while (i2 < length) {
                 try {
-                    id = Integer.parseInt(buf[i]);
-                } catch (NumberFormatException e) {
+                    i = Integer.parseInt(split[i2]);
+                } catch (NumberFormatException unused) {
+                    i = 0;
                 }
-                remoteControlSpecialTitleIds[index] = id;
-                i++;
-                index++;
+                this.remoteControlSpecialTitleIds[i3] = i;
+                i2++;
+                i3++;
             }
         }
     }
@@ -175,23 +171,23 @@ public class SystemSettingsModel extends ModelBase<Version> {
     private class GetSmartglassSettingsRunner extends IDataLoaderRunnable<SmartglassSettings> {
         private final SystemSettingsModel caller;
 
-        public GetSmartglassSettingsRunner(SystemSettingsModel caller2) {
-            caller = caller2;
+        public GetSmartglassSettingsRunner(SystemSettingsModel systemSettingsModel) {
+            this.caller = systemSettingsModel;
         }
 
         public SmartglassSettings buildData() throws XLEException {
             return null;
         }
 
+        public long getDefaultErrorCode() {
+            return XLEErrorCode.FAILED_TO_GET_SETTINGS;
+        }
+
         public void onPreExecute() {
         }
 
-        public void onPostExcute(AsyncResult<SmartglassSettings> result) {
-            caller.onGetSmartglassSettingsCompleted(result);
-        }
-
-        public long getDefaultErrorCode() {
-            return XLEErrorCode.FAILED_TO_GET_SETTINGS;
+        public void onPostExcute(AsyncResult<SmartglassSettings> asyncResult) {
+            this.caller.onGetSmartglassSettingsCompleted(asyncResult);
         }
     }
 }

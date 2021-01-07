@@ -1,32 +1,31 @@
 package com.microsoft.xbox.service.network.managers.xblshared;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 
 public class ProtectedRunnable implements Runnable {
-    private final Runnable mRunnable;
+    private static final String TAG = ProtectedRunnable.class.getSimpleName();
+    private final Runnable runnable;
 
     public ProtectedRunnable(Runnable runnable2) {
-        mRunnable = runnable2;
+        this.runnable = runnable2;
     }
 
     public void run() {
-        boolean success = false;
+        boolean z = false;
         int i = 0;
-        while (!success && i < 10) {
+        while (!z && i < 10) {
             try {
-                mRunnable.run();
-                success = true;
-            } catch (LinkageError e) {
-                e.printStackTrace();
+                this.runnable.run();
+                z = true;
+            } catch (LinkageError unused) {
                 try {
                     Thread.sleep(500);
-                } catch (InterruptedException e2) {
-                    e2.printStackTrace();
+                } catch (InterruptedException unused2) {
                 }
             }
             i++;

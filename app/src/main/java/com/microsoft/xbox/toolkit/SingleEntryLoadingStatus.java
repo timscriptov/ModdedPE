@@ -1,7 +1,7 @@
 package com.microsoft.xbox.toolkit;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -13,52 +13,52 @@ public class SingleEntryLoadingStatus {
     private Object syncObj = new Object();
 
     public boolean getIsLoading() {
-        return isLoading;
+        return this.isLoading;
     }
 
     public XLEException getLastError() {
-        return lastError;
+        return this.lastError;
     }
 
     public void setSuccess() {
         setDone((XLEException) null);
     }
 
-    public void setFailed(XLEException ex) {
-        setDone(ex);
+    public void setFailed(XLEException xLEException) {
+        setDone(xLEException);
     }
 
-    private void setDone(XLEException ex) {
-        synchronized (syncObj) {
-            isLoading = false;
-            lastError = ex;
-            syncObj.notifyAll();
+    private void setDone(XLEException xLEException) {
+        synchronized (this.syncObj) {
+            this.isLoading = false;
+            this.lastError = xLEException;
+            this.syncObj.notifyAll();
         }
     }
 
     public WaitResult waitForNotLoading() {
-        WaitResult waitResult;
-        synchronized (syncObj) {
-            if (isLoading) {
+        synchronized (this.syncObj) {
+            if (this.isLoading) {
                 try {
-                    syncObj.wait();
+                    this.syncObj.wait();
                 } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
+                    e.printStackTrace();
                 }
-                waitResult = new WaitResult(true, lastError);
-            } else {
-                isLoading = true;
-                waitResult = new WaitResult(false, (XLEException) null);
+                Thread.currentThread().interrupt();
+                WaitResult waitResult = new WaitResult(true, this.lastError);
+                return waitResult;
             }
+            this.isLoading = true;
+            WaitResult waitResult2 = new WaitResult(false, (XLEException) null);
+            return waitResult2;
         }
-        return waitResult;
     }
 
     public void reset() {
-        synchronized (syncObj) {
-            isLoading = false;
-            lastError = null;
-            syncObj.notifyAll();
+        synchronized (this.syncObj) {
+            this.isLoading = false;
+            this.lastError = null;
+            this.syncObj.notifyAll();
         }
     }
 
@@ -66,9 +66,9 @@ public class SingleEntryLoadingStatus {
         public XLEException error;
         public boolean waited;
 
-        public WaitResult(boolean waited2, XLEException error2) {
-            waited = waited2;
-            error = error2;
+        public WaitResult(boolean z, XLEException xLEException) {
+            this.waited = z;
+            this.error = xLEException;
         }
     }
 }

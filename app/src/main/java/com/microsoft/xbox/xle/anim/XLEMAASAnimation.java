@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -39,11 +39,11 @@ public class XLEMAASAnimation extends MAASAnimation {
     public String targetId = null;
 
     public XLEAnimation compile() {
-        return compile(XLERValueHelper.findViewByString(targetId));
+        return compile(XLERValueHelper.findViewByString(this.targetId));
     }
 
-    public XLEAnimation compileWithRoot(@NotNull View root) {
-        return compile(root.findViewById(XLERValueHelper.getIdRValue(targetId)));
+    public XLEAnimation compileWithRoot(@NotNull View view) {
+        return compile(view.findViewById(XLERValueHelper.getIdRValue(this.targetId)));
     }
 
     public XLEAnimation compile(View targetView) {

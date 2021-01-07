@@ -7,7 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -37,6 +37,6 @@ public class XLEThreadPool {
     }
 
     public void run(Runnable runnable) {
-        executor.execute(runnable);
+        this.executor.execute(runnable);
     }
 }

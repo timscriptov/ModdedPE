@@ -5,7 +5,7 @@ import com.microsoft.xbox.toolkit.XLEAssert;
 import com.microsoft.xbox.xle.app.XLEUtil;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -14,25 +14,25 @@ import com.microsoft.xbox.xle.app.XLEUtil;
 public class RecommendationsPeopleData extends FollowersData {
     private IPeopleHubResult.PeopleHubRecommendation recommendationInfo;
 
-    public RecommendationsPeopleData(IPeopleHubResult.PeopleHubPersonSummary person) {
-        super(person);
-        XLEAssert.assertNotNull(person.recommendation);
-        recommendationInfo = person.recommendation;
+    public RecommendationsPeopleData(IPeopleHubResult.PeopleHubPersonSummary peopleHubPersonSummary) {
+        super(peopleHubPersonSummary);
+        XLEAssert.assertNotNull(peopleHubPersonSummary.recommendation);
+        this.recommendationInfo = peopleHubPersonSummary.recommendation;
     }
 
-    public RecommendationsPeopleData(boolean isDummy, FollowersData.DummyType type) {
-        super(isDummy, type);
+    public RecommendationsPeopleData(boolean z, FollowersData.DummyType dummyType) {
+        super(z, dummyType);
     }
 
     public String getRecommendationFirstReason() {
-        return XLEUtil.isNullOrEmpty(recommendationInfo.Reasons) ? "" : recommendationInfo.Reasons.get(0);
+        return XLEUtil.isNullOrEmpty(this.recommendationInfo.Reasons) ? "" : this.recommendationInfo.Reasons.get(0);
     }
 
     public boolean getIsFacebookFriend() {
-        return recommendationInfo.getRecommendationType() == IPeopleHubResult.RecommendationType.FacebookFriend;
+        return this.recommendationInfo.getRecommendationType() == IPeopleHubResult.RecommendationType.FacebookFriend;
     }
 
     public IPeopleHubResult.RecommendationType getRecommendationType() {
-        return recommendationInfo.getRecommendationType();
+        return this.recommendationInfo.getRecommendationType();
     }
 }

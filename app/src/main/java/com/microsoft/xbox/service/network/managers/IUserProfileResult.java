@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -32,55 +32,56 @@ public interface IUserProfileResult {
 
         private void fetchMaturityLevel() {
             try {
-                FamilySettings familySettings = ServiceManagerFactory.getInstance().getSLSServiceManager().getFamilySettings(id);
+                FamilySettings familySettings = ServiceManagerFactory.getInstance().getSLSServiceManager().getFamilySettings(this.id);
                 if (familySettings != null && familySettings.familyUsers != null) {
                     int i = 0;
                     while (true) {
                         if (i >= familySettings.familyUsers.size()) {
                             break;
-                        } else if (familySettings.familyUsers.get(i).xuid.equalsIgnoreCase(id)) {
-                            canViewTVAdultContent = familySettings.familyUsers.get(i).canViewTVAdultContent;
-                            maturityLevel = familySettings.familyUsers.get(i).maturityLevel;
+                        } else if (familySettings.familyUsers.get(i).xuid.equalsIgnoreCase(this.id)) {
+                            this.canViewTVAdultContent = familySettings.familyUsers.get(i).canViewTVAdultContent;
+                            this.maturityLevel = familySettings.familyUsers.get(i).maturityLevel;
                             break;
                         } else {
                             i++;
                         }
                     }
                 }
-            } catch (Throwable th) {
-                th.printStackTrace();
+            } catch (Throwable unused) {
             }
-            updateMaturityLevelTimer = System.currentTimeMillis();
+            this.updateMaturityLevelTimer = System.currentTimeMillis();
         }
 
         public int getMaturityLevel() {
-            if (updateMaturityLevelTimer < 0 || System.currentTimeMillis() - updateMaturityLevelTimer > FORCE_MATURITY_LEVEL_UPDATE_TIME) {
+            if (this.updateMaturityLevelTimer < 0 || System.currentTimeMillis() - this.updateMaturityLevelTimer > FORCE_MATURITY_LEVEL_UPDATE_TIME) {
                 fetchMaturityLevel();
             }
-            return maturityLevel;
+            return this.maturityLevel;
         }
 
-        public void setmaturityLevel(int maturityLevel2) {
-            maturityLevel = maturityLevel2;
-            updateMaturityLevelTimer = System.currentTimeMillis();
+        public void setmaturityLevel(int i) {
+            this.maturityLevel = i;
+            this.updateMaturityLevelTimer = System.currentTimeMillis();
         }
 
         public int[] getPrivileges() {
-            return privileges;
+            return this.privileges;
         }
 
-        public void setPrivilieges(int[] privileges2) {
-            privileges = privileges2;
+        public void setPrivilieges(int[] iArr) {
+            this.privileges = iArr;
         }
 
-        public String getSettingValue(UserProfileSetting settingId) {
-            if (settings != null) {
-                Iterator<Settings> it = settings.iterator();
-                while (it.hasNext()) {
-                    Settings setting = it.next();
-                    if (setting.id != null && setting.id.equals(settingId.toString())) {
-                        return setting.value;
-                    }
+        public String getSettingValue(UserProfileSetting userProfileSetting) {
+            ArrayList<Settings> arrayList = this.settings;
+            if (arrayList == null) {
+                return null;
+            }
+            Iterator<Settings> it = arrayList.iterator();
+            while (it.hasNext()) {
+                Settings next = it.next();
+                if (next.id != null && next.id.equals(userProfileSetting.toString())) {
+                    return next.value;
                 }
             }
             return null;
@@ -90,8 +91,8 @@ public interface IUserProfileResult {
     public static class UserProfileResult {
         public ArrayList<ProfileUser> profileUsers;
 
-        public static UserProfileResult deserialize(String input) {
-            return GsonUtil.deserializeJson(input, UserProfileResult.class);
+        public static UserProfileResult deserialize(String str) {
+            return (UserProfileResult) GsonUtil.deserializeJson(str, UserProfileResult.class);
         }
     }
 }

@@ -40,7 +40,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -67,47 +67,60 @@ public class TextureManager {
     private TimeMonitor stopwatch = new TimeMonitor();
 
     public TextureManager() {
-        stopwatch.start();
-        decodeThread = new XLEThread(new TextureManagerDecodeThread(), "XLETextureDecodeThread");
-        decodeThread.setDaemon(true);
-        decodeThread.setPriority(4);
-        decodeThread.start();
+        this.stopwatch.start();
+        XLEThread xLEThread = new XLEThread(new TextureManagerDecodeThread(), "XLETextureDecodeThread");
+        this.decodeThread = xLEThread;
+        xLEThread.setDaemon(true);
+        this.decodeThread.setPriority(4);
+        this.decodeThread.start();
     }
 
     public static TextureManager Instance() {
         return instance;
     }
 
-    private static boolean invalidUrl(String url) {
-        return url == null || url.length() == 0;
+    private static boolean invalidUrl(String str) {
+        return str == null || str.length() == 0;
     }
 
-    private static boolean validResizeDimention(int width, int height) {
-        if (width != 0 && height != 0) {
-            return width > 0 && height > 0;
+    private static boolean validResizeDimention(int i, int i2) {
+        if (i != 0 && i2 != 0) {
+            return i > 0 && i2 > 0;
         }
         throw new UnsupportedOperationException();
+    }
+
+    public void logMemoryUsage() {
+    }
+
+    public void preload(int i) {
+    }
+
+    public void preload(URI uri) {
+    }
+
+    public void preloadFromFile(String str) {
+    }
+
+    public void unsafeClearBitmapCache() {
     }
 
     private int getNetworkBitmapCacheSizeInMB() {
         return (Math.max(0, MemoryMonitor.instance().getMemoryClass() - 64) / 2) + 12;
     }
 
-    public void unsafeClearBitmapCache() {
-    }
-
-    private void load(@NotNull TextureManagerScaledNetworkBitmapRequest key) {
-        if (!invalidUrl(key.url)) {
-            XLEThreadPool.textureThreadPool.run(new TextureManagerDownloadThreadWorker(new TextureManagerDownloadRequest(key)));
+    private void load(@NotNull TextureManagerScaledNetworkBitmapRequest textureManagerScaledNetworkBitmapRequest) {
+        if (!invalidUrl(textureManagerScaledNetworkBitmapRequest.url)) {
+            XLEThreadPool.textureThreadPool.run(new TextureManagerDownloadThreadWorker(new TextureManagerDownloadRequest(textureManagerScaledNetworkBitmapRequest)));
         }
     }
 
-    public XLEBitmap.XLEBitmapDrawable loadScaledResourceDrawable(int resourceId) {
-        XLEBitmap bitmap = loadResource(resourceId);
-        if (bitmap == null) {
+    public XLEBitmap.XLEBitmapDrawable loadScaledResourceDrawable(int i) {
+        XLEBitmap loadResource = loadResource(i);
+        if (loadResource == null) {
             return null;
         }
-        return bitmap.getDrawable();
+        return loadResource.getDrawable();
     }
 
     public BitmapFactory.Options computeInSampleSizeOptions(int desiredw, int desiredh, BitmapFactory.Options options) {
@@ -125,233 +138,231 @@ public class TextureManager {
         return scaleoptions;
     }
 
-    public XLEBitmap loadResource(int resourceId) {
-        TextureManagerScaledResourceBitmapRequest request = new TextureManagerScaledResourceBitmapRequest(resourceId);
-        XLEBitmap bitmap = resourceBitmapCache.get(request);
-        if (bitmap == null) {
+
+    public XLEBitmap loadResource(int i) {
+        TextureManagerScaledResourceBitmapRequest textureManagerScaledResourceBitmapRequest = new TextureManagerScaledResourceBitmapRequest(i);
+        XLEBitmap xLEBitmap = this.resourceBitmapCache.get(textureManagerScaledResourceBitmapRequest);
+        if (xLEBitmap == null) {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
-            BitmapFactory.decodeResource(XboxTcuiSdk.getResources(), request.resourceId, options);
-            bitmap = XLEBitmap.decodeResource(XboxTcuiSdk.getResources(), request.resourceId);
-            resourceBitmapCache.put(request, bitmap);
+            BitmapFactory.decodeResource(XboxTcuiSdk.getResources(), textureManagerScaledResourceBitmapRequest.resourceId, options);
+            xLEBitmap = XLEBitmap.decodeResource(XboxTcuiSdk.getResources(), textureManagerScaledResourceBitmapRequest.resourceId);
+            this.resourceBitmapCache.put(textureManagerScaledResourceBitmapRequest, xLEBitmap);
         }
-        XLEAssert.assertNotNull(bitmap);
-        return bitmap;
+        XLEAssert.assertNotNull(xLEBitmap);
+        return xLEBitmap;
     }
 
-    public void preload(int resourceId) {
+    public void bindToView(int i, ImageView imageView, int i2, int i3) {
+        bindToView(i, imageView, i2, i3, (OnBitmapSetListener) null);
     }
 
-    public void preload(URI uri) {
-    }
-
-    public void preloadFromFile(String filePath) {
-    }
-
-    public void bindToView(int resourceId, ImageView view, int width, int height) {
-        bindToView(resourceId, view, width, height, (OnBitmapSetListener) null);
-    }
-
-    public void bindToView(int resourceId, ImageView view, int width, int height, OnBitmapSetListener listener) {
-        boolean z;
-        boolean z2 = true;
-        if (Thread.currentThread() == ThreadManager.UIThread) {
-            z = true;
-        } else {
+    public void bindToView(int i, ImageView imageView, int i2, int i3, OnBitmapSetListener onBitmapSetListener) {
+        boolean z = true;
+        XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
+        XLEBitmap loadResource = loadResource(i);
+        if (loadResource == null) {
             z = false;
         }
         XLEAssert.assertTrue(z);
-        XLEBitmap bitmap = loadResource(resourceId);
-        if (bitmap == null) {
-            z2 = false;
+        if (imageView instanceof XLEImageView) {
+            ((XLEImageView) imageView).TEST_loadingOrLoadedImageUrl = Integer.toString(i);
         }
-        XLEAssert.assertTrue(z2);
-        if (view instanceof XLEImageView) {
-            ((XLEImageView) view).TEST_loadingOrLoadedImageUrl = Integer.toString(resourceId);
-        }
-        setImage(view, bitmap);
+        setImage(imageView, loadResource);
     }
 
-    public void bindToViewFromFile(String filePath, ImageView view, TextureBindingOption option) {
+    public void bindToViewFromFile(String str, ImageView imageView, TextureBindingOption textureBindingOption) {
         XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
-        bindToViewInternal(filePath, view, option);
+        bindToViewInternal(str, imageView, textureBindingOption);
     }
 
-    public void bindToViewFromFile(String filePath, ImageView view, int width, int height) {
+    public void bindToViewFromFile(String str, ImageView imageView, int i, int i2) {
         XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
-        if (width == 0 || height == 0) {
+        if (i == 0 || i2 == 0) {
             throw new UnsupportedOperationException();
         }
-        bindToViewInternal(filePath, view, new TextureBindingOption(width, height));
+        bindToViewInternal(str, imageView, new TextureBindingOption(i, i2));
     }
 
-    public void bindToView(URI uri, ImageView view, int width, int height) {
+    public void bindToView(URI uri, ImageView imageView, int i, int i2) {
+        String str;
         XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
-        if (width == 0 || height == 0) {
+        if (i == 0 || i2 == 0) {
             throw new UnsupportedOperationException();
         }
-        bindToViewInternal(uri == null ? null : uri.toString(), view, new TextureBindingOption(width, height));
+        if (uri == null) {
+            str = null;
+        } else {
+            str = uri.toString();
+        }
+        bindToViewInternal(str, imageView, new TextureBindingOption(i, i2));
     }
 
-    public void bindToView(URI uri, ImageView view, TextureBindingOption option) {
+    public void bindToView(URI uri, ImageView imageView, TextureBindingOption textureBindingOption) {
+        String str;
         XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
-        bindToViewInternal(uri == null ? null : uri.toString(), view, option);
+        if (uri == null) {
+            str = null;
+        } else {
+            str = uri.toString();
+        }
+        bindToViewInternal(str, imageView, textureBindingOption);
     }
 
-    public void setCachingEnabled(boolean enabled) {
-        bitmapCache = new XLEMemoryCache<>(enabled ? getNetworkBitmapCacheSizeInMB() : 0, BITMAP_CACHE_MAX_FILE_SIZE_IN_BYTES);
-        bitmapFileCache = XLEFileCacheManager.createCache(BMP_FILE_CACHE_DIR_NAME, BMP_FILE_CACHE_SIZE, enabled);
-        resourceBitmapCache = new HashMap<>();
+    public void setCachingEnabled(boolean z) {
+        this.bitmapCache = new XLEMemoryCache<>(z ? getNetworkBitmapCacheSizeInMB() : 0, BITMAP_CACHE_MAX_FILE_SIZE_IN_BYTES);
+        this.bitmapFileCache = XLEFileCacheManager.createCache(BMP_FILE_CACHE_DIR_NAME, BMP_FILE_CACHE_SIZE, z);
+        this.resourceBitmapCache = new HashMap<>();
     }
 
     public boolean isBusy() {
         boolean z;
-        synchronized (listLock) {
-            z = !inProgress.isEmpty();
+        synchronized (this.listLock) {
+            z = !this.inProgress.isEmpty();
         }
         return z;
     }
 
-    private void bindToViewInternal(String url, ImageView view, TextureBindingOption option) {
-        boolean needToDownload;
-        TextureManagerScaledNetworkBitmapRequest key = new TextureManagerScaledNetworkBitmapRequest(url, option);
-        XLEBitmap bitmap = null;
-        synchronized (listLock) {
-            if (waitingForImage.containsValue(view)) {
-                waitingForImage.removeValue(view);
+    private void bindToViewInternal(String str, ImageView imageView, TextureBindingOption textureBindingOption) {
+        boolean z;
+        XLEBitmap xLEBitmap;
+        TextureManagerScaledNetworkBitmapRequest textureManagerScaledNetworkBitmapRequest = new TextureManagerScaledNetworkBitmapRequest(str, textureBindingOption);
+        synchronized (this.listLock) {
+            if (this.waitingForImage.containsValue(imageView)) {
+                this.waitingForImage.removeValue(imageView);
             }
-            if (!invalidUrl(url)) {
-                bitmap = bitmapCache.get(key);
-                if (bitmap == null) {
-                    RetryEntry retryEntry = timeToRetryCache.get(key);
-                    if (retryEntry == null) {
-                        needToDownload = true;
-                    } else if (retryEntry.isExpired()) {
-                        needToDownload = true;
-                    } else {
-                        if (option.resourceIdForError != -1) {
-                            bitmap = loadResource(option.resourceIdForError);
+            boolean z2 = true;
+            if (!invalidUrl(str)) {
+                xLEBitmap = this.bitmapCache.get(textureManagerScaledNetworkBitmapRequest);
+                if (xLEBitmap == null) {
+                    RetryEntry retryEntry = this.timeToRetryCache.get(textureManagerScaledNetworkBitmapRequest);
+                    if (retryEntry != null) {
+                        if (!retryEntry.isExpired()) {
+                            if (textureBindingOption.resourceIdForError != -1) {
+                                xLEBitmap = loadResource(textureBindingOption.resourceIdForError);
+                            }
                         }
-                        needToDownload = false;
                     }
-                } else {
-                    needToDownload = false;
+                    z = true;
+                    if (z) {
+                        if (textureBindingOption.resourceIdForLoading != -1) {
+                            xLEBitmap = loadResource(textureBindingOption.resourceIdForLoading);
+                            if (xLEBitmap == null) {
+                                z2 = false;
+                            }
+                            XLEAssert.assertTrue(z2);
+                        }
+                        this.waitingForImage.put(textureManagerScaledNetworkBitmapRequest, imageView);
+                        if (!this.inProgress.contains(textureManagerScaledNetworkBitmapRequest)) {
+                            this.inProgress.add(textureManagerScaledNetworkBitmapRequest);
+                            load(textureManagerScaledNetworkBitmapRequest);
+                        }
+                    }
                 }
-            } else if (option.resourceIdForError != -1) {
-                bitmap = loadResource(option.resourceIdForError);
-                needToDownload = false;
-                XLEAssert.assertNotNull(bitmap);
+            } else if (textureBindingOption.resourceIdForError != -1) {
+                xLEBitmap = loadResource(textureBindingOption.resourceIdForError);
+                XLEAssert.assertNotNull(xLEBitmap);
             } else {
-                needToDownload = false;
+                xLEBitmap = null;
             }
-            if (needToDownload) {
-                if (option.resourceIdForLoading != -1) {
-                    bitmap = loadResource(option.resourceIdForLoading);
-                    XLEAssert.assertTrue(bitmap != null);
-                }
-                this.waitingForImage.put(key, view);
-                if (!inProgress.contains(key)) {
-                    inProgress.add(key);
-                    load(key);
-                }
+            z = false;
+            if (z) {
             }
         }
-        setImage(view, bitmap);
-        if (view instanceof XLEImageView) {
-            ((XLEImageView) view).TEST_loadingOrLoadedImageUrl = url;
+        setImage(imageView, xLEBitmap);
+        if (imageView instanceof XLEImageView) {
+            ((XLEImageView) imageView).TEST_loadingOrLoadedImageUrl = str;
         }
     }
 
-    public XLEBitmap createScaledBitmap(XLEBitmap bitmapsrc, int width, int height) {
-        XLEBitmap bitmap = bitmapsrc;
-        if (!validResizeDimention(width, height) || bitmapsrc.getBitmap() == null) {
-            return bitmap;
+    public XLEBitmap createScaledBitmap(XLEBitmap xLEBitmap, int i, int i2) {
+        if (!validResizeDimention(i, i2) || xLEBitmap.getBitmap() == null) {
+            return xLEBitmap;
         }
-        float bitmapAR = ((float) bitmapsrc.getBitmap().getHeight()) / ((float) bitmapsrc.getBitmap().getWidth());
-        if (((float) height) / ((float) width) < bitmapAR) {
-            width = Math.max(1, (int) (((float) height) / bitmapAR));
+        float height = ((float) xLEBitmap.getBitmap().getHeight()) / ((float) xLEBitmap.getBitmap().getWidth());
+        float f = (float) i2;
+        float f2 = (float) i;
+        if (f / f2 < height) {
+            i = Math.max(1, (int) (f / height));
         } else {
-            height = Math.max(1, (int) (((float) width) * bitmapAR));
+            i2 = Math.max(1, (int) (f2 * height));
         }
-        return XLEBitmap.createScaledBitmap8888(bitmapsrc, width, height, true);
+        return XLEBitmap.createScaledBitmap8888(xLEBitmap, i, i2, true);
     }
 
-    public void drainWaitingForImage(TextureManagerScaledNetworkBitmapRequest key, XLEBitmap bitmap) {
-        if (waitingForImage.containsKey(key)) {
-            Iterator<ImageView> it = waitingForImage.get(key).iterator();
+    public void drainWaitingForImage(TextureManagerScaledNetworkBitmapRequest textureManagerScaledNetworkBitmapRequest, XLEBitmap xLEBitmap) {
+        if (this.waitingForImage.containsKey(textureManagerScaledNetworkBitmapRequest)) {
+            Iterator<ImageView> it = this.waitingForImage.get(textureManagerScaledNetworkBitmapRequest).iterator();
             while (it.hasNext()) {
-                ImageView view = it.next();
-                if (view != null) {
-                    if (view instanceof XLEImageView) {
-                        setXLEImageView(key, (XLEImageView) view, bitmap);
+                ImageView next = it.next();
+                if (next != null) {
+                    if (next instanceof XLEImageView) {
+                        setXLEImageView(textureManagerScaledNetworkBitmapRequest, (XLEImageView) next, xLEBitmap);
                     } else {
-                        setView(key, view, bitmap);
+                        setView(textureManagerScaledNetworkBitmapRequest, next, xLEBitmap);
                     }
                 }
             }
         }
     }
 
-    private void setView(final TextureManagerScaledNetworkBitmapRequest key, final ImageView view, final XLEBitmap bitmap) {
+    private void setView(final TextureManagerScaledNetworkBitmapRequest textureManagerScaledNetworkBitmapRequest, final ImageView imageView, final XLEBitmap xLEBitmap) {
         ThreadManager.UIThreadPost(() -> {
-            boolean stillValid;
+            boolean keyValueMatches;
             XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
-            synchronized (listLock) {
-                stillValid = waitingForImage.keyValueMatches(key, view);
+            synchronized (TextureManager.this.listLock) {
+                keyValueMatches = TextureManager.this.waitingForImage.keyValueMatches(textureManagerScaledNetworkBitmapRequest, imageView);
             }
-            if (stillValid) {
-                setImage(view, bitmap);
-                synchronized (listLock) {
-                    waitingForImage.removeValue(view);
+            if (keyValueMatches) {
+                TextureManager.this.setImage(imageView, xLEBitmap);
+                synchronized (TextureManager.this.listLock) {
+                    TextureManager.this.waitingForImage.removeValue(imageView);
                 }
             }
         });
     }
 
-    private void setXLEImageView(final TextureManagerScaledNetworkBitmapRequest key, final XLEImageView view, final XLEBitmap bitmap) {
+    private void setXLEImageView(final TextureManagerScaledNetworkBitmapRequest textureManagerScaledNetworkBitmapRequest, final XLEImageView xLEImageView, final XLEBitmap xLEBitmap) {
         ThreadManager.UIThreadPost((Runnable) () -> {
-            boolean stillValid;
+            boolean keyValueMatches;
             XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
             synchronized (listLock) {
-                stillValid = waitingForImage.keyValueMatches(key, view);
+                keyValueMatches = waitingForImage.keyValueMatches(textureManagerScaledNetworkBitmapRequest, xLEImageView);
             }
-            if (stillValid) {
-                final float finalAlpha = view.getAlpha();
-                if (view.getShouldAnimate()) {
-                    view.animate().alpha(0.0f).setDuration(100).setListener(new AnimatorListenerAdapter() {
-                        public void onAnimationEnd(Animator animation) {
-                            view.setFinal(true);
-                            setImage(view, bitmap);
-                            view.animate().alpha(finalAlpha).setDuration(100).setListener((Animator.AnimatorListener) null);
+            if (keyValueMatches) {
+                final float alpha = xLEImageView.getAlpha();
+                if (xLEImageView.getShouldAnimate()) {
+                    xLEImageView.animate().alpha(0.0f).setDuration(100).setListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animator) {
+                            xLEImageView.setFinal(true);
+                            setImage(xLEImageView, xLEBitmap);
+                            xLEImageView.animate().alpha(alpha).setDuration(100).setListener((Animator.AnimatorListener) null);
                         }
                     });
                 } else {
-                    setImage(view, bitmap);
+                    setImage(xLEImageView, xLEBitmap);
                 }
                 synchronized (listLock) {
-                    waitingForImage.removeValue(view);
+                    waitingForImage.removeValue(xLEImageView);
                 }
             }
         });
     }
 
-    public void logMemoryUsage() {
-    }
-
     public void purgeResourceBitmapCache() {
-        resourceBitmapCache.clear();
+        this.resourceBitmapCache.clear();
     }
 
-    public void setImage(@NotNull ImageView img, XLEBitmap bitmap) {
-        Bitmap bmp = bitmap == null ? null : bitmap.getBitmap();
-        OnBitmapSetListener listener = (OnBitmapSetListener) img.getTag(R.id.image_callback);
-        if (listener != null) {
-            listener.onBeforeImageSet(img, bmp);
+    public void setImage(@NotNull ImageView imageView, XLEBitmap xLEBitmap) {
+        Bitmap bitmap = xLEBitmap == null ? null : xLEBitmap.getBitmap();
+        OnBitmapSetListener onBitmapSetListener = (OnBitmapSetListener) imageView.getTag(R.id.image_callback);
+        if (onBitmapSetListener != null) {
+            onBitmapSetListener.onBeforeImageSet(imageView, bitmap);
         }
-        img.setImageBitmap(bmp);
-        img.setTag(R.id.image_bound, true);
-        if (listener != null) {
-            listener.onAfterImageSet(img, bmp);
+        imageView.setImageBitmap(bitmap);
+        imageView.setTag(R.id.image_bound, true);
+        if (onBitmapSetListener != null) {
+            onBitmapSetListener.onAfterImageSet(imageView, bitmap);
         }
     }
 
@@ -362,14 +373,15 @@ public class TextureManager {
         private long currStart = System.currentTimeMillis();
 
         public boolean isExpired() {
-            return currStart + TIMES_MS[curIdx] < System.currentTimeMillis();
+            return this.currStart + TIMES_MS[this.curIdx] < System.currentTimeMillis();
         }
 
         public void startNext() {
-            if (curIdx < TIMES_MS.length - 1) {
-                curIdx++;
+            int i = this.curIdx;
+            if (i < TIMES_MS.length - 1) {
+                this.curIdx = i + 1;
             }
-            currStart = System.currentTimeMillis();
+            this.currStart = System.currentTimeMillis();
         }
     }
 
@@ -379,44 +391,44 @@ public class TextureManager {
 
         public void run() {
             while (true) {
-                TextureManagerDownloadRequest request = (TextureManagerDownloadRequest) toDecode.pop();
-                XLEBitmap bitmap = null;
-                if (request.stream != null) {
+                TextureManagerDownloadRequest textureManagerDownloadRequest = (TextureManagerDownloadRequest) toDecode.pop();
+                XLEBitmap xLEBitmap = null;
+                if (textureManagerDownloadRequest.stream != null) {
                     BackgroundThreadWaitor.getInstance().waitForReady(TextureManager.DECODE_THREAD_WAIT_TIMEOUT_MS);
                     try {
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        StreamUtil.CopyStream(baos, request.stream);
-                        byte[] buffer = baos.toByteArray();
+                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                        StreamUtil.CopyStream(byteArrayOutputStream, textureManagerDownloadRequest.stream);
+                        byte[] byteArray = byteArrayOutputStream.toByteArray();
                         BitmapFactory.Options options = new BitmapFactory.Options();
                         options.inJustDecodeBounds = true;
-                        BitmapFactory.decodeStream(new ByteArrayInputStream(buffer), (Rect) null, options);
-                        BitmapFactory.Options scaleoptions = computeInSampleSizeOptions(request.key.bindingOption.width, request.key.bindingOption.height, options);
-                        int i = (options.outWidth / scaleoptions.inSampleSize) * (options.outHeight / scaleoptions.inSampleSize) * 4;
-                        XLEBitmap bitmapsrc = XLEBitmap.decodeStream(new ByteArrayInputStream(buffer), scaleoptions);
-                        if (request.key.bindingOption.useFileCache && !bitmapFileCache.contains(request.key)) {
-                            bitmapFileCache.save(request.key, new ByteArrayInputStream(buffer));
+                        BitmapFactory.decodeStream(new ByteArrayInputStream(byteArray), (Rect) null, options);
+                        BitmapFactory.Options access$200 = computeInSampleSizeOptions(textureManagerDownloadRequest.key.bindingOption.width, textureManagerDownloadRequest.key.bindingOption.height, options);
+                        int i = options.outWidth / access$200.inSampleSize;
+                        int i2 = options.outHeight / access$200.inSampleSize;
+                        XLEBitmap decodeStream = XLEBitmap.decodeStream(new ByteArrayInputStream(byteArray), access$200);
+                        if (textureManagerDownloadRequest.key.bindingOption.useFileCache && !bitmapFileCache.contains(textureManagerDownloadRequest.key)) {
+                            bitmapFileCache.save(textureManagerDownloadRequest.key, new ByteArrayInputStream(byteArray));
                         }
-                        bitmap = createScaledBitmap(bitmapsrc, request.key.bindingOption.width, request.key.bindingOption.height);
-                    } catch (Exception e) {
-                        bitmap = null;
+                        xLEBitmap = TextureManager.this.createScaledBitmap(decodeStream, textureManagerDownloadRequest.key.bindingOption.width, textureManagerDownloadRequest.key.bindingOption.height);
+                    } catch (Exception unused) {
                     }
                 }
                 BackgroundThreadWaitor.getInstance().waitForReady(TextureManager.DECODE_THREAD_WAIT_TIMEOUT_MS);
                 synchronized (listLock) {
-                    if (bitmap != null) {
-                        bitmapCache.add(request.key, bitmap, bitmap.getByteCount());
-                        timeToRetryCache.remove(request.key);
-                    } else if (request.key.bindingOption.resourceIdForError != -1) {
-                        bitmap = loadResource(request.key.bindingOption.resourceIdForError);
-                        RetryEntry retryEntry = (RetryEntry) timeToRetryCache.get(request.key);
+                    if (xLEBitmap != null) {
+                        bitmapCache.add(textureManagerDownloadRequest.key, xLEBitmap, xLEBitmap.getByteCount());
+                        timeToRetryCache.remove(textureManagerDownloadRequest.key);
+                    } else if (textureManagerDownloadRequest.key.bindingOption.resourceIdForError != -1) {
+                        xLEBitmap = loadResource(textureManagerDownloadRequest.key.bindingOption.resourceIdForError);
+                        RetryEntry retryEntry = (RetryEntry) timeToRetryCache.get(textureManagerDownloadRequest.key);
                         if (retryEntry != null) {
                             retryEntry.startNext();
                         } else {
-                            timeToRetryCache.put(request.key, new RetryEntry());
+                            timeToRetryCache.put(textureManagerDownloadRequest.key, new RetryEntry());
                         }
                     }
-                    drainWaitingForImage(request.key, bitmap);
-                    inProgress.remove(request.key);
+                    drainWaitingForImage(textureManagerDownloadRequest.key, xLEBitmap);
+                    inProgress.remove(textureManagerDownloadRequest.key);
                 }
             }
         }
@@ -425,50 +437,47 @@ public class TextureManager {
     private class TextureManagerDownloadThreadWorker implements Runnable {
         private TextureManagerDownloadRequest request;
 
-        public TextureManagerDownloadThreadWorker(TextureManagerDownloadRequest request2) {
-            request = request2;
+        public TextureManagerDownloadThreadWorker(TextureManagerDownloadRequest textureManagerDownloadRequest) {
+            this.request = textureManagerDownloadRequest;
         }
 
         public void run() {
-            XLEAssert.assertTrue((request.key == null || request.key.url == null) ? false : true);
-            request.stream = null;
+            XLEAssert.assertTrue((this.request.key == null || this.request.key.url == null) ? false : true);
+            this.request.stream = null;
             try {
-                if (!request.key.url.startsWith(HttpHost.DEFAULT_SCHEME_NAME)) {
-                    request.stream = downloadFromAssets(request.key.url);
-                } else if (request.key.bindingOption.useFileCache) {
-                    request.stream = bitmapFileCache.getInputStreamForRead(request.key);
-                    if (request.stream == null) {
-                        request.stream = downloadFromWeb(request.key.url);
+                if (!this.request.key.url.startsWith(HttpHost.DEFAULT_SCHEME_NAME)) {
+                    this.request.stream = downloadFromAssets(this.request.key.url);
+                } else if (this.request.key.bindingOption.useFileCache) {
+                    this.request.stream = TextureManager.this.bitmapFileCache.getInputStreamForRead(this.request.key);
+                    if (this.request.stream == null) {
+                        this.request.stream = downloadFromWeb(this.request.key.url);
                     }
                 } else {
-                    request.stream = downloadFromWeb(request.key.url);
+                    this.request.stream = downloadFromWeb(this.request.key.url);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception unused) {
             }
-            synchronized (listLock) {
-                toDecode.push(request);
+            synchronized (TextureManager.this.listLock) {
+                TextureManager.this.toDecode.push(this.request);
             }
         }
 
-        @Nullable
-        private InputStream downloadFromWeb(String requestUrl) {
+        private @Nullable InputStream downloadFromWeb(String str) {
             try {
-                XLEHttpStatusAndStream statusAndStream = HttpClientFactory.textureFactory.getHttpClient(TextureManager.TEXTURE_TIMEOUT_MS).getHttpStatusAndStreamInternal(new HttpGet(URI.create(requestUrl)), false);
-                if (statusAndStream.statusCode == 200) {
-                    return statusAndStream.stream;
+                XLEHttpStatusAndStream httpStatusAndStreamInternal = HttpClientFactory.textureFactory.getHttpClient(TextureManager.TEXTURE_TIMEOUT_MS).getHttpStatusAndStreamInternal(new HttpGet(URI.create(str)), false);
+                if (httpStatusAndStreamInternal.statusCode == 200) {
+                    return httpStatusAndStreamInternal.stream;
                 }
                 return null;
-            } catch (Exception e) {
+            } catch (Exception unused) {
                 return null;
             }
         }
 
-        @Nullable
-        private InputStream downloadFromAssets(String requestUrl) {
+        private @Nullable InputStream downloadFromAssets(String str) {
             try {
-                return XboxTcuiSdk.getAssetManager().open(requestUrl);
-            } catch (IOException e) {
+                return XboxTcuiSdk.getAssetManager().open(str);
+            } catch (IOException unused) {
                 return null;
             }
         }

@@ -1,7 +1,7 @@
 package com.microsoft.xbox.idp.toolkit;
 
 /**
- * 05.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -12,16 +12,16 @@ public abstract class LoaderResult<T> {
     private final HttpError error;
     private final Exception exception;
 
-    protected LoaderResult(T data2, HttpError error2) {
-        data = data2;
-        error = error2;
-        exception = null;
+    protected LoaderResult(T t, HttpError httpError) {
+        this.data = t;
+        this.error = httpError;
+        this.exception = null;
     }
 
-    protected LoaderResult(Exception exception2) {
-        data = null;
-        error = null;
-        exception = exception2;
+    protected LoaderResult(Exception exc) {
+        this.data = null;
+        this.error = null;
+        this.exception = exc;
     }
 
     public abstract boolean isReleased();
@@ -29,26 +29,26 @@ public abstract class LoaderResult<T> {
     public abstract void release();
 
     public T getData() {
-        return data;
+        return this.data;
     }
 
     public HttpError getError() {
-        return error;
+        return this.error;
     }
 
     public Exception getException() {
-        return exception;
+        return this.exception;
     }
 
     public boolean hasData() {
-        return data != null;
+        return this.data != null;
     }
 
     public boolean hasError() {
-        return error != null;
+        return this.error != null;
     }
 
     public boolean hasException() {
-        return exception != null;
+        return this.exception != null;
     }
 }

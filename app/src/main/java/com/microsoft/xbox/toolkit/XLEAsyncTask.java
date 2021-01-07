@@ -4,13 +4,6 @@ import com.microsoft.xbox.toolkit.network.XLEThreadPool;
 
 import org.jetbrains.annotations.NotNull;
 
-/**
- * 08.10.2020
- *
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
- */
-
 public abstract class XLEAsyncTask<Result> {
     public XLEAsyncTask chainedTask = null;
     protected boolean cancelled = false;
@@ -18,19 +11,14 @@ public abstract class XLEAsyncTask<Result> {
     private Runnable doBackgroundAndPostExecuteRunnable = null;
     private XLEThreadPool threadPool = null;
 
-    public XLEAsyncTask(XLEThreadPool threadPool2) {
-        threadPool = threadPool2;
-        doBackgroundAndPostExecuteRunnable = () -> {
-            final Result r;
-            if (!cancelled) {
-                r = doInBackground();
-            } else {
-                r = null;
-            }
+    public XLEAsyncTask(XLEThreadPool xLEThreadPool) {
+        this.threadPool = xLEThreadPool;
+        this.doBackgroundAndPostExecuteRunnable = () -> {
+            final Object doInBackground = !cancelled ? doInBackground() : null;
             ThreadManager.UIThreadPost(() -> {
                 isBusy = false;
                 if (!cancelled) {
-                    onPostExecute(r);
+                    onPostExecute((Result) doInBackground);
                     if (chainedTask != null) {
                         chainedTask.execute();
                     }
@@ -39,12 +27,15 @@ public abstract class XLEAsyncTask<Result> {
         };
     }
 
-    public static void executeAll(@NotNull XLEAsyncTask... tasks) {
-        if (tasks.length > 0) {
-            for (int i = 0; i < tasks.length - 1; i++) {
-                tasks[i].chainedTask = tasks[i + 1];
+    public static void executeAll(XLEAsyncTask @NotNull ... xLEAsyncTaskArr) {
+        if (xLEAsyncTaskArr.length > 0) {
+            int i = 0;
+            while (i < xLEAsyncTaskArr.length - 1) {
+                XLEAsyncTask xLEAsyncTask = xLEAsyncTaskArr[i];
+                i++;
+                xLEAsyncTask.chainedTask = xLEAsyncTaskArr[i];
             }
-            tasks[0].execute();
+            xLEAsyncTaskArr[0].execute();
         }
     }
 
@@ -56,23 +47,23 @@ public abstract class XLEAsyncTask<Result> {
 
     public void cancel() {
         XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
-        cancelled = true;
+        this.cancelled = true;
     }
 
     public void execute() {
         XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
-        cancelled = false;
-        isBusy = true;
+        this.cancelled = false;
+        this.isBusy = true;
         onPreExecute();
         executeBackground();
     }
 
     public boolean getIsBusy() {
-        return isBusy && !cancelled;
+        return this.isBusy && !this.cancelled;
     }
 
     public void executeBackground() {
-        cancelled = false;
-        threadPool.run(doBackgroundAndPostExecuteRunnable);
+        this.cancelled = false;
+        this.threadPool.run(this.doBackgroundAndPostExecuteRunnable);
     }
 }

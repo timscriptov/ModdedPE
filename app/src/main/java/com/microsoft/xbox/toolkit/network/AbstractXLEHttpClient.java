@@ -1,6 +1,5 @@
 package com.microsoft.xbox.toolkit.network;
 
-import com.appsflyer.share.Constants;
 import com.microsoft.xbox.toolkit.XLEException;
 
 import org.apache.http.Header;
@@ -16,7 +15,7 @@ import java.io.IOException;
 import java.util.zip.GZIPInputStream;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -25,36 +24,41 @@ import java.util.zip.GZIPInputStream;
 public abstract class AbstractXLEHttpClient {
     public abstract HttpResponse execute(HttpUriRequest httpUriRequest) throws ClientProtocolException, IOException;
 
-    public XLEHttpStatusAndStream getHttpStatusAndStreamInternal(HttpUriRequest httpGet, boolean printStreamDebug) throws XLEException {
-        XLEHttpStatusAndStream rv = new XLEHttpStatusAndStream();
+    public XLEHttpStatusAndStream getHttpStatusAndStreamInternal(HttpUriRequest httpUriRequest, boolean z) throws XLEException {
+        HttpEntity httpEntity;
+        XLEHttpStatusAndStream xLEHttpStatusAndStream = new XLEHttpStatusAndStream();
         try {
-            HttpResponse response = execute(httpGet);
-            if (!(response == null || response.getStatusLine() == null)) {
-                rv.statusLine = response.getStatusLine().toString();
-                rv.statusCode = response.getStatusLine().getStatusCode();
+            HttpResponse execute = execute(httpUriRequest);
+            if (!(execute == null || execute.getStatusLine() == null)) {
+                xLEHttpStatusAndStream.statusLine = execute.getStatusLine().toString();
+                xLEHttpStatusAndStream.statusCode = execute.getStatusLine().getStatusCode();
             }
-            if (!(response == null || response.getLastHeader(Constants.HTTP_REDIRECT_URL_HEADER_FIELD) == null)) {
-                rv.redirectUrl = response.getLastHeader(Constants.HTTP_REDIRECT_URL_HEADER_FIELD).getValue();
+            if (!(execute == null || execute.getLastHeader("Location") == null)) {
+                xLEHttpStatusAndStream.redirectUrl = execute.getLastHeader("Location").getValue();
             }
-            if (response != null) {
-                rv.headers = response.getAllHeaders();
+            if (execute != null) {
+                xLEHttpStatusAndStream.headers = execute.getAllHeaders();
             }
-            HttpEntity entity = response == null ? null : response.getEntity();
-            if (entity != null) {
-                rv.stream = new ByteArrayInputStream(EntityUtils.toByteArray(entity));
-                entity.consumeContent();
-                Header contentEncodingHeader = response.getFirstHeader(HTTP.CONTENT_ENCODING);
-                if (contentEncodingHeader != null && contentEncodingHeader.getValue().equalsIgnoreCase("gzip")) {
-                    rv.stream = new GZIPInputStream(rv.stream);
+            if (execute == null) {
+                httpEntity = null;
+            } else {
+                httpEntity = execute.getEntity();
+            }
+            if (httpEntity != null) {
+                xLEHttpStatusAndStream.stream = new ByteArrayInputStream(EntityUtils.toByteArray(httpEntity));
+                httpEntity.consumeContent();
+                Header firstHeader = execute.getFirstHeader(HTTP.CONTENT_ENCODING);
+                if (firstHeader != null && firstHeader.getValue().equalsIgnoreCase("gzip")) {
+                    xLEHttpStatusAndStream.stream = new GZIPInputStream(xLEHttpStatusAndStream.stream);
                 }
             }
-            return rv;
+            return xLEHttpStatusAndStream;
         } catch (Exception e) {
-            httpGet.abort();
-            if (!(rv == null || rv.stream == null)) {
-                rv.close();
+            httpUriRequest.abort();
+            if (xLEHttpStatusAndStream.stream != null) {
+                xLEHttpStatusAndStream.close();
             }
-            throw new XLEException(4, e);
+            throw new XLEException(4, (Throwable) e);
         }
     }
 }

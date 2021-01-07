@@ -5,9 +5,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.widget.AppCompatTextView;
 
 import com.mcal.mcpelauncher.R;
 import com.microsoft.xbox.telemetry.helpers.UTCChangeRelationship;
@@ -32,7 +31,7 @@ import com.microsoft.xbox.xle.viewmodel.ViewModelBase;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -49,101 +48,109 @@ public class ChangeFriendshipDialog extends XLEManagedDialog {
     private CustomTypefaceTextView gamertag;
     private FastProgressBar overlayLoadingIndicator;
     private ViewModelBase previousVM;
-    private AppCompatTextView profileAccountTier;
+    private TextView profileAccountTier;
     private CustomTypefaceTextView profileGamerScore;
     private XLEUniversalImageView profilePic;
     private CustomTypefaceTextView realName;
     private XLEClickableLayout removeFriendLayout;
     private XLECheckBox shareRealNameCheckbox;
 
-    public ChangeFriendshipDialog(Context context, ChangeFriendshipDialogViewModel vm2, ViewModelBase previousVM2) {
+    public ChangeFriendshipDialog(Context context, ChangeFriendshipDialogViewModel changeFriendshipDialogViewModel, ViewModelBase viewModelBase) {
         super(context, R.style.TcuiDialog);
-        previousVM = previousVM2;
-        vm = vm2;
+        this.previousVM = viewModelBase;
+        this.vm = changeFriendshipDialogViewModel;
     }
 
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public String getActivityName() {
+        return "ChangeRelationship Info";
+    }
+
+    public void onStop() {
+    }
+
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
         requestWindowFeature(1);
         getWindow().setLayout(-1, -1);
         getWindow().setFlags(1024, 1024);
         setContentView(R.layout.change_friendship_dialog);
-        profilePic = findViewById(R.id.change_friendship_profile_pic);
-        gamertag = findViewById(R.id.gamertag_text);
-        realName = findViewById(R.id.realname_text);
-        profileAccountTier = findViewById(R.id.peoplehub_info_gamerscore_icon);
-        profileGamerScore = findViewById(R.id.peoplehub_info_gamerscore);
-        addFriend = findViewById(R.id.add_as_friend);
-        addFavorite = findViewById(R.id.add_as_favorite);
-        shareRealNameCheckbox = findViewById(R.id.share_real_name_checkbox);
-        confirmButton = findViewById(R.id.submit_button);
-        cancelButton = findViewById(R.id.cancel_button);
-        changeFriendshipSwitchPanel = findViewById(R.id.change_friendship_switch_panel);
-        removeFriendLayout = findViewById(R.id.remove_friend_btn_layout);
-        favoriteIconView = findViewById(R.id.people_favorites_icon);
-        overlayLoadingIndicator = findViewById(R.id.overlay_loading_indicator);
+        this.profilePic = (XLEUniversalImageView) findViewById(R.id.change_friendship_profile_pic);
+        this.gamertag = (CustomTypefaceTextView) findViewById(R.id.gamertag_text);
+        this.realName = (CustomTypefaceTextView) findViewById(R.id.realname_text);
+        this.profileAccountTier = (TextView) findViewById(R.id.peoplehub_info_gamerscore_icon);
+        this.profileGamerScore = (CustomTypefaceTextView) findViewById(R.id.peoplehub_info_gamerscore);
+        this.addFriend = (RadioButton) findViewById(R.id.add_as_friend);
+        this.addFavorite = (RadioButton) findViewById(R.id.add_as_favorite);
+        this.shareRealNameCheckbox = (XLECheckBox) findViewById(R.id.share_real_name_checkbox);
+        this.confirmButton = (XLEButton) findViewById(R.id.submit_button);
+        this.cancelButton = (XLEButton) findViewById(R.id.cancel_button);
+        this.changeFriendshipSwitchPanel = (SwitchPanel) findViewById(R.id.change_friendship_switch_panel);
+        this.removeFriendLayout = (XLEClickableLayout) findViewById(R.id.remove_friend_btn_layout);
+        this.favoriteIconView = (CustomTypefaceTextView) findViewById(R.id.people_favorites_icon);
+        this.overlayLoadingIndicator = (FastProgressBar) findViewById(R.id.overlay_loading_indicator);
         FrameLayout frameLayout = new FrameLayout(getContext());
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(-2, -2);
         layoutParams.gravity = 5;
-        XLEButton closeButton = new XLEButton(getContext());
-        closeButton.setPadding(60, 0, 0, 0);
-        closeButton.setBackgroundResource(R.drawable.common_button_background);
-        closeButton.setText(R.string.ic_Close);
-        closeButton.setTextColor(-1);
-        closeButton.setTextSize(2, 14.0f);
-        closeButton.setTypeFace("fonts/SegXboxSymbol.ttf");
-        closeButton.setContentDescription(getContext().getResources().getString(R.string.TextInput_Confirm));
-        closeButton.setOnClickListener(v -> {
+        XLEButton xLEButton = new XLEButton(getContext());
+        xLEButton.setPadding(60, 0, 0, 0);
+        xLEButton.setBackgroundResource(R.drawable.common_button_background);
+        xLEButton.setText(R.string.ic_Close);
+        xLEButton.setTextColor(-1);
+        xLEButton.setTextSize(2, 14.0f);
+        xLEButton.setTypeFace("fonts/SegXboxSymbol.ttf");
+        xLEButton.setContentDescription(getContext().getResources().getString(R.string.TextInput_Confirm));
+        xLEButton.setOnClickListener(view -> {
             try {
-                dismiss();
+                ChangeFriendshipDialog.this.dismiss();
                 NavigationManager.getInstance().PopAllScreens();
-            } catch (XLEException e) {
+            } catch (XLEException unused) {
             }
         });
-        closeButton.setOnKeyListener((v, keyCode, event) -> {
-            if (keyCode != 4 || event.getAction() != 1) {
+        xLEButton.setOnKeyListener((view, i, keyEvent) -> {
+            if (i != 4 || keyEvent.getAction() != 1) {
                 return false;
             }
-            dismiss();
+            ChangeFriendshipDialog.this.dismiss();
             return true;
         });
-        frameLayout.addView(closeButton);
+        frameLayout.addView(xLEButton);
         addContentView(frameLayout, layoutParams);
     }
 
     public void onStart() {
-        vm.load();
+        this.vm.load();
         updateView();
-        changeFriendshipSwitchPanel.setBackgroundColor(vm.getPreferredColor());
-        UTCChangeRelationship.trackChangeRelationshipView(getActivityName(), vm.getXuid());
+        this.changeFriendshipSwitchPanel.setBackgroundColor(this.vm.getPreferredColor());
+        UTCChangeRelationship.trackChangeRelationshipView(getActivityName(), this.vm.getXuid());
     }
 
     @SuppressLint("WrongConstant")
     public void updateView() {
-        if (vm.getViewModelState() == ListState.ValidContentState) {
+        if (this.vm.getViewModelState() == ListState.ValidContentState) {
             setDialogValidContentView();
-            XLEUtil.updateAndShowTextViewUnlessEmpty(gamertag, vm.getGamerTag());
-            if (profilePic != null) {
-                profilePic.setImageURI2(ImageUtil.getMedium(vm.getGamerPicUrl()), R.drawable.gamerpic_missing, R.drawable.gamerpic_missing);
+            XLEUtil.updateAndShowTextViewUnlessEmpty(this.gamertag, this.vm.getGamerTag());
+            XLEUniversalImageView xLEUniversalImageView = this.profilePic;
+            if (xLEUniversalImageView != null) {
+                xLEUniversalImageView.setImageURI2(ImageUtil.getMedium(this.vm.getGamerPicUrl()), R.drawable.gamerpic_missing, R.drawable.gamerpic_missing);
             }
-            XLEUtil.updateAndShowTextViewUnlessEmpty(realName, vm.getRealName());
-            XLEUtil.updateVisibilityIfNotNull(favoriteIconView, vm.getIsFavorite() ? 0 : 4);
-            if (vm.getIsFavorite()) {
-                favoriteIconView.setTextColor(getContext().getResources().getColor(R.color.XboxGreen));
+            XLEUtil.updateAndShowTextViewUnlessEmpty(this.realName, this.vm.getRealName());
+            XLEUtil.updateVisibilityIfNotNull(this.favoriteIconView, this.vm.getIsFavorite() ? 0 : 4);
+            if (this.vm.getIsFavorite()) {
+                this.favoriteIconView.setTextColor(getContext().getResources().getColor(R.color.XboxGreen));
             }
-            String gamerScore = vm.getGamerScore();
+            String gamerScore = this.vm.getGamerScore();
             if (gamerScore != null && !gamerScore.equalsIgnoreCase("0")) {
-                XLEUtil.updateAndShowTextViewUnlessEmpty(profileGamerScore, vm.getGamerScore());
-                XLEUtil.updateVisibilityIfNotNull(profileAccountTier, 0);
+                XLEUtil.updateAndShowTextViewUnlessEmpty(this.profileGamerScore, this.vm.getGamerScore());
+                XLEUtil.updateVisibilityIfNotNull(this.profileAccountTier, 0);
             }
-            if (addFriend != null) {
-                if (vm.getIsFollowing()) {
-                    addFriend.setChecked(true);
+            if (this.addFriend != null) {
+                if (this.vm.getIsFollowing()) {
+                    this.addFriend.setChecked(true);
                 } else {
-                    vm.setShouldAddUserToFriendList(true);
-                    addFriend.setChecked(true);
+                    this.vm.setShouldAddUserToFriendList(true);
+                    this.addFriend.setChecked(true);
                 }
-                addFriend.setOnClickListener(v -> {
+                this.addFriend.setOnClickListener(view -> {
                     if (!vm.getIsFollowing()) {
                         vm.setShouldAddUserToFriendList(true);
                     }
@@ -153,34 +160,37 @@ public class ChangeFriendshipDialog extends XLEManagedDialog {
                     vm.setShouldAddUserToFavoriteList(false);
                 });
             }
-            if (addFavorite != null) {
-                if (vm.getIsFavorite()) {
-                    addFavorite.setChecked(true);
+            if (this.addFavorite != null) {
+                if (this.vm.getIsFavorite()) {
+                    this.addFavorite.setChecked(true);
                 }
-                addFavorite.setOnClickListener(v -> {
+                this.addFavorite.setOnClickListener(view -> {
                     if (!vm.getIsFavorite()) {
                         vm.setShouldAddUserToFavoriteList(true);
                     }
                     vm.setShouldRemoveUserFromFavoriteList(false);
                 });
             }
-            if (confirmButton != null) {
-                confirmButton.setOnClickListener(v -> {
+            XLEButton xLEButton = this.confirmButton;
+            if (xLEButton != null) {
+                xLEButton.setOnClickListener(view -> {
                     changeFriendshipSwitchPanel.setState(1);
                     vm.onChangeRelationshipCompleted();
                 });
             }
-            if (cancelButton != null) {
-                cancelButton.setOnClickListener(v -> {
+            XLEButton xLEButton2 = this.cancelButton;
+            if (xLEButton2 != null) {
+                xLEButton2.setOnClickListener(view -> {
                     dismissSelf();
                     vm.clearChangeFriendshipForm();
                 });
             }
-            if (shareRealNameCheckbox != null) {
-                shareRealNameCheckbox.setChecked(vm.getCallerMarkedTargetAsIdentityShared());
-                shareRealNameCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                    vm.setIsSharingRealNameEnd(isChecked);
-                    if (isChecked) {
+            XLECheckBox xLECheckBox = this.shareRealNameCheckbox;
+            if (xLECheckBox != null) {
+                xLECheckBox.setChecked(this.vm.getCallerMarkedTargetAsIdentityShared());
+                this.shareRealNameCheckbox.setOnCheckedChangeListener((compoundButton, z) -> {
+                    vm.setIsSharingRealNameEnd(z);
+                    if (z) {
                         if (!vm.getCallerMarkedTargetAsIdentityShared()) {
                             vm.setShouldAddUserToShareIdentityList(true);
                         }
@@ -194,52 +204,53 @@ public class ChangeFriendshipDialog extends XLEManagedDialog {
                 });
                 updateShareIdentityCheckboxStatus();
             }
-            if (removeFriendLayout != null) {
-                if (vm.getIsFollowing()) {
-                    removeFriendLayout.setVisibility(0);
-                    removeFriendLayout.setOnClickListener(v -> {
+            if (this.removeFriendLayout != null) {
+                if (this.vm.getIsFollowing()) {
+                    this.removeFriendLayout.setVisibility(0);
+                    this.removeFriendLayout.setOnClickListener(view -> {
                         UTCChangeRelationship.trackChangeRelationshipRemoveFriend();
                         changeFriendshipSwitchPanel.setState(1);
                         vm.removeFollowingUser();
                     });
                 } else {
-                    removeFriendLayout.setEnabled(false);
-                    removeFriendLayout.setVisibility(8);
+                    this.removeFriendLayout.setEnabled(false);
+                    this.removeFriendLayout.setVisibility(8);
                 }
-                confirmButton.setText(vm.getDialogButtonText());
+                this.confirmButton.setText(this.vm.getDialogButtonText());
             }
             updateShareIdentityCheckboxStatus();
-        } else if (vm.getViewModelState() == ListState.LoadingState) {
+        } else if (this.vm.getViewModelState() == ListState.LoadingState) {
             setDialogLoadingView();
         }
     }
 
     private void setDialogValidContentView() {
-        XLEUtil.updateVisibilityIfNotNull(overlayLoadingIndicator, 8);
-        if (confirmButton != null) {
-            confirmButton.setEnabled(true);
+        XLEUtil.updateVisibilityIfNotNull(this.overlayLoadingIndicator, 8);
+        XLEButton xLEButton = this.confirmButton;
+        if (xLEButton != null) {
+            xLEButton.setEnabled(true);
         }
-        if (cancelButton != null) {
-            cancelButton.setEnabled(true);
+        XLEButton xLEButton2 = this.cancelButton;
+        if (xLEButton2 != null) {
+            xLEButton2.setEnabled(true);
         }
     }
 
     private void setDialogLoadingView() {
-        XLEUtil.updateVisibilityIfNotNull(overlayLoadingIndicator, 0);
-        if (confirmButton != null) {
-            confirmButton.setEnabled(false);
+        XLEUtil.updateVisibilityIfNotNull(this.overlayLoadingIndicator, 0);
+        XLEButton xLEButton = this.confirmButton;
+        if (xLEButton != null) {
+            xLEButton.setEnabled(false);
         }
-        if (cancelButton != null) {
-            cancelButton.setEnabled(false);
+        XLEButton xLEButton2 = this.cancelButton;
+        if (xLEButton2 != null) {
+            xLEButton2.setEnabled(false);
         }
     }
 
     public void closeDialog() {
         dismissSelf();
-        previousVM.load(true);
-    }
-
-    public void onStop() {
+        this.previousVM.load(true);
     }
 
     public void onBackPressed() {
@@ -250,81 +261,66 @@ public class ChangeFriendshipDialog extends XLEManagedDialog {
         ((SGProjectSpecificDialogManager) DialogManager.getInstance().getManager()).dismissChangeFriendshipDialog();
     }
 
-    public void setVm(ChangeFriendshipDialogViewModel vm2) {
-        vm = vm2;
+    public void setVm(ChangeFriendshipDialogViewModel changeFriendshipDialogViewModel) {
+        this.vm = changeFriendshipDialogViewModel;
     }
 
+    @SuppressLint("WrongConstant")
     public void updateShareIdentityCheckboxStatus() {
-        int i;
-        boolean isTargetSharingRealName;
-        String callerShareRealNameStatus = vm.getCallerShareRealNameStatus();
+        String callerShareRealNameStatus = this.vm.getCallerShareRealNameStatus();
         if (callerShareRealNameStatus != null) {
-            boolean isBlocked = callerShareRealNameStatus.equalsIgnoreCase("Blocked");
-            XLECheckBox xLECheckBox = shareRealNameCheckbox;
-            if (isBlocked) {
-                i = 8;
-            } else {
-                i = 0;
-            }
-            xLECheckBox.setVisibility(i);
-            if (!isBlocked) {
-                if (!JavaUtil.isNullOrEmpty(vm.getRealName())) {
-                    isTargetSharingRealName = true;
-                } else {
-                    isTargetSharingRealName = false;
-                }
+            boolean equalsIgnoreCase = callerShareRealNameStatus.equalsIgnoreCase("Blocked");
+            this.shareRealNameCheckbox.setVisibility(equalsIgnoreCase ? 8 : 0);
+            if (!equalsIgnoreCase) {
+                boolean z = !JavaUtil.isNullOrEmpty(this.vm.getRealName());
                 if (callerShareRealNameStatus.compareToIgnoreCase("Everyone") == 0) {
-                    shareRealNameCheckbox.setChecked(true);
-                    vm.setInitialRealNameSharingState(true);
-                    shareRealNameCheckbox.setEnabled(false);
-                    shareRealNameCheckbox.setSubText(XboxTcuiSdk.getResources().getString(R.string.ChangeRelationship_Checkbox_Subtext_ShareRealName_Everyone));
+                    this.shareRealNameCheckbox.setChecked(true);
+                    this.vm.setInitialRealNameSharingState(true);
+                    this.shareRealNameCheckbox.setEnabled(false);
+                    this.shareRealNameCheckbox.setSubText(XboxTcuiSdk.getResources().getString(R.string.ChangeRelationship_Checkbox_Subtext_ShareRealName_Everyone));
                 }
                 if (callerShareRealNameStatus.compareToIgnoreCase("PeopleOnMyList") == 0) {
-                    shareRealNameCheckbox.setChecked(true);
-                    vm.setInitialRealNameSharingState(true);
-                    shareRealNameCheckbox.setEnabled(false);
-                    shareRealNameCheckbox.setSubText(XboxTcuiSdk.getResources().getString(R.string.ChangeRelationship_Checkbox_Subtext_ShareRealName_Friends));
+                    this.shareRealNameCheckbox.setChecked(true);
+                    this.vm.setInitialRealNameSharingState(true);
+                    this.shareRealNameCheckbox.setEnabled(false);
+                    this.shareRealNameCheckbox.setSubText(XboxTcuiSdk.getResources().getString(R.string.ChangeRelationship_Checkbox_Subtext_ShareRealName_Friends));
                 }
                 if (callerShareRealNameStatus.compareToIgnoreCase("FriendCategoryShareIdentity") == 0) {
-                    if (vm.getIsFollowing()) {
-                        if (vm.getCallerMarkedTargetAsIdentityShared()) {
-                            shareRealNameCheckbox.setChecked(true);
-                            vm.setInitialRealNameSharingState(true);
+                    if (this.vm.getIsFollowing()) {
+                        if (this.vm.getCallerMarkedTargetAsIdentityShared()) {
+                            this.shareRealNameCheckbox.setChecked(true);
+                            this.vm.setInitialRealNameSharingState(true);
                         } else {
-                            shareRealNameCheckbox.setChecked(false);
-                            vm.setInitialRealNameSharingState(false);
+                            this.shareRealNameCheckbox.setChecked(false);
+                            this.vm.setInitialRealNameSharingState(false);
                         }
-                    } else if (isTargetSharingRealName) {
-                        shareRealNameCheckbox.setChecked(true);
-                        vm.setInitialRealNameSharingState(true);
-                        vm.setShouldAddUserToShareIdentityList(true);
+                    } else if (z) {
+                        this.shareRealNameCheckbox.setChecked(true);
+                        this.vm.setInitialRealNameSharingState(true);
+                        this.vm.setShouldAddUserToShareIdentityList(true);
                     } else {
-                        shareRealNameCheckbox.setChecked(false);
-                        vm.setInitialRealNameSharingState(false);
+                        this.shareRealNameCheckbox.setChecked(false);
+                        this.vm.setInitialRealNameSharingState(false);
                     }
-                    shareRealNameCheckbox.setSubText(String.format(XboxTcuiSdk.getResources().getString(R.string.ChangeRelationship_Checkbox_Subtext_ShareRealName), new Object[]{vm.getGamerTag()}));
-                    shareRealNameCheckbox.setEnabled(true);
+                    this.shareRealNameCheckbox.setSubText(String.format(XboxTcuiSdk.getResources().getString(R.string.ChangeRelationship_Checkbox_Subtext_ShareRealName), new Object[]{this.vm.getGamerTag()}));
+                    this.shareRealNameCheckbox.setEnabled(true);
                 }
             }
         }
     }
 
     public void reportAsyncTaskCompleted() {
-        if (!vm.isBusy() && changeFriendshipSwitchPanel.getState() == 1) {
+        if (!this.vm.isBusy() && this.changeFriendshipSwitchPanel.getState() == 1) {
             closeDialog();
         }
     }
 
     @SuppressLint("WrongConstant")
-    public void reportAsyncTaskFailed(String errorMessage) {
-        if (changeFriendshipSwitchPanel.getState() == 1) {
-            changeFriendshipSwitchPanel.setState(0);
-            Toast.makeText(XboxTcuiSdk.getActivity(), errorMessage, 0).show();
+    public void reportAsyncTaskFailed(String str) {
+        if (this.changeFriendshipSwitchPanel.getState() == 1) {
+            this.changeFriendshipSwitchPanel.setState(0);
+            Toast.makeText(XboxTcuiSdk.getActivity(), str, 0).show();
         }
         updateView();
-    }
-
-    public String getActivityName() {
-        return "ChangeRelationship Info";
     }
 }

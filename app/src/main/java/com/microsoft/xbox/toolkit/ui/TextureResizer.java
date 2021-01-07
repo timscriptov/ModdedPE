@@ -10,56 +10,61 @@ import android.graphics.RectF;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 
 public class TextureResizer {
-    @NotNull
-    public static Bitmap createScaledBitmap8888(@NotNull Bitmap source, int dstwidth, int dstheight, boolean filter) {
+    public static @NotNull Bitmap createScaledBitmap8888(@NotNull Bitmap bitmap, int i, int i2, boolean z) {
         Paint paint;
-        Bitmap bitmap;
-        int width = source.getWidth();
-        int height = source.getHeight();
-        Matrix m = new Matrix();
-        m.setScale(((float) dstwidth) / ((float) width), ((float) dstheight) / ((float) height));
-        if (0 + width > source.getWidth()) {
-            throw new IllegalArgumentException("x + width must be <= bitmap.width()");
-        } else if (0 + height > source.getHeight()) {
-            throw new IllegalArgumentException("y + height must be <= bitmap.height()");
-        } else if (!source.isMutable() && 0 == 0 && 0 == 0 && width == source.getWidth() && height == source.getHeight() && (m == null || m.isIdentity())) {
-            return source;
-        } else {
-            int neww = width;
-            int newh = height;
-            Canvas canvas = new Canvas();
-            Rect srcR = new Rect(0, 0, 0 + width, 0 + height);
-            RectF dstR = new RectF(0.0f, 0.0f, (float) width, (float) height);
-            if (m == null || m.isIdentity()) {
-                bitmap = Bitmap.createBitmap(neww, newh, Bitmap.Config.ARGB_8888);
-                paint = null;
+        Bitmap bitmap2;
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        float f = (float) width;
+        float f2 = (float) height;
+        Matrix matrix = new Matrix();
+        matrix.setScale(((float) i) / f, ((float) i2) / f2);
+        int i3 = width + 0;
+        if (i3 <= bitmap.getWidth()) {
+            int i4 = height + 0;
+            if (i4 > bitmap.getHeight()) {
+                throw new IllegalArgumentException("y + height must be <= bitmap.height()");
+            } else if (!bitmap.isMutable() && width == bitmap.getWidth() && height == bitmap.getHeight() && matrix.isIdentity()) {
+                return bitmap;
             } else {
-                boolean hasAlpha = source.hasAlpha() || !m.rectStaysRect();
-                RectF deviceR = new RectF();
-                m.mapRect(deviceR, dstR);
-                bitmap = Bitmap.createBitmap(Math.round(deviceR.width()), Math.round(deviceR.height()), Bitmap.Config.ARGB_8888);
-                if (hasAlpha) {
-                    bitmap.eraseColor(0);
+                Canvas canvas = new Canvas();
+                Rect rect = new Rect(0, 0, i3, i4);
+                RectF rectF = new RectF(0.0f, 0.0f, f, f2);
+                if (matrix.isIdentity()) {
+                    bitmap2 = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                    paint = null;
+                } else {
+                    boolean z2 = bitmap.hasAlpha() || !matrix.rectStaysRect();
+                    RectF rectF2 = new RectF();
+                    matrix.mapRect(rectF2, rectF);
+                    Bitmap createBitmap = Bitmap.createBitmap(Math.round(rectF2.width()), Math.round(rectF2.height()), Bitmap.Config.ARGB_8888);
+                    if (z2) {
+                        createBitmap.eraseColor(0);
+                    }
+                    canvas.translate(-rectF2.left, -rectF2.top);
+                    canvas.concat(matrix);
+                    Paint paint2 = new Paint();
+                    paint2.setFilterBitmap(z);
+                    if (!matrix.rectStaysRect()) {
+                        paint2.setAntiAlias(true);
+                    }
+                    paint = paint2;
+                    bitmap2 = createBitmap;
                 }
-                canvas.translate(-deviceR.left, -deviceR.top);
-                canvas.concat(m);
-                paint = new Paint();
-                paint.setFilterBitmap(filter);
-                if (!m.rectStaysRect()) {
-                    paint.setAntiAlias(true);
-                }
+                bitmap2.setDensity(bitmap.getDensity());
+                canvas.setBitmap(bitmap2);
+                canvas.drawBitmap(bitmap, rect, rectF, paint);
+                return bitmap2;
             }
-            bitmap.setDensity(source.getDensity());
-            canvas.setBitmap(bitmap);
-            canvas.drawBitmap(source, srcR, dstR, paint);
-            return bitmap;
+        } else {
+            throw new IllegalArgumentException("x + width must be <= bitmap.width()");
         }
     }
 }

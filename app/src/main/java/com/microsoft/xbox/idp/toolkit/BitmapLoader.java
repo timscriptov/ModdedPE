@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.net.URL;
 
 /**
- * 05.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov

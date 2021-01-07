@@ -67,7 +67,10 @@
                             android:visibility="gone"
                             android:layout_marginTop="1dp"
                             android:layout_marginRight="1dp"
-                            android:text="@string/ic_GamerScore" />
+                            android:text="@string/ic_GamerScore"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content" />
+
                         <com.microsoft.xbox.toolkit.ui.CustomTypefaceTextView
                             android:textSize="17sp"
                             android:id="@+id/profile_gamerscore"

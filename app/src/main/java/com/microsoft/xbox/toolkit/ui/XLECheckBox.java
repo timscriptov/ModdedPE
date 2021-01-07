@@ -5,143 +5,159 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
-
-import androidx.appcompat.widget.AppCompatCheckBox;
-import androidx.appcompat.widget.AppCompatTextView;
+import android.widget.TextView;
 
 import com.mcal.mcpelauncher.R;
 
-import org.jetbrains.annotations.NotNull;
 import org.spongycastle.asn1.cmp.PKIFailureInfo;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 
 public class XLECheckBox extends ViewGroup {
-    public final AppCompatCheckBox checkBox;
-    private final AppCompatTextView subText;
-    private final AppCompatTextView text;
+    public final CheckBox checkBox;
+    private final TextView subText;
+    private final TextView text;
 
     public XLECheckBox(Context context) {
         super(context);
-        checkBox = new AppCompatCheckBox(context);
-        text = new AppCompatTextView(context);
-        subText = new AppCompatTextView(context);
+        this.checkBox = new CheckBox(context);
+        this.text = new TextView(context);
+        this.subText = new TextView(context);
     }
 
-    public XLECheckBox(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        checkBox = new AppCompatCheckBox(context, attrs);
-        text = new AppCompatTextView(context, attrs);
-        subText = new AppCompatTextView(context, attrs);
-        initialize(context, attrs);
+    public XLECheckBox(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
+        this.checkBox = new CheckBox(context, attributeSet);
+        this.text = new TextView(context, attributeSet);
+        this.subText = new TextView(context, attributeSet);
+        initialize(context, attributeSet);
     }
 
-    public XLECheckBox(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        checkBox = new AppCompatCheckBox(context, attrs);
-        text = new AppCompatTextView(context, attrs);
-        subText = new AppCompatTextView(context, attrs);
-        initialize(context, attrs);
+    public XLECheckBox(Context context, AttributeSet attributeSet, int i) {
+        super(context, attributeSet, i);
+        this.checkBox = new CheckBox(context, attributeSet);
+        this.text = new TextView(context, attributeSet);
+        this.subText = new TextView(context, attributeSet);
+        initialize(context, attributeSet);
     }
 
     public CharSequence getText() {
-        return text.getText();
+        return this.text.getText();
     }
 
-    public void setText(CharSequence text2) {
-        text.setText(text2);
+    public void setText(CharSequence charSequence) {
+        this.text.setText(charSequence);
     }
 
     public CharSequence getSubText() {
-        return subText.getText();
+        return this.subText.getText();
     }
 
-    public void setSubText(CharSequence subText2) {
-        subText.setText(subText2);
+    public void setSubText(CharSequence charSequence) {
+        this.subText.setText(charSequence);
     }
 
     public boolean isChecked() {
-        return checkBox.isChecked();
+        return this.checkBox.isChecked();
     }
 
-    public void setChecked(boolean checked) {
-        checkBox.setChecked(checked);
+    public void setChecked(boolean z) {
+        this.checkBox.setChecked(z);
     }
 
     public void toggle() {
-        checkBox.toggle();
+        this.checkBox.toggle();
     }
 
-    public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
-        checkBox.setEnabled(enabled);
-        text.setEnabled(enabled);
-        subText.setEnabled(enabled);
+    public void setEnabled(boolean z) {
+        super.setEnabled(z);
+        this.checkBox.setEnabled(z);
+        this.text.setEnabled(z);
+        this.subText.setEnabled(z);
     }
 
-    public void setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener listener) {
-        checkBox.setOnCheckedChangeListener(listener);
+    public void setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener onCheckedChangeListener) {
+        this.checkBox.setOnCheckedChangeListener(onCheckedChangeListener);
     }
 
-    private void initialize(@NotNull Context context, AttributeSet attrs) {
-        checkBox.setButtonDrawable(R.drawable.apptheme_btn_check_holo_light);
-        addView(checkBox, new ViewGroup.LayoutParams(-2, -2));
-        text.setOnClickListener(view -> checkBox.toggle());
-        addView(text, new ViewGroup.LayoutParams(-2, -2));
-        addView(subText, new ViewGroup.LayoutParams(-2, -2));
-        /*TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.XLECheckBox);
+    private void initialize(Context context, AttributeSet attributeSet) {
+        this.checkBox.setButtonDrawable(R.drawable.apptheme_btn_check_holo_light);
+        addView(this.checkBox, new ViewGroup.LayoutParams(-2, -2));
+        this.text.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                XLECheckBox.this.checkBox.toggle();
+            }
+        });
+        addView(this.text, new ViewGroup.LayoutParams(-2, -2));
+        addView(this.subText, new ViewGroup.LayoutParams(-2, -2));
+        /*TypedArray obtainStyledAttributes = context.obtainStyledAttributes(attributeSet, R.styleable.XLECheckBox);
         try {
             if (!isInEditMode()) {
-                LibCompat.setTextAppearance(text, a.getResourceId(R.styleable.XLECheckBox_textStyle, -1));
-                text.setTypeface(FontManager.Instance().getTypeface(context, a.getString(R.styleable.XLECheckBox_textTypefaceSource)));
-                LibCompat.setTextAppearance(subText, a.getResourceId(R.styleable.XLECheckBox_subTextStyle, -1));
-                subText.setTypeface(FontManager.Instance().getTypeface(context, a.getString(R.styleable.XLECheckBox_subTextTypefaceSource)));
+                LibCompat.setTextAppearance(this.text, obtainStyledAttributes.getResourceId(R.styleable.XLECheckBox_textStyle, -1));
+                this.text.setTypeface(FontManager.Instance().getTypeface(context, obtainStyledAttributes.getString(R.styleable.XLECheckBox_textTypefaceSource)));
+                LibCompat.setTextAppearance(this.subText, obtainStyledAttributes.getResourceId(R.styleable.XLECheckBox_subTextStyle, -1));
+                this.subText.setTypeface(FontManager.Instance().getTypeface(context, obtainStyledAttributes.getString(R.styleable.XLECheckBox_subTextTypefaceSource)));
             }
-            text.setText(a.getString(R.styleable.XLECheckBox_text));
-            subText.setText(a.getString(R.styleable.XLECheckBox_subText));
+            this.text.setText(obtainStyledAttributes.getString(R.styleable.XLECheckBox_text));
+            this.subText.setText(obtainStyledAttributes.getString(R.styleable.XLECheckBox_subText));
         } finally {
-            a.recycle();
+            obtainStyledAttributes.recycle();
         }*/
     }
 
+    /* access modifiers changed from: protected */
     @SuppressLint("WrongConstant")
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int w = View.MeasureSpec.getSize(widthMeasureSpec);
-        int wMyMode = View.MeasureSpec.getMode(widthMeasureSpec);
-        int wChildMode = wMyMode == 0 ? 0 : PKIFailureInfo.systemUnavail;
-        int h = View.MeasureSpec.getSize(heightMeasureSpec);
-        int hMyMode = View.MeasureSpec.getMode(heightMeasureSpec);
-        int hChildMode = hMyMode == 0 ? 0 : PKIFailureInfo.systemUnavail;
-        int xCur = getPaddingLeft();
-        int yCur = getPaddingTop();
-        checkBox.measure(View.MeasureSpec.makeMeasureSpec(Math.max((w - xCur) - getPaddingRight(), 0), wChildMode), View.MeasureSpec.makeMeasureSpec(Math.max((h - yCur) - getPaddingBottom(), 0), hChildMode));
-        int xCur2 = xCur + checkBox.getMeasuredWidth();
-        text.measure(View.MeasureSpec.makeMeasureSpec(Math.max((w - xCur2) - getPaddingRight(), 0), wChildMode), View.MeasureSpec.makeMeasureSpec(Math.max((h - yCur) - getPaddingBottom(), 0), hChildMode));
-        int yCur2 = yCur + Math.max(checkBox.getMeasuredHeight(), text.getMeasuredHeight());
-        subText.measure(View.MeasureSpec.makeMeasureSpec(Math.max((w - xCur2) - getPaddingRight(), 0), wChildMode), View.MeasureSpec.makeMeasureSpec(Math.max((h - yCur2) - getPaddingBottom(), 0), hChildMode));
-        int xCur3 = xCur2 + Math.max(text.getMeasuredWidth(), subText.getMeasuredWidth());
-        int yCur3 = yCur2 + subText.getMeasuredHeight();
-        int xCur4 = xCur3 + getPaddingRight();
-        int yCur4 = yCur3 + getPaddingBottom();
-        setMeasuredDimension(wMyMode == 0 ? xCur4 : Math.min(xCur4, w), hMyMode == 0 ? yCur4 : Math.min(yCur4, h));
+    public void onMeasure(int i, int i2) {
+        int size = View.MeasureSpec.getSize(i);
+        int mode = View.MeasureSpec.getMode(i);
+        int i3 = PKIFailureInfo.systemUnavail;
+        int i4 = mode == 0 ? 0 : PKIFailureInfo.systemUnavail;
+        int size2 = View.MeasureSpec.getSize(i2);
+        int mode2 = View.MeasureSpec.getMode(i2);
+        if (mode2 == 0) {
+            i3 = 0;
+        }
+        int paddingLeft = getPaddingLeft();
+        int paddingTop = getPaddingTop();
+        int i5 = size2 - paddingTop;
+        this.checkBox.measure(View.MeasureSpec.makeMeasureSpec(Math.max((size - paddingLeft) - getPaddingRight(), 0), i4), View.MeasureSpec.makeMeasureSpec(Math.max(i5 - getPaddingBottom(), 0), i3));
+        int measuredWidth = paddingLeft + this.checkBox.getMeasuredWidth();
+        int i6 = size - measuredWidth;
+        this.text.measure(View.MeasureSpec.makeMeasureSpec(Math.max(i6 - getPaddingRight(), 0), i4), View.MeasureSpec.makeMeasureSpec(Math.max(i5 - getPaddingBottom(), 0), i3));
+        int max = paddingTop + Math.max(this.checkBox.getMeasuredHeight(), this.text.getMeasuredHeight());
+        this.subText.measure(View.MeasureSpec.makeMeasureSpec(Math.max(i6 - getPaddingRight(), 0), i4), View.MeasureSpec.makeMeasureSpec(Math.max((size2 - max) - getPaddingBottom(), 0), i3));
+        int max2 = measuredWidth + Math.max(this.text.getMeasuredWidth(), this.subText.getMeasuredWidth());
+        int measuredHeight = max + this.subText.getMeasuredHeight();
+        int paddingRight = max2 + getPaddingRight();
+        int paddingBottom = measuredHeight + getPaddingBottom();
+        if (mode != 0) {
+            paddingRight = Math.min(paddingRight, size);
+        }
+        if (mode2 != 0) {
+            paddingBottom = Math.min(paddingBottom, size2);
+        }
+        setMeasuredDimension(paddingRight, paddingBottom);
     }
 
-    public void onLayout(boolean changed, int l, int t, int r, int b) {
-        int lCheckbox = getPaddingLeft();
-        int cCheckbox = getPaddingTop() + Math.max(checkBox.getMeasuredHeight() / 2, text.getMeasuredHeight() / 2);
-        int tCheckbox = cCheckbox - (checkBox.getMeasuredWidth() / 2);
-        this.checkBox.layout(lCheckbox, tCheckbox, checkBox.getMeasuredWidth() + lCheckbox, checkBox.getMeasuredHeight() + tCheckbox);
-        int lText = lCheckbox + checkBox.getMeasuredWidth();
-        int tText = cCheckbox - (text.getMeasuredHeight() / 2);
-        this.text.layout(lText, tText, text.getMeasuredWidth() + lText, text.getMeasuredHeight() + tText);
-        int lSubText = lText;
-        int tSubText = tText + text.getMeasuredHeight();
-        subText.layout(lSubText, tSubText, subText.getMeasuredWidth() + lSubText, subText.getMeasuredHeight() + tSubText);
+    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        int paddingLeft = getPaddingLeft();
+        int paddingTop = getPaddingTop() + Math.max(this.checkBox.getMeasuredHeight() / 2, this.text.getMeasuredHeight() / 2);
+        int measuredWidth = paddingTop - (this.checkBox.getMeasuredWidth() / 2);
+        CheckBox checkBox2 = this.checkBox;
+        checkBox2.layout(paddingLeft, measuredWidth, checkBox2.getMeasuredWidth() + paddingLeft, this.checkBox.getMeasuredHeight() + measuredWidth);
+        int measuredWidth2 = paddingLeft + this.checkBox.getMeasuredWidth();
+        int measuredHeight = paddingTop - (this.text.getMeasuredHeight() / 2);
+        TextView textView = this.text;
+        textView.layout(measuredWidth2, measuredHeight, textView.getMeasuredWidth() + measuredWidth2, this.text.getMeasuredHeight() + measuredHeight);
+        int measuredHeight2 = measuredHeight + this.text.getMeasuredHeight();
+        TextView textView2 = this.subText;
+        textView2.layout(measuredWidth2, measuredHeight2, textView2.getMeasuredWidth() + measuredWidth2, this.subText.getMeasuredHeight() + measuredHeight2);
     }
 }

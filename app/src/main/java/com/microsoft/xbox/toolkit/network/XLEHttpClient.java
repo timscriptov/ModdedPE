@@ -12,7 +12,7 @@ import org.apache.http.protocol.HttpContext;
 import java.io.IOException;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -21,11 +21,11 @@ import java.io.IOException;
 public class XLEHttpClient extends AbstractXLEHttpClient {
     DefaultHttpClient client;
 
-    public XLEHttpClient(ClientConnectionManager connectionManager, HttpParams params) {
-        client = new DefaultHttpClient(connectionManager, params);
+    public XLEHttpClient(ClientConnectionManager clientConnectionManager, HttpParams httpParams) {
+        this.client = new DefaultHttpClient(clientConnectionManager, httpParams);
     }
 
-    public HttpResponse execute(HttpUriRequest get) throws ClientProtocolException, IOException {
-        return client.execute(get, (HttpContext) new BasicHttpContext());
+    public HttpResponse execute(HttpUriRequest httpUriRequest) throws ClientProtocolException, IOException {
+        return this.client.execute(httpUriRequest, (HttpContext) new BasicHttpContext());
     }
 }

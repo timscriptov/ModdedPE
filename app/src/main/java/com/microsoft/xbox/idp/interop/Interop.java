@@ -13,14 +13,14 @@ import java.io.InputStream;
 import java.util.Locale;
 
 /**
- * 05.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 
 public class Interop {
-    public static final String TAG = "Interop";
+    public static final String TAG = Interop.class.getSimpleName();
     private static final String DNET_SCOPE = "open-user.auth.dnet.xboxlive.com";
     private static final String PACKAGE_NAME_TO_REMOVE = "com.microsoft.onlineid.sample";
     private static final String POLICY = "mbi_ssl";
@@ -33,22 +33,21 @@ public class Interop {
 
     private static native void notificiation_registration_callback(String str);
 
-    @NotNull
-    public static String getSystemProxy() {
-        String proxyPort;
-        String proxyAddress = System.getProperty("http.proxyHost");
-        if (proxyAddress == null || (proxyPort = System.getProperty("http.proxyPort")) == null) {
+    public static @NotNull String getSystemProxy() {
+        String property;
+        String property2 = System.getProperty("http.proxyHost");
+        if (property2 == null || (property = System.getProperty("http.proxyPort")) == null) {
             return "";
         }
-        String fullProxy = "http://" + proxyAddress + ":" + proxyPort;
-        Log.i(TAG, fullProxy);
-        return fullProxy;
+        String str = "http://" + property2 + ":" + property;
+        Log.i(TAG, str);
+        return str;
     }
 
-    @NotNull
-    public static String getLocale() {
+    public static @NotNull String getLocale() {
         String locale = Locale.getDefault().toString();
-        Log.i(TAG, "locale is: " + locale);
+        String str = TAG;
+        Log.i(str, "locale is: " + locale);
         return locale;
     }
 
@@ -74,8 +73,7 @@ public class Interop {
         return outputStream.toString();
     }
 
-    @NotNull
-    public static String GetLocalStoragePath(@NotNull Context context) {
+    public static @NotNull String GetLocalStoragePath(@NotNull Context context) {
         return context.getFilesDir().getPath();
     }
 
@@ -83,21 +81,24 @@ public class Interop {
         return s_context;
     }
 
-    public static void NotificationRegisterCallback(String token) {
-        Log.i(TAG, "NotificationRegisterCallback, token:" + token);
-        notificiation_registration_callback(token);
+    public static void NotificationRegisterCallback(String str) {
+        String str2 = TAG;
+        Log.i(str2, "NotificationRegisterCallback, token:" + str);
+        notificiation_registration_callback(str);
     }
 
     public static void RegisterWithGNS(Context context) {
         Log.i("XSAPI.Android", "trying to register..");
         try {
-            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(result -> {
-                Log.d(Interop.TAG, "Got Firebase id:" + result.getId());
-                Log.d(Interop.TAG, "Got Firebase token:" + result.getToken());
-                Interop.NotificationRegisterCallback(result.getToken());
-            }).addOnFailureListener(e -> Log.d(Interop.TAG, "Gettting Firebase token failed, message:" + e.getMessage()));
+            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
+                Log.d(Interop.TAG, "Got Firebase id:" + instanceIdResult.getId());
+                Log.d(Interop.TAG, "Got Firebase token:" + instanceIdResult.getToken());
+                Interop.NotificationRegisterCallback(instanceIdResult.getToken());
+            }).addOnFailureListener(exc -> {
+                Log.d(Interop.TAG, "Gettting Firebase token failed, message:" + exc.getMessage());
+            });
         } catch (Exception e) {
-            Log.e(TAG, "Gettting Firebase instance failed, message:" + e.getMessage());
+            Log.e(Interop.TAG, "Gettting Firebase instance failed, message:" + e.getMessage());
         }
     }
 
@@ -106,14 +107,14 @@ public class Interop {
         ERROR_USER_CANCEL(1),
         PROVIDER_ERROR(2);
 
-        private final int mId;
+        private final int id;
 
-        private AuthFlowScreenStatus(int id) {
-            mId = id;
+        private AuthFlowScreenStatus(int i) {
+            id = i;
         }
 
         public int getId() {
-            return mId;
+            return id;
         }
     }
 
@@ -123,14 +124,14 @@ public class Interop {
         OFFLINE(2),
         CATCHALL(3);
 
-        private final int mId;
+        private final int id;
 
-        private ErrorType(int id) {
-            mId = id;
+        private ErrorType(int i) {
+            id = i;
         }
 
         public int getId() {
-            return mId;
+            return id;
         }
     }
 
@@ -138,14 +139,14 @@ public class Interop {
         TRY_AGAIN(0),
         CLOSE(1);
 
-        private final int mId;
+        private final int id;
 
-        private ErrorStatus(int id) {
-            mId = id;
+        private ErrorStatus(int i) {
+            id = i;
         }
 
         public int getId() {
-            return mId;
+            return id;
         }
     }
 

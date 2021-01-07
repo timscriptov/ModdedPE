@@ -5,7 +5,7 @@ import android.app.LoaderManager;
 import com.microsoft.xbox.idp.toolkit.ObjectLoader;
 
 /**
- * 05.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -14,26 +14,26 @@ import com.microsoft.xbox.idp.toolkit.ObjectLoader;
 public class ObjectLoaderInfo implements ErrorHelper.LoaderInfo {
     private final LoaderManager.LoaderCallbacks<?> callbacks;
 
-    public ObjectLoaderInfo(LoaderManager.LoaderCallbacks<?> callbacks2) {
-        callbacks = callbacks2;
+    public ObjectLoaderInfo(LoaderManager.LoaderCallbacks<?> loaderCallbacks) {
+        this.callbacks = loaderCallbacks;
     }
 
     public LoaderManager.LoaderCallbacks<?> getLoaderCallbacks() {
-        return callbacks;
+        return this.callbacks;
     }
 
-    public void clearCache(Object key) {
-        ObjectLoader.Cache cache = CacheUtil.getObjectLoaderCache();
-        synchronized (cache) {
-            cache.remove(key);
+    public void clearCache(Object obj) {
+        ObjectLoader.Cache objectLoaderCache = CacheUtil.getObjectLoaderCache();
+        synchronized (objectLoaderCache) {
+            objectLoaderCache.remove(obj);
         }
     }
 
-    public boolean hasCachedData(Object key) {
+    public boolean hasCachedData(Object obj) {
         boolean z;
-        ObjectLoader.Cache cache = CacheUtil.getObjectLoaderCache();
-        synchronized (cache) {
-            z = cache.get(key) != null;
+        ObjectLoader.Cache objectLoaderCache = CacheUtil.getObjectLoaderCache();
+        synchronized (objectLoaderCache) {
+            z = objectLoaderCache.get(obj) != null;
         }
         return z;
     }

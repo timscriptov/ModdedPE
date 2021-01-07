@@ -3,19 +3,16 @@ package com.microsoft.xbox.toolkit;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 
 public class XLEAssert {
-    static final boolean $assertionsDisabled = (!XLEAssert.class.desiredAssertionStatus());
+    static final boolean $assertionsDisabled = false;
 
-    public static void assertTrue(String message, boolean condition) {
-        if (!$assertionsDisabled && !condition) {
-            throw new AssertionError();
-        }
+    public static void assertTrue(String str, boolean z) {
     }
 
     public static void assertIsUIThread() {
@@ -26,43 +23,40 @@ public class XLEAssert {
         assertTrue(Thread.currentThread() != ThreadManager.UIThread);
     }
 
-    public static void assertTrue(boolean condition) {
-        assertTrue((String) null, condition);
+    public static void assertTrue(boolean z) {
+        assertTrue((String) null, z);
     }
 
-    public static void assertNotNull(Object object) {
-        assertTrue((String) null, object != null);
+    public static void assertNotNull(Object obj) {
+        assertTrue((String) null, obj != null);
     }
 
-    public static void assertNull(Object object) {
-        assertTrue((String) null, object == null);
+    public static void assertNull(Object obj) {
+        assertTrue((String) null, obj == null);
     }
 
-    public static void assertNotNull(String message, Object object) {
-        assertTrue(message, object != null);
+    public static void assertNotNull(String str, Object obj) {
+        assertTrue(str, obj != null);
     }
 
-    public static void assertFalse(String message, boolean condition) {
-        assertTrue(message, !condition);
+    public static void assertFalse(String str, boolean z) {
+        assertTrue(str, !z);
     }
 
-    public static void fail(String message) {
-        assertTrue(message, false);
+    public static void fail(String str) {
+        assertTrue(str, false);
     }
 
-    @NotNull
-    private static String getCallerLocation() {
-        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
-        int depth = 0;
-        while (depth < elements.length && (!elements[depth].getClassName().equals(XLEAssert.class.getName()) || !elements[depth].getMethodName().equals("getCallerLocation"))) {
-            depth++;
+    private static @NotNull String getCallerLocation() {
+        Class<XLEAssert> cls = XLEAssert.class;
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        int i = 0;
+        while (i < stackTrace.length && (!stackTrace[i].getClassName().equals(cls.getName()) || !stackTrace[i].getMethodName().equals("getCallerLocation"))) {
+            i++;
         }
-        while (depth < elements.length && elements[depth].getClassName().equals(XLEAssert.class.getName())) {
-            depth++;
+        while (i < stackTrace.length && stackTrace[i].getClassName().equals(cls.getName())) {
+            i++;
         }
-        if (depth < elements.length) {
-            return elements[depth].toString();
-        }
-        return "unknown";
+        return i < stackTrace.length ? stackTrace[i].toString() : "unknown";
     }
 }

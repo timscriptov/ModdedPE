@@ -20,10 +20,13 @@ import com.microsoft.xbox.xle.ui.XLERootView;
 import com.microsoft.xbox.xle.viewmodel.ViewModelBase;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.lang.ref.WeakReference;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -38,55 +41,80 @@ public abstract class ActivityBase extends ScreenLayout {
         this(0);
     }
 
-    public ActivityBase(int orientation) {
-        super(XboxTcuiSdk.getApplicationContext(), orientation);
-        showUtilityBar = true;
-        showRightPane = true;
+    public ActivityBase(int i) {
+        super(XboxTcuiSdk.getApplicationContext(), i);
+        this.showUtilityBar = true;
+        this.showRightPane = true;
     }
 
-    public ActivityBase(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        showUtilityBar = true;
-        showRightPane = true;
+    public ActivityBase(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
+        this.showUtilityBar = true;
+        this.showRightPane = true;
+    }
+
+    public int computeBottomMargin() {
+        return 0;
+    }
+
+    public boolean delayAppbarAnimation() {
+        return false;
     }
 
     public abstract String getActivityName();
 
+    public String getRelativeId() {
+        return null;
+    }
+
+    public boolean getShouldShowAppbar() {
+        return false;
+    }
+
     public abstract void onCreateContentView();
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (viewModel != null) {
-            viewModel.onActivityResult(requestCode, resultCode, data);
+    public void setHeaderName(String str) {
+    }
+
+    public void onActivityResult(int i, int i2, Intent intent) {
+        super.onActivityResult(i, i2, intent);
+        ViewModelBase viewModelBase = this.viewModel;
+        if (viewModelBase != null) {
+            viewModelBase.onActivityResult(i, i2, intent);
         }
     }
 
     public void onStop() {
         if (getIsStarted()) {
             super.onStop();
-            if (viewModel != null) {
-                viewModel.onSetInactive();
+            ViewModelBase viewModelBase = this.viewModel;
+            if (viewModelBase != null) {
+                viewModelBase.onSetInactive();
             }
-            if (viewModel != null) {
-                viewModel.onStop();
+            ViewModelBase viewModelBase2 = this.viewModel;
+            if (viewModelBase2 != null) {
+                viewModelBase2.onStop();
             }
         }
     }
 
     public void forceRefresh() {
-        if (viewModel != null) {
-            viewModel.forceRefresh();
+        ViewModelBase viewModelBase = this.viewModel;
+        if (viewModelBase != null) {
+            viewModelBase.forceRefresh();
         }
     }
 
     public void onStart() {
         if (!getIsStarted()) {
             super.onStart();
-            if (viewModel != null) {
-                viewModel.onStart();
+            ViewModelBase viewModelBase = this.viewModel;
+            if (viewModelBase != null) {
+                viewModelBase.onStart();
             }
-            if (viewModel != null) {
-                viewModel.load();
+            ViewModelBase viewModelBase2 = this.viewModel;
+            if (viewModelBase2 != null) {
+                viewModelBase2.load();
             }
         }
         if (!delayAppbarAnimation()) {
@@ -95,149 +123,155 @@ public abstract class ActivityBase extends ScreenLayout {
     }
 
     public void onAnimateInStarted() {
-        if (viewModel != null) {
-            viewModel.forceUpdateViewImmediately();
+        ViewModelBase viewModelBase = this.viewModel;
+        if (viewModelBase != null) {
+            viewModelBase.forceUpdateViewImmediately();
         }
     }
 
     public void onAnimateInCompleted() {
-        if (viewModel != null) {
-            final WeakReference<ViewModelBase> viewModelWeakPtr = new WeakReference<>(viewModel);
+        if (this.viewModel != null) {
+            final WeakReference weakReference = new WeakReference(this.viewModel);
             BackgroundThreadWaitor.getInstance().postRunnableAfterReady(() -> {
-                ViewModelBase viewModelPtr = viewModelWeakPtr.get();
-                if (viewModelPtr != null) {
-                    viewModelPtr.forceUpdateViewImmediately();
+                ViewModelBase viewModelBase = (ViewModelBase) weakReference.get();
+                if (viewModelBase != null) {
+                    viewModelBase.forceUpdateViewImmediately();
                 }
             });
         }
-        if (viewModel != null) {
-            viewModel.onAnimateInCompleted();
+        ViewModelBase viewModelBase = this.viewModel;
+        if (viewModelBase != null) {
+            viewModelBase.onAnimateInCompleted();
         }
     }
 
     public void forceUpdateViewImmediately() {
-        if (viewModel != null) {
-            viewModel.forceUpdateViewImmediately();
+        ViewModelBase viewModelBase = this.viewModel;
+        if (viewModelBase != null) {
+            viewModelBase.forceUpdateViewImmediately();
         }
     }
 
-    public int computeBottomMargin() {
-        return 0;
-    }
-
-    public XLEAnimationPackage getAnimateOut(boolean goingBack) {
+    public XLEAnimationPackage getAnimateOut(boolean z) {
         MAASAnimation animation;
-        XLEAnimation screenBodyAnimation;
-        View root = getChildAt(0);
-        if (root == null || (animation = MAAS.getInstance().getAnimation("Screen")) == null || (screenBodyAnimation = ((XLEMAASAnimationPackageNavigationManager) animation).compile(MAAS.MAASAnimationType.ANIMATE_OUT, goingBack, root)) == null) {
+        XLEAnimation compile;
+        View childAt = getChildAt(0);
+        if (childAt == null || (animation = MAAS.getInstance().getAnimation("Screen")) == null || (compile = ((XLEMAASAnimationPackageNavigationManager) animation).compile(MAAS.MAASAnimationType.ANIMATE_OUT, z, childAt)) == null) {
             return null;
         }
-        XLEAnimationPackage animationPackage = new XLEAnimationPackage();
-        animationPackage.add(screenBodyAnimation);
-        return animationPackage;
+        XLEAnimationPackage xLEAnimationPackage = new XLEAnimationPackage();
+        xLEAnimationPackage.add(compile);
+        return xLEAnimationPackage;
     }
 
-    public XLEAnimationPackage getAnimateIn(boolean goingBack) {
+    public XLEAnimationPackage getAnimateIn(boolean z) {
         MAASAnimation animation;
-        XLEAnimation screenBodyAnimation;
-        View root = getChildAt(0);
-        if (root == null || (animation = MAAS.getInstance().getAnimation("Screen")) == null || (screenBodyAnimation = ((XLEMAASAnimationPackageNavigationManager) animation).compile(MAAS.MAASAnimationType.ANIMATE_IN, goingBack, root)) == null) {
+        XLEAnimation compile;
+        View childAt = getChildAt(0);
+        if (childAt == null || (animation = MAAS.getInstance().getAnimation("Screen")) == null || (compile = ((XLEMAASAnimationPackageNavigationManager) animation).compile(MAAS.MAASAnimationType.ANIMATE_IN, z, childAt)) == null) {
             return null;
         }
-        XLEAnimationPackage animationPackage = new XLEAnimationPackage();
-        animationPackage.add(screenBodyAnimation);
-        return animationPackage;
+        XLEAnimationPackage xLEAnimationPackage = new XLEAnimationPackage();
+        xLEAnimationPackage.add(compile);
+        return xLEAnimationPackage;
     }
 
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        if (viewModel != null) {
-            viewModel.onRestoreInstanceState(savedInstanceState);
+    public void onRestoreInstanceState(Bundle bundle) {
+        super.onRestoreInstanceState(bundle);
+        ViewModelBase viewModelBase = this.viewModel;
+        if (viewModelBase != null) {
+            viewModelBase.onRestoreInstanceState(bundle);
         }
     }
 
     public boolean onBackButtonPressed() {
-        if (viewModel != null) {
-            return viewModel.onBackButtonPressed();
+        ViewModelBase viewModelBase = this.viewModel;
+        if (viewModelBase != null) {
+            return viewModelBase.onBackButtonPressed();
         }
         return false;
     }
 
     public void onSetActive() {
         super.onSetActive();
-        if (viewModel != null) {
-            viewModel.onSetActive();
+        ViewModelBase viewModelBase = this.viewModel;
+        if (viewModelBase != null) {
+            viewModelBase.onSetActive();
         }
-    }
-
-    public boolean getShouldShowAppbar() {
-        return false;
     }
 
     @SuppressLint("WrongConstant")
-    public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event) {
-        if (event.getEventType() != 8 || getXLERootView() == null || getXLERootView().getContentDescription() == null) {
-            return super.dispatchPopulateAccessibilityEvent(event);
+    public boolean dispatchPopulateAccessibilityEvent(@NotNull AccessibilityEvent accessibilityEvent) {
+        if (accessibilityEvent.getEventType() != 8 || getXLERootView() == null || getXLERootView().getContentDescription() == null) {
+            return super.dispatchPopulateAccessibilityEvent(accessibilityEvent);
         }
-        event.getText().clear();
-        event.getText().add(getXLERootView().getContentDescription());
+        accessibilityEvent.getText().clear();
+        accessibilityEvent.getText().add(getXLERootView().getContentDescription());
         return true;
     }
 
     public void onSetInactive() {
         super.onSetInactive();
-        if (viewModel != null) {
-            viewModel.onSetInactive();
+        ViewModelBase viewModelBase = this.viewModel;
+        if (viewModelBase != null) {
+            viewModelBase.onSetInactive();
         }
     }
 
     public void onPause() {
         super.onPause();
-        if (viewModel != null) {
-            viewModel.onPause();
+        ViewModelBase viewModelBase = this.viewModel;
+        if (viewModelBase != null) {
+            viewModelBase.onPause();
         }
     }
 
     public void onApplicationPause() {
         super.onApplicationPause();
-        if (viewModel != null) {
-            viewModel.onApplicationPause();
+        ViewModelBase viewModelBase = this.viewModel;
+        if (viewModelBase != null) {
+            viewModelBase.onApplicationPause();
         }
     }
 
     public void onApplicationResume() {
         super.onApplicationResume();
-        if (viewModel != null) {
-            viewModel.onApplicationResume();
+        ViewModelBase viewModelBase = this.viewModel;
+        if (viewModelBase != null) {
+            viewModelBase.onApplicationResume();
         }
     }
 
     public void onResume() {
         super.onResume();
-        if (viewModel != null) {
-            viewModel.onResume();
+        ViewModelBase viewModelBase = this.viewModel;
+        if (viewModelBase != null) {
+            viewModelBase.onResume();
         }
     }
 
     public void onDestroy() {
-        if (viewModel != null) {
-            viewModel.onDestroy();
+        ViewModelBase viewModelBase = this.viewModel;
+        if (viewModelBase != null) {
+            viewModelBase.onDestroy();
         }
-        viewModel = null;
+        this.viewModel = null;
         super.onDestroy();
     }
 
     public void onTombstone() {
-        if (viewModel != null) {
-            viewModel.onTombstone();
+        ViewModelBase viewModelBase = this.viewModel;
+        if (viewModelBase != null) {
+            viewModelBase.onTombstone();
         }
         super.onTombstone();
     }
 
     public void onRehydrate() {
         super.onRehydrate();
-        if (viewModel != null) {
-            viewModel.onRehydrate();
+        ViewModelBase viewModelBase = this.viewModel;
+        if (viewModelBase != null) {
+            viewModelBase.onRehydrate();
         }
     }
 
@@ -245,23 +279,24 @@ public abstract class ActivityBase extends ScreenLayout {
         onCreateContentView();
     }
 
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if (viewModel != null) {
-            viewModel.onConfigurationChanged(newConfig);
+    public void onConfigurationChanged(Configuration configuration) {
+        super.onConfigurationChanged(configuration);
+        ViewModelBase viewModelBase = this.viewModel;
+        if (viewModelBase != null) {
+            viewModelBase.onConfigurationChanged(configuration);
         }
     }
 
-    private XLERootView getXLERootView() {
+    private @Nullable XLERootView getXLERootView() {
         if (getChildAt(0) instanceof XLERootView) {
             return (XLERootView) getChildAt(0);
         }
         return null;
     }
 
-    public void adjustBottomMargin(int bottomMargin) {
+    public void adjustBottomMargin(int i) {
         if (getXLERootView() != null) {
-            getXLERootView().setBottomMargin(bottomMargin);
+            getXLERootView().setBottomMargin(i);
         }
     }
 
@@ -277,24 +312,14 @@ public abstract class ActivityBase extends ScreenLayout {
         }
     }
 
-    public boolean delayAppbarAnimation() {
-        return false;
-    }
-
-    public void setHeaderName(String headerName) {
-    }
-
     public String getName() {
         return getActivityName();
     }
 
-    public String getRelativeId() {
-        return null;
-    }
-
-    public void setScreenState(int state) {
-        if (viewModel != null) {
-            viewModel.setScreenState(state);
+    public void setScreenState(int i) {
+        ViewModelBase viewModelBase = this.viewModel;
+        if (viewModelBase != null) {
+            viewModelBase.setScreenState(i);
         }
     }
 

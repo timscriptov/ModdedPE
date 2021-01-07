@@ -14,7 +14,7 @@ import android.util.AttributeSet;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -25,42 +25,39 @@ public class XLERoundedUniversalImageView extends XLEUniversalImageView {
         super(context, new XLEUniversalImageView.Params());
     }
 
-    public XLERoundedUniversalImageView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public XLERoundedUniversalImageView(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
     }
 
-    public XLERoundedUniversalImageView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
+    public XLERoundedUniversalImageView(Context context, AttributeSet attributeSet, int i) {
+        super(context, attributeSet, i);
     }
 
-    public static Bitmap getRoundedCroppedBitmap(@NotNull Bitmap bitmap, int radius) {
-        Bitmap finalBitmap;
-        if (bitmap.getWidth() == radius && bitmap.getHeight() == radius) {
-            finalBitmap = bitmap;
-        } else {
-            finalBitmap = Bitmap.createScaledBitmap(bitmap, radius, radius, false);
+    public static Bitmap getRoundedCroppedBitmap(@NotNull Bitmap bitmap, int i) {
+        if (!(bitmap.getWidth() == i && bitmap.getHeight() == i)) {
+            bitmap = Bitmap.createScaledBitmap(bitmap, i, i, false);
         }
-        Bitmap output = Bitmap.createBitmap(finalBitmap.getWidth(), finalBitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
+        Bitmap createBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(createBitmap);
         Paint paint = new Paint();
-        Rect rect = new Rect(0, 0, finalBitmap.getWidth(), finalBitmap.getHeight());
+        Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
         paint.setAntiAlias(true);
         paint.setFilterBitmap(true);
         paint.setDither(true);
         canvas.drawARGB(0, 0, 0, 0);
-        canvas.drawCircle(((float) (finalBitmap.getWidth() / 2)) + 0.7f, ((float) (finalBitmap.getHeight() / 2)) + 0.7f, ((float) (finalBitmap.getWidth() / 2)) + 0.1f, paint);
+        canvas.drawCircle(((float) (bitmap.getWidth() / 2)) + 0.7f, ((float) (bitmap.getHeight() / 2)) + 0.7f, ((float) (bitmap.getWidth() / 2)) + 0.1f, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(finalBitmap, rect, rect, paint);
-        return output;
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+        return createBitmap;
     }
 
     public void onDraw(Canvas canvas) {
         Drawable drawable = getDrawable();
         if (drawable != null && getWidth() != 0 && getHeight() != 0) {
-            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap().copy(Bitmap.Config.ARGB_8888, true);
-            int w = getWidth();
-            int height = getHeight();
-            canvas.drawBitmap(getRoundedCroppedBitmap(bitmap, w), 0.0f, 0.0f, (Paint) null);
+            Bitmap copy = ((BitmapDrawable) drawable).getBitmap().copy(Bitmap.Config.ARGB_8888, true);
+            int width = getWidth();
+            getHeight();
+            canvas.drawBitmap(getRoundedCroppedBitmap(copy, width), 0.0f, 0.0f, (Paint) null);
         }
     }
 }

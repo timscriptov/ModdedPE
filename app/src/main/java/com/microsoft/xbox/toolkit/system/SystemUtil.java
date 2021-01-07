@@ -12,13 +12,14 @@ import android.view.WindowManager;
 import com.microsoft.xbox.toolkit.XLEAssert;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.NetworkInterface;
 import java.util.Collections;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -31,12 +32,12 @@ public class SystemUtil {
         return Build.VERSION.SDK_INT;
     }
 
-    public static int DIPtoPixels(float dip) {
-        return (int) TypedValue.applyDimension(1, dip, XboxTcuiSdk.getResources().getDisplayMetrics());
+    public static int DIPtoPixels(float f) {
+        return (int) TypedValue.applyDimension(1, f, XboxTcuiSdk.getResources().getDisplayMetrics());
     }
 
-    public static int SPtoPixels(float sp) {
-        return (int) TypedValue.applyDimension(2, sp, XboxTcuiSdk.getResources().getDisplayMetrics());
+    public static int SPtoPixels(float f) {
+        return (int) TypedValue.applyDimension(2, f, XboxTcuiSdk.getResources().getDisplayMetrics());
     }
 
     public static int getScreenWidth() {
@@ -72,10 +73,7 @@ public class SystemUtil {
 
     public static int getOrientation() {
         int rotation = getRotation();
-        if (rotation == 0 || rotation == 2) {
-            return 1;
-        }
-        return 2;
+        return (rotation == 0 || rotation == 2) ? 1 : 2;
     }
 
     public static boolean isHDScreen() {
@@ -86,8 +84,8 @@ public class SystemUtil {
         return Math.sqrt(Math.pow((double) getScreenWidthInches(), 2.0d) + Math.pow((double) getScreenHeightInches(), 2.0d)) > 6.0d;
     }
 
-    @NotNull
-    public static String getDeviceType() {
+    @Contract(pure = true)
+    public static @NotNull String getDeviceType() {
         XLEAssert.assertTrue(false);
         return "";
     }
@@ -106,13 +104,9 @@ public class SystemUtil {
         if (screenWidth <= 0 || screenHeight <= 0) {
             return 0.0f;
         }
-        if (screenWidth > screenHeight) {
-            return ((float) screenWidth) / ((float) screenHeight);
-        }
-        return ((float) screenHeight) / ((float) screenWidth);
+        return screenWidth > screenHeight ? ((float) screenWidth) / ((float) screenHeight) : ((float) screenHeight) / ((float) screenWidth);
     }
 
-    @SuppressLint("HardwareIds")
     public static String getDeviceId() {
         return Settings.Secure.getString(XboxTcuiSdk.getContentResolver(), "android_id");
     }
@@ -146,17 +140,17 @@ public class SystemUtil {
         return "";
     }
 
-    public static void TEST_randomSleep(int maxSeconds) {
+    public static void TEST_randomSleep(int i) {
         XLEAssert.assertTrue(false);
     }
 
-    public static boolean TEST_randomFalseOutOf(int max) {
+    public static boolean TEST_randomFalseOutOf(int i) {
         XLEAssert.assertTrue(false);
         return true;
     }
 
     public static boolean isKindle() {
-        String manufecturer = Build.MANUFACTURER;
-        return manufecturer != null && "AMAZON".compareToIgnoreCase(manufecturer) == 0;
+        String str = Build.MANUFACTURER;
+        return str != null && "AMAZON".compareToIgnoreCase(str) == 0;
     }
 }

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -31,37 +31,36 @@ public class TextureBindingOption {
         this(-1, -1, DefaultResourceIdForLoading, DefaultResourceIdForError, false);
     }
 
-    public TextureBindingOption(int width2, int height2) {
-        this(width2, height2, true);
+    public TextureBindingOption(int i, int i2) {
+        this(i, i2, true);
     }
 
-    public TextureBindingOption(int width2, int height2, boolean useFileCache2) {
-        this(width2, height2, DefaultResourceIdForLoading, DefaultResourceIdForError, useFileCache2);
+    public TextureBindingOption(int i, int i2, boolean z) {
+        this(i, i2, DefaultResourceIdForLoading, DefaultResourceIdForError, z);
     }
 
-    public TextureBindingOption(int width2, int height2, int resourceForLoading, int resourceForError, boolean useFileCache2) {
-        width = width2;
-        height = height2;
-        resourceIdForLoading = resourceForLoading;
-        resourceIdForError = resourceForError;
-        useFileCache = useFileCache2;
+    public TextureBindingOption(int i, int i2, int i3, int i4, boolean z) {
+        this.width = i;
+        this.height = i2;
+        this.resourceIdForLoading = i3;
+        this.resourceIdForError = i4;
+        this.useFileCache = z;
     }
 
-    @NotNull
     @Contract(value = "_, _, _ -> new", pure = true)
-    public static TextureBindingOption createDoNotScale(int resourceForLoading, int resourceForError, boolean useFileCache2) {
-        return new TextureBindingOption(-1, -1, resourceForLoading, resourceForError, useFileCache2);
+    public static @NotNull TextureBindingOption createDoNotScale(int i, int i2, boolean z) {
+        return new TextureBindingOption(-1, -1, i, i2, z);
     }
 
-    public boolean equals(Object rhsuntyped) {
-        if (this == rhsuntyped) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (!(rhsuntyped instanceof TextureBindingOption)) {
+        if (!(obj instanceof TextureBindingOption)) {
             return false;
         }
-        TextureBindingOption rhs = (TextureBindingOption) rhsuntyped;
-        if (width == rhs.width && height == rhs.height && resourceIdForError == rhs.resourceIdForError && resourceIdForLoading == rhs.resourceIdForLoading) {
+        TextureBindingOption textureBindingOption = (TextureBindingOption) obj;
+        if (this.width == textureBindingOption.width && this.height == textureBindingOption.height && this.resourceIdForError == textureBindingOption.resourceIdForError && this.resourceIdForLoading == textureBindingOption.resourceIdForLoading) {
             return true;
         }
         return false;

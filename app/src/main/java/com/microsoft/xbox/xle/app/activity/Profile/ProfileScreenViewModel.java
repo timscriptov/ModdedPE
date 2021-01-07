@@ -1,6 +1,6 @@
 package com.microsoft.xbox.xle.app.activity.Profile;
 
-import androidx.appcompat.app.AlertDialog;
+import android.app.AlertDialog;
 
 import com.mcal.mcpelauncher.R;
 import com.microsoft.xbox.service.model.FollowersData;
@@ -34,7 +34,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -71,136 +71,157 @@ public class ProfileScreenViewModel extends ViewModelBase {
     private RemoveUserFromMutedListAsyncTask removeUserFromMutedListAsyncTask;
     private RemoveUserToNeverListAsyncTask removeUserToNeverListAsyncTask;
 
-    public ProfileScreenViewModel(ScreenLayout screen) {
-        super(screen);
-        adapter = new ProfileScreenAdapter(this);
+    public ProfileScreenViewModel(ScreenLayout screenLayout) {
+        super(screenLayout);
+        this.adapter = new ProfileScreenAdapter(this);
+    }
+
+    public boolean isFacebookFriend() {
+        return false;
     }
 
     public void onRehydrate() {
-        adapter = new ProfileScreenAdapter(this);
+        this.adapter = new ProfileScreenAdapter(this);
     }
 
     public String getGamerTag() {
-        return model.getGamerTag();
+        return this.model.getGamerTag();
     }
 
     public String getGamerScore() {
-        return model.getGamerScore();
+        return this.model.getGamerScore();
     }
 
     public String getGamerPicUrl() {
-        return model.getGamerPicImageUrl();
+        return this.model.getGamerPicImageUrl();
     }
 
     public String getXuid() {
-        return model.getXuid();
+        return this.model.getXuid();
     }
 
     public String getRealName() {
-        return model.getRealName();
+        return this.model.getRealName();
     }
 
     public boolean isCallerFollowingTarget() {
-        return isFollowing;
+        return this.isFollowing;
     }
 
     public int getPreferredColor() {
-        return model.getPreferedColor();
+        return this.model.getPreferedColor();
     }
 
     public boolean isMeProfile() {
-        return model.isMeProfile();
+        return this.model.isMeProfile();
     }
 
     public void onStartOverride() {
-        isShowingFailureDialog = false;
+        this.isShowingFailureDialog = false;
     }
 
     public boolean isBusy() {
-        return isLoadingUserProfile || isLoadingUserNeverList || isLoadingUserMutedList || isAddingUserToFollowingList || isAddingUserToShareIdentityList || isRemovingUserFromBlockList || isAddingUserToBlockList || isAddingUserToMutedList || isRemovingUserFromMutedList;
+        return this.isLoadingUserProfile || this.isLoadingUserNeverList || this.isLoadingUserMutedList || this.isAddingUserToFollowingList || this.isAddingUserToShareIdentityList || this.isRemovingUserFromBlockList || this.isAddingUserToBlockList || this.isAddingUserToMutedList || this.isRemovingUserFromMutedList;
     }
 
     public void onStopOverride() {
-        if (loadMeProfileTask != null) {
-            loadMeProfileTask.cancel();
+        LoadUserProfileAsyncTask loadUserProfileAsyncTask = this.loadMeProfileTask;
+        if (loadUserProfileAsyncTask != null) {
+            loadUserProfileAsyncTask.cancel();
         }
-        if (loadUserNeverListTask != null) {
-            loadUserNeverListTask.cancel();
+        LoadUserNeverListAsyncTask loadUserNeverListAsyncTask = this.loadUserNeverListTask;
+        if (loadUserNeverListAsyncTask != null) {
+            loadUserNeverListAsyncTask.cancel();
         }
-        if (loadUserMutedListTask != null) {
-            loadUserMutedListTask.cancel();
+        LoadUserMutedListAsyncTask loadUserMutedListAsyncTask = this.loadUserMutedListTask;
+        if (loadUserMutedListAsyncTask != null) {
+            loadUserMutedListAsyncTask.cancel();
         }
-        if (loadUserProfileTask != null) {
-            loadUserProfileTask.cancel();
+        LoadUserProfileAsyncTask loadUserProfileAsyncTask2 = this.loadUserProfileTask;
+        if (loadUserProfileAsyncTask2 != null) {
+            loadUserProfileAsyncTask2.cancel();
         }
-        if (addUserToFollowingListAsyncTask != null) {
-            addUserToFollowingListAsyncTask.cancel();
+        AddUserToFollowingListAsyncTask addUserToFollowingListAsyncTask2 = this.addUserToFollowingListAsyncTask;
+        if (addUserToFollowingListAsyncTask2 != null) {
+            addUserToFollowingListAsyncTask2.cancel();
         }
-        if (addUserToShareIdentityListAsyncTask != null) {
-            addUserToShareIdentityListAsyncTask.cancel();
+        AddUserToShareIdentityListAsyncTask addUserToShareIdentityListAsyncTask2 = this.addUserToShareIdentityListAsyncTask;
+        if (addUserToShareIdentityListAsyncTask2 != null) {
+            addUserToShareIdentityListAsyncTask2.cancel();
         }
-        if (addUserToNeverListAsyncTask != null) {
-            addUserToNeverListAsyncTask.cancel();
+        AddUserToNeverListAsyncTask addUserToNeverListAsyncTask2 = this.addUserToNeverListAsyncTask;
+        if (addUserToNeverListAsyncTask2 != null) {
+            addUserToNeverListAsyncTask2.cancel();
         }
-        if (removeUserToNeverListAsyncTask != null) {
-            removeUserToNeverListAsyncTask.cancel();
+        RemoveUserToNeverListAsyncTask removeUserToNeverListAsyncTask2 = this.removeUserToNeverListAsyncTask;
+        if (removeUserToNeverListAsyncTask2 != null) {
+            removeUserToNeverListAsyncTask2.cancel();
         }
-        if (addUserToMutedListAsyncTask != null) {
-            addUserToMutedListAsyncTask.cancel();
+        AddUserToMutedListAsyncTask addUserToMutedListAsyncTask2 = this.addUserToMutedListAsyncTask;
+        if (addUserToMutedListAsyncTask2 != null) {
+            addUserToMutedListAsyncTask2.cancel();
         }
-        if (removeUserFromMutedListAsyncTask != null) {
-            removeUserFromMutedListAsyncTask.cancel();
+        RemoveUserFromMutedListAsyncTask removeUserFromMutedListAsyncTask2 = this.removeUserFromMutedListAsyncTask;
+        if (removeUserFromMutedListAsyncTask2 != null) {
+            removeUserFromMutedListAsyncTask2.cancel();
         }
     }
 
-    public void load(boolean forceRefresh) {
-        if (loadUserProfileTask != null) {
-            loadUserProfileTask.cancel();
+    public void load(boolean z) {
+        LoadUserProfileAsyncTask loadUserProfileAsyncTask = this.loadUserProfileTask;
+        if (loadUserProfileAsyncTask != null) {
+            loadUserProfileAsyncTask.cancel();
         }
-        loadMeProfileTask = new LoadUserProfileAsyncTask(ProfileModel.getMeProfileModel());
-        loadMeProfileTask.load(true);
+        LoadUserProfileAsyncTask loadUserProfileAsyncTask2 = new LoadUserProfileAsyncTask(ProfileModel.getMeProfileModel());
+        this.loadMeProfileTask = loadUserProfileAsyncTask2;
+        loadUserProfileAsyncTask2.load(true);
         if (!isMeProfile()) {
-            if (loadUserNeverListTask != null) {
-                loadUserNeverListTask.cancel();
+            LoadUserNeverListAsyncTask loadUserNeverListAsyncTask = this.loadUserNeverListTask;
+            if (loadUserNeverListAsyncTask != null) {
+                loadUserNeverListAsyncTask.cancel();
             }
-            loadUserNeverListTask = new LoadUserNeverListAsyncTask(ProfileModel.getMeProfileModel());
-            loadUserNeverListTask.load(true);
-            if (loadUserMutedListTask != null) {
-                loadUserMutedListTask.cancel();
+            LoadUserNeverListAsyncTask loadUserNeverListAsyncTask2 = new LoadUserNeverListAsyncTask(ProfileModel.getMeProfileModel());
+            this.loadUserNeverListTask = loadUserNeverListAsyncTask2;
+            loadUserNeverListAsyncTask2.load(true);
+            LoadUserMutedListAsyncTask loadUserMutedListAsyncTask = this.loadUserMutedListTask;
+            if (loadUserMutedListAsyncTask != null) {
+                loadUserMutedListAsyncTask.cancel();
             }
-            loadUserMutedListTask = new LoadUserMutedListAsyncTask(ProfileModel.getMeProfileModel());
-            loadUserMutedListTask.load(true);
-            loadUserProfileTask = new LoadUserProfileAsyncTask(model);
-            loadUserProfileTask.load(true);
+            LoadUserMutedListAsyncTask loadUserMutedListAsyncTask2 = new LoadUserMutedListAsyncTask(ProfileModel.getMeProfileModel());
+            this.loadUserMutedListTask = loadUserMutedListAsyncTask2;
+            loadUserMutedListAsyncTask2.load(true);
+            LoadUserProfileAsyncTask loadUserProfileAsyncTask3 = new LoadUserProfileAsyncTask(this.model);
+            this.loadUserProfileTask = loadUserProfileAsyncTask3;
+            loadUserProfileAsyncTask3.load(true);
         }
     }
 
     public boolean getIsFavorite() {
-        return isFavorite;
+        return this.isFavorite;
     }
 
     public boolean getIsBlocked() {
-        return isBlocked;
+        return this.isBlocked;
     }
 
     public boolean getIsMuted() {
-        return isMuted;
+        return this.isMuted;
     }
 
     public boolean getIsAddingUserToBlockList() {
-        return isAddingUserToBlockList;
+        return this.isAddingUserToBlockList;
     }
 
     public boolean getIsRemovingUserFromBlockList() {
-        return isRemovingUserFromBlockList;
+        return this.isRemovingUserFromBlockList;
     }
 
     public boolean getIsAddingUserToMutedList() {
-        return isAddingUserToMutedList;
+        return this.isAddingUserToMutedList;
     }
 
     public boolean getIsRemovingUserFromMutedList() {
-        return isRemovingUserFromMutedList;
+        return this.isRemovingUserFromMutedList;
     }
 
     public void navigateToChangeRelationship() {
@@ -214,89 +235,96 @@ public class ProfileScreenViewModel extends ViewModelBase {
 
     public void addFollowingUser() {
         if (ProfileModel.hasPrivilegeToAddFriend()) {
-            if (addUserToFollowingListAsyncTask != null) {
-                addUserToFollowingListAsyncTask.cancel();
+            AddUserToFollowingListAsyncTask addUserToFollowingListAsyncTask2 = this.addUserToFollowingListAsyncTask;
+            if (addUserToFollowingListAsyncTask2 != null) {
+                addUserToFollowingListAsyncTask2.cancel();
             }
-            addUserToFollowingListAsyncTask = new AddUserToFollowingListAsyncTask(model.getXuid());
-            addUserToFollowingListAsyncTask.load(true);
+            AddUserToFollowingListAsyncTask addUserToFollowingListAsyncTask3 = new AddUserToFollowingListAsyncTask(this.model.getXuid());
+            this.addUserToFollowingListAsyncTask = addUserToFollowingListAsyncTask3;
+            addUserToFollowingListAsyncTask3.load(true);
             return;
         }
         showError(R.string.Global_MissingPrivilegeError_DialogBody);
     }
 
     public void addUserToShareIdentityList() {
-        if (addUserToShareIdentityListAsyncTask != null) {
-            addUserToShareIdentityListAsyncTask.cancel();
+        AddUserToShareIdentityListAsyncTask addUserToShareIdentityListAsyncTask2 = this.addUserToShareIdentityListAsyncTask;
+        if (addUserToShareIdentityListAsyncTask2 != null) {
+            addUserToShareIdentityListAsyncTask2.cancel();
         }
-        ArrayList<String> users = new ArrayList<>();
-        users.add(model.getXuid());
-        addUserToShareIdentityListAsyncTask = new AddUserToShareIdentityListAsyncTask(users);
-        addUserToShareIdentityListAsyncTask.load(true);
+        ArrayList arrayList = new ArrayList();
+        arrayList.add(this.model.getXuid());
+        AddUserToShareIdentityListAsyncTask addUserToShareIdentityListAsyncTask3 = new AddUserToShareIdentityListAsyncTask(arrayList);
+        this.addUserToShareIdentityListAsyncTask = addUserToShareIdentityListAsyncTask3;
+        addUserToShareIdentityListAsyncTask3.load(true);
     }
 
     private void notifyDialogAsyncTaskCompleted() {
         ((SGProjectSpecificDialogManager) DialogManager.getInstance().getManager()).notifyChangeFriendshipDialogAsyncTaskCompleted();
     }
 
-    private void notifyDialogAsyncTaskFailed(String errorMessage) {
-        ((SGProjectSpecificDialogManager) DialogManager.getInstance().getManager()).notifyChangeFriendshipDialogAsyncTaskFailed(errorMessage);
+    private void notifyDialogAsyncTaskFailed(String str) {
+        ((SGProjectSpecificDialogManager) DialogManager.getInstance().getManager()).notifyChangeFriendshipDialogAsyncTaskFailed(str);
     }
 
     public void showChangeFriendshipDialog() {
-        if (changeFriendshipDialogViewModel == null) {
-            changeFriendshipDialogViewModel = new ChangeFriendshipDialogViewModel(model);
+        if (this.changeFriendshipDialogViewModel == null) {
+            this.changeFriendshipDialogViewModel = new ChangeFriendshipDialogViewModel(this.model);
         }
-        ((SGProjectSpecificDialogManager) DialogManager.getInstance().getManager()).showChangeFriendshipDialog(changeFriendshipDialogViewModel, this);
+        ((SGProjectSpecificDialogManager) DialogManager.getInstance().getManager()).showChangeFriendshipDialog(this.changeFriendshipDialogViewModel, this);
     }
 
     public void blockUser() {
         XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
-        showOkCancelDialog(XboxTcuiSdk.getResources().getString(R.string.Messages_BlockUserConfirmation_DialogTitle), XboxTcuiSdk.getResources().getString(R.string.Messages_BlockUserConfirmation_DialogBody), XboxTcuiSdk.getResources().getString(R.string.OK_Text), new Runnable() {
-            public void run() {
-                blockUserInternal();
-            }
-        }, XboxTcuiSdk.getResources().getString(R.string.MessageDialog_Cancel), null);
+        showOkCancelDialog(XboxTcuiSdk.getResources().getString(R.string.Messages_BlockUserConfirmation_DialogTitle), XboxTcuiSdk.getResources().getString(R.string.Messages_BlockUserConfirmation_DialogBody), XboxTcuiSdk.getResources().getString(R.string.OK_Text), (Runnable) () -> ProfileScreenViewModel.this.blockUserInternal(), XboxTcuiSdk.getResources().getString(R.string.MessageDialog_Cancel), (Runnable) null);
         updateAdapter();
     }
 
     public void blockUserInternal() {
         UTCPeopleHub.trackBlockDialogComplete();
-        if (addUserToNeverListAsyncTask != null) {
-            addUserToNeverListAsyncTask.cancel();
+        AddUserToNeverListAsyncTask addUserToNeverListAsyncTask2 = this.addUserToNeverListAsyncTask;
+        if (addUserToNeverListAsyncTask2 != null) {
+            addUserToNeverListAsyncTask2.cancel();
         }
-        addUserToNeverListAsyncTask = new AddUserToNeverListAsyncTask(model.getXuid());
-        addUserToNeverListAsyncTask.load(true);
+        AddUserToNeverListAsyncTask addUserToNeverListAsyncTask3 = new AddUserToNeverListAsyncTask(this.model.getXuid());
+        this.addUserToNeverListAsyncTask = addUserToNeverListAsyncTask3;
+        addUserToNeverListAsyncTask3.load(true);
     }
 
     public void unblockUser() {
-        if (removeUserToNeverListAsyncTask != null) {
-            removeUserToNeverListAsyncTask.cancel();
+        RemoveUserToNeverListAsyncTask removeUserToNeverListAsyncTask2 = this.removeUserToNeverListAsyncTask;
+        if (removeUserToNeverListAsyncTask2 != null) {
+            removeUserToNeverListAsyncTask2.cancel();
         }
-        removeUserToNeverListAsyncTask = new RemoveUserToNeverListAsyncTask(model.getXuid());
-        removeUserToNeverListAsyncTask.load(true);
+        RemoveUserToNeverListAsyncTask removeUserToNeverListAsyncTask3 = new RemoveUserToNeverListAsyncTask(this.model.getXuid());
+        this.removeUserToNeverListAsyncTask = removeUserToNeverListAsyncTask3;
+        removeUserToNeverListAsyncTask3.load(true);
     }
 
     public void muteUser() {
-        if (addUserToMutedListAsyncTask != null) {
-            addUserToMutedListAsyncTask.cancel();
+        AddUserToMutedListAsyncTask addUserToMutedListAsyncTask2 = this.addUserToMutedListAsyncTask;
+        if (addUserToMutedListAsyncTask2 != null) {
+            addUserToMutedListAsyncTask2.cancel();
         }
-        addUserToMutedListAsyncTask = new AddUserToMutedListAsyncTask(model.getXuid());
-        addUserToMutedListAsyncTask.load(true);
+        AddUserToMutedListAsyncTask addUserToMutedListAsyncTask3 = new AddUserToMutedListAsyncTask(this.model.getXuid());
+        this.addUserToMutedListAsyncTask = addUserToMutedListAsyncTask3;
+        addUserToMutedListAsyncTask3.load(true);
     }
 
     public void unmuteUser() {
-        if (removeUserFromMutedListAsyncTask != null) {
-            removeUserFromMutedListAsyncTask.cancel();
+        RemoveUserFromMutedListAsyncTask removeUserFromMutedListAsyncTask2 = this.removeUserFromMutedListAsyncTask;
+        if (removeUserFromMutedListAsyncTask2 != null) {
+            removeUserFromMutedListAsyncTask2.cancel();
         }
-        removeUserFromMutedListAsyncTask = new RemoveUserFromMutedListAsyncTask(model.getXuid());
-        removeUserFromMutedListAsyncTask.load(true);
+        RemoveUserFromMutedListAsyncTask removeUserFromMutedListAsyncTask3 = new RemoveUserFromMutedListAsyncTask(this.model.getXuid());
+        this.removeUserFromMutedListAsyncTask = removeUserFromMutedListAsyncTask3;
+        removeUserFromMutedListAsyncTask3.load(true);
     }
 
     public void showReportDialog() {
         try {
             NavigationManager.getInstance().PopScreensAndReplace(0, ReportUserScreen.class, false, false, false, NavigationManager.getInstance().getActivityParameters());
-        } catch (XLEException e) {
-            e.printStackTrace();
+        } catch (XLEException unused) {
         }
     }
 
@@ -305,14 +333,10 @@ public class ProfileScreenViewModel extends ViewModelBase {
         showOkCancelDialog(XboxTcuiSdk.getResources().getString(R.string.Messages_BlockUserConfirmation_DialogTitle), XboxTcuiSdk.getResources().getString(R.string.Messages_ViewInXboxApp_DialogBody), XboxTcuiSdk.getResources().getString(R.string.ConnectDialog_ContinueAsGuest), new Runnable() {
             public void run() {
                 UTCPeopleHub.trackViewInXboxAppDialogComplete();
-                XboxAppDeepLinker.showUserProfile(XboxTcuiSdk.getActivity(), model.getXuid());
+                XboxAppDeepLinker.showUserProfile(XboxTcuiSdk.getActivity(), ProfileScreenViewModel.this.model.getXuid());
             }
-        }, XboxTcuiSdk.getResources().getString(R.string.MessageDialog_Cancel), null);
+        }, XboxTcuiSdk.getResources().getString(R.string.MessageDialog_Cancel), (Runnable) null);
         updateAdapter();
-    }
-
-    public boolean isFacebookFriend() {
-        return false;
     }
 
     public void onLoadUserProfileCompleted(@NotNull AsyncActionStatus status) {
@@ -530,28 +554,28 @@ public class ProfileScreenViewModel extends ViewModelBase {
     private class LoadUserProfileAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
         private ProfileModel model;
 
-        private LoadUserProfileAsyncTask(ProfileModel model2) {
-            model = model2;
+        private LoadUserProfileAsyncTask(ProfileModel profileModel) {
+            this.model = profileModel;
         }
 
         public boolean checkShouldExecute() {
             XLEAssert.assertIsUIThread();
-            return model.shouldRefresh() || model.shouldRefreshProfileSummary();
+            return this.model.shouldRefresh() || this.model.shouldRefreshProfileSummary();
         }
 
         public void onNoAction() {
             XLEAssert.assertIsUIThread();
-            onLoadUserProfileCompleted(AsyncActionStatus.NO_CHANGE);
+            ProfileScreenViewModel.this.onLoadUserProfileCompleted(AsyncActionStatus.NO_CHANGE);
         }
 
         public void onPreExecute() {
             XLEAssert.assertIsUIThread();
-            boolean unused = isLoadingUserProfile = true;
-            updateAdapter();
+            boolean unused = ProfileScreenViewModel.this.isLoadingUserProfile = true;
+            ProfileScreenViewModel.this.updateAdapter();
         }
 
-        public void onPostExecute(AsyncActionStatus result) {
-            onLoadUserProfileCompleted(result);
+        public void onPostExecute(AsyncActionStatus asyncActionStatus) {
+            ProfileScreenViewModel.this.onLoadUserProfileCompleted(asyncActionStatus);
         }
 
         public AsyncActionStatus onError() {
@@ -559,37 +583,40 @@ public class ProfileScreenViewModel extends ViewModelBase {
         }
 
         public AsyncActionStatus loadDataInBackground() {
-            XLEAssert.assertNotNull(model);
-            AsyncActionStatus status = model.loadSync(forceLoad).getStatus();
-            return (status == AsyncActionStatus.SUCCESS || status == AsyncActionStatus.NO_CHANGE || status == AsyncActionStatus.NO_OP_SUCCESS) ? model.loadProfileSummary(forceLoad).getStatus() : status;
+            XLEAssert.assertNotNull(this.model);
+            AsyncActionStatus status = this.model.loadSync(this.forceLoad).getStatus();
+            if (status == AsyncActionStatus.SUCCESS || status == AsyncActionStatus.NO_CHANGE || status == AsyncActionStatus.NO_OP_SUCCESS) {
+                return this.model.loadProfileSummary(this.forceLoad).getStatus();
+            }
+            return status;
         }
     }
 
     private class LoadUserNeverListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
         private ProfileModel model;
 
-        private LoadUserNeverListAsyncTask(ProfileModel model2) {
-            model = model2;
+        private LoadUserNeverListAsyncTask(ProfileModel profileModel) {
+            this.model = profileModel;
         }
 
         public boolean checkShouldExecute() {
             XLEAssert.assertIsUIThread();
-            return model.shouldRefresh();
+            return this.model.shouldRefresh();
         }
 
         public void onNoAction() {
             XLEAssert.assertIsUIThread();
-            onLoadUserProfileCompleted(AsyncActionStatus.NO_CHANGE);
+            ProfileScreenViewModel.this.onLoadUserProfileCompleted(AsyncActionStatus.NO_CHANGE);
         }
 
         public void onPreExecute() {
             XLEAssert.assertIsUIThread();
-            boolean unused = isLoadingUserNeverList = true;
-            updateAdapter();
+            boolean unused = ProfileScreenViewModel.this.isLoadingUserNeverList = true;
+            ProfileScreenViewModel.this.updateAdapter();
         }
 
-        public void onPostExecute(AsyncActionStatus result) {
-            onLoadUserNeverListCompleted(result);
+        public void onPostExecute(AsyncActionStatus asyncActionStatus) {
+            ProfileScreenViewModel.this.onLoadUserNeverListCompleted(asyncActionStatus);
         }
 
         public AsyncActionStatus onError() {
@@ -597,37 +624,40 @@ public class ProfileScreenViewModel extends ViewModelBase {
         }
 
         public AsyncActionStatus loadDataInBackground() {
-            XLEAssert.assertNotNull(model);
-            AsyncActionStatus status = model.loadSync(forceLoad).getStatus();
-            return (status == AsyncActionStatus.SUCCESS || status == AsyncActionStatus.NO_CHANGE || status == AsyncActionStatus.NO_OP_SUCCESS) ? model.loadUserNeverList(true).getStatus() : status;
+            XLEAssert.assertNotNull(this.model);
+            AsyncActionStatus status = this.model.loadSync(this.forceLoad).getStatus();
+            if (status == AsyncActionStatus.SUCCESS || status == AsyncActionStatus.NO_CHANGE || status == AsyncActionStatus.NO_OP_SUCCESS) {
+                return this.model.loadUserNeverList(true).getStatus();
+            }
+            return status;
         }
     }
 
     private class LoadUserMutedListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
         private ProfileModel model;
 
-        private LoadUserMutedListAsyncTask(ProfileModel model2) {
-            model = model2;
+        private LoadUserMutedListAsyncTask(ProfileModel profileModel) {
+            this.model = profileModel;
         }
 
         public boolean checkShouldExecute() {
             XLEAssert.assertIsUIThread();
-            return model.shouldRefresh();
+            return this.model.shouldRefresh();
         }
 
         public void onNoAction() {
             XLEAssert.assertIsUIThread();
-            onLoadUserProfileCompleted(AsyncActionStatus.NO_CHANGE);
+            ProfileScreenViewModel.this.onLoadUserProfileCompleted(AsyncActionStatus.NO_CHANGE);
         }
 
         public void onPreExecute() {
             XLEAssert.assertIsUIThread();
-            boolean unused = isLoadingUserMutedList = true;
-            updateAdapter();
+            boolean unused = ProfileScreenViewModel.this.isLoadingUserMutedList = true;
+            ProfileScreenViewModel.this.updateAdapter();
         }
 
-        public void onPostExecute(AsyncActionStatus result) {
-            onLoadUserMutedListCompleted(result);
+        public void onPostExecute(AsyncActionStatus asyncActionStatus) {
+            ProfileScreenViewModel.this.onLoadUserMutedListCompleted(asyncActionStatus);
         }
 
         public AsyncActionStatus onError() {
@@ -635,9 +665,12 @@ public class ProfileScreenViewModel extends ViewModelBase {
         }
 
         public AsyncActionStatus loadDataInBackground() {
-            XLEAssert.assertNotNull(model);
-            AsyncActionStatus status = model.loadSync(forceLoad).getStatus();
-            return (status == AsyncActionStatus.SUCCESS || status == AsyncActionStatus.NO_CHANGE || status == AsyncActionStatus.NO_OP_SUCCESS) ? model.loadUserMutedList(true).getStatus() : status;
+            XLEAssert.assertNotNull(this.model);
+            AsyncActionStatus status = this.model.loadSync(this.forceLoad).getStatus();
+            if (status == AsyncActionStatus.SUCCESS || status == AsyncActionStatus.NO_CHANGE || status == AsyncActionStatus.NO_OP_SUCCESS) {
+                return this.model.loadUserMutedList(true).getStatus();
+            }
+            return status;
         }
     }
 
@@ -645,8 +678,8 @@ public class ProfileScreenViewModel extends ViewModelBase {
         private String followingUserXuid;
         private boolean isFollowingUser = false;
 
-        public AddUserToFollowingListAsyncTask(String followingUserXuid2) {
-            followingUserXuid = followingUserXuid2;
+        public AddUserToFollowingListAsyncTask(String str) {
+            this.followingUserXuid = str;
         }
 
         public boolean checkShouldExecute() {
@@ -656,17 +689,17 @@ public class ProfileScreenViewModel extends ViewModelBase {
 
         public void onNoAction() {
             XLEAssert.assertIsUIThread();
-            onAddUserToFollowingListCompleted(AsyncActionStatus.NO_CHANGE, isFollowingUser);
+            ProfileScreenViewModel.this.onAddUserToFollowingListCompleted(AsyncActionStatus.NO_CHANGE, this.isFollowingUser);
         }
 
         public void onPreExecute() {
             XLEAssert.assertIsUIThread();
-            boolean unused = isAddingUserToFollowingList = true;
-            updateAdapter();
+            boolean unused = ProfileScreenViewModel.this.isAddingUserToFollowingList = true;
+            ProfileScreenViewModel.this.updateAdapter();
         }
 
-        public void onPostExecute(AsyncActionStatus result) {
-            onAddUserToFollowingListCompleted(result, isFollowingUser);
+        public void onPostExecute(AsyncActionStatus asyncActionStatus) {
+            ProfileScreenViewModel.this.onAddUserToFollowingListCompleted(asyncActionStatus, this.isFollowingUser);
         }
 
         public AsyncActionStatus onError() {
@@ -674,29 +707,31 @@ public class ProfileScreenViewModel extends ViewModelBase {
         }
 
         public AsyncActionStatus loadDataInBackground() {
-            ProfileModel meProfile = ProfileModel.getMeProfileModel();
-            if (meProfile == null) {
+            ProfileModel meProfileModel = ProfileModel.getMeProfileModel();
+            if (meProfileModel == null) {
                 return AsyncActionStatus.FAIL;
             }
-            AsyncActionStatus status = meProfile.addUserToFollowingList(forceLoad, followingUserXuid).getStatus();
-            if (AsyncActionStatus.getIsFail(status)) {
-                return status;
-            }
-            AddFollowingUserResponseContainer.AddFollowingUserResponse response = meProfile.getAddUserToFollowingResult();
-            if (response != null && !response.getAddFollowingRequestStatus() && response.code == 1028) {
-                return AsyncActionStatus.FAIL;
-            }
-            model.loadProfileSummary(true);
-            meProfile.loadProfileSummary(true);
-            ArrayList<FollowersData> followersList = meProfile.getFollowingData();
-            if (followersList == null) {
-                return status;
-            }
-            Iterator<FollowersData> it = followersList.iterator();
-            while (it.hasNext()) {
-                if (it.next().xuid.equals(followingUserXuid)) {
-                    isFollowingUser = true;
-                    return status;
+            AsyncActionStatus status = meProfileModel.addUserToFollowingList(this.forceLoad, this.followingUserXuid).getStatus();
+            if (!AsyncActionStatus.getIsFail(status)) {
+                AddFollowingUserResponseContainer.AddFollowingUserResponse addUserToFollowingResult = meProfileModel.getAddUserToFollowingResult();
+                if (addUserToFollowingResult != null && !addUserToFollowingResult.getAddFollowingRequestStatus() && addUserToFollowingResult.code == 1028) {
+                    return AsyncActionStatus.FAIL;
+                }
+                ProfileScreenViewModel.this.model.loadProfileSummary(true);
+                meProfileModel.loadProfileSummary(true);
+                ArrayList<FollowersData> followingData = meProfileModel.getFollowingData();
+                if (followingData != null) {
+                    Iterator<FollowersData> it = followingData.iterator();
+                    while (true) {
+                        if (it.hasNext()) {
+                            if (it.next().xuid.equals(this.followingUserXuid)) {
+                                this.isFollowingUser = true;
+                                break;
+                            }
+                        } else {
+                            break;
+                        }
+                    }
                 }
             }
             return status;
@@ -706,8 +741,8 @@ public class ProfileScreenViewModel extends ViewModelBase {
     private class AddUserToShareIdentityListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
         private ArrayList<String> usersToAdd;
 
-        public AddUserToShareIdentityListAsyncTask(ArrayList<String> users) {
-            usersToAdd = users;
+        public AddUserToShareIdentityListAsyncTask(ArrayList<String> arrayList) {
+            this.usersToAdd = arrayList;
         }
 
         public boolean checkShouldExecute() {
@@ -719,12 +754,12 @@ public class ProfileScreenViewModel extends ViewModelBase {
 
         public void onPreExecute() {
             XLEAssert.assertIsUIThread();
-            boolean unused = isAddingUserToShareIdentityList = true;
-            updateAdapter();
+            boolean unused = ProfileScreenViewModel.this.isAddingUserToShareIdentityList = true;
+            ProfileScreenViewModel.this.updateAdapter();
         }
 
         public void onPostExecute(AsyncActionStatus asyncActionStatus) {
-            onAddUseToShareIdentityListCompleted(asyncActionStatus);
+            ProfileScreenViewModel.this.onAddUseToShareIdentityListCompleted(asyncActionStatus);
         }
 
         public AsyncActionStatus onError() {
@@ -732,9 +767,9 @@ public class ProfileScreenViewModel extends ViewModelBase {
         }
 
         public AsyncActionStatus loadDataInBackground() {
-            ProfileModel meProfile = ProfileModel.getMeProfileModel();
-            if (meProfile != null) {
-                return meProfile.addUserToShareIdentity(forceLoad, usersToAdd).getStatus();
+            ProfileModel meProfileModel = ProfileModel.getMeProfileModel();
+            if (meProfileModel != null) {
+                return meProfileModel.addUserToShareIdentity(this.forceLoad, this.usersToAdd).getStatus();
             }
             return AsyncActionStatus.FAIL;
         }
@@ -743,8 +778,8 @@ public class ProfileScreenViewModel extends ViewModelBase {
     private class AddUserToNeverListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
         private String blockUserXuid;
 
-        public AddUserToNeverListAsyncTask(String blockUserXuid2) {
-            blockUserXuid = blockUserXuid2;
+        public AddUserToNeverListAsyncTask(String str) {
+            this.blockUserXuid = str;
         }
 
         public boolean checkShouldExecute() {
@@ -754,17 +789,17 @@ public class ProfileScreenViewModel extends ViewModelBase {
 
         public void onNoAction() {
             XLEAssert.assertIsUIThread();
-            onAddUserToBlockListCompleted(AsyncActionStatus.NO_CHANGE);
+            ProfileScreenViewModel.this.onAddUserToBlockListCompleted(AsyncActionStatus.NO_CHANGE);
         }
 
         public void onPreExecute() {
             XLEAssert.assertIsUIThread();
-            boolean unused = isAddingUserToBlockList = true;
-            updateAdapter();
+            boolean unused = ProfileScreenViewModel.this.isAddingUserToBlockList = true;
+            ProfileScreenViewModel.this.updateAdapter();
         }
 
-        public void onPostExecute(AsyncActionStatus result) {
-            onAddUserToBlockListCompleted(result);
+        public void onPostExecute(AsyncActionStatus asyncActionStatus) {
+            ProfileScreenViewModel.this.onAddUserToBlockListCompleted(asyncActionStatus);
         }
 
         public AsyncActionStatus onError() {
@@ -772,9 +807,9 @@ public class ProfileScreenViewModel extends ViewModelBase {
         }
 
         public AsyncActionStatus loadDataInBackground() {
-            ProfileModel meProfile = ProfileModel.getMeProfileModel();
-            if (meProfile != null) {
-                return meProfile.addUserToNeverList(forceLoad, blockUserXuid).getStatus();
+            ProfileModel meProfileModel = ProfileModel.getMeProfileModel();
+            if (meProfileModel != null) {
+                return meProfileModel.addUserToNeverList(this.forceLoad, this.blockUserXuid).getStatus();
             }
             return AsyncActionStatus.FAIL;
         }
@@ -783,8 +818,8 @@ public class ProfileScreenViewModel extends ViewModelBase {
     private class RemoveUserToNeverListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
         private String unblockUserXuid;
 
-        public RemoveUserToNeverListAsyncTask(String blockUserXuid) {
-            unblockUserXuid = blockUserXuid;
+        public RemoveUserToNeverListAsyncTask(String str) {
+            this.unblockUserXuid = str;
         }
 
         public boolean checkShouldExecute() {
@@ -794,17 +829,17 @@ public class ProfileScreenViewModel extends ViewModelBase {
 
         public void onNoAction() {
             XLEAssert.assertIsUIThread();
-            onRemoveUserFromBlockListCompleted(AsyncActionStatus.NO_CHANGE);
+            ProfileScreenViewModel.this.onRemoveUserFromBlockListCompleted(AsyncActionStatus.NO_CHANGE);
         }
 
         public void onPreExecute() {
             XLEAssert.assertIsUIThread();
-            boolean unused = isRemovingUserFromBlockList = true;
-            updateAdapter();
+            boolean unused = ProfileScreenViewModel.this.isRemovingUserFromBlockList = true;
+            ProfileScreenViewModel.this.updateAdapter();
         }
 
-        public void onPostExecute(AsyncActionStatus result) {
-            onRemoveUserFromBlockListCompleted(result);
+        public void onPostExecute(AsyncActionStatus asyncActionStatus) {
+            ProfileScreenViewModel.this.onRemoveUserFromBlockListCompleted(asyncActionStatus);
         }
 
         public AsyncActionStatus onError() {
@@ -812,9 +847,9 @@ public class ProfileScreenViewModel extends ViewModelBase {
         }
 
         public AsyncActionStatus loadDataInBackground() {
-            ProfileModel meProfile = ProfileModel.getMeProfileModel();
-            if (meProfile != null) {
-                return meProfile.removeUserFromNeverList(forceLoad, unblockUserXuid).getStatus();
+            ProfileModel meProfileModel = ProfileModel.getMeProfileModel();
+            if (meProfileModel != null) {
+                return meProfileModel.removeUserFromNeverList(this.forceLoad, this.unblockUserXuid).getStatus();
             }
             return AsyncActionStatus.FAIL;
         }
@@ -823,8 +858,8 @@ public class ProfileScreenViewModel extends ViewModelBase {
     private class AddUserToMutedListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
         private String mutedUserXuid;
 
-        public AddUserToMutedListAsyncTask(String mutedUserXuid2) {
-            mutedUserXuid = mutedUserXuid2;
+        public AddUserToMutedListAsyncTask(String str) {
+            this.mutedUserXuid = str;
         }
 
         public boolean checkShouldExecute() {
@@ -834,17 +869,17 @@ public class ProfileScreenViewModel extends ViewModelBase {
 
         public void onNoAction() {
             XLEAssert.assertIsUIThread();
-            onAddUserToMutedListCompleted(AsyncActionStatus.NO_CHANGE);
+            ProfileScreenViewModel.this.onAddUserToMutedListCompleted(AsyncActionStatus.NO_CHANGE);
         }
 
         public void onPreExecute() {
             XLEAssert.assertIsUIThread();
-            boolean unused = isAddingUserToMutedList = true;
-            updateAdapter();
+            boolean unused = ProfileScreenViewModel.this.isAddingUserToMutedList = true;
+            ProfileScreenViewModel.this.updateAdapter();
         }
 
-        public void onPostExecute(AsyncActionStatus result) {
-            onAddUserToMutedListCompleted(result);
+        public void onPostExecute(AsyncActionStatus asyncActionStatus) {
+            ProfileScreenViewModel.this.onAddUserToMutedListCompleted(asyncActionStatus);
         }
 
         public AsyncActionStatus onError() {
@@ -852,9 +887,9 @@ public class ProfileScreenViewModel extends ViewModelBase {
         }
 
         public AsyncActionStatus loadDataInBackground() {
-            ProfileModel meProfile = ProfileModel.getMeProfileModel();
-            if (meProfile != null) {
-                return meProfile.addUserToMutedList(forceLoad, mutedUserXuid).getStatus();
+            ProfileModel meProfileModel = ProfileModel.getMeProfileModel();
+            if (meProfileModel != null) {
+                return meProfileModel.addUserToMutedList(this.forceLoad, this.mutedUserXuid).getStatus();
             }
             return AsyncActionStatus.FAIL;
         }
@@ -863,8 +898,8 @@ public class ProfileScreenViewModel extends ViewModelBase {
     private class RemoveUserFromMutedListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
         private String mutedUserXuid;
 
-        public RemoveUserFromMutedListAsyncTask(String mutedUserXuid2) {
-            mutedUserXuid = mutedUserXuid2;
+        public RemoveUserFromMutedListAsyncTask(String str) {
+            this.mutedUserXuid = str;
         }
 
         public boolean checkShouldExecute() {
@@ -874,17 +909,17 @@ public class ProfileScreenViewModel extends ViewModelBase {
 
         public void onNoAction() {
             XLEAssert.assertIsUIThread();
-            onRemoveUserFromMutedListCompleted(AsyncActionStatus.NO_CHANGE);
+            ProfileScreenViewModel.this.onRemoveUserFromMutedListCompleted(AsyncActionStatus.NO_CHANGE);
         }
 
         public void onPreExecute() {
             XLEAssert.assertIsUIThread();
-            boolean unused = isRemovingUserFromMutedList = true;
-            updateAdapter();
+            boolean unused = ProfileScreenViewModel.this.isRemovingUserFromMutedList = true;
+            ProfileScreenViewModel.this.updateAdapter();
         }
 
-        public void onPostExecute(AsyncActionStatus result) {
-            onRemoveUserFromMutedListCompleted(result);
+        public void onPostExecute(AsyncActionStatus asyncActionStatus) {
+            ProfileScreenViewModel.this.onRemoveUserFromMutedListCompleted(asyncActionStatus);
         }
 
         public AsyncActionStatus onError() {
@@ -892,9 +927,9 @@ public class ProfileScreenViewModel extends ViewModelBase {
         }
 
         public AsyncActionStatus loadDataInBackground() {
-            ProfileModel meProfile = ProfileModel.getMeProfileModel();
-            if (meProfile != null) {
-                return meProfile.removeUserFromMutedList(forceLoad, mutedUserXuid).getStatus();
+            ProfileModel meProfileModel = ProfileModel.getMeProfileModel();
+            if (meProfileModel != null) {
+                return meProfileModel.removeUserFromMutedList(this.forceLoad, this.mutedUserXuid).getStatus();
             }
             return AsyncActionStatus.FAIL;
         }

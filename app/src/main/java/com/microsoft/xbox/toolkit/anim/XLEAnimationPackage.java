@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -22,50 +22,50 @@ public class XLEAnimationPackage {
 
     public void tryFinishAll() {
         if (getRemainingAnimations() == 0) {
-            XLEAssert.assertTrue(running);
-            running = false;
-            onAnimationEndRunnable.run();
+            XLEAssert.assertTrue(this.running);
+            this.running = false;
+            this.onAnimationEndRunnable.run();
         }
     }
 
     private int getRemainingAnimations() {
-        int rv = 0;
-        Iterator it = animations.iterator();
+        Iterator it = this.animations.iterator();
+        int i = 0;
         while (it.hasNext()) {
             if (!((XLEAnimationEntry) it.next()).done) {
-                rv++;
+                i++;
             }
         }
-        return rv;
+        return i;
     }
 
     public void setOnAnimationEndRunnable(Runnable runnable) {
-        onAnimationEndRunnable = runnable;
+        this.onAnimationEndRunnable = runnable;
     }
 
     public void startAnimation() {
-        XLEAssert.assertTrue(!running);
-        running = true;
-        Iterator it = animations.iterator();
+        XLEAssert.assertTrue(!this.running);
+        this.running = true;
+        Iterator it = this.animations.iterator();
         while (it.hasNext()) {
             ((XLEAnimationEntry) it.next()).startAnimation();
         }
     }
 
     public void clearAnimation() {
-        Iterator it = animations.iterator();
+        Iterator it = this.animations.iterator();
         while (it.hasNext()) {
             ((XLEAnimationEntry) it.next()).clearAnimation();
         }
     }
 
-    public void add(XLEAnimation animation) {
-        animations.add(new XLEAnimationEntry(animation));
+    public void add(XLEAnimation xLEAnimation) {
+        this.animations.add(new XLEAnimationEntry(xLEAnimation));
     }
 
-    public XLEAnimationPackage add(XLEAnimationPackage animationPackage) {
-        if (animationPackage != null) {
-            Iterator it = animationPackage.animations.iterator();
+    public XLEAnimationPackage add(XLEAnimationPackage xLEAnimationPackage) {
+        if (xLEAnimationPackage != null) {
+            Iterator it = xLEAnimationPackage.animations.iterator();
             while (it.hasNext()) {
                 add(((XLEAnimationEntry) it.next()).animation);
             }
@@ -78,44 +78,38 @@ public class XLEAnimationPackage {
         public boolean done = false;
         public int iterationID = 0;
 
-        public XLEAnimationEntry(@NotNull XLEAnimation animation2) {
-            animation = animation2;
-            animation2.setOnAnimationEnd(() -> onAnimationEnded());
+        public XLEAnimationEntry(@NotNull XLEAnimation xLEAnimation) {
+            this.animation = xLEAnimation;
+            xLEAnimation.setOnAnimationEnd(() -> XLEAnimationEntry.this.onAnimationEnded());
         }
 
         public void onAnimationEnded() {
-            boolean z;
-            boolean z2 = true;
-            if (Thread.currentThread() == ThreadManager.UIThread) {
-                z = true;
-            } else {
+            boolean z = true;
+            XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
+            if (XLEAnimationPackage.this.onAnimationEndRunnable == null) {
                 z = false;
             }
             XLEAssert.assertTrue(z);
-            if (onAnimationEndRunnable == null) {
-                z2 = false;
-            }
-            XLEAssert.assertTrue(z2);
-            final int finishIterationID = iterationID;
+            final int i = this.iterationID;
             ThreadManager.UIThreadPost(() -> {
-                if (finishIterationID == iterationID) {
-                    finish();
+                if (i == XLEAnimationEntry.this.iterationID) {
+                    XLEAnimationEntry.this.finish();
                 }
             });
         }
 
         public void finish() {
-            done = true;
-            tryFinishAll();
+            this.done = true;
+            XLEAnimationPackage.this.tryFinishAll();
         }
 
         public void startAnimation() {
-            animation.start();
+            this.animation.start();
         }
 
         public void clearAnimation() {
-            iterationID++;
-            animation.clear();
+            this.iterationID++;
+            this.animation.clear();
         }
     }
 }

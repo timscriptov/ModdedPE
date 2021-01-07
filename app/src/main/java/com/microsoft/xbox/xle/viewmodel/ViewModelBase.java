@@ -5,7 +5,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 
-import com.appboy.models.InAppMessageBase;
 import com.microsoft.xbox.service.model.UpdateData;
 import com.microsoft.xbox.service.model.UpdateType;
 import com.microsoft.xbox.toolkit.AsyncResult;
@@ -30,7 +29,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -38,7 +37,7 @@ import java.util.Iterator;
 
 public abstract class ViewModelBase implements XLEObserver<UpdateData> {
     public static final String TAG_PAGE_LOADING_TIME = "performance_measure_page_loadingtime";
-    protected static int LAUNCH_TIME_OUT = InAppMessageBase.INAPP_MESSAGE_DURATION_DEFAULT_MILLIS;
+    protected static int LAUNCH_TIME_OUT = 5000;
     private final ScreenLayout screen;
     protected int LifetimeInMinutes;
     protected AdapterBase adapter;
@@ -57,120 +56,171 @@ public abstract class ViewModelBase implements XLEObserver<UpdateData> {
     private EnumSet<UpdateType> updateTypesToCheck;
     private boolean updating;
 
-    public ViewModelBase(ScreenLayout screen2) {
-        this(screen2, true, false);
+    public ViewModelBase(ScreenLayout screenLayout) {
+        this(screenLayout, true, false);
     }
 
     public ViewModelBase() {
         this((ScreenLayout) null, true, false);
     }
 
-    public ViewModelBase(boolean showNoNetworkPopup2, boolean onlyProcessExceptionsAndShowToastsWhenActive2) {
-        this(null, showNoNetworkPopup2, onlyProcessExceptionsAndShowToastsWhenActive2);
+    public ViewModelBase(boolean z, boolean z2) {
+        this((ScreenLayout) null, z, z2);
     }
 
-    public ViewModelBase(ScreenLayout screen2, boolean showNoNetworkPopup2, boolean onlyProcessExceptionsAndShowToastsWhenActive2) {
-        LifetimeInMinutes = 60;
-        updateExceptions = new HashMap<>();
-        showNoNetworkPopup = true;
-        onlyProcessExceptionsAndShowToastsWhenActive = false;
-        nextScreenData = null;
-        updating = false;
-        isLaunching = false;
-        screen = screen2;
-        showNoNetworkPopup = showNoNetworkPopup2;
-        onlyProcessExceptionsAndShowToastsWhenActive = onlyProcessExceptionsAndShowToastsWhenActive2;
+    public ViewModelBase(ScreenLayout screenLayout, boolean z, boolean z2) {
+        this.LifetimeInMinutes = 60;
+        this.updateExceptions = new HashMap<>();
+        this.showNoNetworkPopup = true;
+        this.onlyProcessExceptionsAndShowToastsWhenActive = false;
+        this.nextScreenData = null;
+        this.updating = false;
+        this.isLaunching = false;
+        this.screen = screenLayout;
+        this.showNoNetworkPopup = z;
+        this.onlyProcessExceptionsAndShowToastsWhenActive = z2;
+    }
+
+    public void TEST_induceGoBack() {
+    }
+
+    public String getBlockingStatusText() {
+        return null;
+    }
+
+    public boolean isBlockingBusy() {
+        return false;
     }
 
     public abstract boolean isBusy();
 
     public abstract void load(boolean z);
 
+    /* access modifiers changed from: protected */
+    public void logOut(boolean z) {
+    }
+
+    public void onActivityResult(int i, int i2, Intent intent) {
+    }
+
+    public boolean onBackButtonPressed() {
+        return false;
+    }
+
+    public void onChildViewModelChanged(ViewModelBase viewModelBase) {
+    }
+
+    public void onConfigurationChanged(Configuration configuration) {
+    }
+
     public abstract void onRehydrate();
+
+    public void onRestoreInstanceState(Bundle bundle) {
+    }
+
+    public void onSaveInstanceState(Bundle bundle) {
+    }
 
     public abstract void onStartOverride();
 
     public abstract void onStopOverride();
 
-    public View findViewById(int id) {
-        if (screen != null) {
-            return screen.xleFindViewId(id);
+    public boolean shouldDismissTopNoFatalAlert() {
+        return true;
+    }
+
+    public boolean shouldRefreshAsPivotHeader() {
+        return false;
+    }
+
+    public void showMustActDialog(String str, String str2, String str3, Runnable runnable, boolean z) {
+    }
+
+    public void updateOverride(AsyncResult<UpdateData> asyncResult) {
+    }
+
+    public boolean updateWithoutAdapter() {
+        return false;
+    }
+
+    public View findViewById(int i) {
+        ScreenLayout screenLayout = this.screen;
+        if (screenLayout != null) {
+            return screenLayout.xleFindViewId(i);
         }
         return null;
     }
 
     public ScreenLayout getScreen() {
-        return screen;
+        return this.screen;
     }
 
     public ViewModelBase getParent() {
-        return parent;
+        return this.parent;
     }
 
-    public void setParent(ViewModelBase parent2) {
-        parent = parent2;
+    public void setParent(ViewModelBase viewModelBase) {
+        this.parent = viewModelBase;
     }
 
     public AdapterBase getAdapter() {
-        return adapter;
-    }
-
-    public void onChildViewModelChanged(ViewModelBase child) {
+        return this.adapter;
     }
 
     public void updateAdapter() {
         updateAdapter(true);
     }
 
-    public void updateAdapter(boolean notifyParent) {
-        if (adapter != null) {
-            adapter.updateView();
+    public void updateAdapter(boolean z) {
+        AdapterBase adapterBase = this.adapter;
+        if (adapterBase != null) {
+            adapterBase.updateView();
         }
-        if (parent != null && notifyParent) {
-            parent.onChildViewModelChanged(this);
+        ViewModelBase viewModelBase = this.parent;
+        if (viewModelBase != null && z) {
+            viewModelBase.onChildViewModelChanged(this);
         }
-    }
-
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
     }
 
     public void onStart() {
-        isForeground = true;
+        this.isForeground = true;
         onStartOverride();
-        if (adapter != null) {
-            adapter.onStart();
+        AdapterBase adapterBase = this.adapter;
+        if (adapterBase != null) {
+            adapterBase.onStart();
         }
     }
 
     public boolean getShouldHideScreen() {
-        return shouldHideScreen;
+        return this.shouldHideScreen;
     }
 
-    public void setShouldHideScreen(boolean shouldHide) {
-        shouldHideScreen = shouldHide;
+    public void setShouldHideScreen(boolean z) {
+        this.shouldHideScreen = z;
     }
 
-    public void setListPosition(int index, int offset2) {
-        listIndex = index;
-        offset = offset2;
+    public void setListPosition(int i, int i2) {
+        this.listIndex = i;
+        this.offset = i2;
     }
 
     public int getAndResetListPosition() {
-        int value = listIndex;
-        listIndex = 0;
-        return value;
+        int i = this.listIndex;
+        this.listIndex = 0;
+        return i;
     }
 
     public int getAndResetListOffset() {
-        int offset2 = offset;
-        offset = 0;
-        return offset2;
+        int i = this.offset;
+        this.offset = 0;
+        return i;
     }
 
     public void onStop() {
-        isForeground = false;
-        if (adapter != null) {
-            adapter.onStop();
+        this.isForeground = false;
+        AdapterBase adapterBase = this.adapter;
+        if (adapterBase != null) {
+            adapterBase.onStop();
         }
         DialogManager.getInstance().dismissBlocking();
         if (shouldDismissTopNoFatalAlert()) {
@@ -180,75 +230,57 @@ public abstract class ViewModelBase implements XLEObserver<UpdateData> {
         onStopOverride();
     }
 
-    public boolean shouldDismissTopNoFatalAlert() {
-        return true;
-    }
-
     public void onPause() {
         cancelLaunchTimeout();
-        if (adapter != null) {
-            adapter.onPause();
+        AdapterBase adapterBase = this.adapter;
+        if (adapterBase != null) {
+            adapterBase.onPause();
         }
     }
 
     public void onApplicationPause() {
-        if (adapter != null) {
-            adapter.onApplicationPause();
+        AdapterBase adapterBase = this.adapter;
+        if (adapterBase != null) {
+            adapterBase.onApplicationPause();
         }
     }
 
     public void onApplicationResume() {
-        if (adapter != null) {
-            adapter.onApplicationResume();
+        AdapterBase adapterBase = this.adapter;
+        if (adapterBase != null) {
+            adapterBase.onApplicationResume();
         }
     }
 
     public void onResume() {
-        if (adapter != null) {
-            adapter.onResume();
-            adapter.updateView();
+        AdapterBase adapterBase = this.adapter;
+        if (adapterBase != null) {
+            adapterBase.onResume();
+            this.adapter.updateView();
         }
     }
 
     public void onDestroy() {
-        if (adapter != null) {
-            adapter.onDestroy();
+        AdapterBase adapterBase = this.adapter;
+        if (adapterBase != null) {
+            adapterBase.onDestroy();
         }
-        adapter = null;
+        this.adapter = null;
     }
 
     public void onTombstone() {
-        if (adapter != null) {
-            adapter.onDestroy();
+        AdapterBase adapterBase = this.adapter;
+        if (adapterBase != null) {
+            adapterBase.onDestroy();
         }
-        adapter = null;
+        this.adapter = null;
     }
 
     public void forceUpdateViewImmediately() {
-        if (adapter != null) {
-            adapter.forceUpdateViewImmediately();
+        AdapterBase adapterBase = this.adapter;
+        if (adapterBase != null) {
+            adapterBase.forceUpdateViewImmediately();
         }
-    }
-
-    public void onConfigurationChanged(Configuration newConfig) {
-    }
-
-    public void onSaveInstanceState(Bundle outState) {
-    }
-
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-    }
-
-    public boolean onBackButtonPressed() {
-        return false;
-    }
-
-    public boolean isBlockingBusy() {
-        return false;
-    }
-
-    public String getBlockingStatusText() {
-        return null;
     }
 
     public void load() {
@@ -257,8 +289,9 @@ public abstract class ViewModelBase implements XLEObserver<UpdateData> {
 
     public void forceRefresh() {
         load(true);
-        if (adapter != null) {
-            adapter.updateView();
+        AdapterBase adapterBase = this.adapter;
+        if (adapterBase != null) {
+            adapterBase.updateView();
         }
     }
 
@@ -309,184 +342,166 @@ public abstract class ViewModelBase implements XLEObserver<UpdateData> {
         nextScreenData = null;
     }
 
-    public boolean updateWithoutAdapter() {
-        return false;
+    public void setUpdateTypesToCheck(EnumSet<UpdateType> enumSet) {
+        this.updateTypesToCheck = enumSet;
+        this.updateExceptions.clear();
     }
 
-    public void updateOverride(AsyncResult<UpdateData> asyncResult) {
-    }
-
-    public void logOut(boolean clearEverything) {
-    }
-
-    public void setUpdateTypesToCheck(EnumSet<UpdateType> checkList) {
-        updateTypesToCheck = checkList;
-        updateExceptions.clear();
-    }
-
-    public boolean checkErrorCode(UpdateType updateType, long errorCode) {
-        if (!updateExceptions.containsKey(updateType) || updateExceptions.get(updateType).getErrorCode() != errorCode) {
-            return false;
-        }
-        if (updateExceptions.get(updateType).getIsHandled()) {
+    public boolean checkErrorCode(UpdateType updateType, long j) {
+        if (!this.updateExceptions.containsKey(updateType) || this.updateExceptions.get(updateType).getErrorCode() != j || this.updateExceptions.get(updateType).getIsHandled()) {
             return false;
         }
         return true;
     }
 
     public boolean updateTypesToCheckIsEmpty() {
-        return updateTypesToCheck == null || updateTypesToCheck.isEmpty();
+        EnumSet<UpdateType> enumSet = this.updateTypesToCheck;
+        return enumSet == null || enumSet.isEmpty();
     }
 
     public boolean updateTypesToCheckHadAnyErrors() {
-        return !updateExceptions.isEmpty();
+        return !this.updateExceptions.isEmpty();
     }
 
     public void onUpdateFinished() {
-        updateTypesToCheck = null;
-        updateExceptions.clear();
+        this.updateTypesToCheck = null;
+        this.updateExceptions.clear();
     }
 
-    public XLEAnimationPackage getAnimateOut(boolean goingBack) {
-        ArrayList<XLEAnimation> animations = adapter.getAnimateOut(goingBack);
-        if (animations == null || animations.size() <= 0) {
+    public XLEAnimationPackage getAnimateOut(boolean z) {
+        ArrayList<XLEAnimation> animateOut = this.adapter.getAnimateOut(z);
+        if (animateOut == null || animateOut.size() <= 0) {
             return null;
         }
-        XLEAnimationPackage animationPackage = new XLEAnimationPackage();
-        Iterator<XLEAnimation> it = animations.iterator();
+        XLEAnimationPackage xLEAnimationPackage = new XLEAnimationPackage();
+        Iterator<XLEAnimation> it = animateOut.iterator();
         while (it.hasNext()) {
-            animationPackage.add(it.next());
+            xLEAnimationPackage.add(it.next());
         }
-        return animationPackage;
+        return xLEAnimationPackage;
     }
 
-    public XLEAnimationPackage getAnimateIn(boolean goingBack) {
-        ArrayList<XLEAnimation> animations = adapter.getAnimateIn(goingBack);
-        if (animations == null || animations.size() <= 0) {
+    public XLEAnimationPackage getAnimateIn(boolean z) {
+        ArrayList<XLEAnimation> animateIn = this.adapter.getAnimateIn(z);
+        if (animateIn == null || animateIn.size() <= 0) {
             return null;
         }
-        XLEAnimationPackage animationPackage = new XLEAnimationPackage();
-        Iterator<XLEAnimation> it = animations.iterator();
+        XLEAnimationPackage xLEAnimationPackage = new XLEAnimationPackage();
+        Iterator<XLEAnimation> it = animateIn.iterator();
         while (it.hasNext()) {
-            animationPackage.add(it.next());
+            xLEAnimationPackage.add(it.next());
         }
-        return animationPackage;
-    }
-
-    public void TEST_induceGoBack() {
+        return xLEAnimationPackage;
     }
 
     public void onAnimateInCompleted() {
-        if (adapter != null) {
-            adapter.onAnimateInCompleted();
+        AdapterBase adapterBase = this.adapter;
+        if (adapterBase != null) {
+            adapterBase.onAnimateInCompleted();
         }
     }
 
-    public void NavigateTo(Class<? extends ScreenLayout> screenClass, ActivityParameters activityParameters) {
-        NavigateTo(screenClass, true, activityParameters);
+    public void NavigateTo(Class<? extends ScreenLayout> cls, ActivityParameters activityParameters) {
+        NavigateTo(cls, true, activityParameters);
     }
 
-    public void NavigateTo(Class<? extends ScreenLayout> screenClass) {
-        NavigateTo(screenClass, null);
+    public void NavigateTo(Class<? extends ScreenLayout> cls) {
+        NavigateTo(cls, (ActivityParameters) null);
     }
 
-    public void NavigateTo(Class<? extends ScreenLayout> screenClass, boolean addToStack, ActivityParameters activityParameters) {
+    public void NavigateTo(Class<? extends ScreenLayout> cls, boolean z, ActivityParameters activityParameters) {
         cancelLaunchTimeout();
         XLEAssert.assertFalse("We shouldn't navigate to a new screen if the current screen is blocking", isBlockingBusy());
-        if (updating) {
-            nextScreenData = new NavigationData(screenClass, addToStack ? NavigationType.Push : NavigationType.PopReplace);
+        if (this.updating) {
+            this.nextScreenData = new NavigationData(cls, z ? NavigationType.Push : NavigationType.PopReplace);
             return;
         }
         XLEAssert.assertFalse("We shouldn't navigate to a new screen if the current screen is blocking", isBlockingBusy());
-        NavigationManager.getInstance().NavigateTo(screenClass, addToStack, activityParameters);
+        NavigationManager.getInstance().NavigateTo(cls, z, activityParameters);
     }
 
-    public void NavigateTo(Class<? extends ScreenLayout> screenClass, boolean addToStack) {
-        NavigateTo(screenClass, addToStack, null);
+    public void NavigateTo(Class<? extends ScreenLayout> cls, boolean z) {
+        NavigateTo(cls, z, (ActivityParameters) null);
     }
 
-    public void showMustActDialog(String title, String promptText, String okText, Runnable okHandler, boolean isFatal) {
+    public void showOkCancelDialog(String str, String str2, Runnable runnable, String str3, Runnable runnable2) {
+        showOkCancelDialog((String) null, str, str2, runnable, str3, runnable2);
     }
 
-    public void showOkCancelDialog(String promptText, String okText, Runnable okHandler, String cancelText, Runnable cancelHandler) {
-        showOkCancelDialog(null, promptText, okText, okHandler, cancelText, cancelHandler);
-    }
-
-    public void showOkCancelDialog(String title, String promptText, String okText, Runnable okHandler, String cancelText, Runnable cancelHandler) {
+    public void showOkCancelDialog(String str, String str2, String str3, Runnable runnable, String str4, Runnable runnable2) {
         if (shouldProcessErrors()) {
-            XLEUtil.showOkCancelDialog(title, promptText, okText, okHandler, cancelText, cancelHandler);
+            XLEUtil.showOkCancelDialog(str, str2, str3, runnable, str4, runnable2);
         }
     }
 
-    public void showError(int contentResId) {
-        DialogManager.getInstance().showToast(contentResId);
+    public void showError(int i) {
+        DialogManager.getInstance().showToast(i);
     }
 
     public void onSetActive() {
-        isActive = true;
-        if (adapter != null) {
-            adapter.onSetActive();
+        this.isActive = true;
+        AdapterBase adapterBase = this.adapter;
+        if (adapterBase != null) {
+            adapterBase.onSetActive();
         }
     }
 
     public void onSetInactive() {
         DialogManager.getInstance().dismissToast();
-        isActive = false;
-        if (adapter != null) {
-            adapter.onSetInactive();
+        this.isActive = false;
+        AdapterBase adapterBase = this.adapter;
+        if (adapterBase != null) {
+            adapterBase.onSetInactive();
         }
     }
 
     public boolean getIsActive() {
-        return isActive;
+        return this.isActive;
     }
 
     public boolean getShowNoNetworkPopup() {
-        return showNoNetworkPopup;
+        return this.showNoNetworkPopup;
     }
 
     private boolean shouldProcessErrors() {
-        if (onlyProcessExceptionsAndShowToastsWhenActive) {
-            return isActive;
+        if (this.onlyProcessExceptionsAndShowToastsWhenActive) {
+            return this.isActive;
         }
         return true;
     }
 
     public void setAsPivotPane() {
-        showNoNetworkPopup = true;
-        onlyProcessExceptionsAndShowToastsWhenActive = true;
+        this.showNoNetworkPopup = true;
+        this.onlyProcessExceptionsAndShowToastsWhenActive = true;
     }
 
     public void cancelLaunchTimeout() {
-        isLaunching = false;
-        if (launchTimeoutHandler != null) {
-            ThreadManager.Handler.removeCallbacks(launchTimeoutHandler);
+        this.isLaunching = false;
+        if (this.launchTimeoutHandler != null) {
+            ThreadManager.Handler.removeCallbacks(this.launchTimeoutHandler);
         }
     }
 
     public void cancelLaunch() {
-        isLaunching = false;
+        this.isLaunching = false;
     }
 
-    /* access modifiers changed from: protected */
     public void adapterUpdateView() {
-        if (adapter != null) {
-            adapter.updateView();
+        AdapterBase adapterBase = this.adapter;
+        if (adapterBase != null) {
+            adapterBase.updateView();
         }
     }
 
-    public void setScreenState(int state) {
-        if (adapter != null) {
-            adapter.setScreenState(state);
+    public void setScreenState(int i) {
+        AdapterBase adapterBase = this.adapter;
+        if (adapterBase != null) {
+            adapterBase.setScreenState(i);
         }
     }
 
-    public void leaveViewModel(@NotNull Runnable leaveHandler) {
-        leaveHandler.run();
-    }
-
-    public boolean shouldRefreshAsPivotHeader() {
-        return false;
+    public void leaveViewModel(@NotNull Runnable runnable) {
+        runnable.run();
     }
 
     private enum NavigationType {
@@ -499,17 +514,17 @@ public abstract class ViewModelBase implements XLEObserver<UpdateData> {
         private NavigationType navigationType;
         private Class<? extends ScreenLayout> screenClass;
 
-        protected NavigationData(Class<? extends ScreenLayout> screen, NavigationType type) {
-            screenClass = screen;
-            navigationType = type;
+        protected NavigationData(Class<? extends ScreenLayout> cls, NavigationType navigationType2) {
+            this.screenClass = cls;
+            this.navigationType = navigationType2;
         }
 
         public Class<? extends ScreenLayout> getScreenClass() {
-            return screenClass;
+            return this.screenClass;
         }
 
         public NavigationType getNavigationType() {
-            return navigationType;
+            return this.navigationType;
         }
     }
 }

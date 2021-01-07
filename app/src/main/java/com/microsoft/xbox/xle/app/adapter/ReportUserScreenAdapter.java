@@ -5,9 +5,8 @@ import android.os.Build;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
-
-import androidx.appcompat.widget.AppCompatEditText;
 
 import com.mcal.mcpelauncher.R;
 import com.microsoft.xbox.telemetry.helpers.UTCReportUser;
@@ -20,14 +19,14 @@ import com.microsoft.xbox.xle.viewmodel.ReportUserScreenViewModel;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 
 public class ReportUserScreenAdapter extends AdapterBase {
-    public AppCompatEditText optionalText = ((AppCompatEditText) findViewById(R.id.report_user_text));
+    public EditText optionalText = ((EditText) findViewById(R.id.report_user_text));
     public ReportUserScreenViewModel viewModel;
     private XLEButton cancelButton = ((XLEButton) findViewById(R.id.report_user_cancel));
     private Spinner reasonSpinner = ((Spinner) findViewById(R.id.report_user_reason));
@@ -35,45 +34,48 @@ public class ReportUserScreenAdapter extends AdapterBase {
     private XLEButton submitButton = ((XLEButton) findViewById(R.id.report_user_submit));
     private CustomTypefaceTextView titleTextView = ((CustomTypefaceTextView) findViewById(R.id.report_user_title));
 
-    public ReportUserScreenAdapter(ReportUserScreenViewModel viewModel2) {
-        super(viewModel2);
-        viewModel = viewModel2;
-        XLEAssert.assertNotNull(titleTextView);
-        XLEAssert.assertNotNull(reasonSpinner);
-        XLEAssert.assertNotNull(optionalText);
-        XLEAssert.assertNotNull(cancelButton);
-        XLEAssert.assertNotNull(submitButton);
+    public ReportUserScreenAdapter(ReportUserScreenViewModel reportUserScreenViewModel) {
+        super(reportUserScreenViewModel);
+        this.viewModel = reportUserScreenViewModel;
+        XLEAssert.assertNotNull(this.titleTextView);
+        XLEAssert.assertNotNull(this.reasonSpinner);
+        XLEAssert.assertNotNull(this.optionalText);
+        XLEAssert.assertNotNull(this.cancelButton);
+        XLEAssert.assertNotNull(this.submitButton);
     }
 
     public void onStart() {
         super.onStart();
-        reasonSpinnerAdapter = new ArrayAdapter<>(XboxTcuiSdk.getActivity(), R.layout.report_spinner_item, viewModel.getReasonTitles());
-        reasonSpinnerAdapter.setDropDownViewResource(R.layout.spinner_item_dropdown);
-        reasonSpinner.setAdapter(reasonSpinnerAdapter);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(XboxTcuiSdk.getActivity(), R.layout.report_spinner_item, this.viewModel.getReasonTitles());
+        this.reasonSpinnerAdapter = arrayAdapter;
+        arrayAdapter.setDropDownViewResource(R.layout.spinner_item_dropdown);
+        this.reasonSpinner.setAdapter(this.reasonSpinnerAdapter);
         if (Build.VERSION.SDK_INT >= 16) {
-            reasonSpinner.setPopupBackgroundDrawable(new ColorDrawable(viewModel.getPreferredColor()));
+            this.reasonSpinner.setPopupBackgroundDrawable(new ColorDrawable(this.viewModel.getPreferredColor()));
         }
-        reasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                viewModel.setReason(position);
-            }
-
+        this.reasonSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
+
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long j) {
+                ReportUserScreenAdapter.this.viewModel.setReason(i);
+            }
         });
-        cancelButton.setOnClickListener(v -> viewModel.onBackButtonPressed());
-        submitButton.setOnClickListener(v -> {
-            UTCReportUser.trackReportDialogOK(viewModel.getReason() == null ? UTCTelemetry.UNKNOWNPAGE : viewModel.getReason().toString());
-            viewModel.submitReport(optionalText.getText().toString());
+        this.cancelButton.setOnClickListener(view -> ReportUserScreenAdapter.this.viewModel.onBackButtonPressed());
+        this.submitButton.setOnClickListener(view -> {
+            UTCReportUser.trackReportDialogOK(ReportUserScreenAdapter.this.viewModel.getReason() == null ? UTCTelemetry.UNKNOWNPAGE : ReportUserScreenAdapter.this.viewModel.getReason().toString());
+            ReportUserScreenAdapter.this.viewModel.submitReport(ReportUserScreenAdapter.this.optionalText.getText().toString());
         });
     }
 
     public void updateViewOverride() {
-        if (titleTextView != null) {
-            titleTextView.setText(viewModel.getTitle());
+        CustomTypefaceTextView customTypefaceTextView = this.titleTextView;
+        if (customTypefaceTextView != null) {
+            customTypefaceTextView.setText(this.viewModel.getTitle());
         }
-        if (submitButton != null) {
-            submitButton.setEnabled(viewModel.validReasonSelected());
+        XLEButton xLEButton = this.submitButton;
+        if (xLEButton != null) {
+            xLEButton.setEnabled(this.viewModel.validReasonSelected());
         }
     }
 }

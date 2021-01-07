@@ -15,7 +15,7 @@ import com.microsoft.xbox.toolkit.BackgroundThreadWaitor;
 import com.microsoft.xbox.toolkit.XLERValueHelper;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -29,30 +29,30 @@ public class SwitchPanel extends LinearLayout {
     private boolean blocking = false;
     private View newView = null;
     private AnimatorListenerAdapter AnimateInListener = new AnimatorListenerAdapter() {
-        public void onAnimationCancel(Animator animation) {
-            onAnimateInEnd();
+        public void onAnimationCancel(Animator animator) {
+            SwitchPanel.this.onAnimateInEnd();
         }
 
-        public void onAnimationEnd(Animator animation) {
-            onAnimateInEnd();
+        public void onAnimationEnd(Animator animator) {
+            SwitchPanel.this.onAnimateInEnd();
         }
 
-        public void onAnimationStart(Animator animation) {
-            onAnimateInStart();
+        public void onAnimationStart(Animator animator) {
+            SwitchPanel.this.onAnimateInStart();
         }
     };
     private View oldView = null;
     private AnimatorListenerAdapter AnimateOutListener = new AnimatorListenerAdapter() {
-        public void onAnimationCancel(Animator animation) {
-            onAnimateOutEnd();
+        public void onAnimationCancel(Animator animator) {
+            SwitchPanel.this.onAnimateOutEnd();
         }
 
-        public void onAnimationEnd(Animator animation) {
-            onAnimateOutEnd();
+        public void onAnimationEnd(Animator animator) {
+            SwitchPanel.this.onAnimateOutEnd();
         }
 
-        public void onAnimationStart(Animator animation) {
-            onAnimateOutStart();
+        public void onAnimationStart(Animator animator) {
+            SwitchPanel.this.onAnimateOutStart();
         }
     };
     private int selectedState;
@@ -63,85 +63,96 @@ public class SwitchPanel extends LinearLayout {
         throw new UnsupportedOperationException();
     }
 
-    public SwitchPanel(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        TypedArray a = context.obtainStyledAttributes(attrs, XLERValueHelper.getStyleableRValueArray("SwitchPanel"));
-        selectedState = a.getInteger(XLERValueHelper.getStyleableRValue("SwitchPanel_selectedState"), -1);
-        a.recycle();
-        if (selectedState < 0) {
-            throw new IllegalArgumentException("You must specify the selectedState attribute in the xml, and the value must be positive.");
+    public SwitchPanel(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
+        TypedArray obtainStyledAttributes = context.obtainStyledAttributes(attributeSet, XLERValueHelper.getStyleableRValueArray("SwitchPanel"));
+        this.selectedState = obtainStyledAttributes.getInteger(XLERValueHelper.getStyleableRValue("SwitchPanel_selectedState"), -1);
+        obtainStyledAttributes.recycle();
+        if (this.selectedState >= 0) {
+            setLayoutParams(new RelativeLayout.LayoutParams(-1, -1));
+            return;
         }
-        setLayoutParams(new RelativeLayout.LayoutParams(-1, -1));
+        throw new IllegalArgumentException("You must specify the selectedState attribute in the xml, and the value must be positive.");
     }
 
     public void onFinishInflate() {
         super.onFinishInflate();
-        updateVisibility(-1, selectedState);
+        updateVisibility(-1, this.selectedState);
     }
 
-    public void setActive(boolean active2) {
-        active = active2;
+    public void setActive(boolean z) {
+        this.active = z;
     }
 
-    public void setShouldAnimate(boolean value) {
-        shouldAnimate = value;
+    public void setShouldAnimate(boolean z) {
+        this.shouldAnimate = z;
     }
 
     public int getState() {
-        return selectedState;
+        return this.selectedState;
     }
 
-    public void setState(int newState) {
-        if (newState < 0) {
-            throw new IllegalArgumentException("New state must be a positive value.");
-        } else if (selectedState != newState) {
-            int oldState = selectedState;
-            selectedState = newState;
-            updateVisibility(oldState, newState);
+    public void setState(int i) {
+        if (i >= 0) {
+            int i2 = this.selectedState;
+            if (i2 != i) {
+                this.selectedState = i;
+                updateVisibility(i2, i);
+                return;
+            }
+            return;
         }
+        throw new IllegalArgumentException("New state must be a positive value.");
     }
 
     @SuppressLint("WrongConstant")
-    private void updateVisibility(int oldState, int newState) {
+    private void updateVisibility(int i, int i2) {
+        View view;
         int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View v = getChildAt(i);
-            if (!(v instanceof SwitchPanelChild)) {
+        int i3 = 0;
+        while (i3 < childCount) {
+            View childAt = getChildAt(i3);
+            if (childAt instanceof SwitchPanelChild) {
+                int state = ((SwitchPanelChild) childAt).getState();
+                if (state == i) {
+                    this.oldView = childAt;
+                } else if (state == i2) {
+                    this.newView = childAt;
+                } else {
+                    childAt.setVisibility(8);
+                }
+                i3++;
+            } else {
                 throw new UnsupportedOperationException("All children of SwitchPanel must implement the SwitchPanelChild interface. All other types are not supported and should be removed.");
             }
-            int switchPanelState = ((SwitchPanelChild) v).getState();
-            if (switchPanelState == oldState) {
-                oldView = v;
-            } else if (switchPanelState == newState) {
-                newView = v;
-            } else {
-                v.setVisibility(8);
-            }
         }
-        if (!shouldAnimate || newState != 0 || newView == null) {
-            if (oldView != null) {
-                oldView.setVisibility(8);
+        if (!this.shouldAnimate || i2 != 0 || (view = this.newView) == null) {
+            View view2 = this.oldView;
+            if (view2 != null) {
+                view2.setVisibility(8);
             }
-            if (newView != null) {
-                newView.setAlpha(1.0f);
-                newView.setVisibility(0);
+            View view3 = this.newView;
+            if (view3 != null) {
+                view3.setAlpha(1.0f);
+                this.newView.setVisibility(0);
             }
             requestLayout();
             return;
         }
-        newView.setAlpha(0.0f);
-        newView.setVisibility(0);
+        view.setAlpha(0.0f);
+        this.newView.setVisibility(0);
         requestLayout();
-        if (oldView != null) {
-            oldView.animate().alpha(0.0f).setDuration(150).setListener(AnimateOutListener);
+        View view4 = this.oldView;
+        if (view4 != null) {
+            view4.animate().alpha(0.0f).setDuration(150).setListener(this.AnimateOutListener);
         }
-        newView.animate().alpha(1.0f).setDuration(150).setListener(AnimateInListener);
+        this.newView.animate().alpha(1.0f).setDuration(150).setListener(this.AnimateInListener);
     }
 
-    public void setBlocking(boolean value) {
-        if (blocking != value) {
-            blocking = value;
-            if (blocking) {
+    public void setBlocking(boolean z) {
+        if (this.blocking != z) {
+            this.blocking = z;
+            if (z) {
                 BackgroundThreadWaitor.getInstance().setBlocking(BackgroundThreadWaitor.WaitType.ListLayout, 150);
             } else {
                 BackgroundThreadWaitor.getInstance().clearBlocking(BackgroundThreadWaitor.WaitType.ListLayout);
@@ -151,8 +162,9 @@ public class SwitchPanel extends LinearLayout {
 
     @SuppressLint("WrongConstant")
     public void onAnimateInStart() {
-        if (newView != null) {
-            newView.setLayerType(2, (Paint) null);
+        View view = this.newView;
+        if (view != null) {
+            view.setLayerType(2, (Paint) null);
             setBlocking(true);
         }
     }
@@ -160,24 +172,27 @@ public class SwitchPanel extends LinearLayout {
     @SuppressLint("WrongConstant")
     public void onAnimateInEnd() {
         setBlocking(false);
-        if (newView != null) {
-            newView.setLayerType(0, (Paint) null);
+        View view = this.newView;
+        if (view != null) {
+            view.setLayerType(0, (Paint) null);
         }
     }
 
     @SuppressLint("WrongConstant")
     public void onAnimateOutStart() {
-        if (oldView != null) {
-            oldView.setLayerType(2, (Paint) null);
+        View view = this.oldView;
+        if (view != null) {
+            view.setLayerType(2, (Paint) null);
             setBlocking(true);
         }
     }
 
     @SuppressLint("WrongConstant")
     public void onAnimateOutEnd() {
-        if (oldView != null) {
-            oldView.setVisibility(8);
-            oldView.setLayerType(0, (Paint) null);
+        View view = this.oldView;
+        if (view != null) {
+            view.setVisibility(8);
+            this.oldView.setLayerType(0, (Paint) null);
         }
     }
 

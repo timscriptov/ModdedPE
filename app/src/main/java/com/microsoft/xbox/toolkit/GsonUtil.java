@@ -16,7 +16,7 @@ import java.lang.reflect.Type;
 import java.util.Map;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -24,28 +24,28 @@ import java.util.Map;
 
 public class GsonUtil {
 
-    public static <T> T deserializeJson(InputStream stream, Class<T> resultClass) {
-        return deserializeJson(createMinimumGsonBuilder().create(), stream, resultClass);
+    public static <T> T deserializeJson(InputStream inputStream, Class<T> cls) {
+        return deserializeJson(createMinimumGsonBuilder().create(), inputStream, cls);
     }
 
-    public static <T> T deserializeJson(String input, Class<T> resultClass) {
-        return deserializeJson(createMinimumGsonBuilder().create(), input, resultClass);
+    public static <T> T deserializeJson(String str, Class<T> cls) {
+        return deserializeJson(createMinimumGsonBuilder().create(), str, cls);
     }
 
-    public static <T> T deserializeJson(InputStream stream, Class<T> resultClass, Type typeForAdapter, Object typeAdapter) {
-        return deserializeJson(createMinimumGsonBuilder().registerTypeAdapter(typeForAdapter, typeAdapter).create(), stream, resultClass);
+    public static <T> T deserializeJson(InputStream inputStream, Class<T> cls, Type type, Object obj) {
+        return deserializeJson(createMinimumGsonBuilder().registerTypeAdapter(type, obj).create(), inputStream, cls);
     }
 
-    public static <T> T deserializeJson(InputStream stream, Class<T> resultClass, @NotNull Map<Type, Object> adapters) {
-        GsonBuilder builder = createMinimumGsonBuilder();
-        for (Map.Entry<Type, Object> e : adapters.entrySet()) {
-            builder.registerTypeAdapter(e.getKey(), e.getValue());
+    public static <T> T deserializeJson(InputStream inputStream, Class<T> cls, @NotNull Map<Type, Object> map) {
+        GsonBuilder createMinimumGsonBuilder = createMinimumGsonBuilder();
+        for (Map.Entry next : map.entrySet()) {
+            createMinimumGsonBuilder.registerTypeAdapter((Type) next.getKey(), next.getValue());
         }
-        return deserializeJson(builder.create(), stream, resultClass);
+        return deserializeJson(createMinimumGsonBuilder.create(), inputStream, cls);
     }
 
-    public static <T> T deserializeJson(String input, Class<T> resultClass, Type typeForAdapter, Object typeAdapter) {
-        return deserializeJson(createMinimumGsonBuilder().registerTypeAdapter(typeForAdapter, typeAdapter).create(), input, resultClass);
+    public static <T> T deserializeJson(String str, Class<T> cls, Type type, Object obj) {
+        return deserializeJson(createMinimumGsonBuilder().registerTypeAdapter(type, obj).create(), str, cls);
     }
 
     public static <T> T deserializeJson(Gson gson, InputStream stream, Class<T> resultClass) {
@@ -125,17 +125,15 @@ public class GsonUtil {
         return result;
     }
 
-    @Nullable
-    public static <T> T deserializeJson(Gson gson, String input, Class<T> resultClass) {
+    public static <T> @Nullable T deserializeJson(Gson gson, String str, Class<T> cls) {
         try {
-            return gson.fromJson(input, resultClass);
-        } catch (Exception e) {
+            return gson.fromJson(str, cls);
+        } catch (Exception unused) {
             return null;
         }
     }
 
-    @NotNull
-    public static GsonBuilder createMinimumGsonBuilder() {
+    public static @NotNull GsonBuilder createMinimumGsonBuilder() {
         return new GsonBuilder().excludeFieldsWithModifiers(128);
     }
 
@@ -143,19 +141,18 @@ public class GsonUtil {
         return new Gson().toJson(obj);
     }
 
-    @NotNull
-    public static String buildJsonBody(JsonBodyBuilder builder) throws IOException {
-        JsonWriter w;
-        StringWriter out = new StringWriter();
+    public static @NotNull String buildJsonBody(JsonBodyBuilder jsonBodyBuilder) throws IOException {
+        JsonWriter jsonWriter;
+        StringWriter stringWriter = new StringWriter();
         try {
-            w = new JsonWriter(out);
-            builder.buildBody(w);
-            String stringWriter = out.toString();
-            w.close();
-            out.close();
-            return stringWriter;
+            jsonWriter = new JsonWriter(stringWriter);
+            jsonBodyBuilder.buildBody(jsonWriter);
+            String stringWriter2 = stringWriter.toString();
+            jsonWriter.close();
+            stringWriter.close();
+            return stringWriter2;
         } catch (Throwable th) {
-            out.close();
+            stringWriter.close();
             throw th;
         }
     }

@@ -17,7 +17,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -34,130 +34,121 @@ public class XLEFileCache {
     private int writeAccessCnt;
 
     XLEFileCache() {
-        size = 0;
-        enabled = true;
-        readAccessCnt = 0;
-        writeAccessCnt = 0;
-        readSuccessfulCnt = 0;
-        expiredTimer = Long.MAX_VALUE;
-        maxFileNumber = 0;
-        enabled = false;
+        this.size = 0;
+        this.enabled = true;
+        this.readAccessCnt = 0;
+        this.writeAccessCnt = 0;
+        this.readSuccessfulCnt = 0;
+        this.expiredTimer = Long.MAX_VALUE;
+        this.maxFileNumber = 0;
+        this.enabled = false;
     }
 
-    XLEFileCache(String dir, int maxFileNumber2) {
-        this(dir, maxFileNumber2, Long.MAX_VALUE);
+    XLEFileCache(String str, int i) {
+        this(str, i, Long.MAX_VALUE);
     }
 
-    XLEFileCache(String dir, int maxFileNumber2, long expiredDurationInSeconds) {
-        size = 0;
-        enabled = true;
-        readAccessCnt = 0;
-        writeAccessCnt = 0;
-        readSuccessfulCnt = 0;
-        maxFileNumber = maxFileNumber2;
-        expiredTimer = expiredDurationInSeconds;
+    XLEFileCache(String str, int i, long j) {
+        this.size = 0;
+        this.enabled = true;
+        this.readAccessCnt = 0;
+        this.writeAccessCnt = 0;
+        this.readSuccessfulCnt = 0;
+        this.maxFileNumber = i;
+        this.expiredTimer = j;
     }
 
-    public static int readInt(@NotNull InputStream is) throws IOException {
-        int ch1 = is.read();
-        int ch2 = is.read();
-        int ch3 = is.read();
-        int ch4 = is.read();
-        if ((ch1 | ch2 | ch3 | ch4) >= 0) {
-            return (ch1 << 24) + (ch2 << 16) + (ch3 << 8) + (ch4 << 0);
+    public static int readInt(@NotNull InputStream inputStream) throws IOException {
+        int read = inputStream.read();
+        int read2 = inputStream.read();
+        int read3 = inputStream.read();
+        int read4 = inputStream.read();
+        if ((read | read2 | read3 | read4) >= 0) {
+            return (read << 24) + (read2 << 16) + (read3 << 8) + (read4 << 0);
         }
         throw new EOFException();
     }
 
     public int getItemsInCache() {
-        return size;
+        return this.size;
     }
 
-    public synchronized boolean contains(XLEFileCacheItemKey cachedItem) {
-        boolean exists;
-        if (!enabled) {
-            exists = false;
-        } else {
-            exists = new File(XLEFileCacheManager.getCacheRootDir(this), getCachedItemFileName(cachedItem)).exists();
+    public synchronized boolean contains(XLEFileCacheItemKey xLEFileCacheItemKey) {
+        if (!this.enabled) {
+            return false;
         }
-        return exists;
+        return new File(XLEFileCacheManager.getCacheRootDir(this), getCachedItemFileName(xLEFileCacheItemKey)).exists();
     }
 
-    public synchronized OutputStream getOuputStreamForSave(XLEFileCacheItemKey cachedItem) throws IOException {
-        OutputStream cachedFileOutputStreamItem;
-        if (!enabled) {
-            cachedFileOutputStreamItem = new OutputStream() {
-                public void write(int oneByte) throws IOException {
+    public synchronized OutputStream getOuputStreamForSave(XLEFileCacheItemKey xLEFileCacheItemKey) throws IOException {
+        if (!this.enabled) {
+            return new OutputStream() {
+                public void write(int i) throws IOException {
                 }
             };
-        } else {
-            XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
-            writeAccessCnt++;
-            checkAndEnsureCapacity();
-            File outputFile = new File(XLEFileCacheManager.getCacheRootDir(this), getCachedItemFileName(cachedItem));
-            if (outputFile.exists()) {
-                outputFile.delete();
-                size--;
-            }
-            if (outputFile.createNewFile()) {
-                size++;
-            }
-            cachedFileOutputStreamItem = new CachedFileOutputStreamItem(cachedItem, outputFile);
         }
-        return cachedFileOutputStreamItem;
+        XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
+        this.writeAccessCnt++;
+        checkAndEnsureCapacity();
+        File file = new File(XLEFileCacheManager.getCacheRootDir(this), getCachedItemFileName(xLEFileCacheItemKey));
+        if (file.exists()) {
+            file.delete();
+            this.size--;
+        }
+        if (file.createNewFile()) {
+            this.size++;
+        }
+        return new CachedFileOutputStreamItem(xLEFileCacheItemKey, file);
     }
 
-    public synchronized void save(XLEFileCacheItemKey fileItem, InputStream is) {
+    public synchronized void save(XLEFileCacheItemKey xLEFileCacheItemKey, InputStream inputStream) {
         try {
-            OutputStream os = getOuputStreamForSave(fileItem);
-            StreamUtil.CopyStream(os, is);
-            os.close();
+            OutputStream ouputStreamForSave = getOuputStreamForSave(xLEFileCacheItemKey);
+            StreamUtil.CopyStream(ouputStreamForSave, inputStream);
+            ouputStreamForSave.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public synchronized InputStream getInputStreamForRead(XLEFileCacheItemKey cachedItem) {
-        InputStream inputStream;
-        if (!enabled) {
-            inputStream = null;
-        } else {
-            XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
-            readAccessCnt++;
-            File cacheFile = new File(XLEFileCacheManager.getCacheRootDir(this), getCachedItemFileName(cachedItem));
-            if (cacheFile.exists()) {
-                if (cacheFile.lastModified() < System.currentTimeMillis() - expiredTimer) {
-                    cacheFile.delete();
-                    size--;
-                    inputStream = null;
-                } else {
-                    try {
-                        inputStream = new CachedFileInputStreamItem(cachedItem, cacheFile).getContentInputStream();
-                        readSuccessfulCnt++;
-                    } catch (IOException e) {
-                    }
-                }
-            }
-            inputStream = null;
+    public synchronized InputStream getInputStreamForRead(XLEFileCacheItemKey xLEFileCacheItemKey) {
+        if (!this.enabled) {
+            return null;
         }
-        return inputStream;
+        XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
+        this.readAccessCnt++;
+        File file = new File(XLEFileCacheManager.getCacheRootDir(this), getCachedItemFileName(xLEFileCacheItemKey));
+        if (file.exists()) {
+            if (file.lastModified() < System.currentTimeMillis() - this.expiredTimer) {
+                file.delete();
+                this.size--;
+                return null;
+            }
+            try {
+                InputStream contentInputStream = new CachedFileInputStreamItem(xLEFileCacheItemKey, file).getContentInputStream();
+                this.readSuccessfulCnt++;
+                return contentInputStream;
+            } catch (IOException unused) {
+                return null;
+            }
+        }
+        return null;
     }
 
-    public String toString() {
-        return "Size=" + size + "\tRootDir=" + XLEFileCacheManager.getCacheRootDir(this) + "\tMaxFileNumber=" + maxFileNumber + "\tExpiredTimerInSeconds=" + expiredTimer + "\tWriteAccessCnt=" + writeAccessCnt + "\tReadAccessCnt=" + readAccessCnt + "\tReadSuccessfulCnt=" + readSuccessfulCnt;
+    public @NotNull String toString() {
+        return "Size=" + this.size + "\tRootDir=" + XLEFileCacheManager.getCacheRootDir(this) + "\tMaxFileNumber=" + this.maxFileNumber + "\tExpiredTimerInSeconds=" + this.expiredTimer + "\tWriteAccessCnt=" + this.writeAccessCnt + "\tReadAccessCnt=" + this.readAccessCnt + "\tReadSuccessfulCnt=" + this.readSuccessfulCnt;
     }
 
     private void checkAndEnsureCapacity() {
-        if (size >= maxFileNumber && enabled) {
-            File[] files = XLEFileCacheManager.getCacheRootDir(this).listFiles();
-            files[new Random().nextInt(files.length)].delete();
-            size = files.length - 1;
+        if (this.size >= this.maxFileNumber && this.enabled) {
+            File[] listFiles = XLEFileCacheManager.getCacheRootDir(this).listFiles();
+            listFiles[new Random().nextInt(listFiles.length)].delete();
+            this.size = listFiles.length - 1;
         }
     }
 
-    @NotNull
-    private String getCachedItemFileName(@NotNull XLEFileCacheItemKey fileItem) {
-        return String.valueOf(fileItem.getKeyString().hashCode());
+    private @NotNull String getCachedItemFileName(@NotNull XLEFileCacheItemKey xLEFileCacheItemKey) {
+        return String.valueOf(xLEFileCacheItemKey.getKeyString().hashCode());
     }
 
     private class CachedFileInputStreamItem {
@@ -166,49 +157,51 @@ public class XLEFileCache {
         private MessageDigest mDigest = null;
         private byte[] savedMd5;
 
-        public CachedFileInputStreamItem(XLEFileCacheItemKey key, File file) throws IOException {
-            FileInputStream wrappedFileInputStream = new FileInputStream(file);
+        public CachedFileInputStreamItem(XLEFileCacheItemKey xLEFileCacheItemKey, File file) throws IOException {
+            FileInputStream fileInputStream = new FileInputStream(file);
             try {
-                mDigest = MessageDigest.getInstance("MD5");
-                savedMd5 = new byte[mDigest.getDigestLength()];
-                if (wrappedFileInputStream.read(savedMd5) != mDigest.getDigestLength()) {
-                    wrappedFileInputStream.close();
-                    throw new IOException("Ddigest lengh check failed!");
-                }
-                int keyLength = XLEFileCache.readInt(wrappedFileInputStream);
-                byte[] cacheItemKey = new byte[keyLength];
-                if (keyLength != wrappedFileInputStream.read(cacheItemKey) || !key.getKeyString().equals(new String(cacheItemKey))) {
+                MessageDigest instance = MessageDigest.getInstance("MD5");
+                this.mDigest = instance;
+                byte[] bArr = new byte[instance.getDigestLength()];
+                this.savedMd5 = bArr;
+                if (fileInputStream.read(bArr) == this.mDigest.getDigestLength()) {
+                    int access$000 = XLEFileCache.readInt(fileInputStream);
+                    byte[] bArr2 = new byte[access$000];
+                    if (access$000 != fileInputStream.read(bArr2) || !xLEFileCacheItemKey.getKeyString().equals(new String(bArr2))) {
+                        file.delete();
+                        throw new IOException("File key check failed because keyLength != readKeyLength or !key.getKeyString().equals(new String(urlOrSomething))");
+                    }
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    StreamUtil.CopyStream(byteArrayOutputStream, fileInputStream);
+                    fileInputStream.close();
+                    byte[] byteArray = byteArrayOutputStream.toByteArray();
+                    this.mDigest.update(byteArray);
+                    this.computedMd5 = this.mDigest.digest();
+                    if (!isMd5Error()) {
+                        this.contentInputStream = new ByteArrayInputStream(byteArray);
+                        return;
+                    }
                     file.delete();
-                    throw new IOException("File key check failed because keyLength != readKeyLength or !key.getKeyString().equals(new String(urlOrSomething))");
+                    throw new IOException(fileInputStream.getFD() + "the saved md5 is not equal computed md5.ComputedMd5:" + this.computedMd5 + "     SavedMd5:" + this.savedMd5);
                 }
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                StreamUtil.CopyStream(baos, wrappedFileInputStream);
-                wrappedFileInputStream.close();
-                byte[] content = baos.toByteArray();
-                mDigest.update(content);
-                computedMd5 = mDigest.digest();
-                if (isMd5Error()) {
-                    file.delete();
-                    throw new IOException(wrappedFileInputStream.getFD() + "the saved md5 is not equal computed md5.ComputedMd5:" + computedMd5 + "     SavedMd5:" + savedMd5);
-                } else {
-                    contentInputStream = new ByteArrayInputStream(content);
-                }
+                fileInputStream.close();
+                throw new IOException("Ddigest lengh check failed!");
             } catch (NoSuchAlgorithmException e) {
-                wrappedFileInputStream.close();
+                fileInputStream.close();
                 throw new IOException("File digest failed! " + e.getMessage());
             } catch (OutOfMemoryError e2) {
-                wrappedFileInputStream.close();
+                fileInputStream.close();
                 throw new IOException("File digest failed! Out of memory: " + e2.getMessage());
             }
         }
 
         public InputStream getContentInputStream() {
-            return contentInputStream;
+            return this.contentInputStream;
         }
 
         private boolean isMd5Error() {
-            for (int i = 0; i < mDigest.getDigestLength(); i++) {
-                if (savedMd5[i] != computedMd5[i]) {
+            for (int i = 0; i < this.mDigest.getDigestLength(); i++) {
+                if (this.savedMd5[i] != this.computedMd5[i]) {
                     return true;
                 }
             }
@@ -222,16 +215,17 @@ public class XLEFileCache {
         private boolean startDigest = false;
         private boolean writeMd5Finished = false;
 
-        public CachedFileOutputStreamItem(@NotNull XLEFileCacheItemKey key, File file) throws IOException {
+        public CachedFileOutputStreamItem(@NotNull XLEFileCacheItemKey xLEFileCacheItemKey, File file) throws IOException {
             super(file);
-            destFile = file;
+            this.destFile = file;
             try {
-                mDigest = MessageDigest.getInstance("MD5");
-                write(new byte[mDigest.getDigestLength()]);
-                byte[] urlOrSomething = key.getKeyString().getBytes();
-                writeInt(urlOrSomething.length);
-                write(urlOrSomething);
-                startDigest = true;
+                MessageDigest instance = MessageDigest.getInstance("MD5");
+                this.mDigest = instance;
+                write(new byte[instance.getDigestLength()]);
+                byte[] bytes = xLEFileCacheItemKey.getKeyString().getBytes();
+                writeInt(bytes.length);
+                write(bytes);
+                this.startDigest = true;
             } catch (NoSuchAlgorithmException e) {
                 throw new IOException("File digest failed!" + e.getMessage());
             }
@@ -239,28 +233,28 @@ public class XLEFileCache {
 
         public void close() throws IOException {
             super.close();
-            if (!writeMd5Finished) {
-                writeMd5Finished = true;
-                RandomAccessFile raf = new RandomAccessFile(destFile, "rw");
-                byte[] md5Hash = mDigest.digest();
-                raf.seek(0);
-                raf.write(md5Hash);
-                raf.close();
+            if (!this.writeMd5Finished) {
+                this.writeMd5Finished = true;
+                RandomAccessFile randomAccessFile = new RandomAccessFile(this.destFile, "rw");
+                byte[] digest = this.mDigest.digest();
+                randomAccessFile.seek(0);
+                randomAccessFile.write(digest);
+                randomAccessFile.close();
             }
         }
 
-        public void write(byte[] buffer, int offset, int byteCount) throws IOException {
-            super.write(buffer, offset, byteCount);
-            if (startDigest) {
-                mDigest.update(buffer, offset, byteCount);
+        public void write(byte[] bArr, int i, int i2) throws IOException {
+            super.write(bArr, i, i2);
+            if (this.startDigest) {
+                this.mDigest.update(bArr, i, i2);
             }
         }
 
-        private final void writeInt(int v) throws IOException {
-            write((v >>> 24) & 255);
-            write((v >>> 16) & 255);
-            write((v >>> 8) & 255);
-            write((v >>> 0) & 255);
+        private final void writeInt(int i) throws IOException {
+            write((i >>> 24) & 255);
+            write((i >>> 16) & 255);
+            write((i >>> 8) & 255);
+            write((i >>> 0) & 255);
         }
     }
 }

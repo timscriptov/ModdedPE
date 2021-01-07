@@ -10,125 +10,126 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Field;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 
 public class XLERValueHelper {
-    public static int getStringRValue(String name) {
+    public static int getStringRValue(String str) {
         try {
-            return getStringRClass().getDeclaredField(name).getInt((Object) null);
-        } catch (Exception e) {
-            XLEAssert.assertTrue("Can't find " + name, false);
+            return getStringRClass().getDeclaredField(str).getInt((Object) null);
+        } catch (Exception unused) {
+            XLEAssert.assertTrue("Can't find " + str, false);
             return -1;
         }
     }
 
-    public static int getDrawableRValue(String name) {
+    public static int getDrawableRValue(String str) {
         try {
-            return getDrawableRClass().getDeclaredField(name).getInt((Object) null);
-        } catch (Exception e) {
-            XLEAssert.assertTrue("Can't find " + name, false);
+            return getDrawableRClass().getDeclaredField(str).getInt((Object) null);
+        } catch (Exception unused) {
+            XLEAssert.assertTrue("Can't find " + str, false);
             return -1;
         }
     }
 
-    public static int getIdRValue(String name) {
+    public static int getIdRValue(String str) {
         try {
-            return getIdRClass().getDeclaredField(name).getInt((Object) null);
-        } catch (Exception e) {
-            XLEAssert.assertTrue("Can't find " + name, false);
+            return getIdRClass().getDeclaredField(str).getInt((Object) null);
+        } catch (Exception unused) {
+            XLEAssert.assertTrue("Can't find " + str, false);
             return -1;
         }
     }
 
-    public static int getStyleRValue(String name) {
+    public static int getStyleRValue(String str) {
         try {
-            return getStyleRClass().getDeclaredField(name).getInt((Object) null);
-        } catch (Exception e) {
-            XLEAssert.assertTrue("Can't find " + name, false);
+            return getStyleRClass().getDeclaredField(str).getInt((Object) null);
+        } catch (Exception unused) {
+            XLEAssert.assertTrue("Can't find " + str, false);
             return -1;
         }
     }
 
-    @Nullable
-    public static int[] getStyleableRValueArray(String name) {
+    public static int @Nullable [] getStyleableRValueArray(String str) {
         try {
-            return (int[]) getStyleableRClass().getDeclaredField(name).get((Object) null);
-        } catch (Exception e) {
-            XLEAssert.assertTrue("Can't find " + name, false);
+            return (int[]) getStyleableRClass().getDeclaredField(str).get((Object) null);
+        } catch (Exception unused) {
+            XLEAssert.assertTrue("Can't find " + str, false);
             return null;
         }
     }
 
-    public static int getStyleableRValue(String name) {
+    public static int getStyleableRValue(String str) {
         try {
-            return getStyleableRClass().getDeclaredField(name).getInt((Object) null);
-        } catch (Exception e) {
-            XLEAssert.assertTrue("Can't find " + name, false);
+            return getStyleableRClass().getDeclaredField(str).getInt((Object) null);
+        } catch (Exception unused) {
+            XLEAssert.assertTrue("Can't find " + str, false);
             return -1;
         }
     }
 
-    public static int getLayoutRValue(String name) {
+    public static int getLayoutRValue(String str) {
         try {
-            return getLayoutRClass().getDeclaredField(name).getInt((Object) null);
-        } catch (Exception e) {
-            XLEAssert.assertTrue("Can't find " + name, false);
+            return getLayoutRClass().getDeclaredField(str).getInt((Object) null);
+        } catch (Exception unused) {
+            XLEAssert.assertTrue("Can't find " + str, false);
             return -1;
         }
     }
 
-    public static int getDimenRValue(String name) {
+    public static int getDimenRValue(String str) {
         try {
-            return getDimenRClass().getDeclaredField(name).getInt((Object) null);
-        } catch (Exception e) {
-            XLEAssert.assertTrue("Can't find " + name, false);
+            return getDimenRClass().getDeclaredField(str).getInt((Object) null);
+        } catch (Exception unused) {
+            XLEAssert.assertTrue("Can't find " + str, false);
             return -1;
         }
     }
 
-    public static int getColorRValue(String name) {
+    public static int getColorRValue(String str) {
         try {
-            return getColorRClass().getDeclaredField(name).getInt((Object) null);
-        } catch (Exception e) {
-            XLEAssert.assertTrue("Can't find " + name, false);
+            return getColorRClass().getDeclaredField(str).getInt((Object) null);
+        } catch (Exception unused) {
+            XLEAssert.assertTrue("Can't find " + str, false);
             return -1;
         }
     }
 
-    public static int findDimensionIdByName(String name) {
-        Field field = null;
+    public static int findDimensionIdByName(String str) {
+        Field field;
         try {
-            field = R.dimen.class.getField(name);
-        } catch (NoSuchFieldException e) {
+            field = R.dimen.class.getField(str);
+        } catch (NoSuchFieldException unused) {
+            field = null;
         }
         if (field == null) {
             return -1;
         }
         try {
-            return field.getInt(null);
-        } catch (IllegalAccessException e2) {
+            return field.getInt((Object) null);
+        } catch (IllegalAccessException unused2) {
             return -1;
         }
     }
 
-    public static View findViewByString(String viewName) {
-        Field field = null;
+    public static View findViewByString(String str) {
+        Field field;
         try {
-            field = R.id.class.getField(viewName);
-        } catch (NoSuchFieldException e) {
+            field = R.id.class.getField(str);
+        } catch (NoSuchFieldException unused) {
+            field = null;
         }
-        int id = -1;
+        int i = -1;
         if (field != null) {
             try {
-                id = field.getInt(null);
-            } catch (IllegalAccessException e2) {
+                i = field.getInt((Object) null);
+            } catch (IllegalAccessException unused2) {
             }
         }
-        return XboxTcuiSdk.getActivity().findViewById(id);
+        return XboxTcuiSdk.getActivity().findViewById(i);
     }
 
     protected static Class getStringRClass() {

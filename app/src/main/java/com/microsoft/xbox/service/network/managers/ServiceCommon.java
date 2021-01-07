@@ -30,7 +30,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -39,203 +39,203 @@ import java.util.List;
 public class ServiceCommon {
     public static final int MaxBIErrorParamLength = 2048;
 
-    public static void AddWebHeaders(HttpUriRequest httpRequest, List<Header> headers) {
-        if (headers != null) {
-            for (Header header : headers) {
-                httpRequest.addHeader(header);
+    public static void AddWebHeaders(HttpUriRequest httpUriRequest, List<Header> list) {
+        if (list != null) {
+            for (Header addHeader : list) {
+                httpUriRequest.addHeader(addHeader);
             }
         }
     }
 
-    public static int deleteWithStatus(String url, List<Header> headers) throws XLEException {
-        URI uri = UrlUtil.getEncodedUri(url);
-        String url2 = uri.toString();
+    public static int deleteWithStatus(String str, List<Header> list) throws XLEException {
+        URI encodedUri = UrlUtil.getEncodedUri(str);
+        String uri = encodedUri.toString();
         new TimeMonitor();
-        XLEHttpStatusAndStream statusAndStream = excuteHttpRequest(new HttpDelete(uri), url2, headers, false, 0);
-        statusAndStream.close();
-        return statusAndStream.statusCode;
+        XLEHttpStatusAndStream excuteHttpRequest = excuteHttpRequest(new HttpDelete(encodedUri), uri, list, false, 0);
+        excuteHttpRequest.close();
+        return excuteHttpRequest.statusCode;
     }
 
-    public static boolean delete(String url, List<Header> headers) throws XLEException {
-        int statusCode = deleteWithStatus(url, headers);
-        return statusCode == 200 || statusCode == 204;
+    public static boolean delete(String str, List<Header> list) throws XLEException {
+        int deleteWithStatus = deleteWithStatus(str, list);
+        return deleteWithStatus == 200 || deleteWithStatus == 204;
     }
 
-    public static boolean delete(String url, List<Header> headers, String body) throws XLEException {
+    public static boolean delete(String str, List<Header> list, String str2) throws XLEException {
         try {
-            return JavaUtil.isNullOrEmpty(body) ? delete(url, headers) : delete(url, headers, body.getBytes(HTTP.UTF_8));
+            return JavaUtil.isNullOrEmpty(str2) ? delete(str, list) : delete(str, list, str2.getBytes(HTTP.UTF_8));
         } catch (UnsupportedEncodingException e) {
             throw new XLEException(5, (Throwable) e);
         }
     }
 
-    public static boolean delete(String url, List<Header> headers, byte[] body) throws XLEException {
-        boolean value = false;
-        URI uri = UrlUtil.getEncodedUri(url);
-        String url2 = uri.toString();
+    public static boolean delete(String str, List<Header> list, byte[] bArr) throws XLEException {
+        URI encodedUri = UrlUtil.getEncodedUri(str);
+        String uri = encodedUri.toString();
         new TimeMonitor();
-        HttpDeleteWithRequestBody httpDelete = new HttpDeleteWithRequestBody(uri);
-        if (body != null && body.length > 0) {
+        HttpDeleteWithRequestBody httpDeleteWithRequestBody = new HttpDeleteWithRequestBody(encodedUri);
+        if (bArr != null && bArr.length > 0) {
             try {
-                httpDelete.setEntity(new ByteArrayEntity(body));
+                httpDeleteWithRequestBody.setEntity(new ByteArrayEntity(bArr));
             } catch (Exception e) {
-                throw new XLEException(5, e);
+                throw new XLEException(5, (Throwable) e);
             }
         }
-        XLEHttpStatusAndStream statusAndStream = excuteHttpRequest(httpDelete, url2, headers, false, 0);
-        if (statusAndStream.statusCode == 200 || statusAndStream.statusCode == 204) {
-            value = true;
+        boolean z = false;
+        XLEHttpStatusAndStream excuteHttpRequest = excuteHttpRequest(httpDeleteWithRequestBody, uri, list, false, 0);
+        if (excuteHttpRequest.statusCode == 200 || excuteHttpRequest.statusCode == 204) {
+            z = true;
         }
-        statusAndStream.close();
-        return value;
+        excuteHttpRequest.close();
+        return z;
     }
 
-    private static void ParseHttpResponseForStatus(String url, int statusCode, String statusLine) throws XLEException {
-        ParseHttpResponseForStatus(url, statusCode, statusLine, (InputStream) null);
+    private static void ParseHttpResponseForStatus(String str, int i, String str2) throws XLEException {
+        ParseHttpResponseForStatus(str, i, str2, (InputStream) null);
     }
 
-    private static void ParseHttpResponseForStatus(String url, int statusCode, String statusLine, InputStream stream) throws XLEException {
-        if (statusCode >= 200 && statusCode < 400) {
+    private static void ParseHttpResponseForStatus(String str, int i, String str2, InputStream inputStream) throws XLEException {
+        if (i >= 200 && i < 400) {
             return;
         }
-        if (statusCode == -1) {
+        if (i == -1) {
             throw new XLEException(3);
-        } else if (statusCode == 401 || statusCode == 403) {
+        } else if (i == 401 || i == 403) {
             throw new XLEException(XLEErrorCode.NOT_AUTHORIZED);
-        } else if (statusCode == 400) {
-            if (stream == null) {
+        } else if (i == 400) {
+            if (inputStream == null) {
                 throw new XLEException(15);
             }
-            throw new XLEException(15, null, null, StreamUtil.ReadAsString(stream));
-        } else if (statusCode == 500) {
+            throw new XLEException(15, (String) null, (Throwable) null, StreamUtil.ReadAsString(inputStream));
+        } else if (i == 500) {
             throw new XLEException(13);
-        } else if (statusCode == 503) {
+        } else if (i == 503) {
             throw new XLEException(18);
-        } else if (statusCode == 404) {
+        } else if (i == 404) {
             throw new XLEException(21);
         } else {
             throw new XLEException(4);
         }
     }
 
-    public static XLEHttpStatusAndStream getStreamAndStatus(String url, List<Header> headers) throws XLEException {
-        XLEHttpStatusAndStream statusAndStream = getStreamAndStatus(url, headers, true, 0);
-        if (statusAndStream == null || JavaUtil.isNullOrEmpty(statusAndStream.redirectUrl)) {
-            return statusAndStream;
-        }
-        return getStreamAndStatus(statusAndStream.redirectUrl, headers);
+    public static @NotNull XLEHttpStatusAndStream getStreamAndStatus(String str, List<Header> list) throws XLEException {
+        XLEHttpStatusAndStream streamAndStatus = getStreamAndStatus(str, list, true, 0);
+        return (streamAndStatus == null || JavaUtil.isNullOrEmpty(streamAndStatus.redirectUrl)) ? streamAndStatus : getStreamAndStatus(streamAndStatus.redirectUrl, list);
     }
 
-    @NotNull
-    private static XLEHttpStatusAndStream getStreamAndStatus(String url, List<Header> headers, boolean urlEncode, int timeoutOverride) throws XLEException {
-        return getStreamAndStatus(url, headers, urlEncode, timeoutOverride, false);
+    private static @NotNull XLEHttpStatusAndStream getStreamAndStatus(String str, List<Header> list, boolean z, int i) throws XLEException {
+        return getStreamAndStatus(str, list, z, i, false);
     }
 
-    @NotNull
-    private static XLEHttpStatusAndStream getStreamAndStatus(String url, List<Header> headers, boolean urlEncode, int timeoutOverride, boolean addUserObjectFromBadRequestResponse) throws XLEException {
-        URI uri = null;
-        if (urlEncode) {
-            uri = UrlUtil.getEncodedUri(url);
+    private static @NotNull XLEHttpStatusAndStream getStreamAndStatus(String str, List<Header> list, boolean z, int i, boolean z2) throws XLEException {
+        URI uri;
+        if (z) {
+            uri = UrlUtil.getEncodedUri(str);
         } else {
             try {
-                uri = new URI(url);
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
+                uri = new URI(str);
+            } catch (URISyntaxException unused) {
+                uri = null;
             }
         }
-        return excuteHttpRequest(new HttpGet(uri), uri.toString(), headers, true, timeoutOverride, addUserObjectFromBadRequestResponse);
+        return excuteHttpRequest(new HttpGet(uri), uri.toString(), list, true, i, z2);
     }
 
-    @NotNull
-    public static XLEHttpStatusAndStream postStringWithStatus(String url, List<Header> headers, @NotNull String body) throws XLEException {
+    public static @NotNull XLEHttpStatusAndStream postStringWithStatus(String str, List<Header> list, @NotNull String str2) throws XLEException {
         try {
-            return postStreamWithStatus(url, headers, body.getBytes(HTTP.UTF_8));
-        } catch (UnsupportedEncodingException e) {
-            throw new XLEException(5, e);
-        }
-    }
-
-    @NotNull
-    public static XLEHttpStatusAndStream postStreamWithStatus(String url, List<Header> headers, byte[] body) throws XLEException {
-        URI uri = UrlUtil.getEncodedUri(url);
-        String url2 = uri.toString();
-        HttpPost post = new HttpPost(uri);
-        if (body != null && body.length > 0) {
-            try {
-                post.setEntity(new ByteArrayEntity(body));
-            } catch (Exception e) {
-                throw new XLEException(5, e);
-            }
-        }
-        return excuteHttpRequest(post, url2, headers, false, 0);
-    }
-
-    @NotNull
-    public static XLEHttpStatusAndStream putStringWithStatus(String url, List<Header> headers, @NotNull String body) throws XLEException {
-        try {
-            return putStreamWithStatus(url, headers, body.getBytes(HTTP.UTF_8));
+            return postStreamWithStatus(str, list, str2.getBytes(HTTP.UTF_8));
         } catch (UnsupportedEncodingException e) {
             throw new XLEException(5, (Throwable) e);
         }
     }
 
-    @NotNull
-    public static XLEHttpStatusAndStream putStreamWithStatus(String url, List<Header> headers, byte[] body) throws XLEException {
-        URI uri = UrlUtil.getEncodedUri(url);
-        String url2 = uri.toString();
-        HttpPut put = new HttpPut(uri);
-        if (body != null && body.length > 0) {
+    public static @NotNull XLEHttpStatusAndStream postStreamWithStatus(String str, List<Header> list, byte[] bArr) throws XLEException {
+        URI encodedUri = UrlUtil.getEncodedUri(str);
+        String uri = encodedUri.toString();
+        HttpPost httpPost = new HttpPost(encodedUri);
+        if (bArr != null && bArr.length > 0) {
             try {
-                put.setEntity(new ByteArrayEntity(body));
+                httpPost.setEntity(new ByteArrayEntity(bArr));
             } catch (Exception e) {
-                throw new XLEException(5, e);
+                throw new XLEException(5, (Throwable) e);
             }
         }
-        return excuteHttpRequest(put, url2, headers, false, 0);
+        return excuteHttpRequest(httpPost, uri, list, false, 0);
     }
 
-    @NotNull
-    private static XLEHttpStatusAndStream excuteHttpRequest(HttpUriRequest request, String url, List<Header> headers, boolean expectResponseEntity, int timeoutOverride) throws XLEException {
-        return excuteHttpRequest(request, url, headers, expectResponseEntity, timeoutOverride, false);
+    public static @NotNull XLEHttpStatusAndStream putStringWithStatus(String str, List<Header> list, @NotNull String str2) throws XLEException {
+        try {
+            return putStreamWithStatus(str, list, str2.getBytes(HTTP.UTF_8));
+        } catch (UnsupportedEncodingException e) {
+            throw new XLEException(5, (Throwable) e);
+        }
     }
 
-    @NotNull
-    private static XLEHttpStatusAndStream excuteHttpRequest(HttpUriRequest request, String url, List<Header> headers, boolean expectResponseEntity, int timeoutOverride, boolean addUserObjectFromResponse) throws XLEException {
-        AddWebHeaders(request, headers);
-        new XLEHttpStatusAndStream();
-        XLEHttpStatusAndStream rv = HttpClientFactory.networkOperationsFactory.getHttpClient(timeoutOverride).getHttpStatusAndStreamInternal(request, true);
-        if (!addUserObjectFromResponse) {
+    public static @NotNull XLEHttpStatusAndStream putStreamWithStatus(String str, List<Header> list, byte[] bArr) throws XLEException {
+        URI encodedUri = UrlUtil.getEncodedUri(str);
+        String uri = encodedUri.toString();
+        HttpPut httpPut = new HttpPut(encodedUri);
+        if (bArr != null && bArr.length > 0) {
             try {
-                ParseHttpResponseForStatus(url, rv.statusCode, rv.statusLine);
+                httpPut.setEntity(new ByteArrayEntity(bArr));
+            } catch (Exception e) {
+                throw new XLEException(5, (Throwable) e);
+            }
+        }
+        return excuteHttpRequest(httpPut, uri, list, false, 0);
+    }
+
+    private static @NotNull XLEHttpStatusAndStream excuteHttpRequest(HttpUriRequest httpUriRequest, String str, List<Header> list, boolean z, int i) throws XLEException {
+        return excuteHttpRequest(httpUriRequest, str, list, z, i, false);
+    }
+
+    private static @NotNull XLEHttpStatusAndStream excuteHttpRequest(HttpUriRequest httpUriRequest, String str, List<Header> list, boolean z, int i, boolean z2) throws XLEException {
+        int i2;
+        String str2;
+        AddWebHeaders(httpUriRequest, list);
+        new XLEHttpStatusAndStream();
+        XLEHttpStatusAndStream httpStatusAndStreamInternal = HttpClientFactory.networkOperationsFactory.getHttpClient(i).getHttpStatusAndStreamInternal(httpUriRequest, true);
+        if (!z2) {
+            try {
+                ParseHttpResponseForStatus(str, httpStatusAndStreamInternal.statusCode, httpStatusAndStreamInternal.statusLine);
             } catch (XLEException e) {
-                JsonObject callStackJson = new JsonObject();
-                JsonObject responseJson = new JsonObject();
-                String responseDescription = "";
-                int responseStatusCode = rv == null ? 0 : rv.statusCode;
-                String requestUrl = "";
-                if (request != null) {
-                    String method = request.getMethod();
+                JsonObject jsonObject = new JsonObject();
+                JsonObject jsonObject2 = new JsonObject();
+                if (httpStatusAndStreamInternal == null) {
+                    i2 = 0;
+                } else {
+                    i2 = httpStatusAndStreamInternal.statusCode;
                 }
-                if (rv != null && !TextUtils.isEmpty(rv.statusLine)) {
-                    responseDescription = rv.statusLine.length() > 2048 ? rv.statusLine.substring(0, 2048) : rv.statusLine;
+                if (httpUriRequest != null) {
+                    httpUriRequest.getMethod();
                 }
-                if (!(request == null || request.getURI() == null)) {
-                    requestUrl = request.getURI().toString();
+                String str3 = "";
+                if (httpStatusAndStreamInternal == null || TextUtils.isEmpty(httpStatusAndStreamInternal.statusLine)) {
+                    str2 = str3;
+                } else {
+                    int length = httpStatusAndStreamInternal.statusLine.length();
+                    str2 = httpStatusAndStreamInternal.statusLine;
+                    if (length > 2048) {
+                        str2 = str2.substring(0, 2048);
+                    }
                 }
-                if (requestUrl.length() > 2048) {
-                    requestUrl = requestUrl.substring(0, 2048);
+                if (!(httpUriRequest == null || httpUriRequest.getURI() == null)) {
+                    str3 = httpUriRequest.getURI().toString();
                 }
-                callStackJson.addProperty("Request", requestUrl);
-                responseJson.addProperty(AuthenticationConstants.OAuth2.CODE, Integer.valueOf(responseStatusCode));
-                responseJson.addProperty("description", responseDescription);
-                callStackJson.add("Response", responseJson);
+                if (str3.length() > 2048) {
+                    str3 = str3.substring(0, 2048);
+                }
+                jsonObject.addProperty("Request", str3);
+                jsonObject2.addProperty(AuthenticationConstants.OAuth2.CODE, Integer.valueOf(i2));
+                jsonObject2.addProperty("description", str2);
+                jsonObject.add("Response", jsonObject2);
                 throw e;
             }
         } else {
-            ParseHttpResponseForStatus(url, rv.statusCode, rv.statusLine, rv.stream);
+            ParseHttpResponseForStatus(str, httpStatusAndStreamInternal.statusCode, httpStatusAndStreamInternal.statusLine, httpStatusAndStreamInternal.stream);
         }
-        if (rv.stream != null || !expectResponseEntity) {
-            return rv;
+        if (httpStatusAndStreamInternal.stream != null || !z) {
+            return httpStatusAndStreamInternal;
         }
         throw new XLEException(7);
     }

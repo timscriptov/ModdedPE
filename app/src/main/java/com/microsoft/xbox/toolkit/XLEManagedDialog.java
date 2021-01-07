@@ -14,7 +14,7 @@ import com.microsoft.xbox.toolkit.ui.NavigationManager;
 import com.microsoft.xbox.xle.anim.XLEMAASAnimationPackageNavigationManager;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -22,19 +22,27 @@ import com.microsoft.xbox.xle.anim.XLEMAASAnimationPackageNavigationManager;
 
 public class XLEManagedDialog extends Dialog implements IXLEManagedDialog {
     protected static final String BODY_ANIMATION_NAME = "Dialog";
-    final Runnable callAfterAnimationIn = () -> OnAnimationInEnd();
+    final Runnable callAfterAnimationIn = new Runnable() {
+        public void run() {
+            XLEManagedDialog.this.OnAnimationInEnd();
+        }
+    };
     protected String bodyAnimationName = BODY_ANIMATION_NAME;
     protected View dialogBody = null;
     protected Runnable onAnimateOutCompletedRunable = null;
-    final Runnable callAfterAnimationOut = () -> OnAnimationOutEnd();
+    final Runnable callAfterAnimationOut = new Runnable() {
+        public void run() {
+            XLEManagedDialog.this.OnAnimationOutEnd();
+        }
+    };
     private IXLEManagedDialog.DialogType dialogType = IXLEManagedDialog.DialogType.NORMAL;
 
-    protected XLEManagedDialog(Context context, boolean cancelable, DialogInterface.OnCancelListener cancelListener) {
-        super(context, cancelable, cancelListener);
+    protected XLEManagedDialog(Context context, boolean z, DialogInterface.OnCancelListener onCancelListener) {
+        super(context, z, onCancelListener);
     }
 
-    public XLEManagedDialog(Context context, int theme) {
-        super(context, theme);
+    public XLEManagedDialog(Context context, int i) {
+        super(context, i);
     }
 
     public XLEManagedDialog(Context context) {
@@ -45,24 +53,24 @@ public class XLEManagedDialog extends Dialog implements IXLEManagedDialog {
         return SystemUtil.isKindle();
     }
 
-    public String getBodyAnimationName() {
-        return bodyAnimationName;
+    public Dialog getDialog() {
+        return this;
     }
 
-    public void setBodyAnimationName(String string) {
-        bodyAnimationName = string;
+    public String getBodyAnimationName() {
+        return this.bodyAnimationName;
+    }
+
+    public void setBodyAnimationName(String str) {
+        this.bodyAnimationName = str;
     }
 
     public IXLEManagedDialog.DialogType getDialogType() {
-        return dialogType;
+        return this.dialogType;
     }
 
-    public void setDialogType(IXLEManagedDialog.DialogType type) {
-        dialogType = type;
-    }
-
-    public Dialog getDialog() {
-        return this;
+    public void setDialogType(IXLEManagedDialog.DialogType dialogType2) {
+        this.dialogType = dialogType2;
     }
 
     public void makeFullScreen() {
@@ -77,30 +85,30 @@ public class XLEManagedDialog extends Dialog implements IXLEManagedDialog {
         super.dismiss();
     }
 
-    public void onWindowFocusChanged(boolean hasFocus) {
-        if (!hasFocus) {
+    public void onWindowFocusChanged(boolean z) {
+        if (!z) {
             safeDismiss();
         }
     }
 
     public XLEAnimationPackage getAnimateOut() {
-        XLEAnimation screenBodyAnimation = getBodyAnimation(MAAS.MAASAnimationType.ANIMATE_OUT, true);
-        if (screenBodyAnimation == null) {
+        XLEAnimation bodyAnimation = getBodyAnimation(MAAS.MAASAnimationType.ANIMATE_OUT, true);
+        if (bodyAnimation == null) {
             return null;
         }
-        XLEAnimationPackage animationPackage = new XLEAnimationPackage();
-        animationPackage.add(screenBodyAnimation);
-        return animationPackage;
+        XLEAnimationPackage xLEAnimationPackage = new XLEAnimationPackage();
+        xLEAnimationPackage.add(bodyAnimation);
+        return xLEAnimationPackage;
     }
 
     public XLEAnimationPackage getAnimateIn() {
-        XLEAnimation screenBodyAnimation = getBodyAnimation(MAAS.MAASAnimationType.ANIMATE_IN, false);
-        if (screenBodyAnimation == null) {
+        XLEAnimation bodyAnimation = getBodyAnimation(MAAS.MAASAnimationType.ANIMATE_IN, false);
+        if (bodyAnimation == null) {
             return null;
         }
-        XLEAnimationPackage animationPackage = new XLEAnimationPackage();
-        animationPackage.add(screenBodyAnimation);
-        return animationPackage;
+        XLEAnimationPackage xLEAnimationPackage = new XLEAnimationPackage();
+        xLEAnimationPackage.add(bodyAnimation);
+        return xLEAnimationPackage;
     }
 
     public void OnAnimationInEnd() {
@@ -110,30 +118,30 @@ public class XLEManagedDialog extends Dialog implements IXLEManagedDialog {
     public void OnAnimationOutEnd() {
         NavigationManager.getInstance().setAnimationBlocking(false);
         super.dismiss();
-        if (onAnimateOutCompletedRunable != null) {
+        Runnable runnable = this.onAnimateOutCompletedRunable;
+        if (runnable != null) {
             try {
-                onAnimateOutCompletedRunable.run();
-            } catch (Exception e) {
-                e.printStackTrace();
+                runnable.run();
+            } catch (Exception unused) {
             }
         }
     }
 
-    public void setAnimateOutRunnable(Runnable postAnimateOutRunnable) {
-        onAnimateOutCompletedRunable = postAnimateOutRunnable;
+    public void setAnimateOutRunnable(Runnable runnable) {
+        this.onAnimateOutCompletedRunable = runnable;
     }
 
     public View getDialogBody() {
-        return dialogBody;
+        return this.dialogBody;
     }
 
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        XLEAnimationPackage anim = getAnimateIn();
-        if (getDialogBody() != null && anim != null) {
+        XLEAnimationPackage animateIn = getAnimateIn();
+        if (getDialogBody() != null && animateIn != null) {
             NavigationManager.getInstance().setAnimationBlocking(true);
-            anim.setOnAnimationEndRunnable(callAfterAnimationIn);
-            anim.startAnimation();
+            animateIn.setOnAnimationEndRunnable(this.callAfterAnimationIn);
+            animateIn.startAnimation();
         }
     }
 
@@ -142,27 +150,32 @@ public class XLEManagedDialog extends Dialog implements IXLEManagedDialog {
             super.dismiss();
             return;
         }
-        XLEAnimationPackage anim = getAnimateOut();
-        if (getDialogBody() == null || anim == null) {
-            if (onAnimateOutCompletedRunable != null) {
-                onAnimateOutCompletedRunable.run();
+        XLEAnimationPackage animateOut = getAnimateOut();
+        if (getDialogBody() == null || animateOut == null) {
+            Runnable runnable = this.onAnimateOutCompletedRunable;
+            if (runnable != null) {
+                runnable.run();
             }
             super.dismiss();
             return;
         }
         NavigationManager.getInstance().setAnimationBlocking(true);
-        anim.setOnAnimationEndRunnable(callAfterAnimationOut);
-        anim.startAnimation();
+        animateOut.setOnAnimationEndRunnable(this.callAfterAnimationOut);
+        animateOut.startAnimation();
     }
 
-    public XLEAnimation getBodyAnimation(MAAS.MAASAnimationType animationType, boolean goingBack) {
+    public XLEAnimation getBodyAnimation(MAAS.MAASAnimationType mAASAnimationType, boolean z) {
         if (getDialogBody() != null) {
-            return ((XLEMAASAnimationPackageNavigationManager) MAAS.getInstance().getAnimation(bodyAnimationName)).compile(animationType, goingBack, getDialogBody());
+            return ((XLEMAASAnimationPackageNavigationManager) MAAS.getInstance().getAnimation(this.bodyAnimationName)).compile(mAASAnimationType, z, getDialogBody());
         }
         return null;
     }
 
     public void forceKindleRespectDimOptions() {
-        new Handler().postDelayed(() -> getWindow().addFlags(2), 100);
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                XLEManagedDialog.this.getWindow().addFlags(2);
+            }
+        }, 100);
     }
 }

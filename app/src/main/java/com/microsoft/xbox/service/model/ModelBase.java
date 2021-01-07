@@ -6,6 +6,7 @@ import com.microsoft.xbox.toolkit.DataLoadUtil;
 import com.microsoft.xbox.toolkit.ModelData;
 import com.microsoft.xbox.toolkit.SingleEntryLoadingStatus;
 import com.microsoft.xbox.toolkit.XLEAssert;
+import com.microsoft.xbox.toolkit.XLEException;
 import com.microsoft.xbox.toolkit.XLEObservable;
 import com.microsoft.xbox.toolkit.network.IDataLoaderRunnable;
 import com.microsoft.xbox.xle.app.XLEUtil;
@@ -15,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Date;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -33,56 +34,52 @@ public abstract class ModelBase<T> extends XLEObservable<UpdateData> implements 
     private SingleEntryLoadingStatus loadingStatus = new SingleEntryLoadingStatus();
 
     public boolean shouldRefresh() {
-        return shouldRefresh(lastRefreshTime);
+        return shouldRefresh(this.lastRefreshTime);
     }
 
     public boolean hasValidData() {
-        return lastRefreshTime != null;
+        return this.lastRefreshTime != null;
     }
 
-    public boolean shouldRefresh(Date lastRefreshTime2) {
-        return XLEUtil.shouldRefresh(lastRefreshTime2, lifetime);
+    public boolean shouldRefresh(Date date) {
+        return XLEUtil.shouldRefresh(date, this.lifetime);
     }
 
     public boolean isLoaded() {
-        return lastRefreshTime != null;
+        return this.lastRefreshTime != null;
     }
 
-    public void updateWithNewData(@NotNull AsyncResult<T> result) {
-        isLoading = false;
-        if (result.getException() == null && result.getStatus() == AsyncActionStatus.SUCCESS) {
-            lastRefreshTime = new Date();
+    public void updateWithNewData(@NotNull AsyncResult<T> asyncResult) {
+        this.isLoading = false;
+        if (asyncResult.getException() == null && asyncResult.getStatus() == AsyncActionStatus.SUCCESS) {
+            this.lastRefreshTime = new Date();
         }
     }
 
     public boolean getIsLoading() {
-        return loadingStatus.getIsLoading();
+        return this.loadingStatus.getIsLoading();
     }
 
     public void invalidateData() {
-        lastRefreshTime = null;
+        this.lastRefreshTime = null;
     }
 
-    public AsyncResult<T> loadData(boolean forceRefresh, IDataLoaderRunnable<T> runnable) {
+    public AsyncResult<T> loadData(boolean z, IDataLoaderRunnable<T> iDataLoaderRunnable) {
         XLEAssert.assertIsNotUIThread();
-        return DataLoadUtil.Load(forceRefresh, lifetime, lastRefreshTime, loadingStatus, runnable);
+        return DataLoadUtil.Load(z, this.lifetime, this.lastRefreshTime, this.loadingStatus, iDataLoaderRunnable);
     }
 
-    public void loadInternal(boolean forceRefresh, UpdateType updateType, IDataLoaderRunnable<T> runnable) {
-        loadInternal(forceRefresh, updateType, runnable, lastRefreshTime);
+    public void loadInternal(boolean z, UpdateType updateType, IDataLoaderRunnable<T> iDataLoaderRunnable) {
+        loadInternal(z, updateType, iDataLoaderRunnable, this.lastRefreshTime);
     }
 
-    public void loadInternal(boolean forceRefresh, UpdateType updateType, IDataLoaderRunnable<T> runnable, Date lastRefreshTime2) {
-        boolean z = false;
+    public void loadInternal(boolean z, UpdateType updateType, IDataLoaderRunnable<T> iDataLoaderRunnable, Date date) {
         XLEAssert.assertIsUIThread();
-        if (getIsLoading() || (!forceRefresh && !shouldRefresh(lastRefreshTime2))) {
-            if (!getIsLoading()) {
-                z = true;
-            }
-            notifyObservers(new AsyncResult(new UpdateData(updateType, z), this, null));
+        if (getIsLoading() || (!z && !shouldRefresh(date))) {
+            notifyObservers(new AsyncResult(new UpdateData(updateType, !getIsLoading()), this, (XLEException) null));
             return;
         }
-        DataLoadUtil.StartLoadFromUI(forceRefresh, lifetime, lastRefreshTime, loadingStatus, runnable);
-        notifyObservers(new AsyncResult(new UpdateData(updateType, false), this, null));
+        DataLoadUtil.StartLoadFromUI(z, this.lifetime, this.lastRefreshTime, this.loadingStatus, iDataLoaderRunnable);
+        notifyObservers(new AsyncResult(new UpdateData(updateType, false), this, (XLEException) null));
     }
 }

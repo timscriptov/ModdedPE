@@ -1,60 +1,61 @@
 package com.microsoft.xbox.toolkit.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-
-import androidx.appcompat.widget.AppCompatTextView;
+import android.widget.TextView;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 
-public class CustomTypefaceTextView extends AppCompatTextView {
-    public CustomTypefaceTextView(Context context, String typeface) {
+@SuppressLint("AppCompatCustomView")
+public class CustomTypefaceTextView extends TextView {
+    public CustomTypefaceTextView(Context context, String str) {
         super(context);
-        applyCustomTypeface(context, typeface);
+        applyCustomTypeface(context, str);
     }
 
-    public CustomTypefaceTextView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public CustomTypefaceTextView(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
         /*if (!isInEditMode()) {
-            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CustomTypeface);
-            String typeface = a.getString(R.styleable.CustomTypeface_typefaceSource);
-            String uppercaseText = a.getString(R.styleable.CustomTypeface_uppercaseText);
-            if (uppercaseText != null) {
-                setText(uppercaseText.toUpperCase());
+            TypedArray obtainStyledAttributes = context.obtainStyledAttributes(attributeSet, R.styleable.CustomTypeface);
+            String string = obtainStyledAttributes.getString(R.styleable.CustomTypeface_typefaceSource);
+            String string2 = obtainStyledAttributes.getString(R.styleable.CustomTypeface_uppercaseText);
+            if (string2 != null) {
+                setText(string2.toUpperCase());
             }
-            applyCustomTypeface(context, typeface);
-            a.recycle();
+            applyCustomTypeface(context, string);
+            obtainStyledAttributes.recycle();
         }*/
     }
 
-    public CustomTypefaceTextView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
+    public CustomTypefaceTextView(Context context, AttributeSet attributeSet, int i) {
+        super(context, attributeSet, i);
         /*if (!isInEditMode()) {
-            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CustomTypeface);
-            applyCustomTypeface(context, a.getString(R.styleable.CustomTypeface_typefaceSource));
-            a.recycle();
+            TypedArray obtainStyledAttributes = context.obtainStyledAttributes(attributeSet, R.styleable.CustomTypeface);
+            applyCustomTypeface(context, obtainStyledAttributes.getString(R.styleable.CustomTypeface_typefaceSource));
+            obtainStyledAttributes.recycle();
         }*/
     }
 
-    private void applyCustomTypeface(Context context, String typefaceSource) {
-        if (typefaceSource != null) {
-            setTypeface(FontManager.Instance().getTypeface(getContext(), typefaceSource));
+    private void applyCustomTypeface(Context context, String str) {
+        if (str != null) {
+            setTypeface(FontManager.Instance().getTypeface(getContext(), str));
         }
         setCursorVisible(false);
     }
 
-    public void setOnClickListener(View.OnClickListener l) {
+    public void setOnClickListener(View.OnClickListener onClickListener) {
         throw new UnsupportedOperationException("If you want CustomTypefaceTextView to be clickable, use XLEButton instead.");
     }
 
-    public void setClickable(boolean clickable) {
-        if (clickable) {
+    public void setClickable(boolean z) {
+        if (z) {
             throw new UnsupportedOperationException("If you want CustomTypefaceTextView to be clickable, use XLEButton instead.");
         }
     }

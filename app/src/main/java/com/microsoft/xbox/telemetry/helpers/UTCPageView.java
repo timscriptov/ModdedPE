@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -23,58 +23,58 @@ public class UTCPageView {
     }
 
     public static String getCurrentPage() {
-        int count = getSize();
-        if (count == 0) {
+        int size = getSize();
+        if (size == 0) {
             return UTCTelemetry.UNKNOWNPAGE;
         }
-        return pages.get(count - 1);
+        return pages.get(size - 1);
     }
 
     public static String getPreviousPage() {
-        int count = getSize();
-        if (count < 2) {
+        int size = getSize();
+        if (size < 2) {
             return UTCTelemetry.UNKNOWNPAGE;
         }
-        return pages.get(count - 2);
+        return pages.get(size - 2);
     }
 
-    public static void addPage(String newPage) {
+    public static void addPage(String str) {
         if (pages == null) {
             pages = new ArrayList<>();
         }
-        if (!pages.contains(newPage) && newPage != null) {
-            pages.add(newPage);
+        if (!pages.contains(str) && str != null) {
+            pages.add(str);
         }
     }
 
     public static void removePage() {
-        int count = getSize();
-        if (count > 0) {
-            pages.remove(count - 1);
+        int size = getSize();
+        if (size > 0) {
+            pages.remove(size - 1);
         }
     }
 
-    public static void track(String toPage, CharSequence activityTitle) {
-        track(toPage, activityTitle, new HashMap());
+    public static void track(String str, CharSequence charSequence) {
+        track(str, charSequence, new HashMap());
     }
 
-    public static void track(String toPage, CharSequence activityTitle, HashMap<String, Object> additionalInfo) {
-        if (activityTitle != null) {
+    public static void track(String str, CharSequence charSequence, HashMap<String, Object> hashMap) {
+        if (charSequence != null) {
             try {
-                additionalInfo.put("activityTitle", activityTitle);
+                hashMap.put("activityTitle", charSequence);
             } catch (Exception e) {
                 UTCError.trackException(e, "UTCPageView.track");
                 UTCLog.log(e.getMessage(), new Object[0]);
                 return;
             }
         }
-        addPage(toPage);
-        String fromPage = getPreviousPage();
+        addPage(str);
+        String previousPage = getPreviousPage();
         PageView pageView = new PageView();
-        pageView.pageName = toPage;
-        pageView.fromPage = fromPage;
-        pageView.additionalInfo = additionalInfo;
-        UTCLog.log("pageView:%s, fromPage:%s, additionalInfo:%s", toPage, fromPage, additionalInfo);
+        pageView.pageName = str;
+        pageView.fromPage = previousPage;
+        pageView.additionalInfo = hashMap;
+        UTCLog.log("pageView:%s, fromPage:%s, additionalInfo:%s", str, previousPage, hashMap);
         UTCTelemetry.LogEvent(pageView);
     }
 }

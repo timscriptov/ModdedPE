@@ -1,15 +1,15 @@
 package com.microsoft.xbox.toolkit;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 
 public class XLEThread extends Thread {
-    public XLEThread(Runnable runnable, String name) {
-        super(runnable, name);
+    public XLEThread(Runnable runnable, String str) {
+        super(runnable, str);
         setUncaughtExceptionHandler(XLEUnhandledExceptionHandler.Instance);
     }
 }

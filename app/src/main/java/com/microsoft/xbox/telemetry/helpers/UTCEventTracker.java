@@ -1,9 +1,7 @@
 package com.microsoft.xbox.telemetry.helpers;
 
-import org.jetbrains.annotations.Nullable;
-
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -11,20 +9,19 @@ import org.jetbrains.annotations.Nullable;
 
 public class UTCEventTracker {
 
-    public static void callTrackWrapper(UTCEventDelegate delegate) {
+    public static void callTrackWrapper(UTCEventDelegate uTCEventDelegate) {
         try {
-            delegate.call();
-        } catch (Exception ex) {
-            UTCLog.log(ex.getMessage(), new Object[0]);
+            uTCEventDelegate.call();
+        } catch (Exception e) {
+            UTCLog.log(e.getMessage(), new Object[0]);
         }
     }
 
-    @Nullable
-    public static String callStringTrackWrapper(UTCStringEventDelegate delegate) {
+    public static String callStringTrackWrapper(UTCStringEventDelegate uTCStringEventDelegate) {
         try {
-            return delegate.call();
-        } catch (Exception ex) {
-            UTCLog.log(ex.getMessage(), new Object[0]);
+            return uTCStringEventDelegate.call();
+        } catch (Exception e) {
+            UTCLog.log(e.getMessage(), new Object[0]);
             return null;
         }
     }

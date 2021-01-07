@@ -1,7 +1,7 @@
 package com.microsoft.xbox.toolkit;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -15,205 +15,227 @@ public class ProjectSpecificDataProvider implements IProjectSpecificDataProvider
         return instance;
     }
 
-    public void setProvider(IProjectSpecificDataProvider provider2) {
-        provider = provider2;
+    private void checkProvider() {
+    }
+
+    public void setProvider(IProjectSpecificDataProvider iProjectSpecificDataProvider) {
+        this.provider = iProjectSpecificDataProvider;
     }
 
     public String getLegalLocale() {
         checkProvider();
-        if (provider != null) {
-            return provider.getLegalLocale();
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            return iProjectSpecificDataProvider.getLegalLocale();
         }
         return null;
     }
 
     public String getCombinedContentRating() {
         checkProvider();
-        if (provider != null) {
-            return provider.getCombinedContentRating();
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            return iProjectSpecificDataProvider.getCombinedContentRating();
         }
         return null;
     }
 
     public String getMembershipLevel() {
         checkProvider();
-        if (provider != null) {
-            return provider.getMembershipLevel();
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            return iProjectSpecificDataProvider.getMembershipLevel();
         }
         return null;
     }
 
     public String getXuidString() {
         checkProvider();
-        if (provider != null) {
-            return provider.getXuidString();
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            return iProjectSpecificDataProvider.getXuidString();
         }
         return null;
     }
 
-    public void setXuidString(String xuid) {
+    public void setXuidString(String str) {
         checkProvider();
-        if (provider != null) {
-            provider.setXuidString(xuid);
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            iProjectSpecificDataProvider.setXuidString(str);
         }
     }
 
     public String getSCDRpsTicket() {
         checkProvider();
-        if (provider != null) {
-            return provider.getSCDRpsTicket();
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            return iProjectSpecificDataProvider.getSCDRpsTicket();
         }
         return null;
     }
 
-    public void setSCDRpsTicket(String rpsTicket) {
+    public void setSCDRpsTicket(String str) {
         checkProvider();
-        if (provider != null) {
-            provider.setSCDRpsTicket(rpsTicket);
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            iProjectSpecificDataProvider.setSCDRpsTicket(str);
         }
     }
 
     public String getPrivileges() {
         checkProvider();
-        if (provider != null) {
-            return provider.getPrivileges();
-        }
-        return "";
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        return iProjectSpecificDataProvider != null ? iProjectSpecificDataProvider.getPrivileges() : "";
     }
 
-    public void setPrivileges(String privileges) {
+    public void setPrivileges(String str) {
         checkProvider();
-        if (provider != null) {
-            provider.setPrivileges(privileges);
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            iProjectSpecificDataProvider.setPrivileges(str);
         }
     }
 
     public boolean getAllowExplicitContent() {
         checkProvider();
-        if (provider != null) {
-            return provider.getAllowExplicitContent();
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            return iProjectSpecificDataProvider.getAllowExplicitContent();
         }
         return false;
     }
 
     public String getAutoSuggestdDataSource() {
         checkProvider();
-        if (provider != null) {
-            return provider.getAutoSuggestdDataSource();
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            return iProjectSpecificDataProvider.getAutoSuggestdDataSource();
         }
         return null;
     }
 
     public boolean getInitializeComplete() {
         checkProvider();
-        if (provider != null) {
-            return provider.getInitializeComplete();
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            return iProjectSpecificDataProvider.getInitializeComplete();
         }
         return false;
     }
 
     public boolean getIsFreeAccount() {
         checkProvider();
-        if (provider != null) {
-            return provider.getIsFreeAccount();
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            return iProjectSpecificDataProvider.getIsFreeAccount();
         }
         return true;
     }
 
-    private void checkProvider() {
-    }
-
     public boolean getIsXboxMusicSupported() {
         checkProvider();
-        if (provider != null) {
-            return provider.getIsXboxMusicSupported();
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            return iProjectSpecificDataProvider.getIsXboxMusicSupported();
         }
         return false;
     }
 
     public String getWindowsLiveClientId() {
         checkProvider();
-        if (provider != null) {
-            return provider.getWindowsLiveClientId();
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            return iProjectSpecificDataProvider.getWindowsLiveClientId();
         }
         return null;
     }
 
     public String getVersionCheckUrl() {
         checkProvider();
-        if (provider != null) {
-            return provider.getVersionCheckUrl();
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            return iProjectSpecificDataProvider.getVersionCheckUrl();
         }
         return null;
     }
 
-    public void resetModels(boolean clearEverything) {
+    public void resetModels(boolean z) {
         checkProvider();
-        if (provider != null) {
-            provider.resetModels(clearEverything);
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            iProjectSpecificDataProvider.resetModels(z);
         }
     }
 
     public boolean getIsForXboxOne() {
         checkProvider();
-        if (provider != null) {
-            return provider.getIsForXboxOne();
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            return iProjectSpecificDataProvider.getIsForXboxOne();
         }
         return false;
     }
 
     public String getCurrentSandboxID() {
         checkProvider();
-        if (provider != null) {
-            return provider.getCurrentSandboxID();
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            return iProjectSpecificDataProvider.getCurrentSandboxID();
         }
         return null;
     }
 
     public boolean isDeviceLocaleKnown() {
         checkProvider();
-        if (provider != null) {
-            return provider.isDeviceLocaleKnown();
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            return iProjectSpecificDataProvider.isDeviceLocaleKnown();
         }
         return true;
     }
 
     public String getConnectedLocale() {
         checkProvider();
-        if (provider != null) {
-            return provider.getConnectedLocale();
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            return iProjectSpecificDataProvider.getConnectedLocale();
         }
         return null;
     }
 
-    public String getConnectedLocale(boolean fromEdsCall) {
+    public String getConnectedLocale(boolean z) {
         checkProvider();
-        if (provider != null) {
-            return provider.getConnectedLocale(fromEdsCall);
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            return iProjectSpecificDataProvider.getConnectedLocale(z);
         }
         return null;
     }
 
     public int getVersionCode() {
         checkProvider();
-        if (provider != null) {
-            return provider.getVersionCode();
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            return iProjectSpecificDataProvider.getVersionCode();
         }
         return 0;
     }
 
     public String getContentRestrictions() {
         checkProvider();
-        if (provider != null) {
-            return provider.getContentRestrictions();
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            return iProjectSpecificDataProvider.getContentRestrictions();
         }
         return null;
     }
 
     public String getRegion() {
         checkProvider();
-        if (provider != null) {
-            return provider.getRegion();
+        IProjectSpecificDataProvider iProjectSpecificDataProvider = this.provider;
+        if (iProjectSpecificDataProvider != null) {
+            return iProjectSpecificDataProvider.getRegion();
         }
         return null;
     }

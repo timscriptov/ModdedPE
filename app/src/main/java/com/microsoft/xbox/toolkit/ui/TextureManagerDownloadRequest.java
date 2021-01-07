@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -18,11 +18,11 @@ public class TextureManagerDownloadRequest implements Comparable<TextureManagerD
     public TextureManagerScaledNetworkBitmapRequest key;
     public InputStream stream;
 
-    public TextureManagerDownloadRequest(TextureManagerScaledNetworkBitmapRequest key2) {
-        key = key2;
+    public TextureManagerDownloadRequest(TextureManagerScaledNetworkBitmapRequest textureManagerScaledNetworkBitmapRequest) {
+        this.key = textureManagerScaledNetworkBitmapRequest;
     }
 
-    public int compareTo(@NotNull TextureManagerDownloadRequest rhs) {
-        return index - rhs.index;
+    public int compareTo(@NotNull TextureManagerDownloadRequest textureManagerDownloadRequest) {
+        return this.index - textureManagerDownloadRequest.index;
     }
 }

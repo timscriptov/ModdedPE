@@ -6,7 +6,7 @@ import android.view.animation.Interpolator;
 import com.microsoft.xbox.toolkit.ThreadManager;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -25,9 +25,9 @@ public abstract class XLEAnimation {
 
     public void setOnAnimationEnd(final Runnable runnable) {
         if (runnable != null) {
-            endRunnable = () -> ThreadManager.UIThreadPost(runnable);
+            this.endRunnable = () -> ThreadManager.UIThreadPost(runnable);
         } else {
-            endRunnable = null;
+            this.endRunnable = null;
         }
     }
 }

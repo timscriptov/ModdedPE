@@ -10,7 +10,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -24,163 +24,157 @@ public class TrieSearch {
     public Hashtable<String, List<Object>> WordsDictionary;
 
     public TrieSearch() {
-        WordsDictionary = new Hashtable<>();
-        RootTrieNode = new TrieNode();
-        TrieDepth = DefaultTrieDepth;
+        this.WordsDictionary = new Hashtable<>();
+        this.RootTrieNode = new TrieNode();
+        this.TrieDepth = DefaultTrieDepth;
     }
 
-    public TrieSearch(int depth) {
-        WordsDictionary = new Hashtable<>();
-        RootTrieNode = new TrieNode();
-        TrieDepth = depth;
+    public TrieSearch(int i) {
+        this.WordsDictionary = new Hashtable<>();
+        this.RootTrieNode = new TrieNode();
+        this.TrieDepth = i;
     }
 
-    @NotNull
-    public static Hashtable<String, List<Object>> getWordsDictionary(List<TrieInput> trieInputs) {
-        String[] words;
-        Hashtable<String, List<Object>> wordsDictionary = new Hashtable<>();
-        if (trieInputs != null) {
-            for (TrieInput trieInput : trieInputs) {
-                if (JavaUtil.isNullOrEmpty(trieInput.Text)) {
-                    words = new String[0];
-                } else {
-                    words = trieInput.Text.split(" ");
-                }
-                for (String findWordIndex : words) {
-                    int wordIndex = findWordIndex(trieInput.Text, findWordIndex);
-                    if (wordIndex != -1) {
-                        String word = trieInput.Text.substring(wordIndex).toUpperCase();
-                        if (!wordsDictionary.containsKey(word)) {
-                            List<Object> contexts = new ArrayList<>();
-                            contexts.add(trieInput.Context);
-                            wordsDictionary.put(word, contexts);
-                        } else if (!wordsDictionary.get(word).contains(trieInput.Context)) {
-                            wordsDictionary.get(word).add(trieInput.Context);
-                        }
+    public static @NotNull Hashtable<String, List<Object>> getWordsDictionary(List<TrieInput> list) {
+        Hashtable<String, List<Object>> hashtable = new Hashtable<>();
+        if (list == null) {
+            return hashtable;
+        }
+        for (TrieInput next : list) {
+            String[] split = JavaUtil.isNullOrEmpty(next.Text) ? new String[0] : next.Text.split(" ");
+            for (String findWordIndex : split) {
+                int findWordIndex2 = findWordIndex(next.Text, findWordIndex);
+                if (findWordIndex2 != -1) {
+                    String upperCase = next.Text.substring(findWordIndex2).toUpperCase();
+                    if (!hashtable.containsKey(upperCase)) {
+                        ArrayList arrayList = new ArrayList();
+                        arrayList.add(next.Context);
+                        hashtable.put(upperCase, arrayList);
+                    } else if (!hashtable.get(upperCase).contains(next.Context)) {
+                        hashtable.get(upperCase).add(next.Context);
                     }
                 }
             }
         }
-        return wordsDictionary;
+        return hashtable;
     }
 
-    public static int findWordIndex(String text, String word) {
-        int index = -1;
-        if (!JavaUtil.isNullOrEmpty(text) && !JavaUtil.isNullOrEmpty(word)) {
-            index = text.toLowerCase().indexOf(word.toLowerCase());
-            while (index != -1 && index != 0 && !isNullOrWhitespace(text.substring(index - 1, index))) {
-                index = text.toLowerCase().indexOf(word.toLowerCase(), index + 1);
-            }
+    public static int findWordIndex(String str, String str2) {
+        if (JavaUtil.isNullOrEmpty(str) || JavaUtil.isNullOrEmpty(str2)) {
+            return -1;
         }
-        return index;
+        int indexOf = str.toLowerCase().indexOf(str2.toLowerCase());
+        while (indexOf != -1 && indexOf != 0 && !isNullOrWhitespace(str.substring(indexOf - 1, indexOf))) {
+            indexOf = str.toLowerCase().indexOf(str2.toLowerCase(), indexOf + 1);
+        }
+        return indexOf;
     }
 
-    private static boolean isNullOrWhitespace(String text) {
-        return JavaUtil.isNullOrEmpty(text) || text.trim().isEmpty();
+    private static boolean isNullOrWhitespace(String str) {
+        return JavaUtil.isNullOrEmpty(str) || str.trim().isEmpty();
     }
 
-    public static TrieNode getTrieNodes(Hashtable<String, List<Object>> wordsDictionary, int trieDepth) {
-        if (wordsDictionary == null) {
+    public static TrieNode getTrieNodes(Hashtable<String, List<Object>> hashtable, int i) {
+        if (hashtable == null) {
             return null;
         }
-        TrieNode rootTrieNode = new TrieNode();
-        Enumeration<String> keys = wordsDictionary.keys();
+        TrieNode trieNode = new TrieNode();
+        Enumeration<String> keys = hashtable.keys();
         while (keys.hasMoreElements()) {
-            String word = keys.nextElement();
-            TrieNode node = rootTrieNode;
-            int level = 0;
-            while (level < word.length() && level <= trieDepth) {
-                char charAtIndex = word.charAt(level);
-                if (node.MoreNodes == null) {
-                    node.MoreNodes = new Hashtable<>(26);
+            String nextElement = keys.nextElement();
+            int i2 = 0;
+            TrieNode trieNode2 = trieNode;
+            while (i2 < nextElement.length() && i2 <= i) {
+                char charAt = nextElement.charAt(i2);
+                if (trieNode2.MoreNodes == null) {
+                    trieNode2.MoreNodes = new Hashtable<>(26);
                 }
-                if (!node.MoreNodes.containsKey(Character.valueOf(charAtIndex))) {
-                    node.MoreNodes.put(Character.valueOf(charAtIndex), new TrieNode());
+                if (!trieNode2.MoreNodes.containsKey(Character.valueOf(charAt))) {
+                    trieNode2.MoreNodes.put(Character.valueOf(charAt), new TrieNode());
                 }
-                node = node.MoreNodes.get(Character.valueOf(charAtIndex));
-                level++;
+                trieNode2 = trieNode2.MoreNodes.get(Character.valueOf(charAt));
+                i2++;
             }
-            if (level > trieDepth) {
-                if (node.Words == null) {
-                    node.Words = new ArrayList();
+            if (i2 > i) {
+                if (trieNode2.Words == null) {
+                    trieNode2.Words = new ArrayList();
                 }
-                node.Words.add(word);
+                trieNode2.Words.add(nextElement);
             }
-            if (level == word.length()) {
-                node.IsWord = true;
+            if (i2 == nextElement.length()) {
+                trieNode2.IsWord = true;
             }
         }
-        return rootTrieNode;
+        return trieNode;
     }
 
-    @NotNull
-    public static List<String> getWordMatches(TrieNode root, int trieDepth, String searchText) {
-        List<String> wordMatches = new ArrayList<>();
-        if (!JavaUtil.isNullOrEmpty(searchText)) {
-            String prefix = "";
-            TrieNode node = root;
-            boolean hasMatches = true;
-            String text = searchText.toUpperCase();
-            int level = 0;
-            while (true) {
-                if (level >= text.length() || level > trieDepth) {
+    public static @NotNull List<String> getWordMatches(TrieNode trieNode, int i, String str) {
+        ArrayList arrayList = new ArrayList();
+        if (JavaUtil.isNullOrEmpty(str)) {
+            return arrayList;
+        }
+        String upperCase = str.toUpperCase();
+        boolean z = false;
+        String str2 = "";
+        int i2 = 0;
+        while (true) {
+            if (i2 < upperCase.length() && i2 <= i) {
+                char charAt = upperCase.charAt(i2);
+                str2 = str2 + charAt;
+                if (trieNode.MoreNodes == null || !trieNode.MoreNodes.containsKey(Character.valueOf(charAt))) {
                     break;
                 }
-                char charAtIndex = text.charAt(level);
-                prefix = prefix + charAtIndex;
-                if (node.MoreNodes == null || !node.MoreNodes.containsKey(Character.valueOf(charAtIndex))) {
-                    hasMatches = false;
-                } else {
-                    node = node.MoreNodes.get(Character.valueOf(charAtIndex));
-                    level++;
-                }
-            }
-            if (level > trieDepth) {
-                if (node.Words != null) {
-                    for (String word : node.Words) {
-                        if (word.toLowerCase().startsWith(searchText.toLowerCase())) {
-                            wordMatches.add(word);
-                        }
-                    }
-                }
-            } else if (hasMatches) {
-                wordMatches.addAll(getRemainingWordMatches(node, trieDepth, prefix));
+                trieNode = trieNode.MoreNodes.get(Character.valueOf(charAt));
+                i2++;
+            } else {
+                z = true;
             }
         }
-        return wordMatches;
+        if (i2 > i) {
+            if (trieNode.Words != null) {
+                for (String next : trieNode.Words) {
+                    if (next.toLowerCase().startsWith(str.toLowerCase())) {
+                        arrayList.add(next);
+                    }
+                }
+            }
+        } else if (z) {
+            arrayList.addAll(getRemainingWordMatches(trieNode, i, str2));
+        }
+        return arrayList;
     }
 
-    @NotNull
-    public static List<String> getRemainingWordMatches(TrieNode node, int trieDepth, String prefix) {
-        List<String> words = new ArrayList<>();
-        if (node != null && !JavaUtil.isNullOrEmpty(prefix)) {
-            if (node.IsWord && prefix.length() <= trieDepth) {
-                words.add(prefix);
+    public static @NotNull List<String> getRemainingWordMatches(TrieNode trieNode, int i, String str) {
+        ArrayList arrayList = new ArrayList();
+        if (trieNode != null && !JavaUtil.isNullOrEmpty(str)) {
+            if (trieNode.IsWord && str.length() <= i) {
+                arrayList.add(str);
             }
-            if (node.MoreNodes != null) {
-                Enumeration<Character> keys = node.MoreNodes.keys();
+            if (trieNode.MoreNodes != null) {
+                Enumeration<Character> keys = trieNode.MoreNodes.keys();
                 while (keys.hasMoreElements()) {
-                    char key = keys.nextElement().charValue();
-                    words.addAll(getRemainingWordMatches(node.MoreNodes.get(Character.valueOf(key)), trieDepth, prefix + key));
+                    char charValue = keys.nextElement().charValue();
+                    arrayList.addAll(getRemainingWordMatches(trieNode.MoreNodes.get(Character.valueOf(charValue)), i, str + charValue));
                 }
             }
-            if (node.Words != null) {
-                for (String word : node.Words) {
-                    if (word.toLowerCase().startsWith(prefix.toLowerCase())) {
-                        words.add(word);
+            if (trieNode.Words != null) {
+                for (String next : trieNode.Words) {
+                    if (next.toLowerCase().startsWith(str.toLowerCase())) {
+                        arrayList.add(next);
                     }
                 }
             }
         }
-        return words;
+        return arrayList;
     }
 
-    public void initialize(List<TrieInput> trieInputs) {
-        WordsDictionary = getWordsDictionary(trieInputs);
-        RootTrieNode = getTrieNodes(WordsDictionary, TrieDepth);
+    public void initialize(List<TrieInput> list) {
+        Hashtable<String, List<Object>> wordsDictionary = getWordsDictionary(list);
+        this.WordsDictionary = wordsDictionary;
+        this.RootTrieNode = getTrieNodes(wordsDictionary, this.TrieDepth);
     }
 
-    public List<String> search(String searchText) {
-        return getWordMatches(RootTrieNode, TrieDepth, searchText);
+    public List<String> search(String str) {
+        return getWordMatches(this.RootTrieNode, this.TrieDepth, str);
     }
 }

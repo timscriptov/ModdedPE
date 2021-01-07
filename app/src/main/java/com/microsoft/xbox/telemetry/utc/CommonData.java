@@ -19,12 +19,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -56,47 +55,42 @@ public class CommonData {
     public String xsapiVersion = "1.0";
     private String accessibilityInfo = staticAccessibilityInfo;
 
-    public CommonData(int partCVersion) {
-        eventVersion = String.format("%s.%s", new Object[]{EVENTVERSION, Integer.valueOf(partCVersion)});
+    public CommonData(int i) {
+        this.eventVersion = String.format("%s.%s", new Object[]{EVENTVERSION, Integer.valueOf(i)});
     }
 
     private static native String get_title_telemetry_device_id();
 
     private static native String get_title_telemetry_session_id();
 
-    @NotNull
-    public static String getApplicationSession() {
+    public static @NotNull String getApplicationSession() {
         return applicationSession.toString();
     }
 
     private static String getDeviceModel() {
-        String androidModel = Build.MODEL;
-        if (androidModel == null || androidModel.isEmpty()) {
-            return UNKNOWNAPP;
-        }
-        return androidModel.replace(AuthenticationConstants.Broker.CALLER_CACHEKEY_PREFIX, "");
+        String str = Build.MODEL;
+        return (str == null || str.isEmpty()) ? UNKNOWNAPP : str.replace(AuthenticationConstants.Broker.CALLER_CACHEKEY_PREFIX, "");
     }
 
     private static String getAppName() {
         try {
-            Context ctx = Interop.getApplicationContext();
-            if (ctx != null) {
-                return ctx.getApplicationInfo().packageName;
+            Context applicationContext = Interop.getApplicationContext();
+            if (applicationContext != null) {
+                return applicationContext.getApplicationInfo().packageName;
             }
             return UNKNOWNAPP;
-        } catch (Exception ex) {
-            UTCLog.log(ex.getMessage(), new Object[0]);
+        } catch (Exception e) {
+            UTCLog.log(e.getMessage(), new Object[0]);
             return UNKNOWNAPP;
         }
     }
 
-    @Nullable
-    private static String getDeviceLocale() {
+    private static @Nullable String getDeviceLocale() {
         try {
-            Locale deviceLocale = Locale.getDefault();
-            return String.format("%s-%s", new Object[]{deviceLocale.getLanguage(), deviceLocale.getCountry()});
-        } catch (Exception ex) {
-            UTCLog.log(ex.getMessage(), new Object[0]);
+            Locale locale = Locale.getDefault();
+            return String.format("%s-%s", new Object[]{locale.getLanguage(), locale.getCountry()});
+        } catch (Exception e) {
+            UTCLog.log(e.getMessage(), new Object[0]);
             return null;
         }
     }
@@ -104,8 +98,8 @@ public class CommonData {
     private static String getSandboxId() {
         try {
             return new XboxLiveAppConfig().getSandbox();
-        } catch (Exception ex) {
-            UTCLog.log(ex.getMessage(), new Object[0]);
+        } catch (Exception e) {
+            UTCLog.log(e.getMessage(), new Object[0]);
             return DEFAULTSANDBOX;
         }
     }
@@ -113,30 +107,27 @@ public class CommonData {
     private static NetworkType getNetworkConnection() {
         if (netType == NetworkType.UNKNOWN && Interop.getApplicationContext() != null) {
             try {
-                @SuppressLint("WrongConstant") NetworkInfo defaultNetworkInfo = ((ConnectivityManager) Interop.getApplicationContext().getSystemService("connectivity")).getActiveNetworkInfo();
-                if (defaultNetworkInfo != null) {
-                    if (defaultNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                        switch (defaultNetworkInfo.getType()) {
-                            case 0:
-                            case 6:
-                                netType = NetworkType.CELLULAR;
-                                break;
-                            case 1:
-                                netType = NetworkType.WIFI;
-                                break;
-                            case 9:
-                                netType = NetworkType.WIRED;
-                                break;
-                            default:
-                                netType = NetworkType.UNKNOWN;
-                                break;
-                        }
-                    }
-                } else {
+                @SuppressLint("WrongConstant") NetworkInfo activeNetworkInfo = ((ConnectivityManager) Interop.getApplicationContext().getSystemService("connectivity")).getActiveNetworkInfo();
+                if (activeNetworkInfo == null) {
                     return netType;
                 }
-            } catch (Exception ex) {
-                UTCLog.log(ex.getMessage(), new Object[0]);
+                if (activeNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
+                    int type = activeNetworkInfo.getType();
+                    if (type != 0) {
+                        if (type == 1) {
+                            netType = NetworkType.WIFI;
+                        } else if (type != 6) {
+                            if (type != 9) {
+                                netType = NetworkType.UNKNOWN;
+                            } else {
+                                netType = NetworkType.WIRED;
+                            }
+                        }
+                    }
+                    netType = NetworkType.CELLULAR;
+                }
+            } catch (Exception e) {
+                UTCLog.log(e.getMessage(), new Object[0]);
                 netType = NetworkType.UNKNOWN;
             }
         }
@@ -145,24 +136,23 @@ public class CommonData {
 
     private static String getAccessibilityInfo() {
         try {
-            Context ctx = Interop.getApplicationContext();
-            if (ctx == null) {
+            Context applicationContext = Interop.getApplicationContext();
+            if (applicationContext == null) {
                 return "";
             }
-            @SuppressLint("WrongConstant") AccessibilityManager manager = (AccessibilityManager) ctx.getSystemService("accessibility");
-            HashMap<String, Object> accessibilityInfoMap = new HashMap<>();
-            accessibilityInfoMap.put("isenabled", Boolean.valueOf(manager.isEnabled()));
-            List<AccessibilityServiceInfo> serviceInfoList = manager.getEnabledAccessibilityServiceList(-1);
-            String services = DEFAULTSERVICES;
-            for (AccessibilityServiceInfo info : serviceInfoList) {
-                if (services.equals(DEFAULTSERVICES)) {
-                    services = info.getId();
+            @SuppressLint("WrongConstant") AccessibilityManager accessibilityManager = (AccessibilityManager) applicationContext.getSystemService("accessibility");
+            HashMap hashMap = new HashMap();
+            hashMap.put("isenabled", Boolean.valueOf(accessibilityManager.isEnabled()));
+            String str = DEFAULTSERVICES;
+            for (AccessibilityServiceInfo next : accessibilityManager.getEnabledAccessibilityServiceList(-1)) {
+                if (str.equals(DEFAULTSERVICES)) {
+                    str = next.getId();
                 } else {
-                    services = services + String.format(";%s", new Object[]{info.getId()});
+                    str = str + String.format(";%s", new Object[]{next.getId()});
                 }
             }
-            accessibilityInfoMap.put("enabledservices", services);
-            return new GsonBuilder().serializeNulls().create().toJson(accessibilityInfoMap);
+            hashMap.put("enabledservices", str);
+            return new GsonBuilder().serializeNulls().create().toJson(hashMap);
         } catch (Exception e) {
             UTCLog.log(e.getMessage(), new Object[0]);
             return "";
@@ -180,7 +170,7 @@ public class CommonData {
 
     public String GetAdditionalInfoString() {
         try {
-            return new GsonBuilder().serializeNulls().create().toJson(additionalInfo);
+            return new GsonBuilder().serializeNulls().create().toJson(this.additionalInfo);
         } catch (JsonIOException e) {
             UTCLog.log("UTCJsonSerializer", "Error in json serialization" + e.toString());
             return null;
@@ -195,17 +185,17 @@ public class CommonData {
 
         private int value;
 
-        private NetworkType(int val) {
-            value = 0;
-            setValue(val);
+        private NetworkType(int i) {
+            this.value = 0;
+            setValue(i);
         }
 
         public int getValue() {
-            return value;
+            return this.value;
         }
 
-        public void setValue(int value2) {
-            value = value2;
+        public void setValue(int i) {
+            this.value = i;
         }
     }
 }

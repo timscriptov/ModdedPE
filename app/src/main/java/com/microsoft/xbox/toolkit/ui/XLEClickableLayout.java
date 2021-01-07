@@ -4,12 +4,11 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 
-import androidx.appcompat.widget.AppCompatButton;
-
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -21,23 +20,23 @@ public class XLEClickableLayout extends RelativeLayout {
         setSoundEffectsEnabled(false);
     }
 
-    public XLEClickableLayout(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public XLEClickableLayout(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
         setSoundEffectsEnabled(false);
     }
 
-    public XLEClickableLayout(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
+    public XLEClickableLayout(Context context, AttributeSet attributeSet, int i) {
+        super(context, attributeSet, i);
         setSoundEffectsEnabled(false);
     }
 
-    public void setOnClickListener(View.OnClickListener listener) {
-        super.setOnClickListener(TouchUtil.createOnClickListener(listener));
+    public void setOnClickListener(View.OnClickListener onClickListener) {
+        super.setOnClickListener(TouchUtil.createOnClickListener(onClickListener));
     }
 
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
-        super.onInitializeAccessibilityNodeInfo(info);
-        info.setClickable(true);
-        info.setClassName(AppCompatButton.class.getName());
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        accessibilityNodeInfo.setClickable(true);
+        accessibilityNodeInfo.setClassName(Button.class.getName());
     }
 }

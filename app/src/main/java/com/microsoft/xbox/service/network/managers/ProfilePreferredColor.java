@@ -3,7 +3,7 @@ package com.microsoft.xbox.service.network.managers;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -20,38 +20,35 @@ public class ProfilePreferredColor {
     @SerializedName("tertiaryColor")
     private String tertiaryColorString;
 
-    public static int convertColorFromString(String colorString) {
-        if (colorString == null) {
+    public static int convertColorFromString(String str) {
+        if (str == null) {
             return 0;
         }
-        if (colorString.startsWith("#")) {
-            colorString = colorString.substring(1);
+        if (str.startsWith("#")) {
+            str = str.substring(1);
         }
-        int color = Integer.parseInt(colorString, 16);
-        if ((color >> 24) == 0) {
-            return color | -16777216;
-        }
-        return color;
+        int parseInt = Integer.parseInt(str, 16);
+        return (parseInt >> 24) == 0 ? parseInt | -16777216 : parseInt;
     }
 
     public int getPrimaryColor() {
-        if (primary < 0) {
-            primary = convertColorFromString(primaryColorString);
+        if (this.primary < 0) {
+            this.primary = convertColorFromString(this.primaryColorString);
         }
-        return primary;
+        return this.primary;
     }
 
     public int getSecondaryColor() {
-        if (secondary < 0) {
-            secondary = convertColorFromString(secondaryColorString);
+        if (this.secondary < 0) {
+            this.secondary = convertColorFromString(this.secondaryColorString);
         }
-        return secondary;
+        return this.secondary;
     }
 
     public int getTertiaryColor() {
-        if (tertiary < 0) {
-            tertiary = convertColorFromString(tertiaryColorString);
+        if (this.tertiary < 0) {
+            this.tertiary = convertColorFromString(this.tertiaryColorString);
         }
-        return tertiary;
+        return this.tertiary;
     }
 }

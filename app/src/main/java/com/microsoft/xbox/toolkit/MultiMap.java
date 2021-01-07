@@ -5,7 +5,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -15,79 +15,79 @@ public class MultiMap<K, V> {
     private Hashtable<K, HashSet<V>> data = new Hashtable<>();
     private Hashtable<V, K> dataInverse = new Hashtable<>();
 
-    public HashSet<V> get(K key) {
-        return data.get(key);
+    public HashSet<V> get(K k) {
+        return this.data.get(k);
     }
 
     public int size() {
-        return data.size();
+        return this.data.size();
     }
 
     public int TESTsizeDegenerate() {
-        int count = 0;
-        for (K key : data.keySet()) {
-            if (data.get(key).size() == 0) {
-                count++;
+        int i = 0;
+        for (K k : this.data.keySet()) {
+            if (this.data.get(k).size() == 0) {
+                i++;
             }
         }
-        return count;
+        return i;
     }
 
     public void clear() {
-        data.clear();
-        dataInverse.clear();
+        this.data.clear();
+        this.dataInverse.clear();
     }
 
-    public boolean containsKey(K key) {
-        return data.containsKey(key);
+    public boolean containsKey(K k) {
+        return this.data.containsKey(k);
     }
 
-    public boolean containsValue(V value) {
-        return getKey(value) != null;
+    public boolean containsValue(V v) {
+        return getKey(v) != null;
     }
 
-    public K getKey(V value) {
-        return dataInverse.get(value);
+    public K getKey(V v) {
+        return this.dataInverse.get(v);
     }
 
-    public void removeValue(V view) {
-        K key = getKey(view);
-        data.get(key).remove(view);
-        dataInverse.remove(view);
-        removeKeyIfEmpty(key);
+    public void removeValue(V v) {
+        Object key = getKey(v);
+        this.data.get(key).remove(v);
+        this.dataInverse.remove(v);
+        removeKeyIfEmpty((K) key);
     }
 
-    public void removeKey(K key) {
-        Iterator it = data.get(key).iterator();
+    public void removeKey(K k) {
+        Iterator it = this.data.get(k).iterator();
         while (it.hasNext()) {
-            V value = (V) it.next();
-            XLEAssert.assertTrue(dataInverse.containsKey(value));
-            dataInverse.remove(value);
+            Object next = it.next();
+            XLEAssert.assertTrue(this.dataInverse.containsKey(next));
+            this.dataInverse.remove(next);
         }
-        data.remove(key);
+        this.data.remove(k);
     }
 
-    public void put(K key, V value) {
-        if (data.get(key) == null) {
-            data.put(key, new HashSet());
+    public void put(K k, V v) {
+        if (this.data.get(k) == null) {
+            this.data.put(k, new HashSet());
         }
-        XLEAssert.assertTrue(!dataInverse.containsKey(value));
-        data.get(key).add(value);
-        dataInverse.put(value, key);
+        XLEAssert.assertTrue(!this.dataInverse.containsKey(v));
+        this.data.get(k).add(v);
+        this.dataInverse.put(v, k);
     }
 
-    public boolean keyValueMatches(K key, V value) {
-        HashSet<V> vset = get(key);
-        if (vset == null) {
+    public boolean keyValueMatches(K k, V v) {
+        HashSet hashSet = get(k);
+        if (hashSet == null) {
             return false;
         }
-        return vset.contains(value);
+        return hashSet.contains(v);
     }
 
-    private void removeKeyIfEmpty(K key) {
-        HashSet<V> vset = get(key);
-        if (vset != null && vset.isEmpty()) {
-            data.remove(key);
+    private void removeKeyIfEmpty(K k) {
+        HashSet hashSet = get(k);
+        if (hashSet != null && hashSet.isEmpty()) {
+            this.data.remove(k);
         }
     }
 }

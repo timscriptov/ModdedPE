@@ -1,7 +1,5 @@
 package com.microsoft.xbox.toolkit.anim;
 
-import android.annotation.SuppressLint;
-
 import com.microsoft.xbox.toolkit.XMLHelper;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
 
@@ -13,7 +11,7 @@ import java.io.InputStream;
 import java.util.Hashtable;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -22,7 +20,6 @@ import java.util.Hashtable;
 public class MAAS {
     private static MAAS instance = new MAAS();
     private final String ASSET_FILENAME = "animation/%sAnimation.xml";
-    @SuppressLint("SdCardPath")
     private final String SDCARD_FILENAME = "/sdcard/bishop/maas/%sAnimation.xml";
     private Hashtable<String, MAASAnimation> maasFileCache = new Hashtable<>();
     private boolean usingSdcard = false;
@@ -31,33 +28,31 @@ public class MAAS {
         return instance;
     }
 
-    public MAASAnimation getAnimation(String name) {
-        if (name != null) {
-            return getMAASFile(name);
+    public MAASAnimation getAnimation(String str) {
+        if (str != null) {
+            return getMAASFile(str);
         }
         throw new IllegalArgumentException();
     }
 
-    private MAASAnimation getMAASFile(String name) {
-        MAASAnimation file;
-        if (!maasFileCache.containsKey(name) && (file = loadMAASFile(name)) != null) {
-            maasFileCache.put(name, file);
+    private MAASAnimation getMAASFile(String str) {
+        MAASAnimation loadMAASFile;
+        if (!this.maasFileCache.containsKey(str) && (loadMAASFile = loadMAASFile(str)) != null) {
+            this.maasFileCache.put(str, loadMAASFile);
         }
-        return maasFileCache.get(name);
+        return this.maasFileCache.get(str);
     }
 
-    @SuppressLint("SdCardPath")
-    @Nullable
-    private MAASAnimation loadMAASFile(String name) {
-        InputStream s;
+    private @Nullable MAASAnimation loadMAASFile(String str) {
+        InputStream inputStream;
         try {
-            if (usingSdcard) {
-                s = new FileInputStream(new File(String.format("/sdcard/bishop/maas/%sAnimation.xml", new Object[]{name})));
+            if (this.usingSdcard) {
+                inputStream = new FileInputStream(new File(String.format("/sdcard/bishop/maas/%sAnimation.xml", new Object[]{str})));
             } else {
-                s = XboxTcuiSdk.getAssetManager().open(String.format("animation/%sAnimation.xml", new Object[]{name}));
+                inputStream = XboxTcuiSdk.getAssetManager().open(String.format("animation/%sAnimation.xml", new Object[]{str}));
             }
-            return XMLHelper.instance().load(s, MAASAnimation.class);
-        } catch (Exception e) {
+            return (MAASAnimation) XMLHelper.instance().load(inputStream, MAASAnimation.class);
+        } catch (Exception unused) {
             return null;
         }
     }

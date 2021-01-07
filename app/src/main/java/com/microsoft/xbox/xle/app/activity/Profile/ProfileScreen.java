@@ -8,7 +8,7 @@ import com.microsoft.xbox.telemetry.helpers.UTCPeopleHub;
 import com.microsoft.xbox.xle.app.activity.ActivityBase;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -18,23 +18,23 @@ public class ProfileScreen extends ActivityBase {
     public ProfileScreen() {
     }
 
-    public ProfileScreen(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public ProfileScreen(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
+    }
+
+    public String getActivityName() {
+        return "PeopleHub Info";
     }
 
     public void onCreate() {
         super.onCreate();
         onCreateContentView();
-        ProfileScreenViewModel psVM = new ProfileScreenViewModel(this);
-        viewModel = psVM;
-        UTCPeopleHub.trackPeopleHubView(getActivityName(), psVM.getXuid(), psVM.isMeProfile());
+        ProfileScreenViewModel profileScreenViewModel = new ProfileScreenViewModel(this);
+        this.viewModel = profileScreenViewModel;
+        UTCPeopleHub.trackPeopleHubView(getActivityName(), profileScreenViewModel.getXuid(), profileScreenViewModel.isMeProfile());
     }
 
     public void onCreateContentView() {
         setContentView(R.layout.profile_screen);
-    }
-
-    public String getActivityName() {
-        return "PeopleHub Info";
     }
 }

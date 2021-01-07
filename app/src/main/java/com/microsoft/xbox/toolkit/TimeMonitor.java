@@ -1,7 +1,7 @@
 package com.microsoft.xbox.toolkit;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -13,49 +13,47 @@ public class TimeMonitor {
     private long startTicks = 0;
 
     public boolean getIsStarted() {
-        return startTicks != 0;
+        return this.startTicks != 0;
     }
 
     public boolean getIsEnded() {
-        return endTicks != 0;
+        return this.endTicks != 0;
     }
 
     public void reset() {
-        startTicks = 0;
-        endTicks = 0;
+        this.startTicks = 0;
+        this.endTicks = 0;
     }
 
     public void start() {
-        startTicks = System.nanoTime();
-        endTicks = 0;
+        this.startTicks = System.nanoTime();
+        this.endTicks = 0;
     }
 
     public void stop() {
-        if (startTicks != 0 && endTicks == 0) {
-            endTicks = System.nanoTime();
+        if (this.startTicks != 0 && this.endTicks == 0) {
+            this.endTicks = System.nanoTime();
         }
     }
 
     public long currentTime() {
-        return (System.nanoTime() - startTicks) / 1000000;
+        return (System.nanoTime() - this.startTicks) / 1000000;
     }
 
     public void saveCurrentTime() {
         if (getIsStarted()) {
-            endTicks = System.nanoTime();
+            this.endTicks = System.nanoTime();
         }
     }
 
     public long getElapsedMs() {
-        long end;
         if (!getIsStarted()) {
             return 0;
         }
-        if (endTicks != 0) {
-            end = endTicks;
-        } else {
-            end = System.nanoTime();
+        long j = this.endTicks;
+        if (j == 0) {
+            j = System.nanoTime();
         }
-        return (end - startTicks) / 1000000;
+        return (j - this.startTicks) / 1000000;
     }
 }

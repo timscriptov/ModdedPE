@@ -75,4 +75,5 @@
     <string name="ic_RemoveFriend"></string>
     <string name="ic_Close"></string>
     <string name="ic_ApplicationLaunch"></string>
+    <string name="xbid_creation_error_android" />
 </resources>

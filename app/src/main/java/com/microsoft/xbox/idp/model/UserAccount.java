@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Date;
 
 /**
- * 05.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -38,9 +38,8 @@ public class UserAccount {
     public String userKey;
     public String userXuid;
 
-    @NotNull
-    public static GsonBuilder registerAdapters(@NotNull GsonBuilder gson) {
-        return gson.registerTypeAdapter(Date.class, new UTCDateConverter.UTCDateConverterJSONDeserializer());
+    public static @NotNull GsonBuilder registerAdapters(@NotNull GsonBuilder gsonBuilder) {
+        return gsonBuilder.registerTypeAdapter(Date.class, new UTCDateConverter.UTCDateConverterJSONDeserializer());
     }
 
     public static class Address {

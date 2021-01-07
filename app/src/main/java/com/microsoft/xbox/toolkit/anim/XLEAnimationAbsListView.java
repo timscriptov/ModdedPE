@@ -1,6 +1,7 @@
 package com.microsoft.xbox.toolkit.anim;
 
 import android.view.View;
+import android.view.animation.Animation;
 import android.view.animation.Interpolator;
 import android.view.animation.LayoutAnimationController;
 import android.widget.AbsListView;
@@ -8,7 +9,7 @@ import android.widget.AbsListView;
 import com.microsoft.xbox.toolkit.XLEAssert;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -18,30 +19,30 @@ public class XLEAnimationAbsListView extends XLEAnimation {
     private LayoutAnimationController layoutAnimationController = null;
     private AbsListView layoutView = null;
 
-    public XLEAnimationAbsListView(LayoutAnimationController controller) {
-        layoutAnimationController = controller;
-        XLEAssert.assertTrue(layoutAnimationController != null);
+    public XLEAnimationAbsListView(LayoutAnimationController layoutAnimationController2) {
+        this.layoutAnimationController = layoutAnimationController2;
+        XLEAssert.assertTrue(layoutAnimationController2 != null);
     }
 
     public void start() {
-        layoutView.setLayoutAnimation(layoutAnimationController);
-        if (endRunnable != null) {
-            endRunnable.run();
+        this.layoutView.setLayoutAnimation(this.layoutAnimationController);
+        if (this.endRunnable != null) {
+            this.endRunnable.run();
         }
     }
 
     public void clear() {
-        layoutView.setLayoutAnimationListener(null);
-        layoutView.clearAnimation();
+        this.layoutView.setLayoutAnimationListener((Animation.AnimationListener) null);
+        this.layoutView.clearAnimation();
     }
 
     public void setInterpolator(Interpolator interpolator) {
-        layoutAnimationController.setInterpolator(interpolator);
+        this.layoutAnimationController.setInterpolator(interpolator);
     }
 
-    public void setTargetView(View targetView) {
-        XLEAssert.assertNotNull(targetView);
-        XLEAssert.assertTrue(targetView instanceof AbsListView);
-        layoutView = (AbsListView) targetView;
+    public void setTargetView(View view) {
+        XLEAssert.assertNotNull(view);
+        XLEAssert.assertTrue(view instanceof AbsListView);
+        this.layoutView = (AbsListView) view;
     }
 }

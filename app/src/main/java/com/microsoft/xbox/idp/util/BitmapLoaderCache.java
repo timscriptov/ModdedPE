@@ -6,7 +6,7 @@ import android.util.LruCache;
 import com.microsoft.xbox.idp.toolkit.BitmapLoader;
 
 /**
- * 05.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -15,23 +15,23 @@ import com.microsoft.xbox.idp.toolkit.BitmapLoader;
 public class BitmapLoaderCache implements BitmapLoader.Cache {
     private final LruCache<Object, Bitmap> cache;
 
-    public BitmapLoaderCache(int numOfEntries) {
-        cache = new LruCache<>(numOfEntries);
+    public BitmapLoaderCache(int i) {
+        this.cache = new LruCache<>(i);
     }
 
-    public Bitmap get(Object key) {
-        return cache.get(key);
+    public Bitmap get(Object obj) {
+        return this.cache.get(obj);
     }
 
-    public Bitmap put(Object key, Bitmap value) {
-        return cache.put(key, value);
+    public Bitmap put(Object obj, Bitmap bitmap) {
+        return this.cache.put(obj, bitmap);
     }
 
-    public Bitmap remove(Object key) {
-        return cache.remove(key);
+    public Bitmap remove(Object obj) {
+        return this.cache.remove(obj);
     }
 
     public void clear() {
-        cache.evictAll();
+        this.cache.evictAll();
     }
 }

@@ -20,6 +20,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
+/**
+ * 07.01.2021
+ *
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public class ChangeFriendshipDialogViewModel {
     private static final String TAG = ChangeFriendshipDialogViewModel.class.getSimpleName();
     public boolean isAddingUserToFavoriteList;
@@ -44,145 +51,142 @@ public class ChangeFriendshipDialogViewModel {
     private RemoveUserFromShareIdentityListAsyncTask removeUserFromShareIdentityListAsyncTask;
     private ListState viewModelState = ListState.LoadingState;
 
-    public ChangeFriendshipDialogViewModel(@NotNull ProfileModel model2) {
-        boolean z = false;
-        XLEAssert.assertTrue(!ProfileModel.isMeXuid(model2.getXuid()) ? true : z);
-        model = model2;
+    public ChangeFriendshipDialogViewModel(@NotNull ProfileModel profileModel) {
+        XLEAssert.assertTrue(!ProfileModel.isMeXuid(profileModel.getXuid()));
+        this.model = profileModel;
     }
 
     public ListState getViewModelState() {
-        return viewModelState;
+        return this.viewModelState;
     }
 
     public String getGamerTag() {
-        return model.getGamerTag();
+        return this.model.getGamerTag();
     }
 
     public String getGamerPicUrl() {
-        return model.getGamerPicImageUrl();
+        return this.model.getGamerPicImageUrl();
     }
 
     public String getRealName() {
-        return model.getRealName();
+        return this.model.getRealName();
     }
 
     public String getGamerScore() {
-        return model.getGamerScore();
+        return this.model.getGamerScore();
     }
 
     public int getPreferredColor() {
-        return model.getPreferedColor();
+        return this.model.getPreferedColor();
     }
 
     public boolean getIsFollowing() {
-        return model.isCallerFollowingTarget();
+        return this.model.isCallerFollowingTarget();
     }
 
     public boolean getIsFavorite() {
-        return model.hasCallerMarkedTargetAsFavorite();
+        return this.model.hasCallerMarkedTargetAsFavorite();
     }
 
     public String getXuid() {
-        return model.getXuid();
+        return this.model.getXuid();
     }
 
     public boolean getCallerMarkedTargetAsIdentityShared() {
-        return model.hasCallerMarkedTargetAsIdentityShared();
+        return this.model.hasCallerMarkedTargetAsIdentityShared();
     }
 
     public String getCallerShareRealNameStatus() {
-        ProfileModel meProfile = ProfileModel.getMeProfileModel();
-        if (meProfile != null) {
-            return meProfile.getShareRealNameStatus();
-        }
-        return "";
+        ProfileModel meProfileModel = ProfileModel.getMeProfileModel();
+        return meProfileModel != null ? meProfileModel.getShareRealNameStatus() : "";
     }
 
     public String getCallerGamerTag() {
-        ProfileModel meProfile = ProfileModel.getMeProfileModel();
-        if (meProfile != null) {
-            return meProfile.getGamerTag();
-        }
-        return "";
+        ProfileModel meProfileModel = ProfileModel.getMeProfileModel();
+        return meProfileModel != null ? meProfileModel.getGamerTag() : "";
     }
 
-    public void setShouldAddUserToFriendList(boolean shouldAddUserToFriendList) {
-        if (shouldAddUserToFriendList) {
-            changeFriendshipForm.add(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldAddUserToFriendList);
+    public void setShouldAddUserToFriendList(boolean z) {
+        if (z) {
+            this.changeFriendshipForm.add(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldAddUserToFriendList);
         } else {
-            changeFriendshipForm.remove(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldAddUserToFriendList);
+            this.changeFriendshipForm.remove(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldAddUserToFriendList);
         }
     }
 
-    public void setShouldAddUserToFavoriteList(boolean shouldAddUserToFavoriteList) {
-        if (shouldAddUserToFavoriteList) {
-            changeFriendshipForm.add(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldAddUserToFavoriteList);
+    public void setShouldAddUserToFavoriteList(boolean z) {
+        if (z) {
+            this.changeFriendshipForm.add(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldAddUserToFavoriteList);
         } else {
-            changeFriendshipForm.remove(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldAddUserToFavoriteList);
+            this.changeFriendshipForm.remove(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldAddUserToFavoriteList);
         }
     }
 
-    public void setShouldRemoveUserFromFavoriteList(boolean shouldRemoveUserFromFavoriteList) {
-        if (shouldRemoveUserFromFavoriteList) {
-            changeFriendshipForm.add(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldRemoveUserFromFavoriteList);
+    public void setShouldRemoveUserFromFavoriteList(boolean z) {
+        if (z) {
+            this.changeFriendshipForm.add(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldRemoveUserFromFavoriteList);
         } else {
-            changeFriendshipForm.remove(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldRemoveUserFromFavoriteList);
+            this.changeFriendshipForm.remove(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldRemoveUserFromFavoriteList);
         }
     }
 
-    public void setShouldAddUserToShareIdentityList(boolean shouldAddUserToShareIdentityList) {
-        if (shouldAddUserToShareIdentityList) {
-            changeFriendshipForm.add(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldAddUserToShareIdentityList);
+    public void setShouldAddUserToShareIdentityList(boolean z) {
+        if (z) {
+            this.changeFriendshipForm.add(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldAddUserToShareIdentityList);
         } else {
-            changeFriendshipForm.remove(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldAddUserToShareIdentityList);
+            this.changeFriendshipForm.remove(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldAddUserToShareIdentityList);
         }
     }
 
-    public void setShouldRemoveUserFroShareIdentityList(boolean shouldRemoveUserFroShareIdentityList) {
-        if (shouldRemoveUserFroShareIdentityList) {
-            changeFriendshipForm.add(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldRemoveUserFromShareIdentityList);
+    public void setShouldRemoveUserFroShareIdentityList(boolean z) {
+        if (z) {
+            this.changeFriendshipForm.add(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldRemoveUserFromShareIdentityList);
         } else {
-            changeFriendshipForm.remove(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldRemoveUserFromShareIdentityList);
+            this.changeFriendshipForm.remove(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldRemoveUserFromShareIdentityList);
         }
     }
 
     public void onChangeRelationshipCompleted() {
-        boolean willPerformAsyncAction = false;
-        UTCChangeRelationship.Relationship relationship = model.isCallerFollowingTarget() ? UTCChangeRelationship.Relationship.EXISTINGFRIEND : UTCChangeRelationship.Relationship.NOTCHANGED;
-        UTCChangeRelationship.FavoriteStatus favoriteStatus = model.hasCallerMarkedTargetAsFavorite() ? UTCChangeRelationship.FavoriteStatus.EXISTINGFAVORITE : UTCChangeRelationship.FavoriteStatus.EXISTINGNOTFAVORITED;
-        UTCChangeRelationship.RealNameStatus realNameStatus = model.hasCallerMarkedTargetAsIdentityShared() ? UTCChangeRelationship.RealNameStatus.EXISTINGSHARED : UTCChangeRelationship.RealNameStatus.EXISTINGNOTSHARED;
+        boolean z;
+        UTCChangeRelationship.Relationship relationship = this.model.isCallerFollowingTarget() ? UTCChangeRelationship.Relationship.EXISTINGFRIEND : UTCChangeRelationship.Relationship.NOTCHANGED;
+        UTCChangeRelationship.FavoriteStatus favoriteStatus = this.model.hasCallerMarkedTargetAsFavorite() ? UTCChangeRelationship.FavoriteStatus.EXISTINGFAVORITE : UTCChangeRelationship.FavoriteStatus.EXISTINGNOTFAVORITED;
+        UTCChangeRelationship.RealNameStatus realNameStatus = this.model.hasCallerMarkedTargetAsIdentityShared() ? UTCChangeRelationship.RealNameStatus.EXISTINGSHARED : UTCChangeRelationship.RealNameStatus.EXISTINGNOTSHARED;
         UTCChangeRelationship.GamerType gamerType = UTCChangeRelationship.GamerType.NORMAL;
-        if (changeFriendshipForm.contains(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldAddUserToFriendList)) {
+        boolean z2 = true;
+        if (this.changeFriendshipForm.contains(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldAddUserToFriendList)) {
             relationship = UTCChangeRelationship.Relationship.ADDFRIEND;
             addFollowingUser();
-            willPerformAsyncAction = true;
+            z = true;
+        } else {
+            z = false;
         }
-        if (changeFriendshipForm.contains(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldRemoveUserFromFriendList)) {
+        if (this.changeFriendshipForm.contains(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldRemoveUserFromFriendList)) {
             relationship = UTCChangeRelationship.Relationship.REMOVEFRIEND;
             removeFollowingUser();
-            willPerformAsyncAction = true;
+            z = true;
         }
-        if (changeFriendshipForm.contains(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldAddUserToFavoriteList)) {
+        if (this.changeFriendshipForm.contains(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldAddUserToFavoriteList)) {
             favoriteStatus = UTCChangeRelationship.FavoriteStatus.FAVORITED;
             addFavoriteUser();
-            willPerformAsyncAction = true;
+            z = true;
         }
-        if (changeFriendshipForm.contains(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldRemoveUserFromFavoriteList)) {
+        if (this.changeFriendshipForm.contains(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldRemoveUserFromFavoriteList)) {
             favoriteStatus = UTCChangeRelationship.FavoriteStatus.UNFAVORITED;
             removeFavoriteUser();
-            willPerformAsyncAction = true;
+            z = true;
         }
-        if (changeFriendshipForm.contains(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldAddUserToShareIdentityList)) {
+        if (this.changeFriendshipForm.contains(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldAddUserToShareIdentityList)) {
             realNameStatus = UTCChangeRelationship.RealNameStatus.SHARINGON;
             addUserToShareIdentityList();
-            willPerformAsyncAction = true;
+            z = true;
         }
-        if (changeFriendshipForm.contains(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldRemoveUserFromShareIdentityList)) {
+        if (this.changeFriendshipForm.contains(ProfileScreenViewModel.ChangeFriendshipFormOptions.ShouldRemoveUserFromShareIdentityList)) {
             realNameStatus = UTCChangeRelationship.RealNameStatus.SHARINGOFF;
             removeUserFromShareIdentityList();
-            willPerformAsyncAction = true;
+        } else {
+            z2 = z;
         }
-        if (!willPerformAsyncAction) {
+        if (!z2) {
             notifyDialogAsyncTaskCompleted();
         } else {
             UTCChangeRelationship.trackChangeRelationshipDone(relationship, realNameStatus, favoriteStatus, gamerType);
@@ -190,39 +194,39 @@ public class ChangeFriendshipDialogViewModel {
     }
 
     public void clearChangeFriendshipForm() {
-        changeFriendshipForm.clear();
+        this.changeFriendshipForm.clear();
     }
 
-    public void setInitialRealNameSharingState(boolean state) {
-        isSharingRealNameStart = state;
-        isSharingRealNameEnd = state;
+    public void setInitialRealNameSharingState(boolean z) {
+        this.isSharingRealNameStart = z;
+        this.isSharingRealNameEnd = z;
     }
 
     public boolean getIsSharingRealNameStart() {
-        return isSharingRealNameStart;
+        return this.isSharingRealNameStart;
     }
 
     public boolean getIsSharingRealNameEnd() {
-        return isSharingRealNameEnd;
+        return this.isSharingRealNameEnd;
     }
 
-    public void setIsSharingRealNameEnd(boolean state) {
-        isSharingRealNameEnd = state;
+    public void setIsSharingRealNameEnd(boolean z) {
+        this.isSharingRealNameEnd = z;
     }
 
-    private void showError(int contentResId) {
-        DialogManager.getInstance().showToast(contentResId);
+    private void showError(int i) {
+        DialogManager.getInstance().showToast(i);
     }
 
     public String getDialogButtonText() {
-        if (isFollowing) {
+        if (this.isFollowing) {
             return XboxTcuiSdk.getResources().getString(R.string.TextInput_Confirm);
         }
         return XboxTcuiSdk.getResources().getString(R.string.OK_Text);
     }
 
     public boolean isBusy() {
-        return isLoadingUserProfile || isAddingUserToFavoriteList || isRemovingUserFromFavoriteList || isAddingUserToFollowingList || isRemovingUserFromFollowingList || isAddingUserToShareIdentityList || isRemovingUserFromShareIdentityList;
+        return this.isLoadingUserProfile || this.isAddingUserToFavoriteList || this.isRemovingUserFromFavoriteList || this.isAddingUserToFollowingList || this.isRemovingUserFromFollowingList || this.isAddingUserToShareIdentityList || this.isRemovingUserFromShareIdentityList;
     }
 
     public void load() {
@@ -234,39 +238,46 @@ public class ChangeFriendshipDialogViewModel {
     }
 
     public void addFavoriteUser() {
-        if (addUserToFavoriteListAsyncTask != null) {
-            addUserToFavoriteListAsyncTask.cancel();
+        AddUserToFavoriteListAsyncTask addUserToFavoriteListAsyncTask2 = this.addUserToFavoriteListAsyncTask;
+        if (addUserToFavoriteListAsyncTask2 != null) {
+            addUserToFavoriteListAsyncTask2.cancel();
         }
-        addUserToFavoriteListAsyncTask = new AddUserToFavoriteListAsyncTask(model.getXuid());
-        addUserToFavoriteListAsyncTask.load(true);
+        AddUserToFavoriteListAsyncTask addUserToFavoriteListAsyncTask3 = new AddUserToFavoriteListAsyncTask(this.model.getXuid());
+        this.addUserToFavoriteListAsyncTask = addUserToFavoriteListAsyncTask3;
+        addUserToFavoriteListAsyncTask3.load(true);
     }
 
     public void removeFavoriteUser() {
-        if (removeUserFromFavoriteListAsyncTask != null) {
-            removeUserFromFavoriteListAsyncTask.cancel();
+        RemoveUserFromFavoriteListAsyncTask removeUserFromFavoriteListAsyncTask2 = this.removeUserFromFavoriteListAsyncTask;
+        if (removeUserFromFavoriteListAsyncTask2 != null) {
+            removeUserFromFavoriteListAsyncTask2.cancel();
         }
-        removeUserFromFavoriteListAsyncTask = new RemoveUserFromFavoriteListAsyncTask(model.getXuid());
-        removeUserFromFavoriteListAsyncTask.load(true);
+        RemoveUserFromFavoriteListAsyncTask removeUserFromFavoriteListAsyncTask3 = new RemoveUserFromFavoriteListAsyncTask(this.model.getXuid());
+        this.removeUserFromFavoriteListAsyncTask = removeUserFromFavoriteListAsyncTask3;
+        removeUserFromFavoriteListAsyncTask3.load(true);
     }
 
     public void addUserToShareIdentityList() {
-        if (addUserToShareIdentityListAsyncTask != null) {
-            addUserToShareIdentityListAsyncTask.cancel();
+        AddUserToShareIdentityListAsyncTask addUserToShareIdentityListAsyncTask2 = this.addUserToShareIdentityListAsyncTask;
+        if (addUserToShareIdentityListAsyncTask2 != null) {
+            addUserToShareIdentityListAsyncTask2.cancel();
         }
-        ArrayList<String> users = new ArrayList<>();
-        users.add(model.getXuid());
-        addUserToShareIdentityListAsyncTask = new AddUserToShareIdentityListAsyncTask(users);
-        addUserToShareIdentityListAsyncTask.load(true);
+        ArrayList arrayList = new ArrayList();
+        arrayList.add(this.model.getXuid());
+        AddUserToShareIdentityListAsyncTask addUserToShareIdentityListAsyncTask3 = new AddUserToShareIdentityListAsyncTask(arrayList);
+        this.addUserToShareIdentityListAsyncTask = addUserToShareIdentityListAsyncTask3;
+        addUserToShareIdentityListAsyncTask3.load(true);
     }
 
     public void removeUserFromShareIdentityList() {
-        if (removeUserFromFollowingListAsyncTask != null) {
-            removeUserFromFavoriteListAsyncTask.cancel();
+        if (this.removeUserFromFollowingListAsyncTask != null) {
+            this.removeUserFromFavoriteListAsyncTask.cancel();
         }
-        ArrayList<String> users = new ArrayList<>();
-        users.add(model.getXuid());
-        removeUserFromShareIdentityListAsyncTask = new RemoveUserFromShareIdentityListAsyncTask(users);
-        removeUserFromShareIdentityListAsyncTask.load(true);
+        ArrayList arrayList = new ArrayList();
+        arrayList.add(this.model.getXuid());
+        RemoveUserFromShareIdentityListAsyncTask removeUserFromShareIdentityListAsyncTask2 = new RemoveUserFromShareIdentityListAsyncTask(arrayList);
+        this.removeUserFromShareIdentityListAsyncTask = removeUserFromShareIdentityListAsyncTask2;
+        removeUserFromShareIdentityListAsyncTask2.load(true);
     }
 
     private void notifyDialogUpdateView() {
@@ -277,28 +288,32 @@ public class ChangeFriendshipDialogViewModel {
         ((SGProjectSpecificDialogManager) DialogManager.getInstance().getManager()).notifyChangeFriendshipDialogAsyncTaskCompleted();
     }
 
-    private void notifyDialogAsyncTaskFailed(String errorMessage) {
-        ((SGProjectSpecificDialogManager) DialogManager.getInstance().getManager()).notifyChangeFriendshipDialogAsyncTaskFailed(errorMessage);
+    private void notifyDialogAsyncTaskFailed(String str) {
+        ((SGProjectSpecificDialogManager) DialogManager.getInstance().getManager()).notifyChangeFriendshipDialogAsyncTaskFailed(str);
     }
 
     public void addFollowingUser() {
         if (ProfileModel.hasPrivilegeToAddFriend()) {
-            if (addUserToFollowingListAsyncTask != null) {
-                addUserToFollowingListAsyncTask.cancel();
+            AddUserToFollowingListAsyncTask addUserToFollowingListAsyncTask2 = this.addUserToFollowingListAsyncTask;
+            if (addUserToFollowingListAsyncTask2 != null) {
+                addUserToFollowingListAsyncTask2.cancel();
             }
-            addUserToFollowingListAsyncTask = new AddUserToFollowingListAsyncTask(model.getXuid());
-            addUserToFollowingListAsyncTask.load(true);
+            AddUserToFollowingListAsyncTask addUserToFollowingListAsyncTask3 = new AddUserToFollowingListAsyncTask(this.model.getXuid());
+            this.addUserToFollowingListAsyncTask = addUserToFollowingListAsyncTask3;
+            addUserToFollowingListAsyncTask3.load(true);
             return;
         }
         showError(R.string.Global_MissingPrivilegeError_DialogBody);
     }
 
     public void removeFollowingUser() {
-        if (removeUserFromFollowingListAsyncTask != null) {
-            removeUserFromFollowingListAsyncTask.cancel();
+        RemoveUserFromFollowingListAsyncTask removeUserFromFollowingListAsyncTask2 = this.removeUserFromFollowingListAsyncTask;
+        if (removeUserFromFollowingListAsyncTask2 != null) {
+            removeUserFromFollowingListAsyncTask2.cancel();
         }
-        removeUserFromFollowingListAsyncTask = new RemoveUserFromFollowingListAsyncTask(model.getXuid());
-        removeUserFromFollowingListAsyncTask.load(true);
+        RemoveUserFromFollowingListAsyncTask removeUserFromFollowingListAsyncTask3 = new RemoveUserFromFollowingListAsyncTask(this.model.getXuid());
+        this.removeUserFromFollowingListAsyncTask = removeUserFromFollowingListAsyncTask3;
+        removeUserFromFollowingListAsyncTask3.load(true);
     }
 
     public void onLoadPersonDataCompleted(@NotNull AsyncActionStatus status) {
@@ -452,16 +467,16 @@ public class ChangeFriendshipDialogViewModel {
 
         public void onNoAction() {
             XLEAssert.assertIsUIThread();
-            onLoadPersonDataCompleted(AsyncActionStatus.NO_CHANGE);
+            ChangeFriendshipDialogViewModel.this.onLoadPersonDataCompleted(AsyncActionStatus.NO_CHANGE);
         }
 
         public void onPreExecute() {
             XLEAssert.assertIsUIThread();
-            boolean unused = isLoadingUserProfile = true;
+            boolean unused = ChangeFriendshipDialogViewModel.this.isLoadingUserProfile = true;
         }
 
-        public void onPostExecute(AsyncActionStatus result) {
-            onLoadPersonDataCompleted(result);
+        public void onPostExecute(AsyncActionStatus asyncActionStatus) {
+            ChangeFriendshipDialogViewModel.this.onLoadPersonDataCompleted(asyncActionStatus);
         }
 
         public AsyncActionStatus onError() {
@@ -469,16 +484,16 @@ public class ChangeFriendshipDialogViewModel {
         }
 
         public AsyncActionStatus loadDataInBackground() {
-            XLEAssert.assertNotNull(model);
-            return model.loadProfileSummary(forceLoad).getStatus();
+            XLEAssert.assertNotNull(ChangeFriendshipDialogViewModel.this.model);
+            return ChangeFriendshipDialogViewModel.this.model.loadProfileSummary(this.forceLoad).getStatus();
         }
     }
 
     private class RemoveUserFromShareIdentityListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
         private ArrayList<String> usersToAdd;
 
-        public RemoveUserFromShareIdentityListAsyncTask(ArrayList<String> users) {
-            usersToAdd = users;
+        public RemoveUserFromShareIdentityListAsyncTask(ArrayList<String> arrayList) {
+            this.usersToAdd = arrayList;
         }
 
         public boolean checkShouldExecute() {
@@ -490,11 +505,11 @@ public class ChangeFriendshipDialogViewModel {
 
         public void onPreExecute() {
             XLEAssert.assertIsUIThread();
-            boolean unused = isRemovingUserFromShareIdentityList = true;
+            boolean unused = ChangeFriendshipDialogViewModel.this.isRemovingUserFromShareIdentityList = true;
         }
 
         public void onPostExecute(AsyncActionStatus asyncActionStatus) {
-            onRemoveUserFromShareIdentityListCompleted(asyncActionStatus);
+            ChangeFriendshipDialogViewModel.this.onRemoveUserFromShareIdentityListCompleted(asyncActionStatus);
         }
 
         public AsyncActionStatus onError() {
@@ -502,9 +517,9 @@ public class ChangeFriendshipDialogViewModel {
         }
 
         public AsyncActionStatus loadDataInBackground() {
-            ProfileModel meProfile = ProfileModel.getMeProfileModel();
-            if (meProfile != null) {
-                return meProfile.removeUserFromShareIdentity(forceLoad, usersToAdd).getStatus();
+            ProfileModel meProfileModel = ProfileModel.getMeProfileModel();
+            if (meProfileModel != null) {
+                return meProfileModel.removeUserFromShareIdentity(this.forceLoad, this.usersToAdd).getStatus();
             }
             return AsyncActionStatus.FAIL;
         }
@@ -513,8 +528,8 @@ public class ChangeFriendshipDialogViewModel {
     private class AddUserToShareIdentityListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
         private ArrayList<String> usersToAdd;
 
-        public AddUserToShareIdentityListAsyncTask(ArrayList<String> users) {
-            usersToAdd = users;
+        public AddUserToShareIdentityListAsyncTask(ArrayList<String> arrayList) {
+            this.usersToAdd = arrayList;
         }
 
         public boolean checkShouldExecute() {
@@ -526,11 +541,11 @@ public class ChangeFriendshipDialogViewModel {
 
         public void onPreExecute() {
             XLEAssert.assertIsUIThread();
-            boolean unused = isAddingUserToShareIdentityList = true;
+            boolean unused = ChangeFriendshipDialogViewModel.this.isAddingUserToShareIdentityList = true;
         }
 
         public void onPostExecute(AsyncActionStatus asyncActionStatus) {
-            onAddUseToShareIdentityListCompleted(asyncActionStatus);
+            ChangeFriendshipDialogViewModel.this.onAddUseToShareIdentityListCompleted(asyncActionStatus);
         }
 
         public AsyncActionStatus onError() {
@@ -538,9 +553,9 @@ public class ChangeFriendshipDialogViewModel {
         }
 
         public AsyncActionStatus loadDataInBackground() {
-            ProfileModel meProfile = ProfileModel.getMeProfileModel();
-            if (meProfile != null) {
-                return meProfile.addUserToShareIdentity(forceLoad, usersToAdd).getStatus();
+            ProfileModel meProfileModel = ProfileModel.getMeProfileModel();
+            if (meProfileModel != null) {
+                return meProfileModel.addUserToShareIdentity(this.forceLoad, this.usersToAdd).getStatus();
             }
             return AsyncActionStatus.FAIL;
         }
@@ -550,8 +565,8 @@ public class ChangeFriendshipDialogViewModel {
         private boolean favoriteUser = false;
         private String favoriteUserXuid;
 
-        public AddUserToFavoriteListAsyncTask(String favoriteUserXuid2) {
-            favoriteUserXuid = favoriteUserXuid2;
+        public AddUserToFavoriteListAsyncTask(String str) {
+            this.favoriteUserXuid = str;
         }
 
         public boolean checkShouldExecute() {
@@ -561,38 +576,41 @@ public class ChangeFriendshipDialogViewModel {
 
         public void onNoAction() {
             XLEAssert.assertIsUIThread();
-            onAddUserToFavoriteListCompleted(AsyncActionStatus.NO_CHANGE, favoriteUser);
+            ChangeFriendshipDialogViewModel.this.onAddUserToFavoriteListCompleted(AsyncActionStatus.NO_CHANGE, this.favoriteUser);
         }
 
         public void onPreExecute() {
             XLEAssert.assertIsUIThread();
-            boolean unused = isAddingUserToFavoriteList = true;
+            boolean unused = ChangeFriendshipDialogViewModel.this.isAddingUserToFavoriteList = true;
         }
 
-        public void onPostExecute(AsyncActionStatus result) {
-            onAddUserToFavoriteListCompleted(result, favoriteUser);
+        public void onPostExecute(AsyncActionStatus asyncActionStatus) {
+            ChangeFriendshipDialogViewModel.this.onAddUserToFavoriteListCompleted(asyncActionStatus, this.favoriteUser);
         }
 
         public AsyncActionStatus onError() {
             return AsyncActionStatus.FAIL;
         }
 
+        /* access modifiers changed from: protected */
         public AsyncActionStatus loadDataInBackground() {
-            ArrayList<FollowersData> favoriteList;
-            ProfileModel meProfile = ProfileModel.getMeProfileModel();
-            if (meProfile == null) {
+            ArrayList<FollowersData> favorites;
+            ProfileModel meProfileModel = ProfileModel.getMeProfileModel();
+            if (meProfileModel == null) {
                 return AsyncActionStatus.FAIL;
             }
-            AsyncActionStatus status = meProfile.addUserToFavoriteList(forceLoad, favoriteUserXuid).getStatus();
-            if ((status != AsyncActionStatus.SUCCESS && status != AsyncActionStatus.NO_CHANGE && status != AsyncActionStatus.NO_OP_SUCCESS) || (favoriteList = meProfile.getFavorites()) == null) {
-                return status;
-            }
-            Iterator<FollowersData> it = favoriteList.iterator();
-            while (it.hasNext()) {
-                FollowersData fData = it.next();
-                if (fData.xuid.equals(favoriteUserXuid)) {
-                    favoriteUser = fData.isFavorite;
-                    return status;
+            AsyncActionStatus status = meProfileModel.addUserToFavoriteList(this.forceLoad, this.favoriteUserXuid).getStatus();
+            if ((status == AsyncActionStatus.SUCCESS || status == AsyncActionStatus.NO_CHANGE || status == AsyncActionStatus.NO_OP_SUCCESS) && (favorites = meProfileModel.getFavorites()) != null) {
+                Iterator<FollowersData> it = favorites.iterator();
+                while (true) {
+                    if (!it.hasNext()) {
+                        break;
+                    }
+                    FollowersData next = it.next();
+                    if (next.xuid.equals(this.favoriteUserXuid)) {
+                        this.favoriteUser = next.isFavorite;
+                        break;
+                    }
                 }
             }
             return status;
@@ -603,8 +621,8 @@ public class ChangeFriendshipDialogViewModel {
         private boolean favoriteUser = false;
         private String favoriteUserXuid;
 
-        public RemoveUserFromFavoriteListAsyncTask(String favoriteUserXuid2) {
-            favoriteUserXuid = favoriteUserXuid2;
+        public RemoveUserFromFavoriteListAsyncTask(String str) {
+            this.favoriteUserXuid = str;
         }
 
         public boolean checkShouldExecute() {
@@ -614,16 +632,16 @@ public class ChangeFriendshipDialogViewModel {
 
         public void onNoAction() {
             XLEAssert.assertIsUIThread();
-            onRemoveUserFromFavoriteListCompleted(AsyncActionStatus.NO_CHANGE, favoriteUser);
+            ChangeFriendshipDialogViewModel.this.onRemoveUserFromFavoriteListCompleted(AsyncActionStatus.NO_CHANGE, this.favoriteUser);
         }
 
         public void onPreExecute() {
             XLEAssert.assertIsUIThread();
-            boolean unused = isRemovingUserFromFavoriteList = true;
+            boolean unused = ChangeFriendshipDialogViewModel.this.isRemovingUserFromFavoriteList = true;
         }
 
-        public void onPostExecute(AsyncActionStatus result) {
-            onRemoveUserFromFavoriteListCompleted(result, favoriteUser);
+        public void onPostExecute(AsyncActionStatus asyncActionStatus) {
+            ChangeFriendshipDialogViewModel.this.onRemoveUserFromFavoriteListCompleted(asyncActionStatus, this.favoriteUser);
         }
 
         public AsyncActionStatus onError() {
@@ -631,21 +649,23 @@ public class ChangeFriendshipDialogViewModel {
         }
 
         public AsyncActionStatus loadDataInBackground() {
-            ArrayList<FollowersData> favoriteList;
-            ProfileModel meProfile = ProfileModel.getMeProfileModel();
-            if (meProfile == null) {
+            ArrayList<FollowersData> favorites;
+            ProfileModel meProfileModel = ProfileModel.getMeProfileModel();
+            if (meProfileModel == null) {
                 return AsyncActionStatus.FAIL;
             }
-            AsyncActionStatus status = meProfile.removeUserFromFavoriteList(forceLoad, favoriteUserXuid).getStatus();
-            if ((status != AsyncActionStatus.SUCCESS && status != AsyncActionStatus.NO_CHANGE && status != AsyncActionStatus.NO_OP_SUCCESS) || (favoriteList = meProfile.getFavorites()) == null) {
-                return status;
-            }
-            Iterator<FollowersData> it = favoriteList.iterator();
-            while (it.hasNext()) {
-                FollowersData fData = it.next();
-                if (fData.xuid.equals(favoriteUserXuid)) {
-                    favoriteUser = fData.isFavorite;
-                    return status;
+            AsyncActionStatus status = meProfileModel.removeUserFromFavoriteList(this.forceLoad, this.favoriteUserXuid).getStatus();
+            if ((status == AsyncActionStatus.SUCCESS || status == AsyncActionStatus.NO_CHANGE || status == AsyncActionStatus.NO_OP_SUCCESS) && (favorites = meProfileModel.getFavorites()) != null) {
+                Iterator<FollowersData> it = favorites.iterator();
+                while (true) {
+                    if (!it.hasNext()) {
+                        break;
+                    }
+                    FollowersData next = it.next();
+                    if (next.xuid.equals(this.favoriteUserXuid)) {
+                        this.favoriteUser = next.isFavorite;
+                        break;
+                    }
                 }
             }
             return status;
@@ -656,8 +676,8 @@ public class ChangeFriendshipDialogViewModel {
         private String followingUserXuid;
         private boolean isFollowingUser = false;
 
-        public AddUserToFollowingListAsyncTask(String followingUserXuid2) {
-            followingUserXuid = followingUserXuid2;
+        public AddUserToFollowingListAsyncTask(String str) {
+            this.followingUserXuid = str;
         }
 
         public boolean checkShouldExecute() {
@@ -667,16 +687,16 @@ public class ChangeFriendshipDialogViewModel {
 
         public void onNoAction() {
             XLEAssert.assertIsUIThread();
-            onAddUserToFollowingListCompleted(AsyncActionStatus.NO_CHANGE, isFollowingUser);
+            ChangeFriendshipDialogViewModel.this.onAddUserToFollowingListCompleted(AsyncActionStatus.NO_CHANGE, this.isFollowingUser);
         }
 
         public void onPreExecute() {
             XLEAssert.assertIsUIThread();
-            boolean unused = isAddingUserToFollowingList = true;
+            boolean unused = ChangeFriendshipDialogViewModel.this.isAddingUserToFollowingList = true;
         }
 
-        public void onPostExecute(AsyncActionStatus result) {
-            onAddUserToFollowingListCompleted(result, isFollowingUser);
+        public void onPostExecute(AsyncActionStatus asyncActionStatus) {
+            ChangeFriendshipDialogViewModel.this.onAddUserToFollowingListCompleted(asyncActionStatus, this.isFollowingUser);
         }
 
         public AsyncActionStatus onError() {
@@ -684,29 +704,31 @@ public class ChangeFriendshipDialogViewModel {
         }
 
         public AsyncActionStatus loadDataInBackground() {
-            ProfileModel meProfile = ProfileModel.getMeProfileModel();
-            if (meProfile == null) {
+            ProfileModel meProfileModel = ProfileModel.getMeProfileModel();
+            if (meProfileModel == null) {
                 return AsyncActionStatus.FAIL;
             }
-            AsyncActionStatus status = meProfile.addUserToFollowingList(forceLoad, followingUserXuid).getStatus();
-            if (AsyncActionStatus.getIsFail(status)) {
-                return status;
-            }
-            AddFollowingUserResponseContainer.AddFollowingUserResponse response = meProfile.getAddUserToFollowingResult();
-            if (response != null && !response.getAddFollowingRequestStatus() && response.code == 1028) {
-                return AsyncActionStatus.FAIL;
-            }
-            model.loadProfileSummary(true);
-            meProfile.loadProfileSummary(true);
-            ArrayList<FollowersData> followersList = meProfile.getFollowingData();
-            if (followersList == null) {
-                return status;
-            }
-            Iterator<FollowersData> it = followersList.iterator();
-            while (it.hasNext()) {
-                if (it.next().xuid.equals(followingUserXuid)) {
-                    isFollowingUser = true;
-                    return status;
+            AsyncActionStatus status = meProfileModel.addUserToFollowingList(this.forceLoad, this.followingUserXuid).getStatus();
+            if (!AsyncActionStatus.getIsFail(status)) {
+                AddFollowingUserResponseContainer.AddFollowingUserResponse addUserToFollowingResult = meProfileModel.getAddUserToFollowingResult();
+                if (addUserToFollowingResult != null && !addUserToFollowingResult.getAddFollowingRequestStatus() && addUserToFollowingResult.code == 1028) {
+                    return AsyncActionStatus.FAIL;
+                }
+                ChangeFriendshipDialogViewModel.this.model.loadProfileSummary(true);
+                meProfileModel.loadProfileSummary(true);
+                ArrayList<FollowersData> followingData = meProfileModel.getFollowingData();
+                if (followingData != null) {
+                    Iterator<FollowersData> it = followingData.iterator();
+                    while (true) {
+                        if (it.hasNext()) {
+                            if (it.next().xuid.equals(this.followingUserXuid)) {
+                                this.isFollowingUser = true;
+                                break;
+                            }
+                        } else {
+                            break;
+                        }
+                    }
                 }
             }
             return status;
@@ -717,8 +739,8 @@ public class ChangeFriendshipDialogViewModel {
         private String followingUserXuid;
         private boolean isFollowingUser = true;
 
-        public RemoveUserFromFollowingListAsyncTask(String followingUserXuid2) {
-            followingUserXuid = followingUserXuid2;
+        public RemoveUserFromFollowingListAsyncTask(String str) {
+            this.followingUserXuid = str;
         }
 
         public boolean checkShouldExecute() {
@@ -728,16 +750,16 @@ public class ChangeFriendshipDialogViewModel {
 
         public void onNoAction() {
             XLEAssert.assertIsUIThread();
-            onRemoveUserFromFollowingListCompleted(AsyncActionStatus.NO_CHANGE, isFollowingUser);
+            onRemoveUserFromFollowingListCompleted(AsyncActionStatus.NO_CHANGE, this.isFollowingUser);
         }
 
         public void onPreExecute() {
             XLEAssert.assertIsUIThread();
-            boolean unused = isRemovingUserFromFollowingList = true;
+            boolean unused = ChangeFriendshipDialogViewModel.this.isRemovingUserFromFollowingList = true;
         }
 
-        public void onPostExecute(AsyncActionStatus result) {
-            onRemoveUserFromFollowingListCompleted(result, isFollowingUser);
+        public void onPostExecute(AsyncActionStatus asyncActionStatus) {
+            ChangeFriendshipDialogViewModel.this.onRemoveUserFromFollowingListCompleted(asyncActionStatus, this.isFollowingUser);
         }
 
         public AsyncActionStatus onError() {
@@ -745,17 +767,16 @@ public class ChangeFriendshipDialogViewModel {
         }
 
         public AsyncActionStatus loadDataInBackground() {
-            ProfileModel meProfile = ProfileModel.getMeProfileModel();
-            if (meProfile == null) {
+            ProfileModel meProfileModel = ProfileModel.getMeProfileModel();
+            if (meProfileModel == null) {
                 return AsyncActionStatus.FAIL;
             }
-            AsyncActionStatus status = meProfile.removeUserFromFollowingList(forceLoad, followingUserXuid).getStatus();
-            if (AsyncActionStatus.getIsFail(status)) {
-                return status;
+            AsyncActionStatus status = meProfileModel.removeUserFromFollowingList(this.forceLoad, this.followingUserXuid).getStatus();
+            if (!AsyncActionStatus.getIsFail(status)) {
+                ChangeFriendshipDialogViewModel.this.model.loadProfileSummary(true);
+                meProfileModel.loadProfileSummary(true);
+                this.isFollowingUser = false;
             }
-            model.loadProfileSummary(true);
-            meProfile.loadProfileSummary(true);
-            isFollowingUser = false;
             return status;
         }
     }

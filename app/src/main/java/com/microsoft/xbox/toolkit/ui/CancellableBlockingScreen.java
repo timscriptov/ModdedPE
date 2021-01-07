@@ -5,13 +5,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
-
-import androidx.appcompat.widget.AppCompatTextView;
+import android.widget.TextView;
 
 import com.microsoft.xbox.toolkit.XLERValueHelper;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -20,7 +19,7 @@ import com.microsoft.xbox.toolkit.XLERValueHelper;
 public class CancellableBlockingScreen extends Dialog {
     private XLEButton cancelButton = ((XLEButton) findViewById(XLERValueHelper.getIdRValue("blocking_dialog_cancel")));
     private View container = findViewById(XLERValueHelper.getIdRValue("blocking_dialog_container"));
-    private AppCompatTextView statusText = ((AppCompatTextView) findViewById(XLERValueHelper.getIdRValue("blocking_dialog_status_text")));
+    private TextView statusText = ((TextView) findViewById(XLERValueHelper.getIdRValue("blocking_dialog_status_text")));
 
     public CancellableBlockingScreen(Context context) {
         super(context, XLERValueHelper.getStyleRValue("cancellable_dialog_style"));
@@ -30,27 +29,27 @@ public class CancellableBlockingScreen extends Dialog {
         setContentView(XLERValueHelper.getLayoutRValue("cancellable_blocking_dialog"));
     }
 
-    public void show(Context context, CharSequence statusText2) {
-        boolean previouslyVisible = isShowing();
-        setMessage(statusText2);
+    public void show(Context context, CharSequence charSequence) {
+        boolean isShowing = isShowing();
+        setMessage(charSequence);
         show();
-        if (!previouslyVisible) {
-            AlphaAnimation animation = new AlphaAnimation(0.0f, 1.0f);
-            animation.setFillAfter(true);
-            animation.setStartOffset(1000);
-            animation.setDuration(1000);
-            container.startAnimation(animation);
+        if (!isShowing) {
+            AlphaAnimation alphaAnimation = new AlphaAnimation(0.0f, 1.0f);
+            alphaAnimation.setFillAfter(true);
+            alphaAnimation.setStartOffset(1000);
+            alphaAnimation.setDuration(1000);
+            this.container.startAnimation(alphaAnimation);
         }
     }
 
-    public void setMessage(CharSequence statusText2) {
-        statusText.setText(statusText2);
+    public void setMessage(CharSequence charSequence) {
+        this.statusText.setText(charSequence);
     }
 
-    public void setCancelButtonAction(View.OnClickListener listener) {
-        if (listener != null) {
-            cancelButton.setOnClickListener((View.OnClickListener) null);
+    public void setCancelButtonAction(View.OnClickListener onClickListener) {
+        if (onClickListener != null) {
+            this.cancelButton.setOnClickListener((View.OnClickListener) null);
         }
-        cancelButton.setOnClickListener(listener);
+        this.cancelButton.setOnClickListener(onClickListener);
     }
 }

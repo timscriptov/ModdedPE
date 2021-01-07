@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 05.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -16,45 +16,31 @@ import org.jetbrains.annotations.NotNull;
 
 public class FragmentLoaderKey implements Parcelable {
     public static final Parcelable.Creator<FragmentLoaderKey> CREATOR = new Parcelable.Creator<FragmentLoaderKey>() {
-        @NotNull
         @Contract("_ -> new")
-        public FragmentLoaderKey createFromParcel(Parcel in) {
-            return new FragmentLoaderKey(in);
+        public @NotNull FragmentLoaderKey createFromParcel(Parcel parcel) {
+            return new FragmentLoaderKey(parcel);
         }
 
-        @NotNull
         @Contract(value = "_ -> new", pure = true)
-        public FragmentLoaderKey[] newArray(int size) {
-            return new FragmentLoaderKey[size];
+        public FragmentLoaderKey @NotNull [] newArray(int i) {
+            return new FragmentLoaderKey[i];
         }
     };
-    static final boolean assertionsDisabled;
-
-    static {
-        boolean z;
-        if (!FragmentLoaderKey.class.desiredAssertionStatus()) {
-            z = true;
-        } else {
-            z = false;
-        }
-        assertionsDisabled = z;
-    }
-
     private final String className;
     private final int loaderId;
 
-    public FragmentLoaderKey(Class<? extends Fragment> cls, int loaderId2) {
-        if (assertionsDisabled || cls != null) {
-            className = cls.getName();
-            loaderId = loaderId2;
-            return;
-        }
-        throw new AssertionError();
+    public FragmentLoaderKey(@NotNull Class<? extends Fragment> cls, int i) {
+        this.className = cls.getName();
+        this.loaderId = i;
     }
 
-    protected FragmentLoaderKey(@NotNull Parcel in) {
-        className = in.readString();
-        loaderId = in.readInt();
+    protected FragmentLoaderKey(@NotNull Parcel parcel) {
+        this.className = parcel.readString();
+        this.loaderId = parcel.readInt();
+    }
+
+    public int describeContents() {
+        return 0;
     }
 
     public boolean equals(Object obj) {
@@ -64,23 +50,19 @@ public class FragmentLoaderKey implements Parcelable {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        FragmentLoaderKey that = (FragmentLoaderKey) obj;
-        if (loaderId == that.loaderId) {
-            return className.equals(that.className);
+        FragmentLoaderKey fragmentLoaderKey = (FragmentLoaderKey) obj;
+        if (this.loaderId != fragmentLoaderKey.loaderId) {
+            return false;
         }
-        return false;
+        return this.className.equals(fragmentLoaderKey.className);
     }
 
     public int hashCode() {
-        return (className.hashCode() * 31) + loaderId;
+        return (this.className.hashCode() * 31) + this.loaderId;
     }
 
-    public int describeContents() {
-        return 0;
-    }
-
-    public void writeToParcel(@NotNull Parcel dest, int flags) {
-        dest.writeString(className);
-        dest.writeInt(loaderId);
+    public void writeToParcel(@NotNull Parcel parcel, int i) {
+        parcel.writeString(this.className);
+        parcel.writeInt(this.loaderId);
     }
 }

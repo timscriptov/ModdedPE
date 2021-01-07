@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.simpleframework.xml.Attribute;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov

@@ -4,7 +4,7 @@ import com.microsoft.xbox.toolkit.AsyncResult;
 import com.microsoft.xbox.toolkit.XLEException;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -17,15 +17,15 @@ public abstract class IDataLoaderRunnable<T> {
 
     public abstract long getDefaultErrorCode();
 
-    public abstract void onPostExcute(AsyncResult<T> asyncResult);
-
-    public abstract void onPreExecute();
-
     public Object getUserObject() {
         return null;
     }
 
+    public abstract void onPostExcute(AsyncResult<T> asyncResult);
+
+    public abstract void onPreExecute();
+
     public int getShouldRetryCountOnTokenError() {
-        return retryCountOnTokenError;
+        return this.retryCountOnTokenError;
     }
 }

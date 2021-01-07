@@ -6,7 +6,7 @@ import android.os.Debug;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -40,18 +40,18 @@ public class MemoryMonitor {
     }
 
     public synchronized int getDalvikFreeKb() {
-        Debug.getMemoryInfo(memoryInfo);
+        Debug.getMemoryInfo(this.memoryInfo);
         return (((ActivityManager) XboxTcuiSdk.getSystemService("activity")).getMemoryClass() * 1024) - getDalvikUsedKb();
     }
 
     public synchronized int getDalvikUsedKb() {
-        Debug.getMemoryInfo(memoryInfo);
-        return memoryInfo.dalvikPss;
+        Debug.getMemoryInfo(this.memoryInfo);
+        return this.memoryInfo.dalvikPss;
     }
 
     public synchronized int getUsedKb() {
-        Debug.getMemoryInfo(memoryInfo);
-        return memoryInfo.dalvikPss + memoryInfo.nativePss;
+        Debug.getMemoryInfo(this.memoryInfo);
+        return this.memoryInfo.dalvikPss + this.memoryInfo.nativePss;
     }
 
     public int getMemoryClass() {

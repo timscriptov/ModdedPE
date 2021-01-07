@@ -3,7 +3,7 @@ package com.microsoft.xbox.idp.util;
 import java.io.InputStream;
 
 /**
- * 05.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -12,12 +12,12 @@ import java.io.InputStream;
 public class HttpCall {
     private final long id;
 
-    public HttpCall(String method, String endpoint, String pathAndQuery) {
-        this.id = create(method, endpoint, pathAndQuery, true);
+    public HttpCall(String str, String str2, String str3) {
+        this.id = create(str, str2, str3, true);
     }
 
-    public HttpCall(String method, String endpoint, String pathAndQuery, boolean addDefaultHeaders) {
-        this.id = create(method, endpoint, pathAndQuery, addDefaultHeaders);
+    public HttpCall(String str, String str2, String str3, boolean z) {
+        this.id = create(str, str2, str3, z);
     }
 
     private static native long create(String str, String str2, String str3, boolean z);
@@ -41,7 +41,7 @@ public class HttpCall {
     public native void setXboxContractVersionHeaderValue(String str);
 
     public void finalize() throws Throwable {
-        delete(id);
+        delete(this.id);
         super.finalize();
     }
 

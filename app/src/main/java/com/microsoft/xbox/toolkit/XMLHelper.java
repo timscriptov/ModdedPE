@@ -9,7 +9,7 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -21,49 +21,49 @@ public class XMLHelper {
     private Serializer serializer;
 
     private XMLHelper() {
-        serializer = null;
-        serializer = new Persister(new AnnotationStrategy());
+        this.serializer = null;
+        this.serializer = new Persister(new AnnotationStrategy());
     }
 
     public static XMLHelper instance() {
         return instance;
     }
 
-    public <T> T load(InputStream input, Class<T> type) throws XLEException {
-        ClassLoader clsLoader = null;
+    public <T> T load(InputStream inputStream, Class<T> cls) throws XLEException {
+        ClassLoader contextClassLoader = null;
         if (ThreadManager.UIThread != Thread.currentThread()) {
             BackgroundThreadWaitor.getInstance().waitForReady(1000);
         }
         new TimeMonitor();
         try {
-            clsLoader = Thread.currentThread().getContextClassLoader();
-            Thread.currentThread().setContextClassLoader(type.getClassLoader());
-            T rv = serializer.read(type, input, false);
-            Thread.currentThread().setContextClassLoader(clsLoader);
-            return rv;
+            contextClassLoader = Thread.currentThread().getContextClassLoader();
+            Thread.currentThread().setContextClassLoader(cls.getClassLoader());
+            T read = this.serializer.read(cls, inputStream, false);
+            Thread.currentThread().setContextClassLoader(contextClassLoader);
+            return read;
         } catch (Exception e) {
             throw new XLEException(9, e.toString());
         } catch (Throwable th) {
-            Thread.currentThread().setContextClassLoader(clsLoader);
+            Thread.currentThread().setContextClassLoader(contextClassLoader);
             throw th;
         }
     }
 
-    public <T> String save(T output) throws XLEException {
+    public <T> String save(T t) throws XLEException {
         new TimeMonitor();
-        StringWriter writer = new StringWriter();
+        StringWriter stringWriter = new StringWriter();
         try {
-            serializer.write(output, writer);
-            return writer.toString();
+            this.serializer.write(t, stringWriter);
+            return stringWriter.toString();
         } catch (Exception e) {
             throw new XLEException(9, e.toString());
         }
     }
 
-    public <T> void save(T output, OutputStream outStream) throws XLEException {
+    public <T> void save(T t, OutputStream outputStream) throws XLEException {
         new TimeMonitor();
         try {
-            serializer.write(output, outStream);
+            this.serializer.write(t, outputStream);
         } catch (Exception e) {
             throw new XLEException(9, e.toString());
         }

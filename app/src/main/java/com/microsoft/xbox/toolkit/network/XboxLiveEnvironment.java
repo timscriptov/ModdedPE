@@ -5,7 +5,7 @@ import com.microsoft.xbox.toolkit.XLEAssert;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -23,6 +23,58 @@ public class XboxLiveEnvironment {
 
     public static XboxLiveEnvironment Instance() {
         return instance;
+    }
+
+    public String getFriendFinderSettingsUrl() {
+        return "https://settings.xboxlive.com/settings/feature/friendfinder/settings";
+    }
+
+    public String getMutedServiceUrlFormat() {
+        return "https://privacy.xboxlive.com/users/xuid(%s)/people/mute";
+    }
+
+    public String getPeopleHubFriendFinderStateUrlFormat() {
+        return "https://peoplehub.xboxlive.com/users/me/friendfinder";
+    }
+
+    public String getPeopleHubRecommendationsUrlFormat() {
+        return "https://peoplehub.xboxlive.com/users/me/people/recommendations";
+    }
+
+    public String getProfileSettingUrlFormat() {
+        return "https://privacy.xboxlive.com/users/me/privacy/settings/%s";
+    }
+
+    public boolean getProxyEnabled() {
+        return false;
+    }
+
+    public String getSetFriendFinderOptInStatusUrlFormat() {
+        return "https://friendfinder.xboxlive.com/users/me/networks/%s/optin";
+    }
+
+    public String getShortCircuitProfileUrlFormat() {
+        return "https://pf.directory.live.com/profile/mine/System.ShortCircuitProfile.json";
+    }
+
+    public String getSubmitFeedbackUrlFormat() {
+        return "https://reputation.xboxlive.com/users/xuid(%s)/feedback";
+    }
+
+    public String getTenureWatermarkUrlFormat() {
+        return "http://dlassets.xboxlive.com/public/content/ppl/watermarks/tenure/%s.png";
+    }
+
+    public String getUpdateThirdPartyTokenUrlFormat() {
+        return "https://thirdpartytokens.xboxlive.com/users/me/networks/%s/token";
+    }
+
+    public String getUploadingPhoneContactsUrlFormat() {
+        return "https://people.directory.live.com/people/ExternalSCDLookup";
+    }
+
+    public String getUserProfileSettingUrlFormat() {
+        return "https://privacy.xboxlive.com/users/me/privacy/settings";
     }
 
     public String getUserProfileInfoUrl() {
@@ -118,15 +170,7 @@ public class XboxLiveEnvironment {
     }
 
     public Environment getEnvironment() {
-        return environment;
-    }
-
-    public boolean getProxyEnabled() {
-        return false;
-    }
-
-    public String getTenureWatermarkUrlFormat() {
-        return "http://dlassets.xboxlive.com/public/content/ppl/watermarks/tenure/%s.png";
+        return this.environment;
     }
 
     public String getWatermarkUrl(@NotNull String watermark) {
@@ -205,50 +249,6 @@ public class XboxLiveEnvironment {
         }
     }
 
-    public String getMutedServiceUrlFormat() {
-        return "https://privacy.xboxlive.com/users/xuid(%s)/people/mute";
-    }
-
-    public String getSubmitFeedbackUrlFormat() {
-        return "https://reputation.xboxlive.com/users/xuid(%s)/feedback";
-    }
-
-    public String getUserProfileSettingUrlFormat() {
-        return "https://privacy.xboxlive.com/users/me/privacy/settings";
-    }
-
-    public String getFriendFinderSettingsUrl() {
-        return "https://settings.xboxlive.com/settings/feature/friendfinder/settings";
-    }
-
-    public String getPeopleHubFriendFinderStateUrlFormat() {
-        return "https://peoplehub.xboxlive.com/users/me/friendfinder";
-    }
-
-    public String getProfileSettingUrlFormat() {
-        return "https://privacy.xboxlive.com/users/me/privacy/settings/%s";
-    }
-
-    public String getSetFriendFinderOptInStatusUrlFormat() {
-        return "https://friendfinder.xboxlive.com/users/me/networks/%s/optin";
-    }
-
-    public String getUpdateThirdPartyTokenUrlFormat() {
-        return "https://thirdpartytokens.xboxlive.com/users/me/networks/%s/token";
-    }
-
-    public String getPeopleHubRecommendationsUrlFormat() {
-        return "https://peoplehub.xboxlive.com/users/me/people/recommendations";
-    }
-
-    public String getShortCircuitProfileUrlFormat() {
-        return "https://pf.directory.live.com/profile/mine/System.ShortCircuitProfile.json";
-    }
-
-    public String getUploadingPhoneContactsUrlFormat() {
-        return "https://people.directory.live.com/people/ExternalSCDLookup";
-    }
-
     public String getGamertagSearchUrlFormat() {
         switch (environment) {
             case VINT:
@@ -271,4 +271,5 @@ public class XboxLiveEnvironment {
         PROD,
         DNET
     }
+
 }

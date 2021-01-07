@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -27,53 +27,53 @@ public class SearchResultPerson {
     public String StatusBefore;
     public String StatusMatch;
 
-    public SearchResultPerson(FollowersData person, String searchText) {
-        if (isNullOrWhitespace(searchText)) {
-            throw new IllegalArgumentException(searchText);
+    public SearchResultPerson(FollowersData followersData, String str) {
+        if (!isNullOrWhitespace(str)) {
+            this.SearchText = str;
+            setInlineRuns(followersData);
+            return;
         }
-        SearchText = searchText;
-        setInlineRuns(person);
+        throw new IllegalArgumentException(str);
     }
 
-    @NotNull
-    private static List<String> getRuns(String text, String searchText) {
-        List<String> runs = new ArrayList<>(3);
-        int startIndex = TrieSearch.findWordIndex(text, searchText);
-        int postIndex = startIndex + searchText.length();
-        if (startIndex != -1) {
-            runs.add(text.substring(0, startIndex));
-            runs.add(text.substring(startIndex, searchText.length() + startIndex));
-            runs.add(text.substring(postIndex, text.length()));
+    private static @NotNull List<String> getRuns(String str, String str2) {
+        ArrayList arrayList = new ArrayList(3);
+        int findWordIndex = TrieSearch.findWordIndex(str, str2);
+        int length = str2.length() + findWordIndex;
+        if (findWordIndex != -1) {
+            arrayList.add(str.substring(0, findWordIndex));
+            arrayList.add(str.substring(findWordIndex, str2.length() + findWordIndex));
+            arrayList.add(str.substring(length, str.length()));
         } else {
-            runs.add(text);
-            runs.add("");
-            runs.add("");
+            arrayList.add(str);
+            arrayList.add("");
+            arrayList.add("");
         }
-        return runs;
+        return arrayList;
     }
 
-    private static boolean isNullOrWhitespace(String text) {
-        return JavaUtil.isNullOrEmpty(text) || text.trim().isEmpty();
+    private static boolean isNullOrWhitespace(String str) {
+        return JavaUtil.isNullOrEmpty(str) || str.trim().isEmpty();
     }
 
-    private void setInlineRuns(@NotNull FollowersData person) {
-        List<String> runs = getRuns(person.getGamertag(), SearchText);
+    private void setInlineRuns(@NotNull FollowersData followersData) {
+        List<String> runs = getRuns(followersData.getGamertag(), this.SearchText);
         if (runs.size() == 3) {
-            GamertagBefore = runs.get(0);
-            GamertagMatch = runs.get(1);
-            GamertagAfter = runs.get(2);
+            this.GamertagBefore = runs.get(0);
+            this.GamertagMatch = runs.get(1);
+            this.GamertagAfter = runs.get(2);
         }
-        List<String> runs2 = getRuns(person.getGamerRealName(), SearchText);
+        List<String> runs2 = getRuns(followersData.getGamerRealName(), this.SearchText);
         if (runs2.size() == 3) {
-            RealNameBefore = runs2.get(0);
-            RealNameMatch = runs2.get(1);
-            RealNameAfter = runs2.get(2);
+            this.RealNameBefore = runs2.get(0);
+            this.RealNameMatch = runs2.get(1);
+            this.RealNameAfter = runs2.get(2);
         }
-        List<String> runs3 = getRuns(person.presenceString, SearchText);
+        List<String> runs3 = getRuns(followersData.presenceString, this.SearchText);
         if (runs3.size() == 3) {
-            StatusBefore = runs3.get(0);
-            StatusMatch = runs3.get(1);
-            StatusAfter = runs3.get(2);
+            this.StatusBefore = runs3.get(0);
+            this.StatusMatch = runs3.get(1);
+            this.StatusAfter = runs3.get(2);
         }
     }
 }

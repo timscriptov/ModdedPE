@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -13,31 +13,31 @@ import java.util.HashSet;
 public class MultiSelection<T> {
     private HashSet<T> selection = new HashSet<>();
 
-    public void add(T object) {
-        selection.add(object);
+    public void add(T t) {
+        this.selection.add(t);
     }
 
-    public void remove(T object) {
-        selection.remove(object);
+    public void remove(T t) {
+        this.selection.remove(t);
     }
 
-    public boolean contains(T object) {
-        return selection.contains(object);
+    public boolean contains(T t) {
+        return this.selection.contains(t);
     }
 
     public boolean isEmpty() {
-        return selection.isEmpty();
+        return this.selection.isEmpty();
     }
 
     public ArrayList<T> toArrayList() {
-        return new ArrayList<>(selection);
+        return new ArrayList<>(this.selection);
     }
 
     public void reset() {
-        selection.clear();
+        this.selection.clear();
     }
 
     public int size() {
-        return selection.size();
+        return this.selection.size();
     }
 }

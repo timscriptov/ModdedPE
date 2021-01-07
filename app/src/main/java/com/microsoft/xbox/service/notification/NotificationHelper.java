@@ -8,16 +8,15 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 
 public class NotificationHelper {
-    @NotNull
     @Contract("_, _ -> new")
-    public static NotificationResult tryParseXboxLiveNotification(RemoteMessage remoteMessage, Context ctx) {
-        return new NotificationResult(remoteMessage, ctx);
+    public static @NotNull NotificationResult tryParseXboxLiveNotification(RemoteMessage remoteMessage, Context context) {
+        return new NotificationResult(remoteMessage, context);
     }
 }

@@ -3,7 +3,7 @@ package com.microsoft.xbox.toolkit;
 import android.os.Handler;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -17,8 +17,8 @@ public class ThreadManager {
         UIThreadPostDelayed(runnable, 0);
     }
 
-    public static void UIThreadPostDelayed(Runnable runnable, long delayMS) {
-        Handler.postDelayed(runnable, delayMS);
+    public static void UIThreadPostDelayed(Runnable runnable, long j) {
+        Handler.postDelayed(runnable, j);
     }
 
     public static void UIThreadSend(final Runnable runnable) {
@@ -26,11 +26,11 @@ public class ThreadManager {
             runnable.run();
             return;
         }
-        final Ready actionComplete = new Ready();
+        final Ready ready = new Ready();
         Handler.post(() -> {
             runnable.run();
-            actionComplete.setReady();
+            ready.setReady();
         });
-        actionComplete.waitForReady();
+        ready.waitForReady();
     }
 }

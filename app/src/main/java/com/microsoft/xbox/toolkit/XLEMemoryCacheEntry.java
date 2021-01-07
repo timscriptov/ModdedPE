@@ -1,7 +1,7 @@
 package com.microsoft.xbox.toolkit;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -11,22 +11,22 @@ public class XLEMemoryCacheEntry<V> {
     private int byteCount;
     private V data;
 
-    public XLEMemoryCacheEntry(V data2, int byteCount2) {
-        if (data2 == null) {
+    public XLEMemoryCacheEntry(V v, int i) {
+        if (v == null) {
             throw new IllegalArgumentException("data");
-        } else if (byteCount2 <= 0) {
-            throw new IllegalArgumentException("byteCount");
+        } else if (i > 0) {
+            this.data = v;
+            this.byteCount = i;
         } else {
-            data = data2;
-            byteCount = byteCount2;
+            throw new IllegalArgumentException("byteCount");
         }
     }
 
     public int getByteCount() {
-        return byteCount;
+        return this.byteCount;
     }
 
     public V getValue() {
-        return data;
+        return this.data;
     }
 }

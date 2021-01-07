@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 /**
- * 07.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -30,35 +30,35 @@ public class XLERootView extends RelativeLayout {
         throw new UnsupportedOperationException();
     }
 
-    public XLERootView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        /*TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.XLERootView);
-        if (a != null) {
+    public XLERootView(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
+        /*TypedArray obtainStyledAttributes = context.obtainStyledAttributes(attributeSet, R.styleable.XLERootView);
+        if (obtainStyledAttributes != null) {
             try {
-                activityBodyIndex = a.getResourceId(R.styleable.XLERootView_activityBody, -1);
-                isTopLevel = a.getBoolean(R.styleable.XLERootView_isTopLevel, false);
-                showTitleBar = a.getBoolean(R.styleable.XLERootView_showTitleBar, true);
-                int minScreenPercent = a.getInt(R.styleable.XLERootView_minScreenPercent, PKIFailureInfo.systemUnavail);
-                if (minScreenPercent != Integer.MIN_VALUE) {
-                    setMinimumWidth((Math.max(0, minScreenPercent) * SystemUtil.getScreenWidth()) / 100);
+                this.activityBodyIndex = obtainStyledAttributes.getResourceId(R.styleable.XLERootView_activityBody, -1);
+                this.isTopLevel = obtainStyledAttributes.getBoolean(R.styleable.XLERootView_isTopLevel, false);
+                this.showTitleBar = obtainStyledAttributes.getBoolean(R.styleable.XLERootView_showTitleBar, true);
+                int i = obtainStyledAttributes.getInt(R.styleable.XLERootView_minScreenPercent, PKIFailureInfo.systemUnavail);
+                if (i != Integer.MIN_VALUE) {
+                    setMinimumWidth((Math.max(0, i) * SystemUtil.getScreenWidth()) / 100);
                 }
-                headerName = a.getString(R.styleable.XLERootView_headerName);
+                this.headerName = obtainStyledAttributes.getString(R.styleable.XLERootView_headerName);
             } finally {
-                a.recycle();
+                obtainStyledAttributes.recycle();
             }
         }*/
     }
 
     public boolean getIsTopLevel() {
-        return isTopLevel;
+        return this.isTopLevel;
     }
 
     public boolean getShowTitleBar() {
-        return showTitleBar;
+        return this.showTitleBar;
     }
 
     public String getHeaderName() {
-        return headerName;
+        return this.headerName;
     }
 
     public void onFinishInflate() {
@@ -67,25 +67,27 @@ public class XLERootView extends RelativeLayout {
     }
 
     private void initialize() {
-        if (activityBodyIndex != -1) {
-            activityBody = findViewById(activityBodyIndex);
+        int i = this.activityBodyIndex;
+        if (i != -1) {
+            this.activityBody = findViewById(i);
         } else {
-            activityBody = this;
+            this.activityBody = this;
         }
-        origPaddingBottom = getPaddingBottom();
-        if (activityBody != null && activityBody != this) {
-            ViewGroup.LayoutParams lpActivityBody = activityBody.getLayoutParams();
-            RelativeLayout.LayoutParams activityParams = new RelativeLayout.LayoutParams(lpActivityBody);
-            activityParams.width = -1;
-            activityParams.height = -1;
-            activityParams.addRule(10);
-            if (lpActivityBody instanceof ViewGroup.MarginLayoutParams) {
-                ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) lpActivityBody;
-                setPadding(getPaddingLeft() + mlp.leftMargin, getPaddingTop() + mlp.topMargin, getPaddingRight() + mlp.rightMargin, origPaddingBottom + mlp.bottomMargin);
-                activityParams.setMargins(0, 0, 0, 0);
+        this.origPaddingBottom = getPaddingBottom();
+        View view = this.activityBody;
+        if (view != null && view != this) {
+            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+            RelativeLayout.LayoutParams layoutParams2 = new RelativeLayout.LayoutParams(layoutParams);
+            layoutParams2.width = -1;
+            layoutParams2.height = -1;
+            layoutParams2.addRule(10);
+            if (layoutParams instanceof ViewGroup.MarginLayoutParams) {
+                ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) layoutParams;
+                setPadding(getPaddingLeft() + marginLayoutParams.leftMargin, getPaddingTop() + marginLayoutParams.topMargin, getPaddingRight() + marginLayoutParams.rightMargin, this.origPaddingBottom + marginLayoutParams.bottomMargin);
+                layoutParams2.setMargins(0, 0, 0, 0);
             }
-            removeView(activityBody);
-            addView(activityBody, activityParams);
+            removeView(this.activityBody);
+            addView(this.activityBody, layoutParams2);
         }
     }
 
@@ -93,7 +95,7 @@ public class XLERootView extends RelativeLayout {
         super.dispatchDraw(canvas);
     }
 
-    public void setBottomMargin(int marginBottom) {
-        setPadding(getPaddingLeft(), getPaddingTop(), getPaddingRight(), origPaddingBottom + marginBottom);
+    public void setBottomMargin(int i) {
+        setPadding(getPaddingLeft(), getPaddingTop(), getPaddingRight(), this.origPaddingBottom + i);
     }
 }

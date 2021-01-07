@@ -6,7 +6,7 @@ import android.graphics.Typeface;
 import java.util.HashMap;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -20,13 +20,13 @@ public class FontManager {
         return instance;
     }
 
-    public Typeface getTypeface(Context context, String typeface) {
-        if (fonts == null) {
-            fonts = new HashMap<>();
+    public Typeface getTypeface(Context context, String str) {
+        if (this.fonts == null) {
+            this.fonts = new HashMap<>();
         }
-        if (!fonts.containsKey(typeface)) {
-            fonts.put(typeface, Typeface.createFromAsset(context.getAssets(), typeface));
+        if (!this.fonts.containsKey(str)) {
+            this.fonts.put(str, Typeface.createFromAsset(context.getAssets(), str));
         }
-        return fonts.get(typeface);
+        return this.fonts.get(str);
     }
 }

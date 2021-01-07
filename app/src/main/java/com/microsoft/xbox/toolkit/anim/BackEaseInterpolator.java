@@ -1,7 +1,7 @@
 package com.microsoft.xbox.toolkit.anim;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -10,13 +10,13 @@ package com.microsoft.xbox.toolkit.anim;
 public class BackEaseInterpolator extends XLEInterpolator {
     private float amplitude;
 
-    public BackEaseInterpolator(float amplitude2, EasingMode easingMode) {
+    public BackEaseInterpolator(float f, EasingMode easingMode) {
         super(easingMode);
-        amplitude = amplitude2;
+        this.amplitude = f;
     }
 
-    public float getInterpolationCore(float normalizedTime) {
-        float normalizedTime2 = (float) Math.max(normalizedTime, 0.0d);
-        return (float) (((double) ((normalizedTime2 * normalizedTime2) * normalizedTime2)) - (((double) (amplitude * normalizedTime2)) * Math.sin(((double) normalizedTime2) * 3.141592653589793d)));
+    public float getInterpolationCore(float f) {
+        float max = (float) Math.max((double) f, 0.0d);
+        return (float) (((double) ((max * max) * max)) - (((double) (this.amplitude * max)) * Math.sin(((double) max) * 3.141592653589793d)));
     }
 }

@@ -16,7 +16,7 @@ import com.microsoft.xbox.telemetry.helpers.UTCPageView;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * 05.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -29,18 +29,18 @@ public class ErrorActivity extends BaseActivity implements HeaderFragment.Callba
     private static final String TAG = ErrorActivity.class.getSimpleName();
     private int activityResult = 0;
 
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle bundle) {
         Log.d(TAG, "onCreate");
-        super.onCreate(savedInstanceState);
+        super.onCreate(bundle);
         setContentView(R.layout.xbid_activity_error);
         Intent intent = getIntent();
         UiUtil.ensureHeaderFragment(this, R.id.xbid_header_fragment, intent.getExtras());
         if (intent.hasExtra(ARG_ERROR_TYPE)) {
-            ErrorScreen errorScreen = ErrorScreen.fromId(intent.getIntExtra(ARG_ERROR_TYPE, -1));
-            if (errorScreen != null) {
-                UiUtil.ensureErrorFragment(this, errorScreen);
-                UiUtil.ensureErrorButtonsFragment(this, errorScreen);
-                UTCError.trackPageView(errorScreen, getTitle());
+            ErrorScreen fromId = ErrorScreen.fromId(intent.getIntExtra(ARG_ERROR_TYPE, -1));
+            if (fromId != null) {
+                UiUtil.ensureErrorFragment(this, fromId);
+                UiUtil.ensureErrorButtonsFragment(this, fromId);
+                UTCError.trackPageView(fromId, getTitle());
                 return;
             }
             Log.e(TAG, "Incorrect error type was provided");
@@ -57,18 +57,18 @@ public class ErrorActivity extends BaseActivity implements HeaderFragment.Callba
 
     public void onClickedLeftButton() {
         Log.d(TAG, "onClickedLeftButton");
-        ErrorScreen errorScreen = ErrorScreen.fromId(getIntent().getIntExtra(ARG_ERROR_TYPE, -1));
-        if (errorScreen == ErrorScreen.BAN) {
-            UTCError.trackGoToEnforcement(errorScreen, getTitle());
+        ErrorScreen fromId = ErrorScreen.fromId(getIntent().getIntExtra(ARG_ERROR_TYPE, -1));
+        if (fromId == ErrorScreen.BAN) {
+            UTCError.trackGoToEnforcement(fromId, getTitle());
             try {
                 startActivity(new Intent("android.intent.action.VIEW", Const.URL_ENFORCEMENT_XBOX_COM));
             } catch (ActivityNotFoundException e) {
                 Log.e(TAG, e.getMessage());
             }
         } else {
-            UTCError.trackTryAgain(errorScreen, getTitle());
-            activityResult = 1;
-            setResult(activityResult);
+            UTCError.trackTryAgain(fromId, getTitle());
+            this.activityResult = 1;
+            setResult(1);
             finish();
         }
     }
@@ -94,17 +94,16 @@ public class ErrorActivity extends BaseActivity implements HeaderFragment.Callba
         public final int leftButtonTextId;
         public final Interop.ErrorType type;
 
-        private ErrorScreen(Interop.ErrorType type2, Class<? extends BaseFragment> errorFragmentClass2, int leftButtonId) {
-            type = type2;
-            errorFragmentClass = errorFragmentClass2;
-            leftButtonTextId = leftButtonId;
+        private ErrorScreen(Interop.ErrorType errorType, Class<? extends BaseFragment> cls, int i) {
+            this.type = errorType;
+            this.errorFragmentClass = cls;
+            this.leftButtonTextId = i;
         }
 
-        @Nullable
-        public static ErrorScreen fromId(int id) {
-            for (ErrorScreen t : values()) {
-                if (t.type.getId() == id) {
-                    return t;
+        public static @Nullable ErrorScreen fromId(int i) {
+            for (ErrorScreen errorScreen : values()) {
+                if (errorScreen.type.getId() == i) {
+                    return errorScreen;
                 }
             }
             return null;

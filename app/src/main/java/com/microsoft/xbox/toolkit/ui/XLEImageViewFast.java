@@ -5,15 +5,14 @@ import android.content.res.TypedArray;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.View;
-
-import androidx.appcompat.widget.AppCompatImageView;
+import android.widget.ImageView;
 
 import com.microsoft.xbox.toolkit.XLERValueHelper;
 
 import java.net.URI;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -31,21 +30,21 @@ public class XLEImageViewFast extends XLEImageView {
         setSoundEffectsEnabled(false);
     }
 
-    public XLEImageViewFast(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public XLEImageViewFast(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
         if (!isInEditMode()) {
-            TypedArray a = context.obtainStyledAttributes(attrs, XLERValueHelper.getStyleableRValueArray("XLEImageViewFast"));
-            setImageResource(a.getResourceId(XLERValueHelper.getStyleableRValue("XLEImageViewFast_src"), -1));
-            a.recycle();
+            TypedArray obtainStyledAttributes = context.obtainStyledAttributes(attributeSet, XLERValueHelper.getStyleableRValueArray("XLEImageViewFast"));
+            setImageResource(obtainStyledAttributes.getResourceId(XLERValueHelper.getStyleableRValue("XLEImageViewFast_src"), -1));
+            obtainStyledAttributes.recycle();
             setSoundEffectsEnabled(false);
         }
     }
 
-    public void setImageResource(int resourceId) {
+    public void setImageResource(int i) {
         if (hasSize()) {
-            bindToResourceId(resourceId);
+            bindToResourceId(i);
         } else {
-            pendingBitmapResourceId = resourceId;
+            this.pendingBitmapResourceId = i;
         }
     }
 
@@ -53,34 +52,34 @@ public class XLEImageViewFast extends XLEImageView {
         if (hasSize()) {
             bindToUri(uri);
         } else {
-            pendingUri = uri;
+            this.pendingUri = uri;
         }
     }
 
-    public void setImageURI2(URI uri, boolean useFilaCache) {
-        useFileCache = useFilaCache;
-        option = new TextureBindingOption(getWidth(), getHeight(), useFileCache);
+    public void setImageURI2(URI uri, boolean z) {
+        this.useFileCache = z;
+        this.option = new TextureBindingOption(getWidth(), getHeight(), this.useFileCache);
         if (hasSize()) {
-            bindToUri(uri, option);
+            bindToUri(uri, this.option);
         } else {
-            pendingUri = uri;
+            this.pendingUri = uri;
         }
     }
 
-    public void setImageURI2(URI uri, int loadingResourceId, int errorResourceId) {
-        option = new TextureBindingOption(getWidth(), getHeight(), loadingResourceId, errorResourceId, useFileCache);
+    public void setImageURI2(URI uri, int i, int i2) {
+        this.option = new TextureBindingOption(getWidth(), getHeight(), i, i2, this.useFileCache);
         if (hasSize()) {
-            bindToUri(uri, option);
+            bindToUri(uri, this.option);
         } else {
-            pendingUri = uri;
+            this.pendingUri = uri;
         }
     }
 
-    public void setImageFilePath(String filePath) {
+    public void setImageFilePath(String str) {
         if (hasSize()) {
-            bindToFilePath(filePath);
+            bindToFilePath(str);
         } else {
-            pendingFilePath = filePath;
+            this.pendingFilePath = str;
         }
     }
 
@@ -92,51 +91,54 @@ public class XLEImageViewFast extends XLEImageView {
         return getWidth() > 0 && getHeight() > 0;
     }
 
-    private void bindToResourceId(int resourceId) {
+    private void bindToResourceId(int i) {
         this.pendingBitmapResourceId = -1;
-        TextureManager.Instance().bindToView(resourceId, (AppCompatImageView) this, getWidth(), getHeight());
+        TextureManager.Instance().bindToView(i, (ImageView) this, getWidth(), getHeight());
     }
 
     public void bindToUri(URI uri) {
-        pendingUri = null;
-        bindToUri(uri, new TextureBindingOption(getWidth(), getHeight(), useFileCache));
+        this.pendingUri = null;
+        bindToUri(uri, new TextureBindingOption(getWidth(), getHeight(), this.useFileCache));
     }
 
-    private void bindToUri(URI uri, TextureBindingOption option2) {
-        pendingUri = null;
-        option = null;
-        TextureManager.Instance().bindToView(uri, this, option2);
+    private void bindToUri(URI uri, TextureBindingOption textureBindingOption) {
+        this.pendingUri = null;
+        this.option = null;
+        TextureManager.Instance().bindToView(uri, this, textureBindingOption);
     }
 
-    private void bindToFilePath(String filePath) {
-        pendingFilePath = null;
-        TextureManager.Instance().bindToViewFromFile(filePath, this, getWidth(), getHeight());
+    private void bindToFilePath(String str) {
+        this.pendingFilePath = null;
+        TextureManager.Instance().bindToViewFromFile(str, this, getWidth(), getHeight());
     }
 
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(resolveSize(0, widthMeasureSpec), resolveSize(0, heightMeasureSpec));
+    public void onMeasure(int i, int i2) {
+        setMeasuredDimension(resolveSize(0, i), resolveSize(0, i2));
     }
 
-    public void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
+    public void onSizeChanged(int i, int i2, int i3, int i4) {
+        super.onSizeChanged(i, i2, i3, i4);
         if (hasSize()) {
-            if (pendingBitmapResourceId >= 0) {
-                bindToResourceId(pendingBitmapResourceId);
+            int i5 = this.pendingBitmapResourceId;
+            if (i5 >= 0) {
+                bindToResourceId(i5);
             }
-            if (pendingUri != null || (pendingUri == null && option != null)) {
-                if (option != null) {
-                    bindToUri(pendingUri, new TextureBindingOption(getWidth(), getHeight(), option.resourceIdForLoading, option.resourceIdForError, option.useFileCache));
+            URI uri = this.pendingUri;
+            if (uri != null || (uri == null && this.option != null)) {
+                if (this.option != null) {
+                    bindToUri(this.pendingUri, new TextureBindingOption(getWidth(), getHeight(), this.option.resourceIdForLoading, this.option.resourceIdForError, this.option.useFileCache));
                 } else {
-                    bindToUri(pendingUri);
+                    bindToUri(this.pendingUri);
                 }
             }
-            if (pendingFilePath != null) {
-                bindToFilePath(pendingFilePath);
+            String str = this.pendingFilePath;
+            if (str != null) {
+                bindToFilePath(str);
             }
         }
     }
 
-    public void setOnClickListener(View.OnClickListener listener) {
-        super.setOnClickListener(TouchUtil.createOnClickListener(listener));
+    public void setOnClickListener(View.OnClickListener onClickListener) {
+        super.setOnClickListener(TouchUtil.createOnClickListener(onClickListener));
     }
 }

@@ -6,7 +6,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 /**
- * 08.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -17,14 +17,15 @@ public class TrieNode {
     public Hashtable<Character, TrieNode> MoreNodes = new Hashtable<>(26);
     public List<String> Words = new ArrayList();
 
-    public void accept(ITrieNodeVisitor visitor) {
-        if (visitor != null) {
-            visitor.visit(this);
+    public void accept(ITrieNodeVisitor iTrieNodeVisitor) {
+        if (iTrieNodeVisitor != null) {
+            iTrieNodeVisitor.visit(this);
         }
-        if (MoreNodes != null) {
-            Enumeration<Character> keys = MoreNodes.keys();
+        Hashtable<Character, TrieNode> hashtable = this.MoreNodes;
+        if (hashtable != null) {
+            Enumeration<Character> keys = hashtable.keys();
             while (keys.hasMoreElements()) {
-                MoreNodes.get(Character.valueOf(keys.nextElement().charValue())).accept(visitor);
+                this.MoreNodes.get(Character.valueOf(keys.nextElement().charValue())).accept(iTrieNodeVisitor);
             }
         }
     }

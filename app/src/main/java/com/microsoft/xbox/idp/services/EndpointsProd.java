@@ -1,7 +1,7 @@
 package com.microsoft.xbox.idp.services;
 
 /**
- * 05.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
@@ -11,12 +11,16 @@ class EndpointsProd implements Endpoints {
     EndpointsProd() {
     }
 
-    public String profile() {
-        return "https://profile.xboxlive.com";
-    }
-
     public String accounts() {
         return "https://accounts.xboxlive.com";
+    }
+
+    public String privacy() {
+        return "https://privacy.xboxlive.com";
+    }
+
+    public String profile() {
+        return "https://profile.xboxlive.com";
     }
 
     public String userAccount() {
@@ -25,9 +29,5 @@ class EndpointsProd implements Endpoints {
 
     public String userManagement() {
         return "https://user.mgt.xboxlive.com";
-    }
-
-    public String privacy() {
-        return "https://privacy.xboxlive.com";
     }
 }

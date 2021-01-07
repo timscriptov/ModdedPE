@@ -1,13 +1,14 @@
 package com.microsoft.xbox.idp.model;
 
 /**
- * 05.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 
 public class GamerTag {
+
     public static class Request {
         public String gamertag;
         public boolean preview;
@@ -25,9 +26,9 @@ public class GamerTag {
         public ReservationRequest() {
         }
 
-        public ReservationRequest(String gamertag, String reservationId) {
-            Gamertag = gamertag;
-            ReservationId = reservationId;
+        public ReservationRequest(String str, String str2) {
+            this.Gamertag = str;
+            this.ReservationId = str2;
         }
     }
 }

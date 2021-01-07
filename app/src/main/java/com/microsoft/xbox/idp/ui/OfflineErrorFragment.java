@@ -11,14 +11,14 @@ import com.microsoft.xbox.idp.compat.BaseFragment;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * 05.10.2020
+ * 07.01.2021
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 
 public class OfflineErrorFragment extends BaseFragment {
-    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.xbid_fragment_error_offline, container, false);
+    public View onCreateView(@NotNull LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+        return layoutInflater.inflate(R.layout.xbid_fragment_error_offline, viewGroup, false);
     }
 }
