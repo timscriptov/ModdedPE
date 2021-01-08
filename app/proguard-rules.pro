@@ -34,6 +34,7 @@
 -keep class org.fmod.MediaCodec { *; }
 -keep class org.fmod.FMOD { *; }
 
+-keep class com.mojang.minecraftpe.ActiveDirectorySignIn { *; }
 -keep class com.mojang.minecraftpe.HardwareInformation { *; }
 -keep class com.mojang.minecraftpe.MainActivity { *; }
 -keep class com.mojang.minecraftpe.store.NativeStoreListener { *; }
@@ -45,6 +46,10 @@
 -keep class com.mojang.minecraftpe.packagesource.PackageSourceFactory { *; }
 -keep class com.mojang.minecraftpe.packagesource.PackageSource { *; }
 -keep class com.mojang.minecraftpe.packagesource.NativePackageSourceListener { *; }
+-keep class com.mojang.minecraftpe.Webview.MinecraftChromeClient { *; }
+-keep class com.mojang.minecraftpe.Webview.MinecraftWebview { *; }
+-keep class com.mojang.minecraftpe.Webview.MinecraftWebViewClient { *; }
+-keep class com.mojang.minecraftpe.Webview.WebviewHostInterface { *; }
 
 -keep class com.mcal.pesdk.nativeapi.NativeUtils { *; }
 

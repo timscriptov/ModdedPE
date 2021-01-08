@@ -7,6 +7,11 @@ import android.util.Log;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public class WebView {
     public static final String DEFAULT_BROWSER_INFO = "webkit";
     public static final int SHOW_ADDITIONAL_UI = 3;

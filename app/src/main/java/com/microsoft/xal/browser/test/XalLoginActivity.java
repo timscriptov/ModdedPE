@@ -11,6 +11,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public class XalLoginActivity extends AppCompatActivity {
     public long operationId;
     public String endurl;

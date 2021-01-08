@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,6 +41,10 @@ public class HardwareInformation {
     @Contract(pure = true)
     public static String getAndroidVersion() {
         return "Android " + VERSION.RELEASE;
+    }
+
+    public static @NotNull String getLocale() {
+        return Locale.getDefault().toString();
     }
 
     public static String getCPUType() {

@@ -32,6 +32,11 @@ import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
+
 public class WebView extends AppCompatActivity {
     public static final String CANCEL_DELAY = "CANCEL_DELAY";
     public static final String END_URL = "END_URL";

@@ -28,9 +28,9 @@ import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.Environment;
@@ -44,7 +44,6 @@ import android.os.SystemClock;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images.Media;
-import android.provider.Settings.Secure;
 import android.speech.tts.TextToSpeech;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -61,6 +60,7 @@ import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -72,6 +72,7 @@ import com.mojang.minecraftpe.platforms.Platform;
 
 import org.fmod.FMOD;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.spongycastle.asn1.cmp.PKIFailureInfo;
@@ -87,11 +88,18 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
+import java.math.BigInteger;
+import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.net.UnknownHostException;
+import java.nio.ByteOrder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -103,16 +111,24 @@ import java.util.UUID;
  */
 
 public class MainActivity extends NativeActivity implements OnKeyListener, CrashManagerOwner {
+    public static final String MARKET_URL_FORMAT = "market://details?id=%s";
+    public static final String ACTION_TCUI_BROADCAST_LAUNCH = "com.microsoft.beambroadcast.xle.app.action.TCUI";
+    public static final String BROADCAST_TITLE_NAME_KEY = "name";
+    public static final String MINECRAFT_BROADCAST_TITLE = "Minecraft";
+    public static final String PACKAGE_NAME_KEY = "package";
     private static final String SESSION_HISTORY_SEP = "&";
     private static final String SESSION_HISTORY_KEY = "session-history";
+    private static final String MIXER_CREATE_BETA_PACKAGE = "com.microsoft.beambroadcast.beta";
+    private static final String MIXER_CREATE_INTERNAL_BETA_PACKAGE = "com.microsoft.beambroadcast.beta.internal";
+    private static final String MIXER_CREATE_RETAIL_PACKAGE = "com.microsoft.beambroadcast";
     public static MainActivity mInstance = null;
     private static boolean _isPowerVr = false;
     private static boolean mHasStoragePermission = false;
     final Messenger mMessenger = new Messenger(new IncomingHandler());
+    @SuppressLint("SimpleDateFormat")
     private final DateFormat DateFormat = new SimpleDateFormat();
     public int mLastPermissionRequestReason;
     public int virtualKeyboardHeight = 0;
-    protected DisplayMetrics displayMetrics;
     HeadsetConnectionReceiver headsetConnectionReceiver;
     List<ActivityListener> mActivityListeners = new ArrayList<ActivityListener>();
     MessageConnectionStatus mBound = MessageConnectionStatus.NOTSET;
@@ -127,15 +143,13 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     private int _userInputStatus = -1;
     private String[] _userInputText = null;
     private ClipboardManager clipboardManager;
-    private Locale initialUserLocale;
     private long mCallback = 0;
-    private SessionInfo mLastDeviceSessionInfo = null;
     private InputDeviceManager deviceManager;
-    private SessionInfo mCurrentSession = null;
     private ArrayList<SessionInfo> mSessionHistory = null;
-    private CrashManager mCrashManager = null;
-    private AlertDialog mDialog;
-    private ArrayList<StringValue> _userInputValues = new ArrayList<>();
+    private final ArrayList<StringValue> _userInputValues = new ArrayList<>();
+    private long mFileDialogCallback = 0;
+    private HardwareInformation mHardwareInformation;
+    private TextToSpeech textToSpeechManager;
 
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
@@ -155,22 +169,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
             mBound = MessageConnectionStatus.DISCONNECTED;
         }
     };
-
-    private long mFileDialogCallback = 0;
-    private HardwareInformation mHardwareInformation;
-    private String mLastDeviceSessionId = "";
-    private TextToSpeech textToSpeechManager;
-
-    public static boolean isXperiaPlay() {
-        String[] tags = {Build.MODEL, Build.DEVICE, Build.PRODUCT};
-        for (String tag : tags) {
-            tag.toLowerCase(Locale.ENGLISH);
-            if (tag.contains("r800") || tag.contains("so-01d") || (tag.contains("xperia") && tag.contains("play"))) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public static boolean isPowerVR() {
         return _isPowerVr;
@@ -208,51 +206,9 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         out.close();
     }
 
-    private static void copyAssetDir(AssetManager am, String outpath) {
-        Log.w("ModdedPE", "EXTRACTING: " + "mono");
-        try {
-            String[] res = am.list("mono");
-            int length = res.length;
-            for (String result : res) {
-                String fromFile = "mono" + "/" + result;
-                String toFile = outpath + "/" + result;
-                if (fromFile.endsWith(".dll")) {
-                    Log.w("ModdedPE", "\tCOPYING " + fromFile + " to " + toFile);
-                    copyFile(am.open(fromFile), new FileOutputStream(toFile));
-                } else {
-                    Log.w("ModdedPE", "\t" + fromFile + " is not a dll, skipping");
-                }
-            }
-        } catch (Exception e) {
-            Log.w("ModdedPE", "DLL copy failed: ", e);
-        }
-    }
-
     private static native void nativeConfigureNewSession(SessionInfo sessionInfo);
 
     private static native void nativeWaitCrashManagementSetupComplete();
-
-    public SessionInfo getLastDeviceSessionInfo() {
-        if (mLastDeviceSessionInfo == null) {
-            mLastDeviceSessionInfo = SessionInfo.fromString(PreferenceManager.getDefaultSharedPreferences(this).getString("last-session-info", ""));
-            Log.i("ModdedPE", "getLastDeviceSessionInfo was null and now: " + mLastDeviceSessionInfo.toString());
-        } else {
-            Log.i("ModdedPE", "getLastDeviceSessionInfo was not null with: " + mLastDeviceSessionInfo.toString());
-        }
-        return mLastDeviceSessionInfo;
-    }
-
-    public void setLastDeviceSessionInfo(@NotNull SessionInfo info) {
-        SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(this).edit();
-        edit.putString("last-session-info", info.toString());
-        edit.apply();
-        Log.i("MCPE", "setLastDeviceSessionInfo: " + info.toString());
-        this.mLastDeviceSessionInfo = info;
-    }
-
-    public boolean supportsNonTouchscreen() {
-        return isXperiaPlay();
-    }
 
     private native void fireCrashedTelemetry(String str, String str2, String str3);
 
@@ -375,19 +331,9 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     }
 
     public String getLastDeviceSessionId() {
-        if (mLastDeviceSessionId.equals("")) {
-            mLastDeviceSessionId = PreferenceManager.getDefaultSharedPreferences(this).getString("LastDeviceSessionId", "");
-        }
-        return mLastDeviceSessionId;
-    }
+        ArrayList<SessionInfo> arrayList = mSessionHistory;
+        return arrayList.get(arrayList.size() - 1).sessionId;
 
-    public void setLastDeviceSessionId(String currentDeviceSessionId) {
-        if (mLastDeviceSessionId.equals("")) {
-            getLastDeviceSessionId();
-        }
-        Editor edit = PreferenceManager.getDefaultSharedPreferences(this).edit();
-        edit.putString("LastDeviceSessionId", currentDeviceSessionId);
-        edit.apply();
     }
 
     @SuppressLint("WrongConstant")
@@ -396,8 +342,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         int attempts = prefs.getInt("correlationAttempts", 10);
         if (attempts != 0) {
             Intent i = new Intent();
-            //i.setComponent(new ComponentName(getPackageName().contains("trial") ? "com.mojang.minecraftpe" : "com.mojang.minecrafttrialpe", "com.mojang.minecraftpe.ImportService"));
-            i.setComponent(new ComponentName(getPackageName().contains("trial") ? "com.mojang.minecraftpe" : "com.mojang.minecraftpe", "com.mojang.minecraftpe.ImportService"));
+            i.setComponent(new ComponentName(getPackageName().contains("trial") ? "com.mojang.minecraftpe" : "com.mojang.minecrafttrialpe", "com.mojang.minecraftpe.ImportService"));
             bindService(i, mConnection, 1);
             Editor edit = prefs.edit();
             edit.putInt("correlationAttempts", attempts - 1);
@@ -415,19 +360,17 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     public void initializeCrashManager() {
         AppConstants.loadFromContext(getApplicationContext());
         SessionInfo sessionInfo = new SessionInfo();
-        mCurrentSession = sessionInfo;
         nativeConfigureNewSession(sessionInfo);
-        mCurrentSession.updateJavaConstants(this);
+        sessionInfo.updateJavaConstants(this);
         loadSessionHistory();
-        saveNewSession(mCurrentSession);
+        saveNewSession(sessionInfo);
         File file = new File(getFilesDir(), "/minidumps");
         file.mkdir();
         Log.v("MinecraftPlatform", "Minidump directory is: " + file.getAbsolutePath());
         Log.i("MinecraftPlatform", "Setting up crash handler");
-        CrashManager crashManager = new CrashManager((CrashManagerOwner) this, file.getAbsolutePath(), getCachedDeviceId(), isAndroidTrial() ? new SentryEndpointConfig("https://sentry.io", "2308440", "668bc09f7bcf461796ea07c1006076fe") : new SentryEndpointConfig("https://sentry.io", "2277697", "1c3f5cbd723a4a84879059d260b19ef6"), mCurrentSession);
-        mCrashManager = crashManager;
+        CrashManager crashManager = new CrashManager((CrashManagerOwner) this, file.getAbsolutePath(), getCachedDeviceId(), isAndroidTrial() ? new SentryEndpointConfig("https://sentry.io", "2308440", "668bc09f7bcf461796ea07c1006076fe") : new SentryEndpointConfig("https://sentry.io", "2277697", "1c3f5cbd723a4a84879059d260b19ef6"), sessionInfo);
         crashManager.installGlobalExceptionHandler();
-        setUpBreakpad(file.getAbsolutePath(), mCurrentSession.sessionId);
+        setUpBreakpad(file.getAbsolutePath(), sessionInfo.sessionId);
     }
 
     private void loadSessionHistory() {
@@ -449,14 +392,16 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
 
     private void saveSessionHistory() {
         ArrayList arrayList = new ArrayList();
-        for (SessionInfo sessionInfo : mSessionHistory) {
-            arrayList.add(sessionInfo.toString());
+        Iterator<SessionInfo> it = this.mSessionHistory.iterator();
+        while (it.hasNext()) {
+            arrayList.add(it.next().toString());
         }
         String join = TextUtils.join(SESSION_HISTORY_SEP, arrayList);
         SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(this).edit();
         edit.putString(SESSION_HISTORY_KEY, join);
-        edit.apply();
-        Log.i("ModdedPE", "saveSessionHistory: " + mSessionHistory.size() + " entries saved");
+        edit.commit();
+        Log.i("ModdedPE", "saveSessionHistory: " + this.mSessionHistory.size() + " entries saved");
+
     }
 
     private void saveNewSession(SessionInfo sessionInfo) {
@@ -481,7 +426,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         return getCachedDeviceId();
     }
 
-
     @Override
     public void notifyCrashUploadCompleted(CrashManager crashManager, @NotNull SessionInfo sessionInfo) {
         fireCrashedTelemetry(sessionInfo.sessionId, sessionInfo.buildId, CrashManager.formatTimestamp(sessionInfo.crashTimestamp));
@@ -503,14 +447,13 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
 
         nativeSetHeadphonesConnected(((AudioManager) getSystemService("audio")).isWiredHeadsetOn());
         clipboardManager = (ClipboardManager) getSystemService("clipboard");
-        initialUserLocale = Locale.getDefault();
+        Locale initialUserLocale = Locale.getDefault();
         AppConstants.loadFromContext(getApplicationContext());
         mInstance = this;
         _fromOnCreate = true;
         textInputWidget = createTextWidget();
         findViewById(16908290).getRootView().addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> nativeResize(right - left, bottom - top));
     }
-
 
     private void createAlertDialog(boolean z, boolean z2, boolean z3) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -526,7 +469,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
             builder.setNegativeButton("Cancel", (dialogInterface, i) -> onDialogCanceled());
         }
         AlertDialog create = builder.create();
-        mDialog = create;
         create.setOwnerActivity(this);
     }
 
@@ -663,9 +605,10 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
             textToSpeechManager = null;
         } else if (textToSpeechManager == null) {
             try {
-                textToSpeechManager = new TextToSpeech(getApplicationContext(), status -> {
+                textToSpeechManager = new TextToSpeech(getApplicationContext(), i -> {
                 });
-            } catch (Exception ignored) {
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -697,33 +640,73 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     }
 
     public boolean isMixerCreateInstalled() {
-        return isPackageInstalledByName("com.microsoft.beambroadcast") || isPackageInstalledByName("com.microsoft.beambroadcast.beta");
-    }
-
-    private boolean isPackageInstalledByName(String str) {
-        try {
-            return getPackageManager().getPackageInfo(str, 0) != null;
-        } catch (NameNotFoundException e) {
+        if (getApplicationContext() == null || getMixerCreateInstalledPackage() == null) {
             return false;
         }
+        return true;
     }
 
-    @SuppressLint("LongLogTag")
-    public void navigateToPlaystoreForMixerCreate() {
-        launchUri("market://details?id=com.microsoft.beambroadcast");
+    private @Nullable Intent getMixerCreateInstalledPackage() {
+        Context applicationContext = getApplicationContext();
+        if (applicationContext != null) {
+            Intent mixerCreateInternalBetaPackage = applicationContext.getPackageManager().getLaunchIntentForPackage(MIXER_CREATE_INTERNAL_BETA_PACKAGE);
+            if (mixerCreateInternalBetaPackage != null) {
+                Log.d("ModdedPE", "Found internal beta package installed");
+                return mixerCreateInternalBetaPackage;
+            }
+            Intent mixerCreateBetaPackage = applicationContext.getPackageManager().getLaunchIntentForPackage(MIXER_CREATE_BETA_PACKAGE);
+            if (mixerCreateBetaPackage != null) {
+                Log.d("ModdedPE", "Found beta package installed");
+                return mixerCreateBetaPackage;
+            }
+            Intent mixerCreateRetailPackage = applicationContext.getPackageManager().getLaunchIntentForPackage(MIXER_CREATE_RETAIL_PACKAGE);
+            if (mixerCreateRetailPackage == null) {
+                return null;
+            }
+            Log.d("ModdedPE", "Found retail package installed");
+            return mixerCreateRetailPackage;
+        }
         Log.w("ModdedPE", "Application context is null");
+        return null;
     }
 
-    @SuppressLint("LongLogTag")
-    public boolean launchMixerCreateForBroadcast() {
-        try {
-            launchUri("beambroadcast://");
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
+    @SuppressLint("WrongConstant")
+    public void navigateToPlaystoreForMixerCreate() {
+        Context applicationContext = getApplicationContext();
+        if (applicationContext != null) {
+            Intent intent = new Intent("android.intent.action.VIEW");
+            intent.setData(Uri.parse(String.format(MARKET_URL_FORMAT, new Object[]{MIXER_CREATE_RETAIL_PACKAGE})));
+            intent.addFlags(268435456);
+            try {
+                applicationContext.startActivity(intent);
+            } catch (ActivityNotFoundException unused) {
+                Log.w("ModdedPE", "launch market place- failed");
+            }
+        } else {
             Log.w("ModdedPE", "Application context is null");
+        }
+    }
+
+    @SuppressLint("WrongConstant")
+    public boolean launchMixerCreateForBroadcast() {
+        Context applicationContext = getApplicationContext();
+        if (applicationContext != null) {
+            Intent mixerCreateInstalledPackage = getMixerCreateInstalledPackage();
+            if (mixerCreateInstalledPackage != null) {
+                mixerCreateInstalledPackage.setAction(ACTION_TCUI_BROADCAST_LAUNCH);
+                Bundle bundle = new Bundle();
+                bundle.putString(BROADCAST_TITLE_NAME_KEY, MINECRAFT_BROADCAST_TITLE);
+                bundle.putString(PACKAGE_NAME_KEY, getPackageName());
+                mixerCreateInstalledPackage.putExtras(bundle);
+                mixerCreateInstalledPackage.addFlags(67108864);
+                applicationContext.startActivity(mixerCreateInstalledPackage);
+                return true;
+            }
+            Log.w("ModdedPE", "No mixer create package installed on the device");
             return false;
         }
+        Log.w("ModdedPE", "Application context is null");
+        return false;
     }
 
     @SuppressLint("WrongConstant")
@@ -745,7 +728,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         textInputWidget.setSelection(textInputWidget.length());
     }
 
-    @SuppressLint("ResourceType")
+    @SuppressLint({"ResourceType", "SetTextI18n"})
     public TextInputProxyEditTextbox createTextWidget() {
         final TextInputProxyEditTextbox textWidget = new TextInputProxyEditTextbox(this);
         textWidget.setVisibility(8);
@@ -814,11 +797,9 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
             }
 
             public boolean onBackKeyPressed() {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        Log.w("mcpe - keyboard", "textInputWidget.onBackPressed");
-                        nativeBackPressed();
-                    }
+                runOnUiThread(() -> {
+                    Log.w("ModdedPE", "textInputWidget.onBackPressed");
+                    nativeBackPressed();
                 });
                 return true;
             }
@@ -834,10 +815,8 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     }
 
     public void updateLocalization(String lang, String region) {
-        final String langString = lang;
-        final String regionString = region;
         runOnUiThread(() -> {
-            Locale locale = new Locale(langString, regionString);
+            Locale locale = new Locale(lang, region);
             Locale.setDefault(locale);
             Configuration config = new Configuration();
             config.locale = locale;
@@ -846,14 +825,12 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     }
 
     public void showKeyboard(String text, int maxLength, boolean limitInput, boolean numbersOnly, boolean isMultiline) {
+        nativeClearAButtonState();
         final String startText = text;
         final int fMaxLength = maxLength;
         final boolean fLimitInput = limitInput;
         final boolean fNumbersOnly = numbersOnly;
         final boolean fIsMultiline = isMultiline;
-        //Не поддерживается в Minecraft 1.11.4.2
-        //nativeClearAButtonState();
-        nativeClearAButtonState();
         runOnUiThread(new Runnable() {
             public void run() {
                 setupKeyboardViews(startText, fMaxLength, fLimitInput, fNumbersOnly, fIsMultiline);
@@ -862,28 +839,28 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     }
 
     public void hideKeyboard() {
-        runOnUiThread(() -> dismissTextWidget());
+        runOnUiThread(this::dismissTextWidget);
     }
 
     @SuppressLint("WrongConstant")
     public boolean isTextWidgetActive() {
-        return textInputWidget != null && textInputWidget.getVisibility() == 0;
+        TextInputProxyEditTextbox textInputProxyEditTextbox = textInputWidget;
+        return textInputProxyEditTextbox != null && textInputProxyEditTextbox.getVisibility() == 0;
     }
 
     @SuppressLint("WrongConstant")
     public void dismissTextWidget() {
         if (isTextWidgetActive()) {
             getInputMethodManager().hideSoftInputFromWindow(textInputWidget.getWindowToken(), 0);
-            textInputWidget.setInputType(524288);
+            textInputWidget.setInputType(PKIFailureInfo.signerNotTrusted);
             textInputWidget.setVisibility(8);
         }
     }
 
     public void updateTextboxText(String newText) {
-        final String setText = newText;
         runOnUiThread(() -> {
             if (isTextWidgetActive()) {
-                textInputWidget.setTextFromGame(setText);
+                textInputWidget.setTextFromGame(newText);
                 textInputWidget.setSelection(textInputWidget.length());
             }
         });
@@ -940,127 +917,114 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         return 0;
     }
 
-    public boolean unpackMonoAssemblies() {
-        try {
-            Context context = getApplicationContext();
-            String filesDir = context.getFilesDir().getAbsolutePath();
-            Log.w("ModdedPE", "copy all DLLs to \"" + filesDir + "\"");
-            new File(filesDir).mkdir();
-            copyAssetDir(context.getAssets(), filesDir);
-            Log.w("ModdedPE", "unpacking success :-)");
-            return true;
-        } catch (Exception e) {
-            Log.e("ModdedPE", "unpacking failed :-(");
-            return false;
-        }
-    }
-
     public byte[] getFileDataBytes(@NotNull String filename) {
-        BufferedInputStream bis;
+        BufferedInputStream bufferedInputStream;
         if (filename.isEmpty()) {
             return null;
         }
         try {
             AssetManager assets = getApplicationContext().getAssets();
             if (assets == null) {
-                System.err.println("getAssets returned null: Could not getFileDataBytes " + filename);
+                PrintStream printStream = System.err;
+                printStream.println("getAssets returned null: Could not getFileDataBytes " + filename);
                 return null;
             }
             try {
-                bis = new BufferedInputStream(assets.open(filename));
-            } catch (IOException e) {
+                bufferedInputStream = new BufferedInputStream(assets.open(filename));
+            } catch (IOException unused) {
                 new File(filename);
                 try {
-                    bis = new BufferedInputStream(new FileInputStream(filename));
-                } catch (IOException e2) {
+                    bufferedInputStream = new BufferedInputStream(new FileInputStream(filename));
+                } catch (IOException e) {
+                    e.printStackTrace();
                     return null;
                 }
             }
-            ByteArrayOutputStream s = new ByteArrayOutputStream(1048576);
-            byte[] tmp = new byte[1048576];
-            while (true) {
-                try {
-                    int count = bis.read(tmp);
-                    if (count <= 0) {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1048576);
+            byte[] bArr = new byte[1048576];
+            try {
+                while (true) {
+                    int read = bufferedInputStream.read(bArr);
+                    if (read > 0) {
+                        byteArrayOutputStream.write(bArr, 0, read);
                         try {
-                            bis.close();
+                            PrintStream printStream2 = System.err;
+                            printStream2.println("Cannot read from file " + filename);
                             break;
-                        } catch (IOException e3) {
-                            e3.printStackTrace();
+                        } catch (Throwable th) {
+                            try {
+                                bufferedInputStream.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            throw th;
                         }
-                    } else {
-                        s.write(tmp, 0, count);
-                    }
-                } catch (IOException e4) {
-                    System.err.println("Cannot read from file " + filename);
-                    try {
-                        bis.close();
-                    } catch (IOException e5) {
-                        e5.printStackTrace();
-                    }
-                } catch (Throwable th) {
-                    th.printStackTrace();
-                    try {
-                        bis.close();
-                    } catch (IOException e6) {
-                        e6.printStackTrace();
                     }
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            return s.toByteArray();
-        } catch (NullPointerException e7) {
-            e7.printStackTrace();
-            System.err.println("getAssets threw NPE: Could not getFileDataBytes " + filename);
+            try {
+                bufferedInputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return byteArrayOutputStream.toByteArray();
+        } catch (NullPointerException e) {
+            PrintStream printStream3 = System.err;
+            printStream3.println("getAssets threw NPE: Could not getFileDataBytes " + filename);
             return null;
         }
     }
 
     public int[] getImageData(String filename) {
-        Bitmap bm = BitmapFactory.decodeFile(filename);
-        if (bm == null) {
+        Bitmap decodeFile = BitmapFactory.decodeFile(filename);
+        if (decodeFile == null) {
             try {
                 AssetManager assets = getApplicationContext().getAssets();
                 if (assets != null) {
                     try {
-                        bm = BitmapFactory.decodeStream(assets.open(filename));
+                        decodeFile = BitmapFactory.decodeStream(assets.open(filename));
                     } catch (IOException e) {
-                        e.printStackTrace();
-                        System.err.println("getImageData: Could not open image " + filename);
+                        PrintStream printStream = System.err;
+                        printStream.println("getImageData: Could not open image " + filename);
                         return null;
                     }
                 } else {
-                    System.err.println("getAssets returned null: Could not open image " + filename);
+                    PrintStream printStream2 = System.err;
+                    printStream2.println("getAssets returned null: Could not open image " + filename);
                     return null;
                 }
-            } catch (NullPointerException e2) {
-                e2.printStackTrace();
-                System.err.println("getAssets threw NPE: Could not open image " + filename);
+            } catch (NullPointerException e) {
+                PrintStream printStream3 = System.err;
+                printStream3.println("getAssets threw NPE: Could not open image " + filename);
                 return null;
             }
         }
-        int w = bm.getWidth();
-        int h = bm.getHeight();
-        int[] pixels = new int[((w * h) + 2)];
-        pixels[0] = w;
-        pixels[1] = h;
-        bm.getPixels(pixels, 2, w, 0, 0, w, h);
+        Bitmap bitmap = decodeFile;
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        int[] pixels = new int[((width * height) + 2)];
+        pixels[0] = width;
+        pixels[1] = height;
+        bitmap.getPixels(pixels, 2, width, 0, 0, width, height);
         return pixels;
     }
 
     public int getScreenWidth() {
         @SuppressLint("WrongConstant")
-        Display display = ((WindowManager) getSystemService("window")).getDefaultDisplay();
-        int out = Math.max(display.getWidth(), display.getHeight());
-        System.out.println("getwidth: " + out);
-        return out;
+        Display defaultDisplay = ((WindowManager) getSystemService("window")).getDefaultDisplay();
+        int max = Math.max(defaultDisplay.getWidth(), defaultDisplay.getHeight());
+        System.out.println("getwidth: " + max);
+        return max;
     }
 
     public int getScreenHeight() {
         @SuppressLint("WrongConstant")
-        Display display = ((WindowManager) getSystemService("window")).getDefaultDisplay();
-        int out = Math.min(display.getWidth(), display.getHeight());
-        System.out.println("getheight: " + out);
-        return out;
+        Display defaultDisplay = ((WindowManager) getSystemService("window")).getDefaultDisplay();
+        int min = Math.min(defaultDisplay.getWidth(), defaultDisplay.getHeight());
+        System.out.println("getheight: " + min);
+        return min;
     }
 
     public int getAndroidVersion() {
@@ -1072,8 +1036,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     }
 
     public String getLocale() {
-        Locale locale = getResources().getConfiguration().locale;
-        return locale.getLanguage() + "_" + locale.getCountry();
+        return HardwareInformation.getLocale();
     }
 
     public String getObbDirPath() {
@@ -1103,31 +1066,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
 
     public void quit() {
         runOnUiThread(this::finish);
-    }
-
-    public String getFormattedDateString(int s) {
-        return java.text.DateFormat.getDateInstance(3, initialUserLocale).format(new Date(((long) s) * 1000));
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    public String getFileTimestamp(int s) {
-        return new SimpleDateFormat("__EEE__yyyy_MM_dd__HH_mm_ss'.txt'").format(new Date(((long) s) * 1000));
-    }
-
-    public String createDeviceID() {
-        @SuppressLint("HardwareIds") String androidId = Secure.getString(getContentResolver(), "android_id");
-        if (androidId != null && !androidId.isEmpty()) {
-            return androidId;
-        }
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String snooperID = prefs.getString("snooperId", "");
-        if (snooperID.isEmpty()) {
-            snooperID = createUUID();
-            Editor edit = prefs.edit();
-            edit.putString("snooperId", snooperID);
-            edit.apply();
-        }
-        return snooperID;
     }
 
     public void displayDialog(int dialogId) {
@@ -1240,34 +1178,75 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     }
 
     public String[] getBroadcastAddresses() {
-        Log.i("ModdedPE", "get broadcast addresses");
-        return new String[]{"255.255.255.255"};
+        ArrayList arrayList = new ArrayList();
+        try {
+            System.setProperty("java.net.preferIPv4Stack", "true");
+            Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+            while (networkInterfaces.hasMoreElements()) {
+                NetworkInterface nextElement = networkInterfaces.nextElement();
+                if (!nextElement.isLoopback()) {
+                    for (InterfaceAddress next : nextElement.getInterfaceAddresses()) {
+                        if (next.getBroadcast() != null) {
+                            arrayList.add(next.getBroadcast().toString().substring(1));
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return (String[]) arrayList.toArray(new String[arrayList.size()]);
     }
 
     public boolean isChromebook() {
         return getWindow().getContext().getPackageManager().hasSystemFeature("android.hardware.type.pc");
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @SuppressLint("WrongConstant")
     public String chromebookCompatibilityIP() {
-        /*Context activityContext = getWindow().getContext();
-        if (isChromebook() && activityContext.checkCallingOrSelfPermission("android.permission.ACCESS_WIFI_STATE") == 0) {
-            int ip = activityContext.getSystemService(WifiManager.class).getConnectionInfo().getIpAddress();
-            if (ip != 0) {
-                if (ByteOrder.nativeOrder().equals(ByteOrder.LITTLE_ENDIAN)) {
-                    ip = Integer.reverseBytes(ip);
-                }
-                try {
-                    return InetAddress.getByAddress(BigInteger.valueOf((long) ip).toByteArray()).getHostAddress();
-                } catch (UnknownHostException e) {
-                }
-            }
-        }*/
-        return "";
+        int ipAddress;
+        Context context = getWindow().getContext();
+        if (!isChromebook() || context.checkCallingOrSelfPermission("android.permission.ACCESS_WIFI_STATE") != 0 || (ipAddress = (context.getSystemService(WifiManager.class)).getConnectionInfo().getIpAddress()) == 0) {
+            return "";
+        }
+        if (ByteOrder.nativeOrder().equals(ByteOrder.LITTLE_ENDIAN)) {
+            ipAddress = Integer.reverseBytes(ipAddress);
+        }
+        try {
+            return InetAddress.getByAddress(BigInteger.valueOf((long) ipAddress).toByteArray()).getHostAddress();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public String[] getIPAddresses() {
-        System.out.println("get IP addresses?");
-        return new String[]{"127.0.0.1"};
+        ArrayList arrayList = new ArrayList();
+        String chromebookCompatibilityIP = chromebookCompatibilityIP();
+        if (!chromebookCompatibilityIP.isEmpty()) {
+            arrayList.add(chromebookCompatibilityIP);
+        }
+        try {
+            System.setProperty("java.net.preferIPv4Stack", "true");
+            Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+            while (networkInterfaces.hasMoreElements()) {
+                NetworkInterface nextElement = networkInterfaces.nextElement();
+                if (!nextElement.isLoopback() && nextElement.isUp()) {
+                    for (InterfaceAddress next : nextElement.getInterfaceAddresses()) {
+                        InetAddress address = next.getAddress();
+                        if (address != null && !address.isAnyLocalAddress() && !address.isMulticastAddress() && !address.isLinkLocalAddress()) {
+                            arrayList.add(next.getAddress().toString().substring(1));
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return (String[]) arrayList.toArray(new String[arrayList.size()]);
+
     }
 
     public void initiateUserInput(int id) {
@@ -1325,11 +1304,16 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     }
 
     public long calculateAvailableDiskFreeSpace(String rootPath) {
-        StatFs stat = new StatFs(rootPath);
-        if (VERSION.SDK_INT >= 18) {
-            return stat.getAvailableBytes();
+        try {
+            StatFs statFs = new StatFs(rootPath);
+            if (Build.VERSION.SDK_INT >= 18) {
+                return statFs.getAvailableBytes();
+            }
+            return (long) (statFs.getAvailableBlocks() * statFs.getBlockSize());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
         }
-        return stat.getAvailableBlocks() * stat.getBlockSize();
     }
 
     @SuppressLint({"DefaultLocale"})
@@ -1343,37 +1327,8 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         }
     }
 
-    @NotNull
-    private File copyContentStoreToTempFile(Uri content) {
-        return copyContentStoreToTempFile(content, "skintemp.png");
-    }
-
-    @SuppressLint("SdCardPath")
-    @NotNull
-    private File copyContentStoreToTempFile(Uri content, String targetName) {
-        try {
-            File tempFile = new File(this.getExternalFilesDir(null), targetName);
-            tempFile.getParentFile().mkdirs();
-            InputStream is = getContentResolver().openInputStream(content);
-            OutputStream os = new FileOutputStream(tempFile);
-            byte[] buffer = new byte[0x1000];
-            int count;
-            while ((count = is.read(buffer)) != -1) {
-                os.write(buffer, 0, count);
-            }
-            is.close();
-            os.close();
-            return tempFile;
-        } catch (IOException ie) {
-            ie.printStackTrace();
-            return new File("/sdcard/totally/fake");
-        }
-    }
-
     @Override
     public void onResume() {
-        boolean numbersOnly;
-        boolean isMultiline;
         Log.d("ModdedPE", "onResume");
         super.onResume();
 
@@ -1390,16 +1345,16 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
                     Gravity.TOP | Gravity.LEFT | Gravity.CENTER_VERTICAL, 0, 0));
         }).start();
     */
-        registerReceiver(this.headsetConnectionReceiver, new IntentFilter("android.intent.action.HEADSET_PLUG"));
+        registerReceiver(headsetConnectionReceiver, new IntentFilter("android.intent.action.HEADSET_PLUG"));
         if (isTextWidgetActive()) {
-            String obj = this.textInputWidget.getText().toString();
-            int i = this.textInputWidget.allowedLength;
-            boolean z = (this.textInputWidget.getInputType() & 2) == 2;
-            boolean z2 = (this.textInputWidget.getInputType() & PKIFailureInfo.unsupportedVersion) == 131072;
+            String obj = textInputWidget.getText().toString();
+            int i = textInputWidget.allowedLength;
+            boolean z = (textInputWidget.getInputType() & 2) == 2;
+            boolean z2 = (textInputWidget.getInputType() & PKIFailureInfo.unsupportedVersion) == 131072;
             dismissTextWidget();
             showKeyboard(obj, i, false, z, z2);
         }
-        for (ActivityListener onResume : this.mActivityListeners) {
+        for (ActivityListener onResume : mActivityListeners) {
             onResume.onResume();
         }
     }
@@ -1538,17 +1493,28 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     }
 
     public int getAPIVersion(String apiName) {
-        System.out.println("Get API version: " + apiName);
-        try {
-            Field field = VERSION_CODES.class.getField(apiName);
-            return field.getInt(null);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1;
+        Field[] fields = Build.VERSION_CODES.class.getFields();
+        int length = fields.length;
+        int i = 0;
+        while (i < length) {
+            Field field = fields[i];
+            if (field.getName().equals(apiName)) {
+                try {
+                    return field.getInt(new Object());
+                } catch (IllegalArgumentException unused) {
+                    Log.e("ModdedPE", "IllegalArgumentException in getApiVersion(" + apiName + ")");
+                } catch (IllegalAccessException unused2) {
+                    Log.e("ModdedPE", "IllegalAccessException in getApiVersion(" + apiName + ")");
+                } catch (NullPointerException unused3) {
+                    Log.e("ModdedPE", "NullPointerException in getApiVersion(" + apiName + ")");
+                }
+            } else {
+                i++;
+            }
         }
-    }
+        Log.e("ModdedPE", "Failed to find API version for: " + apiName);
+        return -1;
 
-    private void registerCrashManager() {
     }
 
     public String MC_GetActiveScreen() {
@@ -1586,15 +1552,10 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         return nativeGetLogText(fileInfo);
     }
 
+    @SuppressLint("WrongConstant")
     public boolean isTTSEnabled() {
-        if (getApplicationContext() != null) {
-            @SuppressLint("WrongConstant")
-            AccessibilityManager am = (AccessibilityManager) getSystemService("accessibility");
-            if (!(am == null || !am.isEnabled() || am.getEnabledAccessibilityServiceList(1).isEmpty())) {
-                return true;
-            }
-        }
-        return false;
+        AccessibilityManager accessibilityManager;
+        return getApplicationContext() != null && (accessibilityManager = (AccessibilityManager) getSystemService("accessibility")) != null && accessibilityManager.isEnabled() && !accessibilityManager.getEnabledAccessibilityServiceList(1).isEmpty();
     }
 
     public void initializeXboxLive(long xalInitArgs, long xblInitArgs) {

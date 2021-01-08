@@ -27,7 +27,7 @@ public class DeviceInfo {
         int idLength = deviceId.length();
         int index = 0;
         if (idLength < 32) {
-            paddedId = String.format("%0" + (32 - idLength) + "d", new Object[]{0}) + deviceId;
+            paddedId = String.format("%0" + (32 - idLength) + "d", 0) + deviceId;
         } else {
             paddedId = deviceId;
         }
