@@ -13,6 +13,8 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
 
+import com.appboy.Constants;
+
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -31,35 +33,31 @@ public class ImportService extends Service {
 
     @SuppressLint("HandlerLeak")
     class IncomingHandler extends Handler {
+        IncomingHandler() {
+        }
 
-        public void handleMessage(@NotNull Message msg) {
-            if (msg.what == MSG_CORRELATION_CHECK) {
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                String deviceId = prefs.getString("deviceId", "?");
-                String lastSessionId = prefs.getString("LastDeviceSessionId", "");
-                if (!deviceId.equals("?")) {
-                    try {
-                        long timestamp = getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).firstInstallTime;
-                        Bundle b = new Bundle();
-                        b.putLong("time", timestamp);
-                        b.putString("deviceId", deviceId);
-                        b.putString("sessionId", lastSessionId);
-                        Message nmsg = Message.obtain(null, MSG_CORRELATION_RESPONSE);
-                        nmsg.setData(b);
-                        try {
-                            msg.replyTo.send(nmsg);
-                            return;
-                        } catch (RemoteException e) {
-                            return;
-                        }
-                    } catch (NameNotFoundException e2) {
-                        return;
-                    }
-                } else {
-                    return;
+        public void handleMessage(@NotNull Message message) {
+            if (message.what != ImportService.MSG_CORRELATION_CHECK) {
+                super.handleMessage(message);
+                return;
+            }
+            SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String string = defaultSharedPreferences.getString("deviceId", "?");
+            String string2 = defaultSharedPreferences.getString("LastDeviceSessionId", "");
+            if (!string.equals("?")) {
+                try {
+                    long j = getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).firstInstallTime;
+                    Bundle bundle = new Bundle();
+                    bundle.putLong(Constants.APPBOY_LOCATION_TIME_INTERVAL_KEY, j);
+                    bundle.putString("deviceId", string);
+                    bundle.putString("sessionId", string2);
+                    Message obtain = Message.obtain(null, ImportService.MSG_CORRELATION_RESPONSE);
+                    obtain.setData(bundle);
+                    message.replyTo.send(obtain);
+                } catch (NameNotFoundException | RemoteException e) {
+                    e.printStackTrace();
                 }
             }
-            super.handleMessage(msg);
         }
     }
 }

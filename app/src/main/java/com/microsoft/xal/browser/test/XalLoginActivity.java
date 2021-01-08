@@ -1,12 +1,10 @@
-package com.microsoft.xal.browser;
+package com.microsoft.xal.browser.test;
 
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.webkit.CookieManager;
-import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,10 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.jetbrains.annotations.NotNull;
 
 public class XalLoginActivity extends AppCompatActivity {
-    public WebView m_webView;
     public long operationId;
     public String endurl;
-    public boolean z;
+    public String startUrl;
+    public boolean m_cancelOperationOnResume;
 
     public static void deleteCookies() {
         for (String str : new String[]{"login.live.com", "account.live.com", "live.com", "xboxlive.com", "sisu.xboxlive.com"}) {
@@ -42,34 +40,36 @@ public class XalLoginActivity extends AppCompatActivity {
     @SuppressLint("SetJavaScriptEnabled")
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+
         operationId = getIntent().getLongExtra("native_op", 0);
-        String stringExtra = getIntent().getStringExtra("start_url");
+        startUrl = getIntent().getStringExtra("start_url");
         endurl = getIntent().getStringExtra("end_url");
-        m_webView = new WebView(this);
-        m_webView.getSettings().setJavaScriptEnabled(true);
-        m_webView.setWebViewClient(new CustomWebViewClient());
-        Log.d("XalLoginActivity", "Sign in url is: " + stringExtra);
-        Log.d("XalLoginActivity", "End url is: " + endurl);
-        m_webView.loadUrl(stringExtra);
-        setContentView((View) m_webView);
+
+        android.webkit.WebView webView = new android.webkit.WebView(this);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setAllowFileAccess(true);
+        webView.setWebViewClient(new CustomWebViewClient());
+        webView.loadUrl(startUrl);
+        setContentView(webView);
     }
 
     public void onDestroy() {
         super.onDestroy();
-        if (!z) {
-            com.microsoft.xal.browser.WebView.urlOperationCanceled(operationId, false, com.microsoft.xal.browser.WebView.DEFAULT_BROWSER_INFO);
+        if (!m_cancelOperationOnResume) {
+            WebView.urlOperationCanceled(operationId, false, WebView.DEFAULT_BROWSER_INFO);
         }
     }
 
     public class CustomWebViewClient extends WebViewClient {
-        public boolean shouldOverrideUrlLoading(WebView webView, @NotNull String finalUrl) {
+        public boolean shouldOverrideUrlLoading(android.webkit.WebView webView, @NotNull String finalUrl) {
             if (!finalUrl.startsWith(endurl)) {
                 return false;
             }
+
             Log.d("XalLoginActivity", "Reached endUrl: " + finalUrl);
-            com.microsoft.xal.browser.WebView.urlOperationSucceeded(operationId, finalUrl, false, com.microsoft.xal.browser.WebView.DEFAULT_BROWSER_INFO);
+            WebView.urlOperationSucceeded(operationId, finalUrl, false, WebView.DEFAULT_BROWSER_INFO);
             XalLoginActivity xalLoginActivity = XalLoginActivity.this;
-            xalLoginActivity.z = true;
+            xalLoginActivity.m_cancelOperationOnResume = true;
             xalLoginActivity.finish();
             return true;
         }

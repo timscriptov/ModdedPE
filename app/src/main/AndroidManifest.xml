@@ -55,6 +55,7 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
+        android:usesCleartextTraffic="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme"
         tools:targetApi="q"
@@ -328,18 +329,13 @@
                 <action
                     android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <category
-                    android:name="com.mojang.minecraftpe" />
+                    android:name="com.mcal.mcpelauncher" />
             </intent-filter>
         </receiver>
 
         <!-- Xbox Live SDK -->
 
         <activity
-            android:name="com.microsoft.xal.browser.XalLoginActivity"
-            android:screenOrientation="sensorLandscape"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize" />
-
-        <!-- activity
             android:name="com.microsoft.xal.browser.IntentHandler"
             android:exported="true"
             android:launchMode="singleTask"
@@ -363,7 +359,7 @@
             android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape"
-            android:configChanges="orientation" / -->
+            android:configChanges="orientation" />
 
     </application>
 

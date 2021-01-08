@@ -13,13 +13,13 @@ import android.util.Log;
  */
 
 public class AppConstants {
-    public static String ANDROID_BUILD = null;
-    public static String ANDROID_VERSION = null;
-    public static String APP_PACKAGE = null;
-    public static int APP_VERSION = 0;
-    public static String APP_VERSION_NAME = null;
-    public static String PHONE_MANUFACTURER = null;
-    public static String PHONE_MODEL = null;
+    public static String ANDROID_BUILD;
+    public static String ANDROID_VERSION;
+    public static String APP_PACKAGE;
+    public static int APP_VERSION;
+    public static String APP_VERSION_NAME;
+    public static String PHONE_MANUFACTURER;
+    public static String PHONE_MODEL;
     private static AsyncTask<Void, Object, String> loadIdentifiersTask;
 
     public static void loadFromContext(Context context) {

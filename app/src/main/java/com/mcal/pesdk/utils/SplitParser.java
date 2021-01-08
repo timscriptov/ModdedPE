@@ -45,6 +45,7 @@ public class SplitParser {
 
     /**
      * Извлечение C++ библиотек из Minecraft
+     *
      * @param context
      */
     public static void parse(Context context) {
@@ -86,6 +87,7 @@ public class SplitParser {
 
     /**
      * Проверка формата приложения на App Bundle
+     *
      * @return
      */
     @Contract(pure = true)

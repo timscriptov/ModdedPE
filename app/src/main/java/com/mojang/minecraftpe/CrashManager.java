@@ -41,8 +41,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 
 public class CrashManager {
-    public static final String FILENAME_SEQUENCE_SEPARATOR = "-";
     private static final int MAX_CONCURRENT_UPLOADS = 4;
+    private static final String FILENAME_SEQUENCE_SEPARATOR = "-";
     private String mCrashUploadURI = null;
     private SessionInfo mCurrentSession = null;
     private ConcurrentLinkedQueue<String> mDumpFileQueue = null;
@@ -162,12 +162,12 @@ public class CrashManager {
     }
 
     private String getSentryParametersJSON(@NotNull SessionInfo sessionInfo) {
-        return getSentryParameters(this.mOwner.getCachedDeviceId(this), sessionInfo.sessionId, sessionInfo.buildId, sessionInfo.commitId, sessionInfo.branchId, sessionInfo.flavor, sessionInfo.appVersion);
+        return getSentryParameters(mOwner.getCachedDeviceId(this), sessionInfo.sessionId, sessionInfo.buildId, sessionInfo.commitId, sessionInfo.branchId, sessionInfo.flavor, sessionInfo.appVersion);
     }
 
     public void installGlobalExceptionHandler() {
         mPreviousUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
-        Thread.setDefaultUncaughtExceptionHandler((thread, th) -> handleUncaughtException(thread, th));
+        Thread.setDefaultUncaughtExceptionHandler(this::handleUncaughtException);
     }
 
     public void handleUncaughtException(Thread thread, @NotNull Throwable th) {
@@ -214,7 +214,7 @@ public class CrashManager {
         } catch (IOException e2) {
             Log.e("ModdedPE", "IO exception: " + e2.toString());
         }
-        this.mPreviousUncaughtExceptionHandler.uncaughtException(thread, th);
+        mPreviousUncaughtExceptionHandler.uncaughtException(thread, th);
     }
 
     private @Nullable HttpResponse uploadException(File file, String str) {
@@ -227,9 +227,9 @@ public class CrashManager {
                 if (readLine != null) {
                     str2 = str2 + readLine + "\n";
                 } else {
-                    Log.i("ModdedPE", "Sending exception by HTTP to " + this.mExceptionUploadURI);
+                    Log.i("ModdedPE", "Sending exception by HTTP to " + mExceptionUploadURI);
                     DefaultHttpClient defaultHttpClient = new DefaultHttpClient();
-                    HttpPost httpPost = new HttpPost(this.mExceptionUploadURI);
+                    HttpPost httpPost = new HttpPost(mExceptionUploadURI);
                     httpPost.setEntity(new StringEntity(str2));
                     return defaultHttpClient.execute(httpPost);
                 }
@@ -277,11 +277,11 @@ public class CrashManager {
                             int parseInt = Integer.parseInt(firstHeader.getValue());
                             Log.w("ModdedPE", "Received Too Many Requests response, retrying after " + parseInt + com.appboy.Constants.APPBOY_PUSH_SUMMARY_TEXT_KEY);
                             try {
-                                Thread.sleep((parseInt * 1000));
+                                Thread.sleep((long) (parseInt * 1000));
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                            mDumpFileQueue.add(poll);
+                            this.mDumpFileQueue.add(poll);
                             z = false;
                         } else {
                             Log.w("ModdedPE", "Received Too Many Requests response with no Retry-After header, so dropping event " + poll);
@@ -310,9 +310,7 @@ public class CrashManager {
         if (findSessionInfoForCrash != null) {
             String createLogFile = createLogFile(mDumpFilesPath, formatTimestamp(fileTimestamp), mUserId, findSessionInfoForCrash.sessionId);
             if (createLogFile != null) {
-                File file2 = file;
-                String str2 = str;
-                httpResponse = uploadDumpAndLog(file2, mCrashUploadURI, mDumpFilesPath, str2, createLogFile, findSessionInfoForCrash.gameVersionName, mUserId, findSessionInfoForCrash.sessionId, getSentryParametersJSON(findSessionInfoForCrash));
+                httpResponse = uploadDumpAndLog(file, mCrashUploadURI, mDumpFilesPath, str, createLogFile, findSessionInfoForCrash.gameVersionName, mUserId, findSessionInfoForCrash.sessionId, getSentryParametersJSON(findSessionInfoForCrash));
             } else {
                 Log.e("ModdedPE", "CrashManager: Could not generate log file for previously crashed session " + replace);
             }

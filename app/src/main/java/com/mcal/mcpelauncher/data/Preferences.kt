@@ -47,7 +47,7 @@ object Preferences {
     @JvmStatic
     val isBackgroundMusic: Boolean
         get() = preferences.getBoolean("background_music", false)
-    
+
     @JvmStatic
     val isDesktopGui: Boolean
         get() = preferences.getBoolean("desktop_gui", false)

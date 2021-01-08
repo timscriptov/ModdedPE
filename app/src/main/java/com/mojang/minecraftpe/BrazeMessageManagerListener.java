@@ -27,70 +27,68 @@ public class BrazeMessageManagerListener implements IInAppMessageManagerListener
 
     public native void nativeBrazeToastMessageReceived(String str, String str2, String str3);
 
-    public InAppMessageOperation beforeInAppMessageDisplayed(@NotNull IInAppMessage inAppMessage) {
-        if (inAppMessage.getClass().getSimpleName().equals("InAppMessageSlideup")) {
-            String uri = "";
-            if (inAppMessage.getUri() != null) {
-                uri = inAppMessage.getUri().toString();
-            }
-            String subtitle = "";
-            if (inAppMessage.getExtras() != null && !inAppMessage.getExtras().isEmpty()) {
-                Map<String, String> extras = inAppMessage.getExtras();
+    public boolean onInAppMessageButtonClicked(MessageButton messageButton, InAppMessageCloser inAppMessageCloser) {
+        return true;
+    }
+
+    public boolean onInAppMessageClicked(IInAppMessage iInAppMessage, InAppMessageCloser inAppMessageCloser) {
+        return true;
+    }
+
+    public void onInAppMessageDismissed(IInAppMessage iInAppMessage) {
+    }
+
+    public boolean onInAppMessageReceived(IInAppMessage iInAppMessage) {
+        return false;
+    }
+
+    public InAppMessageOperation beforeInAppMessageDisplayed(@NotNull IInAppMessage iInAppMessage) {
+        String str = "";
+        if (iInAppMessage.getClass().getSimpleName().equals("InAppMessageSlideup")) {
+            String uri = iInAppMessage.getUri() != null ? iInAppMessage.getUri().toString() : str;
+            if (iInAppMessage.getExtras() != null && !iInAppMessage.getExtras().isEmpty()) {
+                Map<String, String> extras = iInAppMessage.getExtras();
                 if (extras.get("ToastSubtitle") != null) {
-                    subtitle = extras.get("ToastSubtitle");
+                    str = extras.get("ToastSubtitle");
                 }
             }
-            _mostRecentInAppToast = inAppMessage;
-            nativeBrazeToastMessageReceived(inAppMessage.getMessage(), subtitle, uri);
-            inAppMessage.logImpression();
-        } else if (inAppMessage.getClass().getSimpleName().equals("InAppMessageModal")) {
-            _mostRecentInAppDialog = (InAppMessageModal) inAppMessage;
-            List<MessageButton> messageButtons = _mostRecentInAppDialog.getMessageButtons();
+            this._mostRecentInAppToast = iInAppMessage;
+            nativeBrazeToastMessageReceived(iInAppMessage.getMessage(), str, uri);
+            iInAppMessage.logImpression();
+        } else if (iInAppMessage.getClass().getSimpleName().equals("InAppMessageModal")) {
+            InAppMessageModal inAppMessageModal = (InAppMessageModal) iInAppMessage;
+            _mostRecentInAppDialog = inAppMessageModal;
+            List<MessageButton> messageButtons = inAppMessageModal.getMessageButtons();
             _mostRecentButton0 = messageButtons.get(0);
             _mostRecentButton1 = messageButtons.get(1);
-            String button0Uri = "";
-            if (_mostRecentButton0.getUri() != null) {
-                button0Uri = _mostRecentButton0.getUri().toString();
-            }
-            String button1Uri = "";
+            String uri2 = _mostRecentButton0.getUri() != null ? _mostRecentButton0.getUri().toString() : str;
             if (_mostRecentButton1.getUri() != null) {
-                button1Uri = _mostRecentButton1.getUri().toString();
+                str = _mostRecentButton1.getUri().toString();
             }
-            nativeBrazeModalDialogMessageReceived(_mostRecentInAppDialog.getHeader(), _mostRecentInAppDialog.getMessage(), _mostRecentInAppDialog.getRemoteImageUrl(), _mostRecentButton0.getText(), button0Uri, _mostRecentButton1.getText(), button1Uri);
-            inAppMessage.logImpression();
+            nativeBrazeModalDialogMessageReceived(_mostRecentInAppDialog.getHeader(), _mostRecentInAppDialog.getMessage(), _mostRecentInAppDialog.getRemoteImageUrl(), _mostRecentButton0.getText(), uri2, _mostRecentButton1.getText(), str);
+            iInAppMessage.logImpression();
         }
         return InAppMessageOperation.DISCARD;
     }
 
     public void logClickOnMostRecentToast() {
-        if (_mostRecentInAppToast != null) {
-            _mostRecentInAppToast.logClick();
+        IInAppMessage iInAppMessage = _mostRecentInAppToast;
+        if (iInAppMessage != null) {
+            iInAppMessage.logClick();
         }
     }
 
-    public void logClickOnMostRecentDialog(int buttonNumber) {
-        if (_mostRecentInAppDialog == null) {
+    public void logClickOnMostRecentDialog(int i) {
+        MessageButton messageButton;
+        MessageButton messageButton2;
+        InAppMessageModal inAppMessageModal = _mostRecentInAppDialog;
+        if (inAppMessageModal == null) {
             return;
         }
-        if (buttonNumber == 0 && _mostRecentButton0 != null) {
-            _mostRecentInAppDialog.logButtonClick(_mostRecentButton0);
-        } else if (buttonNumber == 1 && _mostRecentButton1 != null) {
-            _mostRecentInAppDialog.logButtonClick(_mostRecentButton1);
+        if (i == 0 && (messageButton2 = _mostRecentButton0) != null) {
+            inAppMessageModal.logButtonClick(messageButton2);
+        } else if (i == 1 && (messageButton = _mostRecentButton1) != null) {
+            _mostRecentInAppDialog.logButtonClick(messageButton);
         }
-    }
-
-    public boolean onInAppMessageButtonClicked(MessageButton button, InAppMessageCloser inAppMessageCloser) {
-        return true;
-    }
-
-    public boolean onInAppMessageClicked(IInAppMessage inAppMessage, InAppMessageCloser inAppMessageCloser) {
-        return true;
-    }
-
-    public void onInAppMessageDismissed(IInAppMessage inAppMessage) {
-    }
-
-    public boolean onInAppMessageReceived(IInAppMessage inAppMessage) {
-        return false;
     }
 }

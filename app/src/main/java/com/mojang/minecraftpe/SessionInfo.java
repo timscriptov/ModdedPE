@@ -122,7 +122,14 @@ public class SessionInfo implements Serializable {
         }
     }
 
-    public String toString() {
-        return sessionId + ";" + buildId + ";" + commitId + ";" + branchId + ";" + flavor + ";" + gameVersionName + ";" + appVersion + ";" + getDateFormat().format(recordDate);
+    public @NotNull String toString() {
+        return sessionId + ";" +
+                buildId + ";" +
+                commitId + ";" +
+                branchId + ";" +
+                flavor + ";" +
+                gameVersionName + ";" +
+                appVersion + ";" +
+                getDateFormat().format(recordDate);
     }
 }

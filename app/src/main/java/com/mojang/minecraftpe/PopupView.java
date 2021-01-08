@@ -101,6 +101,7 @@ public class PopupView {
         try {
             mWindowManager.removeView(mPopupView);
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

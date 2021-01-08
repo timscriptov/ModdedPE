@@ -66,7 +66,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.appsflyer.AppsFlyerLib;
-import com.mcal.mcpelauncher.services.SoundService;
 import com.mojang.android.StringValue;
 import com.mojang.minecraftpe.input.InputDeviceManager;
 import com.mojang.minecraftpe.platforms.Platform;
@@ -156,15 +155,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
             mBound = MessageConnectionStatus.DISCONNECTED;
         }
     };
-    /**********************************
-     * Bg music                       *
-     **********************************/
-    private ServiceConnection sc;
-    private boolean bound, paused;
-    private SoundService ss;
-    /**********************************
-     * Bg music                       *
-     **********************************/
+
     private long mFileDialogCallback = 0;
     private HardwareInformation mHardwareInformation;
     private String mLastDeviceSessionId = "";
@@ -518,27 +509,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         _fromOnCreate = true;
         textInputWidget = createTextWidget();
         findViewById(16908290).getRootView().addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> nativeResize(right - left, bottom - top));
-        /**********************************
-         * Bg music                       *
-         **********************************/
-        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("background_music", false)) {
-            sc = new ServiceConnection() {
-                @Override
-                public void onServiceConnected(ComponentName p1, IBinder p2) {
-                    bound = true;
-                    ss = ((SoundService.SoundBinder) p2).getService();
-                }
-
-                @Override
-                public void onServiceDisconnected(ComponentName p1) {
-                    bound = false;
-                }
-            };
-            bindService(new Intent(getApplicationContext(), SoundService.class), sc, BIND_AUTO_CREATE);
-        }
-        /**********************************
-         * Bg music                        *
-         **********************************/
     }
 
 
@@ -585,13 +555,12 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         });
     }
 
-    /*public void onNewIntent(Intent intent) {
+    public void onNewIntent(Intent intent) {
         setIntent(intent);
         processIntent(intent);
-    }*/
+    }
 
-    /*private void processIntent(Intent intent) {
-        StringBuilder sb;
+    private void processIntent(Intent intent) {
         if (intent != null) {
             String stringExtra = intent.getStringExtra("intent_cmd");
             if (stringExtra == null || stringExtra.length() <= 0) {
@@ -599,9 +568,8 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
                 intent.getType();
                 if ("xbox_live_game_invite".equals(action)) {
                     String stringExtra2 = intent.getStringExtra("xbl");
-                    Log.d("MCPE", "[XboxLive] Received Invite " + stringExtra2);
+                    Log.d("ModdedPE", "[XboxLive] Received Invite " + stringExtra2);
                     nativeProcessIntentUriQuery(action, stringExtra2);
-                    return;
                 } else if ("android.intent.action.VIEW".equals(action) || "org.chromium.arc.intent.action.VIEW".equals(action)) {
                     String scheme = intent.getScheme();
                     Uri data2 = intent.getData();
@@ -611,12 +579,9 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
                             String query = data2.getQuery();
                             if (host != null || query != null) {
                                 nativeProcessIntentUriQuery(host, query);
-                                return;
                             }
-                            return;
                         } else if ("file".equalsIgnoreCase(scheme)) {
                             nativeProcessIntentUriQuery("fileIntent", data2.getPath() + SESSION_HISTORY_SEP + data2.getPath());
-                            return;
                         } else if ("content".equalsIgnoreCase(scheme)) {
                             String name = new File(data2.getPath()).getName();
                             File file = new File(getApplicationContext().getCacheDir() + "/" + name);
@@ -641,30 +606,22 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
                                         }
                                     }
                                 } catch (IOException e2) {
-                                    Log.e("MCPE", "IOException while copying file from content intent\n" + e2.toString());
+                                    Log.e("ModdedPE", "IOException while copying file from content intent\n" + e2.toString());
                                     file.delete();
                                     openInputStream.close();
-                                    return;
                                 } catch (Throwable th) {
                                     try {
                                         openInputStream.close();
                                     } catch (IOException e3) {
-                                        Log.e("MCPE", "IOException while closing input stream\n" + e3.toString());
+                                        Log.e("ModdedPE", "IOException while closing input stream\n" + e3.toString());
                                     }
                                     throw th;
                                 }
                             } catch (IOException e4) {
-                                Log.e("MCPE", "IOException while opening file from content intent\n" + e4.toString());
-                                return;
+                                Log.e("ModdedPE", "IOException while opening file from content intent\n" + e4.toString());
                             }
-                        } else {
-                            return;
                         }
-                    } else {
-                        return;
                     }
-                } else {
-                    return;
                 }
             } else {
                 try {
@@ -672,25 +629,20 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
                     String string = jSONObject.getString("Command");
                     if (string.equals("keyboardResult")) {
                         nativeSetTextboxText(jSONObject.getString("Text"));
-                        return;
-                    } else if (string.equals("fileDialogResult") && this.mFileDialogCallback != 0) {
+                    } else if (string.equals("fileDialogResult") && mFileDialogCallback != 0) {
                         if (jSONObject.getString("Result").equals("Ok")) {
-                            nativeOnPickImageSuccess(this.mFileDialogCallback, jSONObject.getString("Path"));
+                            nativeOnPickImageSuccess(mFileDialogCallback, jSONObject.getString("Path"));
                         } else {
-                            nativeOnPickImageCanceled(this.mFileDialogCallback);
+                            nativeOnPickImageCanceled(mFileDialogCallback);
                         }
                         this.mFileDialogCallback = 0;
-                        return;
-                    } else {
-                        return;
                     }
                 } catch (JSONException e5) {
-                    Log.d("MCPE", "JSONObject exception:" + e5.toString());
-                    return;
+                    Log.d("ModdedPE", "JSONObject exception:" + e5.toString());
                 }
             }
         }
-    }*/
+    }
 
     public boolean dispatchKeyEvent(@NotNull KeyEvent event) {
         if (nativeKeyHandler(event.getKeyCode(), event.getAction())) {
@@ -1387,18 +1339,8 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         deviceManager.register();
         if (_fromOnCreate) {
             _fromOnCreate = false;
-            //processIntent(getIntent());
+            processIntent(getIntent());
         }
-        /**********************************
-         * Bg music                       *
-         **********************************/
-        if (bound && paused) {
-            ss.play();
-            paused = false;
-        }
-        /**********************************
-         * Bg music                       *
-         **********************************/
     }
 
     @NotNull
@@ -1479,16 +1421,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         for (ActivityListener listener : mActivityListeners) {
             listener.onStop();
         }
-        /**********************************
-         * Bg music                       *
-         **********************************/
-        if (bound && !paused) {
-            ss.pause();
-            paused = true;
-        }
-        /**********************************
-         * Bg music                       *
-         **********************************/
     }
 
     public void onDestroy() {
@@ -1496,21 +1428,11 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         mInstance = null;
         System.out.println("onDestroy");
         FMOD.close();
-        for (ActivityListener listener : new ArrayList<>(this.mActivityListeners)) {
+        for (ActivityListener listener : new ArrayList<>(mActivityListeners)) {
             listener.onDestroy();
         }
         nativeOnDestroy();
         super.onDestroy();
-        System.exit(0);
-        /**********************************
-         * Bg music                       *
-         **********************************/
-        if (bound) {
-            unbindService(sc);
-        }
-        /**********************************
-         * Bg music                       *
-         **********************************/
         System.exit(0);
     }
 

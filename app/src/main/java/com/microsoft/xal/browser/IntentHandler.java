@@ -17,9 +17,10 @@
 package com.microsoft.xal.browser;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * 05.10.2020
@@ -28,13 +29,13 @@ import android.os.Bundle;
  * @author https://github.com/TimScriptov
  */
 
-public class IntentHandler2 extends Activity {
+public class IntentHandler extends AppCompatActivity {
     public static final String TAG = "IntentHandler";
 
     @SuppressLint("WrongConstant")
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        Intent intent = new Intent(this, WebView2.class);
+        Intent intent = new Intent(this, WebView.class);
         intent.setData(getIntent().getData());
         intent.addFlags(603979776);
         startActivity(intent);

@@ -17,14 +17,14 @@
 package com.microsoft.xal.browser;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
-import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.microsoft.aad.adal.AuthenticationConstants;
 
@@ -35,13 +35,13 @@ import com.microsoft.aad.adal.AuthenticationConstants;
  * @author https://github.com/TimScriptov
  */
 
-public class WebKitWebViewController2 extends Activity {
+public class WebKitWebViewController extends AppCompatActivity {
     public static final String END_URL = "END_URL";
     public static final String RESPONSE_KEY = "RESPONSE";
     public static final int RESULT_FAILED = 8054;
     public static final String SHOW_TYPE = "SHOW_TYPE";
     public static final String START_URL = "START_URL";
-    private WebView m_webView;
+    private android.webkit.WebView m_webView;
 
     @SuppressLint("SetJavaScriptEnabled")
     public void onCreate(Bundle bundle) {
@@ -52,15 +52,15 @@ public class WebKitWebViewController2 extends Activity {
             finish();
             return;
         }
-        String string = extras.getString("START_URL", "");
-        final String string2 = extras.getString("END_URL", "");
+        String string = extras.getString(START_URL, "");
+        final String string2 = extras.getString(END_URL, "");
         if (string.isEmpty() || string2.isEmpty()) {
             setResult(RESULT_FAILED);
             finish();
             return;
         }
-        WebView2.ShowUrlType showUrlType = (WebView2.ShowUrlType) extras.get("SHOW_TYPE");
-        if (showUrlType == WebView2.ShowUrlType.CookieRemoval || showUrlType == WebView2.ShowUrlType.CookieRemovalSkipIfSharedCredentials) {
+        WebView.ShowUrlType showUrlType = (WebView.ShowUrlType) extras.get(SHOW_TYPE);
+        if (showUrlType == WebView.ShowUrlType.CookieRemoval || showUrlType == WebView.ShowUrlType.CookieRemovalSkipIfSharedCredentials) {
             deleteCookies("login.live.com", true);
             deleteCookies("account.live.com", true);
             deleteCookies("live.com", true);
@@ -90,7 +90,7 @@ public class WebKitWebViewController2 extends Activity {
                     return false;
                 }
                 Intent intent = new Intent();
-                intent.putExtra(WebKitWebViewController2.RESPONSE_KEY, str);
+                intent.putExtra(WebKitWebViewController.RESPONSE_KEY, str);
                 setResult(-1, intent);
                 finish();
                 return true;
