@@ -8,7 +8,7 @@
 ### Что такое ModdedPE?
 ModdedPE - это лаунчер для запуска Minecraft PE и загрузки модов NMods(Нативные моды на C/C++).  ModdedPE также можно использовать в качестве библиотеки для вашего проекта.
 
-Загрузить в в Google Play Store
+Загрузить в Google Play Store
  
 <a href="https://play.google.com/store/apps/details?id=com.mcal.mcpelauncher"
 target="_blank">
