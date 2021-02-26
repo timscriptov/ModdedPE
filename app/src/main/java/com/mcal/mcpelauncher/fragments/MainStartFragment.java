@@ -21,11 +21,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.TransactionDetails;
 import com.mcal.mcpelauncher.BuildConfig;
 import com.mcal.mcpelauncher.R;
+import com.mcal.mcpelauncher.activities.AboutActivity;
 import com.mcal.mcpelauncher.activities.PreloadActivity;
 import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.mcpelauncher.ui.view.Dialogs;
@@ -37,15 +41,19 @@ import org.jetbrains.annotations.NotNull;
  * @author https://github.com/TimScriptov
  */
 public class MainStartFragment extends BaseFragment {
+
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.moddedpe_main, null);
         view.findViewById(R.id.moddedpe_main_play_button).setOnClickListener(p1 -> onPlayClicked());
-        if (!Preferences.getRated()) {
-            Dialogs.rate(getContext());
-        }
+        view.findViewById(R.id.moddedpe_main_about_button).setOnClickListener(p1 -> onAboutClicked());
 
         return view;
+    }
+
+    private void onAboutClicked() {
+        Intent intent = new Intent(getActivity(), AboutActivity.class);
+        getActivity().startActivity(intent);
     }
 
     private void onPlayClicked() {

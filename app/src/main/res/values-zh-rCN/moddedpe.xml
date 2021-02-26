@@ -122,7 +122,7 @@
     <!--Main Activity-->
     <string name="main_play">开始游戏</string>
     <string name="main_reloading_title">正在刷新……</string>
-    <string name="main_default_minecraft_title">我的世界携带版：原版</string>
+    <string name="main_default_minecraft_title">Resource Pack: 原版</string>
     <string name="no_available_mcpe_version_found">抱歉，这个版本的ModdedPE暂时不支持您所安装的Minecraft PE %1$s，它所支持的是 %2$s\n点击“开始冒险”按钮可以冒险打开游戏，但是很可能会出现报错或崩溃问题。</string>
     <string name="no_available_mcpe_version_found_title">版本不支持</string>
     <string name="no_available_mcpe_version_continue">开始冒险</string>

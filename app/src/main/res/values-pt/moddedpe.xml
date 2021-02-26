@@ -123,7 +123,7 @@
     <!--Main Activity-->
     <string name="main_play">Toque</string>
     <string name="main_reloading_title">Recarregar&#8321;</string>
-    <string name="main_default_minecraft_title">Minecraft PE : Padrão</string>
+    <string name="main_default_minecraft_title">Resource Pack: Padrão</string>
     <string name="no_available_mcpe_version_found">O ModdedPE encontrou uma versão não suportada do Minecraft PE (%1$s) neste aparelho.(ModdedPE suporta apenas %2$s!)\nSe continuar a abrir o jogo, o ModdedPE pode falhar ou causar problemas.</string>
     <string name="no_available_mcpe_version_found_title">Versão não suportada do Minecraft: PE</string>
     <string name="no_available_mcpe_version_continue">Continuar (DESCONTINUADA!)</string>

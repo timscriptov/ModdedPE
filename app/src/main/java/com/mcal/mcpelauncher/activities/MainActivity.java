@@ -155,6 +155,10 @@ public class MainActivity extends BaseActivity implements BackgroundSoundPlayer 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q && !Environment.isExternalStorageManager()) {
             Dialogs.showScopedStorageDialog(this);
         }
+
+        if (!Preferences.getRated()) {
+            Dialogs.rate(this);
+        }
     }
 
 

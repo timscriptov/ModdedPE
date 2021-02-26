@@ -131,7 +131,7 @@
     <!--Main Activity-->
     <string name="main_play">プレイ</string>
     <string name="main_reloading_title">リロード…</string>
-    <string name="main_default_minecraft_title">Minecraft PE : デフォルト</string>
+    <string name="main_default_minecraft_title">Resource Pack: デフォルト</string>
     <string name="no_available_mcpe_version_found">ModdedPEが、このデバイスでサポートされていないバージョンのMinecraft PE (%1$s) を検出しました。(ModdedPEがサポートしているバージョンは %2$s です！)\nゲームを続行すると、ModdedPEがクラッシュするか、問題が発生する場合があります。</string>
     <string name="no_available_mcpe_version_found_title">サポートされていないバージョンのMinecraft PE</string>
     <string name="no_available_mcpe_version_continue">プレイする(非推奨!)</string>

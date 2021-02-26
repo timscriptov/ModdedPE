@@ -17,6 +17,7 @@
 package com.mcal.pesdk.utils;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.os.Build;
@@ -24,6 +25,7 @@ import android.os.Build;
 import com.mcal.mcpelauncher.data.Preferences;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,8 +35,8 @@ import java.util.regex.Pattern;
  * @author https://github.com/TimScriptov
  */
 public class MinecraftInfo {
-    private Context mContext;
-    private Context mMCContext;
+    private static Context mContext;
+    private static Context mMCContext;
 
     public MinecraftInfo(@NotNull Context context) {
         this.mContext = context;
@@ -75,7 +77,7 @@ public class MinecraftInfo {
         return null;
     }
 
-    public String getMinecraftPackageNativeLibraryDir() {
+    public static String getMinecraftPackageNativeLibraryDir() {
         if (SplitParser.isAppBundle()) {
             return mContext.getCacheDir().getPath() + "/lib/" + Build.CPU_ABI;
         } else {
@@ -83,7 +85,7 @@ public class MinecraftInfo {
         }
     }
 
-    public Context getMinecraftPackageContext() {
+    public static Context getMinecraftPackageContext() {
         return mMCContext;
     }
 

@@ -123,7 +123,7 @@
     <!--Main Activity-->
     <string name="main_play">Jouer</string>
     <string name="main_reloading_title">Rechargement…</string>
-    <string name="main_default_minecraft_title">Minecraft PE par Défaut</string>
+    <string name="main_default_minecraft_title">Resource Pack: Défaut</string>
     <string name="no_available_mcpe_version_found">ModdedPE n\'a pas trouvé de version supportée de Minecraft PE (%1$s) sur cet appareil.(ModdedPE ne supporte que %2$s!)\nSi vous continuez à ouvrir le jeu, ModdedPE pourrait crash et créer des issues !</string>
     <string name="no_available_mcpe_version_found_title">Version non supportée de Minecraft PE</string>
     <string name="no_available_mcpe_version_continue">Continuer(DÉSAPROUVÉ!)</string>

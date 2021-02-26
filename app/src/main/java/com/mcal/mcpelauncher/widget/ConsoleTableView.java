@@ -60,9 +60,9 @@ public class ConsoleTableView extends RelativeLayout {
     private void addTableView() {
         View rootView = LayoutInflater.from(getContext()).inflate(R.layout.moddedpe_main_console_table, null);
 
-        ((AppCompatTextView) rootView.findViewById(R.id.moddedpe_main_text_view_app_version)).setText(getContext().getResources().getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME);
+        ((AppCompatTextView) rootView.findViewById(R.id.moddedpe_main_text_view_app_version)).setText(getContext().getResources().getString(R.string.copyright));
         ((AppCompatTextView) rootView.findViewById(R.id.moddedpe_main_text_view_target_mc_version)).setTextColor(ModdedPEApplication.mPESdk.getMinecraftInfo().isSupportedMinecraftVersion(getContext().getResources().getStringArray(R.array.target_mcpe_versions)) ? Color.GREEN : Color.RED);
-        ((AppCompatTextView) rootView.findViewById(R.id.moddedpe_main_text_view_target_mc_version)).setText(getContext().getResources().getString(R.string.app_game) + " " + BuildConfig.VERSION_NAME);
+        ((AppCompatTextView) rootView.findViewById(R.id.moddedpe_main_text_view_target_mc_version)).setText(BuildConfig.VERSION_NAME);
         addView(rootView);
     }
 }

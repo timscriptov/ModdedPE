@@ -123,7 +123,7 @@
     <!--Main Activity-->
     <string name="main_play">Ойнау</string>
     <string name="main_reloading_title">Қайта жүктелуде…</string>
-    <string name="main_default_minecraft_title">Minecraft PE : Әдеттегідей</string>
+    <string name="main_default_minecraft_title">Resource Pack: Әдеттегідей</string>
     <string name="no_available_mcpe_version_found">ModdedPE сәйкес келмейтін версяны тапты Minecraft PE (%1$s).(ModdedPE совместим с %2$s!)\nЕгер сіз қосуды жалғастырсаңыз ModdedPE шығып кетуі мүмкін.</string>
     <string name="no_available_mcpe_version_found_title">Minecraft PE версиясы келмейді!</string>
     <string name="no_available_mcpe_version_continue">Жалғастыру(КЕҢЕС БЕРМЕЙМІЗ!)</string>

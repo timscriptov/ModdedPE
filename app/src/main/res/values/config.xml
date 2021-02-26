@@ -21,4 +21,5 @@
     </string-array>
     <string name="app_name" translatable="false">ModdedPE</string>
     <string name="app_game" translatable="false">Minecraft</string>
+    <string name="copyright" translatable="false">© Иван Тимашков</string>
 </resources>

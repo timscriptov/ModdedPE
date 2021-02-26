@@ -122,7 +122,7 @@
     <!--Main Activity-->
     <string name="main_play">เล่น</string>
     <string name="main_reloading_title">Reloading&#8230;</string>
-    <string name="main_default_minecraft_title">Minecraft PE : ตั้งต้น</string>
+    <string name="main_default_minecraft_title">Resource Pack: ตั้งต้น</string>
     <string name="no_available_mcpe_version_found">ModdedPE พบกับเวอร์ชันที่ไม่รองรับของ  MinecraftPE (%1$s) on ในเครื่องนี้(ModdedPE รองรับเฉพาะ %2$s!)\nถ้าเกิดต้องการที่จะเปิดเกม,ModdedPE อาจจะหยุดทำงานหรือเกิดอาการ Crash ขึ้น</string>
     <string name="no_available_mcpe_version_found_title">Minecraft PE ไม่รองรับ</string>
     <string name="no_available_mcpe_version_continue">ทำต่อ(DEPRECATED!)</string>

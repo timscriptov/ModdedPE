@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongycastle.asn1.cmp.PKIFailureInfo;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -38,6 +40,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 
 public class WebView extends AppCompatActivity {
+    public static final String DEFAULT_BROWSER_INFO = "webkit";
     public static final String CANCEL_DELAY = "CANCEL_DELAY";
     public static final String END_URL = "END_URL";
     public static final String IN_PROC_BROWSER = "IN_PROC_BROWSER";
@@ -79,14 +82,23 @@ public class WebView extends AppCompatActivity {
                     urlOperationFailed(operationId, false, null);
                     return;
                 }
+
+                if (startUrl.startsWith("https://sisu.xboxlive.com/client/v8/0000000048183522/view/splash.html?msa=")) {
+                    try {
+                        startUrl = URLDecoder.decode(startUrl.substring(74), "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 Intent intent = new Intent(context, WebView.class);
                 Bundle bundle = new Bundle();
                 bundle.putLong(OPERATION_ID, operationId);
                 bundle.putString(START_URL, startUrl);
                 bundle.putString(END_URL, endUrl);
-                bundle.putSerializable(SHOW_TYPE, fromInt);
-                bundle.putBoolean(IN_PROC_BROWSER, useInProcBrowser);
-                bundle.putLong(CANCEL_DELAY, cancelDelay);
+                //bundle.putSerializable(SHOW_TYPE, fromInt);
+                //bundle.putBoolean(IN_PROC_BROWSER, useInProcBrowser);
+                //bundle.putLong(CANCEL_DELAY, cancelDelay);
                 intent.putExtras(bundle);
                 intent.setFlags(268435456);
                 context.startActivity(intent);
@@ -174,6 +186,7 @@ public class WebView extends AppCompatActivity {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 8053) {
             if (resultCode == -1) {
                 String string = data.getExtras().getString(WebKitWebViewController.RESPONSE_KEY, "");

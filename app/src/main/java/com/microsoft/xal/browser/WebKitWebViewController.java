@@ -41,7 +41,7 @@ public class WebKitWebViewController extends AppCompatActivity {
     public static final int RESULT_FAILED = 8054;
     public static final String SHOW_TYPE = "SHOW_TYPE";
     public static final String START_URL = "START_URL";
-    private android.webkit.WebView m_webView;
+    //private android.webkit.WebView m_webView;
 
     @SuppressLint("SetJavaScriptEnabled")
     public void onCreate(Bundle bundle) {
@@ -73,18 +73,18 @@ public class WebKitWebViewController extends AppCompatActivity {
             return;
         }
         android.webkit.WebView webView = new android.webkit.WebView(this);
-        this.m_webView = webView;
+        //this.m_webView = webView;
         setContentView(webView);
-        this.m_webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setJavaScriptEnabled(true);
         if (Build.VERSION.SDK_INT >= 21) {
-            this.m_webView.getSettings().setMixedContentMode(2);
+            webView.getSettings().setMixedContentMode(2);
         }
-        this.m_webView.setWebChromeClient(new WebChromeClient() {
+        webView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(android.webkit.WebView webView, int i) {
                 setProgress(i * 100);
             }
         });
-        this.m_webView.setWebViewClient(new WebViewClient() {
+        webView.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(android.webkit.WebView webView, String str) {
                 if (!str.startsWith(string2, 0)) {
                     return false;
@@ -96,10 +96,10 @@ public class WebKitWebViewController extends AppCompatActivity {
                 return true;
             }
         });
-        this.m_webView.loadUrl(string);
+        webView.loadUrl(string);
     }
 
-    private void deleteCookies(String str, boolean z) {
+    public static void deleteCookies(String str, boolean z) {
         CookieManager instance = CookieManager.getInstance();
         StringBuilder sb = new StringBuilder();
         sb.append(z ? AuthenticationConstants.Broker.REDIRECT_SSL_PREFIX : "http://");

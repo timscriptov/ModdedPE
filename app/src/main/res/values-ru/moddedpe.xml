@@ -121,7 +121,7 @@
     <!--Main Activity-->
     <string name="main_play">Играть</string>
     <string name="main_reloading_title">Перезагрузка…</string>
-    <string name="main_default_minecraft_title">Minecraft PE : По умолчанию</string>
+    <string name="main_default_minecraft_title">Resource Pack: По умолчанию</string>
     <string name="no_available_mcpe_version_found">ModdedPE нашёл несовместимую версию Minecraft PE (%1$s) на этом устройстве.(ModdedPE совместим с %2$s!)\nЕсли если вы продолжите запуск, то ModdedPE может вылететь или заглючить.</string>
     <string name="no_available_mcpe_version_found_title">Неподходящая версия Minecraft PE</string>
     <string name="no_available_mcpe_version_continue">Продолжить(НЕ СОВЕТУЕМ!)</string>
