@@ -10,6 +10,7 @@ import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.pesdk.utils.ABIInfo;
 
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -32,7 +33,7 @@ public class ASplitParser {
      *
      * @param context
      */
-    public static void parse(Context context) {
+    public static void parse(@NotNull Context context) {
         File lib = new File(context.getCacheDir().getPath() + "/lib");
         if (!lib.exists()) {
             lib.mkdir();

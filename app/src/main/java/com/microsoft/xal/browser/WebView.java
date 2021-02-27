@@ -8,6 +8,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.Signature;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
 
 import com.appboy.Constants;
+import com.mcal.mcpelauncher.R;
 import com.microsoft.aad.adal.AuthenticationConstants;
 
 import org.jetbrains.annotations.Contract;
@@ -165,7 +167,7 @@ public class WebView extends AppCompatActivity {
                     startWebView(startUrl, endUrl, showUrlType);
                 } else {
                     setBrowserInfo(defaultBrowserPackageName + "-customTabsAllowed", versionCode, versionName);
-                    startCustomTabsInBrowser(defaultBrowserPackageName, startUrl, endUrl, showUrlType);
+                    startCustomTabsInBrowser(startUrl, endUrl, showUrlType);
                 }
             }
         } else {
@@ -225,19 +227,19 @@ public class WebView extends AppCompatActivity {
         }
     }
 
-    private void startCustomTabsInBrowser(String browserPackageName, String startUrl, String endUrl, ShowUrlType showUrlType) {
+    @SuppressLint("ResourceAsColor")
+    private void startCustomTabsInBrowser(String startUrl, String endUrl, ShowUrlType showUrlType) {
         if (showUrlType == ShowUrlType.CookieRemovalSkipIfSharedCredentials) {
             finishOperation(WebResult.SUCCESS, endUrl);
             return;
         }
         m_cancelOperationOnResume = false;
         m_sharedBrowserUsed = true;
+        
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        builder.setShowTitle(true);
-        CustomTabsIntent build = builder.build();
-        build.intent.setData(Uri.parse(startUrl));
-        build.intent.setPackage(browserPackageName);
-        startActivity(build.intent);
+        builder.setToolbarColor(R.color.colorPrimaryDark);
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(this, Uri.parse(startUrl));
     }
 
     private void startWebView(String startUrl, String endUrl, ShowUrlType showUrlType) {
