@@ -19,8 +19,10 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -69,6 +71,19 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
         SwitchPreference mDesktopGuiPreference = findPreference("desktop_gui");
         mDesktopGuiPreference.setOnPreferenceChangeListener((p1, p2) -> {
             DesktopGui.run(getContext());
+            return true;
+        });
+
+        SwitchPreference mWebViewCorePreference = findPreference("webview_engine");
+        mWebViewCorePreference.setOnPreferenceChangeListener((p1, p2) -> {
+            if(Build.VERSION.SDK_INT >= 24) {
+                Intent intent = new Intent(Settings.ACTION_WEBVIEW_SETTINGS);
+                if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+            } else {
+                Snackbar.make(getActivity().getWindow().getDecorView(), getString(R.string.not_supported_on_your_device), 2500).show();
+            }
             return true;
         });
 

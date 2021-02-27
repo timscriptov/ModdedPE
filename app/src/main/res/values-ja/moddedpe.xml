@@ -84,6 +84,8 @@
     <string name="preferences_summary_music">Background music while playing</string>
     <string name="preferences_title_desktop_gui">Use Desktop GUI</string>
     <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
+    <string name="preferences_title_webview_engine">WebView Engine</string>
+    <string name="preferences_summary_webview_engine">Select WebView engine</string>
 
     <!--Open Game Dialog-->
     <string name="preloading_initing">ランチャーを起動中</string>
@@ -102,7 +104,6 @@
     <string name="preloading_nmod_loaded_failed">--読み込みに失敗しました: %1$s</string>
     <string name="preloading_nmod_finish_loading">NModの読み込みに完了しました。</string>
     <string name="preloading_finished">ゲームを開始…</string>
-
 
     <string-array name="preloading_tips_text" tools:ignore="InconsistentArrays">
         <item>APK形式のNModもインポートできるんだ~</item>
@@ -167,4 +168,5 @@
     <!--Enable Warnings-->
 
     <string name="rate">Rate</string>
+    <string name="not_supported_on_your_device">Not supported on your device!</string>
 </resources>

@@ -84,6 +84,8 @@
     <string name="preferences_summary_music">Музика на фоні під час гри</string>
     <string name="preferences_title_desktop_gui">Use Desktop GUI</string>
     <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
+    <string name="preferences_title_webview_engine">WebView движок</string>
+    <string name="preferences_summary_webview_engine">Выберите WebView движок</string>
 
     <!--Open Game Dialog-->
     <string name="preloading_initing">Запускаємо лончер</string>
@@ -159,4 +161,5 @@
     <string name="scoped_storage_msg">В Android 11 появился новый способ управления файлами под названием \"Scoped Storage\". Вам необходимо предоставить специальное разрешение!</string>
 
     <string name="rate">Оценить</string>
+    <string name="not_supported_on_your_device">Not supported on your device!</string>
 </resources>

@@ -235,7 +235,7 @@ public class WebView extends AppCompatActivity {
         }
         m_cancelOperationOnResume = false;
         m_sharedBrowserUsed = true;
-        
+
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         builder.setToolbarColor(R.color.colorPrimaryDark);
         CustomTabsIntent customTabsIntent = builder.build();

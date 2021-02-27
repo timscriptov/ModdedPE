@@ -84,6 +84,8 @@
     <string name="preferences_summary_music">Background music while playing</string>
     <string name="preferences_title_desktop_gui">Use Desktop GUI</string>
     <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
+    <string name="preferences_title_webview_engine">WebView Engine</string>
+    <string name="preferences_summary_webview_engine">Select WebView engine</string>
 
     <!--Open Game Dialog-->
     <string name="preloading_initing">Initiating Launcher</string>
@@ -159,5 +161,6 @@
     <string name="scoped_storage_msg">Android 11 introduce a new file-management way called \"Scoped Storage\". You need to grant a special permission!</string>
 
     <string name="rate">Rate</string>
+    <string name="not_supported_on_your_device">Not supported on your device!</string>
 </resources>
 

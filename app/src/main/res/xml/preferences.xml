@@ -13,6 +13,12 @@
             android:summary="@string/preferences_summary_safe_mode"
             android:title="@string/preferences_title_safe_mode" />
         <androidx.preference.SwitchPreference
+            android:icon="@drawable/ic_webview_engine"
+            android:defaultValue="false"
+            android:key="webview_engine"
+            android:summary="@string/preferences_summary_webview_engine"
+            android:title="@string/preferences_title_webview_engine" />
+        <androidx.preference.SwitchPreference
             android:icon="@drawable/ic_sun"
             android:defaultValue="false"
             android:key="xhook_sky_color"
