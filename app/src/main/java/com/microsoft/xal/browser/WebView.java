@@ -42,7 +42,6 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 
 public class WebView extends AppCompatActivity {
-    public static final String DEFAULT_BROWSER_INFO = "webkit";
     public static final String CANCEL_DELAY = "CANCEL_DELAY";
     public static final String END_URL = "END_URL";
     public static final String IN_PROC_BROWSER = "IN_PROC_BROWSER";
