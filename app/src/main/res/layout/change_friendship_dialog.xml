@@ -54,7 +54,6 @@
                         android:layout_weight="1.0">
                         <RadioGroup
                             android:orientation="vertical"
-                            android:id="@+id/settings_share_real_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                             <RadioButton
@@ -139,7 +138,6 @@
             app:state="1">
             <com.microsoft.xbox.toolkit.ui.FastProgressBar
                 android:layout_gravity="center"
-                android:id="@+id/imageviewer_loading"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:indeterminateOnly="true" />

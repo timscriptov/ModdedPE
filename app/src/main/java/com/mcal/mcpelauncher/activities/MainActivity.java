@@ -227,13 +227,13 @@ public class MainActivity extends BaseActivity implements BackgroundSoundPlayer 
     }
 
     private class MainFragmentPagerAdapter extends FragmentPagerAdapter {
-        private List<Fragment> mFragments;
-        private List<CharSequence> mTitles;
+        private final List<Fragment> mFragments;
+        private final List<CharSequence> mTitles;
 
         MainFragmentPagerAdapter(List<Fragment> fragments, List<CharSequence> titles) {
             super(getSupportFragmentManager());
-            this.mFragments = fragments;
-            this.mTitles = titles;
+            mFragments = fragments;
+            mTitles = titles;
         }
 
         @Override
@@ -242,7 +242,7 @@ public class MainActivity extends BaseActivity implements BackgroundSoundPlayer 
         }
 
         @Override
-        public androidx.fragment.app.Fragment getItem(int p1) {
+        public @NotNull Fragment getItem(int p1) {
             return mFragments.get(p1);
         }
 

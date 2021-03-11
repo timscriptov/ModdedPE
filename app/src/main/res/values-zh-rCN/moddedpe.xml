@@ -94,7 +94,6 @@
     <string name="preloading_initing_loading_libs">加载动态链接库</string>
     <string name="preloading_loading_lib_substrate">--加载libsubstrate.so</string>
     <string name="preloading_loading_lib_xhook">--加载libxhook.so</string>
-    <string name="preloading_loading_lib_xhook_skycolor">--加载libxhook-skycolor.so</string>
     <string name="preloading_loading_lib_game_launcher">--加载liblauncher-core.so</string>
     <string name="preloading_loading_lib_fmod">--加载libfmod.so</string>
     <string name="preloading_loading_lib_minecraftpe">--加载libminecraftpe.so</string>

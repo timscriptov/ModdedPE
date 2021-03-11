@@ -39,10 +39,10 @@ object LibraryLoader {
         System.loadLibrary("xhook")
     }
 
-    @JvmStatic
-    fun loadXHookSkyColor() {
-        System.loadLibrary("xhook-skycolor")
-    }
+    //@JvmStatic
+    //fun loadXHookSkyColor() {
+    //    System.loadLibrary("xhook-skycolor")
+    //}
 
     @JvmStatic
     @SuppressLint("UnsafeDynamicallyLoadedCode")

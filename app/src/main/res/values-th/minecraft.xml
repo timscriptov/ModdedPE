@@ -2,11 +2,6 @@
 <resources>
     <string name="xperiaplayoptimized_content">true</string>
     <string name="appcenter_android_id">c35d56a4–fe9c–4490–9d16-600825114d4b</string>
-    <string name="http_auth_dialog_cancel">Cancel</string>
-    <string name="http_auth_dialog_login">Login</string>
-    <string name="http_auth_dialog_password">Password</string>
-    <string name="http_auth_dialog_title">Enter your credentials</string>
-    <string name="http_auth_dialog_username">Username</string>
 
     <string name="xbid_ban_error_body_android">We can\'t sign you in because your account has been suspended from Xbox Live.</string>
     <string name="xbid_catchall_error_android">Sorry, something went wrong. Give it another try, or try on &lt;u&gt;Xbox.com&lt;/u&gt;</string>

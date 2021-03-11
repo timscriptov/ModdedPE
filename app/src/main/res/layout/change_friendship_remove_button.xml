@@ -13,7 +13,6 @@
         android:layout_centerVertical="true">
         <com.microsoft.xbox.toolkit.ui.CustomTypefaceTextView
             android:textSize="16dp"
-            android:id="@+id/remove_friend_btn_icon"
             android:layout_marginLeft="8dp"
             android:text="@string/ic_RemoveFriend"
             android:translationY="1dp"
@@ -21,7 +20,6 @@
             android:layout_width="wrap_content" />
         <com.microsoft.xbox.toolkit.ui.CustomTypefaceTextView
             android:textSize="18sp"
-            android:id="@+id/remove_friend_btn_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"

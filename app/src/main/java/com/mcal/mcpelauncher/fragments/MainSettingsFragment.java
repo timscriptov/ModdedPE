@@ -22,7 +22,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,7 +31,6 @@ import androidx.core.content.ContextCompat;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.SwitchPreference;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.mcal.mcpelauncher.R;
@@ -45,6 +43,7 @@ import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.mcpelauncher.services.BackgroundSoundPlayer;
 import com.mcal.mcpelauncher.utils.DesktopGui;
 import com.mcal.mcpelauncher.utils.I18n;
+import com.mcal.mcpelauncher.view.SwitchPreference;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -74,9 +73,9 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
 
-        SwitchPreference mWebViewCorePreference = findPreference("webview_engine");
-        mWebViewCorePreference.setOnPreferenceChangeListener((p1, p2) -> {
-            if(Build.VERSION.SDK_INT >= 24) {
+        Preference mWebViewCorePreference = findPreference("webview_engine");
+        mWebViewCorePreference.setOnPreferenceClickListener(p1 -> {
+            if (Build.VERSION.SDK_INT >= 24) {
                 Intent intent = new Intent(Settings.ACTION_WEBVIEW_SETTINGS);
                 if (intent.resolveActivity(getContext().getPackageManager()) != null) {
                     startActivity(intent);
@@ -88,6 +87,7 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
         });
 
         SwitchPreference mSafeModePreference = findPreference("safe_mode");
+        mSafeModePreference.setWidgetLayoutResource(R.layout.switch_preference);
         mSafeModePreference.setOnPreferenceChangeListener((p1, p2) -> {
             Preferences.setSafeMode((boolean) p2);
             return true;

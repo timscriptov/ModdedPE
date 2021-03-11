@@ -12,7 +12,6 @@
         android:layout_marginBottom="105dp" />
 
     <com.mcal.mcpelauncher.widget.ConsoleTableView
-        android:id="@+id/moddedpe_main_console_table_view"
         android:layout_width="match_parent"
         android:layout_height="90dp"
         android:layout_alignParentBottom="true" />

@@ -43,6 +43,29 @@ public class WebKitWebViewController extends AppCompatActivity {
     public static final String START_URL = "START_URL";
     //private android.webkit.WebView m_webView;
 
+    public static void deleteCookies(String str, boolean z) {
+        CookieManager instance = CookieManager.getInstance();
+        StringBuilder sb = new StringBuilder();
+        sb.append(z ? AuthenticationConstants.Broker.REDIRECT_SSL_PREFIX : "http://");
+        sb.append(str);
+        String sb2 = sb.toString();
+        String cookie = instance.getCookie(sb2);
+        boolean z2 = false;
+        if (cookie != null) {
+            String[] split = cookie.split(AuthenticationConstants.Broker.CHALLENGE_REQUEST_CERT_AUTH_DELIMETER);
+            for (String split2 : split) {
+                String str2 = split2.split("=")[0];
+                instance.setCookie(sb2, str2.trim() + "=;Domain=" + str + ";Path=/");
+            }
+            if (split.length > 0) {
+                z2 = true;
+            }
+        }
+        if (Build.VERSION.SDK_INT >= 21) {
+            instance.flush();
+        }
+    }
+
     @SuppressLint("SetJavaScriptEnabled")
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -97,28 +120,5 @@ public class WebKitWebViewController extends AppCompatActivity {
             }
         });
         webView.loadUrl(string);
-    }
-
-    public static void deleteCookies(String str, boolean z) {
-        CookieManager instance = CookieManager.getInstance();
-        StringBuilder sb = new StringBuilder();
-        sb.append(z ? AuthenticationConstants.Broker.REDIRECT_SSL_PREFIX : "http://");
-        sb.append(str);
-        String sb2 = sb.toString();
-        String cookie = instance.getCookie(sb2);
-        boolean z2 = false;
-        if (cookie != null) {
-            String[] split = cookie.split(AuthenticationConstants.Broker.CHALLENGE_REQUEST_CERT_AUTH_DELIMETER);
-            for (String split2 : split) {
-                String str2 = split2.split("=")[0];
-                instance.setCookie(sb2, str2.trim() + "=;Domain=" + str + ";Path=/");
-            }
-            if (split.length > 0) {
-                z2 = true;
-            }
-        }
-        if (Build.VERSION.SDK_INT >= 21) {
-            instance.flush();
-        }
     }
 }

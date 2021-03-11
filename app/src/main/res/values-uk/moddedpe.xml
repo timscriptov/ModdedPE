@@ -93,8 +93,8 @@
     <string name="preloading_initing_info_safe_mode">--Безпечний режим ввімк.\n--Версія Minecraft PE: %1$s</string>
     <string name="preloading_initing_loading_libs">Завантаження Native Libs</string>
     <string name="preloading_loading_lib_substrate">--Завантаження libsubstrate.so</string>
-    <string name="preloading_loading_lib_xhook">--Завантаження libxhook.so</string>>
-    <string name="preloading_loading_lib_xhook_skycolor">--Завантаження libxhook-skycolor.so</string>
+    <string name="preloading_loading_lib_xhook">--Завантаження libxhook.so</string><![CDATA[>
+    ]]>
     <string name="preloading_loading_lib_game_launcher">--Завантаження liblauncher-core.so</string>
     <string name="preloading_loading_lib_fmod">--Завантаження libfmod.so</string>
     <string name="preloading_loading_lib_minecraftpe">--Завантаження libminecraftpe.so</string>

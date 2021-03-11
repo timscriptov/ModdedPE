@@ -52,6 +52,7 @@ class ModdedPEApplication : Application() {
         private var context: Context? = null
         private var app: Application? = null
         private var preferences: SharedPreferences? = null
+
         @JvmField
         var mPESdk: PESdk? = null
 

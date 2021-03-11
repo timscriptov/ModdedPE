@@ -94,8 +94,6 @@ import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.nio.ByteOrder;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -111,47 +109,31 @@ import java.util.UUID;
  */
 
 public class MainActivity extends NativeActivity implements OnKeyListener, CrashManagerOwner {
-    public static final String MARKET_URL_FORMAT = "market://details?id=%s";
-    public static final String ACTION_TCUI_BROADCAST_LAUNCH = "com.microsoft.beambroadcast.xle.app.action.TCUI";
-    public static final String BROADCAST_TITLE_NAME_KEY = "name";
-    public static final String MINECRAFT_BROADCAST_TITLE = "Minecraft";
-    public static final String PACKAGE_NAME_KEY = "package";
-    private static final String SESSION_HISTORY_SEP = "&";
-    private static final String SESSION_HISTORY_KEY = "session-history";
-    private static final String MIXER_CREATE_BETA_PACKAGE = "com.microsoft.beambroadcast.beta";
-    private static final String MIXER_CREATE_INTERNAL_BETA_PACKAGE = "com.microsoft.beambroadcast.beta.internal";
-    private static final String MIXER_CREATE_RETAIL_PACKAGE = "com.microsoft.beambroadcast";
     public static MainActivity mInstance = null;
     private static boolean _isPowerVr = false;
-    private static boolean mHasStoragePermission = false;
-    final Messenger mMessenger = new Messenger(new IncomingHandler());
-    @SuppressLint("SimpleDateFormat")
-    private final DateFormat DateFormat = new SimpleDateFormat();
+    private final String MARKET_URL_FORMAT = "market://details?id=%s";
+    private final String ACTION_TCUI_BROADCAST_LAUNCH = "com.microsoft.beambroadcast.xle.app.action.TCUI";
+    private final String BROADCAST_TITLE_NAME_KEY = "name";
+    private final String MINECRAFT_BROADCAST_TITLE = "Minecraft";
+    private final String PACKAGE_NAME_KEY = "package";
+    private final String SESSION_HISTORY_SEP = "&";
+    private final String SESSION_HISTORY_KEY = "session-history";
+    private final String MIXER_CREATE_BETA_PACKAGE = "com.microsoft.beambroadcast.beta";
+    private final String MIXER_CREATE_INTERNAL_BETA_PACKAGE = "com.microsoft.beambroadcast.beta.internal";
+    private final String MIXER_CREATE_RETAIL_PACKAGE = "com.microsoft.beambroadcast";
     public int mLastPermissionRequestReason;
     public int virtualKeyboardHeight = 0;
-    HeadsetConnectionReceiver headsetConnectionReceiver;
-    List<ActivityListener> mActivityListeners = new ArrayList<ActivityListener>();
-    MessageConnectionStatus mBound = MessageConnectionStatus.NOTSET;
-    MemoryInfo mCachedMemoryInfo = new MemoryInfo();
-    long mCachedMemoryInfoUpdateTime = 0;
-    long mCachedUsedMemory = 0;
-    long mCachedUsedMemoryUpdateTime = 0;
-    Messenger mService = null;
-    Platform platform;
-    TextInputProxyEditTextbox textInputWidget;
-    private boolean _fromOnCreate = false;
-    private int _userInputStatus = -1;
-    private String[] _userInputText = null;
-    private ClipboardManager clipboardManager;
-    private long mCallback = 0;
-    private InputDeviceManager deviceManager;
-    private ArrayList<SessionInfo> mSessionHistory = null;
-    private final ArrayList<StringValue> _userInputValues = new ArrayList<>();
-    private long mFileDialogCallback = 0;
-    private HardwareInformation mHardwareInformation;
-    private TextToSpeech textToSpeechManager;
-
-    private ServiceConnection mConnection = new ServiceConnection() {
+    private boolean mHasStoragePermission = false;
+    private Messenger mMessenger = new Messenger(new IncomingHandler());
+    private HeadsetConnectionReceiver headsetConnectionReceiver;
+    private List<ActivityListener> mActivityListeners = new ArrayList<ActivityListener>();
+    private MessageConnectionStatus mBound = MessageConnectionStatus.NOTSET;
+    private MemoryInfo mCachedMemoryInfo = new MemoryInfo();
+    private long mCachedMemoryInfoUpdateTime = 0;
+    private long mCachedUsedMemory = 0;
+    private long mCachedUsedMemoryUpdateTime = 0;
+    private Messenger mService = null;
+    private final ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
             mService = new Messenger(service);
             mBound = MessageConnectionStatus.CONNECTED;
@@ -169,6 +151,23 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
             mBound = MessageConnectionStatus.DISCONNECTED;
         }
     };
+    private Platform platform;
+    private TextInputProxyEditTextbox textInputWidget;
+    private boolean _fromOnCreate = false;
+    private int _userInputStatus = -1;
+    private String[] _userInputText = null;
+    private ClipboardManager clipboardManager;
+    private long mCallback = 0;
+    private InputDeviceManager deviceManager;
+    private ArrayList<SessionInfo> mSessionHistory = null;
+    private ArrayList<StringValue> _userInputValues = new ArrayList<>();
+    private long mFileDialogCallback = 0;
+    private HardwareInformation mHardwareInformation;
+    private TextToSpeech textToSpeechManager;
+    private ThermalMonitor mThermalMonitor;
+    private BatteryMonitor mBatteryMonitor;
+    private float mVolume = 1.0f;
+    private Locale initialUserLocale;
 
     public static boolean isPowerVR() {
         return _isPowerVr;
@@ -350,12 +349,27 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         }
     }
 
+    public BatteryMonitor getBatteryMonitor() {
+        if (mBatteryMonitor == null) {
+            mBatteryMonitor = new BatteryMonitor(this);
+        }
+        return mBatteryMonitor;
+    }
+
     public HardwareInformation getHardwareInfo() {
         if (mHardwareInformation == null) {
             mHardwareInformation = new HardwareInformation(this);
         }
         return mHardwareInformation;
     }
+
+    public ThermalMonitor getThermalMonitor() {
+        if (mThermalMonitor == null) {
+            mThermalMonitor = new ThermalMonitor(this);
+        }
+        return mThermalMonitor;
+    }
+
 
     public void initializeCrashManager() {
         AppConstants.loadFromContext(getApplicationContext());
@@ -436,7 +450,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         nativeWaitCrashManagementSetupComplete();
-        //displayMetrics = new DisplayMetrics();
         platform = Platform.createPlatform(true);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         FMOD.init(this);
@@ -447,12 +460,16 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
 
         nativeSetHeadphonesConnected(((AudioManager) getSystemService("audio")).isWiredHeadsetOn());
         clipboardManager = (ClipboardManager) getSystemService("clipboard");
-        Locale initialUserLocale = Locale.getDefault();
+        initialUserLocale = Locale.getDefault();
         AppConstants.loadFromContext(getApplicationContext());
         mInstance = this;
         _fromOnCreate = true;
         textInputWidget = createTextWidget();
         findViewById(16908290).getRootView().addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> nativeResize(right - left, bottom - top));
+    }
+
+    public void setVolume(float f) {
+        mVolume = f;
     }
 
     private void createAlertDialog(boolean z, boolean z2, boolean z3) {
@@ -1473,11 +1490,22 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         mActivityListeners.remove(listener);
     }
 
-    public void startTextToSpeech(String s) {
-        if (textToSpeechManager != null) {
-            textToSpeechManager.speak(s, 0, null);
+    @SuppressLint("ObsoleteSdkInt")
+    public void startTextToSpeech(String str) {
+        if (textToSpeechManager == null) {
+            return;
         }
+        if (Build.VERSION.SDK_INT < 21) {
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("volume", String.valueOf(mVolume));
+            this.textToSpeechManager.speak(str, 0, hashMap);
+            return;
+        }
+        Bundle bundle = new Bundle();
+        bundle.putFloat("volume", mVolume);
+        this.textToSpeechManager.speak(str, 0, bundle, null);
     }
+
 
     public void stopTextToSpeech() {
         if (textToSpeechManager != null) {

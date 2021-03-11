@@ -28,7 +28,6 @@
         android:visibility="gone">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/moddedpe_manage_nmod_add_new_card_view"
             android:layout_width="325dp"
             android:layout_height="150dp"
             android:layout_centerInParent="true"

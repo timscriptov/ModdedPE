@@ -52,7 +52,6 @@
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/donate"
             android:layout_width="65dp"
             android:layout_height="65dp"
             android:background="@drawable/moddedpe_main_button_drawable"

@@ -17,7 +17,6 @@
 package com.mcal.pesdk.utils;
 
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.os.Build;
@@ -25,7 +24,6 @@ import android.os.Build;
 import com.mcal.mcpelauncher.data.Preferences;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,6 +51,18 @@ public class MinecraftInfo {
         AssetOverrideManager.getInstance().addAssetOverride(mContext.getPackageResourcePath());
     }
 
+    public static String getMinecraftPackageNativeLibraryDir() {
+        if (SplitParser.isAppBundle()) {
+            return mContext.getCacheDir().getPath() + "/lib/" + Build.CPU_ABI;
+        } else {
+            return mMCContext.getApplicationInfo().nativeLibraryDir;
+        }
+    }
+
+    public static Context getMinecraftPackageContext() {
+        return mMCContext;
+    }
+
     public boolean isSupportedMinecraftVersion(String[] versions) {
         String mcpeVersionName = getMinecraftVersionName();
         if (mcpeVersionName == null)
@@ -75,18 +85,6 @@ public class MinecraftInfo {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public static String getMinecraftPackageNativeLibraryDir() {
-        if (SplitParser.isAppBundle()) {
-            return mContext.getCacheDir().getPath() + "/lib/" + Build.CPU_ABI;
-        } else {
-            return mMCContext.getApplicationInfo().nativeLibraryDir;
-        }
-    }
-
-    public static Context getMinecraftPackageContext() {
-        return mMCContext;
     }
 
     public boolean isMinecraftInstalled() {

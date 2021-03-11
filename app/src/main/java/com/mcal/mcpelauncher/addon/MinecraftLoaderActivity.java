@@ -1,18 +1,13 @@
 package com.mcal.mcpelauncher.addon;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 
-import com.mcal.mcpelauncher.addon.utils.ASplitParser;
-import com.mcal.pesdk.nativeapi.LibraryLoader;
 import com.mcal.pesdk.utils.AssetOverrideManager;
 import com.mcal.pesdk.utils.MinecraftInfo;
-import com.mcal.pesdk.utils.SplitParser;
 import com.mojang.minecraftpe.MainActivity;
 
 public class MinecraftLoaderActivity extends MainActivity {

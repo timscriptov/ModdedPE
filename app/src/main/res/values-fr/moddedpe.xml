@@ -94,7 +94,6 @@
     <string name="preloading_initing_loading_libs">Chargement des libraires requises..</string>
     <string name="preloading_loading_lib_substrate">--Chargement de libsubstrate.so</string>
     <string name="preloading_loading_lib_xhook">--Chargement de libxhook.so</string>
-    <string name="preloading_loading_lib_xhook_skycolor">--Chargement libxhook-skycolor.so</string>
     <string name="preloading_loading_lib_game_launcher">--Chargement de liblauncher-core.so</string>
     <string name="preloading_loading_lib_fmod">--Chargement de libfmod.so</string>
     <string name="preloading_loading_lib_minecraftpe">--Chargement de libminecraftpe.so</string>
