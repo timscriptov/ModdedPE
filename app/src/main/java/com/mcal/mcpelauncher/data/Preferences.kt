@@ -27,10 +27,6 @@ object Preferences {
     private val preferences = PreferenceManager.getDefaultSharedPreferences(ModdedPEApplication.getContext())
 
     @JvmStatic
-    val xHookSkyColor: Boolean
-        get() = preferences.getBoolean("xhook_sky_color", false)
-
-    @JvmStatic
     var rated: Boolean
         get() = preferences.getBoolean("isRated", false)
         set(mode) {

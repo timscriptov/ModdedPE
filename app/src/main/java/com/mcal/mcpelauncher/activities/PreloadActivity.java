@@ -109,11 +109,6 @@ public class PreloadActivity extends BaseActivity {
                         writeNewText(getString(R.string.preloading_loading_lib_xhook));
                     }
 
-                    //@Override
-                    //public void onLoadXHookSkyColorLib() {
-                    //    writeNewText(getString(R.string.preloading_loading_lib_xhook_skycolor));
-                    //}
-
                     @Override
                     public void onLoadMinecraftPELib() {
                         writeNewText(getString(R.string.preloading_loading_lib_minecraftpe));

@@ -29,9 +29,9 @@ LOCAL_LDLIBS    := -L$(LOCAL_PATH)/$(TARGET_ARCH_ABI) -llog -ldl -lsubstrate -lx
 TARGET_NO_UNDEFINED_LDFLAGS :=
 include $(BUILD_SHARED_LIBRARY)
 
-include $(CLEAR_VARS)
-LOCAL_MODULE     := xhook-skycolor
-LOCAL_SRC_FILES  := xhook-skycolor/main.cpp
-TARGET_NO_UNDEFINED_LDFLAGS :=
-LOCAL_LDLIBS := -L$(LOCAL_PATH)/$(TARGET_ARCH_ABI) -llog -ldl -lxhook -lminecraftpe -lfmod
-include $(BUILD_SHARED_LIBRARY)
+#include $(CLEAR_VARS)
+#LOCAL_MODULE     := xhook-skycolor
+#LOCAL_SRC_FILES  := xhook-skycolor/main.cpp
+#TARGET_NO_UNDEFINED_LDFLAGS :=
+#LOCAL_LDLIBS := -L$(LOCAL_PATH)/$(TARGET_ARCH_ABI) -llog -ldl -lxhook -lminecraftpe -lfmod
+#include $(BUILD_SHARED_LIBRARY)
