@@ -32,7 +32,7 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.cardview.widget.CardView;
+import androidx.appcompat.widget.LinearLayoutCompat;
 
 import com.mcal.mcpelauncher.R;
 import com.mcal.mcpelauncher.utils.ScopedStorage;
@@ -182,7 +182,7 @@ public class NModFilePickerActivity extends BaseActivity {
 
         @Override
         public View getView(int p1, View p2, ViewGroup p3) {
-            @SuppressLint("ViewHolder") CardView cardView = (CardView) getLayoutInflater().inflate(R.layout.nmod_picker_file_item, null);
+            @SuppressLint("ViewHolder") LinearLayoutCompat cardView = (LinearLayoutCompat) getLayoutInflater().inflate(R.layout.nmod_picker_file_item, null);
 
             if (!currentPath.getPath().endsWith(File.separator)) {
                 if (p1 == 0) {

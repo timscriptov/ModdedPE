@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:foreground="?attr/selectableItemBackground"
-    card_view:cardCornerRadius="5dp"
-    card_view:cardPreventCornerOverlap="true"
-    card_view:cardUseCompatPadding="true"
-    card_view:contentPadding="1dp">
+    android:background="@drawable/moddedpe_main_button_drawable">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -54,4 +49,4 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-</androidx.cardview.widget.CardView>
+</androidx.appcompat.widget.LinearLayoutCompat>

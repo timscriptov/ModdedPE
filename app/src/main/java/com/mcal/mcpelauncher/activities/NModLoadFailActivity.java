@@ -29,7 +29,7 @@ import android.widget.ListView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.cardview.widget.CardView;
+import androidx.appcompat.widget.LinearLayoutCompat;
 
 import com.mcal.mcpelauncher.R;
 import com.mcal.pesdk.nmod.NMod;
@@ -127,7 +127,7 @@ public class NModLoadFailActivity extends BaseActivity {
 
         @Override
         public View getView(int p1, View p2, ViewGroup p3) {
-            @SuppressLint("ViewHolder") CardView view = (CardView) getLayoutInflater().inflate(R.layout.moddedpe_nmod_load_failed_item_card, null);
+            @SuppressLint("ViewHolder") LinearLayoutCompat view = (LinearLayoutCompat) getLayoutInflater().inflate(R.layout.moddedpe_nmod_load_failed_item_card, null);
             AppCompatTextView packageNameTextView = view.findViewById(R.id.moddedpe_nmod_load_failed_item_card_package_name);
             packageNameTextView.setText(mPackageNames.get(p1));
             AppCompatTextView errorMessageTextView = view.findViewById(R.id.moddedpe_nmod_load_failed_item_card_message);
