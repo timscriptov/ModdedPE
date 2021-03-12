@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center"
     android:paddingTop="10dp"
     android:layout_width="match_parent"
@@ -35,7 +36,7 @@
             android:id="@+id/report_user_cancel"
             android:layout_width="0dp"
             android:layout_height="40dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
             android:text="@string/MessageDialog_Cancel"
             android:layout_weight="1.0" />
         <com.microsoft.xbox.toolkit.ui.XLEButton
@@ -61,5 +62,6 @@
         android:scrollHorizontally="false"
         android:singleLine="false"
         android:layout_above="@+id/report_user_buttons"
-        android:layout_below="@+id/report_user_reason" />
+        android:layout_below="@+id/report_user_reason"
+        tools:ignore="RtlHardcoded" />
 </RelativeLayout>

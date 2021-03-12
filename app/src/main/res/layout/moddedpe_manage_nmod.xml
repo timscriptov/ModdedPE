@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/moddedpe_manage_nmod_layout_nmods"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,7 +20,7 @@
             android:divider="@null"
             android:dividerHeight="0dip" />
 
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <RelativeLayout
         android:id="@+id/moddedpe_manage_nmod_layout_no_found"
@@ -36,7 +37,7 @@
             card_view:cardUseCompatPadding="true"
             card_view:contentPadding="1dp">
 
-            <LinearLayout
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_centerInParent="true"
@@ -54,9 +55,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:src="@drawable/ic_plus_white" />
+                    android:src="@drawable/ic_plus_white"
+                    tools:ignore="ContentDescription" />
 
-            </LinearLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.cardview.widget.CardView>
 

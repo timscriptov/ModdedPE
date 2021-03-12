@@ -8,11 +8,11 @@
         android:id="@+id/image_title_subtitle_button_image"
         android:layout_width="@dimen/friendFinderIconButtonWidth"
         android:layout_height="@dimen/friendFinderIconButtonHeight" />
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="@dimen/friendFinderIconButtonHeight"
-        android:layout_marginLeft="@dimen/friendFinderPageMargin"
+        android:layout_marginStart="@dimen/friendFinderPageMargin"
         android:layout_marginTop="2dp">
         <com.microsoft.xbox.toolkit.ui.CustomTypefaceTextView
             android:textSize="18sp"
@@ -25,5 +25,5 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp" />
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </merge>

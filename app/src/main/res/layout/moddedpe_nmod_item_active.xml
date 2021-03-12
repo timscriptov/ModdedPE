@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="70dp">
 
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:orientation="horizontal">
@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <LinearLayout
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -52,14 +52,15 @@
                         android:maxLines="1"
                         android:textAppearance="?android:attr/textAppearanceSmall" />
 
-                </LinearLayout>
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
             </RelativeLayout>
 
-        </LinearLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/nmod_enabled_minus"
+            android:background="@drawable/moddedpe_main_button_drawable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -69,6 +70,7 @@
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/nmod_enabled_arrow_down"
+            android:background="@drawable/moddedpe_main_button_drawable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -78,6 +80,7 @@
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/nmod_enabled_arrow_up"
+            android:background="@drawable/moddedpe_main_button_drawable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

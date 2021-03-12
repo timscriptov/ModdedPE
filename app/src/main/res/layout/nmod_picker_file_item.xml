@@ -9,7 +9,7 @@
     card_view:cardUseCompatPadding="true"
     card_view:contentPadding="1dp">
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:orientation="horizontal">
@@ -35,6 +35,6 @@
 
         </RelativeLayout>
 
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.cardview.widget.CardView>

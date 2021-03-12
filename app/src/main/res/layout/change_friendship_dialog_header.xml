@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:gravity="center_vertical"
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="20dp"
-    android:layout_toRightOf="@id/change_friendship_profile_pic"
-    android:layout_alignParentRight="true"
+    android:layout_marginStart="20dp"
+    android:layout_toEndOf="@id/change_friendship_profile_pic"
+    android:layout_alignParentEnd="true"
     android:layout_centerVertical="true">
     <com.microsoft.xbox.toolkit.ui.CustomTypefaceTextView
         android:textSize="@dimen/changeFriendshipDialogUserNameSize"
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxLines="1"/>
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -42,8 +42,8 @@
             android:id="@+id/peoplehub_info_gamerscore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
+            android:layout_marginStart="6dp"
             android:layout_marginBottom="1dp"
             android:singleLine="true" />
-    </LinearLayout>
-</LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.appcompat.widget.LinearLayoutCompat>

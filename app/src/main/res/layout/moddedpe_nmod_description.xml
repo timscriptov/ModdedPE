@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -25,7 +25,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
@@ -48,11 +48,11 @@
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         tools:ignore="RtlHardcoded,RtlSymmetry" />
 
-                </LinearLayout>
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
             </RelativeLayout>
 
-        </LinearLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <View
             android:layout_width="match_parent"
@@ -215,7 +215,7 @@
             android:layout_marginBottom="5dp"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </ScrollView>
 

@@ -33,7 +33,7 @@
 
     </RelativeLayout>
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@android:id/widget_frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,6 +41,6 @@
         android:orientation="vertical"
         tools:ignore="RtlHardcoded">
 
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </LinearLayout>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FloatTextView">
+        <attr name="ftvInterval" format="integer|reference" />
+        <attr name="ftvAnimDuration" format="integer|reference" />
+        <attr name="ftvTextSize" format="dimension|reference" />
+        <attr name="ftvTextColor" format="color|reference" />
+        <attr name="ftvSingleLine" format="boolean" />
+        <attr name="ftvVerticalPadding" format="dimension|reference" />
+        <attr name="ftvHorizontalPadding" format="dimension|reference" />
+        <attr name="ftvBackground" format="color|reference" />
+
+        <attr name="ftvFlags">
+            <enum name="strike" value="0" />
+            <enum name="underline" value="1" />
+        </attr>
+        <attr name="ftvGravity">
+            <enum name="left" value="0" />
+            <enum name="center" value="1" />
+            <enum name="right" value="2" />
+        </attr>
+        <attr name="ftvDirection">
+            <enum name="bottom_to_top" value="0" />
+            <enum name="top_to_bottom" value="1" />
+            <enum name="right_to_left" value="2" />
+            <enum name="left_to_right" value="3" />
+        </attr>
+        <attr name="ftvTypeface">
+            <enum name="normal" value="0" />
+            <enum name="bold" value="1" />
+            <enum name="italic" value="2" />
+            <enum name="italic_bold" value="3" />
+        </attr>
+    </declare-styleable>
+</resources>

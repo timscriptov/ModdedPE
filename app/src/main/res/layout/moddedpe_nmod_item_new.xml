@@ -10,7 +10,7 @@
     card_view:cardUseCompatPadding="true"
     card_view:contentPadding="1dp">
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:orientation="horizontal">
@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -48,10 +48,10 @@
                     android:text="@string/nmod_add_new"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
-            </LinearLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
         </RelativeLayout>
 
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.cardview.widget.CardView>

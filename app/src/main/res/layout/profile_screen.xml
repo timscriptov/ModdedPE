@@ -5,7 +5,7 @@
     android:background="@drawable/background_default"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -34,20 +34,20 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:indeterminateOnly="true"
-                android:indeterminateDrawable="@drawable/rotate_loading_rings_small" />
+                android:indeterminateDrawable="@drawable/loading" />
             <ScrollView
                 android:id="@+id/profile_screen_content_list"
                 android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <LinearLayout
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_gravity="center_vertical"
                     android:orientation="vertical"
                     android:paddingTop="15dp"
                     android:paddingBottom="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <LinearLayout
+                    <androidx.appcompat.widget.LinearLayoutCompat
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -56,7 +56,7 @@
                             android:id="@+id/profile_realname"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="30dp"
+                            android:layout_marginEnd="30dp"
                             android:layout_marginBottom="4dp"
                             android:singleLine="true"
                             android:maxLength="30" />
@@ -66,7 +66,7 @@
                             android:id="@+id/profile_gamerscore_icon"
                             android:visibility="gone"
                             android:layout_marginTop="1dp"
-                            android:layout_marginRight="1dp"
+                            android:layout_marginEnd="1dp"
                             android:text="@string/ic_GamerScore"
                             android:layout_height="wrap_content"
                             android:layout_width="wrap_content" />
@@ -79,7 +79,7 @@
                             android:layout_height="wrap_content"
                             android:singleLine="true"
                             android:includeFontPadding="false" />
-                    </LinearLayout>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
                     <com.microsoft.xbox.toolkit.ui.CustomTypefaceTextView
                         android:textSize="40sp"
                         android:textStyle="bold"
@@ -88,7 +88,7 @@
                         android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginEnd="5dp"
                         android:layout_marginBottom="5dp"
                         android:singleLine="true"
                         android:includeFontPadding="false" />
@@ -98,7 +98,7 @@
                         android:visibility="gone"
                         android:layout_width="@dimen/profileMsaPicSize"
                         android:layout_height="@dimen/profileSocialButtonsHeight"
-                        android:layout_marginLeft="-5dp"
+                        android:layout_marginStart="-5dp"
                         android:layout_marginTop="@dimen/profileSocialButtonsTopMargin"
                         app:text_checked="@string/Profile_ChangeFriendship"
                         app:text_unchecked="@string/Profile_Profile_AddFriend"
@@ -111,7 +111,7 @@
                         android:visibility="gone"
                         android:layout_width="@dimen/profileMsaPicSize"
                         android:layout_height="@dimen/profileSocialButtonsHeight"
-                        android:layout_marginLeft="-5dp"
+                        android:layout_marginStart="-5dp"
                         android:layout_marginTop="@dimen/profileSocialButtonsTopMargin"
                         app:text_checked="@string/Narrator_Unmute"
                         app:text_unchecked="@string/Narrator_Mute"
@@ -124,7 +124,7 @@
                         android:visibility="gone"
                         android:layout_width="@dimen/profileMsaPicSize"
                         android:layout_height="@dimen/profileSocialButtonsHeight"
-                        android:layout_marginLeft="-5dp"
+                        android:layout_marginStart="-5dp"
                         android:layout_marginTop="@dimen/profileSocialButtonsTopMargin"
                         app:text_checked="@string/ProfileCard_Report"
                         app:text_unchecked="@string/ProfileCard_Report"
@@ -137,7 +137,7 @@
                         android:visibility="gone"
                         android:layout_width="@dimen/profileMsaPicSize"
                         android:layout_height="@dimen/profileSocialButtonsHeight"
-                        android:layout_marginLeft="-5dp"
+                        android:layout_marginStart="-5dp"
                         android:layout_marginTop="@dimen/profileSocialButtonsTopMargin"
                         app:text_checked="@string/Profile_Profile_Unblock"
                         app:text_unchecked="@string/Profile_Profile_Block"
@@ -150,7 +150,7 @@
                         android:visibility="gone"
                         android:layout_width="@dimen/profileMsaPicSize"
                         android:layout_height="@dimen/profileSocialButtonsHeight"
-                        android:layout_marginLeft="-5dp"
+                        android:layout_marginStart="-5dp"
                         android:layout_marginTop="@dimen/profileSocialButtonsTopMargin"
                         app:text_checked="@string/Profile_ViewInXboxApp"
                         app:text_unchecked="@string/Profile_ViewInXboxApp"
@@ -164,12 +164,12 @@
                         android:id="@+id/profile_view_in_xbox_app_subtext"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="35dp"
+                        android:layout_marginStart="35dp"
                         android:layout_marginTop="-10dp"
                         android:includeFontPadding="false"
                         app:typefaceSource="fonts/SegoeWP.ttf" />
-                </LinearLayout>
+                </androidx.appcompat.widget.LinearLayoutCompat>
             </ScrollView>
         </FrameLayout>
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </com.microsoft.xbox.xle.ui.XLERootView>

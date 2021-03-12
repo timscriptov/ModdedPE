@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:layout_width="match_parent"
@@ -10,18 +10,20 @@
     android:layout_marginBottom="@dimen/xbid_margin_button">
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/xbid_error_left_button"
+        android:background="@drawable/moddedpe_main_button_drawable"
         android:focusable="true"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginRight="@dimen/xbid_margin_button"
+        android:layout_marginEnd="@dimen/xbid_margin_button"
         android:text="@string/xbid_try_again"
         android:layout_weight="1.0" />
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/xbid_error_right_button"
+        android:background="@drawable/moddedpe_main_button_drawable"
         android:focusable="true"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/xbid_margin_button"
+        android:layout_marginStart="@dimen/xbid_margin_button"
         android:text="@android:string/ok"
         android:layout_weight="1.0" />
-</LinearLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>

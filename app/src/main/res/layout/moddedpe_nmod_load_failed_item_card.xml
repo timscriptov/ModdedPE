@@ -9,7 +9,7 @@
     card_view:cardUseCompatPadding="true"
     card_view:contentPadding="1dp">
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -45,6 +45,6 @@
             android:layout_marginBottom="10dp"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.cardview.widget.CardView>

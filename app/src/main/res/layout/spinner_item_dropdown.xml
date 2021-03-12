@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.microsoft.xbox.toolkit.ui.CustomTypefaceTextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:textSize="20sp"
-    android:paddingLeft="24dp"
+    android:paddingStart="24dp"
     android:paddingTop="24dp"
-    android:paddingRight="32dp"
+    android:paddingEnd="32dp"
     android:paddingBottom="24dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />

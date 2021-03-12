@@ -21,7 +21,7 @@
         android:layout_alignParentBottom="true"
         android:background="?android:attr/dividerVertical" />
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/moddedpe_preloading_texts_adapted_layput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

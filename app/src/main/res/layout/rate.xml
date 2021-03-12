@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
@@ -7,7 +7,7 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:layout_marginTop="10dp"
@@ -15,10 +15,10 @@
         app:srcCompat="@drawable/ic_google_play"
         tools:ignore="ContentDescription" />
 
-    <RatingBar
+    <androidx.appcompat.widget.AppCompatRatingBar
         android:id="@+id/rating_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:stepSize="1" />
 
-</LinearLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>
