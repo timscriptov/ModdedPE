@@ -6,7 +6,6 @@
 #include <string>
 #include <cxxabi.h>
 #include <dlfcn.h>
-#include "xhook.h"
 
 //-------------------------------------------------------------
 // Variants

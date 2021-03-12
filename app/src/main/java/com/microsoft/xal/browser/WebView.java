@@ -41,6 +41,8 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 
 public class WebView extends AppCompatActivity {
+    public static final String DEFAULT_BROWSER_INFO = "webkit";
+
     public static final String CANCEL_DELAY = "CANCEL_DELAY";
     public static final String END_URL = "END_URL";
     public static final String IN_PROC_BROWSER = "IN_PROC_BROWSER";
@@ -54,18 +56,16 @@ public class WebView extends AppCompatActivity {
     static {
         HashMap hashMap = new HashMap();
         customTabsAllowedBrowsers = hashMap;
-        hashMap.put("com.android.chrome", "OJGKRT0HGZNU+LGa8F7GViztV4g=");
+        customTabsAllowedBrowsers.put("com.android.chrome", "OJGKRT0HGZNU+LGa8F7GViztV4g=");
         customTabsAllowedBrowsers.put("org.mozilla.firefox", "kg9Idqale0pqL0zK9l99Kc4m/yw=");
         customTabsAllowedBrowsers.put("com.microsoft.emmx", "P2QOJ59jvOpxCCrn6MfvotoBTK0=");
         customTabsAllowedBrowsers.put("com.sec.android.app.sbrowser", "nKUXDzgZGd/gRG/NqxixmhQ7MWM=");
     }
 
     private final Lock m_lock = new ReentrantLock();
-    private String m_browserInfo = null;
     private long m_cancelDelay = 500;
     private boolean m_cancelOperationOnResume = true;
     private long m_operationId = 0;
-    private boolean m_sharedBrowserUsed = false;
 
     private static native void urlOperationCanceled(long operationId, boolean sharedBrowserUsed, String browserInfo);
 
@@ -115,7 +115,6 @@ public class WebView extends AppCompatActivity {
     }
 
     public void onCreate(Bundle bundle) {
-        String versionName;
         super.onCreate(bundle);
         if (getIntent().getData() == null) {
             Bundle extras = getIntent().getExtras();
@@ -143,28 +142,15 @@ public class WebView extends AppCompatActivity {
                 defaultBrowserPackageName = resolveActivity.activityInfo.packageName;
             }
             if (useInProcBrowser) {
-                setBrowserInfo("webkit-inProcRequested", 0, "none");
                 startWebView(startUrl, endUrl, showUrlType);
             } else if (defaultBrowserPackageName == null || defaultBrowserPackageName.equals(Constants.HTTP_USER_AGENT_ANDROID)) {
-                setBrowserInfo("webkit-noDefault", 0, "none");
                 startWebView(startUrl, endUrl, showUrlType);
             } else {
-                int versionCode = -1;
-                try {
-                    PackageInfo packageInfo = getApplicationContext().getPackageManager().getPackageInfo(defaultBrowserPackageName, 0);
-                    versionCode = packageInfo.versionCode;
-                    versionName = packageInfo.versionName;
-                } catch (PackageManager.NameNotFoundException e) {
-                    versionName = "unknown";
-                }
                 if (!browserSupportsCustomTabs(defaultBrowserPackageName)) {
-                    setBrowserInfo(defaultBrowserPackageName + "-noCustomTabs", versionCode, versionName);
                     startWebView(startUrl, endUrl, showUrlType);
                 } else if (!browserAllowedForCustomTabs(defaultBrowserPackageName)) {
-                    setBrowserInfo(defaultBrowserPackageName + "-customTabsNotAllowed", versionCode, versionName);
                     startWebView(startUrl, endUrl, showUrlType);
                 } else {
-                    setBrowserInfo(defaultBrowserPackageName + "-customTabsAllowed", versionCode, versionName);
                     startCustomTabsInBrowser(startUrl, endUrl, showUrlType);
                 }
             }
@@ -232,7 +218,6 @@ public class WebView extends AppCompatActivity {
             return;
         }
         m_cancelOperationOnResume = false;
-        m_sharedBrowserUsed = true;
 
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         builder.setToolbarColor(R.color.colorPrimaryDark);
@@ -242,7 +227,6 @@ public class WebView extends AppCompatActivity {
 
     private void startWebView(String startUrl, String endUrl, ShowUrlType showUrlType) {
         m_cancelOperationOnResume = false;
-        m_sharedBrowserUsed = false;
         Intent intent = new Intent(getApplicationContext(), WebKitWebViewController.class);
         Bundle bundle = new Bundle();
         bundle.putString(START_URL, startUrl);
@@ -264,16 +248,12 @@ public class WebView extends AppCompatActivity {
         }
         int result = XalWebResult.mWebResult[webResult.ordinal()];
         if (result == 1) {
-            urlOperationSucceeded(operationId, finalUrl, m_sharedBrowserUsed, m_browserInfo);
+            urlOperationSucceeded(operationId, finalUrl, false, DEFAULT_BROWSER_INFO);
         } else if (result == 2) {
-            urlOperationCanceled(operationId, m_sharedBrowserUsed, m_browserInfo);
+            urlOperationCanceled(operationId, false, DEFAULT_BROWSER_INFO);
         } else if (result == 3) {
-            urlOperationFailed(operationId, m_sharedBrowserUsed, m_browserInfo);
+            urlOperationFailed(operationId, false, DEFAULT_BROWSER_INFO);
         }
-    }
-
-    private void setBrowserInfo(String packageName, int versionCode, String versionName) {
-        m_browserInfo = String.format(Locale.US, "%s::%d::%s", packageName, versionCode, versionName);
     }
 
     private boolean browserAllowedForCustomTabs(String browserPackageName) {

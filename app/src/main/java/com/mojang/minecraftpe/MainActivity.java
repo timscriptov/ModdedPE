@@ -67,6 +67,7 @@ import androidx.core.content.ContextCompat;
 
 import com.appsflyer.AppsFlyerLib;
 import com.mcal.mcpelauncher.data.Preferences;
+import com.mcal.mcpelauncher.utils.ScopedStorage;
 import com.mojang.android.StringValue;
 import com.mojang.minecraftpe.input.InputDeviceManager;
 import com.mojang.minecraftpe.platforms.Platform;
@@ -1062,7 +1063,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     }
 
     public String getExternalStoragePath() {
-        return Environment.getExternalStorageDirectory().getAbsolutePath();
+        return ScopedStorage.getStorageDirectory().toString();
     }
 
     public float getPixelsPerMillimeter() {

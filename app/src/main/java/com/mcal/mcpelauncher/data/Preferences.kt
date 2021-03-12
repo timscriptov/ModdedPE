@@ -16,8 +16,10 @@
  */
 package com.mcal.mcpelauncher.data
 
+import android.os.Environment
 import androidx.preference.PreferenceManager
 import com.mcal.mcpelauncher.ModdedPEApplication
+import com.mcal.mcpelauncher.utils.ScopedStorage
 
 /**
  * @author Тимашков Иван
@@ -64,7 +66,7 @@ object Preferences {
 
     @JvmStatic
     var dataSavedPath: String?
-        get() = preferences.getString("data_saved_path", "default")
+        get() = preferences.getString("data_saved_path", ScopedStorage.storageDirectory.toString())
         set(str) {
             preferences.edit().putString("data_saved_path", str).apply()
         }

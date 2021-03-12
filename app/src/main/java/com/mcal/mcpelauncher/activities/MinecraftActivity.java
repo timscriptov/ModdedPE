@@ -30,6 +30,7 @@ import android.view.View;
 import com.mcal.mcpelauncher.ModdedPEApplication;
 import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.mcpelauncher.services.SoundService;
+import com.mcal.mcpelauncher.utils.ScopedStorage;
 import com.mcal.pesdk.PESdk;
 
 /**
@@ -74,7 +75,7 @@ public class MinecraftActivity extends com.mojang.minecraftpe.MainActivity {
     @Override
     public String getExternalStoragePath() {
         if (Preferences.isSafeMode()) {
-            return Environment.getExternalStorageDirectory().getAbsolutePath();
+            return ScopedStorage.getStorageDirectory().toString();
         } else {
             return Preferences.getDataSavedPath();
         }
