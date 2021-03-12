@@ -88,22 +88,23 @@ public class Preloader {
             mPreloadListener.onLoadMinecraftPELib();
             LibraryLoader.loadMinecraftPE(MinecraftInfo.getMinecraftPackageNativeLibraryDir());
 
-            mPreloadListener.onLoadSubstrateLib();
-            LibraryLoader.loadSubstrate();
-
-            mPreloadListener.onLoadXHookLib();
-            LibraryLoader.loadXHook();
-
-            /*mPreloadListener.onLoadGameLauncherLib();
+            mPreloadListener.onLoadGameLauncherLib();
             LibraryLoader.loadLauncher(MinecraftInfo.getMinecraftPackageNativeLibraryDir());
             if (!safeMode) {
                 //if (Preferences.getXHookSkyColor()) {
                 //    mPreloadListener.onLoadXHookSkyColorLib();
                 //    LibraryLoader.loadXHookSkyColor();
                 //}
+
+                mPreloadListener.onLoadSubstrateLib();
+                LibraryLoader.loadSubstrate();
+
+                mPreloadListener.onLoadXHookLib();
+                LibraryLoader.loadXHook();
+
                 mPreloadListener.onLoadPESdkLib();
                 LibraryLoader.loadNModAPI(MinecraftInfo.getMinecraftPackageNativeLibraryDir());
-            }*/
+            }
             mPreloadListener.onFinishedLoadingNativeLibs();
         } catch (Throwable throwable) {
             throw new PreloadException(PreloadException.TYPE_LOAD_LIBS_FAILED, throwable);

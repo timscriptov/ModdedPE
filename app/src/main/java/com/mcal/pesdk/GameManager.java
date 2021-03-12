@@ -67,8 +67,9 @@ public class GameManager {
     }
 
     public void onMinecraftActivityFinish(MainActivity activity) {
-        if (Preferences.isSafeMode())
+        if (Preferences.isSafeMode()) {
             return;
+        }
         Gson gson = new Gson();
         Preloader.NModPreloadData preloadData = gson.fromJson(activity.getIntent().getExtras().getString(Constants.NMOD_DATA_TAG), Preloader.NModPreloadData.class);
 

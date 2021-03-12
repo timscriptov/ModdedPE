@@ -286,7 +286,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     }
 
     public void setClipboard(String value) {
-        clipboardManager.setPrimaryClip(ClipData.newPlainText("MCPE-Clipdata", value));
+        clipboardManager.setPrimaryClip(ClipData.newPlainText("ModdedPE-Clipdata", value));
     }
 
     public float getKeyboardHeight() {
@@ -382,7 +382,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         file.mkdir();
         Log.v("MinecraftPlatform", "Minidump directory is: " + file.getAbsolutePath());
         Log.i("MinecraftPlatform", "Setting up crash handler");
-        CrashManager crashManager = new CrashManager((CrashManagerOwner) this, file.getAbsolutePath(), getCachedDeviceId(), isAndroidTrial() ? new SentryEndpointConfig("https://sentry.io", "2308440", "668bc09f7bcf461796ea07c1006076fe") : new SentryEndpointConfig("https://sentry.io", "2277697", "1c3f5cbd723a4a84879059d260b19ef6"), sessionInfo);
+        CrashManager crashManager = new CrashManager(this, file.getAbsolutePath(), getCachedDeviceId(), isAndroidTrial() ? new SentryEndpointConfig("https://sentry.io", "2308440", "668bc09f7bcf461796ea07c1006076fe") : new SentryEndpointConfig("https://sentry.io", "2277697", "1c3f5cbd723a4a84879059d260b19ef6"), sessionInfo);
         crashManager.installGlobalExceptionHandler();
         setUpBreakpad(file.getAbsolutePath(), sessionInfo.sessionId);
     }
