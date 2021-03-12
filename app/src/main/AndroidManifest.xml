@@ -11,7 +11,8 @@
     <!-- Просмотр сетевых подключений -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- Изменение/удаление данных на USB-накопителе -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
     <!-- Управление функцией вибросигнала -->
     <uses-permission android:name="android.permission.VIBRATE" />
     <!-- Поиск аккаунтов на устройстве -->
@@ -52,7 +53,8 @@
         android:name="com.mcal.mcpelauncher.ModdedPEApplication"
         android:allowBackup="false"
         android:fullBackupContent="false"
-        android:debuggable="true"
+        android:isGame="true"
+        android:debuggable="false"
         android:testOnly="false"
         android:hasCode="true"
         android:icon="@mipmap/ic_launcher"

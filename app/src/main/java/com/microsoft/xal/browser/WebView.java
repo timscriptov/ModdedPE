@@ -14,7 +14,9 @@ import android.os.Handler;
 import android.util.Base64;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.browser.customtabs.CustomTabColorSchemeParams;
 import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.core.content.ContextCompat;
 
 import com.appboy.Constants;
 import com.mcal.mcpelauncher.R;
@@ -219,9 +221,14 @@ public class WebView extends AppCompatActivity {
         }
         m_cancelOperationOnResume = false;
 
-        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        builder.setToolbarColor(R.color.colorPrimaryDark);
-        CustomTabsIntent customTabsIntent = builder.build();
+        CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
+        CustomTabColorSchemeParams params = new CustomTabColorSchemeParams.Builder()
+                .setNavigationBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+                .setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+                .setSecondaryToolbarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+                .build();
+        intentBuilder.setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_DARK, params);
+        CustomTabsIntent customTabsIntent = intentBuilder.build();
         customTabsIntent.launchUrl(this, Uri.parse(startUrl));
     }
 
