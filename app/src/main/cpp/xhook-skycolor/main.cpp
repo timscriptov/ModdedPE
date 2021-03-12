@@ -14,6 +14,7 @@ static Color getColor_hook(void* a, float v) {
 }
 
 JNIEXPORT jint JNI_OnLoad(JavaVM*, void*) {
+    // For Minecraft 1.16.201
     xhook_register(".*/libminecraftpe\\.so$", "_ZN5Biome11getSkyColorEf", (void*) &getColor_hook, (void**) &getColor);
     xhook_refresh(1);
     xhook_enable_debug(1);
