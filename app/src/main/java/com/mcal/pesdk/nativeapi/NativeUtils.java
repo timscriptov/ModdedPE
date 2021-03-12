@@ -17,6 +17,7 @@
 package com.mcal.pesdk.nativeapi;
 
 import android.content.Context;
+import android.os.Environment;
 
 import com.mcal.mcpelauncher.data.Constants;
 import com.mcal.mcpelauncher.data.Preferences;
@@ -32,13 +33,13 @@ public class NativeUtils {
         nativeRegisterNatives(NativeUtils.class);
     }
 
-    public static native void nativeSetDataDirectory(String directory);
+    //public static native void nativeSetDataDirectory(String directory);
 
     public static native String nativeDemangle(String symbol_name);
 
     public static native boolean nativeRegisterNatives(Class cls);
 
-    public static void setValues(Context context) {
+    /*public static void setValues(Context context) {
         if (Preferences.getDataSavedPath().equals(Constants.STRING_VALUE_DEFAULT)) {
             NativeUtils.nativeSetDataDirectory(context.getFilesDir().getAbsolutePath() + File.separator);
         } else {
@@ -47,5 +48,5 @@ public class NativeUtils {
                 pathStr += File.separator;
             NativeUtils.nativeSetDataDirectory(pathStr);
         }
-    }
+    }*/
 }

@@ -11,28 +11,28 @@ import java.util.HashSet;
  */
 
 public abstract class XLEObservable<T> {
-    private HashSet<XLEObserver<T>> data = new HashSet<>();
+    private final HashSet<XLEObserver<T>> data = new HashSet<>();
 
-    public synchronized void addUniqueObserver(XLEObserver<T> observer) {
-        if (!data.contains(observer)) {
-            addObserver(observer);
+    public synchronized void addUniqueObserver(XLEObserver<T> xLEObserver) {
+        if (!data.contains(xLEObserver)) {
+            addObserver(xLEObserver);
         }
     }
 
-    public synchronized void addObserver(XLEObserver<T> observer) {
+    public synchronized void addObserver(XLEObserver<T> xLEObserver) {
         XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
-        data.add(observer);
+        data.add(xLEObserver);
     }
 
-    public synchronized void removeObserver(XLEObserver<T> observer) {
+    public synchronized void removeObserver(XLEObserver<T> xLEObserver) {
         XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
-        data.remove(observer);
+        data.remove(xLEObserver);
     }
 
     public synchronized void notifyObservers(AsyncResult<T> asyncResult) {
         XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
-        for (XLEObserver<T> observer : new ArrayList<>(data)) {
-            observer.update(asyncResult);
+        for (XLEObserver <T> xLEObserver : new ArrayList<>(data)) {
+            xLEObserver.update(asyncResult);
         }
     }
 

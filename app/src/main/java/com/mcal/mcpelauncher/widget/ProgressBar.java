@@ -19,36 +19,35 @@ package com.mcal.mcpelauncher.widget;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.widget.ProgressBar;
 
 /**
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-public class MCDProgressBar extends ProgressBar {
+public class ProgressBar extends android.widget.ProgressBar {
     private static final float mDefaultSpeed = 0.075F;
-    private Paint mPaint;
+    private final Paint mPaint;
     private int mWidth = 0;
     private int mHeight = 0;
     private float mBlockDrawingProgress = 0;
     private int mShowedBlocks = 1;
     private boolean mIsScaling = true;
 
-    public MCDProgressBar(android.content.Context context) {
+    public ProgressBar(android.content.Context context) {
         super(context);
         mPaint = new Paint();
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(Color.parseColor("#FF2C9EF4"));
     }
 
-    public MCDProgressBar(android.content.Context context, android.util.AttributeSet attrs) {
+    public ProgressBar(android.content.Context context, android.util.AttributeSet attrs) {
         super(context, attrs);
         mPaint = new Paint();
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(Color.parseColor("#FF2C9EF4"));
     }
 
-    public MCDProgressBar(android.content.Context context, android.util.AttributeSet attrs, int defStyleAttr) {
+    public ProgressBar(android.content.Context context, android.util.AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mPaint = new Paint();
         mPaint.setStyle(Paint.Style.FILL);
@@ -89,22 +88,22 @@ public class MCDProgressBar extends ProgressBar {
                 break;
             }
             case 2: {
-                canvas.drawRect(0, mHeight / 2, mWidth / 2, mHeight, mPaint);
+                canvas.drawRect(0, mHeight >> 1, mWidth >> 1, mHeight, mPaint);
                 int blockDrawHeight = (int) (((float) mHeight / 2) * mBlockDrawingProgress);
-                canvas.drawRect(mWidth / 2, blockDrawHeight, mWidth, blockDrawHeight + mHeight / 2, mPaint);
+                canvas.drawRect(mWidth >> 1, blockDrawHeight, mWidth, blockDrawHeight + (mHeight >> 1), mPaint);
                 break;
             }
             case 3: {
-                canvas.drawRect(0, mHeight / 2, mWidth, mHeight, mPaint);
+                canvas.drawRect(0, mHeight >> 1, mWidth, mHeight, mPaint);
                 int blockDrawHeight = (int) (((float) mHeight / 2) * mBlockDrawingProgress);
-                canvas.drawRect(0, 0, mWidth / 2, blockDrawHeight + 1, mPaint);
+                canvas.drawRect(0, 0, mWidth >> 1, blockDrawHeight + 1, mPaint);
                 break;
             }
             case 4: {
-                canvas.drawRect(0, mHeight / 2, mWidth, mHeight, mPaint);
-                canvas.drawRect(0, 0, mWidth / 2, mHeight / 2, mPaint);
+                canvas.drawRect(0, mHeight >> 1, mWidth, mHeight, mPaint);
+                canvas.drawRect(0, 0, mWidth >> 1, mHeight >> 1, mPaint);
                 int blockDrawHeight = (int) (((float) mHeight / 2) * mBlockDrawingProgress);
-                canvas.drawRect(mWidth / 2, 0, mWidth, blockDrawHeight + 1, mPaint);
+                canvas.drawRect(mWidth >> 1, 0, mWidth, blockDrawHeight + 1, mPaint);
                 break;
             }
         }

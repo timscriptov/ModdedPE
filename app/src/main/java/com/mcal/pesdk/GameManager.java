@@ -25,6 +25,7 @@ import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.pesdk.nativeapi.NativeUtils;
 import com.mcal.pesdk.nmod.NModLib;
 import com.mcal.pesdk.utils.AssetOverrideManager;
+import com.mcal.pesdk.utils.MinecraftInfo;
 import com.mojang.minecraftpe.MainActivity;
 
 import org.jetbrains.annotations.NotNull;
@@ -46,10 +47,10 @@ public class GameManager {
 
     public void onMinecraftActivityCreate(@NotNull MainActivity activity, Bundle savedInstanceState) {
         boolean safeMode = Preferences.isSafeMode();
-        AssetOverrideManager.addAssetOverride(activity.getAssets(), mPESdk.getMinecraftInfo().getMinecraftPackageContext().getPackageResourcePath());
+        AssetOverrideManager.addAssetOverride(activity.getAssets(), MinecraftInfo.getMinecraftPackageContext().getPackageResourcePath());
 
         if (!safeMode) {
-            NativeUtils.setValues(activity);
+            //NativeUtils.setValues(activity);
             Gson gson = new Gson();
             Bundle data = activity.getIntent().getExtras();
 

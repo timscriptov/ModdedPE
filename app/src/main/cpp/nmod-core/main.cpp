@@ -6,13 +6,15 @@
 #include <string>
 #include <cxxabi.h>
 #include <dlfcn.h>
+#include "xhook.h"
 
 //-------------------------------------------------------------
 // Variants
 //-------------------------------------------------------------
 
 JavaVM* mJvm = nullptr;
-std::string* mAddrAndroidAppDataPath = nullptr;
+//std::string* mAddrAndroidAppDataPath = nullptr;
+
 std::string mMCPENativeLibPath;
 
 //-------------------------------------------------------------
@@ -31,9 +33,10 @@ std::string toString(JNIEnv* env, jstring j_str) {
 //-------------------------------------------------------------
 
 namespace NModAPI {
-    void nativeSetDataDirectory(JNIEnv*env,jobject thiz,jstring directory) {
-        *mAddrAndroidAppDataPath = toString(env,directory);
-    }
+    //void nativeSetDataDirectory(JNIEnv*env,jobject thiz,jstring directory) {
+    //    *mAddrAndroidAppDataPath = toString(env,directory);
+    //}
+
     jboolean nativeCallOnActivityFinish(JNIEnv*env,jobject thiz,jstring libname,jobject mainActivity) {
         void* image=dlopen(toString(env,libname).c_str(),RTLD_LAZY);
         void (*NMod_onActivityFinish)(JNIEnv*env,jobject thiz)=
@@ -94,7 +97,7 @@ extern "C" JNIEXPORT jboolean JNICALL Java_com_mcal_pesdk_nmod_NModLib_nativeReg
 
 extern "C" JNIEXPORT jboolean JNICALL Java_com_mcal_pesdk_nativeapi_NativeUtils_nativeRegisterNatives(JNIEnv*env, jclass thiz, jclass cls) {
     JNINativeMethod methods[] = {
-        {"nativeSetDataDirectory", "(Ljava/lang/String;)V", (void *)&NModAPI::nativeSetDataDirectory},
+        //{"nativeSetDataDirectory", "(Ljava/lang/String;)V", (void *)&NModAPI::nativeSetDataDirectory},
         {"nativeDemangle", "(Ljava/lang/String;)Ljava/lang/String;", (void *)&NModAPI::nativeDemangle}
     };
     
@@ -104,10 +107,13 @@ extern "C" JNIEXPORT jboolean JNICALL Java_com_mcal_pesdk_nativeapi_NativeUtils_
 }
 
 extern "C" JNIEXPORT void JNICALL Java_com_mcal_pesdk_nativeapi_LibraryLoader_nativeOnNModAPILoaded(JNIEnv*env, jclass thiz, jstring libPath) {
-    const char* mNativeLibPath = toString(env,libPath).c_str();
+    const char *mNativeLibPath;
+    mNativeLibPath = toString(env, libPath).c_str();
     mMCPENativeLibPath = mNativeLibPath;
     void* imageMCPE = (void*)dlopen(mNativeLibPath,RTLD_LAZY);
-    mAddrAndroidAppDataPath = ((std::string*)dlsym(imageMCPE,"_ZN19AppPlatform_android20ANDROID_APPDATA_PATHE"));
+
+    // Deleted in Minecraft 1.16.210
+    //mAddrAndroidAppDataPath = ((std::string*)dlsym(imageMCPE,"_ZN19AppPlatform_android20ANDROID_APPDATA_PATHE"));
     dlclose(imageMCPE);
 }
 
@@ -117,6 +123,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_mcal_pesdk_nativeapi_LibraryLoader_na
 
 JNIEXPORT jint JNI_OnLoad(JavaVM*vm,void*) {
     mJvm=vm;
+
     return JNI_VERSION_1_6;
 }
 

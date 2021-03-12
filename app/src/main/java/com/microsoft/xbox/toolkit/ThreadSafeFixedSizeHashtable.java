@@ -15,11 +15,29 @@ import java.util.PriorityQueue;
  */
 
 public class ThreadSafeFixedSizeHashtable<K, V> {
-    private final int maxSize;
     private int count = 0;
-    private PriorityQueue<ThreadSafeFixedSizeHashtable<K, V>.KeyTuple> fifo = new PriorityQueue<>();
-    private Hashtable<K, V> hashtable = new Hashtable<>();
-    private Object syncObject = new Object();
+    private final PriorityQueue<ThreadSafeFixedSizeHashtable<K, V>.KeyTuple> fifo = new PriorityQueue<>();
+    private final Hashtable<K, V> hashtable = new Hashtable<>();
+    private final int maxSize;
+    private final Object syncObject = new Object();
+
+    public class KeyTuple implements Comparable<ThreadSafeFixedSizeHashtable<K, V>.KeyTuple> {
+        private int index = 0;
+        private final K key;
+
+        public KeyTuple(K k, int i) {
+            key = k;
+            index = i;
+        }
+
+        public int compareTo(ThreadSafeFixedSizeHashtable<K, V>.@NotNull KeyTuple keyTuple) {
+            return index - keyTuple.index;
+        }
+
+        public K getKey() {
+            return this.key;
+        }
+    }
 
     public ThreadSafeFixedSizeHashtable(int i) {
         this.maxSize = i;
@@ -30,11 +48,11 @@ public class ThreadSafeFixedSizeHashtable<K, V> {
 
     public void put(K k, V v) {
         if (k != null && v != null) {
-            synchronized (this.syncObject) {
-                if (!this.hashtable.containsKey(k)) {
-                    this.count++;
-                    this.fifo.add(new KeyTuple(k, this.count));
-                    this.hashtable.put(k, v);
+            synchronized (syncObject) {
+                if (!hashtable.containsKey(k)) {
+                    count++;
+                    fifo.add(new KeyTuple(k, count));
+                    hashtable.put(k, v);
                     cleanupIfNecessary();
                 }
             }
@@ -46,31 +64,31 @@ public class ThreadSafeFixedSizeHashtable<K, V> {
         if (k == null) {
             return null;
         }
-        synchronized (this.syncObject) {
-            v = this.hashtable.get(k);
+        synchronized (syncObject) {
+            v = hashtable.get(k);
         }
         return v;
     }
 
     public void remove(K k) {
         if (k != null) {
-            synchronized (this.syncObject) {
-                if (this.hashtable.containsKey(k)) {
-                    this.hashtable.remove(k);
-                    KeyTuple keyTuple = null;
-                    Iterator<ThreadSafeFixedSizeHashtable<K, V>.KeyTuple> it = this.fifo.iterator();
+            synchronized (syncObject) {
+                if (hashtable.containsKey(k)) {
+                    hashtable.remove(k);
+                    ThreadSafeFixedSizeHashtable<K, V>.KeyTuple keyTuple = null;
+                    Iterator<ThreadSafeFixedSizeHashtable<K, V>.KeyTuple> it = fifo.iterator();
                     while (true) {
                         if (!it.hasNext()) {
                             break;
                         }
-                        KeyTuple next = it.next();
-                        if (next.key.equals(k)) {
+                        ThreadSafeFixedSizeHashtable<K, V>.KeyTuple next = it.next();
+                        if (((KeyTuple) next).key.equals(k)) {
                             keyTuple = next;
                             break;
                         }
                     }
                     if (keyTuple != null) {
-                        this.fifo.remove(keyTuple);
+                        fifo.remove(keyTuple);
                     }
                 }
             }
@@ -78,36 +96,18 @@ public class ThreadSafeFixedSizeHashtable<K, V> {
     }
 
     public Enumeration<V> elements() {
-        return this.hashtable.elements();
+        return hashtable.elements();
     }
 
     public Enumeration<K> keys() {
-        return this.hashtable.keys();
+        return hashtable.keys();
     }
 
     private void cleanupIfNecessary() {
-        XLEAssert.assertTrue(this.hashtable.size() == this.fifo.size());
-        while (this.hashtable.size() > this.maxSize) {
-            this.hashtable.remove(((KeyTuple) this.fifo.remove()).getKey());
-            XLEAssert.assertTrue(this.hashtable.size() == this.fifo.size());
-        }
-    }
-
-    private class KeyTuple implements Comparable<ThreadSafeFixedSizeHashtable<K, V>.KeyTuple> {
-        public K key;
-        private int index = 0;
-
-        public KeyTuple(K k, int i) {
-            this.key = k;
-            this.index = i;
-        }
-
-        public int compareTo(ThreadSafeFixedSizeHashtable<K, V>.@NotNull KeyTuple keyTuple) {
-            return this.index - keyTuple.index;
-        }
-
-        public K getKey() {
-            return this.key;
+        XLEAssert.assertTrue(hashtable.size() == fifo.size());
+        while (hashtable.size() > maxSize) {
+            hashtable.remove(fifo.remove().getKey());
+            XLEAssert.assertTrue(hashtable.size() == fifo.size());
         }
     }
 }

@@ -66,6 +66,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.appsflyer.AppsFlyerLib;
+import com.mcal.mcpelauncher.data.Preferences;
 import com.mojang.android.StringValue;
 import com.mojang.minecraftpe.input.InputDeviceManager;
 import com.mojang.minecraftpe.platforms.Platform;
@@ -413,7 +414,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         String join = TextUtils.join(SESSION_HISTORY_SEP, arrayList);
         SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(this).edit();
         edit.putString(SESSION_HISTORY_KEY, join);
-        edit.commit();
+        edit.apply();
         Log.i("ModdedPE", "saveSessionHistory: " + this.mSessionHistory.size() + " entries saved");
 
     }

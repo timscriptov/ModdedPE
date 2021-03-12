@@ -57,7 +57,7 @@ dependencies {
     implementation project(':substrate')
     implementation project(':xhook')
     implementation project(':adal')
-    implementation project(':floattext')
+    //implementation project(':floattext')
 
     implementation 'commons-io:commons-io:2.8.0'
 

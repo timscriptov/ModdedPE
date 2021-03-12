@@ -48,12 +48,11 @@
         </intent>
     </queries>
 
-
     <application
         android:name="com.mcal.mcpelauncher.ModdedPEApplication"
         android:allowBackup="false"
         android:fullBackupContent="false"
-        android:debuggable="false"
+        android:debuggable="true"
         android:testOnly="false"
         android:hasCode="true"
         android:icon="@mipmap/ic_launcher"

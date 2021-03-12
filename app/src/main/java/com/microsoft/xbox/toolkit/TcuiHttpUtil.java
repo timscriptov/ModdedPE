@@ -3,13 +3,16 @@ package com.microsoft.xbox.toolkit;
 import android.util.Pair;
 
 import com.microsoft.xbox.idp.util.HttpCall;
+import com.microsoft.xbox.idp.util.HttpHeaders;
 
 import org.apache.http.protocol.HTTP;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -21,91 +24,99 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 
 public class TcuiHttpUtil {
-    public static <T> T getResponseSync(@NotNull HttpCall httpCall, final Class<T> returnClass) throws XLEException {
-        final AtomicReference<Pair<Boolean, T>> notifier = new AtomicReference<>();
-        notifier.set(new Pair(false, null));
-        httpCall.getResponseAsync((httpStatus, stream, headers) -> {
-            T result = (httpStatus >= 200 || httpStatus <= 299) ? GsonUtil.deserializeJson(stream, returnClass) : null;
-            synchronized (notifier) {
-                notifier.set(new Pair(true, result));
-                notifier.notify();
+    public static <T> T getResponseSync(@NotNull HttpCall httpCall, final Class<T> cls) throws XLEException {
+        final AtomicReference<Pair<Boolean, Object>> atomicReference = new AtomicReference<>();
+        atomicReference.set(new Pair<>(false, null));
+        httpCall.getResponseAsync((i, inputStream, httpHeaders) -> {
+            Object deserializeJson = (i >= 200 || i <= 299) ? GsonUtil.deserializeJson(inputStream, cls) : null;
+            synchronized (atomicReference) {
+                atomicReference.set(new Pair<>(true, deserializeJson));
+                atomicReference.notify();
             }
         });
-        synchronized (notifier) {
-            while (!(notifier.get().first).booleanValue()) {
-                try {
-                    notifier.wait();
-                } catch (InterruptedException e) {
+        synchronized (atomicReference) {
+            try {
+                while (true) {
+                    if (!(Boolean) (atomicReference.get()).first) {
+                        atomicReference.wait();
+                    }
                 }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
-        return notifier.get().second;
+        return (T) (atomicReference.get()).second;
     }
 
-    public static boolean getResponseSyncSucceeded(@NotNull HttpCall httpCall, final List<Integer> acceptableStatusCodes) {
-        final AtomicReference<Boolean> notifier = new AtomicReference<>();
-        httpCall.getResponseAsync((httpStatus, stream, headers) -> {
-            synchronized (notifier) {
-                notifier.set(Boolean.valueOf(acceptableStatusCodes.contains(Integer.valueOf(httpStatus))));
-                notifier.notify();
+    public static boolean getResponseSyncSucceeded(@NotNull HttpCall httpCall, final List<Integer> list) {
+        final AtomicReference<Boolean> atomicReference = new AtomicReference<>();
+        httpCall.getResponseAsync((i, inputStream, httpHeaders) -> {
+            synchronized (atomicReference) {
+                atomicReference.set(list.contains(i));
+                atomicReference.notify();
             }
         });
-        synchronized (notifier) {
-            while (notifier.get() == null) {
-                try {
-                    notifier.wait();
-                } catch (InterruptedException e) {
+        synchronized (atomicReference) {
+            try {
+                while (true) {
+                    if (atomicReference.get() == null) {
+                        atomicReference.wait();
+                    }
                 }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
-        return notifier.get().booleanValue();
+        return (atomicReference.get()).booleanValue();
     }
 
     public static String getResponseBodySync(@NotNull HttpCall httpCall) throws XLEException {
-        final AtomicReference<Pair<Boolean, String>> notifier = new AtomicReference<>();
-        notifier.set(new Pair(false, null));
-        httpCall.getResponseAsync((HttpCall.Callback) (httpStatus, stream, headers) -> {
-            if (httpStatus < 200 || httpStatus > 299) {
-                synchronized (notifier) {
-                    notifier.set(new Pair(true, (Object) null));
-                    notifier.notify();
+        final AtomicReference<Pair<Boolean, String>> atomicReference = new AtomicReference<>();
+        atomicReference.set(new Pair<>(false, null));
+        httpCall.getResponseAsync((i, inputStream, httpHeaders) -> {
+            String str = null;
+            if (i < 200 || i > 299) {
+                synchronized (atomicReference) {
+                    atomicReference.set(new Pair<>(true, null));
+                    atomicReference.notify();
                 }
                 return;
             }
-            String responseBody = null;
             try {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(stream, HTTP.UTF_8), 4096);
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8), 4096);
                 StringBuilder sb = new StringBuilder();
                 while (true) {
-                    String line = reader.readLine();
-                    if (line == null) {
+                    String readLine = bufferedReader.readLine();
+                    if (readLine == null) {
                         break;
                     }
-                    sb.append(line + "\n");
+                    sb.append(readLine).append("\n");
                 }
-                responseBody = sb.toString();
-            } catch (IOException ioe) {
-                XLEAssert.assertTrue("Failed to read ShortCircuitProfileMessage string - " + ioe.getMessage(), false);
+                str = sb.toString();
+            } catch (IOException e) {
+                XLEAssert.assertTrue("Failed to read ShortCircuitProfileMessage string - " + e.getMessage(), false);
             }
-            synchronized (notifier) {
-                notifier.set(new Pair(true, responseBody));
-                notifier.notify();
+            synchronized (atomicReference) {
+                atomicReference.set(new Pair<>(true, str));
+                atomicReference.notify();
             }
         });
-        synchronized (notifier) {
-            while (!(notifier.get().first).booleanValue()) {
-                try {
-                    notifier.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        synchronized (atomicReference) {
+            try {
+                while (true) {
+                    if (!(Boolean) (atomicReference.get()).first) {
+                        atomicReference.wait();
+                    }
                 }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
-        return notifier.get().second;
+        return (String) (atomicReference.get()).second;
     }
 
-    public static <T> void throwIfNullOrFalse(T result) throws XLEException {
-        if (result == null && !Boolean.getBoolean(result.toString())) {
+    public static <T> void throwIfNullOrFalse(T t) throws XLEException {
+        if (t == null && !Boolean.getBoolean(t.toString())) {
             throw new XLEException(2);
         }
     }

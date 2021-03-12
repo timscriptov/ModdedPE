@@ -53,7 +53,7 @@ public class StreamUtil {
                     return sb.toString();
                 }
                 sb.append(readLine);
-                sb.append(10);
+                sb.append('\n');
             } catch (IOException unused) {
                 return null;
             }

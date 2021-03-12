@@ -16,9 +16,11 @@
  */
 package com.mcal.mcpelauncher.widget;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
 import com.mcal.mcpelauncher.R;
@@ -28,20 +30,20 @@ import com.mcal.mcpelauncher.utils.BitmapRepeater;
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-public class MCDActionBarView extends RelativeLayout {
-    public MCDActionBarView(android.content.Context context) {
+public class ActionBar extends RelativeLayout {
+    public ActionBar(Context context) {
         super(context);
     }
 
-    public MCDActionBarView(android.content.Context context, android.util.AttributeSet attrs) {
+    public ActionBar(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public MCDActionBarView(android.content.Context context, android.util.AttributeSet attrs, int defStyleAttr) {
+    public ActionBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public MCDActionBarView(android.content.Context context, android.util.AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public ActionBar(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 

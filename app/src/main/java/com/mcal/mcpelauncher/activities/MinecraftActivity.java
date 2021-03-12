@@ -16,12 +16,14 @@
  */
 package com.mcal.mcpelauncher.activities;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
 import android.view.View;
 
@@ -70,6 +72,24 @@ public class MinecraftActivity extends com.mojang.minecraftpe.MainActivity {
     }
 
     @Override
+    public String getObbDirPath() {
+        if (Preferences.isSafeMode()) {
+            return getApplicationContext().getObbDir().getAbsolutePath();
+        } else {
+            return Preferences.getDataSavedPath();
+        }
+    }
+
+    @Override
+    public String getExternalStoragePath() {
+        if (Preferences.isSafeMode()) {
+            return Environment.getExternalStorageDirectory().getAbsolutePath();
+        } else {
+            return Preferences.getDataSavedPath();
+        }
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         if (bound && paused) {
@@ -95,6 +115,7 @@ public class MinecraftActivity extends com.mojang.minecraftpe.MainActivity {
         }
     }
 
+    @SuppressLint("ObsoleteSdkInt")
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);

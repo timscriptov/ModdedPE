@@ -16,10 +16,14 @@
  */
 package com.mcal.mcpelauncher.widget;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.widget.Switch;
+import android.util.AttributeSet;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.mcal.mcpelauncher.R;
 
@@ -27,25 +31,21 @@ import com.mcal.mcpelauncher.R;
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-public class MCDSwitch extends Switch {
+public class Switch extends SwitchCompat {
     Bitmap bitmap;
     Bitmap bitmapClicked;
     Bitmap bitmapNI;
 
-    public MCDSwitch(android.content.Context context) {
+    public Switch(@NonNull Context context) {
         super(context);
     }
 
-    public MCDSwitch(android.content.Context context, android.util.AttributeSet attrs) {
+    public Switch(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public MCDSwitch(android.content.Context context, android.util.AttributeSet attrs, int defStyleAttr) {
+    public Switch(android.content.Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    public MCDSwitch(android.content.Context context, android.util.AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
     }
 
     @Override
@@ -54,7 +54,6 @@ public class MCDSwitch extends Switch {
             bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_switch_default);
             bitmapClicked = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_switch_checked);
             bitmapNI = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_switch_not_important);
-
         }
         if (!super.isClickable())
             canvas.drawBitmap(bitmapNI, 0, 0, null);
