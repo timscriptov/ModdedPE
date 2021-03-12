@@ -72,15 +72,6 @@ public class MinecraftActivity extends com.mojang.minecraftpe.MainActivity {
     }
 
     @Override
-    public String getObbDirPath() {
-        if (Preferences.isSafeMode()) {
-            return getApplicationContext().getObbDir().getAbsolutePath();
-        } else {
-            return Preferences.getDataSavedPath();
-        }
-    }
-
-    @Override
     public String getExternalStoragePath() {
         if (Preferences.isSafeMode()) {
             return Environment.getExternalStorageDirectory().getAbsolutePath();
