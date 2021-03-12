@@ -18,10 +18,10 @@ package com.mcal.mcpelauncher.activities
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.appcompat.widget.LinearLayoutCompat
 
 /**
  * @author Тимашков Иван
@@ -32,11 +32,11 @@ class ExceptionActivity : AppCompatActivity() {
     @SuppressLint("ResourceType")
     override fun onCreate(bundle: Bundle?) {
         super.onCreate(bundle)
-        val mLayoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT).apply {
+        val mLayoutParams = LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.MATCH_PARENT).apply {
             gravity = 17
         }
-        val linearLayout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
+        val linearLayout = LinearLayoutCompat(this).apply {
+            orientation = LinearLayoutCompat.VERTICAL
             layoutParams = mLayoutParams
         }
         val sv = ScrollView(this)

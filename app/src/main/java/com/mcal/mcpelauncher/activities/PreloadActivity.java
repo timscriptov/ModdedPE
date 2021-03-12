@@ -43,7 +43,7 @@ public class PreloadActivity extends BaseActivity {
     private final static int MSG_WRITE_TEXT = 2;
     private final static int MSG_ERROR = 3;
     private final static int MSG_START_NMOD_LOADING_FAILED = 4;
-    private PreloadUIHandler mPreloadUIHandler = new PreloadUIHandler();
+    private final PreloadUIHandler mPreloadUIHandler = new PreloadUIHandler();
     private LinearLayout mPreloadingMessageLayout;
 
     @Override
@@ -68,7 +68,7 @@ public class PreloadActivity extends BaseActivity {
     }
 
     private class PreloadThread extends Thread {
-        private ArrayList<NMod> mFailedNMods = new ArrayList<>();
+        private final ArrayList<NMod> mFailedNMods = new ArrayList<>();
 
         @Override
         public void run() {

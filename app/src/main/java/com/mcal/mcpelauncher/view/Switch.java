@@ -332,18 +332,22 @@ public class Switch extends View implements Checkable {
         public void onAnimationRepeat(Animator animation) {
         }
     };
+
     public Switch(Context context) {
         super(context);
         init(context, null);
     }
+
     public Switch(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
+
     public Switch(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public Switch(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
