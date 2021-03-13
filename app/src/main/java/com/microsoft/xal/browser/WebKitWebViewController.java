@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2020 Тимашков Иван
+ * Copyright (C) 2018-2021 Тимашков Иван
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,8 +76,8 @@ public class WebKitWebViewController extends AppCompatActivity {
             finish();
             return;
         }
-        WebView.ShowUrlType showUrlType = (WebView.ShowUrlType) extras.get(SHOW_TYPE);
-        if (showUrlType == WebView.ShowUrlType.CookieRemoval || showUrlType == WebView.ShowUrlType.CookieRemovalSkipIfSharedCredentials) {
+        ShowUrlType showUrlType = (ShowUrlType) extras.get(SHOW_TYPE);
+        if (showUrlType == ShowUrlType.CookieRemoval || showUrlType == ShowUrlType.CookieRemovalSkipIfSharedCredentials) {
             deleteCookies("login.live.com", true);
             deleteCookies("account.live.com", true);
             deleteCookies("live.com", true);

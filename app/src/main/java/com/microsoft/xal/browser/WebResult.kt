@@ -16,25 +16,10 @@
  */
 package com.microsoft.xal.browser
 
-import android.annotation.SuppressLint
-import android.content.Intent
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-
 /**
- * 05.10.2020
- *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-class IntentHandler : AppCompatActivity() {
-    @SuppressLint("WrongConstant")
-    public override fun onCreate(bundle: Bundle?) {
-        super.onCreate(bundle)
-        val intent = Intent(this, WebView::class.java)
-        intent.data = getIntent().data
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        startActivity(intent)
-        finish()
-    }
+enum class WebResult {
+    SUCCESS, FAIL, CANCEL
 }

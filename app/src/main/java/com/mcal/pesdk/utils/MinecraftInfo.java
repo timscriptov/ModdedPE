@@ -16,6 +16,7 @@
  */
 package com.mcal.pesdk.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
@@ -33,12 +34,13 @@ import java.util.regex.Pattern;
  * @author https://github.com/TimScriptov
  */
 public class MinecraftInfo {
+    @SuppressLint("StaticFieldLeak")
     private static Context mContext;
+    @SuppressLint("StaticFieldLeak")
     private static Context mMCContext;
 
     public MinecraftInfo(@NotNull Context context) {
-        this.mContext = context;
-
+        mContext = context;
         try {
             mMCContext = context.createPackageContext(Preferences.getMinecraftPEPackageName(), Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);
         } catch (PackageManager.NameNotFoundException e) {

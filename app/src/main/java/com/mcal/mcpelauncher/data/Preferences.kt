@@ -16,7 +16,6 @@
  */
 package com.mcal.mcpelauncher.data
 
-import android.os.Environment
 import androidx.preference.PreferenceManager
 import com.mcal.mcpelauncher.ModdedPEApplication
 import com.mcal.mcpelauncher.utils.ScopedStorage

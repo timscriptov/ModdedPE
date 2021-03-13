@@ -1,17 +1,28 @@
+/*
+ * Copyright (C) 2018-2021 Тимашков Иван
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 package com.microsoft.xal.browser;
-
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Base64;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabColorSchemeParams;
@@ -22,18 +33,11 @@ import com.appboy.Constants;
 import com.mcal.mcpelauncher.R;
 import com.microsoft.aad.adal.AuthenticationConstants;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.spongycastle.asn1.cmp.PKIFailureInfo;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -53,16 +57,6 @@ public class WebView extends AppCompatActivity {
     public static final String SHOW_TYPE = "SHOW_TYPE";
     public static final String START_URL = "START_URL";
     public static final int WEB_KIT_WEB_VIEW_REQUEST = 8053;
-    private static final Map<String, String> customTabsAllowedBrowsers;
-
-    static {
-        HashMap hashMap = new HashMap();
-        customTabsAllowedBrowsers = hashMap;
-        customTabsAllowedBrowsers.put("com.android.chrome", "OJGKRT0HGZNU+LGa8F7GViztV4g=");
-        customTabsAllowedBrowsers.put("org.mozilla.firefox", "kg9Idqale0pqL0zK9l99Kc4m/yw=");
-        customTabsAllowedBrowsers.put("com.microsoft.emmx", "P2QOJ59jvOpxCCrn6MfvotoBTK0=");
-        customTabsAllowedBrowsers.put("com.sec.android.app.sbrowser", "nKUXDzgZGd/gRG/NqxixmhQ7MWM=");
-    }
 
     private final Lock m_lock = new ReentrantLock();
     private long m_cancelDelay = 500;
@@ -110,12 +104,6 @@ public class WebView extends AppCompatActivity {
         urlOperationFailed(operationId, false, null);
     }
 
-    private static String hashFromSignature(@NotNull Signature signature) throws NoSuchAlgorithmException {
-        MessageDigest instance = MessageDigest.getInstance("SHA");
-        instance.update(signature.toByteArray());
-        return Base64.encodeToString(instance.digest(), 2);
-    }
-
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         if (getIntent().getData() == null) {
@@ -139,7 +127,7 @@ public class WebView extends AppCompatActivity {
             if (showUrlType == ShowUrlType.NonAuthFlow) {
                 useInProcBrowser = true;
             }
-            @SuppressLint("WrongConstant") ResolveInfo resolveActivity = getApplicationContext().getPackageManager().resolveActivity(new Intent("android.intent.action.VIEW", Uri.parse(AuthenticationConstants.Broker.REDIRECT_SSL_PREFIX)), PKIFailureInfo.notAuthorized);
+            @SuppressLint("WrongConstant") ResolveInfo resolveActivity = getApplicationContext().getPackageManager().resolveActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(AuthenticationConstants.Broker.REDIRECT_SSL_PREFIX)), PKIFailureInfo.notAuthorized);
             if (resolveActivity != null) {
                 defaultBrowserPackageName = resolveActivity.activityInfo.packageName;
             }
@@ -149,8 +137,6 @@ public class WebView extends AppCompatActivity {
                 startWebView(startUrl, endUrl, showUrlType);
             } else {
                 if (!browserSupportsCustomTabs(defaultBrowserPackageName)) {
-                    startWebView(startUrl, endUrl, showUrlType);
-                } else if (!browserAllowedForCustomTabs(defaultBrowserPackageName)) {
                     startWebView(startUrl, endUrl, showUrlType);
                 } else {
                     startCustomTabsInBrowser(startUrl, endUrl, showUrlType);
@@ -263,28 +249,6 @@ public class WebView extends AppCompatActivity {
         }
     }
 
-    private boolean browserAllowedForCustomTabs(String browserPackageName) {
-        String knownSignatureHash = customTabsAllowedBrowsers.get(browserPackageName);
-        if (knownSignatureHash == null) {
-            return false;
-        }
-        try {
-            @SuppressLint({"WrongConstant", "PackageManagerGetSignatures"}) PackageInfo packageInfo = getApplicationContext().getPackageManager().getPackageInfo(browserPackageName, 64);
-            if (packageInfo == null) {
-                return false;
-            }
-            for (Signature hashFromSignature : packageInfo.signatures) {
-                if (hashFromSignature(hashFromSignature).equals(knownSignatureHash)) {
-                    return true;
-                }
-            }
-            return false;
-        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
     private boolean browserSupportsCustomTabs(String packageName) {
         for (ResolveInfo resolveInfo : getApplicationContext().getPackageManager().queryIntentServices(new Intent("android.support.customtabs.action.CustomTabsService"), 0)) {
             if (resolveInfo.serviceInfo.packageName.equals(packageName)) {
@@ -292,51 +256,5 @@ public class WebView extends AppCompatActivity {
             }
         }
         return false;
-    }
-
-    public enum WebResult {
-        SUCCESS,
-        FAIL,
-        CANCEL
-    }
-
-    public enum ShowUrlType {
-        Normal,
-        CookieRemoval,
-        CookieRemovalSkipIfSharedCredentials,
-        NonAuthFlow;
-
-        @Contract(pure = true)
-        public static @Nullable ShowUrlType fromInt(int val) {
-            if (val == 0) {
-                return Normal;
-            }
-            if (val == 1) {
-                return CookieRemoval;
-            }
-            if (val == 2) {
-                return CookieRemovalSkipIfSharedCredentials;
-            }
-            if (val != 3) {
-                return null;
-            }
-            return NonAuthFlow;
-        }
-    }
-
-    static class XalWebResult {
-        static final int[] mWebResult;
-
-        static {
-            int[] iArr = new int[WebResult.values().length];
-            mWebResult = iArr;
-            iArr[WebResult.SUCCESS.ordinal()] = 1;
-            mWebResult[WebResult.CANCEL.ordinal()] = 2;
-            try {
-                mWebResult[WebResult.FAIL.ordinal()] = 3;
-            } catch (NoSuchFieldError e) {
-                e.printStackTrace();
-            }
-        }
     }
 }

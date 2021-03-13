@@ -16,25 +16,31 @@
  */
 package com.microsoft.xal.browser
 
-import android.annotation.SuppressLint
-import android.content.Intent
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import org.jetbrains.annotations.Contract
 
 /**
- * 05.10.2020
- *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-class IntentHandler : AppCompatActivity() {
-    @SuppressLint("WrongConstant")
-    public override fun onCreate(bundle: Bundle?) {
-        super.onCreate(bundle)
-        val intent = Intent(this, WebView::class.java)
-        intent.data = getIntent().data
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        startActivity(intent)
-        finish()
+enum class ShowUrlType {
+    Normal, CookieRemoval, CookieRemovalSkipIfSharedCredentials, NonAuthFlow;
+
+    companion object {
+        @JvmStatic
+        @Contract(pure = true)
+        fun fromInt(`val`: Int): ShowUrlType? {
+            if (`val` == 0) {
+                return Normal
+            }
+            if (`val` == 1) {
+                return CookieRemoval
+            }
+            if (`val` == 2) {
+                return CookieRemovalSkipIfSharedCredentials
+            }
+            return if (`val` != 3) {
+                null
+            } else NonAuthFlow
+        }
     }
 }
