@@ -3,14 +3,11 @@ package com.microsoft.xbox.toolkit;
 import android.util.Pair;
 
 import com.microsoft.xbox.idp.util.HttpCall;
-import com.microsoft.xbox.idp.util.HttpHeaders;
 
-import org.apache.http.protocol.HTTP;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;

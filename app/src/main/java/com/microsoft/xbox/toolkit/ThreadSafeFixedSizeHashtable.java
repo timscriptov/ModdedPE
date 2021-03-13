@@ -15,29 +15,11 @@ import java.util.PriorityQueue;
  */
 
 public class ThreadSafeFixedSizeHashtable<K, V> {
-    private int count = 0;
     private final PriorityQueue<ThreadSafeFixedSizeHashtable<K, V>.KeyTuple> fifo = new PriorityQueue<>();
     private final Hashtable<K, V> hashtable = new Hashtable<>();
     private final int maxSize;
     private final Object syncObject = new Object();
-
-    public class KeyTuple implements Comparable<ThreadSafeFixedSizeHashtable<K, V>.KeyTuple> {
-        private int index = 0;
-        private final K key;
-
-        public KeyTuple(K k, int i) {
-            key = k;
-            index = i;
-        }
-
-        public int compareTo(ThreadSafeFixedSizeHashtable<K, V>.@NotNull KeyTuple keyTuple) {
-            return index - keyTuple.index;
-        }
-
-        public K getKey() {
-            return this.key;
-        }
-    }
+    private int count = 0;
 
     public ThreadSafeFixedSizeHashtable(int i) {
         this.maxSize = i;
@@ -108,6 +90,24 @@ public class ThreadSafeFixedSizeHashtable<K, V> {
         while (hashtable.size() > maxSize) {
             hashtable.remove(fifo.remove().getKey());
             XLEAssert.assertTrue(hashtable.size() == fifo.size());
+        }
+    }
+
+    public class KeyTuple implements Comparable<ThreadSafeFixedSizeHashtable<K, V>.KeyTuple> {
+        private final K key;
+        private int index = 0;
+
+        public KeyTuple(K k, int i) {
+            key = k;
+            index = i;
+        }
+
+        public int compareTo(ThreadSafeFixedSizeHashtable<K, V>.@NotNull KeyTuple keyTuple) {
+            return index - keyTuple.index;
+        }
+
+        public K getKey() {
+            return this.key;
         }
     }
 }

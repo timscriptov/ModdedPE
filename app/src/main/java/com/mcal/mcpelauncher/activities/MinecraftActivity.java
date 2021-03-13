@@ -23,14 +23,12 @@ import android.content.ServiceConnection;
 import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.IBinder;
 import android.view.View;
 
 import com.mcal.mcpelauncher.ModdedPEApplication;
 import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.mcpelauncher.services.SoundService;
-import com.mcal.mcpelauncher.utils.ScopedStorage;
 import com.mcal.pesdk.PESdk;
 
 /**

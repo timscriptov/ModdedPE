@@ -22,7 +22,6 @@ import android.os.Bundle;
 import com.google.gson.Gson;
 import com.mcal.mcpelauncher.data.Constants;
 import com.mcal.mcpelauncher.data.Preferences;
-import com.mcal.pesdk.nativeapi.NativeUtils;
 import com.mcal.pesdk.nmod.NModLib;
 import com.mcal.pesdk.utils.AssetOverrideManager;
 import com.mcal.pesdk.utils.MinecraftInfo;

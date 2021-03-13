@@ -16,14 +16,6 @@
  */
 package com.mcal.pesdk.nativeapi;
 
-import android.content.Context;
-import android.os.Environment;
-
-import com.mcal.mcpelauncher.data.Constants;
-import com.mcal.mcpelauncher.data.Preferences;
-
-import java.io.File;
-
 /**
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov

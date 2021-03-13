@@ -31,7 +31,7 @@ public abstract class XLEObservable<T> {
 
     public synchronized void notifyObservers(AsyncResult<T> asyncResult) {
         XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
-        for (XLEObserver <T> xLEObserver : new ArrayList<>(data)) {
+        for (XLEObserver<T> xLEObserver : new ArrayList<>(data)) {
             xLEObserver.update(asyncResult);
         }
     }

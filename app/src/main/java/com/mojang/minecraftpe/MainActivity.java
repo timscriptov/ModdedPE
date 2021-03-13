@@ -33,7 +33,6 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Debug;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -66,7 +65,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.appsflyer.AppsFlyerLib;
-import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.mcpelauncher.utils.ScopedStorage;
 import com.mojang.android.StringValue;
 import com.mojang.minecraftpe.input.InputDeviceManager;
