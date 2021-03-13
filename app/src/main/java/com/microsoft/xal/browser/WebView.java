@@ -79,14 +79,6 @@ public class WebView extends AppCompatActivity {
                     return;
                 }
 
-                if (startUrl.startsWith("https://sisu.xboxlive.com/client/v8/0000000048183522/view/splash.html?msa=")) {
-                    try {
-                        startUrl = URLDecoder.decode(startUrl.substring(74), "UTF-8");
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                }
-
                 Intent intent = new Intent(context, WebView.class);
                 Bundle bundle = new Bundle();
                 bundle.putLong(OPERATION_ID, operationId);
@@ -164,8 +156,7 @@ public class WebView extends AppCompatActivity {
         if (requestCode == 8053) {
             if (resultCode == -1) {
                 String string = data.getExtras().getString(WebKitWebViewController.RESPONSE_KEY, "");
-                if (string.isEmpty()) {
-                } else {
+                if (!string.isEmpty()) {
                     finishOperation(WebResult.SUCCESS, string);
                     return;
                 }
@@ -195,7 +186,6 @@ public class WebView extends AppCompatActivity {
         super.onDestroy();
         if (m_cancelOperationOnResume) {
             finishOperation(WebResult.CANCEL, null);
-            return;
         }
     }
 

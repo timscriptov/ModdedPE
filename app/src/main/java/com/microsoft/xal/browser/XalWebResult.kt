@@ -21,6 +21,7 @@ package com.microsoft.xal.browser
  * @author https://github.com/TimScriptov
  */
 object XalWebResult {
+    @JvmField
     val mWebResult: IntArray = IntArray(WebResult.values().size)
 
     init {
