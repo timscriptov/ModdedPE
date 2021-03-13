@@ -35,8 +35,10 @@
 -keep class org.fmod.FMOD { *; }
 
 -keep class com.mojang.minecraftpe.ActiveDirectorySignIn { *; }
+-keep class com.mojang.minecraftpe.BatteryMonitor { *; }
 -keep class com.mojang.minecraftpe.HardwareInformation { *; }
 -keep class com.mojang.minecraftpe.MainActivity { *; }
+-keep class com.mojang.minecraftpe.ThermalMonitor { *; }
 -keep class com.mojang.minecraftpe.store.NativeStoreListener { *; }
 -keep class com.mojang.minecraftpe.store.Product { *; }
 -keep class com.mojang.minecraftpe.store.Purchase { *; }

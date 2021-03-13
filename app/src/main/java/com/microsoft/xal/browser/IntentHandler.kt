@@ -14,13 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.microsoft.xal.browser;
+package com.microsoft.xal.browser
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 
 /**
  * 05.10.2020
@@ -28,17 +27,14 @@ import androidx.appcompat.app.AppCompatActivity;
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-
-public class IntentHandler extends AppCompatActivity {
-    public static final String TAG = "IntentHandler";
-
+class IntentHandler : AppCompatActivity() {
     @SuppressLint("WrongConstant")
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        Intent intent = new Intent(this, WebView.class);
-        intent.setData(getIntent().getData());
-        intent.addFlags(603979776);
-        startActivity(intent);
-        finish();
+    public override fun onCreate(bundle: Bundle?) {
+        super.onCreate(bundle)
+        val intent = Intent(this, WebView::class.java)
+        intent.data = getIntent().data
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        startActivity(intent)
+        finish()
     }
 }

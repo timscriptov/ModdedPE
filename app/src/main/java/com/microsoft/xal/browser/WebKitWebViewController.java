@@ -20,6 +20,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebViewClient;
@@ -41,24 +42,17 @@ public class WebKitWebViewController extends AppCompatActivity {
     public static final int RESULT_FAILED = 8054;
     public static final String SHOW_TYPE = "SHOW_TYPE";
     public static final String START_URL = "START_URL";
-    //private android.webkit.WebView m_webView;
 
-    public static void deleteCookies(String str, boolean z) {
+    public static void deleteCookies(String link, boolean z) {
         CookieManager instance = CookieManager.getInstance();
-        StringBuilder sb = new StringBuilder();
-        sb.append(z ? AuthenticationConstants.Broker.REDIRECT_SSL_PREFIX : "http://");
-        sb.append(str);
-        String sb2 = sb.toString();
-        String cookie = instance.getCookie(sb2);
-        boolean z2 = false;
+        String sslPrefix = z ? AuthenticationConstants.Broker.REDIRECT_SSL_PREFIX : "http://";
+        String cookie = instance.getCookie(sslPrefix + link);
         if (cookie != null) {
             String[] split = cookie.split(AuthenticationConstants.Broker.CHALLENGE_REQUEST_CERT_AUTH_DELIMETER);
             for (String split2 : split) {
                 String str2 = split2.split("=")[0];
-                instance.setCookie(sb2, str2.trim() + "=;Domain=" + str + ";Path=/");
-            }
-            if (split.length > 0) {
-                z2 = true;
+                Log.d("WebKitWebViewController", "Deleting cookie: " + str2);
+                instance.setCookie(sslPrefix, str2.trim() + "=;Domain=" + link + ";Path=/");
             }
         }
         if (Build.VERSION.SDK_INT >= 21) {
@@ -96,7 +90,6 @@ public class WebKitWebViewController extends AppCompatActivity {
             return;
         }
         android.webkit.WebView webView = new android.webkit.WebView(this);
-        //this.m_webView = webView;
         setContentView(webView);
         webView.getSettings().setJavaScriptEnabled(true);
         if (Build.VERSION.SDK_INT >= 21) {
@@ -114,7 +107,7 @@ public class WebKitWebViewController extends AppCompatActivity {
                 }
                 Intent intent = new Intent();
                 intent.putExtra(WebKitWebViewController.RESPONSE_KEY, str);
-                setResult(-1, intent);
+                setResult(AppCompatActivity.RESULT_OK, intent);
                 finish();
                 return true;
             }

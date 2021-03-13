@@ -18,7 +18,7 @@ public class BatteryMonitor extends BroadcastReceiver {
 
     public BatteryMonitor(@NotNull Context context) {
         mContext = context;
-        context.registerReceiver(this, new IntentFilter("android.intent.action.BATTERY_CHANGED"));
+        context.registerReceiver(this, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
     }
 
     @Override

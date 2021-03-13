@@ -16,7 +16,7 @@ public class ThermalMonitor extends BroadcastReceiver {
 
     public ThermalMonitor(@NotNull Context context) {
         mContext = context;
-        context.registerReceiver(this, new IntentFilter("android.os.action.POWER_SAVE_MODE_CHANGED"));
+        context.registerReceiver(this, new IntentFilter(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED));
         readPowerMode(context);
     }
 
@@ -33,10 +33,10 @@ public class ThermalMonitor extends BroadcastReceiver {
         readPowerMode(context);
     }
 
-    @SuppressLint("WrongConstant")
+    @SuppressLint({"WrongConstant"})
     private void readPowerMode(Context context) {
         if (Build.VERSION.SDK_INT >= 21) {
-            mLowPowerModeEnabled = ((PowerManager) context.getSystemService("power")).isPowerSaveMode();
+            mLowPowerModeEnabled = ((PowerManager) context.getSystemService(Context.POWER_SERVICE)).isPowerSaveMode();
         }
     }
 }
