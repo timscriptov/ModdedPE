@@ -57,12 +57,10 @@ dependencies {
     implementation project(':substrate')
     implementation project(':xhook')
     implementation project(':adal')
-    //implementation project(':floattext')
 
     implementation 'commons-io:commons-io:2.8.0'
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    //implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
 	implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.preference:preference-ktx:1.1.1'
@@ -79,7 +77,6 @@ dependencies {
     implementation 'com.google.android.gms:play-services-iid:17.0.0'
     implementation 'com.google.firebase:firebase-messaging:21.0.1'
 
-    implementation 'org.zeroturnaround:zt-zip:1.14'
     implementation 'com.anjlab.android.iab.v3:library:1.1.0'
     implementation 'org.jetbrains:annotations:19.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.10"

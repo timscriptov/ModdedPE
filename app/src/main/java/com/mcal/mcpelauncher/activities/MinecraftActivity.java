@@ -74,11 +74,7 @@ public class MinecraftActivity extends com.mojang.minecraftpe.MainActivity {
 
     @Override
     public String getExternalStoragePath() {
-        if (Preferences.isSafeMode()) {
-            return ScopedStorage.getStorageDirectory().toString();
-        } else {
-            return Preferences.getDataSavedPath();
-        }
+        return Preferences.getDataSavedPath();
     }
 
     @Override

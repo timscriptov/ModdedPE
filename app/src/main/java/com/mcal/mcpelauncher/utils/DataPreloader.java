@@ -26,7 +26,7 @@ import com.mcal.pesdk.PESdk;
  * @author https://github.com/TimScriptov
  */
 public class DataPreloader {
-    private PreloadingFinishedListener mListener;
+    private final PreloadingFinishedListener mListener;
     private boolean mIsSleepingFinished = false;
     private boolean mIsPreloadingFinished = false;
 

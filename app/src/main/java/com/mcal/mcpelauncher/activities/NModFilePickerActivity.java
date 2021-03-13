@@ -38,11 +38,14 @@ import com.mcal.mcpelauncher.R;
 import com.mcal.mcpelauncher.utils.ScopedStorage;
 
 import org.jetbrains.annotations.NotNull;
-import org.zeroturnaround.zip.ZipUtil;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 /**
  * @author Тимашков Иван
@@ -197,13 +200,26 @@ public class NModFilePickerActivity extends BaseActivity {
                     final File currentCardViewFile = filesInCurrentPath.get(--p1);
                     AppCompatImageView fileImage = cardView.findViewById(R.id.nmod_picker_item_card_view_image_view);
 
-                    if (currentCardViewFile.isDirectory())
+                    if (currentCardViewFile.isDirectory()) {
                         fileImage.setImageResource(R.drawable.ic_folder);
-                    else if (currentCardViewFile.getName().endsWith(".nmod")) {
-                        byte[] bytes = ZipUtil.unpackEntry(currentCardViewFile, "icon.png");
-                        Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    } else if (currentCardViewFile.getName().endsWith(".nmod")) {
+                        // Отрисовка иконки NMod в файловом мененджере
+                        InputStream imageStream;
+                        try {
+                            ZipFile mZipFile = new ZipFile(currentCardViewFile);
+                            ZipEntry iconEntry = mZipFile.getEntry("icon.png");
+                            if (iconEntry == null) {
+                                return null;
+                            }
+                            imageStream = mZipFile.getInputStream(iconEntry);
+                        } catch (IOException e) {
+                            return null;
+                        }
+                        Bitmap bmp = BitmapFactory.decodeStream(imageStream);
                         fileImage.setImageBitmap(bmp);
-                    } else fileImage.setImageResource(R.drawable.ic_file);
+                    } else {
+                        fileImage.setImageResource(R.drawable.ic_file);
+                    }
 
                     AppCompatTextView textFileName = cardView.findViewById(R.id.nmod_picker_item_card_view_text_name);
                     textFileName.setText(currentCardViewFile.getName());
@@ -214,10 +230,11 @@ public class NModFilePickerActivity extends BaseActivity {
                 if (filesInCurrentPath.size() > 0) {
                     final File currentCardViewFile = filesInCurrentPath.get(p1);
                     AppCompatImageView fileImage = cardView.findViewById(R.id.nmod_picker_item_card_view_image_view);
-                    if (currentCardViewFile.isDirectory())
+                    if (currentCardViewFile.isDirectory()) {
                         fileImage.setImageResource(R.drawable.ic_folder);
-                    else
+                    } else {
                         fileImage.setImageResource(R.drawable.ic_file);
+                    }
 
                     AppCompatTextView textFileName = cardView.findViewById(R.id.nmod_picker_item_card_view_text_name);
                     textFileName.setText(currentCardViewFile.getName());
@@ -246,12 +263,14 @@ public class NModFilePickerActivity extends BaseActivity {
                 File file = (File) msg.obj;
                 if (file == null) {
                     File lastFile = currentPath.getParentFile();
-                    if (isValidParent())
+                    if (isValidParent()) {
                         openDirectory(lastFile);
-                } else if (file.isDirectory())
+                    }
+                } else if (file.isDirectory()) {
                     openDirectory(file);
-                else
+                } else {
                     selectFile(file);
+                }
             }
         }
     }

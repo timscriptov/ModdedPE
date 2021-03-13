@@ -41,7 +41,6 @@ import com.mcal.mcpelauncher.activities.SplashesActivity;
 import com.mcal.mcpelauncher.data.Constants;
 import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.mcpelauncher.services.BackgroundSoundPlayer;
-import com.mcal.mcpelauncher.utils.DesktopGui;
 import com.mcal.mcpelauncher.utils.I18n;
 import com.mcal.mcpelauncher.view.SwitchPreference;
 
@@ -64,12 +63,6 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
             if ((boolean) p2) {
                 ((BackgroundSoundPlayer) getActivity()).bind();
             } else ((BackgroundSoundPlayer) getActivity()).unbind();
-            return true;
-        });
-
-        SwitchPreference mDesktopGuiPreference = findPreference("desktop_gui");
-        mDesktopGuiPreference.setOnPreferenceChangeListener((p1, p2) -> {
-            DesktopGui.run(getContext());
             return true;
         });
 

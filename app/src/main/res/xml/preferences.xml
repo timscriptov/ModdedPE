@@ -30,12 +30,6 @@
             android:key="background_music"
             android:summary="@string/preferences_summary_music"
             android:title="@string/preferences_title_music" />
-        <com.mcal.mcpelauncher.view.SwitchPreference
-            android:icon="@drawable/ic_laptop"
-            android:defaultValue="false"
-            android:key="desktop_gui"
-            android:summary="@string/preferences_summary_desktop_gui"
-            android:title="@string/preferences_title_desktop_gui" />
         <androidx.preference.Preference
             android:icon="@drawable/ic_folder"
             android:key="data_saved_path"

@@ -82,8 +82,6 @@
     <string name="preferences_summary_language">言語を変更します。</string>
     <string name="preferences_title_music">Music</string>
     <string name="preferences_summary_music">Background music while playing</string>
-    <string name="preferences_title_desktop_gui">Use Desktop GUI</string>
-    <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
     <string name="preferences_title_webview_engine">WebView Engine</string>
     <string name="preferences_summary_webview_engine">Select WebView engine</string>
 

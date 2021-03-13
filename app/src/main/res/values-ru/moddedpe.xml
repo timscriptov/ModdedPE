@@ -82,8 +82,6 @@
     <string name="preferences_summary_language">Изменить язык лаунчера.</string>
     <string name="preferences_title_music">Музыка</string>
     <string name="preferences_summary_music">Фоновая музыка во время игры</string>
-    <string name="preferences_title_desktop_gui">Desktop GUI</string>
-    <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
     <string name="preferences_title_webview_engine">WebView движок</string>
     <string name="preferences_summary_webview_engine">Выберите WebView движок</string>
 

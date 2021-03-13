@@ -47,10 +47,6 @@ object Preferences {
         get() = preferences.getBoolean("background_music", false)
 
     @JvmStatic
-    val isDesktopGui: Boolean
-        get() = preferences.getBoolean("desktop_gui", false)
-
-    @JvmStatic
     var isSafeMode: Boolean
         get() = preferences.getBoolean("safe_mode", false)
         set(flag) {
