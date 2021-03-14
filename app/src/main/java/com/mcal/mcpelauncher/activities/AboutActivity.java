@@ -84,7 +84,7 @@ public class AboutActivity extends BaseActivity implements BillingProcessor.IBil
 
     private void openUri(String uri) {
         Intent intent = new Intent();
-        intent.setAction("android.intent.action.VIEW");
+        intent.setAction(Intent.ACTION_VIEW);
         Uri content_url = Uri.parse(uri);
         intent.setData(content_url);
         startActivity(intent);

@@ -82,8 +82,8 @@
     <string name="preferences_summary_language">Изменить язык лаунчера.</string>
     <string name="preferences_title_music">Музыка</string>
     <string name="preferences_summary_music">Фоновая музыка во время игры</string>
-    <string name="preferences_title_webview_engine">WebView движок</string>
-    <string name="preferences_summary_webview_engine">Выберите WebView движок</string>
+    <string name="preferences_title_webview_engine">WebView сервис</string>
+    <string name="preferences_summary_webview_engine">Выберите WebView сервис</string>
 
     <!--Open Game Dialog-->
     <string name="preloading_initing">Запускаем лаунчер</string>

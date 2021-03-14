@@ -49,7 +49,7 @@ public class MCPkgPickerActivity extends BaseActivity {
     public static final int REQUEST_PICK_PACKAGE = 5;
     private static final int MSG_SHOW_LIST_VIEW = 1;
     private static final int MSG_SHOW_UNFOUND_VIEW = 2;
-    private UIHandler mUIHandler = new UIHandler();
+    private final UIHandler mUIHandler = new UIHandler();
     private List<PackageInfo> mInstalledPackages = null;
 
     public static void startThisActivity(AppCompatActivity context) {
@@ -140,7 +140,7 @@ public class MCPkgPickerActivity extends BaseActivity {
     private class PackageListAdapter extends BaseAdapter {
         public PackageListAdapter() {
             Collections.sort(mInstalledPackages, new Comparator<PackageInfo>() {
-                PackageManager pm = getPackageManager();
+                final PackageManager pm = getPackageManager();
 
                 @Override
                 public int compare(PackageInfo o1, PackageInfo o2) {

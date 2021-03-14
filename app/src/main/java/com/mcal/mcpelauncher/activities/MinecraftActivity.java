@@ -23,6 +23,7 @@ import android.content.ServiceConnection;
 import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
 import android.view.View;
 
@@ -72,7 +73,11 @@ public class MinecraftActivity extends com.mojang.minecraftpe.MainActivity {
 
     @Override
     public String getExternalStoragePath() {
-        return Preferences.getDataSavedPath();
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.Q && !Environment.isExternalStorageManager()) {
+            return this.getFilesDir().getAbsolutePath();
+        } else {
+            return Preferences.getDataSavedPath();
+        }
     }
 
     @Override
@@ -105,7 +110,7 @@ public class MinecraftActivity extends com.mojang.minecraftpe.MainActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus && Build.VERSION.SDK_INT >= 19) {
+        if (hasFocus && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             View decorView = getWindow().getDecorView();
             decorView.setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE

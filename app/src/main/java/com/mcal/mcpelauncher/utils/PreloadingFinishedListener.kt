@@ -14,13 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.mcpelauncher.utils;
+package com.mcal.mcpelauncher.utils
 
 /**
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-
-public interface PreloadingFinishedListener {
-    void onPreloadingFinished();
+interface PreloadingFinishedListener {
+    fun onPreloadingFinished()
 }

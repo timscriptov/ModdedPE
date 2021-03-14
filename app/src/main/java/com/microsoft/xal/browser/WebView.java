@@ -36,8 +36,6 @@ import com.microsoft.aad.adal.AuthenticationConstants;
 import org.jetbrains.annotations.NotNull;
 import org.spongycastle.asn1.cmp.PKIFailureInfo;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 

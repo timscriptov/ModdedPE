@@ -71,9 +71,9 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
     private static final int MSG_REFRESH_NMOD_DATA = 6;
     private ListView mListView;
     private View mRootView;
-    private NModProcesserHandler mNModProcesserHandler = new NModProcesserHandler();
+    private final NModProcesserHandler mNModProcesserHandler = new NModProcesserHandler();
     private AlertDialog mProcessingDialog = null;
-    private ReloadHandler mReloadHandler = new ReloadHandler();
+    private final ReloadHandler mReloadHandler = new ReloadHandler();
     private AlertDialog mReloadDialog = null;
     private DataPreloader mDataPreloader = null;
 
@@ -515,8 +515,8 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
     }
 
     private class NModListAdapter extends BaseAdapter {
-        private ArrayList<NMod> mImportedEnabledNMods = new ArrayList<>();
-        private ArrayList<NMod> mImportedDisabledNMods = new ArrayList<>();
+        private final ArrayList<NMod> mImportedEnabledNMods = new ArrayList<>();
+        private final ArrayList<NMod> mImportedDisabledNMods = new ArrayList<>();
 
         NModListAdapter() {
             mImportedEnabledNMods.addAll(getPESdk().getNModAPI().getImportedEnabledNMods());

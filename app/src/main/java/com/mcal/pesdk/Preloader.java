@@ -47,7 +47,7 @@ import java.util.ArrayList;
  */
 public class Preloader {
     private Bundle mBundle;
-    private PESdk mPESdk;
+    private final PESdk mPESdk;
     private PreloadListener mPreloadListener;
     private NModPreloadData mPreloadData = new NModPreloadData();
     private ArrayList<String> mAssetsArrayList = new ArrayList<>();

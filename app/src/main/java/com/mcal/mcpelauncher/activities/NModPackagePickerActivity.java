@@ -47,7 +47,7 @@ public class NModPackagePickerActivity extends BaseActivity {
     public static final int REQUEST_PICK_PACKAGE = 1;
     private static final int MSG_SHOW_LIST_VIEW = 1;
     private static final int MSG_SHOW_UNFOUND_VIEW = 2;
-    private UIHandler mUIHandler = new UIHandler();
+    private final UIHandler mUIHandler = new UIHandler();
     private ArrayList<NMod> nmods = new ArrayList<>();
 
     public static void startThisActivity(AppCompatActivity context) {

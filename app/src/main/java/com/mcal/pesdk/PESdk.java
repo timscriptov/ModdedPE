@@ -26,9 +26,9 @@ import com.mcal.pesdk.utils.MinecraftInfo;
  * @author https://github.com/TimScriptov
  */
 public class PESdk {
-    private MinecraftInfo mMinecraftInfo;
-    private NModAPI mNModAPI;
-    private GameManager mGameManager;
+    private final MinecraftInfo mMinecraftInfo;
+    private final NModAPI mNModAPI;
+    private final GameManager mGameManager;
     private boolean mIsInited;
 
     public PESdk(Context context) {

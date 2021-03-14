@@ -11,7 +11,7 @@ android {
         applicationId "com.mcal.mcpelauncher"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 971621005
+        versionCode 971621006
         versionName "1.16.210.05"
         multiDexEnabled true
         ndk {

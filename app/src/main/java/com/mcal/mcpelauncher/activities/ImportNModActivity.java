@@ -43,7 +43,7 @@ import java.net.URISyntaxException;
 public class ImportNModActivity extends BaseActivity {
     private static final int MSG_SUCCEED = 1;
     private static final int MSG_FAILED = 2;
-    private UIHandler mUIHandler = new UIHandler();
+    private final UIHandler mUIHandler = new UIHandler();
     private NMod mTargetNMod;
     private ExtractFailedException mFailedInfo;
 
@@ -81,7 +81,7 @@ public class ImportNModActivity extends BaseActivity {
     }
 
     private class ImportThread extends Thread {
-        private File mTargetFile;
+        private final File mTargetFile;
 
         ImportThread(File file) {
             mTargetFile = file;

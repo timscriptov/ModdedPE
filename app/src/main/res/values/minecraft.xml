@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="xperiaplayoptimized_content">true</string>
-    <string name="appcenter_android_id">c35d56a4–fe9c–4490–9d16-600825114d4b</string>
+    <string name="appcenter_android_id">c35d56a4–fe9c–4490–9d16–600825114d4b</string>
 
     <string name="xbid_ban_error_body_android">We can\'t sign you in because your account has been suspended from Xbox Live.</string>
     <string name="xbid_catchall_error_android">Sorry, something went wrong. Give it another try, or try on &lt;u&gt;Xbox.com&lt;/u&gt;</string>
@@ -70,5 +70,5 @@
     <string name="ic_RemoveFriend"></string>
     <string name="ic_Close"></string>
     <string name="ic_ApplicationLaunch"></string>
-    <string name="xbid_creation_error_android" />
+    <string name="xbid_creation_error_android" translatable="false" />
 </resources>
