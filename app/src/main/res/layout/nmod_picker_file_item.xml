@@ -2,8 +2,8 @@
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="65dp"
-    android:padding="5dp"
-    android:background="@drawable/moddedpe_main_button_drawable">
+    android:background="@drawable/moddedpe_main_button_drawable"
+    android:padding="5dp">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"

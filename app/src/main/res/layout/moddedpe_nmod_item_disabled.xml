@@ -55,22 +55,22 @@
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/nmod_disabled_add"
-            android:background="@drawable/moddedpe_main_button_drawable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"
+            android:background="@drawable/moddedpe_main_button_drawable"
             android:src="@drawable/ic_plus" />
 
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/nmod_disabled_delete"
-            android:background="@drawable/moddedpe_main_button_drawable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toStartOf="@id/nmod_disabled_add"
+            android:background="@drawable/moddedpe_main_button_drawable"
             android:src="@drawable/ic_delete" />
 
     </RelativeLayout>

@@ -10,8 +10,6 @@
     <string name="xbid_more_info">More info</string>
     <string name="xbid_first_and_last_name_android">%1$s %2$s</string>
     <string name="xbid_voice_over_close_button_text">Close</string>
-    <string name="xbox_live_game_invite_title">Game invite</string>
-    <string name="xbox_live_game_invite_body">%1$s has invited you to play %2$s</string>
     <string name="ChangeRelationship_Label_Friend">Friend</string>
     <string name="ChangeRelationship_Label_Favorite">Favorite</string>
     <string name="ChangeRelationship_RadioButton_Subtext_Favorite">Favorite friends go first on your friends list. You\'ll see when they go online or start broadcasting.</string>

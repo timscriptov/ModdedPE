@@ -73,7 +73,7 @@ public class MinecraftActivity extends com.mojang.minecraftpe.MainActivity {
 
     @Override
     public String getExternalStoragePath() {
-        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.Q && !Environment.isExternalStorageManager()) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q && !Environment.isExternalStorageManager()) {
             return this.getFilesDir().getAbsolutePath();
         } else {
             return Preferences.getDataSavedPath();

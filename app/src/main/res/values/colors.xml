@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <color name="colorAccent">#FF448aff</color>
     <color name="colorPrimaryDark">#212121</color>
@@ -8,7 +8,8 @@
     <color name="xbid_header_background">#ff121212</color>
     <color name="xbid_button_background">#ff349136</color>
     <color name="xbid_button_background_pressed">#ff44a146</color>
-    <color name="xbid_clickable_view_background_pressed">@color/xbid_button_background_pressed</color>
+    <color name="xbid_clickable_view_background_pressed">@color/xbid_button_background_pressed
+    </color>
     <color name="xbid_button_border">#ff54b156</color>
     <color name="xbid_clickable_view_border">@color/xbid_button_border</color>
     <color name="textSoftWhite">#fff1f1f1</color>

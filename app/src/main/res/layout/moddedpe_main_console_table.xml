@@ -42,9 +42,9 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_alignParentEnd="true"
             android:layout_marginEnd="30dp"
             android:layout_marginBottom="30dp">
 
@@ -53,8 +53,8 @@
                 android:layout_width="65dp"
                 android:layout_height="65dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/ic_about"
-                android:background="@drawable/moddedpe_main_button_drawable" />
+                android:background="@drawable/moddedpe_main_button_drawable"
+                android:src="@drawable/ic_about" />
 
         </RelativeLayout>
 
@@ -64,9 +64,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
+            android:layout_margin="5dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="#DEDEDE"
-            android:layout_margin="5dp"
             tools:ignore="RelativeOverlap" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -75,9 +75,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
+            android:layout_margin="5dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="#DEDEDE"
-            android:layout_margin="5dp"
             tools:ignore="RelativeOverlap" />
 
     </RelativeLayout>

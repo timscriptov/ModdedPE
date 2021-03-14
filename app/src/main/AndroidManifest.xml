@@ -11,7 +11,8 @@
     <!-- Просмотр сетевых подключений -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- Изменение/удаление данных на USB-накопителе -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
     <!-- Управление функцией вибросигнала -->
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -27,7 +28,8 @@
     <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
     <!-- uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" / -->
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
 
     <uses-feature
@@ -43,30 +45,30 @@
     <queries>
         <package android:name="com.mojang.minecraftpe" />
         <package android:name="com.mojang.minecrafttrialpe" />
+
         <intent>
-            <action android:name=
-                "android.support.customtabs.action.CustomTabsService" />
+            <action android:name="android.support.customtabs.action.CustomTabsService" />
         </intent>
     </queries>
 
     <application
         android:name="com.mcal.mcpelauncher.ModdedPEApplication"
         android:allowBackup="false"
-        android:fullBackupContent="false"
-        android:isGame="true"
         android:debuggable="false"
-        android:testOnly="false"
+        android:fullBackupContent="false"
         android:hasCode="true"
         android:icon="@mipmap/ic_launcher"
+        android:isGame="true"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
-        android:usesCleartextTraffic="true"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:testOnly="false"
         android:theme="@style/AppTheme"
-        tools:targetApi="q"
-        tools:ignore="HardcodedDebugMode">
+        android:usesCleartextTraffic="true"
+        tools:ignore="HardcodedDebugMode"
+        tools:targetApi="q">
 
         <activity
             android:name="com.mcal.mcpelauncher.activities.MainActivity"
@@ -196,9 +198,9 @@
         </activity>
 
         <activity
+            android:name=".activities.ExceptionActivity"
             android:label="Application Error"
-            android:theme="@style/AppErrorTheme"
-            android:name=".activities.ExceptionActivity" />
+            android:theme="@style/AppErrorTheme" />
 
         <service android:name="com.mcal.mcpelauncher.services.SoundService" />
 
@@ -219,15 +221,15 @@
             android:multiprocess="true" />
 
         <activity
-            android:theme="@style/AppTheme"
             android:name="com.mcal.mcpelauncher.addon.AddonInstallerActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
             android:debuggable="false"
-            android:icon="@drawable/mcd_add_pack"
             android:excludeFromRecents="false"
+            android:icon="@drawable/mcd_add_pack"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape"
-            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
-            android:alwaysRetainTaskState="true">
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="launcher-core" />
@@ -236,86 +238,63 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter -->
             <intent-filter>
-                <action
-                    android:name="android.intent.action.VIEW" />
-                <category
-                    android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="*/*" />
                 <data android:host="*" />
                 <data android:scheme="file" />
                 <data android:scheme="content" />
                 <data android:pathPattern=".*\.mcworld" />
-                <data
-                    android:pathPattern=".*\..*\.mcworld" />
-                <data
-                    android:pathPattern=".*\..*\..*\.mcworld" />
-                <data
-                    android:pathPattern=".*\..*\..*\..*\.mcworld" />
-                <data
-                    android:pathPattern=".*\..*\..*\..*\..*\.mcworld" />
+                <data android:pathPattern=".*\..*\.mcworld" />
+                <data android:pathPattern=".*\..*\..*\.mcworld" />
+                <data android:pathPattern=".*\..*\..*\..*\.mcworld" />
+                <data android:pathPattern=".*\..*\..*\..*\..*\.mcworld" />
                 <data android:pathPattern=".*\.mcpack" />
-                <data
-                    android:pathPattern=".*\..*\.mcpack" />
-                <data
-                    android:pathPattern=".*\..*\..*\.mcpack" />
-                <data
-                    android:pathPattern=".*\..*\..*\..*\.mcpack" />
-                <data
-                    android:pathPattern=".*\..*\..*\..*\..*\.mcpack" />
+                <data android:pathPattern=".*\..*\.mcpack" />
+                <data android:pathPattern=".*\..*\..*\.mcpack" />
+                <data android:pathPattern=".*\..*\..*\..*\.mcpack" />
+                <data android:pathPattern=".*\..*\..*\..*\..*\.mcpack" />
                 <data android:pathPattern=".*\.mcaddon" />
-                <data
-                    android:pathPattern=".*\..*\.mcaddon" />
-                <data
-                    android:pathPattern=".*\..*\..*\.mcaddon" />
-                <data
-                    android:pathPattern=".*\..*\..*\..*\.mcaddon" />
-                <data
-                    android:pathPattern=".*\..*\..*\..*\..*\.mcaddon" />
-                <data
-                    android:pathPattern=".*\.mctemplate" />
-                <data
-                    android:pathPattern=".*\..*\.mctemplate" />
-                <data
-                    android:pathPattern=".*\..*\..*\.mctemplate" />
-                <data
-                    android:pathPattern=".*\..*\..*\..*\.mctemplate" />
-                <data
-                    android:pathPattern=".*\..*\..*\..*\..*\.mctemplate" />
+                <data android:pathPattern=".*\..*\.mcaddon" />
+                <data android:pathPattern=".*\..*\..*\.mcaddon" />
+                <data android:pathPattern=".*\..*\..*\..*\.mcaddon" />
+                <data android:pathPattern=".*\..*\..*\..*\..*\.mcaddon" />
+                <data android:pathPattern=".*\.mctemplate" />
+                <data android:pathPattern=".*\..*\.mctemplate" />
+                <data android:pathPattern=".*\..*\..*\.mctemplate" />
+                <data android:pathPattern=".*\..*\..*\..*\.mctemplate" />
+                <data android:pathPattern=".*\..*\..*\..*\..*\.mctemplate" />
             </intent-filter>
         </activity>
 
         <!-- Minecraft -->
 
         <activity
-            android:theme="@style/SplashScreen"
             android:name="com.mojang.minecraftpe.MainActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
             android:debuggable="false"
             android:excludeFromRecents="false"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape"
-            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
-            android:alwaysRetainTaskState="true">
+            android:theme="@style/SplashScreen">
             <intent-filter>
-                <action
-                    android:name="android.intent.action.VIEW" />
-                <category
-                    android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
-                <action
-                    android:name="xbox_live_game_invite" />
-                <action
-                    android:name="xbox_live_achievement_unlock" />
-                <category
-                    android:name="android.intent.category.DEFAULT" />
+                <action android:name="xbox_live_game_invite" />
+                <action android:name="xbox_live_achievement_unlock" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
-                <action
-                    android:name="android.intent.action.VIEW" />
-                <category
-                    android:name="android.intent.category.DEFAULT" />
-                <category
-                    android:name="android.intent.category.BROWSABLE" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="minecraft" />
             </intent-filter>
             <!-- intent-filter>
@@ -383,12 +362,12 @@
         <meta-data
             android:name="appcenter_android_id"
             android:value="@string/appcenter_android_id" />
+
         <receiver
             android:name="com.appsflyer.SingleInstallBroadcastReceiver"
             android:exported="true">
             <intent-filter>
-                <action
-                    android:name="com.android.vending.INSTALL_REFERRER" />
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
         <uses-library
@@ -396,13 +375,11 @@
             android:required="false" />
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND"
-            android:exported="true">
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
-                <action
-                    android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category
-                    android:name="com.mcal.mcpelauncher" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.mcal.mcpelauncher" />
             </intent-filter>
         </receiver>
 
@@ -410,29 +387,32 @@
 
         <activity
             android:name="com.microsoft.xal.browser.IntentHandler"
+            android:configChanges="orientation"
             android:exported="true"
             android:launchMode="singleTask"
-            android:screenOrientation="sensorLandscape"
-            android:configChanges="orientation">
+            android:screenOrientation="sensorLandscape">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <data android:scheme="ms-xal-0000000048183522" android:host="auth"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <action android:name="android.intent.action.VIEW" />
+                <data
+                    android:host="auth"
+                    android:scheme="ms-xal-0000000048183522" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
 
         <activity
             android:name="com.microsoft.xal.browser.WebKitWebViewController"
-            android:screenOrientation="sensorLandscape"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize" />
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
+            android:screenOrientation="sensorLandscape" />
 
         <activity
             android:name="com.microsoft.xal.browser.WebView"
+            android:configChanges="orientation"
             android:exported="false"
             android:launchMode="singleTask"
-            android:screenOrientation="sensorLandscape"
-            android:configChanges="orientation" />
+            android:screenOrientation="sensorLandscape" />
 
     </application>
 

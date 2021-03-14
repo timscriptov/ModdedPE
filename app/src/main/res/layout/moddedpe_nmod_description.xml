@@ -74,8 +74,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:text="@string/nmod_description_description_title"
-                android:textStyle="bold"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold" />
 
         </RelativeLayout>
 
@@ -109,8 +109,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:text="@string/nmod_description_about_title"
-                android:textStyle="bold"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold" />
 
         </RelativeLayout>
 
@@ -200,8 +200,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:text="@string/nmod_description_whatsnew_title"
-                android:textStyle="bold"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold" />
 
         </RelativeLayout>
 

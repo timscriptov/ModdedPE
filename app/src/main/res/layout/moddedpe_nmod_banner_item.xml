@@ -25,8 +25,8 @@
             android:id="@+id/moddedpe_nmod_banner_item_text_view_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_margin="3dp"
+            android:gravity="center"
             android:maxLines="1"
             android:text="@string/main_default_minecraft_title"
             android:textColor="#DEDEDE" />

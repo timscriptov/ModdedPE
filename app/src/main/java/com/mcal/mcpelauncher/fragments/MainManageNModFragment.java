@@ -69,11 +69,11 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
     private static final int MSG_SHOW_REPLACED_DIALOG = 4;
     private static final int MSG_SHOW_FAILED_DIALOG = 5;
     private static final int MSG_REFRESH_NMOD_DATA = 6;
+    private final NModProcesserHandler mNModProcesserHandler = new NModProcesserHandler();
+    private final ReloadHandler mReloadHandler = new ReloadHandler();
     private ListView mListView;
     private View mRootView;
-    private final NModProcesserHandler mNModProcesserHandler = new NModProcesserHandler();
     private AlertDialog mProcessingDialog = null;
-    private final ReloadHandler mReloadHandler = new ReloadHandler();
     private AlertDialog mReloadDialog = null;
     private DataPreloader mDataPreloader = null;
 
