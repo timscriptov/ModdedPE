@@ -1,32 +1,33 @@
 package com.mcal.mcpelauncher.addon;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import com.mcal.pesdk.utils.ABIInfo;
+import com.mcal.pesdk.utils.AssetOverrideManager;
+import com.mcal.pesdk.utils.SplitParser;
+import com.mojang.minecraftpe.MainActivity;
 
-import com.mcal.mcpelauncher.R;
-import com.mcal.mcpelauncher.addon.utils.ASplitParser;
-import com.mcal.mcpelauncher.utils.ExceptionHandler;
-import com.mcal.pesdk.nativeapi.LibraryLoader;
+public class AddonInstallerActivity extends MainActivity {
+    public static final String PACKAGE_NAME = "com.mojang.minecraftpe";
 
-public class AddonInstallerActivity extends AppCompatActivity {
+    @SuppressLint("UnsafeDynamicallyLoadedCode")
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
-        setContentView(R.layout.moddedpe_addon_installer);
-
-        ASplitParser.parse(this);
-        LibraryLoader.loadCppShared(ASplitParser.getMinecraftPackageNativeLibraryDir(this));
-        LibraryLoader.loadFMod(ASplitParser.getMinecraftPackageNativeLibraryDir(this));
-        LibraryLoader.loadMinecraftPE(ASplitParser.getMinecraftPackageNativeLibraryDir(this));
-        LibraryLoader.loadLauncher(ASplitParser.getMinecraftPackageNativeLibraryDir(this));
-
-        Intent intent = new Intent(AddonInstallerActivity.this, MinecraftLoaderActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        finish();
+        try {
+            Context mc = this.createPackageContext(PACKAGE_NAME, Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);
+            AssetOverrideManager.addAssetOverride(this.getAssets(), mc.getPackageResourcePath());
+            SplitParser.parse(this);
+        } catch (Error | PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            System.load(this.getCacheDir().getPath() + "/lib/" + ABIInfo.getABI() + "/libc++_shared.so");
+            System.load(this.getCacheDir().getPath() + "/lib/" + ABIInfo.getABI() + "/libfmod.so");
+            System.load(this.getCacheDir().getPath() + "/lib/" + ABIInfo.getABI() + "/libminecraftpe.so");
+            System.loadLibrary("launcher-core");
+        }
     }
 }

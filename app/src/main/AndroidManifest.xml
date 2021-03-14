@@ -218,7 +218,7 @@
             android:exported="false"
             android:multiprocess="true" />
 
-        <!-- activity
+        <activity
             android:theme="@style/AppTheme"
             android:name="com.mcal.mcpelauncher.addon.AddonInstallerActivity"
             android:debuggable="false"
@@ -228,10 +228,13 @@
             android:screenOrientation="sensorLandscape"
             android:configChanges="fontScale|keyboard|keyboardHidden|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
             android:alwaysRetainTaskState="true">
-            <intent-filter>
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="launcher-core" />
+            <!-- intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter -->
             <intent-filter>
                 <action
                     android:name="android.intent.action.VIEW" />
@@ -279,21 +282,6 @@
                 <data
                     android:pathPattern=".*\..*\..*\..*\..*\.mctemplate" />
             </intent-filter>
-        </activity -->
-
-        <activity
-            android:theme="@style/AppTheme"
-            android:name="com.mcal.mcpelauncher.addon.MinecraftLoaderActivity"
-            android:label="@string/app_name"
-            android:debuggable="false"
-            android:excludeFromRecents="false"
-            android:launchMode="singleTask"
-            android:screenOrientation="sensorLandscape"
-            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
-            android:alwaysRetainTaskState="true">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="launcher-core" />
         </activity>
 
         <!-- Minecraft -->
