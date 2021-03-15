@@ -297,53 +297,6 @@
 
                 <data android:scheme="minecraft" />
             </intent-filter>
-            <!-- intent-filter>
-                <action
-                    android:name="android.intent.action.VIEW" />
-                <category
-                    android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="*/*" />
-                <data android:host="*" />
-                <data android:scheme="file" />
-                <data android:scheme="content" />
-                <data android:pathPattern=".*\.mcworld" />
-                <data
-                    android:pathPattern=".*\..*\.mcworld" />
-                <data
-                    android:pathPattern=".*\..*\..*\.mcworld" />
-                <data
-                    android:pathPattern=".*\..*\..*\..*\.mcworld" />
-                <data
-                    android:pathPattern=".*\..*\..*\..*\..*\.mcworld" />
-                <data android:pathPattern=".*\.mcpack" />
-                <data
-                    android:pathPattern=".*\..*\.mcpack" />
-                <data
-                    android:pathPattern=".*\..*\..*\.mcpack" />
-                <data
-                    android:pathPattern=".*\..*\..*\..*\.mcpack" />
-                <data
-                    android:pathPattern=".*\..*\..*\..*\..*\.mcpack" />
-                <data android:pathPattern=".*\.mcaddon" />
-                <data
-                    android:pathPattern=".*\..*\.mcaddon" />
-                <data
-                    android:pathPattern=".*\..*\..*\.mcaddon" />
-                <data
-                    android:pathPattern=".*\..*\..*\..*\.mcaddon" />
-                <data
-                    android:pathPattern=".*\..*\..*\..*\..*\.mcaddon" />
-                <data
-                    android:pathPattern=".*\.mctemplate" />
-                <data
-                    android:pathPattern=".*\..*\.mctemplate" />
-                <data
-                    android:pathPattern=".*\..*\..*\.mctemplate" />
-                <data
-                    android:pathPattern=".*\..*\..*\..*\.mctemplate" />
-                <data
-                    android:pathPattern=".*\..*\..*\..*\..*\.mctemplate" />
-            </intent-filter -->
         </activity>
 
         <service
@@ -370,6 +323,7 @@
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
+
         <uses-library
             android:name="xperiaplaycertified"
             android:required="false" />

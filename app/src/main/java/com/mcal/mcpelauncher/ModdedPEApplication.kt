@@ -23,6 +23,8 @@ import android.content.SharedPreferences
 import android.content.res.AssetManager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
+import com.balsikandar.crashreporter.CrashReporter
+import com.balsikandar.crashreporter.utils.CrashUtil
 import com.mcal.mcpelauncher.data.Preferences.isNightMode
 import com.mcal.pesdk.PESdk
 import org.jetbrains.annotations.Nullable
@@ -34,6 +36,7 @@ import org.jetbrains.annotations.Nullable
 class ModdedPEApplication : Application() {
     override fun onCreate() {
         super.onCreate()
+        CrashReporter.initialize(this, CrashUtil.getDefaultPath());
         context = this
         mPESdk = PESdk(this)
         if (isNightMode) {

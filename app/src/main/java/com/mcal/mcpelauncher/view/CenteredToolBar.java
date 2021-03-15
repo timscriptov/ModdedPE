@@ -1,19 +1,3 @@
-package com.mcal.mcpelauncher.view;
-
-import android.content.Context;
-import android.graphics.Typeface;
-import android.text.TextUtils;
-import android.util.AttributeSet;
-import android.view.Gravity;
-
-import androidx.annotation.StringRes;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.appcompat.widget.Toolbar;
-
-import com.mcal.mcpelauncher.R;
-
-import org.jetbrains.annotations.Nullable;
-
 /*
  * Copyright (C) 2018-2021 Тимашков Иван
  *
@@ -30,6 +14,21 @@ import org.jetbrains.annotations.Nullable;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+package com.mcal.mcpelauncher.view;
+
+import android.content.Context;
+import android.graphics.Typeface;
+import android.text.TextUtils;
+import android.util.AttributeSet;
+import android.view.Gravity;
+
+import androidx.annotation.StringRes;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.Toolbar;
+
+import com.mcal.mcpelauncher.R;
+
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Тимашков Иван
