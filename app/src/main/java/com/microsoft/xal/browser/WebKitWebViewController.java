@@ -35,8 +35,6 @@ import com.microsoft.aad.adal.AuthenticationConstants;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-
 /**
  * 05.10.2020
  *
@@ -52,8 +50,6 @@ public class WebKitWebViewController extends AppCompatActivity {
     public static final String START_URL = "START_URL";
     public static final String REQUEST_HEADER_KEYS = "REQUEST_HEADER_KEYS";
     public static final String REQUEST_HEADER_VALUES = "REQUEST_HEADER_VALUES";
-
-    private WebView webView;
 
     public String endUrl;
     public String startUrl;
@@ -107,7 +103,7 @@ public class WebKitWebViewController extends AppCompatActivity {
             deleteCookies("sisu.xboxlive.com", true);
             Intent intent = new Intent();
             intent.putExtra(RESPONSE_KEY, endUrl);
-            setResult(-1, intent);
+            setResult(AppCompatActivity.RESULT_OK, intent);
             finish();
             return;
         }
@@ -122,10 +118,10 @@ public class WebKitWebViewController extends AppCompatActivity {
         }*/
 
         setContentView(R.layout.xal_webview);
-        webView = findViewById(R.id.webView);
+        WebView webView = findViewById(R.id.webView);
 
         webView.getSettings().setJavaScriptEnabled(true);
-        if (Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             webView.getSettings().setMixedContentMode(2);
         }
         webView.setWebChromeClient(new XalWebChromeClient());

@@ -15,7 +15,8 @@
 -keep class org.slf4j.LoggerFactory
 
 -keep class com.microsoft.xal.androidjava.DeviceInfo { *; }
--keep class com.microsoft.xal.browser.WebView { *; }
+-keep class com.microsoft.xal.androidjava.PresenceManager { *; }
+-keep class com.microsoft.xal.browser.BrowserLaunchActivity { *; }
 -keep class com.microsoft.xal.crypto.EccPubKey { *; }
 -keep class com.microsoft.xal.crypto.Ecdsa { *; }
 -keep class com.microsoft.xal.crypto.SecureRandom { *; }
