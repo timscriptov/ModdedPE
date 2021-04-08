@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Rect;
 import android.widget.ImageView;
 
 import com.mcal.mcpelauncher.R;
@@ -64,7 +63,7 @@ public class TextureManager {
     public MultiMap<TextureManagerScaledNetworkBitmapRequest, ImageView> waitingForImage = new MultiMap<>();
     private Thread decodeThread = null;
     private HashMap<TextureManagerScaledResourceBitmapRequest, XLEBitmap> resourceBitmapCache = new HashMap<>();
-    private TimeMonitor stopwatch = new TimeMonitor();
+    private final TimeMonitor stopwatch = new TimeMonitor();
 
     public TextureManager() {
         this.stopwatch.start();
@@ -128,7 +127,7 @@ public class TextureManager {
         BitmapFactory.Options scaleoptions = new BitmapFactory.Options();
         int scale = 1;
         if (validResizeDimention(desiredw, desiredh) && options.outWidth > desiredw && options.outHeight > desiredh) {
-            scale = (int) Math.pow(2.0d, (double) Math.min((int) Math.floor(Math.log((double) (((float) options.outWidth) / ((float) desiredw))) / Math.log(2.0d)), (int) Math.floor(Math.log((double) (((float) options.outHeight) / ((float) desiredh))) / Math.log(2.0d))));
+            scale = (int) Math.pow(2.0d, Math.min((int) Math.floor(Math.log(((float) options.outWidth) / ((float) desiredw)) / Math.log(2.0d)), (int) Math.floor(Math.log(((float) options.outHeight) / ((float) desiredh)) / Math.log(2.0d))));
             if (scale < 1) {
                 z = false;
             }
@@ -154,7 +153,7 @@ public class TextureManager {
     }
 
     public void bindToView(int i, ImageView imageView, int i2, int i3) {
-        bindToView(i, imageView, i2, i3, (OnBitmapSetListener) null);
+        bindToView(i, imageView, i2, i3, null);
     }
 
     public void bindToView(int i, ImageView imageView, int i2, int i3, OnBitmapSetListener onBitmapSetListener) {
@@ -323,7 +322,7 @@ public class TextureManager {
     }
 
     private void setXLEImageView(final TextureManagerScaledNetworkBitmapRequest textureManagerScaledNetworkBitmapRequest, final XLEImageView xLEImageView, final XLEBitmap xLEBitmap) {
-        ThreadManager.UIThreadPost((Runnable) () -> {
+        ThreadManager.UIThreadPost(() -> {
             boolean keyValueMatches;
             XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
             synchronized (listLock) {
@@ -336,7 +335,7 @@ public class TextureManager {
                         public void onAnimationEnd(Animator animator) {
                             xLEImageView.setFinal(true);
                             setImage(xLEImageView, xLEBitmap);
-                            xLEImageView.animate().alpha(alpha).setDuration(100).setListener((Animator.AnimatorListener) null);
+                            xLEImageView.animate().alpha(alpha).setDuration(100).setListener(null);
                         }
                     });
                 } else {
@@ -391,7 +390,7 @@ public class TextureManager {
 
         public void run() {
             while (true) {
-                TextureManagerDownloadRequest textureManagerDownloadRequest = (TextureManagerDownloadRequest) toDecode.pop();
+                TextureManagerDownloadRequest textureManagerDownloadRequest = toDecode.pop();
                 XLEBitmap xLEBitmap = null;
                 if (textureManagerDownloadRequest.stream != null) {
                     BackgroundThreadWaitor.getInstance().waitForReady(TextureManager.DECODE_THREAD_WAIT_TIMEOUT_MS);
@@ -401,7 +400,7 @@ public class TextureManager {
                         byte[] byteArray = byteArrayOutputStream.toByteArray();
                         BitmapFactory.Options options = new BitmapFactory.Options();
                         options.inJustDecodeBounds = true;
-                        BitmapFactory.decodeStream(new ByteArrayInputStream(byteArray), (Rect) null, options);
+                        BitmapFactory.decodeStream(new ByteArrayInputStream(byteArray), null, options);
                         BitmapFactory.Options access$200 = computeInSampleSizeOptions(textureManagerDownloadRequest.key.bindingOption.width, textureManagerDownloadRequest.key.bindingOption.height, options);
                         int i = options.outWidth / access$200.inSampleSize;
                         int i2 = options.outHeight / access$200.inSampleSize;
@@ -420,7 +419,7 @@ public class TextureManager {
                         timeToRetryCache.remove(textureManagerDownloadRequest.key);
                     } else if (textureManagerDownloadRequest.key.bindingOption.resourceIdForError != -1) {
                         xLEBitmap = loadResource(textureManagerDownloadRequest.key.bindingOption.resourceIdForError);
-                        RetryEntry retryEntry = (RetryEntry) timeToRetryCache.get(textureManagerDownloadRequest.key);
+                        RetryEntry retryEntry = timeToRetryCache.get(textureManagerDownloadRequest.key);
                         if (retryEntry != null) {
                             retryEntry.startNext();
                         } else {
@@ -435,14 +434,14 @@ public class TextureManager {
     }
 
     private class TextureManagerDownloadThreadWorker implements Runnable {
-        private TextureManagerDownloadRequest request;
+        private final TextureManagerDownloadRequest request;
 
         public TextureManagerDownloadThreadWorker(TextureManagerDownloadRequest textureManagerDownloadRequest) {
             this.request = textureManagerDownloadRequest;
         }
 
         public void run() {
-            XLEAssert.assertTrue((this.request.key == null || this.request.key.url == null) ? false : true);
+            XLEAssert.assertTrue(this.request.key != null && this.request.key.url != null);
             this.request.stream = null;
             try {
                 if (!this.request.key.url.startsWith(HttpHost.DEFAULT_SCHEME_NAME)) {

@@ -60,10 +60,7 @@ public class TextureBindingOption {
             return false;
         }
         TextureBindingOption textureBindingOption = (TextureBindingOption) obj;
-        if (this.width == textureBindingOption.width && this.height == textureBindingOption.height && this.resourceIdForError == textureBindingOption.resourceIdForError && this.resourceIdForLoading == textureBindingOption.resourceIdForLoading) {
-            return true;
-        }
-        return false;
+        return this.width == textureBindingOption.width && this.height == textureBindingOption.height && this.resourceIdForError == textureBindingOption.resourceIdForError && this.resourceIdForLoading == textureBindingOption.resourceIdForLoading;
     }
 
     public int hashCode() {

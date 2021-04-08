@@ -22,7 +22,7 @@ import java.util.Stack;
 public abstract class DialogManagerBase implements IProjectSpecificDialogManager {
     public CancellableBlockingScreen cancelableBlockingDialog;
     private BlockingScreen blockingSpinner;
-    private Stack<IXLEManagedDialog> dialogStack = new Stack<>();
+    private final Stack<IXLEManagedDialog> dialogStack = new Stack<>();
     private boolean isEnabled;
     private Toast visibleToast;
 
@@ -85,7 +85,7 @@ public abstract class DialogManagerBase implements IProjectSpecificDialogManager
     public void showFatalAlertDialog(String title, String promptText, String okText, Runnable okHandler) {
         forceDismissAll();
         if (isEnabled) {
-            XLEManagedAlertDialog dialog = buildDialog(title, promptText, okText, okHandler, (String) null, (Runnable) null);
+            XLEManagedAlertDialog dialog = buildDialog(title, promptText, okText, okHandler, null, null);
             dialog.setDialogType(IXLEManagedDialog.DialogType.FATAL);
             dialogStack.push(dialog);
             dialog.show();
@@ -94,7 +94,7 @@ public abstract class DialogManagerBase implements IProjectSpecificDialogManager
 
     public void showNonFatalAlertDialog(String title, String promptText, String okText, Runnable okHandler) {
         if (isEnabled) {
-            XLEManagedAlertDialog dialog = buildDialog(title, promptText, okText, okHandler, (String) null, (Runnable) null);
+            XLEManagedAlertDialog dialog = buildDialog(title, promptText, okText, okHandler, null, null);
             dialog.setDialogType(IXLEManagedDialog.DialogType.NON_FATAL);
             dialogStack.push(dialog);
             dialog.show();

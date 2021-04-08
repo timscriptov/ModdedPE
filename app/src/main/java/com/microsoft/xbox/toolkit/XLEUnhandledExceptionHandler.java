@@ -13,7 +13,7 @@ import java.util.Date;
 
 public class XLEUnhandledExceptionHandler implements Thread.UncaughtExceptionHandler {
     public static XLEUnhandledExceptionHandler Instance = new XLEUnhandledExceptionHandler();
-    private Thread.UncaughtExceptionHandler oldExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
+    private final Thread.UncaughtExceptionHandler oldExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
 
     public void uncaughtException(Thread thread, @NotNull Throwable th) {
         th.toString();
@@ -28,7 +28,7 @@ public class XLEUnhandledExceptionHandler implements Thread.UncaughtExceptionHan
         new Date();
         String str2 = "";
         for (StackTraceElement stackTraceElement : th.getStackTrace()) {
-            str2 = str2 + String.format("\t%s\n", new Object[]{stackTraceElement.toString()});
+            str2 = str2 + String.format("\t%s\n", stackTraceElement.toString());
         }
     }
 }

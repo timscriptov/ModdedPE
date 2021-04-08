@@ -44,7 +44,7 @@ public class XLEUniversalImageView extends XLEImageView {
         listener = (v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
             int height = bottom - top;
             if (!(right - left == oldRight - oldLeft && height == oldBottom - oldTop) && arg.hasText()) {
-                new XLETextTask(XLEUniversalImageView.this).execute(new XLETextArg[]{arg.getArgText()});
+                new XLETextTask(XLEUniversalImageView.this).execute(arg.getArgText());
             }
         };
         setMaxWidth(AppboyLogger.SUPPRESS);
@@ -57,7 +57,7 @@ public class XLEUniversalImageView extends XLEImageView {
         listener = (v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
             int height = bottom - top;
             if (!(right - left == oldRight - oldLeft && height == oldBottom - oldTop) && arg.hasText()) {
-                new XLETextTask(XLEUniversalImageView.this).execute(new XLETextArg[]{arg.getArgText()});
+                new XLETextTask(XLEUniversalImageView.this).execute(arg.getArgText());
             }
         };
         arg = initializeAttributes(context, attrs, 0);
@@ -69,7 +69,7 @@ public class XLEUniversalImageView extends XLEImageView {
         listener = (v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
             int height = bottom - top;
             if (!(right - left == oldRight - oldLeft && height == oldBottom - oldTop) && arg.hasText()) {
-                new XLETextTask(XLEUniversalImageView.this).execute(new XLETextArg[]{arg.getArgText()});
+                new XLETextTask(XLEUniversalImageView.this).execute(arg.getArgText());
             }
         };
         arg = initializeAttributes(context, attrs, defStyle);
@@ -104,11 +104,11 @@ public class XLEUniversalImageView extends XLEImageView {
 
     private void updateImage() {
         if (arg.hasText()) {
-            new XLETextTask(this).execute(new XLETextArg[]{arg.getArgText()});
+            new XLETextTask(this).execute(arg.getArgText());
         } else if (arg.hasArgUri()) {
             TextureManager.Instance().bindToView(arg.getArgUri().getUri(), this, arg.getArgUri().getTextureBindingOption());
         } else if (!arg.hasSrc()) {
-            setImageDrawable((Drawable) null);
+            setImageDrawable(null);
         }
     }
 
@@ -311,11 +311,11 @@ public class XLEUniversalImageView extends XLEImageView {
         private final boolean hasSrc;
 
         public Params() {
-            this(new XLETextArg(new XLETextArg.Params()), (XLEURIArg) null, false);
+            this(new XLETextArg(new XLETextArg.Params()), null, false);
         }
 
         public Params(XLETextArg argText2, boolean hasSrc2) {
-            this(argText2, (XLEURIArg) null, hasSrc2);
+            this(argText2, null, hasSrc2);
         }
 
         public Params(XLETextArg argText2, XLEURIArg argUri2) {
@@ -329,7 +329,7 @@ public class XLEUniversalImageView extends XLEImageView {
         }
 
         public Params cloneWithText(String text) {
-            return new Params(new XLETextArg(text, argText.getParams()), (XLEURIArg) null, hasSrc);
+            return new Params(new XLETextArg(text, argText.getParams()), null, hasSrc);
         }
 
         public Params cloneWithUri(URI uri, int loadingResourceId, int errorResourceId) {
@@ -341,11 +341,11 @@ public class XLEUniversalImageView extends XLEImageView {
         }
 
         public Params cloneWithSrc(boolean hasSrc2) {
-            return new Params(new XLETextArg(argText.getParams()), (XLEURIArg) null, hasSrc2);
+            return new Params(new XLETextArg(argText.getParams()), null, hasSrc2);
         }
 
         public Params cloneEmpty() {
-            return new Params(new XLETextArg(argText.getParams()), (XLEURIArg) null, false);
+            return new Params(new XLETextArg(argText.getParams()), null, false);
         }
 
         public XLETextArg getArgText() {

@@ -13,7 +13,7 @@ import java.util.HashMap;
  */
 
 public class FontManager {
-    private static FontManager instance = new FontManager();
+    private static final FontManager instance = new FontManager();
     private HashMap<String, Typeface> fonts;
 
     public static FontManager Instance() {

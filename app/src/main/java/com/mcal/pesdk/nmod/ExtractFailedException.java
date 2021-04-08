@@ -32,7 +32,7 @@ public class ExtractFailedException extends Exception {
     public static final int TYPE_UNEXPECTED = 9;
     public static final int TYPE_REDUNDANT_MANIFEST = 10;
 
-    private int mType;
+    private final int mType;
 
     public ExtractFailedException(int type, Throwable cause) {
         super(cause);

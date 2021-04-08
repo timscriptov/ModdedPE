@@ -69,10 +69,7 @@ public final class Privacy {
 
         public boolean isSettingSet(Key key) {
             Value value;
-            if (settings == null || (value = settings.get(key)) == null || value == Value.NotSet) {
-                return false;
-            }
-            return true;
+            return settings != null && (value = settings.get(key)) != null && value != Value.NotSet;
         }
     }
 
@@ -94,7 +91,7 @@ public final class Privacy {
         }
 
         public Map<Key, Value> read(JsonReader jsonReader) throws IOException {
-            Setting[] settingArr = (Setting[]) new Gson().fromJson(jsonReader, Setting[].class);
+            Setting[] settingArr = new Gson().fromJson(jsonReader, Setting[].class);
             HashMap hashMap = new HashMap();
             for (Setting setting : settingArr) {
                 if (!(setting.setting == null || setting.value == null)) {

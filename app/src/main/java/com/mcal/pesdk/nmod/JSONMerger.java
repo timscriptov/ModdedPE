@@ -29,8 +29,8 @@ import java.util.Iterator;
  * @author https://github.com/TimScriptov
  */
 class JSONMerger {
-    private String mSrc;
-    private String mDist;
+    private final String mSrc;
+    private final String mDist;
 
     JSONMerger(String src, String src2) {
         this.mSrc = src;

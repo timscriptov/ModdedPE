@@ -16,7 +16,7 @@ import com.microsoft.xboxtcui.XboxTcuiSdk;
  */
 
 public class SGProjectSpecificDialogManager extends DialogManagerBase {
-    private static IProjectSpecificDialogManager instance = new SGProjectSpecificDialogManager();
+    private static final IProjectSpecificDialogManager instance = new SGProjectSpecificDialogManager();
     private ChangeFriendshipDialog changeFriendshipDialog;
 
     private SGProjectSpecificDialogManager() {

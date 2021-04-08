@@ -21,7 +21,7 @@ public interface IXLEManagedDialog {
 
     void safeDismiss();
 
-    public enum DialogType {
+    enum DialogType {
         FATAL,
         NON_FATAL,
         NORMAL

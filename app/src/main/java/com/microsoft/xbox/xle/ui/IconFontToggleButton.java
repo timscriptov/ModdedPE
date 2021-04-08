@@ -50,8 +50,8 @@ public class IconFontToggleButton extends LinearLayout implements Checkable {
     @SuppressLint("WrongConstant")
     private void initViews(@NotNull Context context, AttributeSet attributeSet) {
         ((LayoutInflater) context.getSystemService("layout_inflater")).inflate(R.layout.iconfont_toggle_btn_view, this, true);
-        this.iconTextView = (TextView) findViewById(R.id.iconfont_toggle_btn_icon);
-        this.labelTextView = (TextView) findViewById(R.id.iconfont_toggle_btn_text);
+        this.iconTextView = findViewById(R.id.iconfont_toggle_btn_icon);
+        this.labelTextView = findViewById(R.id.iconfont_toggle_btn_text);
         TypedArray obtainStyledAttributes = context.obtainStyledAttributes(attributeSet, XLERValueHelper.getStyleableRValueArray("CustomTypeface"));
         String string = obtainStyledAttributes.getString(XLERValueHelper.getStyleableRValue("CustomTypeface_typefaceSource"));
         obtainStyledAttributes.recycle();

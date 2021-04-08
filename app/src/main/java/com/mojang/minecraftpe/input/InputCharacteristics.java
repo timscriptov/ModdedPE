@@ -24,12 +24,8 @@ public class InputCharacteristics {
         for (int device : ids) {
             InputDevice device2 = InputDevice.getDevice(device);
             if (!device2.isVirtual() && device2.getControllerNumber() > 0 && (device2.getSources() & InputDeviceCompat.SOURCE_GAMEPAD) != 0) {
-                boolean[] supportedTriggerKeys = device2.hasKeys(new int[]{102, 103, 104, 105});
-                if (supportedTriggerKeys.length == 4) {
-                    supportsDoubleTriggers = true;
-                } else {
-                    supportsDoubleTriggers = false;
-                }
+                boolean[] supportedTriggerKeys = device2.hasKeys(102, 103, 104, 105);
+                supportsDoubleTriggers = supportedTriggerKeys.length == 4;
                 int x = 0;
                 while (true) {
                     if (x >= supportedTriggerKeys.length) {
@@ -42,21 +38,9 @@ public class InputCharacteristics {
                     }
                 }
                 if (!supportsDoubleTriggers && supportedTriggerKeys[0] && supportedTriggerKeys[1]) {
-                    if (device2.getMotionRange(17) == null && device2.getMotionRange(23) == null) {
-                        supportsL2 = false;
-                    } else {
-                        supportsL2 = true;
-                    }
-                    if (device2.getMotionRange(18) == null && device2.getMotionRange(22) == null) {
-                        supportsR2 = false;
-                    } else {
-                        supportsR2 = true;
-                    }
-                    if (!supportsL2 || !supportsR2) {
-                        supportsDoubleTriggers = false;
-                    } else {
-                        supportsDoubleTriggers = true;
-                    }
+                    supportsL2 = device2.getMotionRange(17) != null || device2.getMotionRange(23) != null;
+                    supportsR2 = device2.getMotionRange(18) != null || device2.getMotionRange(22) != null;
+                    supportsDoubleTriggers = supportsL2 && supportsR2;
                 }
                 if (supportsDoubleTriggers && device2.getName().contains("EI-GP20")) {
                     supportsDoubleTriggers = false;

@@ -21,7 +21,7 @@ public class XLETextArg {
     }
 
     public XLETextArg(Params params2) {
-        this((String) null, params2);
+        this(null, params2);
     }
 
     public String getText() {
@@ -45,7 +45,7 @@ public class XLETextArg {
         private final Typeface typeface;
 
         public Params() {
-            this((float) SystemUtil.SPtoPixels(8.0f), -1, Typeface.DEFAULT, 0, false, (Float) null);
+            this((float) SystemUtil.SPtoPixels(8.0f), -1, Typeface.DEFAULT, 0, false, null);
         }
 
         public Params(float f, int i, Typeface typeface2, int i2, boolean z, Float f2) {

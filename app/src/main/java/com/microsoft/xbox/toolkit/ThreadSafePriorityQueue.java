@@ -11,9 +11,9 @@ import java.util.PriorityQueue;
  */
 
 public class ThreadSafePriorityQueue<T> {
-    private HashSet<T> hashSet = new HashSet<>();
-    private PriorityQueue<T> queue = new PriorityQueue<>();
-    private Object syncObject = new Object();
+    private final HashSet<T> hashSet = new HashSet<>();
+    private final PriorityQueue<T> queue = new PriorityQueue<>();
+    private final Object syncObject = new Object();
 
     public void push(T t) {
         synchronized (this.syncObject) {

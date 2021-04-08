@@ -11,7 +11,7 @@ import java.util.HashSet;
  */
 
 public class MultiSelection<T> {
-    private HashSet<T> selection = new HashSet<>();
+    private final HashSet<T> selection = new HashSet<>();
 
     public void add(T t) {
         this.selection.add(t);

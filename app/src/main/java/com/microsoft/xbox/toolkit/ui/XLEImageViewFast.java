@@ -5,7 +5,6 @@ import android.content.res.TypedArray;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.microsoft.xbox.toolkit.XLERValueHelper;
 
@@ -93,7 +92,7 @@ public class XLEImageViewFast extends XLEImageView {
 
     private void bindToResourceId(int i) {
         this.pendingBitmapResourceId = -1;
-        TextureManager.Instance().bindToView(i, (ImageView) this, getWidth(), getHeight());
+        TextureManager.Instance().bindToView(i, this, getWidth(), getHeight());
     }
 
     public void bindToUri(URI uri) {

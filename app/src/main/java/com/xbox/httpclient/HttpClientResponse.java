@@ -10,7 +10,7 @@ import okhttp3.Response;
  */
 
 class HttpClientResponse {
-    private Response response;
+    private final Response response;
 
     public HttpClientResponse(Response sourceResponse) {
         response = sourceResponse;

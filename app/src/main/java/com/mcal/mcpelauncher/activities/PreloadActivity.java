@@ -79,9 +79,9 @@ public class PreloadActivity extends BaseActivity {
                     public void onStart() {
                         writeNewText(getString(R.string.preloading_initing));
                         if (Preferences.isSafeMode())
-                            writeNewText(getString(R.string.preloading_initing_info_safe_mode, new Object[]{getPESdk().getMinecraftInfo().getMinecraftVersionName()}));
+                            writeNewText(getString(R.string.preloading_initing_info_safe_mode, getPESdk().getMinecraftInfo().getMinecraftVersionName()));
                         else
-                            writeNewText(getString(R.string.preloading_initing_info, new Object[]{getPESdk().getNModAPI().getVersionName(), getPESdk().getMinecraftInfo().getMinecraftVersionName()}));
+                            writeNewText(getString(R.string.preloading_initing_info, getPESdk().getNModAPI().getVersionName(), getPESdk().getMinecraftInfo().getMinecraftVersionName()));
                         try {
                             Thread.sleep(1500);
                         } catch (InterruptedException e) {
@@ -136,12 +136,12 @@ public class PreloadActivity extends BaseActivity {
 
                     @Override
                     public void onNModLoaded(NMod nmod) {
-                        writeNewText(getString(R.string.preloading_nmod_loaded, new Object[]{nmod.getPackageName()}));
+                        writeNewText(getString(R.string.preloading_nmod_loaded, nmod.getPackageName()));
                     }
 
                     @Override
                     public void onFailedLoadingNMod(NMod nmod) {
-                        writeNewText(getString(R.string.preloading_nmod_loaded_failed, new Object[]{nmod.getPackageName()}));
+                        writeNewText(getString(R.string.preloading_nmod_loaded_failed, nmod.getPackageName()));
                         mFailedNMods.add(nmod);
                     }
 

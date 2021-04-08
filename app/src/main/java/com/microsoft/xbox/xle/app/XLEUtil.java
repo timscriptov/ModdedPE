@@ -47,7 +47,7 @@ public class XLEUtil {
     }
 
     public static void showKeyboard(final View view, int i) {
-        ThreadManager.UIThreadPostDelayed((Runnable) () -> ((InputMethodManager) XboxTcuiSdk.getSystemService("input_method")).showSoftInput(view, 1), (long) i);
+        ThreadManager.UIThreadPostDelayed(() -> ((InputMethodManager) XboxTcuiSdk.getSystemService("input_method")).showSoftInput(view, 1), i);
     }
 
     public static <T> boolean isNullOrEmpty(Iterable<T> iterable) {
@@ -59,10 +59,7 @@ public class XLEUtil {
     }
 
     public static boolean shouldRefresh(Date date, long j) {
-        if (date != null && new Date().getTime() - date.getTime() <= j) {
-            return false;
-        }
-        return true;
+        return date == null || new Date().getTime() - date.getTime() > j;
     }
 
     public static void showOkCancelDialog(String str, String str2, String str3, Runnable runnable, String str4, Runnable runnable2) {

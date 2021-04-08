@@ -33,7 +33,7 @@ public class UTCTelemetry {
             case OFFLINE:
                 return UTCNames.PageView.Errors.Offline;
             default:
-                return String.format("%sErrorScreen", new Object[]{UNKNOWNPAGE});
+                return String.format("%sErrorScreen", UNKNOWNPAGE);
         }
     }
 

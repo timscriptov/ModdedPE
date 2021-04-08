@@ -52,7 +52,7 @@ public abstract class ViewModelBase implements XLEObserver<UpdateData> {
     private ViewModelBase parent;
     private boolean shouldHideScreen;
     private boolean showNoNetworkPopup;
-    private HashMap<UpdateType, XLEException> updateExceptions;
+    private final HashMap<UpdateType, XLEException> updateExceptions;
     private EnumSet<UpdateType> updateTypesToCheck;
     private boolean updating;
 
@@ -61,11 +61,11 @@ public abstract class ViewModelBase implements XLEObserver<UpdateData> {
     }
 
     public ViewModelBase() {
-        this((ScreenLayout) null, true, false);
+        this(null, true, false);
     }
 
     public ViewModelBase(boolean z, boolean z2) {
-        this((ScreenLayout) null, z, z2);
+        this(null, z, z2);
     }
 
     public ViewModelBase(ScreenLayout screenLayout, boolean z, boolean z2) {
@@ -348,10 +348,7 @@ public abstract class ViewModelBase implements XLEObserver<UpdateData> {
     }
 
     public boolean checkErrorCode(UpdateType updateType, long j) {
-        if (!this.updateExceptions.containsKey(updateType) || this.updateExceptions.get(updateType).getErrorCode() != j || this.updateExceptions.get(updateType).getIsHandled()) {
-            return false;
-        }
-        return true;
+        return this.updateExceptions.containsKey(updateType) && this.updateExceptions.get(updateType).getErrorCode() == j && !this.updateExceptions.get(updateType).getIsHandled();
     }
 
     public boolean updateTypesToCheckIsEmpty() {
@@ -406,7 +403,7 @@ public abstract class ViewModelBase implements XLEObserver<UpdateData> {
     }
 
     public void NavigateTo(Class<? extends ScreenLayout> cls) {
-        NavigateTo(cls, (ActivityParameters) null);
+        NavigateTo(cls, null);
     }
 
     public void NavigateTo(Class<? extends ScreenLayout> cls, boolean z, ActivityParameters activityParameters) {
@@ -421,11 +418,11 @@ public abstract class ViewModelBase implements XLEObserver<UpdateData> {
     }
 
     public void NavigateTo(Class<? extends ScreenLayout> cls, boolean z) {
-        NavigateTo(cls, z, (ActivityParameters) null);
+        NavigateTo(cls, z, null);
     }
 
     public void showOkCancelDialog(String str, String str2, Runnable runnable, String str3, Runnable runnable2) {
-        showOkCancelDialog((String) null, str, str2, runnable, str3, runnable2);
+        showOkCancelDialog(null, str, str2, runnable, str3, runnable2);
     }
 
     public void showOkCancelDialog(String str, String str2, String str3, Runnable runnable, String str4, Runnable runnable2) {
@@ -511,8 +508,8 @@ public abstract class ViewModelBase implements XLEObserver<UpdateData> {
     }
 
     private class NavigationData {
-        private NavigationType navigationType;
-        private Class<? extends ScreenLayout> screenClass;
+        private final NavigationType navigationType;
+        private final Class<? extends ScreenLayout> screenClass;
 
         protected NavigationData(Class<? extends ScreenLayout> cls, NavigationType navigationType2) {
             this.screenClass = cls;

@@ -34,7 +34,7 @@ public class TcuiHttpUtil {
         synchronized (atomicReference) {
             try {
                 while (true) {
-                    if (!(Boolean) (atomicReference.get()).first) {
+                    if (!(atomicReference.get()).first) {
                         atomicReference.wait();
                     }
                 }
@@ -101,7 +101,7 @@ public class TcuiHttpUtil {
         synchronized (atomicReference) {
             try {
                 while (true) {
-                    if (!(Boolean) (atomicReference.get()).first) {
+                    if (!(atomicReference.get()).first) {
                         atomicReference.wait();
                     }
                 }
@@ -109,7 +109,7 @@ public class TcuiHttpUtil {
                 e.printStackTrace();
             }
         }
-        return (String) (atomicReference.get()).second;
+        return (atomicReference.get()).second;
     }
 
     public static <T> void throwIfNullOrFalse(T t) throws XLEException {

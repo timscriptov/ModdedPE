@@ -64,7 +64,7 @@ public class UTCPageView {
                 hashMap.put("activityTitle", charSequence);
             } catch (Exception e) {
                 UTCError.trackException(e, "UTCPageView.track");
-                UTCLog.log(e.getMessage(), new Object[0]);
+                UTCLog.log(e.getMessage());
                 return;
             }
         }

@@ -68,11 +68,11 @@ public class ProfileModel extends ModelBase<ProfileData> {
     private static ThreadSafeFixedSizeHashtable<String, ProfileModel> profileModelCache = new ThreadSafeFixedSizeHashtable<>(20);
     public String xuid;
     private AddFollowingUserResponseContainer.AddFollowingUserResponse addUserToFollowingResponse;
-    private SingleEntryLoadingStatus addingUserToFavoriteListLoadingStatus = new SingleEntryLoadingStatus();
-    private SingleEntryLoadingStatus addingUserToFollowingListLoadingStatus = new SingleEntryLoadingStatus();
-    private SingleEntryLoadingStatus addingUserToMutedListLoadingStatus = new SingleEntryLoadingStatus();
-    private SingleEntryLoadingStatus addingUserToNeverListLoadingStatus = new SingleEntryLoadingStatus();
-    private SingleEntryLoadingStatus addingUserToShareIdentityListLoadingStatus = new SingleEntryLoadingStatus();
+    private final SingleEntryLoadingStatus addingUserToFavoriteListLoadingStatus = new SingleEntryLoadingStatus();
+    private final SingleEntryLoadingStatus addingUserToFollowingListLoadingStatus = new SingleEntryLoadingStatus();
+    private final SingleEntryLoadingStatus addingUserToMutedListLoadingStatus = new SingleEntryLoadingStatus();
+    private final SingleEntryLoadingStatus addingUserToNeverListLoadingStatus = new SingleEntryLoadingStatus();
+    private final SingleEntryLoadingStatus addingUserToShareIdentityListLoadingStatus = new SingleEntryLoadingStatus();
     private ArrayList<FollowersData> favorites;
     private String firstName;
     private ArrayList<FollowersData> following;
@@ -84,9 +84,9 @@ public class ProfileModel extends ModelBase<ProfileData> {
     private Date lastRefreshPresenceData;
     private Date lastRefreshProfileSummary;
     private MutedListResultContainer.MutedListResult mutedList;
-    private SingleEntryLoadingStatus mutedListLoadingStatus = new SingleEntryLoadingStatus();
+    private final SingleEntryLoadingStatus mutedListLoadingStatus = new SingleEntryLoadingStatus();
     private NeverListResultContainer.NeverListResult neverList;
-    private SingleEntryLoadingStatus neverListLoadingStatus = new SingleEntryLoadingStatus();
+    private final SingleEntryLoadingStatus neverListLoadingStatus = new SingleEntryLoadingStatus();
     private IPeopleHubResult.PeopleHubPersonSummary peopleHubPersonSummary;
     private ArrayList<FollowersData> peopleHubRecommendations;
     private IPeopleHubResult.PeopleHubPeopleSummary peopleHubRecommendationsRaw;
@@ -96,15 +96,15 @@ public class ProfileModel extends ModelBase<ProfileData> {
     private ProfileSummaryResultContainer.ProfileSummaryResult profileSummary;
     private SingleEntryLoadingStatus profileSummaryLoadingStatus;
     private IUserProfileResult.ProfileUser profileUser;
-    private SingleEntryLoadingStatus removingUserFromFavoriteListLoadingStatus = new SingleEntryLoadingStatus();
-    private SingleEntryLoadingStatus removingUserFromFollowingListLoadingStatus = new SingleEntryLoadingStatus();
-    private SingleEntryLoadingStatus removingUserFromMutedListLoadingStatus = new SingleEntryLoadingStatus();
-    private SingleEntryLoadingStatus removingUserFromNeverListLoadingStatus = new SingleEntryLoadingStatus();
-    private SingleEntryLoadingStatus removingUserFromShareIdentityListLoadingStatus = new SingleEntryLoadingStatus();
+    private final SingleEntryLoadingStatus removingUserFromFavoriteListLoadingStatus = new SingleEntryLoadingStatus();
+    private final SingleEntryLoadingStatus removingUserFromFollowingListLoadingStatus = new SingleEntryLoadingStatus();
+    private final SingleEntryLoadingStatus removingUserFromMutedListLoadingStatus = new SingleEntryLoadingStatus();
+    private final SingleEntryLoadingStatus removingUserFromNeverListLoadingStatus = new SingleEntryLoadingStatus();
+    private final SingleEntryLoadingStatus removingUserFromShareIdentityListLoadingStatus = new SingleEntryLoadingStatus();
     private boolean shareRealName;
     private String shareRealNameStatus;
     private boolean sharingRealNameTransitively;
-    private SingleEntryLoadingStatus submitFeedbackForUserLoadingStatus = new SingleEntryLoadingStatus();
+    private final SingleEntryLoadingStatus submitFeedbackForUserLoadingStatus = new SingleEntryLoadingStatus();
 
     private ProfileModel(String str) {
         this.xuid = str;
@@ -141,7 +141,7 @@ public class ProfileModel extends ModelBase<ProfileData> {
 
     public static boolean isMeXuid(String str) {
         String xuidString = ProjectSpecificDataProvider.getInstance().getXuidString();
-        return (xuidString == null || str == null || str.compareToIgnoreCase(xuidString) != 0) ? false : true;
+        return xuidString != null && str != null && str.compareToIgnoreCase(xuidString) == 0;
     }
 
     public static int getDefaultColor() {
@@ -411,34 +411,34 @@ public class ProfileModel extends ModelBase<ProfileData> {
     public AsyncResult<Boolean> removeUserFromShareIdentity(boolean z, ArrayList<String> arrayList) {
         XLEAssert.assertIsNotUIThread();
         XLEAssert.assertNotNull(this.xuid);
-        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.removingUserFromShareIdentityListLoadingStatus, new RemoveUsersFromShareIdentityListRunner(this, arrayList));
+        return DataLoadUtil.Load(z, this.lifetime, null, this.removingUserFromShareIdentityListLoadingStatus, new RemoveUsersFromShareIdentityListRunner(this, arrayList));
     }
 
     public AsyncResult<Boolean> addUserToShareIdentity(boolean z, ArrayList<String> arrayList) {
         XLEAssert.assertIsNotUIThread();
         XLEAssert.assertNotNull(this.xuid);
-        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.addingUserToShareIdentityListLoadingStatus, new AddUsersToShareIdentityListRunner(this, arrayList));
+        return DataLoadUtil.Load(z, this.lifetime, null, this.addingUserToShareIdentityListLoadingStatus, new AddUsersToShareIdentityListRunner(this, arrayList));
     }
 
     public AsyncResult<Boolean> addUserToFavoriteList(boolean z, String str) {
         XLEAssert.assertIsNotUIThread();
         XLEAssert.assertNotNull(this.xuid);
         XLEAssert.assertNotNull(str);
-        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.addingUserToFavoriteListLoadingStatus, new AddUserToFavoriteListRunner(this, str));
+        return DataLoadUtil.Load(z, this.lifetime, null, this.addingUserToFavoriteListLoadingStatus, new AddUserToFavoriteListRunner(this, str));
     }
 
     public AsyncResult<Boolean> removeUserFromFavoriteList(boolean z, String str) {
         XLEAssert.assertIsNotUIThread();
         XLEAssert.assertNotNull(this.xuid);
         XLEAssert.assertNotNull(str);
-        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.removingUserFromFavoriteListLoadingStatus, new RemoveUserFromFavoriteListRunner(this, str));
+        return DataLoadUtil.Load(z, this.lifetime, null, this.removingUserFromFavoriteListLoadingStatus, new RemoveUserFromFavoriteListRunner(this, str));
     }
 
     public AsyncResult<AddFollowingUserResponseContainer.AddFollowingUserResponse> addUserToFollowingList(boolean z, String str) {
         XLEAssert.assertIsNotUIThread();
         XLEAssert.assertNotNull(this.xuid);
         XLEAssert.assertNotNull(str);
-        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.addingUserToFollowingListLoadingStatus, new AddUserToFollowingListRunner(this, str));
+        return DataLoadUtil.Load(z, this.lifetime, null, this.addingUserToFollowingListLoadingStatus, new AddUserToFollowingListRunner(this, str));
     }
 
     public AsyncResult<ProfileSummaryResultContainer.ProfileSummaryResult> loadProfileSummary(boolean z) {
@@ -452,7 +452,7 @@ public class ProfileModel extends ModelBase<ProfileData> {
         XLEAssert.assertIsNotUIThread();
         XLEAssert.assertNotNull(this.xuid);
         XLEAssert.assertNotNull(str);
-        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.removingUserFromFollowingListLoadingStatus, new RemoveUserFromFollowingListRunner(this, str));
+        return DataLoadUtil.Load(z, this.lifetime, null, this.removingUserFromFollowingListLoadingStatus, new RemoveUserFromFollowingListRunner(this, str));
     }
 
     public AsyncResult<NeverListResultContainer.NeverListResult> loadUserNeverList(boolean z) {
@@ -463,14 +463,14 @@ public class ProfileModel extends ModelBase<ProfileData> {
         XLEAssert.assertIsNotUIThread();
         XLEAssert.assertNotNull(this.xuid);
         XLEAssert.assertNotNull(str);
-        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.addingUserToNeverListLoadingStatus, new PutUserToNeverListRunner(this, this.xuid, str));
+        return DataLoadUtil.Load(z, this.lifetime, null, this.addingUserToNeverListLoadingStatus, new PutUserToNeverListRunner(this, this.xuid, str));
     }
 
     public AsyncResult<Boolean> removeUserFromNeverList(boolean z, String str) {
         XLEAssert.assertIsNotUIThread();
         XLEAssert.assertNotNull(this.xuid);
         XLEAssert.assertNotNull(str);
-        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.removingUserFromNeverListLoadingStatus, new RemoveUserFromNeverListRunner(this, this.xuid, str));
+        return DataLoadUtil.Load(z, this.lifetime, null, this.removingUserFromNeverListLoadingStatus, new RemoveUserFromNeverListRunner(this, this.xuid, str));
     }
 
     public AsyncResult<MutedListResultContainer.MutedListResult> loadUserMutedList(boolean z) {
@@ -481,20 +481,20 @@ public class ProfileModel extends ModelBase<ProfileData> {
         XLEAssert.assertIsNotUIThread();
         XLEAssert.assertNotNull(this.xuid);
         XLEAssert.assertNotNull(str);
-        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.addingUserToMutedListLoadingStatus, new PutUserToMutedListRunner(this, this.xuid, str));
+        return DataLoadUtil.Load(z, this.lifetime, null, this.addingUserToMutedListLoadingStatus, new PutUserToMutedListRunner(this, this.xuid, str));
     }
 
     public AsyncResult<Boolean> removeUserFromMutedList(boolean z, String str) {
         XLEAssert.assertIsNotUIThread();
         XLEAssert.assertNotNull(this.xuid);
         XLEAssert.assertNotNull(str);
-        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.removingUserFromMutedListLoadingStatus, new RemoveUserFromMutedListRunner(this, this.xuid, str));
+        return DataLoadUtil.Load(z, this.lifetime, null, this.removingUserFromMutedListLoadingStatus, new RemoveUserFromMutedListRunner(this, this.xuid, str));
     }
 
     public AsyncResult<Boolean> submitFeedbackForUser(boolean z, FeedbackType feedbackType, String str) {
         XLEAssert.assertIsNotUIThread();
         XLEAssert.assertNotNull(this.xuid);
-        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.submitFeedbackForUserLoadingStatus, new SubmitFeedbackForUserRunner(this, this.xuid, feedbackType, str));
+        return DataLoadUtil.Load(z, this.lifetime, null, this.submitFeedbackForUserLoadingStatus, new SubmitFeedbackForUserRunner(this, this.xuid, feedbackType, str));
     }
 
     private void onGetPeopleHubPersonDataCompleted(@NotNull AsyncResult<IPeopleHubResult.PeopleHubPersonSummary> asyncResult) {
@@ -590,7 +590,7 @@ public class ProfileModel extends ModelBase<ProfileData> {
             }
             Collections.sort(arrayList, new FollowingAndFavoritesComparator());
             this.favorites = arrayList;
-            notifyObservers(new AsyncResult(new UpdateData(UpdateType.UpdateFriend, true), this, (XLEException) null));
+            notifyObservers(new AsyncResult(new UpdateData(UpdateType.UpdateFriend, true), this, null));
         }
     }
 
@@ -608,7 +608,7 @@ public class ProfileModel extends ModelBase<ProfileData> {
                 }
             }
             this.favorites = arrayList;
-            notifyObservers(new AsyncResult(new UpdateData(UpdateType.UpdateFriend, true), this, (XLEException) null));
+            notifyObservers(new AsyncResult(new UpdateData(UpdateType.UpdateFriend, true), this, null));
         }
     }
 
@@ -649,7 +649,7 @@ public class ProfileModel extends ModelBase<ProfileData> {
                 Collections.sort(arrayList, new FollowingAndFavoritesComparator());
             }
             this.following = arrayList;
-            notifyObservers(new AsyncResult(new UpdateData(UpdateType.UpdateFriend, true), this, (XLEException) null));
+            notifyObservers(new AsyncResult(new UpdateData(UpdateType.UpdateFriend, true), this, null));
         } else if (asyncResult.getStatus() != AsyncActionStatus.SUCCESS || (this.addUserToFollowingResponse.code != 1028 && !this.addUserToFollowingResponse.getAddFollowingRequestStatus())) {
             this.addUserToFollowingResponse = null;
         }
@@ -659,7 +659,7 @@ public class ProfileModel extends ModelBase<ProfileData> {
         if (asyncResult.getStatus() == AsyncActionStatus.SUCCESS) {
             this.lastRefreshProfileSummary = new Date();
             this.profileSummary = asyncResult.getResult();
-            notifyObservers(new AsyncResult(new UpdateData(UpdateType.ActivityAlertsSummary, true), this, (XLEException) null));
+            notifyObservers(new AsyncResult(new UpdateData(UpdateType.ActivityAlertsSummary, true), this, null));
         }
     }
 
@@ -679,7 +679,7 @@ public class ProfileModel extends ModelBase<ProfileData> {
             }
             this.following = arrayList;
             this.favorites = arrayList2;
-            notifyObservers(new AsyncResult(new UpdateData(UpdateType.UpdateFriend, true), this, (XLEException) null));
+            notifyObservers(new AsyncResult(new UpdateData(UpdateType.UpdateFriend, true), this, null));
         }
     }
 
@@ -782,7 +782,7 @@ public class ProfileModel extends ModelBase<ProfileData> {
         XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
         super.updateWithNewData(asyncResult);
         if (asyncResult.getStatus() == AsyncActionStatus.SUCCESS && (result = asyncResult.getResult()) != null) {
-            this.shareRealName = isMeProfile() ? result.getShareRealName() : true;
+            this.shareRealName = !isMeProfile() || result.getShareRealName();
             this.shareRealNameStatus = result.getShareRealNameStatus();
             Log.i("ProfileModel", "shareRealNameStatus: " + this.shareRealNameStatus);
             this.sharingRealNameTransitively = result.getSharingRealNameTransitively();
@@ -804,8 +804,8 @@ public class ProfileModel extends ModelBase<ProfileData> {
 
     private class GetProfileRunner extends IDataLoaderRunnable<ProfileData> {
         public String xuid;
-        private ProfileModel caller;
-        private boolean loadEssentialsOnly;
+        private final ProfileModel caller;
+        private final boolean loadEssentialsOnly;
 
         public GetProfileRunner(ProfileModel profileModel, String str, boolean z) {
             this.caller = profileModel;
@@ -910,8 +910,8 @@ public class ProfileModel extends ModelBase<ProfileData> {
     }
 
     private class RemoveUsersFromShareIdentityListRunner extends IDataLoaderRunnable<Boolean> {
-        private ProfileModel caller;
-        private ArrayList<String> userIds;
+        private final ProfileModel caller;
+        private final ArrayList<String> userIds;
 
         public RemoveUsersFromShareIdentityListRunner(ProfileModel profileModel, ArrayList<String> arrayList) {
             this.caller = profileModel;
@@ -935,8 +935,8 @@ public class ProfileModel extends ModelBase<ProfileData> {
     }
 
     private class AddUsersToShareIdentityListRunner extends IDataLoaderRunnable<Boolean> {
-        private ProfileModel caller;
-        private ArrayList<String> userIds;
+        private final ProfileModel caller;
+        private final ArrayList<String> userIds;
 
         public AddUsersToShareIdentityListRunner(ProfileModel profileModel, ArrayList<String> arrayList) {
             this.caller = profileModel;
@@ -960,8 +960,8 @@ public class ProfileModel extends ModelBase<ProfileData> {
     }
 
     private class AddUserToFavoriteListRunner extends IDataLoaderRunnable<Boolean> {
-        private ProfileModel caller;
-        private String favoriteUserXuid;
+        private final ProfileModel caller;
+        private final String favoriteUserXuid;
 
         public AddUserToFavoriteListRunner(ProfileModel profileModel, String str) {
             this.caller = profileModel;
@@ -987,8 +987,8 @@ public class ProfileModel extends ModelBase<ProfileData> {
     }
 
     private class RemoveUserFromFavoriteListRunner extends IDataLoaderRunnable<Boolean> {
-        private ProfileModel caller;
-        private String favoriteUserXuid;
+        private final ProfileModel caller;
+        private final String favoriteUserXuid;
 
         public RemoveUserFromFavoriteListRunner(ProfileModel profileModel, String str) {
             this.caller = profileModel;
@@ -1014,8 +1014,8 @@ public class ProfileModel extends ModelBase<ProfileData> {
     }
 
     private class AddUserToFollowingListRunner extends IDataLoaderRunnable<AddFollowingUserResponseContainer.AddFollowingUserResponse> {
-        private ProfileModel caller;
-        private String followingUserXuid;
+        private final ProfileModel caller;
+        private final String followingUserXuid;
 
         public AddUserToFollowingListRunner(ProfileModel profileModel, String str) {
             this.caller = profileModel;
@@ -1041,8 +1041,8 @@ public class ProfileModel extends ModelBase<ProfileData> {
     }
 
     private class GetProfileSummaryRunner extends IDataLoaderRunnable<ProfileSummaryResultContainer.ProfileSummaryResult> {
-        private ProfileModel caller;
-        private String xuid;
+        private final ProfileModel caller;
+        private final String xuid;
 
         public GetProfileSummaryRunner(ProfileModel profileModel, String str) {
             this.caller = profileModel;
@@ -1066,8 +1066,8 @@ public class ProfileModel extends ModelBase<ProfileData> {
     }
 
     private class RemoveUserFromFollowingListRunner extends IDataLoaderRunnable<Boolean> {
-        private ProfileModel caller;
-        private String followingUserXuid;
+        private final ProfileModel caller;
+        private final String followingUserXuid;
 
         public RemoveUserFromFollowingListRunner(ProfileModel profileModel, String str) {
             this.caller = profileModel;
@@ -1093,8 +1093,8 @@ public class ProfileModel extends ModelBase<ProfileData> {
     }
 
     private class GetPresenceDataRunner extends IDataLoaderRunnable<IFollowerPresenceResult.UserPresence> {
-        private ProfileModel caller;
-        private String xuid;
+        private final ProfileModel caller;
+        private final String xuid;
 
         public GetPresenceDataRunner(ProfileModel profileModel, String str) {
             this.caller = profileModel;
@@ -1118,8 +1118,8 @@ public class ProfileModel extends ModelBase<ProfileData> {
     }
 
     private class GetNeverListRunner extends IDataLoaderRunnable<NeverListResultContainer.NeverListResult> {
-        private ProfileModel caller;
-        private String xuid;
+        private final ProfileModel caller;
+        private final String xuid;
 
         public GetNeverListRunner(ProfileModel profileModel, String str) {
             this.caller = profileModel;
@@ -1143,9 +1143,9 @@ public class ProfileModel extends ModelBase<ProfileData> {
     }
 
     private class PutUserToNeverListRunner extends IDataLoaderRunnable<Boolean> {
-        private String blockUserXuid;
-        private ProfileModel caller;
-        private String xuid;
+        private final String blockUserXuid;
+        private final ProfileModel caller;
+        private final String xuid;
 
         public PutUserToNeverListRunner(ProfileModel profileModel, String str, String str2) {
             this.caller = profileModel;
@@ -1170,9 +1170,9 @@ public class ProfileModel extends ModelBase<ProfileData> {
     }
 
     private class RemoveUserFromNeverListRunner extends IDataLoaderRunnable<Boolean> {
-        private ProfileModel caller;
-        private String unblockUserXuid;
-        private String xuid;
+        private final ProfileModel caller;
+        private final String unblockUserXuid;
+        private final String xuid;
 
         public RemoveUserFromNeverListRunner(ProfileModel profileModel, String str, String str2) {
             this.caller = profileModel;
@@ -1197,8 +1197,8 @@ public class ProfileModel extends ModelBase<ProfileData> {
     }
 
     private class GetMutedListRunner extends IDataLoaderRunnable<MutedListResultContainer.MutedListResult> {
-        private ProfileModel caller;
-        private String xuid;
+        private final ProfileModel caller;
+        private final String xuid;
 
         public GetMutedListRunner(ProfileModel profileModel, String str) {
             this.caller = profileModel;
@@ -1222,9 +1222,9 @@ public class ProfileModel extends ModelBase<ProfileData> {
     }
 
     private class PutUserToMutedListRunner extends IDataLoaderRunnable<Boolean> {
-        private ProfileModel caller;
-        private String mutedUserXuid;
-        private String xuid;
+        private final ProfileModel caller;
+        private final String mutedUserXuid;
+        private final String xuid;
 
         public PutUserToMutedListRunner(ProfileModel profileModel, String str, String str2) {
             this.caller = profileModel;
@@ -1249,9 +1249,9 @@ public class ProfileModel extends ModelBase<ProfileData> {
     }
 
     private class RemoveUserFromMutedListRunner extends IDataLoaderRunnable<Boolean> {
-        private ProfileModel caller;
-        private String unmutedUserXuid;
-        private String xuid;
+        private final ProfileModel caller;
+        private final String unmutedUserXuid;
+        private final String xuid;
 
         public RemoveUserFromMutedListRunner(ProfileModel profileModel, String str, String str2) {
             this.caller = profileModel;
@@ -1276,10 +1276,10 @@ public class ProfileModel extends ModelBase<ProfileData> {
     }
 
     private class SubmitFeedbackForUserRunner extends IDataLoaderRunnable<Boolean> {
-        private ProfileModel caller;
-        private FeedbackType feedbackType;
-        private String textReason;
-        private String xuid;
+        private final ProfileModel caller;
+        private final FeedbackType feedbackType;
+        private final String textReason;
+        private final String xuid;
 
         public SubmitFeedbackForUserRunner(ProfileModel profileModel, String str, FeedbackType feedbackType2, String str2) {
             this.caller = profileModel;
@@ -1296,7 +1296,7 @@ public class ProfileModel extends ModelBase<ProfileData> {
         }
 
         public Boolean buildData() throws XLEException {
-            return Boolean.valueOf(ServiceManagerFactory.getInstance().getSLSServiceManager().submitFeedback(this.xuid, SubmitFeedbackRequest.getSubmitFeedbackRequestBody(new SubmitFeedbackRequest(Long.parseLong(this.xuid), (String) null, this.feedbackType, this.textReason, (String) null, (String) null))));
+            return Boolean.valueOf(ServiceManagerFactory.getInstance().getSLSServiceManager().submitFeedback(this.xuid, SubmitFeedbackRequest.getSubmitFeedbackRequestBody(new SubmitFeedbackRequest(Long.parseLong(this.xuid), null, this.feedbackType, this.textReason, null, null))));
         }
 
         public void onPostExcute(AsyncResult<Boolean> asyncResult) {
@@ -1305,8 +1305,8 @@ public class ProfileModel extends ModelBase<ProfileData> {
     }
 
     private class GetPeopleHubRecommendationRunner extends IDataLoaderRunnable<IPeopleHubResult.PeopleHubPeopleSummary> {
-        private ProfileModel caller;
-        private String xuid;
+        private final ProfileModel caller;
+        private final String xuid;
 
         public GetPeopleHubRecommendationRunner(ProfileModel profileModel, String str) {
             this.caller = profileModel;

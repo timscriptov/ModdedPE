@@ -218,7 +218,7 @@ public class MainActivity extends BaseActivity implements BackgroundSoundPlayer 
         if (errorString != null) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
             dialog.setTitle(R.string.launch_failed_title);
-            dialog.setMessage(getString(R.string.launch_failed_message, new Object[]{errorString}));
+            dialog.setMessage(getString(R.string.launch_failed_message, errorString));
             dialog.setPositiveButton(android.R.string.ok, (dialog1, which) -> dialog1.dismiss());
             dialog.show();
             Preferences.setOpenGameFailed(null);

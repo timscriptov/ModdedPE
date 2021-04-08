@@ -102,7 +102,7 @@ public class Interop {
     private static Activity getForegroundActivity() {
         try {
             @SuppressLint("PrivateApi") Class activityThreadClass = Class.forName("android.app.ActivityThread");
-            Object activityThread = activityThreadClass.getMethod("currentActivityThread", new Class[0]).invoke((Object) null, new Object[0]);
+            Object activityThread = activityThreadClass.getMethod("currentActivityThread", new Class[0]).invoke(null);
             Field activitiesField = activityThreadClass.getDeclaredField("mActivities");
             activitiesField.setAccessible(true);
             for (Object activityRecord : ((Map) activitiesField.get(activityThread)).values()) {

@@ -2,7 +2,6 @@ package com.microsoft.xbox.toolkit.ui;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.TextView;
@@ -17,14 +16,14 @@ import com.microsoft.xbox.toolkit.XLERValueHelper;
  */
 
 public class CancellableBlockingScreen extends Dialog {
-    private XLEButton cancelButton = ((XLEButton) findViewById(XLERValueHelper.getIdRValue("blocking_dialog_cancel")));
-    private View container = findViewById(XLERValueHelper.getIdRValue("blocking_dialog_container"));
-    private TextView statusText = ((TextView) findViewById(XLERValueHelper.getIdRValue("blocking_dialog_status_text")));
+    private final XLEButton cancelButton = findViewById(XLERValueHelper.getIdRValue("blocking_dialog_cancel"));
+    private final View container = findViewById(XLERValueHelper.getIdRValue("blocking_dialog_container"));
+    private final TextView statusText = findViewById(XLERValueHelper.getIdRValue("blocking_dialog_status_text"));
 
     public CancellableBlockingScreen(Context context) {
         super(context, XLERValueHelper.getStyleRValue("cancellable_dialog_style"));
         setCancelable(false);
-        setOnCancelListener((DialogInterface.OnCancelListener) null);
+        setOnCancelListener(null);
         requestWindowFeature(1);
         setContentView(XLERValueHelper.getLayoutRValue("cancellable_blocking_dialog"));
     }
@@ -48,7 +47,7 @@ public class CancellableBlockingScreen extends Dialog {
 
     public void setCancelButtonAction(View.OnClickListener onClickListener) {
         if (onClickListener != null) {
-            this.cancelButton.setOnClickListener((View.OnClickListener) null);
+            this.cancelButton.setOnClickListener(null);
         }
         this.cancelButton.setOnClickListener(onClickListener);
     }

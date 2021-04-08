@@ -14,7 +14,7 @@ import java.util.Date;
 
 public interface IPeopleHubResult {
 
-    public enum RecommendationType {
+    enum RecommendationType {
         Unknown,
         Dummy,
         Follower,
@@ -33,49 +33,49 @@ public interface IPeopleHubResult {
         }
     }
 
-    public static class Follower {
+    class Follower {
         public Date followedDateTime;
         public String text;
     }
 
-    public static class MultiplayerSummary {
+    class MultiplayerSummary {
         public int InMultiplayerSession;
         public int InParty;
     }
 
-    public static class PeopleHubPeopleSummary {
+    class PeopleHubPeopleSummary {
         public ArrayList<PeopleHubPersonSummary> people;
         public RecommendationSummary recommendationSummary;
     }
 
-    public static class PeopleHubPreferredColor {
+    class PeopleHubPreferredColor {
         public String primaryColor;
         public String secondaryColor;
         public String tertiaryColor;
     }
 
-    public static class PeopleHubTitleHistory {
+    class PeopleHubTitleHistory {
         public Date LastTimePlayed;
         public long TitleId;
         public String TitleName;
     }
 
-    public static class PeopleHubTitlePresence {
+    class PeopleHubTitlePresence {
         public boolean IsCurrentlyPlaying;
         public String PresenceText;
         public String TitleId;
         public String TitleName;
     }
 
-    public static class PeopleHubTitleSummary {
+    class PeopleHubTitleSummary {
     }
 
-    public static class RecentPlayer {
+    class RecentPlayer {
         public String text;
         public ArrayList<Title> titles;
     }
 
-    public static class RecommendationSummary {
+    class RecommendationSummary {
         public int VIP;
         public int facebookFriend;
         public int follower;
@@ -84,12 +84,12 @@ public interface IPeopleHubResult {
         public boolean promoteSuggestions;
     }
 
-    public static class Title {
+    class Title {
         public Date lastPlayedWithDateTime;
         public String titleName;
     }
 
-    public static class PeopleHubPersonSummary {
+    class PeopleHubPersonSummary {
         public String displayName;
         public String displayPicRaw;
         public Follower follower;
@@ -122,7 +122,7 @@ public interface IPeopleHubResult {
         }
     }
 
-    public static class PeopleHubRecommendation {
+    class PeopleHubRecommendation {
         public ArrayList<String> Reasons;
         public String Type;
 

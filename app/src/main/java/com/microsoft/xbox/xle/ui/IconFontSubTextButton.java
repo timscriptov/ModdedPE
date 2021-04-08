@@ -22,13 +22,13 @@ import com.microsoft.xbox.xle.app.XLEUtil;
  */
 
 public class IconFontSubTextButton extends LinearLayout {
-    private FrameLayout iconFrameLayout;
-    private CustomTypefaceTextView iconTextView;
-    private CustomTypefaceTextView subtitleTextView;
-    private CustomTypefaceTextView titleTextView;
+    private final FrameLayout iconFrameLayout;
+    private final CustomTypefaceTextView iconTextView;
+    private final CustomTypefaceTextView subtitleTextView;
+    private final CustomTypefaceTextView titleTextView;
 
     public IconFontSubTextButton(Context context) {
-        this(context, (AttributeSet) null);
+        this(context, null);
     }
 
     public IconFontSubTextButton(Context context, AttributeSet attributeSet) {
@@ -38,10 +38,10 @@ public class IconFontSubTextButton extends LinearLayout {
     public IconFontSubTextButton(Context context, AttributeSet attributeSet, int i) {
         super(context, attributeSet, i);
         LayoutInflater.from(context).inflate(R.layout.icon_font_subtext_button, this, true);
-        this.iconTextView = (CustomTypefaceTextView) findViewById(R.id.icon_font_subtext_icon);
-        this.iconFrameLayout = (FrameLayout) findViewById(R.id.icon_font_subtext_btn_icon_bg);
-        this.titleTextView = (CustomTypefaceTextView) findViewById(R.id.icon_font_subtext_btn_title);
-        this.subtitleTextView = (CustomTypefaceTextView) findViewById(R.id.icon_font_subtext_btn_subtitle);
+        this.iconTextView = findViewById(R.id.icon_font_subtext_icon);
+        this.iconFrameLayout = findViewById(R.id.icon_font_subtext_btn_icon_bg);
+        this.titleTextView = findViewById(R.id.icon_font_subtext_btn_title);
+        this.subtitleTextView = findViewById(R.id.icon_font_subtext_btn_subtitle);
         TypedArray obtainStyledAttributes = context.obtainStyledAttributes(attributeSet, XLERValueHelper.getStyleableRValueArray("IconFontSubTextButton"));
         String string = obtainStyledAttributes.getString(XLERValueHelper.getStyleableRValue("IconFontSubTextButton_icon_uri"));
         String string2 = obtainStyledAttributes.getString(XLERValueHelper.getStyleableRValue("IconFontSubTextButton_text_title"));

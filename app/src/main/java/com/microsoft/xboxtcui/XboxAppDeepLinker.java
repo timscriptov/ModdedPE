@@ -54,15 +54,8 @@ public class XboxAppDeepLinker {
 
     public static boolean appDeeplinkingSupported() {
         boolean isAmazonFireTv;
-        if (!Build.MANUFACTURER.equalsIgnoreCase(AMAZON_MANUFACTURER) || !Build.MODEL.startsWith(AMAZON_FIRE_TV_MODEL_PREFIX)) {
-            isAmazonFireTv = false;
-        } else {
-            isAmazonFireTv = true;
-        }
-        if (!isAmazonFireTv) {
-            return true;
-        }
-        return false;
+        isAmazonFireTv = Build.MANUFACTURER.equalsIgnoreCase(AMAZON_MANUFACTURER) && Build.MODEL.startsWith(AMAZON_FIRE_TV_MODEL_PREFIX);
+        return !isAmazonFireTv;
     }
 
     public static boolean showUserProfile(Context context, String xuid) {
@@ -177,10 +170,7 @@ public class XboxAppDeepLinker {
         } catch (PackageManager.NameNotFoundException e2) {
             betaAppInstalled = false;
         }
-        if (mainAppInstalled || betaAppInstalled) {
-            return true;
-        }
-        return false;
+        return mainAppInstalled || betaAppInstalled;
     }
 
     private static Intent getXboxAppLaunchIntent(Context context) {

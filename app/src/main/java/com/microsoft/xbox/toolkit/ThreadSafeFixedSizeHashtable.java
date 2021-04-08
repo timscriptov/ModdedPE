@@ -64,7 +64,7 @@ public class ThreadSafeFixedSizeHashtable<K, V> {
                             break;
                         }
                         ThreadSafeFixedSizeHashtable<K, V>.KeyTuple next = it.next();
-                        if (((KeyTuple) next).key.equals(k)) {
+                        if (next.key.equals(k)) {
                             keyTuple = next;
                             break;
                         }

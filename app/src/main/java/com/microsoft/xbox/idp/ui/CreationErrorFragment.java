@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.mcal.mcpelauncher.R;
 import com.microsoft.xbox.idp.compat.BaseFragment;
@@ -32,7 +31,7 @@ public class CreationErrorFragment extends BaseFragment {
 
     public void onViewCreated(View view, Bundle bundle) {
         super.onViewCreated(view, bundle);
-        UiUtil.ensureClickableSpanOnUnderlineSpan((TextView) view.findViewById(R.id.xbid_error_message), R.string.xbid_creation_error_android, new ClickableSpan() {
+        UiUtil.ensureClickableSpanOnUnderlineSpan(view.findViewById(R.id.xbid_error_message), R.string.xbid_creation_error_android, new ClickableSpan() {
             public void onClick(View view) {
                 Log.d(CreationErrorFragment.TAG, "onClick");
                 try {

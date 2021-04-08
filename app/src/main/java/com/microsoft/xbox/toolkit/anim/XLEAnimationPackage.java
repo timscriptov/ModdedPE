@@ -17,7 +17,7 @@ import java.util.LinkedList;
 
 public class XLEAnimationPackage {
     public Runnable onAnimationEndRunnable;
-    private LinkedList<XLEAnimationEntry> animations = new LinkedList<>();
+    private final LinkedList<XLEAnimationEntry> animations = new LinkedList<>();
     private boolean running = false;
 
     public void tryFinishAll() {

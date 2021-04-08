@@ -49,7 +49,7 @@ import java.util.zip.ZipOutputStream;
  * @author https://github.com/TimScriptov
  */
 class NModExtractor {
-    private Context mContext;
+    private final Context mContext;
 
     NModExtractor(Context context) {
         mContext = context;

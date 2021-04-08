@@ -24,7 +24,7 @@ public class PopupView {
     private View mPopupView;
     private int mWidth;
     @SuppressLint("WrongConstant")
-    private WindowManager mWindowManager = ((WindowManager) mContext.getSystemService("window"));
+    private final WindowManager mWindowManager = ((WindowManager) mContext.getSystemService("window"));
 
     public PopupView(Context context) {
         mContext = context;

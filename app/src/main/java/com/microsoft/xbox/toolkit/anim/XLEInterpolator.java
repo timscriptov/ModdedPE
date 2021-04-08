@@ -10,7 +10,7 @@ import android.view.animation.Interpolator;
  */
 
 public class XLEInterpolator implements Interpolator {
-    private EasingMode easingMode;
+    private final EasingMode easingMode;
 
     public XLEInterpolator(EasingMode easingMode2) {
         this.easingMode = easingMode2;

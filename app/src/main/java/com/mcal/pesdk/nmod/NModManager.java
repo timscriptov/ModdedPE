@@ -34,7 +34,7 @@ class NModManager {
     private ArrayList<NMod> mEnabledNMods = new ArrayList<>();
     private ArrayList<NMod> mAllNMods = new ArrayList<>();
     private ArrayList<NMod> mDisabledNMods = new ArrayList<>();
-    private Context mContext;
+    private final Context mContext;
 
     NModManager(Context context) {
         this.mContext = context;

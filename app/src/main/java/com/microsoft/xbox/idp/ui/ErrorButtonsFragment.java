@@ -5,7 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+
+import androidx.appcompat.widget.AppCompatButton;
 
 import com.mcal.mcpelauncher.R;
 import com.microsoft.xbox.idp.compat.BaseFragment;
@@ -46,7 +47,7 @@ public class ErrorButtonsFragment extends BaseFragment implements View.OnClickLi
 
     public void onViewCreated(View view, Bundle bundle) {
         super.onViewCreated(view, bundle);
-        Button button = (Button) view.findViewById(R.id.xbid_error_left_button);
+        AppCompatButton button = view.findViewById(R.id.xbid_error_left_button);
         button.setOnClickListener(this);
         view.findViewById(R.id.xbid_error_right_button).setOnClickListener(this);
         Bundle arguments = getArguments();
@@ -58,9 +59,9 @@ public class ErrorButtonsFragment extends BaseFragment implements View.OnClickLi
     public void onClick(@NotNull View view) {
         int id = view.getId();
         if (id == R.id.xbid_error_left_button) {
-            this.callbacks.onClickedLeftButton();
+            callbacks.onClickedLeftButton();
         } else if (id == R.id.xbid_error_right_button) {
-            this.callbacks.onClickedRightButton();
+            callbacks.onClickedRightButton();
         }
     }
 

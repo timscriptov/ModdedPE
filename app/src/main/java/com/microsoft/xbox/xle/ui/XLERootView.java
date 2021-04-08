@@ -19,11 +19,11 @@ public class XLERootView extends RelativeLayout {
     private View activityBody;
     private int activityBodyIndex;
     private String headerName;
-    private boolean isTopLevel = false;
-    private long lastFps = 0;
-    private long lastMs = 0;
+    private final boolean isTopLevel = false;
+    private final long lastFps = 0;
+    private final long lastMs = 0;
     private int origPaddingBottom;
-    private boolean showTitleBar = true;
+    private final boolean showTitleBar = true;
 
     public XLERootView(Context context) {
         super(context);

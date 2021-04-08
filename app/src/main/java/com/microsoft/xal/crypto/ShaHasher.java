@@ -11,7 +11,7 @@ import java.security.NoSuchAlgorithmException;
  */
 
 public class ShaHasher {
-    private MessageDigest md = MessageDigest.getInstance("SHA-256");
+    private final MessageDigest md = MessageDigest.getInstance("SHA-256");
 
     public ShaHasher() throws NoSuchAlgorithmException {
     }

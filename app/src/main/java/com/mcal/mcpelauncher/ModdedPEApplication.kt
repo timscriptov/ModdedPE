@@ -36,7 +36,7 @@ import org.jetbrains.annotations.Nullable
 class ModdedPEApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        CrashReporter.initialize(this, CrashUtil.getDefaultPath());
+        CrashReporter.initialize(this, CrashUtil.getDefaultPath())
         context = this
         mPESdk = PESdk(this)
         if (isNightMode) {

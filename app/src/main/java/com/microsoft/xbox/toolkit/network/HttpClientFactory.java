@@ -34,10 +34,10 @@ public class HttpClientFactory {
     public static HttpClientFactory noRedirectNetworkOperationsFactory = new HttpClientFactory(false);
     public static HttpClientFactory textureFactory = new HttpClientFactory(true);
     private AbstractXLEHttpClient client;
-    private AbstractXLEHttpClient clientWithTimeoutOverride;
+    private final AbstractXLEHttpClient clientWithTimeoutOverride;
     private ClientConnectionManager connectionManager;
-    private Object httpSyncObject;
-    private HttpParams params;
+    private final Object httpSyncObject;
+    private final HttpParams params;
 
     public HttpClientFactory() {
         this(false);

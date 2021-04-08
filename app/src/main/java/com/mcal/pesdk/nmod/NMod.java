@@ -45,10 +45,10 @@ public abstract class NMod {
     protected Context mContext;
     protected NModInfo mInfo;
     private LoadFailedException mBugExpection = null;
-    private ArrayList<NModWarning> mWarnings = new ArrayList<NModWarning>();
+    private final ArrayList<NModWarning> mWarnings = new ArrayList<NModWarning>();
     private Bitmap mIcon;
     private Bitmap mBannerImage;
-    private String mPackageName;
+    private final String mPackageName;
 
     protected NMod(String packageName, Context context) {
         mContext = context;

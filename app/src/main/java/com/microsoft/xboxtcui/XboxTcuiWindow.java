@@ -43,7 +43,7 @@ public class XboxTcuiWindow extends FrameLayout implements NavigationManager.Nav
     private final ActivityParameters launchParams;
     private final Class<? extends ScreenLayout> launchScreenClass;
     private final Stack<ScreenLayout> screens = new Stack<>();
-    private Activity mActivity;
+    private final Activity mActivity;
     private boolean mAnimationBlocking;
     private boolean wasRestarted;
 

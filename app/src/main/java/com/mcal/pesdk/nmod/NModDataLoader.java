@@ -31,7 +31,7 @@ class NModDataLoader {
     private static final String TAG_SHARED_PREFERENCE = "nmod_data_list";
     private static final String TAG_ENABLED_LIST = "enabled_nmods_list";
     private static final String TAG_DISABLE_LIST = "disabled_nmods_list";
-    private Context mContext;
+    private final Context mContext;
 
     NModDataLoader(Context context) {
         mContext = context;

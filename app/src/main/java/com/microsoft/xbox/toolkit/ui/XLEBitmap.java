@@ -3,7 +3,6 @@ package com.microsoft.xbox.toolkit.ui;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +33,7 @@ public class XLEBitmap {
     }
 
     public static XLEBitmap decodeStream(InputStream inputStream, BitmapFactory.Options options) {
-        return createBitmap(BitmapFactory.decodeStream(inputStream, (Rect) null, options));
+        return createBitmap(BitmapFactory.decodeStream(inputStream, null, options));
     }
 
     public static XLEBitmap decodeStream(InputStream inputStream) {
@@ -76,7 +75,7 @@ public class XLEBitmap {
     }
 
     public static class XLEBitmapDrawable {
-        private BitmapDrawable drawable;
+        private final BitmapDrawable drawable;
 
         public XLEBitmapDrawable(BitmapDrawable bitmapDrawable) {
             this.drawable = bitmapDrawable;

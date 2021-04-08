@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.hardware.input.InputManager;
-import android.os.Handler;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -34,7 +33,7 @@ public class JellyBeanDeviceManager extends InputDeviceManager implements InputM
 
     public void register() {
         int[] ids = inputManager.getInputDeviceIds();
-        inputManager.registerInputDeviceListener(this, (Handler) null);
+        inputManager.registerInputDeviceListener(this, null);
         setDoubleTriggersSupportedNative(InputCharacteristics.allControllersHaveDoubleTriggers());
         for (int i = 0; i < ids.length; i++) {
             setCreteControllerNative(ids[i], InputCharacteristics.isCreteController(ids[i]));

@@ -58,9 +58,9 @@ public class ProfileScreenViewModel extends ViewModelBase {
     private AddUserToShareIdentityListAsyncTask addUserToShareIdentityListAsyncTask;
     private FollowersData basicData;
     private ChangeFriendshipDialogViewModel changeFriendshipDialogViewModel;
-    private HashSet<ChangeFriendshipFormOptions> changeFriendshipForm = new HashSet<>();
+    private final HashSet<ChangeFriendshipFormOptions> changeFriendshipForm = new HashSet<>();
     private boolean isBlocked = false;
-    private boolean isFavorite = false;
+    private final boolean isFavorite = false;
     private boolean isFollowing = false;
     private boolean isMuted = false;
     private boolean isShowingFailureDialog;
@@ -276,7 +276,7 @@ public class ProfileScreenViewModel extends ViewModelBase {
 
     public void blockUser() {
         XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
-        showOkCancelDialog(XboxTcuiSdk.getResources().getString(R.string.Messages_BlockUserConfirmation_DialogTitle), XboxTcuiSdk.getResources().getString(R.string.Messages_BlockUserConfirmation_DialogBody), XboxTcuiSdk.getResources().getString(R.string.OK_Text), (Runnable) () -> ProfileScreenViewModel.this.blockUserInternal(), XboxTcuiSdk.getResources().getString(R.string.MessageDialog_Cancel), (Runnable) null);
+        showOkCancelDialog(XboxTcuiSdk.getResources().getString(R.string.Messages_BlockUserConfirmation_DialogTitle), XboxTcuiSdk.getResources().getString(R.string.Messages_BlockUserConfirmation_DialogBody), XboxTcuiSdk.getResources().getString(R.string.OK_Text), () -> ProfileScreenViewModel.this.blockUserInternal(), XboxTcuiSdk.getResources().getString(R.string.MessageDialog_Cancel), null);
         updateAdapter();
     }
 
@@ -335,7 +335,7 @@ public class ProfileScreenViewModel extends ViewModelBase {
                 UTCPeopleHub.trackViewInXboxAppDialogComplete();
                 XboxAppDeepLinker.showUserProfile(XboxTcuiSdk.getActivity(), ProfileScreenViewModel.this.model.getXuid());
             }
-        }, XboxTcuiSdk.getResources().getString(R.string.MessageDialog_Cancel), (Runnable) null);
+        }, XboxTcuiSdk.getResources().getString(R.string.MessageDialog_Cancel), null);
         updateAdapter();
     }
 
@@ -552,7 +552,7 @@ public class ProfileScreenViewModel extends ViewModelBase {
     }
 
     private class LoadUserProfileAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
-        private ProfileModel model;
+        private final ProfileModel model;
 
         private LoadUserProfileAsyncTask(ProfileModel profileModel) {
             this.model = profileModel;
@@ -593,7 +593,7 @@ public class ProfileScreenViewModel extends ViewModelBase {
     }
 
     private class LoadUserNeverListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
-        private ProfileModel model;
+        private final ProfileModel model;
 
         private LoadUserNeverListAsyncTask(ProfileModel profileModel) {
             this.model = profileModel;
@@ -634,7 +634,7 @@ public class ProfileScreenViewModel extends ViewModelBase {
     }
 
     private class LoadUserMutedListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
-        private ProfileModel model;
+        private final ProfileModel model;
 
         private LoadUserMutedListAsyncTask(ProfileModel profileModel) {
             this.model = profileModel;
@@ -675,7 +675,7 @@ public class ProfileScreenViewModel extends ViewModelBase {
     }
 
     private class AddUserToFollowingListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
-        private String followingUserXuid;
+        private final String followingUserXuid;
         private boolean isFollowingUser = false;
 
         public AddUserToFollowingListAsyncTask(String str) {
@@ -739,7 +739,7 @@ public class ProfileScreenViewModel extends ViewModelBase {
     }
 
     private class AddUserToShareIdentityListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
-        private ArrayList<String> usersToAdd;
+        private final ArrayList<String> usersToAdd;
 
         public AddUserToShareIdentityListAsyncTask(ArrayList<String> arrayList) {
             this.usersToAdd = arrayList;
@@ -776,7 +776,7 @@ public class ProfileScreenViewModel extends ViewModelBase {
     }
 
     private class AddUserToNeverListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
-        private String blockUserXuid;
+        private final String blockUserXuid;
 
         public AddUserToNeverListAsyncTask(String str) {
             this.blockUserXuid = str;
@@ -816,7 +816,7 @@ public class ProfileScreenViewModel extends ViewModelBase {
     }
 
     private class RemoveUserToNeverListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
-        private String unblockUserXuid;
+        private final String unblockUserXuid;
 
         public RemoveUserToNeverListAsyncTask(String str) {
             this.unblockUserXuid = str;
@@ -856,7 +856,7 @@ public class ProfileScreenViewModel extends ViewModelBase {
     }
 
     private class AddUserToMutedListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
-        private String mutedUserXuid;
+        private final String mutedUserXuid;
 
         public AddUserToMutedListAsyncTask(String str) {
             this.mutedUserXuid = str;
@@ -896,7 +896,7 @@ public class ProfileScreenViewModel extends ViewModelBase {
     }
 
     private class RemoveUserFromMutedListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
-        private String mutedUserXuid;
+        private final String mutedUserXuid;
 
         public RemoveUserFromMutedListAsyncTask(String str) {
             this.mutedUserXuid = str;

@@ -29,7 +29,7 @@ public class NModLib {
         nativeRegisterNatives(NModLib.class);
     }
 
-    private String mName;
+    private final String mName;
 
     public NModLib(String name) {
         mName = name;

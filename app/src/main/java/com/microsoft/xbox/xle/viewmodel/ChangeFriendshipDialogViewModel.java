@@ -40,7 +40,7 @@ public class ChangeFriendshipDialogViewModel {
     private AddUserToFavoriteListAsyncTask addUserToFavoriteListAsyncTask;
     private AddUserToFollowingListAsyncTask addUserToFollowingListAsyncTask;
     private AddUserToShareIdentityListAsyncTask addUserToShareIdentityListAsyncTask;
-    private HashSet<ProfileScreenViewModel.ChangeFriendshipFormOptions> changeFriendshipForm = new HashSet<>();
+    private final HashSet<ProfileScreenViewModel.ChangeFriendshipFormOptions> changeFriendshipForm = new HashSet<>();
     private boolean isFavorite = false;
     private boolean isFollowing = false;
     private boolean isSharingRealNameEnd;
@@ -490,7 +490,7 @@ public class ChangeFriendshipDialogViewModel {
     }
 
     private class RemoveUserFromShareIdentityListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
-        private ArrayList<String> usersToAdd;
+        private final ArrayList<String> usersToAdd;
 
         public RemoveUserFromShareIdentityListAsyncTask(ArrayList<String> arrayList) {
             this.usersToAdd = arrayList;
@@ -526,7 +526,7 @@ public class ChangeFriendshipDialogViewModel {
     }
 
     private class AddUserToShareIdentityListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
-        private ArrayList<String> usersToAdd;
+        private final ArrayList<String> usersToAdd;
 
         public AddUserToShareIdentityListAsyncTask(ArrayList<String> arrayList) {
             this.usersToAdd = arrayList;
@@ -563,7 +563,7 @@ public class ChangeFriendshipDialogViewModel {
 
     private class AddUserToFavoriteListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
         private boolean favoriteUser = false;
-        private String favoriteUserXuid;
+        private final String favoriteUserXuid;
 
         public AddUserToFavoriteListAsyncTask(String str) {
             this.favoriteUserXuid = str;
@@ -619,7 +619,7 @@ public class ChangeFriendshipDialogViewModel {
 
     private class RemoveUserFromFavoriteListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
         private boolean favoriteUser = false;
-        private String favoriteUserXuid;
+        private final String favoriteUserXuid;
 
         public RemoveUserFromFavoriteListAsyncTask(String str) {
             this.favoriteUserXuid = str;
@@ -673,7 +673,7 @@ public class ChangeFriendshipDialogViewModel {
     }
 
     private class AddUserToFollowingListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
-        private String followingUserXuid;
+        private final String followingUserXuid;
         private boolean isFollowingUser = false;
 
         public AddUserToFollowingListAsyncTask(String str) {
@@ -736,7 +736,7 @@ public class ChangeFriendshipDialogViewModel {
     }
 
     private class RemoveUserFromFollowingListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
-        private String followingUserXuid;
+        private final String followingUserXuid;
         private boolean isFollowingUser = true;
 
         public RemoveUserFromFollowingListAsyncTask(String str) {

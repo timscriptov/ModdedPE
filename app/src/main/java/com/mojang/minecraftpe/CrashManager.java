@@ -77,7 +77,7 @@ public class CrashManager {
             Log.d("ModdedPE", "CrashManager: Dump timestamp: " + str2);
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(str5));
             bufferedWriter.write("Package: " + AppConstants.APP_PACKAGE + "\n");
-            bufferedWriter.write("Version Code: " + String.valueOf(AppConstants.APP_VERSION) + "\n");
+            bufferedWriter.write("Version Code: " + AppConstants.APP_VERSION + "\n");
             bufferedWriter.write("Version Name: " + AppConstants.APP_VERSION_NAME + "\n");
             bufferedWriter.write("Android: " + AppConstants.ANDROID_VERSION + "\n");
             bufferedWriter.write("Manufacturer: " + AppConstants.PHONE_MANUFACTURER + "\n");
@@ -277,7 +277,7 @@ public class CrashManager {
                             int parseInt = Integer.parseInt(firstHeader.getValue());
                             Log.w("ModdedPE", "Received Too Many Requests response, retrying after " + parseInt + com.appboy.Constants.APPBOY_PUSH_SUMMARY_TEXT_KEY);
                             try {
-                                Thread.sleep((long) (parseInt * 1000));
+                                Thread.sleep(parseInt * 1000);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }

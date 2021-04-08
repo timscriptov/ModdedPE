@@ -8,7 +8,7 @@ import android.webkit.JavascriptInterface;
  */
 
 class WebviewHostInterface {
-    private MinecraftWebview mView;
+    private final MinecraftWebview mView;
 
     public WebviewHostInterface(MinecraftWebview view) {
         mView = view;

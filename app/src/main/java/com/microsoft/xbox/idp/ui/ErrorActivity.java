@@ -94,7 +94,7 @@ public class ErrorActivity extends BaseActivity implements HeaderFragment.Callba
         public final int leftButtonTextId;
         public final Interop.ErrorType type;
 
-        private ErrorScreen(Interop.ErrorType errorType, Class<? extends BaseFragment> cls, int i) {
+        ErrorScreen(Interop.ErrorType errorType, Class<? extends BaseFragment> cls, int i) {
             this.type = errorType;
             this.errorFragmentClass = cls;
             this.leftButtonTextId = i;

@@ -25,7 +25,7 @@ public class PrivacySettingsResult {
     }
 
     public static PrivacySettingsResult deserialize(String str) {
-        return (PrivacySettingsResult) GsonUtil.deserializeJson(str, PrivacySettingsResult.class);
+        return GsonUtil.deserializeJson(str, PrivacySettingsResult.class);
     }
 
     public static @Nullable String getPrivacySettingRequestBody(PrivacySettingsResult privacySettingsResult) {

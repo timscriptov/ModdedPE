@@ -11,7 +11,7 @@ import android.widget.TextView;
  */
 
 public class TextViewReader implements StringValue {
-    private TextView _view;
+    private final TextView _view;
 
     public TextViewReader(TextView view) {
         _view = view;

@@ -27,14 +27,14 @@ public class UTCError {
             UTCTelemetry.LogEvent(clientError);
         } catch (Exception e) {
             trackException(e, "UTCError.trackUINeeded");
-            UTCLog.log(e.getMessage(), new Object[0]);
+            UTCLog.log(e.getMessage());
         }
     }
 
     public static void trackException(Exception exc, String str) {
         ClientError clientError = new ClientError();
         if (exc != null && str != null) {
-            UTCLog.log(String.format("%s:%s", new Object[]{str, exc.getMessage()}), new Object[0]);
+            UTCLog.log(String.format("%s:%s", str, exc.getMessage()));
             clientError.errorName = exc.getClass().getSimpleName();
             clientError.errorText = exc.getMessage();
             StackTraceElement[] stackTrace = exc.getStackTrace();
@@ -43,7 +43,7 @@ public class UTCError {
                 while (i < stackTrace.length && i < 10) {
                     StackTraceElement stackTraceElement = stackTrace[i];
                     if (stackTraceElement != null) {
-                        str = String.format("%s;%s", new Object[]{str, stackTraceElement.toString()});
+                        str = String.format("%s;%s", str, stackTraceElement.toString());
                     }
                     if (str.length() > 200) {
                         break;
@@ -62,7 +62,7 @@ public class UTCError {
             UTCPageAction.track(UTCNames.PageAction.Errors.Close, charSequence);
         } catch (Exception e) {
             trackException(e, "UTCError.trackClose");
-            UTCLog.log(e.getMessage(), new Object[0]);
+            UTCLog.log(e.getMessage());
         }
     }
 
@@ -71,7 +71,7 @@ public class UTCError {
             UTCPageAction.track(UTCNames.PageAction.Errors.GoToBanned, charSequence);
         } catch (Exception e) {
             trackException(e, "UTCError.trackGoToEnforcement");
-            UTCLog.log(e.getMessage(), new Object[0]);
+            UTCLog.log(e.getMessage());
         }
     }
 
@@ -80,7 +80,7 @@ public class UTCError {
             UTCPageAction.track(UTCNames.PageAction.Errors.Retry, charSequence);
         } catch (Exception e) {
             trackException(e, "UTCError.trackTryAgain");
-            UTCLog.log(e.getMessage(), new Object[0]);
+            UTCLog.log(e.getMessage());
         }
     }
 
@@ -89,7 +89,7 @@ public class UTCError {
             UTCPageAction.track(UTCNames.PageAction.Errors.RightButton, charSequence);
         } catch (Exception e) {
             trackException(e, "UTCError.trackRightButton");
-            UTCLog.log(e.getMessage(), new Object[0]);
+            UTCLog.log(e.getMessage());
         }
     }
 
@@ -98,7 +98,7 @@ public class UTCError {
             UTCPageView.track(UTCTelemetry.getErrorScreen(errorScreen), charSequence);
         } catch (Exception e) {
             trackException(e, "UTCError.trackPageView");
-            UTCLog.log(e.getMessage(), new Object[0]);
+            UTCLog.log(e.getMessage());
         }
     }
 }

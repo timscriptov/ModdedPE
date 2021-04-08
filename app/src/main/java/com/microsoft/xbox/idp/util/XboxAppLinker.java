@@ -61,20 +61,9 @@ public class XboxAppLinker {
     }
 
     public static boolean xboxAppIsInstalled(Context context) {
-        if (isInstalled(context, XBOXAPP_PACKAGE)) {
-            mainAppInstalled = true;
-        } else {
-            mainAppInstalled = false;
-        }
-        if (isInstalled(context, XBOXAPP_BETA_PACKAGE)) {
-            betaAppInstalled = true;
-        } else {
-            betaAppInstalled = false;
-        }
-        if (mainAppInstalled || betaAppInstalled) {
-            return true;
-        }
-        return false;
+        mainAppInstalled = isInstalled(context, XBOXAPP_PACKAGE);
+        betaAppInstalled = isInstalled(context, XBOXAPP_BETA_PACKAGE);
+        return mainAppInstalled || betaAppInstalled;
     }
 
     @SuppressLint("WrongConstant")

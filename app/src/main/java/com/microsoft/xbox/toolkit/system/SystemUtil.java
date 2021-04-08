@@ -50,7 +50,7 @@ public class SystemUtil {
 
     @SuppressLint("WrongConstant")
     public static int getColorDepth() {
-        PixelFormat.getPixelFormatInfo(1, (PixelFormat) null);
+        PixelFormat.getPixelFormatInfo(1, null);
         //return null.bitsPerPixel;
         return 0;
     }
@@ -81,7 +81,7 @@ public class SystemUtil {
     }
 
     public static boolean isSlate() {
-        return Math.sqrt(Math.pow((double) getScreenWidthInches(), 2.0d) + Math.pow((double) getScreenHeightInches(), 2.0d)) > 6.0d;
+        return Math.sqrt(Math.pow(getScreenWidthInches(), 2.0d) + Math.pow(getScreenHeightInches(), 2.0d)) > 6.0d;
     }
 
     @Contract(pure = true)
@@ -126,7 +126,7 @@ public class SystemUtil {
                     }
                     StringBuilder buf = new StringBuilder();
                     for (int idx = 0; idx < mac.length; idx++) {
-                        buf.append(String.format("%02X:", new Object[]{Byte.valueOf(mac[idx])}));
+                        buf.append(String.format("%02X:", Byte.valueOf(mac[idx])));
                     }
                     if (buf.length() > 0) {
                         buf.deleteCharAt(buf.length() - 1);

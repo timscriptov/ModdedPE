@@ -111,7 +111,7 @@ public final class Profile {
         }
 
         public Map<SettingId, String> read(JsonReader jsonReader) throws IOException {
-            Setting[] settingArr = (Setting[]) new Gson().fromJson(jsonReader, Setting[].class);
+            Setting[] settingArr = new Gson().fromJson(jsonReader, Setting[].class);
             HashMap hashMap = new HashMap();
             for (Setting setting : settingArr) {
                 hashMap.put(setting.id, setting.value);

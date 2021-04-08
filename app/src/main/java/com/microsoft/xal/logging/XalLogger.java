@@ -46,34 +46,34 @@ public class XalLogger implements AutoCloseable {
     }
 
     public synchronized void Log(LogLevel level, String msg) {
-        m_logs.add(new LogEntry(level, String.format("[%c][%s][%s] %s", new Object[]{Character.valueOf(level.ToChar()), Timestamp(), m_subArea, msg})));
+        m_logs.add(new LogEntry(level, String.format("[%c][%s][%s] %s", Character.valueOf(level.ToChar()), Timestamp(), m_subArea, msg)));
         if (m_leastVerboseLevel.ToInt() > level.ToInt()) {
             m_leastVerboseLevel = level;
         }
     }
 
     public void Error(String msg) {
-        Log.e(TAG, String.format("[%s] %s", new Object[]{this.m_subArea, msg}));
+        Log.e(TAG, String.format("[%s] %s", this.m_subArea, msg));
         Log(LogLevel.Error, msg);
     }
 
     public void Warning(String msg) {
-        Log.w(TAG, String.format("[%s] %s", new Object[]{this.m_subArea, msg}));
+        Log.w(TAG, String.format("[%s] %s", this.m_subArea, msg));
         Log(LogLevel.Warning, msg);
     }
 
     public void Important(String msg) {
-        Log.w(TAG, String.format("[%c][%s] %s", new Object[]{Character.valueOf(LogLevel.Important.ToChar()), this.m_subArea, msg}));
+        Log.w(TAG, String.format("[%c][%s] %s", Character.valueOf(LogLevel.Important.ToChar()), this.m_subArea, msg));
         Log(LogLevel.Important, msg);
     }
 
     public void Information(String msg) {
-        Log.i(TAG, String.format("[%s] %s", new Object[]{this.m_subArea, msg}));
+        Log.i(TAG, String.format("[%s] %s", this.m_subArea, msg));
         Log(LogLevel.Information, msg);
     }
 
     public void Verbose(String msg) {
-        Log.v(TAG, String.format("[%s] %s", new Object[]{this.m_subArea, msg}));
+        Log.v(TAG, String.format("[%s] %s", this.m_subArea, msg));
         Log(LogLevel.Verbose, msg);
     }
 
@@ -92,7 +92,7 @@ public class XalLogger implements AutoCloseable {
         private final char m_levelChar;
         private final int m_val;
 
-        private LogLevel(int val, char levelChar) {
+        LogLevel(int val, char levelChar) {
             m_val = val;
             m_levelChar = levelChar;
         }

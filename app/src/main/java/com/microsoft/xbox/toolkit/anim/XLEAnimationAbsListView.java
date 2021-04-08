@@ -1,7 +1,6 @@
 package com.microsoft.xbox.toolkit.anim;
 
 import android.view.View;
-import android.view.animation.Animation;
 import android.view.animation.Interpolator;
 import android.view.animation.LayoutAnimationController;
 import android.widget.AbsListView;
@@ -32,7 +31,7 @@ public class XLEAnimationAbsListView extends XLEAnimation {
     }
 
     public void clear() {
-        this.layoutView.setLayoutAnimationListener((Animation.AnimationListener) null);
+        this.layoutView.setLayoutAnimationListener(null);
         this.layoutView.clearAnimation();
     }
 

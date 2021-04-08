@@ -28,11 +28,11 @@ import com.microsoft.xboxtcui.XboxTcuiSdk;
 public class ReportUserScreenAdapter extends AdapterBase {
     public EditText optionalText = ((EditText) findViewById(R.id.report_user_text));
     public ReportUserScreenViewModel viewModel;
-    private XLEButton cancelButton = ((XLEButton) findViewById(R.id.report_user_cancel));
-    private Spinner reasonSpinner = ((Spinner) findViewById(R.id.report_user_reason));
+    private final XLEButton cancelButton = ((XLEButton) findViewById(R.id.report_user_cancel));
+    private final Spinner reasonSpinner = ((Spinner) findViewById(R.id.report_user_reason));
     private ArrayAdapter<String> reasonSpinnerAdapter;
-    private XLEButton submitButton = ((XLEButton) findViewById(R.id.report_user_submit));
-    private CustomTypefaceTextView titleTextView = ((CustomTypefaceTextView) findViewById(R.id.report_user_title));
+    private final XLEButton submitButton = ((XLEButton) findViewById(R.id.report_user_submit));
+    private final CustomTypefaceTextView titleTextView = ((CustomTypefaceTextView) findViewById(R.id.report_user_title));
 
     public ReportUserScreenAdapter(ReportUserScreenViewModel reportUserScreenViewModel) {
         super(reportUserScreenViewModel);

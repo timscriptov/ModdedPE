@@ -34,7 +34,7 @@ import org.jetbrains.annotations.NotNull;
  * @author https://github.com/TimScriptov
  */
 public class GameManager {
-    private PESdk mPESdk;
+    private final PESdk mPESdk;
 
     GameManager(PESdk pesdk) {
         mPESdk = pesdk;

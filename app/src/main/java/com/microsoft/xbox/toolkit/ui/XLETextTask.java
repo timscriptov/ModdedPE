@@ -73,7 +73,7 @@ public class XLETextTask extends AsyncTask<XLETextArg, Void, Bitmap> {
     }
 
     public void onPostExecute(Bitmap bitmap) {
-        ImageView imageView = (ImageView) this.img.get();
+        ImageView imageView = this.img.get();
         if (imageView != null) {
             imageView.setImageBitmap(bitmap);
         }

@@ -17,7 +17,7 @@ import com.microsoft.xbox.toolkit.XLERValueHelper;
 
 public class SwitchPanelItem extends FrameLayout implements SwitchPanel.SwitchPanelChild {
     private final int INVALID_STATE_ID = -1;
-    private int state;
+    private final int state;
 
     public SwitchPanelItem(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);

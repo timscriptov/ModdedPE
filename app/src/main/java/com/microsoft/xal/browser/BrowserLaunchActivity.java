@@ -41,6 +41,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * From 1.16.220.02
+ *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
@@ -127,7 +128,7 @@ public class BrowserLaunchActivity extends AppCompatActivity {
             String endUrl = extras.getString(END_URL, "");
             String defaultBrowserPackageName = null;
             if (startUrl.isEmpty() || endUrl.isEmpty()) {
-                finishOperation(WebResult.FAIL, (String) null);
+                finishOperation(WebResult.FAIL, null);
                 return;
             }
             ShowUrlType showUrlType = (ShowUrlType) extras.get(SHOW_TYPE);

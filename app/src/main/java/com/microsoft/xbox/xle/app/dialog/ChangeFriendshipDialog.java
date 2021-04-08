@@ -47,7 +47,7 @@ public class ChangeFriendshipDialog extends XLEManagedDialog {
     private CustomTypefaceTextView favoriteIconView;
     private CustomTypefaceTextView gamertag;
     private FastProgressBar overlayLoadingIndicator;
-    private ViewModelBase previousVM;
+    private final ViewModelBase previousVM;
     private TextView profileAccountTier;
     private CustomTypefaceTextView profileGamerScore;
     private XLEUniversalImageView profilePic;
@@ -74,20 +74,20 @@ public class ChangeFriendshipDialog extends XLEManagedDialog {
         getWindow().setLayout(-1, -1);
         getWindow().setFlags(1024, 1024);
         setContentView(R.layout.change_friendship_dialog);
-        this.profilePic = (XLEUniversalImageView) findViewById(R.id.change_friendship_profile_pic);
-        this.gamertag = (CustomTypefaceTextView) findViewById(R.id.gamertag_text);
-        this.realName = (CustomTypefaceTextView) findViewById(R.id.realname_text);
-        this.profileAccountTier = (TextView) findViewById(R.id.peoplehub_info_gamerscore_icon);
-        this.profileGamerScore = (CustomTypefaceTextView) findViewById(R.id.peoplehub_info_gamerscore);
-        this.addFriend = (RadioButton) findViewById(R.id.add_as_friend);
-        this.addFavorite = (RadioButton) findViewById(R.id.add_as_favorite);
-        this.shareRealNameCheckbox = (XLECheckBox) findViewById(R.id.share_real_name_checkbox);
-        this.confirmButton = (XLEButton) findViewById(R.id.submit_button);
-        this.cancelButton = (XLEButton) findViewById(R.id.cancel_button);
-        this.changeFriendshipSwitchPanel = (SwitchPanel) findViewById(R.id.change_friendship_switch_panel);
-        this.removeFriendLayout = (XLEClickableLayout) findViewById(R.id.remove_friend_btn_layout);
-        this.favoriteIconView = (CustomTypefaceTextView) findViewById(R.id.people_favorites_icon);
-        this.overlayLoadingIndicator = (FastProgressBar) findViewById(R.id.overlay_loading_indicator);
+        this.profilePic = findViewById(R.id.change_friendship_profile_pic);
+        this.gamertag = findViewById(R.id.gamertag_text);
+        this.realName = findViewById(R.id.realname_text);
+        this.profileAccountTier = findViewById(R.id.peoplehub_info_gamerscore_icon);
+        this.profileGamerScore = findViewById(R.id.peoplehub_info_gamerscore);
+        this.addFriend = findViewById(R.id.add_as_friend);
+        this.addFavorite = findViewById(R.id.add_as_favorite);
+        this.shareRealNameCheckbox = findViewById(R.id.share_real_name_checkbox);
+        this.confirmButton = findViewById(R.id.submit_button);
+        this.cancelButton = findViewById(R.id.cancel_button);
+        this.changeFriendshipSwitchPanel = findViewById(R.id.change_friendship_switch_panel);
+        this.removeFriendLayout = findViewById(R.id.remove_friend_btn_layout);
+        this.favoriteIconView = findViewById(R.id.people_favorites_icon);
+        this.overlayLoadingIndicator = findViewById(R.id.overlay_loading_indicator);
         FrameLayout frameLayout = new FrameLayout(getContext());
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(-2, -2);
         layoutParams.gravity = 5;
@@ -302,7 +302,7 @@ public class ChangeFriendshipDialog extends XLEManagedDialog {
                         this.shareRealNameCheckbox.setChecked(false);
                         this.vm.setInitialRealNameSharingState(false);
                     }
-                    this.shareRealNameCheckbox.setSubText(String.format(XboxTcuiSdk.getResources().getString(R.string.ChangeRelationship_Checkbox_Subtext_ShareRealName), new Object[]{this.vm.getGamerTag()}));
+                    this.shareRealNameCheckbox.setSubText(String.format(XboxTcuiSdk.getResources().getString(R.string.ChangeRelationship_Checkbox_Subtext_ShareRealName), this.vm.getGamerTag()));
                     this.shareRealNameCheckbox.setEnabled(true);
                 }
             }

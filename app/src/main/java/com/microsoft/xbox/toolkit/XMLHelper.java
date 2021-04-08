@@ -17,7 +17,7 @@ import java.io.StringWriter;
 
 public class XMLHelper {
     private static final int XML_WAIT_TIMEOUT_MS = 1000;
-    private static XMLHelper instance = new XMLHelper();
+    private static final XMLHelper instance = new XMLHelper();
     private Serializer serializer;
 
     private XMLHelper() {

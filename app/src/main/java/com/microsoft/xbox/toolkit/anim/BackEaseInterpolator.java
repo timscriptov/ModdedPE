@@ -17,7 +17,7 @@ public class BackEaseInterpolator extends XLEInterpolator {
 
     @Override
     public float getInterpolationCore(float f) {
-        float max = (float) Math.max((double) f, 0.0d);
+        float max = (float) Math.max(f, 0.0d);
         return (float) (((double) ((max * max) * max)) - (((double) (amplitude * max)) * Math.sin(((double) max) * 3.141592653589793d)));
     }
 }

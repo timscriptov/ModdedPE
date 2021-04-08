@@ -2,7 +2,6 @@ package com.microsoft.xbox.toolkit.ui;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.widget.TextView;
 
 import com.microsoft.xbox.toolkit.XLERValueHelper;
@@ -22,7 +21,7 @@ public class BlockingScreen extends Dialog {
 
     public void show(Context context, CharSequence charSequence) {
         setCancelable(false);
-        setOnCancelListener((DialogInterface.OnCancelListener) null);
+        setOnCancelListener(null);
         setContentView(XLERValueHelper.getLayoutRValue("blocking_dialog"));
         setMessage(charSequence);
         show();

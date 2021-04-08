@@ -77,7 +77,7 @@ public class CircleImageView extends ImageView {
     private void drawRoundBitmap(@NotNull Canvas canvas, Bitmap bitmap, int i) {
         Bitmap createRoundBitmap = createRoundBitmap(bitmap, i);
         try {
-            canvas.drawBitmap(createRoundBitmap, 0.0f, 0.0f, (Paint) null);
+            canvas.drawBitmap(createRoundBitmap, 0.0f, 0.0f, null);
         } finally {
             createRoundBitmap.recycle();
         }

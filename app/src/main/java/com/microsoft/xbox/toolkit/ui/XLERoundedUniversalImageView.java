@@ -57,7 +57,7 @@ public class XLERoundedUniversalImageView extends XLEUniversalImageView {
             Bitmap copy = ((BitmapDrawable) drawable).getBitmap().copy(Bitmap.Config.ARGB_8888, true);
             int width = getWidth();
             getHeight();
-            canvas.drawBitmap(getRoundedCroppedBitmap(copy, width), 0.0f, 0.0f, (Paint) null);
+            canvas.drawBitmap(getRoundedCroppedBitmap(copy, width), 0.0f, 0.0f, null);
         }
     }
 }

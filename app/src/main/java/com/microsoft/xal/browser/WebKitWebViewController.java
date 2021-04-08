@@ -148,7 +148,7 @@ public class WebKitWebViewController extends AppCompatActivity {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, @NotNull String url) {
-            if (!url.startsWith(endUrl, 0)) {
+            if (!url.startsWith(endUrl)) {
                 return false;
             }
             Intent intent = new Intent();

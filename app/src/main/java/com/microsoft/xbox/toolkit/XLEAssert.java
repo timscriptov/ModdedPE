@@ -24,15 +24,15 @@ public class XLEAssert {
     }
 
     public static void assertTrue(boolean z) {
-        assertTrue((String) null, z);
+        assertTrue(null, z);
     }
 
     public static void assertNotNull(Object obj) {
-        assertTrue((String) null, obj != null);
+        assertTrue(null, obj != null);
     }
 
     public static void assertNull(Object obj) {
-        assertTrue((String) null, obj == null);
+        assertTrue(null, obj == null);
     }
 
     public static void assertNotNull(String str, Object obj) {

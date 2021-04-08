@@ -20,13 +20,12 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.protocol.HTTP;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -62,11 +61,7 @@ public class ServiceCommon {
     }
 
     public static boolean delete(String str, List<Header> list, String str2) throws XLEException {
-        try {
-            return JavaUtil.isNullOrEmpty(str2) ? delete(str, list) : delete(str, list, str2.getBytes(HTTP.UTF_8));
-        } catch (UnsupportedEncodingException e) {
-            throw new XLEException(5, (Throwable) e);
-        }
+        return JavaUtil.isNullOrEmpty(str2) ? delete(str, list) : delete(str, list, str2.getBytes(StandardCharsets.UTF_8));
     }
 
     public static boolean delete(String str, List<Header> list, byte[] bArr) throws XLEException {
@@ -78,7 +73,7 @@ public class ServiceCommon {
             try {
                 httpDeleteWithRequestBody.setEntity(new ByteArrayEntity(bArr));
             } catch (Exception e) {
-                throw new XLEException(5, (Throwable) e);
+                throw new XLEException(5, e);
             }
         }
         boolean z = false;
@@ -91,7 +86,7 @@ public class ServiceCommon {
     }
 
     private static void ParseHttpResponseForStatus(String str, int i, String str2) throws XLEException {
-        ParseHttpResponseForStatus(str, i, str2, (InputStream) null);
+        ParseHttpResponseForStatus(str, i, str2, null);
     }
 
     private static void ParseHttpResponseForStatus(String str, int i, String str2, InputStream inputStream) throws XLEException {
@@ -106,7 +101,7 @@ public class ServiceCommon {
             if (inputStream == null) {
                 throw new XLEException(15);
             }
-            throw new XLEException(15, (String) null, (Throwable) null, StreamUtil.ReadAsString(inputStream));
+            throw new XLEException(15, null, null, StreamUtil.ReadAsString(inputStream));
         } else if (i == 500) {
             throw new XLEException(13);
         } else if (i == 503) {
@@ -142,11 +137,7 @@ public class ServiceCommon {
     }
 
     public static @NotNull XLEHttpStatusAndStream postStringWithStatus(String str, List<Header> list, @NotNull String str2) throws XLEException {
-        try {
-            return postStreamWithStatus(str, list, str2.getBytes(HTTP.UTF_8));
-        } catch (UnsupportedEncodingException e) {
-            throw new XLEException(5, (Throwable) e);
-        }
+        return postStreamWithStatus(str, list, str2.getBytes(StandardCharsets.UTF_8));
     }
 
     public static @NotNull XLEHttpStatusAndStream postStreamWithStatus(String str, List<Header> list, byte[] bArr) throws XLEException {
@@ -157,18 +148,14 @@ public class ServiceCommon {
             try {
                 httpPost.setEntity(new ByteArrayEntity(bArr));
             } catch (Exception e) {
-                throw new XLEException(5, (Throwable) e);
+                throw new XLEException(5, e);
             }
         }
         return excuteHttpRequest(httpPost, uri, list, false, 0);
     }
 
     public static @NotNull XLEHttpStatusAndStream putStringWithStatus(String str, List<Header> list, @NotNull String str2) throws XLEException {
-        try {
-            return putStreamWithStatus(str, list, str2.getBytes(HTTP.UTF_8));
-        } catch (UnsupportedEncodingException e) {
-            throw new XLEException(5, (Throwable) e);
-        }
+        return putStreamWithStatus(str, list, str2.getBytes(StandardCharsets.UTF_8));
     }
 
     public static @NotNull XLEHttpStatusAndStream putStreamWithStatus(String str, List<Header> list, byte[] bArr) throws XLEException {
@@ -179,7 +166,7 @@ public class ServiceCommon {
             try {
                 httpPut.setEntity(new ByteArrayEntity(bArr));
             } catch (Exception e) {
-                throw new XLEException(5, (Throwable) e);
+                throw new XLEException(5, e);
             }
         }
         return excuteHttpRequest(httpPut, uri, list, false, 0);

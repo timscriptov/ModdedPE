@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
  */
 
 class MinecraftWebViewClient extends WebViewClient {
-    private MinecraftWebview mView;
+    private final MinecraftWebview mView;
 
     public MinecraftWebViewClient(MinecraftWebview view) {
         mView = view;

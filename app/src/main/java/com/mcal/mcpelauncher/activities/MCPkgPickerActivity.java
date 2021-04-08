@@ -185,7 +185,7 @@ public class MCPkgPickerActivity extends BaseActivity {
             baseCardView.setOnClickListener(p113 -> {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(MCPkgPickerActivity.this, R.style.AlertDialogTheme);
                 dialog.setTitle(R.string.pick_tips_title);
-                dialog.setMessage(getString(R.string.pick_tips_message, new Object[]{pkg.packageName, pkg.applicationInfo.loadLabel(getPackageManager())}));
+                dialog.setMessage(getString(R.string.pick_tips_message, pkg.packageName, pkg.applicationInfo.loadLabel(getPackageManager())));
                 dialog.setPositiveButton(android.R.string.ok, (p11, p21) -> {
                     p11.dismiss();
                     Intent intent = new Intent();

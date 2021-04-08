@@ -90,9 +90,9 @@ public class XLEAnimationDefinition {
         if (animation == null) {
             return null;
         }
-        animation.setDuration((long) durationMs);
+        animation.setDuration(durationMs);
         animation.setInterpolator(interpolator);
-        animation.setStartOffset((long) delayMs);
+        animation.setStartOffset(delayMs);
         return animation;
     }
 

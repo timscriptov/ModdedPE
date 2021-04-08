@@ -56,10 +56,7 @@ public class XLEURIArg {
         }
         URI uri2 = this.uri;
         URI uri3 = xLEURIArg.uri;
-        if (uri2 == uri3 || (uri2 != null && uri2.equals(uri3))) {
-            return true;
-        }
-        return false;
+        return uri2 == uri3 || (uri2 != null && uri2.equals(uri3));
     }
 
     public int hashCode() {

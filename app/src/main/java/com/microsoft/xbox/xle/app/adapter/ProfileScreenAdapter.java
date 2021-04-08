@@ -28,18 +28,18 @@ public class ProfileScreenAdapter extends AdapterBase {
     public IconFontToggleButton blockButton = ((IconFontToggleButton) findViewById(R.id.profile_block));
     public IconFontToggleButton muteButton = ((IconFontToggleButton) findViewById(R.id.profile_mute));
     public ProfileScreenViewModel viewModel;
-    private ScrollView contentScrollView = ((ScrollView) findViewById(R.id.profile_screen_content_list));
-    private IconFontToggleButton followButton = ((IconFontToggleButton) findViewById(R.id.profile_follow));
-    private XLERoundedUniversalImageView gamerPicImageView = ((XLERoundedUniversalImageView) findViewById(R.id.profile_gamerpic));
-    private CustomTypefaceTextView gamerscoreIconTextView = ((CustomTypefaceTextView) findViewById(R.id.profile_gamerscore_icon));
-    private CustomTypefaceTextView gamerscoreTextView = ((CustomTypefaceTextView) findViewById(R.id.profile_gamerscore));
-    private CustomTypefaceTextView gamertagTextView = ((CustomTypefaceTextView) findViewById(R.id.profile_gamertag));
-    private FastProgressBar loadingProgressBar = ((FastProgressBar) findViewById(R.id.profile_screen_loading));
-    private CustomTypefaceTextView realNameTextView = ((CustomTypefaceTextView) findViewById(R.id.profile_realname));
-    private IconFontToggleButton reportButton = ((IconFontToggleButton) findViewById(R.id.profile_report));
-    private XLERootView rootView = ((XLERootView) findViewById(R.id.profile_root));
-    private IconFontToggleButton viewInXboxAppButton = ((IconFontToggleButton) findViewById(R.id.profile_view_in_xbox_app));
-    private CustomTypefaceTextView viewInXboxAppSubTextView = ((CustomTypefaceTextView) findViewById(R.id.profile_view_in_xbox_app_subtext));
+    private final ScrollView contentScrollView = ((ScrollView) findViewById(R.id.profile_screen_content_list));
+    private final IconFontToggleButton followButton = ((IconFontToggleButton) findViewById(R.id.profile_follow));
+    private final XLERoundedUniversalImageView gamerPicImageView = ((XLERoundedUniversalImageView) findViewById(R.id.profile_gamerpic));
+    private final CustomTypefaceTextView gamerscoreIconTextView = ((CustomTypefaceTextView) findViewById(R.id.profile_gamerscore_icon));
+    private final CustomTypefaceTextView gamerscoreTextView = ((CustomTypefaceTextView) findViewById(R.id.profile_gamerscore));
+    private final CustomTypefaceTextView gamertagTextView = ((CustomTypefaceTextView) findViewById(R.id.profile_gamertag));
+    private final FastProgressBar loadingProgressBar = ((FastProgressBar) findViewById(R.id.profile_screen_loading));
+    private final CustomTypefaceTextView realNameTextView = ((CustomTypefaceTextView) findViewById(R.id.profile_realname));
+    private final IconFontToggleButton reportButton = ((IconFontToggleButton) findViewById(R.id.profile_report));
+    private final XLERootView rootView = ((XLERootView) findViewById(R.id.profile_root));
+    private final IconFontToggleButton viewInXboxAppButton = ((IconFontToggleButton) findViewById(R.id.profile_view_in_xbox_app));
+    private final CustomTypefaceTextView viewInXboxAppSubTextView = ((CustomTypefaceTextView) findViewById(R.id.profile_view_in_xbox_app_subtext));
 
     @SuppressLint("WrongConstant")
     public ProfileScreenAdapter(ProfileScreenViewModel profileScreenViewModel) {

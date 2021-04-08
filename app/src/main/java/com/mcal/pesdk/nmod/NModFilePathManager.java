@@ -33,7 +33,7 @@ class NModFilePathManager {
     private static final String FILEPATH_FILE_NAME_NMOD_CAHCHE = "nmod_cached";
     private static final String FILEPATH_DIR_NAME_NMOD_JSON_PACKS = "nmod_json_packs";
     private static final String FILEPATH_DIR_NAME_NMOD_TEXT_PACKS = "nmod_text_packs";
-    private Context mContext;
+    private final Context mContext;
 
     NModFilePathManager(Context context) {
         this.mContext = context;

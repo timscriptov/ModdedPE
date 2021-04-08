@@ -8,7 +8,7 @@ package com.microsoft.xbox.toolkit;
  */
 
 public class ProjectSpecificDataProvider implements IProjectSpecificDataProvider {
-    private static ProjectSpecificDataProvider instance = new ProjectSpecificDataProvider();
+    private static final ProjectSpecificDataProvider instance = new ProjectSpecificDataProvider();
     private IProjectSpecificDataProvider provider;
 
     public static ProjectSpecificDataProvider getInstance() {

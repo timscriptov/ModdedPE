@@ -10,9 +10,9 @@ import com.microsoft.xbox.service.network.managers.IUserProfileResult;
  */
 
 public class ProfileData {
-    private IUserProfileResult.UserProfileResult profileResult;
-    private boolean shareRealName;
-    private String shareRealNameStatus;
+    private final IUserProfileResult.UserProfileResult profileResult;
+    private final boolean shareRealName;
+    private final String shareRealNameStatus;
     private boolean sharingRealNameTransitively;
 
     public ProfileData(IUserProfileResult.UserProfileResult userProfileResult, boolean z) {

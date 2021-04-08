@@ -19,9 +19,9 @@ import java.util.Iterator;
 public class BackgroundThreadWaitor {
     private static BackgroundThreadWaitor instance = new BackgroundThreadWaitor();
     private BackgroundThreadWaitorChangedCallback blockingChangedCallback = null;
-    private Hashtable<WaitType, WaitObject> blockingTable = new Hashtable<>();
-    private Ready waitReady = new Ready();
-    private ArrayList<Runnable> waitingRunnables = new ArrayList<>();
+    private final Hashtable<WaitType, WaitObject> blockingTable = new Hashtable<>();
+    private final Ready waitReady = new Ready();
+    private final ArrayList<Runnable> waitingRunnables = new ArrayList<>();
 
     public static BackgroundThreadWaitor getInstance() {
         if (instance == null) {
@@ -42,7 +42,7 @@ public class BackgroundThreadWaitor {
 
     public void setBlocking(WaitType waitType, int i) {
         XLEAssert.assertTrue(ThreadManager.UIThread == Thread.currentThread());
-        this.blockingTable.put(waitType, new WaitObject(waitType, (long) i));
+        this.blockingTable.put(waitType, new WaitObject(waitType, i));
         updateWaitReady();
     }
 
@@ -125,7 +125,7 @@ public class BackgroundThreadWaitor {
 
     private class WaitObject {
         public WaitType type;
-        private long expires;
+        private final long expires;
 
         public WaitObject(WaitType waitType, long j) {
             this.type = waitType;

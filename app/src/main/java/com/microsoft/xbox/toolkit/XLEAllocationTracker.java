@@ -10,8 +10,8 @@ import java.util.HashMap;
  */
 
 public class XLEAllocationTracker {
-    private static XLEAllocationTracker instance = new XLEAllocationTracker();
-    private HashMap<String, HashMap<String, Integer>> adapterCounter = new HashMap<>();
+    private static final XLEAllocationTracker instance = new XLEAllocationTracker();
+    private final HashMap<String, HashMap<String, Integer>> adapterCounter = new HashMap<>();
 
     public static XLEAllocationTracker getInstance() {
         return instance;

@@ -17,9 +17,9 @@ public class XboxLiveEnvironment {
     public static final String SOCIAL_SERVICE_GENERAL_CONTRACT_VERSION = "1";
     public static final String USER_PROFILE_CONTRACT_VERSION = "3";
     public static final String USER_PROFILE_PRIVACY_SETTINGS_CONTRACT_VERSION = "4";
-    private static XboxLiveEnvironment instance = new XboxLiveEnvironment();
+    private static final XboxLiveEnvironment instance = new XboxLiveEnvironment();
     private final boolean useProxy = false;
-    private Environment environment = Environment.PROD;
+    private final Environment environment = Environment.PROD;
 
     public static XboxLiveEnvironment Instance() {
         return instance;

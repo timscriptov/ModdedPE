@@ -15,12 +15,12 @@ import java.util.Iterator;
 
 public interface IUserProfileResult {
 
-    public static class Settings {
+    class Settings {
         public String id;
         public String value;
     }
 
-    public static class ProfileUser {
+    class ProfileUser {
         private static final long FORCE_MATURITY_LEVEL_UPDATE_TIME = 10800000;
         public boolean canViewTVAdultContent;
         public ProfilePreferredColor colors;
@@ -88,11 +88,11 @@ public interface IUserProfileResult {
         }
     }
 
-    public static class UserProfileResult {
+    class UserProfileResult {
         public ArrayList<ProfileUser> profileUsers;
 
         public static UserProfileResult deserialize(String str) {
-            return (UserProfileResult) GsonUtil.deserializeJson(str, UserProfileResult.class);
+            return GsonUtil.deserializeJson(str, UserProfileResult.class);
         }
     }
 }

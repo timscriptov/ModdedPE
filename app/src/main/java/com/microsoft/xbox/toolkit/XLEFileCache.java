@@ -152,10 +152,10 @@ public class XLEFileCache {
     }
 
     private class CachedFileInputStreamItem {
-        private byte[] computedMd5;
-        private InputStream contentInputStream;
+        private final byte[] computedMd5;
+        private final InputStream contentInputStream;
         private MessageDigest mDigest = null;
-        private byte[] savedMd5;
+        private final byte[] savedMd5;
 
         public CachedFileInputStreamItem(XLEFileCacheItemKey xLEFileCacheItemKey, File file) throws IOException {
             FileInputStream fileInputStream = new FileInputStream(file);
@@ -210,7 +210,7 @@ public class XLEFileCache {
     }
 
     private class CachedFileOutputStreamItem extends FileOutputStream {
-        private File destFile;
+        private final File destFile;
         private MessageDigest mDigest = null;
         private boolean startDigest = false;
         private boolean writeMd5Finished = false;

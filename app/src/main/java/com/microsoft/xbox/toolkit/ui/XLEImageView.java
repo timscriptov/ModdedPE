@@ -24,7 +24,7 @@ public class XLEImageView extends ImageView {
     protected boolean shouldAnimate;
 
     public XLEImageView(Context context) {
-        this(context, (AttributeSet) null, 0);
+        this(context, null, 0);
     }
 
     public XLEImageView(Context context, AttributeSet attributeSet) {

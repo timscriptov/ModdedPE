@@ -4,15 +4,15 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.Loader;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.google.gson.GsonBuilder;
 import com.mcal.mcpelauncher.R;
@@ -44,8 +44,8 @@ public class HeaderFragment extends BaseFragment implements View.OnClickListener
     private static final Callbacks NO_OP_CALLBACKS = () -> {
     };
     public UserAccount userAccount;
-    public TextView userEmail;
-    public ImageView userImageView;
+    public AppCompatTextView userEmail;
+    public AppCompatImageView userImageView;
     public final LoaderManager.LoaderCallbacks<BitmapLoader.Result> imageCallbacks = new LoaderManager.LoaderCallbacks<BitmapLoader.Result>() {
         @Contract("_, _ -> new")
         public @NotNull Loader<BitmapLoader.Result> onCreateLoader(int i, Bundle bundle) {
@@ -59,7 +59,7 @@ public class HeaderFragment extends BaseFragment implements View.OnClickListener
             Log.d(HeaderFragment.TAG, "LOADER_USER_IMAGE_URL finished");
             if (result.hasData()) {
                 userImageView.setVisibility(0);
-                userImageView.setImageBitmap((Bitmap) result.getData());
+                userImageView.setImageBitmap(result.getData());
             } else if (result.hasException()) {
                 userImageView.setVisibility(8);
                 Log.w(HeaderFragment.TAG, "Failed to load user image with message: " + result.getException().getMessage());
@@ -67,10 +67,10 @@ public class HeaderFragment extends BaseFragment implements View.OnClickListener
         }
 
         public void onLoaderReset(Loader<BitmapLoader.Result> loader) {
-            userImageView.setImageBitmap((Bitmap) null);
+            userImageView.setImageBitmap(null);
         }
     };
-    public TextView userName;
+    public AppCompatTextView userName;
     LoaderManager.LoaderCallbacks<ObjectLoader.Result<UserAccount>> userAccountCallbacks = new LoaderManager.LoaderCallbacks<ObjectLoader.Result<UserAccount>>() {
         public void onLoaderReset(Loader<ObjectLoader.Result<UserAccount>> loader) {
         }
@@ -88,11 +88,11 @@ public class HeaderFragment extends BaseFragment implements View.OnClickListener
                 userEmail.setText(userAccount.email);
                 if (!TextUtils.isEmpty(userAccount.firstName) || !TextUtils.isEmpty(userAccount.lastName)) {
                     userName.setVisibility(0);
-                    userName.setText(HeaderFragment.this.getString(R.string.xbid_first_and_last_name_android, new Object[]{HeaderFragment.this.userAccount.firstName, HeaderFragment.this.userAccount.lastName}));
+                    userName.setText(getString(R.string.xbid_first_and_last_name_android, userAccount.firstName, userAccount.lastName));
                 } else {
                     userName.setVisibility(8);
                 }
-                getLoaderManager().initLoader(2, (Bundle) null, imageCallbacks);
+                getLoaderManager().initLoader(2, null, imageCallbacks);
                 return;
             }
             Log.e(HeaderFragment.TAG, "Error getting UserAccount");
@@ -102,12 +102,12 @@ public class HeaderFragment extends BaseFragment implements View.OnClickListener
 
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.callbacks = (Callbacks) activity;
+        callbacks = (Callbacks) activity;
     }
 
     public void onDetach() {
         super.onDetach();
-        this.callbacks = NO_OP_CALLBACKS;
+        callbacks = NO_OP_CALLBACKS;
     }
 
     public void onCreate(Bundle bundle) {
@@ -121,16 +121,16 @@ public class HeaderFragment extends BaseFragment implements View.OnClickListener
     public void onViewCreated(View view, Bundle bundle) {
         super.onViewCreated(view, bundle);
         view.findViewById(R.id.xbid_close).setOnClickListener(this);
-        this.userImageView = (ImageView) view.findViewById(R.id.xbid_user_image);
-        this.userName = (TextView) view.findViewById(R.id.xbid_user_name);
-        this.userEmail = (TextView) view.findViewById(R.id.xbid_user_email);
+        userImageView = view.findViewById(R.id.xbid_user_image);
+        userName = view.findViewById(R.id.xbid_user_name);
+        userEmail = view.findViewById(R.id.xbid_user_email);
     }
 
     public void onResume() {
         super.onResume();
         Bundle arguments = getArguments();
         if (arguments != null) {
-            getLoaderManager().initLoader(1, arguments, this.userAccountCallbacks);
+            getLoaderManager().initLoader(1, arguments, userAccountCallbacks);
         } else {
             Log.e(TAG, "No arguments provided");
         }
@@ -138,7 +138,7 @@ public class HeaderFragment extends BaseFragment implements View.OnClickListener
 
     public void onClick(@NotNull View view) {
         if (view.getId() == R.id.xbid_close) {
-            this.callbacks.onClickCloseHeader();
+            callbacks.onClickCloseHeader();
         }
     }
 

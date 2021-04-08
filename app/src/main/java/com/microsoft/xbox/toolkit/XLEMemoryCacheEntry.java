@@ -8,8 +8,8 @@ package com.microsoft.xbox.toolkit;
  */
 
 public class XLEMemoryCacheEntry<V> {
-    private int byteCount;
-    private V data;
+    private final int byteCount;
+    private final V data;
 
     public XLEMemoryCacheEntry(V v, int i) {
         if (v == null) {

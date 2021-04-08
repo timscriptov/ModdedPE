@@ -54,6 +54,6 @@ public class SwitchPreference extends androidx.preference.SwitchPreference imple
     }
 
     public interface OnCheckedChangeListener {
-        public void onCheckedChange(Switch data);
+        void onCheckedChange(Switch data);
     }
 }

@@ -16,8 +16,8 @@ public class MemoryMonitor {
     public static final int KB_TO_BYTES = 1024;
     public static final int MB_TO_BYTES = 1048576;
     public static final int MB_TO_KB = 1024;
-    private static MemoryMonitor instance = new MemoryMonitor();
-    private Debug.MemoryInfo memoryInfo = new Debug.MemoryInfo();
+    private static final MemoryMonitor instance = new MemoryMonitor();
+    private final Debug.MemoryInfo memoryInfo = new Debug.MemoryInfo();
 
     private MemoryMonitor() {
     }

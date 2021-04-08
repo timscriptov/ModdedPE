@@ -25,7 +25,7 @@ import okhttp3.Response;
 
 public class HttpClientRequest {
     private static final byte[] NO_BODY = new byte[0];
-    private static OkHttpClient OK_CLIENT = new OkHttpClient.Builder().retryOnConnectionFailure(false).build();
+    private static final OkHttpClient OK_CLIENT = new OkHttpClient.Builder().retryOnConnectionFailure(false).build();
     private Request okHttpRequest;
     private Request.Builder requestBuilder = new Request.Builder();
 

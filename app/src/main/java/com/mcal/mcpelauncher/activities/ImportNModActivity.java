@@ -77,7 +77,7 @@ public class ImportNModActivity extends BaseActivity {
     private void onFailedViewMoreClicked() {
         setContentView(R.layout.nmod_importer_failed);
         AppCompatTextView errorText = findViewById(R.id.nmod_importer_failed_text_view);
-        errorText.setText(getString(R.string.nmod_import_failed_full_info_message, new Object[]{mFailedInfo.toTypeString(), mFailedInfo.getCause().toString()}));
+        errorText.setText(getString(R.string.nmod_import_failed_full_info_message, mFailedInfo.toTypeString(), mFailedInfo.getCause().toString()));
     }
 
     private class ImportThread extends Thread {

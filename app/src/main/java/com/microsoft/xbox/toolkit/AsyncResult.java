@@ -11,7 +11,7 @@ public class AsyncResult<T> {
     private final XLEException exception;
     private final T result;
     private final Object sender;
-    private AsyncActionStatus status;
+    private final AsyncActionStatus status;
 
     public AsyncResult(T t, Object obj, XLEException xLEException) {
         this(t, obj, xLEException, xLEException == null ? AsyncActionStatus.SUCCESS : AsyncActionStatus.FAIL);

@@ -5,7 +5,6 @@ import com.microsoft.xbox.toolkit.XLEException;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
@@ -22,7 +21,7 @@ import java.util.zip.GZIPInputStream;
  */
 
 public abstract class AbstractXLEHttpClient {
-    public abstract HttpResponse execute(HttpUriRequest httpUriRequest) throws ClientProtocolException, IOException;
+    public abstract HttpResponse execute(HttpUriRequest httpUriRequest) throws IOException;
 
     public XLEHttpStatusAndStream getHttpStatusAndStreamInternal(HttpUriRequest httpUriRequest, boolean z) throws XLEException {
         HttpEntity httpEntity;
@@ -58,7 +57,7 @@ public abstract class AbstractXLEHttpClient {
             if (xLEHttpStatusAndStream.stream != null) {
                 xLEHttpStatusAndStream.close();
             }
-            throw new XLEException(4, (Throwable) e);
+            throw new XLEException(4, e);
         }
     }
 }

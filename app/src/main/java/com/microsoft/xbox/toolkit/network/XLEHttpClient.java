@@ -1,13 +1,11 @@
 package com.microsoft.xbox.toolkit.network;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.HttpContext;
 
 import java.io.IOException;
 
@@ -25,7 +23,7 @@ public class XLEHttpClient extends AbstractXLEHttpClient {
         this.client = new DefaultHttpClient(clientConnectionManager, httpParams);
     }
 
-    public HttpResponse execute(HttpUriRequest httpUriRequest) throws ClientProtocolException, IOException {
-        return this.client.execute(httpUriRequest, (HttpContext) new BasicHttpContext());
+    public HttpResponse execute(HttpUriRequest httpUriRequest) throws IOException {
+        return this.client.execute(httpUriRequest, new BasicHttpContext());
     }
 }

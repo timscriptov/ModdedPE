@@ -30,10 +30,7 @@ public class TextureManagerScaledNetworkBitmapRequest implements XLEFileCacheIte
             return false;
         }
         TextureManagerScaledNetworkBitmapRequest textureManagerScaledNetworkBitmapRequest = (TextureManagerScaledNetworkBitmapRequest) obj;
-        if (!this.url.equals(textureManagerScaledNetworkBitmapRequest.url) || !this.bindingOption.equals(textureManagerScaledNetworkBitmapRequest.bindingOption)) {
-            return false;
-        }
-        return true;
+        return this.url.equals(textureManagerScaledNetworkBitmapRequest.url) && this.bindingOption.equals(textureManagerScaledNetworkBitmapRequest.bindingOption);
     }
 
     public int hashCode() {

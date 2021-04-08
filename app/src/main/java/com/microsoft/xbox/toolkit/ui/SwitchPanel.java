@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -28,7 +27,7 @@ public class SwitchPanel extends LinearLayout {
     private boolean active = false;
     private boolean blocking = false;
     private View newView = null;
-    private AnimatorListenerAdapter AnimateInListener = new AnimatorListenerAdapter() {
+    private final AnimatorListenerAdapter AnimateInListener = new AnimatorListenerAdapter() {
         public void onAnimationCancel(Animator animator) {
             SwitchPanel.this.onAnimateInEnd();
         }
@@ -42,7 +41,7 @@ public class SwitchPanel extends LinearLayout {
         }
     };
     private View oldView = null;
-    private AnimatorListenerAdapter AnimateOutListener = new AnimatorListenerAdapter() {
+    private final AnimatorListenerAdapter AnimateOutListener = new AnimatorListenerAdapter() {
         public void onAnimationCancel(Animator animator) {
             SwitchPanel.this.onAnimateOutEnd();
         }
@@ -164,7 +163,7 @@ public class SwitchPanel extends LinearLayout {
     public void onAnimateInStart() {
         View view = this.newView;
         if (view != null) {
-            view.setLayerType(2, (Paint) null);
+            view.setLayerType(2, null);
             setBlocking(true);
         }
     }
@@ -174,7 +173,7 @@ public class SwitchPanel extends LinearLayout {
         setBlocking(false);
         View view = this.newView;
         if (view != null) {
-            view.setLayerType(0, (Paint) null);
+            view.setLayerType(0, null);
         }
     }
 
@@ -182,7 +181,7 @@ public class SwitchPanel extends LinearLayout {
     public void onAnimateOutStart() {
         View view = this.oldView;
         if (view != null) {
-            view.setLayerType(2, (Paint) null);
+            view.setLayerType(2, null);
             setBlocking(true);
         }
     }
@@ -192,7 +191,7 @@ public class SwitchPanel extends LinearLayout {
         View view = this.oldView;
         if (view != null) {
             view.setVisibility(8);
-            this.oldView.setLayerType(0, (Paint) null);
+            this.oldView.setLayerType(0, null);
         }
     }
 

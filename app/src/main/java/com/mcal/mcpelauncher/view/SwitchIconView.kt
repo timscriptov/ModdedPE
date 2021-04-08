@@ -233,7 +233,7 @@ class SwitchIconView @JvmOverloads constructor(context: Context, attrs: Attribut
     internal class SwitchIconSavedState : BaseSavedState {
         var iconEnabled: Boolean = false
 
-        constructor(superState: Parcelable) : super(superState) {}
+        constructor(superState: Parcelable) : super(superState)
 
         private constructor(parcel: Parcel) : super(parcel) {
             val enabled = parcel.readInt()

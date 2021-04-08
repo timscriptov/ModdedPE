@@ -21,8 +21,8 @@ package com.mcal.pesdk.nmod;
  * @author https://github.com/TimScriptov
  */
 public class NModWarning {
-    private int mType;
-    private Throwable mCause;
+    private final int mType;
+    private final Throwable mCause;
 
     public NModWarning(int type, Throwable cause) {
         mType = type;

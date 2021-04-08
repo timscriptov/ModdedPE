@@ -13,7 +13,7 @@ public class UTCEventTracker {
         try {
             uTCEventDelegate.call();
         } catch (Exception e) {
-            UTCLog.log(e.getMessage(), new Object[0]);
+            UTCLog.log(e.getMessage());
         }
     }
 
@@ -21,7 +21,7 @@ public class UTCEventTracker {
         try {
             return uTCStringEventDelegate.call();
         } catch (Exception e) {
-            UTCLog.log(e.getMessage(), new Object[0]);
+            UTCLog.log(e.getMessage());
             return null;
         }
     }

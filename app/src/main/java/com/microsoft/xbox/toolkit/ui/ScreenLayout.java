@@ -34,7 +34,7 @@ import java.util.Iterator;
  */
 
 public abstract class ScreenLayout extends FrameLayout {
-    private static ArrayList<View> badList = new ArrayList<>();
+    private static final ArrayList<View> badList = new ArrayList<>();
     protected boolean isTombstoned;
     private boolean allEventsEnabled;
     private boolean drawerEnabled;

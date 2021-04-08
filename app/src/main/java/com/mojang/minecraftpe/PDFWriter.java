@@ -2,7 +2,6 @@ package com.mojang.minecraftpe;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
@@ -19,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -29,13 +27,13 @@ import java.io.IOException;
  */
 
 public class PDFWriter {
-    private Rect mImageRect;
+    private final Rect mImageRect;
     private PdfDocument mOpenDocument;
-    private Rect mPageRect = new Rect(0, 0, 612, 792);
-    private TextPaint mPageTextPaint;
-    private Rect mTextRect;
-    private Rect mTitleRect = new Rect(0, 0, mPageRect.width(), (int) (((float) mPageRect.height()) * (1.0f - 0.3f)));
-    private TextPaint mTitleTextPaint;
+    private final Rect mPageRect = new Rect(0, 0, 612, 792);
+    private final TextPaint mPageTextPaint;
+    private final Rect mTextRect;
+    private final Rect mTitleRect = new Rect(0, 0, mPageRect.width(), (int) (((float) mPageRect.height()) * (1.0f - 0.3f)));
+    private final TextPaint mTitleTextPaint;
 
     public PDFWriter() {
         mTitleRect.offset(0, (int) (((float) mPageRect.height()) * 0.3f));
@@ -77,7 +75,7 @@ public class PDFWriter {
                 if (fileExtension.equals("txt")) {
                     _drawTextInRect(_readFileToString(filename), page, mPageTextPaint, mTextRect, Layout.Alignment.ALIGN_NORMAL);
                 } else if (fileExtension.equals("jpeg")) {
-                    page.getCanvas().drawBitmap(BitmapFactory.decodeFile(filename), (Rect) null, mImageRect, (Paint) null);
+                    page.getCanvas().drawBitmap(BitmapFactory.decodeFile(filename), null, mImageRect, null);
                 } else {
                     throw new UnsupportedOperationException("Unsupported extension from file: " + filename);
                 }
@@ -126,7 +124,7 @@ public class PDFWriter {
 
     @NotNull
     @Contract("_ -> new")
-    private String _readFileToString(String filename) throws FileNotFoundException, IOException {
+    private String _readFileToString(String filename) throws IOException {
         File textFile = new File(filename);
         FileInputStream textStream = new FileInputStream(textFile);
         byte[] textBytes = new byte[((int) textFile.length())];

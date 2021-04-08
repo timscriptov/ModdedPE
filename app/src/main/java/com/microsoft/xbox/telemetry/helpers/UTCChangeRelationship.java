@@ -95,9 +95,9 @@ public class UTCChangeRelationship {
         EXISTINGFRIEND(3),
         NOTCHANGED(4);
 
-        private int value;
+        private final int value;
 
-        private Relationship(int i) {
+        Relationship(int i) {
             this.value = i;
         }
 
@@ -114,9 +114,9 @@ public class UTCChangeRelationship {
         EXISTINGFAVORITE(4),
         EXISTINGNOTFAVORITED(5);
 
-        private int value;
+        private final int value;
 
-        private FavoriteStatus(int i) {
+        FavoriteStatus(int i) {
             this.value = i;
         }
 
@@ -132,9 +132,9 @@ public class UTCChangeRelationship {
         EXISTINGSHARED(3),
         EXISTINGNOTSHARED(4);
 
-        private int value;
+        private final int value;
 
-        private RealNameStatus(int i) {
+        RealNameStatus(int i) {
             this.value = i;
         }
 
@@ -149,9 +149,9 @@ public class UTCChangeRelationship {
         FACEBOOK(2),
         SUGGESTED(3);
 
-        private int value;
+        private final int value;
 
-        private GamerType(int i) {
+        GamerType(int i) {
             this.value = i;
         }
 

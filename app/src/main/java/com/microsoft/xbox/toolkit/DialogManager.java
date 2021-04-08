@@ -10,7 +10,7 @@ import android.app.Dialog;
  */
 
 public class DialogManager implements IProjectSpecificDialogManager {
-    private static DialogManager instance = new DialogManager();
+    private static final DialogManager instance = new DialogManager();
     private IProjectSpecificDialogManager manager;
 
     private DialogManager() {

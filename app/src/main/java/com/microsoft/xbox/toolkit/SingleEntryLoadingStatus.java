@@ -10,7 +10,7 @@ package com.microsoft.xbox.toolkit;
 public class SingleEntryLoadingStatus {
     private boolean isLoading = false;
     private XLEException lastError = null;
-    private Object syncObj = new Object();
+    private final Object syncObj = new Object();
 
     public boolean getIsLoading() {
         return this.isLoading;
@@ -21,7 +21,7 @@ public class SingleEntryLoadingStatus {
     }
 
     public void setSuccess() {
-        setDone((XLEException) null);
+        setDone(null);
     }
 
     public void setFailed(XLEException xLEException) {
@@ -49,7 +49,7 @@ public class SingleEntryLoadingStatus {
                 return waitResult;
             }
             this.isLoading = true;
-            WaitResult waitResult2 = new WaitResult(false, (XLEException) null);
+            WaitResult waitResult2 = new WaitResult(false, null);
             return waitResult2;
         }
     }

@@ -291,11 +291,11 @@ public class JavaUtil {
         if (isNullOrEmpty(str)) {
             return null;
         }
-        XLEAssert.assertTrue(str.substring(0, 6).equals("/Date("));
+        XLEAssert.assertTrue(str.startsWith("/Date("));
         int length = str.length();
-        if (str.substring(str.length() - 7, str.length()).equals("+0000)/")) {
+        if (str.startsWith("+0000)/", str.length() - 7)) {
             length = str.length() - 7;
-        } else if (str.substring(str.length() - 2, str.length()).equals(")/")) {
+        } else if (str.startsWith(")/", str.length() - 2)) {
             length = str.length() - 2;
         } else {
             XLEAssert.assertTrue(false);
@@ -306,7 +306,7 @@ public class JavaUtil {
     public static @NotNull String JavaDateToJSONDate(Date date) {
         GregorianCalendar gregorianCalendar = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
         gregorianCalendar.setTime(date);
-        return String.format("/Date(%d)/", new Object[]{Long.valueOf(gregorianCalendar.getTimeInMillis())});
+        return String.format("/Date(%d)/", Long.valueOf(gregorianCalendar.getTimeInMillis()));
     }
 
     public static <T> @NotNull List<T> listIteratorToList(ListIterator<T> listIterator) {
@@ -324,7 +324,7 @@ public class JavaUtil {
         if (i == 1) {
             return str2;
         }
-        return String.format(str3, new Object[]{Integer.valueOf(i)});
+        return String.format(str3, Integer.valueOf(i));
     }
 
     public static int randInRange(@NotNull Random random, int i, int i2) {
@@ -360,12 +360,12 @@ public class JavaUtil {
     }
 
     public static @NotNull String formatInteger(int i) {
-        return INTEGER_FORMATTER.format((long) i);
+        return INTEGER_FORMATTER.format(i);
     }
 
     public static @NotNull String formatPercent(float f) {
         XLEAssert.assertTrue(f + " is not between 0 and 1", f >= 0.0f && f <= 1.0f);
-        return PERCENT_FORMATTER.format((double) f);
+        return PERCENT_FORMATTER.format(f);
     }
 
     public static int[] concatIntArrays(int[]... iArr) {

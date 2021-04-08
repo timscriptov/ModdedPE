@@ -17,7 +17,7 @@ public class UTCLog {
             StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
             if (stackTrace.length > 3) {
                 String methodName = stackTrace[3].getMethodName();
-                Log.d(UTCLOGTAG, String.format(String.format("%s: ", new Object[]{methodName}) + str, objArr));
+                Log.d(UTCLOGTAG, String.format(String.format("%s: ", methodName) + str, objArr));
                 return;
             }
             Log.d(UTCLOGTAG, String.format(str, objArr));

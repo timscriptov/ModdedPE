@@ -3,7 +3,6 @@ package com.mojang.minecraftpe.Webview;
 import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -70,13 +69,13 @@ public class MinecraftWebview {
 
     public void sendToWebView(String data) {
         final String toEvaluate = data;
-        mActivity.runOnUiThread((Runnable) () -> mWebView.evaluateJavascript(toEvaluate, (ValueCallback<String>) null));
+        mActivity.runOnUiThread(() -> mWebView.evaluateJavascript(toEvaluate, null));
     }
 
     public void _injectApi() {
         String apiScript = _readResource(mActivity.getResources().getIdentifier("code_builder_hosted_editor", "raw", mActivity.getPackageName()));
         if (apiScript != null) {
-            mWebView.evaluateJavascript(apiScript, (ValueCallback<String>) null);
+            mWebView.evaluateJavascript(apiScript, null);
         } else {
             nativeOnWebError(0, "Unable to inject api");
         }

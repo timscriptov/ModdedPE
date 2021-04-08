@@ -43,7 +43,7 @@ public class SearchResultPerson {
         if (findWordIndex != -1) {
             arrayList.add(str.substring(0, findWordIndex));
             arrayList.add(str.substring(findWordIndex, str2.length() + findWordIndex));
-            arrayList.add(str.substring(length, str.length()));
+            arrayList.add(str.substring(length));
         } else {
             arrayList.add(str);
             arrayList.add("");

@@ -19,7 +19,7 @@ public interface Endpoints {
 
     String userManagement();
 
-    public enum Type {
+    enum Type {
         PROD,
         DNET
     }

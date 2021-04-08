@@ -19,7 +19,7 @@ import java.lang.reflect.Field;
 public class XLERValueHelper {
     public static int getStringRValue(String str) {
         try {
-            return getStringRClass().getDeclaredField(str).getInt((Object) null);
+            return getStringRClass().getDeclaredField(str).getInt(null);
         } catch (Exception unused) {
             XLEAssert.assertTrue("Can't find " + str, false);
             return -1;
@@ -28,7 +28,7 @@ public class XLERValueHelper {
 
     public static int getDrawableRValue(String str) {
         try {
-            return getDrawableRClass().getDeclaredField(str).getInt((Object) null);
+            return getDrawableRClass().getDeclaredField(str).getInt(null);
         } catch (Exception unused) {
             XLEAssert.assertTrue("Can't find " + str, false);
             return -1;
@@ -37,7 +37,7 @@ public class XLERValueHelper {
 
     public static int getIdRValue(String str) {
         try {
-            return getIdRClass().getDeclaredField(str).getInt((Object) null);
+            return getIdRClass().getDeclaredField(str).getInt(null);
         } catch (Exception unused) {
             XLEAssert.assertTrue("Can't find " + str, false);
             return -1;
@@ -46,7 +46,7 @@ public class XLERValueHelper {
 
     public static int getStyleRValue(String str) {
         try {
-            return getStyleRClass().getDeclaredField(str).getInt((Object) null);
+            return getStyleRClass().getDeclaredField(str).getInt(null);
         } catch (Exception unused) {
             XLEAssert.assertTrue("Can't find " + str, false);
             return -1;
@@ -55,7 +55,7 @@ public class XLERValueHelper {
 
     public static int @Nullable [] getStyleableRValueArray(String str) {
         try {
-            return (int[]) getStyleableRClass().getDeclaredField(str).get((Object) null);
+            return (int[]) getStyleableRClass().getDeclaredField(str).get(null);
         } catch (Exception unused) {
             XLEAssert.assertTrue("Can't find " + str, false);
             return null;
@@ -64,7 +64,7 @@ public class XLERValueHelper {
 
     public static int getStyleableRValue(String str) {
         try {
-            return getStyleableRClass().getDeclaredField(str).getInt((Object) null);
+            return getStyleableRClass().getDeclaredField(str).getInt(null);
         } catch (Exception unused) {
             XLEAssert.assertTrue("Can't find " + str, false);
             return -1;
@@ -73,7 +73,7 @@ public class XLERValueHelper {
 
     public static int getLayoutRValue(String str) {
         try {
-            return getLayoutRClass().getDeclaredField(str).getInt((Object) null);
+            return getLayoutRClass().getDeclaredField(str).getInt(null);
         } catch (Exception unused) {
             XLEAssert.assertTrue("Can't find " + str, false);
             return -1;
@@ -82,7 +82,7 @@ public class XLERValueHelper {
 
     public static int getDimenRValue(String str) {
         try {
-            return getDimenRClass().getDeclaredField(str).getInt((Object) null);
+            return getDimenRClass().getDeclaredField(str).getInt(null);
         } catch (Exception unused) {
             XLEAssert.assertTrue("Can't find " + str, false);
             return -1;
@@ -91,7 +91,7 @@ public class XLERValueHelper {
 
     public static int getColorRValue(String str) {
         try {
-            return getColorRClass().getDeclaredField(str).getInt((Object) null);
+            return getColorRClass().getDeclaredField(str).getInt(null);
         } catch (Exception unused) {
             XLEAssert.assertTrue("Can't find " + str, false);
             return -1;
@@ -109,7 +109,7 @@ public class XLERValueHelper {
             return -1;
         }
         try {
-            return field.getInt((Object) null);
+            return field.getInt(null);
         } catch (IllegalAccessException unused2) {
             return -1;
         }
@@ -125,7 +125,7 @@ public class XLERValueHelper {
         int i = -1;
         if (field != null) {
             try {
-                i = field.getInt((Object) null);
+                i = field.getInt(null);
             } catch (IllegalAccessException unused2) {
             }
         }

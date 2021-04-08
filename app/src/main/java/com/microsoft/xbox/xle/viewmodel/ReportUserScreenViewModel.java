@@ -28,8 +28,8 @@ import java.util.ArrayList;
 
 public class ReportUserScreenViewModel extends ViewModelBase {
     public boolean isSubmittingReport;
-    private FeedbackType[] feedbackReasons;
-    private ProfileModel model;
+    private final FeedbackType[] feedbackReasons;
+    private final ProfileModel model;
     private FeedbackType selectedReason;
     private SubmitReportAsyncTask submitReportAsyncTask;
 
@@ -67,7 +67,7 @@ public class ReportUserScreenViewModel extends ViewModelBase {
     public boolean onBackButtonPressed() {
         UTCPageView.removePage();
         try {
-            NavigationManager.getInstance().PopScreensAndReplace(1, (Class<? extends ScreenLayout>) null, false, false, false, NavigationManager.getInstance().getActivityParameters());
+            NavigationManager.getInstance().PopScreensAndReplace(1, null, false, false, false, NavigationManager.getInstance().getActivityParameters());
             return true;
         } catch (XLEException unused) {
             return false;
@@ -98,7 +98,7 @@ public class ReportUserScreenViewModel extends ViewModelBase {
     }
 
     public String getTitle() {
-        return String.format(XboxTcuiSdk.getResources().getString(R.string.ProfileCard_Report_InfoString_Android), new Object[]{this.model.getGamerTag()});
+        return String.format(XboxTcuiSdk.getResources().getString(R.string.ProfileCard_Report_InfoString_Android), this.model.getGamerTag());
     }
 
     public ArrayList<String> getReasonTitles() {
@@ -156,9 +156,9 @@ public class ReportUserScreenViewModel extends ViewModelBase {
     }
 
     private class SubmitReportAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
-        private FeedbackType feedbackType;
-        private ProfileModel model;
-        private String textReason;
+        private final FeedbackType feedbackType;
+        private final ProfileModel model;
+        private final String textReason;
 
         private SubmitReportAsyncTask(ProfileModel profileModel, FeedbackType feedbackType2, String str) {
             this.model = profileModel;

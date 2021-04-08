@@ -1,7 +1,6 @@
 package com.microsoft.xbox.toolkit.anim;
 
 import android.annotation.SuppressLint;
-import android.graphics.Paint;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -21,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class XLEAnimationView extends XLEAnimation {
     public View animtarget;
-    private Animation anim;
+    private final Animation anim;
 
     public XLEAnimationView(@NotNull Animation animation) {
         this.anim = animation;
@@ -48,7 +47,7 @@ public class XLEAnimationView extends XLEAnimation {
     }
 
     public void clear() {
-        this.anim.setAnimationListener((Animation.AnimationListener) null);
+        this.anim.setAnimationListener(null);
         this.animtarget.clearAnimation();
     }
 
@@ -75,10 +74,10 @@ public class XLEAnimationView extends XLEAnimation {
 
     @SuppressLint("WrongConstant")
     public void onViewAnimationStart() {
-        this.animtarget.setLayerType(2, (Paint) null);
+        this.animtarget.setLayerType(2, null);
     }
 
     public void onViewAnimationEnd() {
-        ThreadManager.UIThreadPost((Runnable) () -> XLEAnimationView.this.animtarget.setLayerType(0, (Paint) null));
+        ThreadManager.UIThreadPost(() -> XLEAnimationView.this.animtarget.setLayerType(0, null));
     }
 }

@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 
 public class TextureManagerDownloadRequest implements Comparable<TextureManagerDownloadRequest> {
-    private static AtomicInteger nextIndex = new AtomicInteger(0);
+    private static final AtomicInteger nextIndex = new AtomicInteger(0);
     public int index = nextIndex.incrementAndGet();
     public TextureManagerScaledNetworkBitmapRequest key;
     public InputStream stream;

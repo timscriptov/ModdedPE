@@ -28,10 +28,7 @@ public class TextureManagerScaledResourceBitmapRequest {
             return false;
         }
         TextureManagerScaledResourceBitmapRequest textureManagerScaledResourceBitmapRequest = (TextureManagerScaledResourceBitmapRequest) obj;
-        if (this.resourceId != textureManagerScaledResourceBitmapRequest.resourceId || !this.bindingOption.equals(textureManagerScaledResourceBitmapRequest.bindingOption)) {
-            return false;
-        }
-        return true;
+        return this.resourceId == textureManagerScaledResourceBitmapRequest.resourceId && this.bindingOption.equals(textureManagerScaledResourceBitmapRequest.bindingOption);
     }
 
     public int hashCode() {

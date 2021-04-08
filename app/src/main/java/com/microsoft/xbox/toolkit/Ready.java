@@ -9,7 +9,7 @@ package com.microsoft.xbox.toolkit;
 
 public class Ready {
     private boolean ready = false;
-    private Object syncObj = new Object();
+    private final Object syncObj = new Object();
 
     public boolean getIsReady() {
         boolean z;
@@ -35,7 +35,7 @@ public class Ready {
             if (!this.ready) {
                 if (i > 0) {
                     try {
-                        this.syncObj.wait((long) i);
+                        this.syncObj.wait(i);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

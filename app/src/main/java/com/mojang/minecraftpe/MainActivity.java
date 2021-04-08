@@ -124,11 +124,11 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     public int mLastPermissionRequestReason;
     public int virtualKeyboardHeight = 0;
     private boolean mHasStoragePermission = false;
-    private Messenger mMessenger = new Messenger(new IncomingHandler());
+    private final Messenger mMessenger = new Messenger(new IncomingHandler());
     private HeadsetConnectionReceiver headsetConnectionReceiver;
-    private List<ActivityListener> mActivityListeners = new ArrayList<ActivityListener>();
+    private final List<ActivityListener> mActivityListeners = new ArrayList<ActivityListener>();
     private MessageConnectionStatus mBound = MessageConnectionStatus.NOTSET;
-    private MemoryInfo mCachedMemoryInfo = new MemoryInfo();
+    private final MemoryInfo mCachedMemoryInfo = new MemoryInfo();
     private long mCachedMemoryInfoUpdateTime = 0;
     private long mCachedUsedMemory = 0;
     private long mCachedUsedMemoryUpdateTime = 0;
@@ -160,7 +160,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     private long mCallback = 0;
     private InputDeviceManager deviceManager;
     private ArrayList<SessionInfo> mSessionHistory = null;
-    private ArrayList<StringValue> _userInputValues = new ArrayList<>();
+    private final ArrayList<StringValue> _userInputValues = new ArrayList<>();
     private long mFileDialogCallback = 0;
     private HardwareInformation mHardwareInformation;
     private TextToSpeech textToSpeechManager;
@@ -638,11 +638,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 1) {
-            if (grantResults[0] == 0) {
-                mHasStoragePermission = true;
-            } else {
-                mHasStoragePermission = false;
-            }
+            mHasStoragePermission = grantResults[0] == 0;
             nativeStoragePermissionRequestResult(mHasStoragePermission, mLastPermissionRequestReason);
         }
     }
@@ -657,10 +653,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     }
 
     public boolean isMixerCreateInstalled() {
-        if (getApplicationContext() == null || getMixerCreateInstalledPackage() == null) {
-            return false;
-        }
-        return true;
+        return getApplicationContext() != null && getMixerCreateInstalledPackage() != null;
     }
 
     private @Nullable Intent getMixerCreateInstalledPackage() {
@@ -692,7 +685,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         Context applicationContext = getApplicationContext();
         if (applicationContext != null) {
             Intent intent = new Intent("android.intent.action.VIEW");
-            intent.setData(Uri.parse(String.format(MARKET_URL_FORMAT, new Object[]{MIXER_CREATE_RETAIL_PACKAGE})));
+            intent.setData(Uri.parse(String.format(MARKET_URL_FORMAT, MIXER_CREATE_RETAIL_PACKAGE)));
             intent.addFlags(268435456);
             try {
                 applicationContext.startActivity(intent);
@@ -757,16 +750,8 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
             boolean isHardwareEnter;
             boolean isMultiline = true;
             Log.w("ModdedPE", "onEditorAction: " + actionId);
-            if (actionId == 5) {
-                isVirtualEnter = true;
-            } else {
-                isVirtualEnter = false;
-            }
-            if (actionId == 0 && event != null && event.getAction() == 0) {
-                isHardwareEnter = true;
-            } else {
-                isHardwareEnter = false;
-            }
+            isVirtualEnter = actionId == 5;
+            isHardwareEnter = actionId == 0 && event != null && event.getAction() == 0;
             if (isVirtualEnter || isHardwareEnter) {
                 if (isVirtualEnter) {
                     nativeReturnKeyPressed();
@@ -780,7 +765,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
                     isMultiline = false;
                 }
                 if (isMultiline) {
-                    textWidget.setText(curText.substring(0, curSelect) + "\n" + curText.substring(curSelect, curText.length()));
+                    textWidget.setText(curText.substring(0, curSelect) + "\n" + curText.substring(curSelect));
                     textWidget.setSelection(Math.min(curSelect + 1, textWidget.getText().length()));
                 }
                 return true;
@@ -1123,10 +1108,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
             return true;
         }
         info = cm.getActiveNetworkInfo();
-        if (info == null || !info.isConnected() || onlyWifiAllowed) {
-            return false;
-        }
-        return true;
+        return info != null && info.isConnected() && !onlyWifiAllowed;
     }
 
     @SuppressLint("WrongConstant")
@@ -1231,7 +1213,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
             ipAddress = Integer.reverseBytes(ipAddress);
         }
         try {
-            return InetAddress.getByAddress(BigInteger.valueOf((long) ipAddress).toByteArray()).getHostAddress();
+            return InetAddress.getByAddress(BigInteger.valueOf(ipAddress).toByteArray()).getHostAddress();
         } catch (UnknownHostException e) {
             e.printStackTrace();
             return "";
@@ -1281,7 +1263,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
 
     @SuppressLint("WrongConstant")
     public void vibrate(int milliSeconds) {
-        ((Vibrator) getSystemService("vibrator")).vibrate((long) milliSeconds);
+        ((Vibrator) getSystemService("vibrator")).vibrate(milliSeconds);
     }
 
     @SuppressLint("WrongConstant")
@@ -1326,7 +1308,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
             if (Build.VERSION.SDK_INT >= 18) {
                 return statFs.getAvailableBytes();
             }
-            return (long) (statFs.getAvailableBlocks() * statFs.getBlockSize());
+            return statFs.getAvailableBlocks() * statFs.getBlockSize();
         } catch (Exception e) {
             e.printStackTrace();
             return 0;

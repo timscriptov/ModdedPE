@@ -34,9 +34,9 @@ import java.util.zip.ZipOutputStream;
  * @author https://github.com/TimScriptov
  */
 public class NModJSONEditor {
-    private NMod mTargetNMod;
-    private NModFilePathManager mManager;
-    private File[] mParents;
+    private final NMod mTargetNMod;
+    private final NModFilePathManager mManager;
+    private final File[] mParents;
 
     public NModJSONEditor(Context context, NMod nmod, File[] parents) {
         mTargetNMod = nmod;

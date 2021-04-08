@@ -7,7 +7,6 @@ import com.microsoft.xbox.toolkit.XLEConstants;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -22,24 +21,24 @@ import java.util.Iterator;
 
 public interface IFollowerPresenceResult {
 
-    public static class ActivityRecord {
+    class ActivityRecord {
         public BroadcastRecord broadcast;
         public String richPresence;
     }
 
-    public static class BroadcastRecord {
+    class BroadcastRecord {
         public String id;
         public String provider;
         public String session;
         public int viewers;
     }
 
-    public static class LastSeenRecord {
+    class LastSeenRecord {
         public String deviceType;
         public String titleName;
     }
 
-    public static class UserPresence {
+    class UserPresence {
         public ArrayList<DeviceRecord> devices;
         public LastSeenRecord lastSeen;
         public String state;
@@ -132,7 +131,7 @@ public interface IFollowerPresenceResult {
         }
     }
 
-    public static class DeviceRecord {
+    class DeviceRecord {
         public ArrayList<TitleRecord> titles;
         public String type;
 
@@ -145,7 +144,7 @@ public interface IFollowerPresenceResult {
         }
     }
 
-    public static class TitleRecord {
+    class TitleRecord {
         public ActivityRecord activity;
         public long id;
         public Date lastModified;
@@ -161,11 +160,11 @@ public interface IFollowerPresenceResult {
         }
     }
 
-    public static class FollowersPresenceResult {
+    class FollowersPresenceResult {
         public ArrayList<UserPresence> userPresence;
 
         public static @Nullable FollowersPresenceResult deserialize(InputStream inputStream) {
-            UserPresence[] userPresenceArr = (UserPresence[]) GsonUtil.deserializeJson(inputStream, UserPresence[].class, (Type) Date.class, (Object) new UTCDateConverterGson.UTCDateConverterJSONDeserializer());
+            UserPresence[] userPresenceArr = GsonUtil.deserializeJson(inputStream, UserPresence[].class, Date.class, new UTCDateConverterGson.UTCDateConverterJSONDeserializer());
             if (userPresenceArr == null) {
                 return null;
             }

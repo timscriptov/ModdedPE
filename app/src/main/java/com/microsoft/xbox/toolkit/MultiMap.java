@@ -12,8 +12,8 @@ import java.util.Iterator;
  */
 
 public class MultiMap<K, V> {
-    private Hashtable<K, HashSet<V>> data = new Hashtable<>();
-    private Hashtable<V, K> dataInverse = new Hashtable<>();
+    private final Hashtable<K, HashSet<V>> data = new Hashtable<>();
+    private final Hashtable<V, K> dataInverse = new Hashtable<>();
 
     public HashSet<V> get(K k) {
         return this.data.get(k);

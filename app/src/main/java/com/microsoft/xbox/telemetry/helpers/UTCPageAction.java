@@ -26,7 +26,7 @@ public class UTCPageAction {
                 hashMap.put("activityTitle", charSequence);
             } catch (Exception e) {
                 UTCError.trackException(e, "UTCPageAction.track");
-                UTCLog.log(e.getMessage(), new Object[0]);
+                UTCLog.log(e.getMessage());
                 return;
             }
         }

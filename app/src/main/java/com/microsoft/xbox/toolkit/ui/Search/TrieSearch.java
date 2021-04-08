@@ -17,8 +17,8 @@ import java.util.List;
  */
 
 public class TrieSearch {
-    private static String ComponentName = TrieSearch.class.getName();
-    private static int DefaultTrieDepth = 4;
+    private static final String ComponentName = TrieSearch.class.getName();
+    private static final int DefaultTrieDepth = 4;
     public TrieNode RootTrieNode;
     public int TrieDepth;
     public Hashtable<String, List<Object>> WordsDictionary;

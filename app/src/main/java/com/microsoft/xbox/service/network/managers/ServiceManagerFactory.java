@@ -11,7 +11,7 @@ import com.microsoft.xbox.service.network.managers.xblshared.SLSXsapiServiceMana
  */
 
 public class ServiceManagerFactory {
-    private static ServiceManagerFactory instance = new ServiceManagerFactory();
+    private static final ServiceManagerFactory instance = new ServiceManagerFactory();
     private ISLSServiceManager slsServiceManager;
 
     private ServiceManagerFactory() {

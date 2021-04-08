@@ -33,7 +33,7 @@ import java.util.ArrayList;
  * @author https://github.com/TimScriptov
  */
 public class PackagedNMod extends NMod {
-    private Context mPackageContext;
+    private final Context mPackageContext;
 
     PackagedNMod(String packageName, Context contextThiz, Context packageContext) {
         super(packageName, contextThiz);

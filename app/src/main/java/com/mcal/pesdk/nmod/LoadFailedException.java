@@ -27,7 +27,7 @@ public class LoadFailedException extends Exception {
     public static final int TYPE_FILE_NOT_FOUND = 4;
     public static final int TYPE_DECODE_FAILED = 5;
     public static final int TYPE_INVALID_SIZE = 6;
-    private int mType;
+    private final int mType;
 
     public LoadFailedException(int type, Throwable cause) {
         super(cause);

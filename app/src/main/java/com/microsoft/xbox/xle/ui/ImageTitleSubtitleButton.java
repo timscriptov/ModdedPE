@@ -25,12 +25,12 @@ import java.net.URI;
  */
 
 public class ImageTitleSubtitleButton extends LinearLayout {
-    private XLEUniversalImageView iconImageView;
-    private CustomTypefaceTextView subtitleTextView;
-    private CustomTypefaceTextView titleTextView;
+    private final XLEUniversalImageView iconImageView;
+    private final CustomTypefaceTextView subtitleTextView;
+    private final CustomTypefaceTextView titleTextView;
 
     public ImageTitleSubtitleButton(Context context) {
-        this(context, (AttributeSet) null);
+        this(context, null);
     }
 
     public ImageTitleSubtitleButton(Context context, AttributeSet attributeSet) {
@@ -40,9 +40,9 @@ public class ImageTitleSubtitleButton extends LinearLayout {
     public ImageTitleSubtitleButton(Context context, AttributeSet attributeSet, int i) {
         super(context, attributeSet, i);
         LayoutInflater.from(context).inflate(R.layout.image_title_subtitle_button, this, true);
-        this.iconImageView = (XLEUniversalImageView) findViewById(R.id.image_title_subtitle_button_image);
-        this.titleTextView = (CustomTypefaceTextView) findViewById(R.id.image_title_subtitle_button_title);
-        this.subtitleTextView = (CustomTypefaceTextView) findViewById(R.id.image_title_subtitle_button_subtitle);
+        this.iconImageView = findViewById(R.id.image_title_subtitle_button_image);
+        this.titleTextView = findViewById(R.id.image_title_subtitle_button_title);
+        this.subtitleTextView = findViewById(R.id.image_title_subtitle_button_subtitle);
         TypedArray obtainStyledAttributes = context.obtainStyledAttributes(attributeSet, XLERValueHelper.getStyleableRValueArray("ImageTitleSubtitleButton"));
         String string = obtainStyledAttributes.getString(XLERValueHelper.getStyleableRValue("ImageTitleSubtitleButton_image_uri"));
         String string2 = obtainStyledAttributes.getString(XLERValueHelper.getStyleableRValue("ImageTitleSubtitleButton_text_title"));

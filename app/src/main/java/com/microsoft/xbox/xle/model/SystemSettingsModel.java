@@ -18,7 +18,6 @@ import com.microsoft.xbox.xle.app.SmartglassSettings;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Date;
 import java.util.HashSet;
 
 /**
@@ -57,18 +56,12 @@ public class SystemSettingsModel extends ModelBase<Version> {
 
     public boolean getHasUpdate(int i) {
         XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
-        if (Build.VERSION.SDK_INT < this.minRequiredOSVersion || getLatestVersion() <= i) {
-            return false;
-        }
-        return true;
+        return Build.VERSION.SDK_INT >= this.minRequiredOSVersion && getLatestVersion() > i;
     }
 
     public boolean getMustUpdate(int i) {
         XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
-        if (Build.VERSION.SDK_INT < this.minRequiredOSVersion || getMinimumVersion() <= i) {
-            return false;
-        }
-        return true;
+        return Build.VERSION.SDK_INT >= this.minRequiredOSVersion && getMinimumVersion() > i;
     }
 
     public int[] getRemoteControlSpecialTitleIds() {
@@ -93,11 +86,11 @@ public class SystemSettingsModel extends ModelBase<Version> {
 
     public void loadAsync(boolean z) {
         XLEAssert.assertTrue(Thread.currentThread() == ThreadManager.UIThread);
-        DataLoadUtil.StartLoadFromUI(z, this.lifetime, (Date) null, this.smartglassSettingsLoadingStatus, new GetSmartglassSettingsRunner(this));
+        DataLoadUtil.StartLoadFromUI(z, this.lifetime, null, this.smartglassSettingsLoadingStatus, new GetSmartglassSettingsRunner(this));
     }
 
     public AsyncResult<SmartglassSettings> loadSystemSettings(boolean z) {
-        return DataLoadUtil.Load(z, this.lifetime, (Date) null, this.smartglassSettingsLoadingStatus, new GetSmartglassSettingsRunner(this));
+        return DataLoadUtil.Load(z, this.lifetime, null, this.smartglassSettingsLoadingStatus, new GetSmartglassSettingsRunner(this));
     }
 
     public void onGetSmartglassSettingsCompleted(@NotNull AsyncResult<SmartglassSettings> asyncResult) {

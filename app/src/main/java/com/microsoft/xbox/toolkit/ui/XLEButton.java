@@ -124,7 +124,7 @@ public class XLEButton extends Button {
 
     public void onSizeChanged(int i, int i2, int i3, int i4) {
         super.onSizeChanged(i, i2, i3, i4);
-        if (hasSize() ? this.stateHandler.onSizeChanged(getWidth(), getHeight()) : false) {
+        if (hasSize() && this.stateHandler.onSizeChanged(getWidth(), getHeight())) {
             updateImage();
         }
     }

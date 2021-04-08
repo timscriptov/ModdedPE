@@ -60,14 +60,14 @@ public class ClassLoaderPatch {
                         declaredConstructor2.setAccessible(true);
                         obj = declaredConstructor2.newInstance(file, true, null, null);
                         try {
-                            obj.getClass().getDeclaredMethod("maybeInit", new Class[0]).invoke(obj, new Object[0]);
+                            obj.getClass().getDeclaredMethod("maybeInit", new Class[0]).invoke(obj);
                         } catch (NoSuchMethodException e1) {
                             e.printStackTrace();
                         }
                     }
                     Object newGenericArrayOfType = newGenericArrayOfType(objArr[0].getClass(), objArr.length + 1);
                     ((Object[]) newGenericArrayOfType)[0] = obj;
-                    System.arraycopy(objArr, 0, (Object[]) newGenericArrayOfType, 1, objArr.length);
+                    System.arraycopy(objArr, 0, newGenericArrayOfType, 1, objArr.length);
                     declaredField3.set(obj2, newGenericArrayOfType);
                     patchedObjects.add(obj);
                 } catch (NoSuchFieldException e) {
@@ -113,7 +113,7 @@ public class ClassLoaderPatch {
                 }
                 Object newGenericArrayOfType = newGenericArrayOfType(objArr[0].getClass(), objArr.length + 1);
                 ((Object[]) newGenericArrayOfType)[objArr.length] = obj;
-                System.arraycopy(objArr, 0, (Object[]) newGenericArrayOfType, 0, objArr.length);
+                System.arraycopy(objArr, 0, newGenericArrayOfType, 0, objArr.length);
                 declaredField2.set(obj2, newGenericArrayOfType);
                 patchedObjects.add(obj);
                 Log.d("ClassLoaderPatch", "modified class loader (dex path, hash: " + classLoader.hashCode() + "): " + classLoader);

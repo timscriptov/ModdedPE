@@ -18,11 +18,11 @@ import java.util.Hashtable;
  */
 
 public class MAAS {
-    private static MAAS instance = new MAAS();
+    private static final MAAS instance = new MAAS();
     private final String ASSET_FILENAME = "animation/%sAnimation.xml";
     private final String SDCARD_FILENAME = "/sdcard/bishop/maas/%sAnimation.xml";
-    private Hashtable<String, MAASAnimation> maasFileCache = new Hashtable<>();
-    private boolean usingSdcard = false;
+    private final Hashtable<String, MAASAnimation> maasFileCache = new Hashtable<>();
+    private final boolean usingSdcard = false;
 
     public static MAAS getInstance() {
         return instance;
@@ -47,11 +47,11 @@ public class MAAS {
         InputStream inputStream;
         try {
             if (this.usingSdcard) {
-                inputStream = new FileInputStream(new File(String.format("/sdcard/bishop/maas/%sAnimation.xml", new Object[]{str})));
+                inputStream = new FileInputStream(new File(String.format("/sdcard/bishop/maas/%sAnimation.xml", str)));
             } else {
-                inputStream = XboxTcuiSdk.getAssetManager().open(String.format("animation/%sAnimation.xml", new Object[]{str}));
+                inputStream = XboxTcuiSdk.getAssetManager().open(String.format("animation/%sAnimation.xml", str));
             }
-            return (MAASAnimation) XMLHelper.instance().load(inputStream, MAASAnimation.class);
+            return XMLHelper.instance().load(inputStream, MAASAnimation.class);
         } catch (Exception unused) {
             return null;
         }

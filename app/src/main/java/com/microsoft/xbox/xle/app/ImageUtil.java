@@ -191,9 +191,9 @@ public class ImageUtil {
         } else if (contains2) {
             return createUri(str.replaceAll("h=[0-9]+", "h=" + i2) + "&w=" + i);
         } else if (str.contains("format=")) {
-            return createUri(str + String.format(resizeFormatterSizeOnly, new Object[]{Integer.valueOf(i), Integer.valueOf(i2)}));
+            return createUri(str + String.format(resizeFormatterSizeOnly, Integer.valueOf(i), Integer.valueOf(i2)));
         } else {
-            return createUri(str + String.format(resizeFormatter, new Object[]{Integer.valueOf(i), Integer.valueOf(i2)}));
+            return createUri(str + String.format(resizeFormatter, Integer.valueOf(i), Integer.valueOf(i2)));
         }
     }
 

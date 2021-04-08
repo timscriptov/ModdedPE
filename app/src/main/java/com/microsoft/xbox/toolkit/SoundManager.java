@@ -20,12 +20,12 @@ import java.util.HashMap;
 public class SoundManager {
     private static final int MAX_STREAM_SIZE = 14;
     private static final int NO_LOOP = 0;
-    private AudioManager audioManager;
-    private Context context;
+    private final AudioManager audioManager;
+    private final Context context;
     private boolean isEnabled;
-    private ArrayList<Integer> recentlyPlayedResourceIds;
-    private HashMap<Integer, Integer> resourceSoundIdMap;
-    private SoundPool soundPool;
+    private final ArrayList<Integer> recentlyPlayedResourceIds;
+    private final HashMap<Integer, Integer> resourceSoundIdMap;
+    private final SoundPool soundPool;
 
     @SuppressLint("WrongConstant")
     private SoundManager() {

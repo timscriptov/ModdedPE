@@ -58,7 +58,7 @@ public class HttpUtil {
         public final int h;
         public final int w;
 
-        private ImageSize(int i, int i2) {
+        ImageSize(int i, int i2) {
             this.w = i;
             this.h = i2;
         }

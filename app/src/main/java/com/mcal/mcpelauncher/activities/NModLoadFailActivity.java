@@ -131,7 +131,7 @@ public class NModLoadFailActivity extends BaseActivity {
             AppCompatTextView packageNameTextView = view.findViewById(R.id.moddedpe_nmod_load_failed_item_card_package_name);
             packageNameTextView.setText(mPackageNames.get(p1));
             AppCompatTextView errorMessageTextView = view.findViewById(R.id.moddedpe_nmod_load_failed_item_card_message);
-            errorMessageTextView.setText(getString(R.string.load_fail_msg, new Object[]{mTypeStrings.get(p1), mMessages.get(p1)}));
+            errorMessageTextView.setText(getString(R.string.load_fail_msg, mTypeStrings.get(p1), mMessages.get(p1)));
             AppCompatImageView imageViewIcon = view.findViewById(R.id.moddedpe_nmod_load_failed_item_card_icon);
             try {
                 if (mIconPaths.get(p1) != null)
@@ -145,7 +145,7 @@ public class NModLoadFailActivity extends BaseActivity {
             view.setOnClickListener(p112 -> {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(NModLoadFailActivity.this, R.style.AlertDialogTheme);
                 dialog.setTitle(R.string.load_fail_title);
-                dialog.setMessage(getString(R.string.load_fail_msg, new Object[]{mTypeStrings.get(index), mMessages.get(index)}));
+                dialog.setMessage(getString(R.string.load_fail_msg, mTypeStrings.get(index), mMessages.get(index)));
                 dialog.setPositiveButton(android.R.string.ok, (p11, p21) -> p11.dismiss());
                 dialog.show();
             });

@@ -50,7 +50,7 @@ public final class UiUtil {
 
     public static void ensureClickableSpanOnUnderlineSpan(@NotNull TextView textView, int i, ClickableSpan clickableSpan) {
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(Html.fromHtml(textView.getResources().getString(i)));
-        UnderlineSpan[] underlineSpanArr = (UnderlineSpan[]) spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), UnderlineSpan.class);
+        UnderlineSpan[] underlineSpanArr = spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), UnderlineSpan.class);
         if (underlineSpanArr != null && underlineSpanArr.length > 0) {
             UnderlineSpan underlineSpan = underlineSpanArr[0];
             spannableStringBuilder.setSpan(clickableSpan, spannableStringBuilder.getSpanStart(underlineSpan), spannableStringBuilder.getSpanEnd(underlineSpan), 33);
@@ -65,10 +65,7 @@ public final class UiUtil {
             return false;
         }
         ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) childAt.getLayoutParams();
-        if (scrollView.getHeight() < marginLayoutParams.topMargin + childAt.getHeight() + marginLayoutParams.bottomMargin) {
-            return true;
-        }
-        return false;
+        return scrollView.getHeight() < marginLayoutParams.topMargin + childAt.getHeight() + marginLayoutParams.bottomMargin;
     }
 
     private static boolean ensureFragment(Class<? extends BaseFragment> cls, @NotNull BaseActivity baseActivity, int i, Bundle bundle) {
@@ -76,7 +73,7 @@ public final class UiUtil {
             return false;
         }
         try {
-            BaseFragment baseFragment = (BaseFragment) cls.newInstance();
+            BaseFragment baseFragment = cls.newInstance();
             baseFragment.setArguments(bundle);
             baseActivity.addFragment(i, baseFragment);
             return true;

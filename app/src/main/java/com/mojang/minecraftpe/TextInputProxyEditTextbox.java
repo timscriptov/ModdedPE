@@ -60,12 +60,12 @@ public class TextInputProxyEditTextbox extends AppCompatEditText {
     }
 
     public void setTextFromGame(String text) {
-        mLastSentText = new String(text);
+        mLastSentText = text;
         setText(text);
     }
 
     public void updateLastSentText() {
-        mLastSentText = new String(getText().toString());
+        mLastSentText = getText().toString();
     }
 
     public InputConnection onCreateInputConnection(EditorInfo outAttrs) {

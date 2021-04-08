@@ -30,9 +30,9 @@ import java.util.ArrayList;
  * @author https://github.com/TimScriptov
  */
 public final class NModAPI {
-    private Context mContext;
-    private NModManager mNModManager;
-    private NModExtractor mExtractor;
+    private final Context mContext;
+    private final NModManager mNModManager;
+    private final NModExtractor mExtractor;
 
     public NModAPI(Context context) {
         mContext = context;
