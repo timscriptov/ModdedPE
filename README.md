@@ -24,7 +24,6 @@ The Open Source NModAPI will help you a lot:)<br>
 
 ### Collaborators
 > [Listerily][2]<br>
-> [Ramzan Elmurzaev][3]<br>
 
 ### Additional components
 > [XHook][4]<br>
@@ -32,6 +31,5 @@ The Open Source NModAPI will help you a lot:)<br>
 
 [1]: https://github.com/TimScriptov/ModdedPE/blob/master/Art/title_logo.png
 [2]: https://github.com/listerily
-[3]: https://github.com/elmurzaev
 [4]: https://github.com/iqiyi/xHook
 [5]: http://www.cydiasubstrate.com/
