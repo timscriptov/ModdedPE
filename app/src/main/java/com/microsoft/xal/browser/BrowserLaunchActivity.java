@@ -23,6 +23,7 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabColorSchemeParams;
@@ -40,17 +41,20 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * From 1.16.220.02
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 
-public class WebView extends AppCompatActivity {
+public class BrowserLaunchActivity extends AppCompatActivity {
     public static final String DEFAULT_BROWSER_INFO = "webkit";
 
     public static final String CANCEL_DELAY = "CANCEL_DELAY";
     public static final String END_URL = "END_URL";
     public static final String IN_PROC_BROWSER = "IN_PROC_BROWSER";
     public static final String OPERATION_ID = "OPERATION_ID";
+    public static final String REQUEST_HEADER_KEYS = "REQUEST_HEADER_KEYS";
+    public static final String REQUEST_HEADER_VALUES = "REQUEST_HEADER_VALUES";
     public static final int RESULT_FAILED = 8052;
     public static final String SHOW_TYPE = "SHOW_TYPE";
     public static final String START_URL = "START_URL";
@@ -61,6 +65,8 @@ public class WebView extends AppCompatActivity {
     private boolean m_cancelOperationOnResume = true;
     private long m_operationId = 0;
 
+    private static native void checkIsLoaded();
+
     private static native void urlOperationCanceled(long operationId, boolean sharedBrowserUsed, String browserInfo);
 
     private static native void urlOperationFailed(long operationId, boolean sharedBrowserUsed, String browserInfo);
@@ -68,27 +74,33 @@ public class WebView extends AppCompatActivity {
     private static native void urlOperationSucceeded(long operationId, String finalUrl, boolean sharedBrowserUsed, String browserInfo);
 
     @SuppressLint("WrongConstant")
-    public static void showUrl(long operationId, Context context, @NotNull String startUrl, String endUrl, int showTypeInt, boolean useInProcBrowser, long cancelDelay) {
+    public static void showUrl(long operationId, Context context, @NotNull String startUrl, String endUrl, int showTypeInt, String[] strArr, String[] strArr2, boolean useInProcBrowser, long cancelDelay) {
         if (!startUrl.isEmpty()) {
             if (!endUrl.isEmpty()) {
                 ShowUrlType fromInt = ShowUrlType.fromInt(showTypeInt);
+
                 if (fromInt == null) {
                     urlOperationFailed(operationId, false, null);
                     return;
+                } else if (strArr.length != strArr2.length) {
+                    urlOperationFailed(operationId, false, null);
+                    return;
+                } else {
+                    Intent intent = new Intent(context, BrowserLaunchActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putLong(OPERATION_ID, operationId);
+                    bundle.putString(START_URL, startUrl);
+                    bundle.putString(END_URL, endUrl);
+                    //bundle.putSerializable(SHOW_TYPE, fromInt);
+                    //bundle.putStringArray(REQUEST_HEADER_KEYS, strArr);
+                    //bundle.putStringArray(REQUEST_HEADER_VALUES, strArr2);
+                    //bundle.putBoolean(IN_PROC_BROWSER, useInProcBrowser);
+                    //bundle.putLong(CANCEL_DELAY, cancelDelay);
+                    intent.putExtras(bundle);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    context.startActivity(intent);
+                    return;
                 }
-
-                Intent intent = new Intent(context, WebView.class);
-                Bundle bundle = new Bundle();
-                bundle.putLong(OPERATION_ID, operationId);
-                bundle.putString(START_URL, startUrl);
-                bundle.putString(END_URL, endUrl);
-                //bundle.putSerializable(SHOW_TYPE, fromInt);
-                //bundle.putBoolean(IN_PROC_BROWSER, useInProcBrowser);
-                //bundle.putLong(CANCEL_DELAY, cancelDelay);
-                intent.putExtras(bundle);
-                intent.setFlags(268435456);
-                context.startActivity(intent);
-                return;
             }
         }
         urlOperationFailed(operationId, false, null);
@@ -96,6 +108,13 @@ public class WebView extends AppCompatActivity {
 
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        if (!checkNativeCodeLoaded() || getIntent().getData() != null) {
+            Intent launchIntentForPackage = getApplicationContext().getPackageManager().getLaunchIntentForPackage(getApplicationContext().getPackageName());
+            startActivity(launchIntentForPackage);
+            finish();
+            return;
+        }
+
         if (getIntent().getData() == null) {
             Bundle extras = getIntent().getExtras();
             if (extras == null) {
@@ -244,5 +263,15 @@ public class WebView extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+    private boolean checkNativeCodeLoaded() {
+        try {
+            checkIsLoaded();
+            return true;
+        } catch (UnsatisfiedLinkError e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

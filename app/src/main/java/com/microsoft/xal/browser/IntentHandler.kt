@@ -31,7 +31,7 @@ class IntentHandler : AppCompatActivity() {
     @SuppressLint("WrongConstant")
     public override fun onCreate(bundle: Bundle?) {
         super.onCreate(bundle)
-        val intent = Intent(this, WebView::class.java)
+        val intent = Intent(this, BrowserLaunchActivity::class.java)
         intent.data = getIntent().data
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
         startActivity(intent)

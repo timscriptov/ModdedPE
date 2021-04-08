@@ -353,11 +353,18 @@
             android:screenOrientation="sensorLandscape" />
 
         <activity
-            android:name="com.microsoft.xal.browser.WebView"
+            android:name="com.microsoft.xal.browser.BrowserLaunchActivity"
             android:configChanges="orientation"
             android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape" />
+
+        <!--activity
+            android:name="com.microsoft.xal.browser.WebView"
+            android:configChanges="orientation"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorLandscape" / -->
 
     </application>
 

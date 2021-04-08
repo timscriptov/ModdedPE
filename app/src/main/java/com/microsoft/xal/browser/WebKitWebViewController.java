@@ -17,17 +17,25 @@
 package com.microsoft.xal.browser;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.mcal.mcpelauncher.R;
 import com.microsoft.aad.adal.AuthenticationConstants;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
 
 /**
  * 05.10.2020
@@ -42,6 +50,13 @@ public class WebKitWebViewController extends AppCompatActivity {
     public static final int RESULT_FAILED = 8054;
     public static final String SHOW_TYPE = "SHOW_TYPE";
     public static final String START_URL = "START_URL";
+    public static final String REQUEST_HEADER_KEYS = "REQUEST_HEADER_KEYS";
+    public static final String REQUEST_HEADER_VALUES = "REQUEST_HEADER_VALUES";
+
+    private WebView webView;
+
+    public String endUrl;
+    public String startUrl;
 
     public static void deleteCookies(String link, boolean z) {
         CookieManager instance = CookieManager.getInstance();
@@ -69,13 +84,20 @@ public class WebKitWebViewController extends AppCompatActivity {
             finish();
             return;
         }
-        String string = extras.getString(START_URL, "");
-        final String string2 = extras.getString(END_URL, "");
-        if (string.isEmpty() || string2.isEmpty()) {
+        startUrl = extras.getString(START_URL, "");
+        endUrl = extras.getString(END_URL, "");
+        if (startUrl.isEmpty() || endUrl.isEmpty()) {
             setResult(RESULT_FAILED);
             finish();
             return;
         }
+        /*String[] stringArray = extras.getStringArray(REQUEST_HEADER_KEYS);
+        String[] stringArray2 = extras.getStringArray(REQUEST_HEADER_VALUES);
+        if (stringArray.length != stringArray2.length) {
+            setResult(RESULT_FAILED);
+            finish();
+            return;
+        }*/
         ShowUrlType showUrlType = (ShowUrlType) extras.get(SHOW_TYPE);
         if (showUrlType == ShowUrlType.CookieRemoval || showUrlType == ShowUrlType.CookieRemovalSkipIfSharedCredentials) {
             deleteCookies("login.live.com", true);
@@ -84,34 +106,60 @@ public class WebKitWebViewController extends AppCompatActivity {
             deleteCookies("xboxlive.com", true);
             deleteCookies("sisu.xboxlive.com", true);
             Intent intent = new Intent();
-            intent.putExtra(RESPONSE_KEY, string2);
+            intent.putExtra(RESPONSE_KEY, endUrl);
             setResult(-1, intent);
             finish();
             return;
         }
-        android.webkit.WebView webView = new android.webkit.WebView(this);
-        setContentView(webView);
+        /*HashMap<String, String> hashMap = new HashMap<>(stringArray.length);
+        for (int i = 0; i < stringArray.length; i++) {
+            if (stringArray[i] == null || stringArray[i].isEmpty() || stringArray2[i] == null || stringArray2[i].isEmpty()) {
+                setResult(RESULT_FAILED);
+                finish();
+                return;
+            }
+            hashMap.put(stringArray[i], stringArray2[i]);
+        }*/
+
+        setContentView(R.layout.xal_webview);
+        webView = findViewById(R.id.webView);
+
         webView.getSettings().setJavaScriptEnabled(true);
         if (Build.VERSION.SDK_INT >= 21) {
             webView.getSettings().setMixedContentMode(2);
         }
-        webView.setWebChromeClient(new WebChromeClient() {
-            public void onProgressChanged(android.webkit.WebView webView, int i) {
-                setProgress(i * 100);
+        webView.setWebChromeClient(new XalWebChromeClient());
+        webView.setWebViewClient(new XalWebViewClient());
+        webView.loadUrl(startUrl);
+    }
+
+    private class XalWebChromeClient extends WebChromeClient {
+        public void onProgressChanged(WebView view, int progress) {
+            setProgress(progress * 100);
+        }
+    }
+
+    private class XalWebViewClient extends WebViewClient {
+        @TargetApi(Build.VERSION_CODES.N)
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, @NotNull WebResourceRequest request) {
+            Intent intent = new Intent();
+            intent.putExtra(WebKitWebViewController.RESPONSE_KEY, request.getUrl().toString());
+            setResult(AppCompatActivity.RESULT_OK, intent);
+            finish();
+            return true;
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, @NotNull String url) {
+            if (!url.startsWith(endUrl, 0)) {
+                return false;
             }
-        });
-        webView.setWebViewClient(new WebViewClient() {
-            public boolean shouldOverrideUrlLoading(android.webkit.WebView webView, String str) {
-                if (!str.startsWith(string2, 0)) {
-                    return false;
-                }
-                Intent intent = new Intent();
-                intent.putExtra(WebKitWebViewController.RESPONSE_KEY, str);
-                setResult(AppCompatActivity.RESULT_OK, intent);
-                finish();
-                return true;
-            }
-        });
-        webView.loadUrl(string);
+            Intent intent = new Intent();
+            intent.putExtra(WebKitWebViewController.RESPONSE_KEY, url);
+            setResult(AppCompatActivity.RESULT_OK, intent);
+            finish();
+            return true;
+        }
     }
 }
