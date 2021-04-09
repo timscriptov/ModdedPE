@@ -64,11 +64,11 @@ public class HttpClientRequest {
 
     public void doRequestAsync(final long sourceCall) {
         OK_CLIENT.newCall(requestBuilder.build()).enqueue(new Callback() {
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 OnRequestFailed(sourceCall, e.getClass().getCanonicalName());
             }
 
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 OnRequestCompleted(sourceCall, new HttpClientResponse(response));
             }
         });

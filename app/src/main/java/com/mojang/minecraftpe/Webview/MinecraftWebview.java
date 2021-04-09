@@ -26,7 +26,7 @@ public class MinecraftWebview {
     private MainActivity mActivity = MainActivity.mInstance;
 
     public MinecraftWebview() {
-        this.mActivity.runOnUiThread(() -> _createWebView());
+        mActivity.runOnUiThread(() -> _createWebView());
     }
 
     public native void nativeDismiss();

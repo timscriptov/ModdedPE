@@ -32,9 +32,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.databinding.DataBindingUtil;
 
 import com.mcal.mcpelauncher.R;
 import com.mcal.mcpelauncher.data.Constants;
+import com.mcal.mcpelauncher.databinding.ModdedpeAboutBinding;
+import com.mcal.mcpelauncher.databinding.ModdedpeDirPickerBinding;
 import com.mcal.mcpelauncher.utils.ScopedStorage;
 
 import org.jetbrains.annotations.NotNull;
@@ -54,6 +57,7 @@ public class DirPickerActivity extends BaseActivity {
     private final SelectHandler mSelectHandler = new SelectHandler();
     private File currentPath;
     private ArrayList<File> filesInCurrentPath;
+    private ModdedpeDirPickerBinding binding;
 
     public static void startThisActivity(AppCompatActivity context, @NotNull File path) {
         startThisActivity(context, path.getPath());
@@ -74,10 +78,10 @@ public class DirPickerActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.moddedpe_dir_picker);
+        binding = DataBindingUtil.setContentView(this, R.layout.moddedpe_dir_picker);
 
-        findViewById(R.id.moddedpe_dir_picker_fab_reset).setOnClickListener(p1 -> onResetClicked());
-        findViewById(R.id.moddedpe_dir_picker_fab_select).setOnClickListener(p1 -> onSelectThisClicked());
+        binding.moddedpeDirPickerFabReset.setOnClickListener(p1 -> onResetClicked());
+        binding.moddedpeDirPickerFabSelect.setOnClickListener(p1 -> onSelectThisClicked());
 
         setResult(RESULT_CANCELED, new Intent());
         setActionBarButtonCloseRight();
@@ -170,7 +174,7 @@ public class DirPickerActivity extends BaseActivity {
             } else return o1.getName().compareToIgnoreCase(o2.getName());
         });
 
-        ListView fileListView = findViewById(R.id.picker_dir_list_view);
+        ListView fileListView = binding.pickerDirListView;
         fileListView.setAdapter(new FileAdapter());
     }
 

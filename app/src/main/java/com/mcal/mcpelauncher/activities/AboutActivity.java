@@ -23,10 +23,13 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.databinding.DataBindingUtil;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
 import com.mcal.mcpelauncher.R;
+import com.mcal.mcpelauncher.databinding.ModdedpeAboutBinding;
+import com.mcal.mcpelauncher.databinding.XalWebviewBinding;
 import com.mcal.mcpelauncher.utils.I18n;
 
 /**
@@ -41,15 +44,15 @@ public class AboutActivity extends BaseActivity implements BillingProcessor.IBil
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.moddedpe_about);
+        ModdedpeAboutBinding binding = DataBindingUtil.setContentView(this, R.layout.moddedpe_about);
 
         setActionBarButtonCloseRight();
 
-        findViewById(R.id.about_view_github_button).setOnClickListener(p1 -> openUri(URI_GITHUB));
+        binding.aboutViewGithubButton.setOnClickListener(p1 -> openUri(URI_GITHUB));
 
-        findViewById(R.id.about_view_nmod_api_button).setOnClickListener(p1 -> openUri(URI_NMOD_API));
+        binding.aboutViewNmodApiButton.setOnClickListener(p1 -> openUri(URI_NMOD_API));
 
-        findViewById(R.id.about_translators_button).setOnClickListener(p1 -> new AlertDialog.Builder(AboutActivity.this)
+        binding.aboutTranslatorsButton.setOnClickListener(p1 -> new AlertDialog.Builder(AboutActivity.this)
                 .setTitle(R.string.about_translators)
                 .setMessage(R.string.about_translators_message)
                 .setPositiveButton(android.R.string.ok, (p11, p2) -> p11.dismiss()).show());

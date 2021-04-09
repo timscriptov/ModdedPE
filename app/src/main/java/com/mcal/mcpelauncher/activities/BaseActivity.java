@@ -16,6 +16,7 @@
  */
 package com.mcal.mcpelauncher.activities;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -56,7 +57,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void setDefaultActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            RelativeLayout actionBarCustomView = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.mcd_actionbar, null);
+            @SuppressLint("InflateParams") RelativeLayout actionBarCustomView = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.mcd_actionbar, null);
             ActionBar.LayoutParams layoutParams = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
             layoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
             actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);

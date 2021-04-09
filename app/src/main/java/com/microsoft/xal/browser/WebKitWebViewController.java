@@ -29,11 +29,15 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import com.mcal.mcpelauncher.R;
+import com.mcal.mcpelauncher.databinding.XalWebviewBinding;
 import com.microsoft.aad.adal.AuthenticationConstants;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
 
 /**
  * 05.10.2020
@@ -51,8 +55,8 @@ public class WebKitWebViewController extends AppCompatActivity {
     public static final String REQUEST_HEADER_KEYS = "REQUEST_HEADER_KEYS";
     public static final String REQUEST_HEADER_VALUES = "REQUEST_HEADER_VALUES";
 
-    public String endUrl;
-    public String startUrl;
+    public String endUrl = "";
+    public String startUrl = "";
 
     public static void deleteCookies(String link, boolean z) {
         CookieManager instance = CookieManager.getInstance();
@@ -87,13 +91,15 @@ public class WebKitWebViewController extends AppCompatActivity {
             finish();
             return;
         }
-        /*String[] stringArray = extras.getStringArray(REQUEST_HEADER_KEYS);
-        String[] stringArray2 = extras.getStringArray(REQUEST_HEADER_VALUES);
-        if (stringArray.length != stringArray2.length) {
+
+        String[] keys = extras.getStringArray(REQUEST_HEADER_KEYS);
+        String[] values = extras.getStringArray(REQUEST_HEADER_VALUES);
+        if (keys.length != values.length) {
             setResult(RESULT_FAILED);
             finish();
             return;
-        }*/
+        }
+
         ShowUrlType showUrlType = (ShowUrlType) extras.get(SHOW_TYPE);
         if (showUrlType == ShowUrlType.CookieRemoval || showUrlType == ShowUrlType.CookieRemovalSkipIfSharedCredentials) {
             deleteCookies("login.live.com", true);
@@ -107,18 +113,20 @@ public class WebKitWebViewController extends AppCompatActivity {
             finish();
             return;
         }
-        /*HashMap<String, String> hashMap = new HashMap<>(stringArray.length);
-        for (int i = 0; i < stringArray.length; i++) {
-            if (stringArray[i] == null || stringArray[i].isEmpty() || stringArray2[i] == null || stringArray2[i].isEmpty()) {
+
+        HashMap<String, String> hashMap = new HashMap<>(keys.length);
+        for (int i = 0; i < keys.length; i++) {
+            if (keys[i] == null || keys[i].isEmpty() || values[i] == null || values[i].isEmpty()) {
                 setResult(RESULT_FAILED);
                 finish();
                 return;
             }
-            hashMap.put(stringArray[i], stringArray2[i]);
-        }*/
+            hashMap.put(keys[i], values[i]);
+        }
 
-        setContentView(R.layout.xal_webview);
-        WebView webView = findViewById(R.id.webView);
+        XalWebviewBinding binding = DataBindingUtil.setContentView(this, R.layout.xal_webview);
+
+        WebView webView = binding.webView;
 
         webView.getSettings().setJavaScriptEnabled(true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
