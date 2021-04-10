@@ -42,7 +42,6 @@ import com.mcal.mcpelauncher.fragments.MainStartFragment;
 import com.mcal.mcpelauncher.services.BackgroundSoundPlayer;
 import com.mcal.mcpelauncher.services.SoundService;
 import com.mcal.mcpelauncher.ui.view.Dialogs;
-import com.mcal.mcpelauncher.utils.ExceptionHandler;
 
 import org.jetbrains.annotations.NotNull;
 

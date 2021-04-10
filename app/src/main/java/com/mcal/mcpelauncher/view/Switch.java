@@ -46,6 +46,7 @@ public class Switch extends View implements Checkable {
     private final int ANIMATE_STATE_SWITCH = 5;
     private final android.animation.ArgbEvaluator argbEvaluator
             = new android.animation.ArgbEvaluator();
+    private final RectF rect = new RectF();
     /**
      * 阴影半径
      */
@@ -165,57 +166,10 @@ public class Switch extends View implements Checkable {
     private ViewState viewState;
     private ViewState beforeState;
     private ViewState afterState;
-    private final RectF rect = new RectF();
     /**
      * 动画状态
      */
     private int animateState = ANIMATE_STATE_NONE;
-    /**
-     *
-     */
-    private ValueAnimator valueAnimator;
-    /**
-     * 是否选中
-     */
-    private boolean isChecked;
-    /**
-     * 是否启用动画
-     */
-    private boolean enableEffect;
-    /**
-     * 是否启用阴影效果
-     */
-    private boolean shadowEffect;
-    /**
-     * 是否显示指示器
-     */
-    private boolean showIndicator;
-    /**
-     * 收拾是否按下
-     */
-    private boolean isTouchingDown = false;
-    /*******************************************************/
-    /**
-     *
-     */
-    private boolean isUiInited = false;
-    /**
-     *
-     */
-    private boolean isEventBroadcast = false;
-    private OnCheckedChangeListener onCheckedChangeListener;
-    /**
-     * 手势按下的时刻
-     */
-    private long touchDownTime;
-    private final Runnable postPendingDrag = new Runnable() {
-        @Override
-        public void run() {
-            if (!isInAnimating()) {
-                pendingDragState();
-            }
-        }
-    };
     private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener
             = new ValueAnimator.AnimatorUpdateListener() {
         @Override
@@ -279,6 +233,48 @@ public class Switch extends View implements Checkable {
             postInvalidate();
         }
     };
+    /**
+     *
+     */
+    private ValueAnimator valueAnimator;
+    /**
+     * 是否选中
+     */
+    private boolean isChecked;
+    /**
+     * 是否启用动画
+     */
+    private boolean enableEffect;
+    /**
+     * 是否启用阴影效果
+     */
+    private boolean shadowEffect;
+    /**
+     * 是否显示指示器
+     */
+    private boolean showIndicator;
+    /*******************************************************/
+    /**
+     * 收拾是否按下
+     */
+    private boolean isTouchingDown = false;
+    private final Runnable postPendingDrag = new Runnable() {
+        @Override
+        public void run() {
+            if (!isInAnimating()) {
+                pendingDragState();
+            }
+        }
+    };
+    /**
+     *
+     */
+    private boolean isUiInited = false;
+    /**
+     *
+     */
+    private boolean isEventBroadcast = false;
+    private OnCheckedChangeListener onCheckedChangeListener;
     private final Animator.AnimatorListener animatorListener
             = new Animator.AnimatorListener() {
         @Override
@@ -332,6 +328,10 @@ public class Switch extends View implements Checkable {
         public void onAnimationRepeat(Animator animation) {
         }
     };
+    /**
+     * 手势按下的时刻
+     */
+    private long touchDownTime;
 
     public Switch(Context context) {
         super(context);

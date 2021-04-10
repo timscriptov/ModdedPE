@@ -33,7 +33,6 @@ import androidx.databinding.DataBindingUtil
 import com.mcal.mcpelauncher.R
 import com.mcal.mcpelauncher.activities.BaseActivity
 import com.mcal.mcpelauncher.data.Constants
-import com.mcal.mcpelauncher.databinding.ModdedpeAboutBinding
 import com.mcal.mcpelauncher.databinding.ModdedpeDirPickerBinding
 import com.mcal.mcpelauncher.databinding.NmodPickerFileItemBinding
 import com.mcal.mcpelauncher.utils.ScopedStorage.storageDirectory
