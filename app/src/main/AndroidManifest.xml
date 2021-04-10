@@ -106,7 +106,7 @@
         </activity>
 
         <activity
-            android:name="com.mcal.mcpelauncher.activities.AboutActivity"
+            android:name="com.mcal.mcpelauncher.ui.AboutActivity"
             android:label="@string/about_title"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme" />
@@ -123,7 +123,7 @@
             android:theme="@style/AppTheme" />
 
         <activity
-            android:name="com.mcal.mcpelauncher.activities.DirPickerActivity"
+            android:name="com.mcal.mcpelauncher.ui.DirPickerActivity"
             android:label="@string/dir_picker_title"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme" />
@@ -154,7 +154,7 @@
             android:theme="@style/AppTheme" />
 
         <activity
-            android:name="com.mcal.mcpelauncher.activities.ImportNModActivity"
+            android:name="com.mcal.mcpelauncher.ui.ImportNModActivity"
             android:icon="@drawable/mcd_add_pack"
             android:label="@string/import_nmod_title"
             android:screenOrientation="sensorLandscape"

@@ -26,7 +26,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.mcal.mcpelauncher.BuildConfig;
 import com.mcal.mcpelauncher.R;
-import com.mcal.mcpelauncher.activities.AboutActivity;
+import com.mcal.mcpelauncher.ui.AboutActivity;
 import com.mcal.mcpelauncher.activities.PreloadActivity;
 import com.mcal.mcpelauncher.data.Preferences;
 

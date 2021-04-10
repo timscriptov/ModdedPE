@@ -34,8 +34,8 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.mcal.mcpelauncher.R;
-import com.mcal.mcpelauncher.activities.AboutActivity;
-import com.mcal.mcpelauncher.activities.DirPickerActivity;
+import com.mcal.mcpelauncher.ui.AboutActivity;
+import com.mcal.mcpelauncher.ui.DirPickerActivity;
 import com.mcal.mcpelauncher.activities.MCPkgPickerActivity;
 import com.mcal.mcpelauncher.activities.SplashesActivity;
 import com.mcal.mcpelauncher.data.Constants;
