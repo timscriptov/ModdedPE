@@ -111,19 +111,20 @@ public class MainActivity extends BaseActivity implements BackgroundSoundPlayer 
 
         mMainViewPager = findViewById(R.id.moddedpe_main_view_pager);
         mMainViewPager.setAdapter(pagerAdapter);
-        mMainViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mMainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int p1, float p2, int p3) {
-                setTitle(mMainViewPager.getAdapter().getPageTitle(p1));
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                setTitle(mMainViewPager.getAdapter().getPageTitle(position));
+                //conterchange.setText(""+(1+position));
             }
 
             @Override
-            public void onPageSelected(int p1) {
+            public void onPageSelected(int position) {
 
             }
 
             @Override
-            public void onPageScrollStateChanged(int p1) {
+            public void onPageScrollStateChanged(int position) {
 
             }
         });

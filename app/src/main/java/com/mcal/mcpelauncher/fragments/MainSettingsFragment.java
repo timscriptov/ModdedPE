@@ -61,8 +61,10 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
         SwitchPreference mBackgroundMusicPreference = findPreference("background_music");
         mBackgroundMusicPreference.setOnPreferenceChangeListener((p1, p2) -> {
             if ((boolean) p2) {
-                ((BackgroundSoundPlayer) getActivity()).bind();
-            } else ((BackgroundSoundPlayer) getActivity()).unbind();
+                ((BackgroundSoundPlayer) requireActivity()).bind();
+            } else {
+                ((BackgroundSoundPlayer) requireActivity()).unbind();
+            }
             return true;
         });
 
@@ -70,11 +72,11 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
         mWebViewCorePreference.setOnPreferenceClickListener(p1 -> {
             if (Build.VERSION.SDK_INT >= 24) {
                 Intent intent = new Intent(Settings.ACTION_WEBVIEW_SETTINGS);
-                if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+                if (intent.resolveActivity(requireContext().getPackageManager()) != null) {
                     startActivity(intent);
                 }
             } else {
-                Snackbar.make(getActivity().getWindow().getDecorView(), getString(R.string.not_supported_on_your_device), 2500).show();
+                Snackbar.make(requireActivity().getWindow().getDecorView(), getString(R.string.not_supported_on_your_device), 2500).show();
             }
             return true;
         });
@@ -90,14 +92,14 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
         mDataPathPreference = findPreference("data_saved_path");
         mDataPathPreference.setOnPreferenceClickListener(p1 -> {
             if (checkPermissions())
-                DirPickerActivity.startThisActivity((AppCompatActivity) getActivity());
+                DirPickerActivity.startThisActivity((AppCompatActivity) requireActivity());
             return true;
         });
 
         Preference mAboutPreference = findPreference("about");
         mAboutPreference.setOnPreferenceClickListener(p1 -> {
             Intent intent = new Intent(getActivity(), AboutActivity.class);
-            getActivity().startActivity(intent);
+            requireActivity().startActivity(intent);
             return true;
         });
 
@@ -126,7 +128,7 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
         mLanguagePreference.setOnPreferenceChangeListener((p1, p2) -> {
             int type = Integer.parseInt((String) p2);
             Preferences.setLanguageType(type);
-            I18n.setLanguage(getActivity());
+            I18n.setLanguage(requireActivity());
             Intent intent = new Intent(getActivity(), SplashesActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
@@ -135,60 +137,64 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
         updatePreferences();
     }
 
-    @Override
+    /*@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == DirPickerActivity.REQUEST_PICK_DIR && resultCode == AppCompatActivity.RESULT_OK) {
             String dir = data.getExtras().getString(DirPickerActivity.TAG_DIR_PATH);
             Preferences.setDataSavedPath(dir);
-            if (dir.equals(Constants.STRING_VALUE_DEFAULT))
-                Snackbar.make(getActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_reset_data_path), 2500).show();
-            else
-                Snackbar.make(getActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_data_path, dir), 2500).show();
+            if (dir.equals(Constants.STRING_VALUE_DEFAULT)) {
+                Snackbar.make(requireActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_reset_data_path), 2500).show();
+            } else {
+                Snackbar.make(requireActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_data_path, dir), 2500).show();
+            }
         } else if (requestCode == MCPkgPickerActivity.REQUEST_PICK_PACKAGE && resultCode == AppCompatActivity.RESULT_OK) {
             String pkgName = data.getExtras().getString("package_name");
             Preferences.setMinecraftPackageName(pkgName);
-            if (pkgName.equals(Constants.STRING_VALUE_DEFAULT))
-                Snackbar.make(getActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_reset_pkg_name), 2500).show();
-            else
-                Snackbar.make(getActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_pkg_name, pkgName), 2500).show();
+            if (pkgName.equals(Constants.STRING_VALUE_DEFAULT)) {
+                Snackbar.make(requireActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_reset_pkg_name), 2500).show();
+            } else {
+                Snackbar.make(requireActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_pkg_name, pkgName), 2500).show();
+            }
             Intent intent = new Intent(getActivity(), SplashesActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            getActivity().startActivity(intent);
+            requireActivity().startActivity(intent);
         }
         updatePreferences();
-    }
+    }*/
 
     private void updatePreferences() {
-        if (!Preferences.getDataSavedPath().equals("default"))
-            mDataPathPreference.setSummary(Preferences.getDataSavedPath());
-        else
+        if (Preferences.getDataSavedPath().equals("default")) {
             mDataPathPreference.setSummary(R.string.preferences_summary_data_saved_path);
+        } else {
+            mDataPathPreference.setSummary(Preferences.getDataSavedPath());
+        }
 
-        if (!Preferences.getMinecraftPEPackageName().equals("com.mojang.minecraftpe"))
-            mPkgPreference.setSummary(Preferences.getMinecraftPEPackageName());
-        else
+        if (Preferences.getMinecraftPEPackageName().equals("com.mojang.minecraftpe")) {
             mPkgPreference.setSummary(R.string.preferences_summary_game_pkg_name);
+        } else {
+            mPkgPreference.setSummary(Preferences.getMinecraftPEPackageName());
+        }
     }
 
     private boolean checkPermissions() {
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             return false;
         }
         return true;
     }
 
     private void showPermissionDinedDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         builder.setTitle(R.string.permission_grant_failed_title);
         builder.setMessage(R.string.permission_grant_failed_message);
         builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
             Intent intent = new Intent();
             intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
             intent.addCategory(Intent.CATEGORY_DEFAULT);
-            intent.setData(Uri.parse("package:" + getActivity().getPackageName()));
+            intent.setData(Uri.parse("package:" + requireActivity().getPackageName()));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
@@ -199,7 +205,7 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String @NotNull [] permissions, int @NotNull [] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == 1) {
@@ -213,7 +219,7 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
             }
 
             if (isAllGranted) {
-                DirPickerActivity.startThisActivity((AppCompatActivity) getActivity());
+                DirPickerActivity.startThisActivity((AppCompatActivity) requireActivity());
             } else {
                 showPermissionDinedDialog();
             }

@@ -54,7 +54,7 @@ class NModBanner : RelativeLayout {
     }
 
     private fun updateNModList() {
-        val newNModList = ModdedPEApplication.mPESdk!!.nModAPI.importedEnabledNModsHaveBanners
+        val newNModList = ModdedPEApplication.mPESdk.nModAPI.importedEnabledNModsHaveBanners
         if (mNModArrayList.isEmpty() || mNModArrayList != newNModList) {
             mNModArrayList.clear()
             mNModArrayList.addAll(newNModList)

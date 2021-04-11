@@ -27,6 +27,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.ListView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -117,23 +118,27 @@ class DirPickerActivity : BaseActivity() {
         }.start()
     }
 
-    private fun openDirectory(directory: File) {
+    private fun openDirectory(directory: File?) {
         currentPath = directory
         filesInCurrentPath = ArrayList()
+
         val unmanagedFilesInCurrentDirectory = currentPath!!.listFiles()
         if (unmanagedFilesInCurrentDirectory != null) {
             for (fileItem in unmanagedFilesInCurrentDirectory) {
-                if (fileItem.isDirectory) filesInCurrentPath!!.add(fileItem)
+                if (fileItem.isDirectory)
+                    filesInCurrentPath!!.add(fileItem)
             }
         }
-        filesInCurrentPath!!.sortWith(Comparator sort@{ o1: File, o2: File ->
-            if (o1.isDirectory and o2.isFile) {
-                return@sort -1
-            } else if (o1.isFile and o2.isDirectory) {
-                return@sort 1
-            } else return@sort o1.name.compareTo(o2.name, ignoreCase = true)
-        })
-        val fileListView = binding.pickerDirListView
+
+        filesInCurrentPath!!.sortWith { o1, o2 ->
+            when {
+                o1.isDirectory and o2.isFile -> -1
+                o1.isFile and o2.isDirectory -> 1
+                else -> o1.name.compareTo(o2.name, ignoreCase = true)
+            }
+        }
+
+        val fileListView = findViewById<View>(R.id.picker_dir_list_view) as ListView
         fileListView.adapter = FileAdapter()
     }
 
@@ -143,12 +148,12 @@ class DirPickerActivity : BaseActivity() {
             return if (filesInCurrentPath!!.size == 0) 1 else filesInCurrentPath!!.size
         }
 
-        override fun getItem(p1: Int): Any {
-            return p1
+        override fun getItem(position: Int): Any {
+            return position
         }
 
-        override fun getItemId(p1: Int): Long {
-            return p1.toLong()
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
         }
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -183,8 +188,10 @@ class DirPickerActivity : BaseActivity() {
                 val file = msg.obj as File
                 if (file == null) {
                     val lastFile = currentPath!!.parentFile
-                    if (isValidParent) openDirectory(lastFile!!)
-                } else if (file.isDirectory) openDirectory(file)
+                    if (isValidParent)
+                        openDirectory(lastFile)
+                } else if (file.isDirectory)
+                    openDirectory(file)
             }
         }
     }
@@ -194,7 +201,6 @@ class DirPickerActivity : BaseActivity() {
         const val TAG_DIR_PATH = "dir_path"
         private const val MSG_SELECT = 1
 
-        @JvmStatic
         fun startThisActivity(context: AppCompatActivity, path: File) {
             startThisActivity(context, path.path)
         }

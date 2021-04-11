@@ -41,8 +41,10 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.mcal.mcpelauncher.ModdedPEApplication;
 import com.mcal.mcpelauncher.R;
 import com.mcal.mcpelauncher.activities.NModDescriptionActivity;
 import com.mcal.mcpelauncher.activities.NModFilePickerActivity;
@@ -62,7 +64,7 @@ import java.util.ArrayList;
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-public class MainManageNModFragment extends BaseFragment implements PreloadingFinishedListener {
+public class MainManageNModFragment extends Fragment implements PreloadingFinishedListener {
     private static final int MSG_SHOW_PROGRESS_DIALOG = 1;
     private static final int MSG_HIDE_PROGRESS_DIALOG = 2;
     private static final int MSG_SHOW_SUCCEED_DIALOG = 3;
@@ -98,8 +100,8 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
     @Override
     public void onStart() {
         super.onStart();
-        if (mDataPreloader == null && !getPESdk().isInited()) {
-            AlertDialog.Builder mReloadDialog = new AlertDialog.Builder(getActivity());
+        if (mDataPreloader == null && !ModdedPEApplication.getMPESdk().isInited()) {
+            AlertDialog.Builder mReloadDialog = new AlertDialog.Builder(requireActivity());
             mReloadDialog.setTitle(R.string.main_reloading_title);
             mReloadDialog.setView(R.layout.moddedpe_main_reload_dialog);
             mReloadDialog.setCancelable(false);
@@ -136,8 +138,8 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
             public void run() {
                 mNModProcesserHandler.sendEmptyMessage(MSG_SHOW_PROGRESS_DIALOG);
                 try {
-                    ZippedNMod zippedNMod = getPESdk().getNModAPI().archiveZippedNMod(finalPath);
-                    if (getPESdk().getNModAPI().importNMod(zippedNMod)) {
+                    ZippedNMod zippedNMod = ModdedPEApplication.getMPESdk().getNModAPI().archiveZippedNMod(finalPath);
+                    if (ModdedPEApplication.getMPESdk().getNModAPI().importNMod(zippedNMod)) {
                         //replaced
                         mNModProcesserHandler.sendEmptyMessage(MSG_HIDE_PROGRESS_DIALOG);
                         mNModProcesserHandler.sendEmptyMessage(MSG_SHOW_REPLACED_DIALOG);
@@ -166,8 +168,8 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
             public void run() {
                 mNModProcesserHandler.sendEmptyMessage(MSG_SHOW_PROGRESS_DIALOG);
                 try {
-                    PackagedNMod packagedNMod = getPESdk().getNModAPI().archivePackagedNMod(finalPkgName);
-                    if (getPESdk().getNModAPI().importNMod(packagedNMod)) {
+                    PackagedNMod packagedNMod = ModdedPEApplication.getMPESdk().getNModAPI().archivePackagedNMod(finalPkgName);
+                    if (ModdedPEApplication.getMPESdk().getNModAPI().importNMod(packagedNMod)) {
                         //replaced
                         mNModProcesserHandler.sendEmptyMessage(MSG_HIDE_PROGRESS_DIALOG);
                         mNModProcesserHandler.sendEmptyMessage(MSG_SHOW_REPLACED_DIALOG);
@@ -189,7 +191,7 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
     }
 
     public void showPickNModFailedDialog(@NotNull ExtractFailedException archiveFailedException) {
-        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(requireActivity());
         alertBuilder.setTitle(R.string.nmod_import_failed);
         alertBuilder.setPositiveButton(android.R.string.ok, (p1, p2) -> p1.dismiss());
         switch (archiveFailedException.getType()) {
@@ -225,9 +227,9 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
             final ExtractFailedException fArchiveFailedException = archiveFailedException;
             alertBuilder.setNegativeButton(R.string.nmod_import_failed_button_full_info, (p1, p2) -> {
                 p1.dismiss();
-                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                AlertDialog.Builder dialog = new AlertDialog.Builder(requireActivity());
                 dialog.setTitle(R.string.nmod_import_failed_full_info_title);
-                dialog.setMessage(getActivity().getResources().getString(R.string.nmod_import_failed_full_info_message, fArchiveFailedException.toTypeString(), fArchiveFailedException.getCause().toString()));
+                dialog.setMessage(requireActivity().getResources().getString(R.string.nmod_import_failed_full_info_message, fArchiveFailedException.toTypeString(), fArchiveFailedException.getCause().toString()));
                 dialog.setPositiveButton(android.R.string.ok, (p1_, p21) -> p1_.dismiss());
                 dialog.show();
             });
@@ -236,7 +238,7 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
     }
 
     public void refreshNModDatas() {
-        if (getPESdk().getNModAPI().getImportedEnabledNMods().isEmpty() && getPESdk().getNModAPI().getImportedDisabledNMods().isEmpty()) {
+        if (ModdedPEApplication.getMPESdk().getNModAPI().getImportedEnabledNMods().isEmpty() && ModdedPEApplication.getMPESdk().getNModAPI().getImportedDisabledNMods().isEmpty()) {
             mRootView.findViewById(R.id.moddedpe_manage_nmod_layout_nmods).setVisibility(View.GONE);
             mRootView.findViewById(R.id.moddedpe_manage_nmod_layout_no_found).setVisibility(View.VISIBLE);
         } else {
@@ -251,7 +253,7 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
     private void showBugDialog(@NotNull NMod nmod) {
         if (!nmod.isBugPack())
             return;
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder dialog = new AlertDialog.Builder(requireActivity());
         dialog.setTitle(R.string.load_fail_title);
         dialog.setMessage(getString(R.string.load_fail_msg, nmod.getLoadException().toTypeString(), nmod.getLoadException().getCause().toString()));
         dialog.setPositiveButton(android.R.string.ok, (p1, p2) -> p1.dismiss());
@@ -292,11 +294,11 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
             View.OnClickListener onInfoClickedListener = p1 -> showBugDialog(nmod);
             AppCompatImageButton deleteButton = convertView.findViewById(R.id.nmod_bugged_delete);
             deleteButton.setOnClickListener(p1 -> {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                AlertDialog.Builder dialog = new AlertDialog.Builder(requireActivity());
                 dialog.setTitle(R.string.nmod_delete_title);
                 dialog.setMessage(R.string.nmod_delete_message);
                 dialog.setPositiveButton(android.R.string.ok, (p112, p2) -> {
-                    getPESdk().getNModAPI().removeImportedNMod(nmod);
+                    ModdedPEApplication.getMPESdk().getNModAPI().removeImportedNMod(nmod);
                     refreshNModDatas();
                     p112.dismiss();
                 });
@@ -319,16 +321,16 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
         imageIcon.setImageBitmap(nmodIcon);
         AppCompatImageButton addButton = convertView.findViewById(R.id.nmod_disabled_add);
         addButton.setOnClickListener(p1 -> {
-            getPESdk().getNModAPI().setEnabled(nmod, true);
+            ModdedPEApplication.getMPESdk().getNModAPI().setEnabled(nmod, true);
             refreshNModDatas();
         });
         AppCompatImageButton deleteButton = convertView.findViewById(R.id.nmod_disabled_delete);
         deleteButton.setOnClickListener(p1 -> {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+            AlertDialog.Builder dialog = new AlertDialog.Builder(requireActivity());
             dialog.setTitle(R.string.nmod_delete_title);
             dialog.setMessage(R.string.nmod_delete_message);
             dialog.setPositiveButton(android.R.string.ok, (p114, p2) -> {
-                getPESdk().getNModAPI().removeImportedNMod(nmod);
+                ModdedPEApplication.getMPESdk().getNModAPI().removeImportedNMod(nmod);
                 refreshNModDatas();
                 p114.dismiss();
             });
@@ -358,11 +360,11 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
             View.OnClickListener onInfoClickedListener = p1 -> showBugDialog(nmod);
             AppCompatImageButton deleteButton = convertView.findViewById(R.id.nmod_bugged_delete);
             deleteButton.setOnClickListener(p1 -> {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                AlertDialog.Builder dialog = new AlertDialog.Builder(requireActivity());
                 dialog.setTitle(R.string.nmod_delete_title);
                 dialog.setMessage(R.string.nmod_delete_message);
                 dialog.setPositiveButton(android.R.string.ok, (p11, p2) -> {
-                    getPESdk().getNModAPI().removeImportedNMod(nmod);
+                    ModdedPEApplication.getMPESdk().getNModAPI().removeImportedNMod(nmod);
                     refreshNModDatas();
                     p11.dismiss();
                 });
@@ -385,17 +387,17 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
         imageIcon.setImageBitmap(nmodIcon);
         AppCompatImageButton minusButton = convertView.findViewById(R.id.nmod_enabled_minus);
         minusButton.setOnClickListener(p1 -> {
-            getPESdk().getNModAPI().setEnabled(nmod, false);
+            ModdedPEApplication.getMPESdk().getNModAPI().setEnabled(nmod, false);
             refreshNModDatas();
         });
         AppCompatImageButton downButton = convertView.findViewById(R.id.nmod_enabled_arrow_down);
         downButton.setOnClickListener(p1 -> {
-            getPESdk().getNModAPI().downPosNMod(nmod);
+            ModdedPEApplication.getMPESdk().getNModAPI().downPosNMod(nmod);
             refreshNModDatas();
         });
         AppCompatImageButton upButton = convertView.findViewById(R.id.nmod_enabled_arrow_up);
         upButton.setOnClickListener(p1 -> {
-            getPESdk().getNModAPI().upPosNMod(nmod);
+            ModdedPEApplication.getMPESdk().getNModAPI().upPosNMod(nmod);
             refreshNModDatas();
         });
         convertView.setOnClickListener(p1 -> NModDescriptionActivity.startThisActivity(getActivity(), nmod));
@@ -403,7 +405,7 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
     }
 
     private void onAddNewNMod() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder dialog = new AlertDialog.Builder(requireActivity());
         dialog.setTitle(R.string.nmod_add_new_title);
         dialog.setMessage(R.string.nmod_add_new_message);
         dialog.setNegativeButton(R.string.nmod_add_new_pick_installed, (p1, p2) -> {
@@ -419,8 +421,8 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
     }
 
     private boolean checkPermissions() {
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
             return false;
         }
         return true;
@@ -447,14 +449,14 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
     }
 
     private void showPermissionDinedDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         builder.setTitle(R.string.permission_grant_failed_title);
         builder.setMessage(R.string.permission_grant_failed_message);
         builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
             Intent intent = new Intent();
             intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
             intent.addCategory(Intent.CATEGORY_DEFAULT);
-            intent.setData(Uri.parse("package:" + getActivity().getPackageName()));
+            intent.setData(Uri.parse("package:" + requireActivity().getPackageName()));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
@@ -464,6 +466,7 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
         builder.show();
     }
 
+    @SuppressLint("HandlerLeak")
     private class ReloadHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -483,7 +486,7 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
             super.handleMessage(msg);
             switch (msg.what) {
                 case MSG_SHOW_PROGRESS_DIALOG:
-                    mProcessingDialog = new AlertDialog.Builder(getActivity()).setTitle(R.string.nmod_importing_title).setView(R.layout.moddedpe_manage_nmod_progress_dialog_view).setCancelable(false).show();
+                    mProcessingDialog = new AlertDialog.Builder(requireActivity()).setTitle(R.string.nmod_importing_title).setView(R.layout.moddedpe_manage_nmod_progress_dialog_view).setCancelable(false).show();
                     break;
                 case MSG_HIDE_PROGRESS_DIALOG:
                     if (mProcessingDialog != null)
@@ -491,14 +494,14 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
                     mProcessingDialog = null;
                     break;
                 case MSG_SHOW_SUCCEED_DIALOG:
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(requireActivity());
                     dialog.setTitle(R.string.nmod_import_succeed_title);
                     dialog.setMessage(R.string.nmod_import_succeed_message);
                     dialog.setPositiveButton(android.R.string.ok, (p1, p2) -> p1.dismiss());
                     dialog.show();
                     break;
                 case MSG_SHOW_REPLACED_DIALOG:
-                    AlertDialog.Builder dialog1 = new AlertDialog.Builder(getActivity());
+                    AlertDialog.Builder dialog1 = new AlertDialog.Builder(requireActivity());
                     dialog1.setTitle(R.string.nmod_import_replaced_title);
                     dialog1.setMessage(R.string.nmod_import_replaced_message);
                     dialog1.setPositiveButton(android.R.string.ok, (p1, p2) -> p1.dismiss());
@@ -519,8 +522,8 @@ public class MainManageNModFragment extends BaseFragment implements PreloadingFi
         private final ArrayList<NMod> mImportedDisabledNMods = new ArrayList<>();
 
         NModListAdapter() {
-            mImportedEnabledNMods.addAll(getPESdk().getNModAPI().getImportedEnabledNMods());
-            mImportedDisabledNMods.addAll(getPESdk().getNModAPI().getImportedDisabledNMods());
+            mImportedEnabledNMods.addAll(ModdedPEApplication.getMPESdk().getNModAPI().getImportedEnabledNMods());
+            mImportedDisabledNMods.addAll(ModdedPEApplication.getMPESdk().getNModAPI().getImportedDisabledNMods());
         }
 
         @Override

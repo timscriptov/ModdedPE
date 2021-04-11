@@ -47,7 +47,7 @@ class ModdedPEApplication : Application() {
     }
 
     override fun getAssets(): AssetManager {
-        return mPESdk!!.minecraftInfo.assets
+        return mPESdk.minecraftInfo.assets
     }
 
     companion object {
@@ -56,8 +56,8 @@ class ModdedPEApplication : Application() {
         private var app: Application? = null
         private var preferences: SharedPreferences? = null
 
-        @JvmField
-        var mPESdk: PESdk? = null
+        @JvmStatic
+        lateinit var mPESdk: PESdk
 
         fun getContext(): Context? {
             if (context == null) {
