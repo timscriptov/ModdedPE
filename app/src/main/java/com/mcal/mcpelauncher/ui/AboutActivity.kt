@@ -20,12 +20,10 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.anjlab.android.iab.v3.BillingProcessor
-import com.anjlab.android.iab.v3.BillingProcessor.IBillingHandler
-import com.anjlab.android.iab.v3.TransactionDetails
+import com.mcal.mcpelauncher.iap.IapConnector
+import com.mcal.mcpelauncher.iap.PurchaseServiceListener
+import com.mcal.mcpelauncher.iap.SubscriptionServiceListener
 import com.mcal.mcpelauncher.R
 import com.mcal.mcpelauncher.activities.BaseActivity
 import com.mcal.mcpelauncher.databinding.ModdedpeAboutBinding
@@ -35,8 +33,7 @@ import com.mcal.mcpelauncher.utils.I18n.setLanguage
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-class AboutActivity : BaseActivity(), IBillingHandler {
-    private var bp: BillingProcessor? = null
+class AboutActivity : BaseActivity() {
     private lateinit var binding: ModdedpeAboutBinding
 
     public override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,32 +41,67 @@ class AboutActivity : BaseActivity(), IBillingHandler {
         binding = ModdedpeAboutBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setActionBarButtonCloseRight()
-        binding.aboutViewGithubButton.setOnClickListener { p1: View? -> openUri(URI_GITHUB) }
-        binding.aboutViewNmodApiButton.setOnClickListener { p1: View? -> openUri(URI_NMOD_API) }
-        binding.aboutTranslatorsButton.setOnClickListener { p1: View? ->
-            AlertDialog.Builder(this@AboutActivity)
+
+        val skuList = listOf("premium", "donate")
+        val subsList = listOf("subscribe")
+
+        val iapConnector = IapConnector(
+                this,
+                skuList,
+                subsList,
+                "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxcY9HnWLQlOrOC70CdjqiFlVvIwZ7GoK9K0po46QHOex2+WefmTVKTmSwx1hreKg0/04ODXIVt5gbwGvUAYnIEGU6SZ2jCg57pCSeg+rEcDvC73YJEUY6nlYFlERBCZv1spkbgpG+HWQ9dP0BPD+cBzZmZtbTca8lWtDnAcQKmfuTBkVH1s/UY60T30+gsfBZCtw78BYF0GnOYpesaYXWkzHH3XtHrWEsEtsyDur8SrNIMNb1iW3Q9eYzHd5kRKWwQdMeDYdPE3uG2laAhRbR9Rz8u3EzJU5lpIPLH9vHCBQpqkdJOC6knjFxFEU0hCBaqUiwB9K/oq5LJjZ9guHLQIDAQAB",
+                true
+        )
+
+        iapConnector.addPurchaseListener(object : PurchaseServiceListener {
+            override fun onPricesUpdated(iapKeyPrices: Map<String, String>) {
+                // list of available products will be received here, so you can update UI with prices if needed
+            }
+
+            override fun onProductPurchased(sku: String?) {
+                when (sku) {
+                    "premium" -> {
+
+                    }
+                    "donate" -> {
+
+                    }
+                }
+            }
+
+            override fun onProductRestored(sku: String?) {
+                // will be triggered fetching owned products using IAPManager.init();
+            }
+        })
+
+        iapConnector.addSubscriptionListener(object : SubscriptionServiceListener {
+            override fun onSubscriptionRestored(sku: String?) {
+                // will be triggered upon fetching owned subscription upon initialization
+            }
+
+            override fun onSubscriptionPurchased(sku: String?) {
+                // will be triggered whenever subscription succeeded
+            }
+
+            override fun onPricesUpdated(iapKeyPrices: Map<String, String>) {
+                // list of available products will be received here, so you can update UI with prices if needed
+            }
+        })
+
+        binding.aboutViewDonateButton.setOnClickListener {
+            iapConnector.purchase(this, "premium")
+        }
+
+        binding.aboutViewGithubButton.setOnClickListener { openUri(URI_GITHUB) }
+        binding.aboutViewNmodApiButton.setOnClickListener { openUri(URI_NMOD_API) }
+        binding.aboutTranslatorsButton.setOnClickListener {
+            AlertDialog.Builder(this)
                     .setTitle(R.string.about_translators)
                     .setMessage(R.string.about_translators_message)
                     .setPositiveButton(android.R.string.ok) { p11: DialogInterface, p2: Int -> p11.dismiss() }.show()
         }
-        bp = BillingProcessor(this, null, this)
         setLanguage(this)
     }
-
-    fun donate(v: View?) {
-        bp!!.purchase(this, "donate")
-    }
-
-    override fun onProductPurchased(p1: String, p2: TransactionDetails?) {
-        Toast.makeText(this, "Thanks", Toast.LENGTH_LONG).show()
-        bp!!.consumePurchase(p1)
-    }
-
-    override fun onPurchaseHistoryRestored() {}
-
-    override fun onBillingError(p1: Int, p2: Throwable?) {}
-
-    override fun onBillingInitialized() {}
 
     private fun openUri(uri: String) {
         val intent = Intent()
@@ -81,7 +113,7 @@ class AboutActivity : BaseActivity(), IBillingHandler {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        bp!!.handleActivityResult(requestCode, resultCode, data)
+        //bp!!.handleActivityResult(requestCode, resultCode, data)
     }
 
     companion object {

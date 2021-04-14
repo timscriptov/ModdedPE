@@ -185,20 +185,17 @@ class DirPickerActivity : BaseActivity() {
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
             if (msg.what == MSG_SELECT) {
-                val file = msg.obj as File
-                if (file == null) {
-                    val lastFile = currentPath!!.parentFile
-                    if (isValidParent)
-                        openDirectory(lastFile)
-                } else if (file.isDirectory)
+                val file: File = msg.obj as File
+                if (file.isDirectory) {
                     openDirectory(file)
+                }
             }
         }
     }
 
     companion object {
-        const val REQUEST_PICK_DIR = 3
-        const val TAG_DIR_PATH = "dir_path"
+        private const val REQUEST_PICK_DIR = 3
+        private const val TAG_DIR_PATH = "dir_path"
         private const val MSG_SELECT = 1
 
         fun startThisActivity(context: AppCompatActivity, path: File) {
