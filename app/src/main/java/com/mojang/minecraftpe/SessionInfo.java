@@ -104,12 +104,12 @@ public class SessionInfo implements Serializable {
         return simpleDateFormat;
     }
 
-    public void setContents(Context context, String str, String str2, String str3, String str4, String str5) {
-        this.sessionId = str;
-        this.buildId = str2;
-        this.commitId = str3;
-        this.branchId = str4;
-        this.flavor = str5;
+    public void setContents(Context context, String sessionId, String buildId, String commitId, String branchId, String flavor) {
+        this.sessionId = sessionId;
+        this.buildId = buildId;
+        this.commitId = commitId;
+        this.branchId = branchId;
+        this.flavor = flavor;
         updateJavaConstants(context);
     }
 

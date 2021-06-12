@@ -126,7 +126,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
     private final String MIXER_CREATE_INTERNAL_BETA_PACKAGE = "com.microsoft.beambroadcast.beta.internal";
     private final String MIXER_CREATE_RETAIL_PACKAGE = "com.microsoft.beambroadcast";
     private final Messenger mMessenger = new Messenger(new IncomingHandler());
-    private final List<ActivityListener> mActivityListeners = new ArrayList<ActivityListener>();
+    private final List<ActivityListener> mActivityListeners = new ArrayList<>();
     private final MemoryInfo mCachedMemoryInfo = new MemoryInfo();
     private final ArrayList<StringValue> _userInputValues = new ArrayList<>();
     private final SentryEndpointConfig mSentryEndpointAndroidTrial = new SentryEndpointConfig("https://sentry.io", "2308440", "668bc09f7bcf461796ea07c1006076fe");
@@ -959,10 +959,8 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         final boolean fLimitInput = limitInput;
         final boolean fNumbersOnly = numbersOnly;
         final boolean fIsMultiline = isMultiline;
-        runOnUiThread(new Runnable() {
-            public void run() {
-                setupKeyboardViews(startText, fMaxLength, fLimitInput, fNumbersOnly, fIsMultiline);
-            }
+        runOnUiThread(() -> {
+            setupKeyboardViews(startText, fMaxLength, fLimitInput, fNumbersOnly, fIsMultiline);
         });
     }
 
@@ -1088,7 +1086,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
             }
             return (String) this.getPropMethod.invoke(this.SystemProperties, str);
         } catch (Exception e) {
-            Log.e("MCPE", "Exception occured while getting a property [" + str + "]\n" + e.getMessage());
+            Log.e("ModdedPE", "Exception occured while getting a property [" + str + "]\n" + e.getMessage());
             return "";
         }
     }

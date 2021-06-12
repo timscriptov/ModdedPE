@@ -29,10 +29,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
 
-import com.mcal.mcpelauncher.R;
-import com.mcal.mcpelauncher.databinding.XalWebviewBinding;
 import com.microsoft.aad.adal.AuthenticationConstants;
 
 import org.jetbrains.annotations.NotNull;
@@ -108,7 +105,7 @@ public class WebKitWebViewController extends AppCompatActivity {
             deleteCookies("xboxlive.com", true);
             deleteCookies("sisu.xboxlive.com", true);
             Intent intent = new Intent();
-            //intent.putExtra(RESPONSE_KEY, endUrl);
+            intent.putExtra(RESPONSE_KEY, endUrl);
             setResult(AppCompatActivity.RESULT_OK, intent);
             finish();
             return;
@@ -124,9 +121,7 @@ public class WebKitWebViewController extends AppCompatActivity {
             hashMap.put(keys[i], values[i]);
         }
 
-        XalWebviewBinding binding = DataBindingUtil.setContentView(this, R.layout.xal_webview);
-
-        WebView webView = binding.webView;
+        WebView webView = new WebView(this);
 
         webView.getSettings().setJavaScriptEnabled(true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -148,7 +143,7 @@ public class WebKitWebViewController extends AppCompatActivity {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, @NotNull WebResourceRequest request) {
             Intent intent = new Intent();
-            //intent.putExtra(WebKitWebViewController.RESPONSE_KEY, request.getUrl().toString());
+            intent.putExtra(WebKitWebViewController.RESPONSE_KEY, request.getUrl().toString());
             setResult(AppCompatActivity.RESULT_OK, intent);
             finish();
             return true;
@@ -160,7 +155,7 @@ public class WebKitWebViewController extends AppCompatActivity {
                 return false;
             }
             Intent intent = new Intent();
-            //intent.putExtra(WebKitWebViewController.RESPONSE_KEY, url);
+            intent.putExtra(WebKitWebViewController.RESPONSE_KEY, url);
             setResult(AppCompatActivity.RESULT_OK, intent);
             finish();
             return true;

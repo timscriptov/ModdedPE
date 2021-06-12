@@ -366,9 +366,7 @@
             android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-                <data
-                    android:host="auth"
-                    android:scheme="ms-xal-0000000048183522" />
+                <data android:scheme="@string/xal_token" android:host="auth"/>
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
