@@ -42,16 +42,12 @@ import com.mcal.mcpelauncher.fragments.MainStartFragment;
 import com.mcal.mcpelauncher.services.BackgroundSoundPlayer;
 import com.mcal.mcpelauncher.services.SoundService;
 import com.mcal.mcpelauncher.ui.view.Dialogs;
-import com.mcal.mcpelauncher.utils.AdsAdmob;
 import com.mcal.mcpelauncher.utils.ExceptionHandler;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import kotlin.Unit;
-import kotlin.jvm.functions.Function0;
 
 /**
  * @author Тимашков Иван
@@ -76,12 +72,11 @@ public class MainActivity extends BaseActivity implements BackgroundSoundPlayer 
     }
 
     @Override
-    public Function0<Unit> play() {
+    public void play() {
         if (bound && paused) {
             ss.play();
             paused = false;
         }
-        return null;
     }
 
     @Override
@@ -164,7 +159,6 @@ public class MainActivity extends BaseActivity implements BackgroundSoundPlayer 
         if (!Preferences.getRated()) {
             Dialogs.rate(this);
         }
-        AdsAdmob.loadInterestialAd(this);
     }
 
     @Override
@@ -228,7 +222,7 @@ public class MainActivity extends BaseActivity implements BackgroundSoundPlayer 
             dialog.show();
             Preferences.setOpenGameFailed(null);
         }
-        AdsAdmob.showInterestialAd(this, play());
+        play();
     }
 
     private class MainFragmentPagerAdapter extends FragmentPagerAdapter {

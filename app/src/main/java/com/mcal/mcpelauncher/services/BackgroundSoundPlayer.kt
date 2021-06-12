@@ -23,6 +23,6 @@ package com.mcal.mcpelauncher.services
 interface BackgroundSoundPlayer {
     fun bind()
     fun unbind()
-    fun play(): (() -> Unit)?
+    fun play()
     fun pause()
 }

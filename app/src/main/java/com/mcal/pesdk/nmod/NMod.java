@@ -42,13 +42,13 @@ public abstract class NMod {
     public static final String MANIFEST_NAME = "nmod_manifest.json";
     public static final int NMOD_TYPE_ZIPPED = 1;
     public static final int NMOD_TYPE_PACKAGED = 2;
+    private final ArrayList<NModWarning> mWarnings = new ArrayList<NModWarning>();
+    private final String mPackageName;
     protected Context mContext;
     protected NModInfo mInfo;
     private LoadFailedException mBugExpection = null;
-    private final ArrayList<NModWarning> mWarnings = new ArrayList<NModWarning>();
     private Bitmap mIcon;
     private Bitmap mBannerImage;
-    private final String mPackageName;
 
     protected NMod(String packageName, Context context) {
         mContext = context;

@@ -31,10 +31,10 @@ import java.util.Iterator;
  * @author https://github.com/TimScriptov
  */
 class NModManager {
+    private final Context mContext;
     private ArrayList<NMod> mEnabledNMods = new ArrayList<>();
     private ArrayList<NMod> mAllNMods = new ArrayList<>();
     private ArrayList<NMod> mDisabledNMods = new ArrayList<>();
-    private final Context mContext;
 
     NModManager(Context context) {
         this.mContext = context;
