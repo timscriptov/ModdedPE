@@ -31,7 +31,8 @@ import kotlin.system.exitProcess
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-class ExceptionHandler @Contract(pure = true) constructor(private val mContext: Activity) : Thread.UncaughtExceptionHandler {
+class ExceptionHandler @Contract(pure = true) constructor(private val mContext: Activity) :
+    Thread.UncaughtExceptionHandler {
     override fun uncaughtException(thread: Thread, th: Throwable) {
         val stringWriter: Writer = StringWriter()
         th.printStackTrace(PrintWriter(stringWriter))

@@ -268,6 +268,10 @@
             </intent-filter>
         </activity>
 
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-1411495427741055~9893928391" />
+
         <!-- Minecraft -->
 
         <activity
@@ -299,6 +303,10 @@
             </intent-filter>
         </activity>
 
+        <meta-data
+            android:name="appcenter_android_trial_id"
+            android:value="@string/appcenter_android_id" />
+
         <service
             android:name="com.mojang.minecraftpe.ImportService"
             android:exported="true" />
@@ -321,6 +329,26 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.appsflyer.SingleInstallBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action
+                    android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.amazon.device.iap.ResponseReceiver">
+            <intent-filter>
+                <action
+                    android:name="com.amazon.inapp.purchasing.NOTIFY"
+                    android:permission="com.amazon.inapp.purchasing.Permission.NOTIFY"
+                    android:windowSoftInputMode="adjustResize"
+                    tools:ignore="InvalidPermission" />
             </intent-filter>
         </receiver>
 

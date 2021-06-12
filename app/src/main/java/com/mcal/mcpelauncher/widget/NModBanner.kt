@@ -49,7 +49,11 @@ class NModBanner : RelativeLayout {
         init()
     }
 
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         init()
     }
 
@@ -58,7 +62,8 @@ class NModBanner : RelativeLayout {
         if (mNModArrayList.isEmpty() || mNModArrayList != newNModList) {
             mNModArrayList.clear()
             mNModArrayList.addAll(newNModList)
-            if (newNModList.size > 0) mBannerView = createBannerItemFor(newNModList[mRandom.nextInt(newNModList.size)])
+            if (newNModList.size > 0) mBannerView =
+                createBannerItemFor(newNModList[mRandom.nextInt(newNModList.size)])
             removeAllViews()
             addView(mBannerView!!)
         }
@@ -84,16 +89,23 @@ class NModBanner : RelativeLayout {
     }
 
     private fun createEmptyBannerItem(): RelativeLayout {
-        return LayoutInflater.from(context).inflate(R.layout.moddedpe_nmod_banner_item, null) as RelativeLayout
+        return LayoutInflater.from(context)
+            .inflate(R.layout.moddedpe_nmod_banner_item, null) as RelativeLayout
     }
 
     private fun createBannerItemFor(nmod_for: NMod): RelativeLayout {
         val view = createEmptyBannerItem()
         val image: AppCompatImageView = view.findViewById(R.id.moddedpe_nmod_banner_item_image_view)
         image.setImageBitmap(nmod_for.bannerImage)
-        val bannerTitle: AppCompatTextView = view.findViewById(R.id.moddedpe_nmod_banner_item_text_view_title)
+        val bannerTitle: AppCompatTextView =
+            view.findViewById(R.id.moddedpe_nmod_banner_item_text_view_title)
         bannerTitle.text = nmod_for.bannerTitle
-        view.setOnClickListener { p1: View? -> NModDescriptionActivity.startThisActivity(context, nmod_for) }
+        view.setOnClickListener { p1: View? ->
+            NModDescriptionActivity.startThisActivity(
+                context,
+                nmod_for
+            )
+        }
         return view
     }
 }

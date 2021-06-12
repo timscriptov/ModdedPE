@@ -25,7 +25,8 @@ import com.mcal.mcpelauncher.utils.ScopedStorage
  * @author https://github.com/TimScriptov
  */
 object Preferences {
-    private val preferences = PreferenceManager.getDefaultSharedPreferences(ModdedPEApplication.getContext())
+    private val preferences =
+        PreferenceManager.getDefaultSharedPreferences(ModdedPEApplication.getContext())
 
     @JvmStatic
     var rated: Boolean

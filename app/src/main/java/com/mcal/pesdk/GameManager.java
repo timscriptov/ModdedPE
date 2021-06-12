@@ -49,7 +49,6 @@ public class GameManager {
         AssetOverrideManager.addAssetOverride(activity.getAssets(), MinecraftInfo.getMinecraftPackageContext().getPackageResourcePath());
 
         if (!safeMode) {
-            //NativeUtils.setValues(activity);
             Gson gson = new Gson();
             Bundle data = activity.getIntent().getExtras();
 

@@ -114,24 +114,24 @@ public class ActiveDirectorySignIn implements ActivityListener {
         return new AuthenticationCallback<AuthenticationResult>() {
             public void onSuccess(AuthenticationResult authenticationResult) {
                 System.out.println("ADAL sign in success");
-                boolean unused = mResultObtained = true;
-                String unused2 = mAccessToken = authenticationResult.getAccessToken();
-                String unused3 = mIdentityToken = authenticationResult.getIdToken();
-                String unused4 = mLastError = "";
-                boolean unused5 = mDialogOpen = false;
-                String unused6 = mUserId = authenticationResult.getUserInfo().getUserId();
+                mResultObtained = true;
+                mAccessToken = authenticationResult.getAccessToken();
+                mIdentityToken = authenticationResult.getIdToken();
+                mLastError = "";
+                mDialogOpen = false;
+                mUserId = authenticationResult.getUserInfo().getUserId();
                 nativeOnDataChanged();
             }
 
             public void onError(Exception exc) {
                 PrintStream printStream = System.out;
                 printStream.println("ADAL sign in error: " + exc.getMessage());
-                boolean unused = mResultObtained = false;
+                mResultObtained = false;
                 if (!(exc instanceof AuthenticationCancelError)) {
-                    String unused2 = mLastError = exc.getMessage();
+                    mLastError = exc.getMessage();
                 }
-                boolean unused3 = mDialogOpen = false;
-                String unused4 = mUserId = "";
+                mDialogOpen = false;
+                mUserId = "";
                 nativeOnDataChanged();
             }
         };

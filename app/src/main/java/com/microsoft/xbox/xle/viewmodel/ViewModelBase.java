@@ -39,6 +39,7 @@ public abstract class ViewModelBase implements XLEObserver<UpdateData> {
     public static final String TAG_PAGE_LOADING_TIME = "performance_measure_page_loadingtime";
     protected static int LAUNCH_TIME_OUT = 5000;
     private final ScreenLayout screen;
+    private final HashMap<UpdateType, XLEException> updateExceptions;
     protected int LifetimeInMinutes;
     protected AdapterBase adapter;
     protected boolean isActive;
@@ -52,7 +53,6 @@ public abstract class ViewModelBase implements XLEObserver<UpdateData> {
     private ViewModelBase parent;
     private boolean shouldHideScreen;
     private boolean showNoNetworkPopup;
-    private final HashMap<UpdateType, XLEException> updateExceptions;
     private EnumSet<UpdateType> updateTypesToCheck;
     private boolean updating;
 

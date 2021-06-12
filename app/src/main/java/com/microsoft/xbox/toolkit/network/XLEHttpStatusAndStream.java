@@ -24,7 +24,8 @@ public class XLEHttpStatusAndStream {
             try {
                 inputStream.close();
                 this.stream = null;
-            } catch (Exception unused) {
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

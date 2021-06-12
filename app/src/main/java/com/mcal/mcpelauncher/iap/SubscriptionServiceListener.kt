@@ -4,14 +4,14 @@ interface SubscriptionServiceListener : BillingServiceListener {
     /**
      * Callback will be triggered upon owned subscription restore
      *
-     * @param sku - specificator of owned subscription
+     * @param purchaseInfo - specifier of owned subscription
      */
-    fun onSubscriptionRestored(sku: String?)
+    fun onSubscriptionRestored(purchaseInfo: DataWrappers.PurchaseInfo)
 
     /**
      * Callback will be triggered when a subscription purchased successfully
      *
-     * @param sku - specificator of purchased subscription
+     * @param purchaseInfo - specifier of purchased subscription
      */
-    fun onSubscriptionPurchased(sku: String?)
+    fun onSubscriptionPurchased(purchaseInfo: DataWrappers.PurchaseInfo)
 }

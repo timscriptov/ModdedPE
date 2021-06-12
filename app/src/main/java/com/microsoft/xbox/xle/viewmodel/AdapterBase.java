@@ -23,12 +23,12 @@ import java.util.Iterator;
  */
 
 public abstract class AdapterBase {
-    public static String ALLOCATION_TAG = "ADAPTERBASE";
     private static final HashMap<String, Integer> adapterCounter = new HashMap<>();
+    public static String ALLOCATION_TAG = "ADAPTERBASE";
     private final ViewModelBase viewModel;
+    private final ArrayList<ScreenModuleLayout> screenModules;
     protected boolean isActive;
     private boolean isStarted;
-    private final ArrayList<ScreenModuleLayout> screenModules;
 
     public AdapterBase() {
         this(null);

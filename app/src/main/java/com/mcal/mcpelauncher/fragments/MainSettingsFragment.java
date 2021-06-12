@@ -36,7 +36,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.mcal.mcpelauncher.R;
 import com.mcal.mcpelauncher.activities.MCPkgPickerActivity;
 import com.mcal.mcpelauncher.activities.SplashesActivity;
-import com.mcal.mcpelauncher.data.Constants;
 import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.mcpelauncher.services.BackgroundSoundPlayer;
 import com.mcal.mcpelauncher.ui.AboutActivity;

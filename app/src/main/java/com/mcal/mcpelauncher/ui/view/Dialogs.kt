@@ -48,7 +48,12 @@ object Dialogs {
         dialog.setView(v)
         dialog.setPositiveButton(android.R.string.ok) { dialog1: DialogInterface, _: Int ->
             if (ratingBar.rating > 3) {
-                context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.mcal.mcpelauncher")))
+                context.startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("market://details?id=com.mcal.mcpelauncher")
+                    )
+                )
                 Preferences.rated
                 dialog1.cancel()
             } else {
@@ -69,12 +74,15 @@ object Dialogs {
     @JvmStatic
     fun showScopedStorageDialog(context: Context) {
         AlertDialog.Builder(context)
-                .setTitle(R.string.scoped_storage_title)
-                .setMessage(R.string.scoped_storage_msg)
-                .setPositiveButton(R.string.settings_title) { p1, p2 ->
-                    val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, Uri.parse("package:" + BuildConfig.APPLICATION_ID))
-                    context.startActivity(intent)
-                }
-                .create().show()
+            .setTitle(R.string.scoped_storage_title)
+            .setMessage(R.string.scoped_storage_msg)
+            .setPositiveButton(R.string.settings_title) { p1, p2 ->
+                val intent = Intent(
+                    Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
+                    Uri.parse("package:" + BuildConfig.APPLICATION_ID)
+                )
+                context.startActivity(intent)
+            }
+            .create().show()
     }
 }

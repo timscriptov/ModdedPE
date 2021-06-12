@@ -88,12 +88,7 @@ public class MainManageNModFragment extends Fragment implements PreloadingFinish
         refreshNModDatas();
 
         FloatingActionButton addBtn = mRootView.findViewById(R.id.moddedpe_manage_nmod_add_new);
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View p1) {
-                onAddNewNMod();
-            }
-        });
+        addBtn.setOnClickListener(p1 -> onAddNewNMod());
         return mRootView;
     }
 

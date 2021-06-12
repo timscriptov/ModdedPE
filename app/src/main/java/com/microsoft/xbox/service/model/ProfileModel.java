@@ -66,13 +66,21 @@ public class ProfileModel extends ModelBase<ProfileData> {
     private static final long profilePresenceDataLifetime = 180000;
     private static ProfileModel meProfileInstance = null;
     private static ThreadSafeFixedSizeHashtable<String, ProfileModel> profileModelCache = new ThreadSafeFixedSizeHashtable<>(20);
-    public String xuid;
-    private AddFollowingUserResponseContainer.AddFollowingUserResponse addUserToFollowingResponse;
     private final SingleEntryLoadingStatus addingUserToFavoriteListLoadingStatus = new SingleEntryLoadingStatus();
     private final SingleEntryLoadingStatus addingUserToFollowingListLoadingStatus = new SingleEntryLoadingStatus();
     private final SingleEntryLoadingStatus addingUserToMutedListLoadingStatus = new SingleEntryLoadingStatus();
     private final SingleEntryLoadingStatus addingUserToNeverListLoadingStatus = new SingleEntryLoadingStatus();
     private final SingleEntryLoadingStatus addingUserToShareIdentityListLoadingStatus = new SingleEntryLoadingStatus();
+    private final SingleEntryLoadingStatus mutedListLoadingStatus = new SingleEntryLoadingStatus();
+    private final SingleEntryLoadingStatus neverListLoadingStatus = new SingleEntryLoadingStatus();
+    private final SingleEntryLoadingStatus removingUserFromFavoriteListLoadingStatus = new SingleEntryLoadingStatus();
+    private final SingleEntryLoadingStatus removingUserFromFollowingListLoadingStatus = new SingleEntryLoadingStatus();
+    private final SingleEntryLoadingStatus removingUserFromMutedListLoadingStatus = new SingleEntryLoadingStatus();
+    private final SingleEntryLoadingStatus removingUserFromNeverListLoadingStatus = new SingleEntryLoadingStatus();
+    private final SingleEntryLoadingStatus removingUserFromShareIdentityListLoadingStatus = new SingleEntryLoadingStatus();
+    private final SingleEntryLoadingStatus submitFeedbackForUserLoadingStatus = new SingleEntryLoadingStatus();
+    public String xuid;
+    private AddFollowingUserResponseContainer.AddFollowingUserResponse addUserToFollowingResponse;
     private ArrayList<FollowersData> favorites;
     private String firstName;
     private ArrayList<FollowersData> following;
@@ -84,9 +92,7 @@ public class ProfileModel extends ModelBase<ProfileData> {
     private Date lastRefreshPresenceData;
     private Date lastRefreshProfileSummary;
     private MutedListResultContainer.MutedListResult mutedList;
-    private final SingleEntryLoadingStatus mutedListLoadingStatus = new SingleEntryLoadingStatus();
     private NeverListResultContainer.NeverListResult neverList;
-    private final SingleEntryLoadingStatus neverListLoadingStatus = new SingleEntryLoadingStatus();
     private IPeopleHubResult.PeopleHubPersonSummary peopleHubPersonSummary;
     private ArrayList<FollowersData> peopleHubRecommendations;
     private IPeopleHubResult.PeopleHubPeopleSummary peopleHubRecommendationsRaw;
@@ -96,15 +102,9 @@ public class ProfileModel extends ModelBase<ProfileData> {
     private ProfileSummaryResultContainer.ProfileSummaryResult profileSummary;
     private SingleEntryLoadingStatus profileSummaryLoadingStatus;
     private IUserProfileResult.ProfileUser profileUser;
-    private final SingleEntryLoadingStatus removingUserFromFavoriteListLoadingStatus = new SingleEntryLoadingStatus();
-    private final SingleEntryLoadingStatus removingUserFromFollowingListLoadingStatus = new SingleEntryLoadingStatus();
-    private final SingleEntryLoadingStatus removingUserFromMutedListLoadingStatus = new SingleEntryLoadingStatus();
-    private final SingleEntryLoadingStatus removingUserFromNeverListLoadingStatus = new SingleEntryLoadingStatus();
-    private final SingleEntryLoadingStatus removingUserFromShareIdentityListLoadingStatus = new SingleEntryLoadingStatus();
     private boolean shareRealName;
     private String shareRealNameStatus;
     private boolean sharingRealNameTransitively;
-    private final SingleEntryLoadingStatus submitFeedbackForUserLoadingStatus = new SingleEntryLoadingStatus();
 
     private ProfileModel(String str) {
         this.xuid = str;
@@ -803,9 +803,9 @@ public class ProfileModel extends ModelBase<ProfileData> {
     }
 
     private class GetProfileRunner extends IDataLoaderRunnable<ProfileData> {
-        public String xuid;
         private final ProfileModel caller;
         private final boolean loadEssentialsOnly;
+        public String xuid;
 
         public GetProfileRunner(ProfileModel profileModel, String str, boolean z) {
             this.caller = profileModel;

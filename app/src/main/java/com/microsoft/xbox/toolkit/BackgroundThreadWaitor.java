@@ -18,10 +18,10 @@ import java.util.Iterator;
 
 public class BackgroundThreadWaitor {
     private static BackgroundThreadWaitor instance = new BackgroundThreadWaitor();
-    private BackgroundThreadWaitorChangedCallback blockingChangedCallback = null;
     private final Hashtable<WaitType, WaitObject> blockingTable = new Hashtable<>();
     private final Ready waitReady = new Ready();
     private final ArrayList<Runnable> waitingRunnables = new ArrayList<>();
+    private BackgroundThreadWaitorChangedCallback blockingChangedCallback = null;
 
     public static BackgroundThreadWaitor getInstance() {
         if (instance == null) {
@@ -124,8 +124,8 @@ public class BackgroundThreadWaitor {
     }
 
     private class WaitObject {
-        public WaitType type;
         private final long expires;
+        public WaitType type;
 
         public WaitObject(WaitType waitType, long j) {
             this.type = waitType;

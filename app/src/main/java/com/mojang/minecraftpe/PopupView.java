@@ -17,14 +17,14 @@ import org.jetbrains.annotations.NotNull;
 public class PopupView {
     private View mContentView;
     private Context mContext;
+    @SuppressLint("WrongConstant")
+    private final WindowManager mWindowManager = ((WindowManager) mContext.getSystemService("window"));
     private int mHeight;
     private int mOriginX;
     private int mOriginY;
     private View mParentView;
     private View mPopupView;
     private int mWidth;
-    @SuppressLint("WrongConstant")
-    private final WindowManager mWindowManager = ((WindowManager) mContext.getSystemService("window"));
 
     public PopupView(Context context) {
         mContext = context;

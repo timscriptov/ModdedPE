@@ -59,6 +59,7 @@ class ModdedPEApplication : Application() {
         @JvmStatic
         lateinit var mPESdk: PESdk
 
+        @JvmStatic
         fun getContext(): Context? {
             if (context == null) {
                 context = ModdedPEApplication()

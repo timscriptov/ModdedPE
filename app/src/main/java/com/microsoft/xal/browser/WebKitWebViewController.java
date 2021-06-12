@@ -108,7 +108,7 @@ public class WebKitWebViewController extends AppCompatActivity {
             deleteCookies("xboxlive.com", true);
             deleteCookies("sisu.xboxlive.com", true);
             Intent intent = new Intent();
-            intent.putExtra(RESPONSE_KEY, endUrl);
+            //intent.putExtra(RESPONSE_KEY, endUrl);
             setResult(AppCompatActivity.RESULT_OK, intent);
             finish();
             return;
@@ -148,7 +148,7 @@ public class WebKitWebViewController extends AppCompatActivity {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, @NotNull WebResourceRequest request) {
             Intent intent = new Intent();
-            intent.putExtra(WebKitWebViewController.RESPONSE_KEY, request.getUrl().toString());
+            //intent.putExtra(WebKitWebViewController.RESPONSE_KEY, request.getUrl().toString());
             setResult(AppCompatActivity.RESULT_OK, intent);
             finish();
             return true;
@@ -160,7 +160,7 @@ public class WebKitWebViewController extends AppCompatActivity {
                 return false;
             }
             Intent intent = new Intent();
-            intent.putExtra(WebKitWebViewController.RESPONSE_KEY, url);
+            //intent.putExtra(WebKitWebViewController.RESPONSE_KEY, url);
             setResult(AppCompatActivity.RESULT_OK, intent);
             finish();
             return true;

@@ -42,6 +42,7 @@ import com.mcal.mcpelauncher.fragments.MainStartFragment;
 import com.mcal.mcpelauncher.services.BackgroundSoundPlayer;
 import com.mcal.mcpelauncher.services.SoundService;
 import com.mcal.mcpelauncher.ui.view.Dialogs;
+import com.mcal.mcpelauncher.utils.ExceptionHandler;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -89,7 +90,7 @@ public class MainActivity extends BaseActivity implements BackgroundSoundPlayer 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
         setContentView(R.layout.moddedpe_main_pager);
 
         ArrayList<Fragment> fragment_list = new ArrayList<>();
@@ -160,7 +161,6 @@ public class MainActivity extends BaseActivity implements BackgroundSoundPlayer 
             Dialogs.rate(this);
         }
     }
-
 
     @Override
     protected void onStop() {

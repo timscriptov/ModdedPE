@@ -44,6 +44,9 @@ object I18n {
             11 -> config.setLocale(Locale("uk")) // Украинский
             else -> config.setLocale(Locale.getDefault())
         }
-        if (defaultLocale != config.locale) context.resources.updateConfiguration(config, context.resources.displayMetrics)
+        if (defaultLocale != config.locale) context.resources.updateConfiguration(
+            config,
+            context.resources.displayMetrics
+        )
     }
 }

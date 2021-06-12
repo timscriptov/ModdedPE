@@ -38,6 +38,7 @@ import com.microsoft.xboxtcui.XboxTcuiSdk;
  */
 
 public class ChangeFriendshipDialog extends XLEManagedDialog {
+    private final ViewModelBase previousVM;
     public SwitchPanel changeFriendshipSwitchPanel;
     public ChangeFriendshipDialogViewModel vm;
     private RadioButton addFavorite;
@@ -47,7 +48,6 @@ public class ChangeFriendshipDialog extends XLEManagedDialog {
     private CustomTypefaceTextView favoriteIconView;
     private CustomTypefaceTextView gamertag;
     private FastProgressBar overlayLoadingIndicator;
-    private final ViewModelBase previousVM;
     private TextView profileAccountTier;
     private CustomTypefaceTextView profileGamerScore;
     private XLEUniversalImageView profilePic;

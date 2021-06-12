@@ -18,8 +18,8 @@ public class XLEThreadPool {
     public static XLEThreadPool nativeOperationsThreadPool = new XLEThreadPool(true, 4, "XLENativeOperationsPool");
     public static XLEThreadPool networkOperationsThreadPool = new XLEThreadPool(false, 3, "XLENetworkOperationsPool");
     public static XLEThreadPool textureThreadPool = new XLEThreadPool(false, 1, "XLETexturePool");
-    public String name;
     private final ExecutorService executor;
+    public String name;
 
     public XLEThreadPool(boolean singleThread, final int priority, String newname) {
         name = newname;

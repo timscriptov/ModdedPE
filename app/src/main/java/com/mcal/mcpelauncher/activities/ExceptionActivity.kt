@@ -32,7 +32,10 @@ class ExceptionActivity : AppCompatActivity() {
     @SuppressLint("ResourceType")
     override fun onCreate(bundle: Bundle?) {
         super.onCreate(bundle)
-        val mLayoutParams = LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.MATCH_PARENT).apply {
+        val mLayoutParams = LinearLayoutCompat.LayoutParams(
+            LinearLayoutCompat.LayoutParams.MATCH_PARENT,
+            LinearLayoutCompat.LayoutParams.MATCH_PARENT
+        ).apply {
             gravity = 17
         }
         val linearLayout = LinearLayoutCompat(this).apply {

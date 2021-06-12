@@ -16,14 +16,14 @@ import android.widget.RelativeLayout;
 
 public class XLERootView extends RelativeLayout {
     private static final int UNASSIGNED_ACTIVITY_BODY_ID = -1;
-    private View activityBody;
-    private int activityBodyIndex;
-    private String headerName;
     private final boolean isTopLevel = false;
     private final long lastFps = 0;
     private final long lastMs = 0;
-    private int origPaddingBottom;
     private final boolean showTitleBar = true;
+    private View activityBody;
+    private int activityBodyIndex;
+    private String headerName;
+    private int origPaddingBottom;
 
     public XLERootView(Context context) {
         super(context);

@@ -54,6 +54,7 @@ public class TextureManager {
     private static final int TEXTURE_TIMEOUT_MS = 15000;
     private static final long TIME_TO_RETRY_MS = 300000;
     public static TextureManager instance = new TextureManager();
+    private final TimeMonitor stopwatch = new TimeMonitor();
     public XLEMemoryCache<TextureManagerScaledNetworkBitmapRequest, XLEBitmap> bitmapCache = new XLEMemoryCache<>(Math.min(getNetworkBitmapCacheSizeInMB(), 50) * 1048576, BITMAP_CACHE_MAX_FILE_SIZE_IN_BYTES);
     public XLEFileCache bitmapFileCache = XLEFileCacheManager.createCache(BMP_FILE_CACHE_DIR_NAME, BMP_FILE_CACHE_SIZE);
     public HashSet<TextureManagerScaledNetworkBitmapRequest> inProgress = new HashSet<>();
@@ -63,7 +64,6 @@ public class TextureManager {
     public MultiMap<TextureManagerScaledNetworkBitmapRequest, ImageView> waitingForImage = new MultiMap<>();
     private Thread decodeThread = null;
     private HashMap<TextureManagerScaledResourceBitmapRequest, XLEBitmap> resourceBitmapCache = new HashMap<>();
-    private final TimeMonitor stopwatch = new TimeMonitor();
 
     public TextureManager() {
         this.stopwatch.start();

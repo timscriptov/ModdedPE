@@ -16,9 +16,9 @@ import java.util.HashMap;
  */
 
 public class XLEFileCacheManager {
-    public static XLEFileCache emptyFileCache = new XLEFileCache();
     private static final HashMap<String, XLEFileCache> sAllCaches = new HashMap<>();
     private static final HashMap<XLEFileCache, File> sCacheRootDirMap = new HashMap<>();
+    public static XLEFileCache emptyFileCache = new XLEFileCache();
 
     public static synchronized XLEFileCache createCache(String str, int i) {
         XLEFileCache createCache;

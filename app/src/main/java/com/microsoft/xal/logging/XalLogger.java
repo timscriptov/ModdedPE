@@ -1,5 +1,6 @@
 package com.microsoft.xal.logging;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +17,7 @@ import java.util.GregorianCalendar;
  */
 
 public class XalLogger implements AutoCloseable {
+    @SuppressLint("SimpleDateFormat")
     private static final SimpleDateFormat LogDateFormat = new SimpleDateFormat("HH:mm:ss.SSS");
     private static final String TAG = "XALJAVA";
     private final ArrayList<LogEntry> m_logs = new ArrayList<>();
@@ -46,7 +48,7 @@ public class XalLogger implements AutoCloseable {
     }
 
     public synchronized void Log(LogLevel level, String msg) {
-        m_logs.add(new LogEntry(level, String.format("[%c][%s][%s] %s", Character.valueOf(level.ToChar()), Timestamp(), m_subArea, msg)));
+        m_logs.add(new LogEntry(level, String.format("[%c][%s][%s] %s", level.ToChar(), Timestamp(), m_subArea, msg)));
         if (m_leastVerboseLevel.ToInt() > level.ToInt()) {
             m_leastVerboseLevel = level;
         }
@@ -63,7 +65,7 @@ public class XalLogger implements AutoCloseable {
     }
 
     public void Important(String msg) {
-        Log.w(TAG, String.format("[%c][%s] %s", Character.valueOf(LogLevel.Important.ToChar()), this.m_subArea, msg));
+        Log.w(TAG, String.format("[%c][%s] %s", LogLevel.Important.ToChar(), this.m_subArea, msg));
         Log(LogLevel.Important, msg);
     }
 

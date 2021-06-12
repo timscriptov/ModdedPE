@@ -22,10 +22,10 @@ public class SoundManager {
     private static final int NO_LOOP = 0;
     private final AudioManager audioManager;
     private final Context context;
-    private boolean isEnabled;
     private final ArrayList<Integer> recentlyPlayedResourceIds;
     private final HashMap<Integer, Integer> resourceSoundIdMap;
     private final SoundPool soundPool;
+    private boolean isEnabled;
 
     @SuppressLint("WrongConstant")
     private SoundManager() {

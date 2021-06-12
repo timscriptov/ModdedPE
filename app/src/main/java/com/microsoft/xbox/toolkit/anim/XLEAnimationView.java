@@ -19,8 +19,8 @@ import org.jetbrains.annotations.NotNull;
  */
 
 public class XLEAnimationView extends XLEAnimation {
-    public View animtarget;
     private final Animation anim;
+    public View animtarget;
 
     public XLEAnimationView(@NotNull Animation animation) {
         this.anim = animation;

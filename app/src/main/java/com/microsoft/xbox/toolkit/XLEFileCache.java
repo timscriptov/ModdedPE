@@ -154,8 +154,8 @@ public class XLEFileCache {
     private class CachedFileInputStreamItem {
         private final byte[] computedMd5;
         private final InputStream contentInputStream;
-        private MessageDigest mDigest = null;
         private final byte[] savedMd5;
+        private MessageDigest mDigest = null;
 
         public CachedFileInputStreamItem(XLEFileCacheItemKey xLEFileCacheItemKey, File file) throws IOException {
             FileInputStream fileInputStream = new FileInputStream(file);

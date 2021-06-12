@@ -25,12 +25,12 @@ public abstract class ModelBase<T> extends XLEObservable<UpdateData> implements 
     protected static final long MilliSecondsInADay = 86400000;
     protected static final long MilliSecondsInAnHour = 3600000;
     protected static final long MilliSecondsInHalfHour = 1800000;
+    private final SingleEntryLoadingStatus loadingStatus = new SingleEntryLoadingStatus();
     protected boolean isLoading = false;
     protected long lastInvalidatedTick = 0;
     protected Date lastRefreshTime;
     protected long lifetime = MilliSecondsInADay;
     protected IDataLoaderRunnable<T> loaderRunnable;
-    private final SingleEntryLoadingStatus loadingStatus = new SingleEntryLoadingStatus();
 
     public boolean shouldRefresh() {
         return shouldRefresh(this.lastRefreshTime);

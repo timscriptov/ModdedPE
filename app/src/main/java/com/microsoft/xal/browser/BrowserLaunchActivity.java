@@ -204,6 +204,7 @@ public class BrowserLaunchActivity extends AppCompatActivity {
         if (m_cancelOperationOnResume) {
             finishOperation(WebResult.CANCEL, null);
         }
+        finish();
     }
 
     @SuppressLint("ResourceAsColor")

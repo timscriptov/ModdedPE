@@ -44,7 +44,8 @@ public class XboxAppLinker {
         try {
             context.getPackageManager().getPackageInfo(str, 1);
             return true;
-        } catch (PackageManager.NameNotFoundException unused) {
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
             return false;
         }
     }

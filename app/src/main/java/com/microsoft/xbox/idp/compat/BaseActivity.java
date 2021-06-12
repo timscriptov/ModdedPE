@@ -1,8 +1,9 @@
 package com.microsoft.xbox.idp.compat;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * 07.01.2021
@@ -11,7 +12,7 @@ import android.os.Bundle;
  * @author https://github.com/TimScriptov
  */
 
-public abstract class BaseActivity extends Activity {
+public abstract class BaseActivity extends AppCompatActivity {
     public boolean hasFragment(int i) {
         return getFragmentManager().findFragmentById(i) != null;
     }

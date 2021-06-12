@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
         <com.mcal.mcpelauncher.widget.ProgressBar
             android:id="@+id/nmod_importer_loading_progress_bar"
@@ -21,4 +19,3 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </RelativeLayout>
-</layout>

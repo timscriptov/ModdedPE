@@ -33,9 +33,9 @@ import java.lang.ref.WeakReference;
  */
 
 public abstract class ActivityBase extends ScreenLayout {
-    protected ViewModelBase viewModel;
     private final boolean showRightPane;
     private final boolean showUtilityBar;
+    protected ViewModelBase viewModel;
 
     public ActivityBase() {
         this(0);

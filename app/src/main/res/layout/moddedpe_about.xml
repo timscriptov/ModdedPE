@@ -8,10 +8,10 @@
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1.0"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="15dp">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
@@ -48,8 +48,7 @@
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1.0"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -58,7 +57,6 @@
                 android:layout_width="65dp"
                 android:layout_height="65dp"
                 android:background="@drawable/moddedpe_main_button_drawable"
-                android:onClick="donate"
                 android:src="@drawable/ic_donate"
                 android:text="@string/about_donate" />
 

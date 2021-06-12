@@ -28,12 +28,12 @@ import java.io.IOException;
 
 public class PDFWriter {
     private final Rect mImageRect;
-    private PdfDocument mOpenDocument;
     private final Rect mPageRect = new Rect(0, 0, 612, 792);
     private final TextPaint mPageTextPaint;
     private final Rect mTextRect;
     private final Rect mTitleRect = new Rect(0, 0, mPageRect.width(), (int) (((float) mPageRect.height()) * (1.0f - 0.3f)));
     private final TextPaint mTitleTextPaint;
+    private PdfDocument mOpenDocument;
 
     public PDFWriter() {
         mTitleRect.offset(0, (int) (((float) mPageRect.height()) * 0.3f));

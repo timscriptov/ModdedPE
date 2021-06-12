@@ -25,9 +25,6 @@ import com.microsoft.xboxtcui.XboxAppDeepLinker;
  */
 
 public class ProfileScreenAdapter extends AdapterBase {
-    public IconFontToggleButton blockButton = ((IconFontToggleButton) findViewById(R.id.profile_block));
-    public IconFontToggleButton muteButton = ((IconFontToggleButton) findViewById(R.id.profile_mute));
-    public ProfileScreenViewModel viewModel;
     private final ScrollView contentScrollView = ((ScrollView) findViewById(R.id.profile_screen_content_list));
     private final IconFontToggleButton followButton = ((IconFontToggleButton) findViewById(R.id.profile_follow));
     private final XLERoundedUniversalImageView gamerPicImageView = ((XLERoundedUniversalImageView) findViewById(R.id.profile_gamerpic));
@@ -40,6 +37,9 @@ public class ProfileScreenAdapter extends AdapterBase {
     private final XLERootView rootView = ((XLERootView) findViewById(R.id.profile_root));
     private final IconFontToggleButton viewInXboxAppButton = ((IconFontToggleButton) findViewById(R.id.profile_view_in_xbox_app));
     private final CustomTypefaceTextView viewInXboxAppSubTextView = ((CustomTypefaceTextView) findViewById(R.id.profile_view_in_xbox_app_subtext));
+    public IconFontToggleButton blockButton = ((IconFontToggleButton) findViewById(R.id.profile_block));
+    public IconFontToggleButton muteButton = ((IconFontToggleButton) findViewById(R.id.profile_mute));
+    public ProfileScreenViewModel viewModel;
 
     @SuppressLint("WrongConstant")
     public ProfileScreenAdapter(ProfileScreenViewModel profileScreenViewModel) {

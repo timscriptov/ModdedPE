@@ -13,8 +13,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class XLEException extends Exception {
     private final long errorCode;
-    private boolean isHandled;
     private final Object userObject;
+    private boolean isHandled;
 
     public XLEException(long j) {
         this(j, null, null, null);

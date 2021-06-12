@@ -1,6 +1,5 @@
 package com.mcal.mcpelauncher.iap
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 
@@ -8,25 +7,26 @@ class IapConnector @JvmOverloads constructor
 /**
  * Initialize billing service.
  *
- * @param key - key to verify purchase messages. Currently valid only for Google Billing. Leave empty if you want to skip verification
+ * @param key - key to verify purchase messages. Leave empty if you want to skip verification
  * @param context          - application context
  * @param iapKeys          - list of sku for purchases
  * @param subscriptionKeys - list of sku for subscriptions
  */
     (
     context: Context,
-    iapKeys: List<String>,
+    nonConsumableKeys: List<String> = emptyList(),
+    consumableKeys: List<String> = emptyList(),
     subscriptionKeys: List<String> = emptyList(),
     key: String? = null,
     enableLogging: Boolean = false
 ) {
 
-    @SuppressLint("StaticFieldLeak")
     private var mBillingService: IBillingService? = null
 
     init {
         val contextLocal = context.applicationContext ?: context
-        mBillingService = BillingService(contextLocal, iapKeys, subscriptionKeys)
+        mBillingService =
+            BillingService(contextLocal, nonConsumableKeys, consumableKeys, subscriptionKeys)
         getBillingService().init(key)
         getBillingService().enableDebugLogging(enableLogging)
     }
@@ -65,7 +65,7 @@ class IapConnector @JvmOverloads constructor
 
     fun getBillingService(): IBillingService {
         return mBillingService ?: let {
-            throw RuntimeException("Call IAPManager.build to initialize billing service")
+            throw RuntimeException("Call IapConnector to initialize billing service")
         }
     }
 }

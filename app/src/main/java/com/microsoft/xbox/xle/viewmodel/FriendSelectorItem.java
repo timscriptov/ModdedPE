@@ -60,6 +60,7 @@ public final class FriendSelectorItem extends FollowersData {
         FriendSelectorItem friendSelectorItem = (FriendSelectorItem) obj;
         if (this.userProfileData == null || this.userProfileData.gamerTag == null) {
             return friendSelectorItem.userProfileData == null && friendSelectorItem.userProfileData.gamerTag == null;
-        } else return this.userProfileData.gamerTag.equals(friendSelectorItem.userProfileData.gamerTag);
+        } else
+            return this.userProfileData.gamerTag.equals(friendSelectorItem.userProfileData.gamerTag);
     }
 }

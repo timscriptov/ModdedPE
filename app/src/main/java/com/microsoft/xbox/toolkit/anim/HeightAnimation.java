@@ -14,8 +14,8 @@ import org.jetbrains.annotations.NotNull;
  */
 
 public class HeightAnimation extends Animation {
-    private int fromValue;
     private final int toValue;
+    private int fromValue;
     private View view;
 
     public HeightAnimation(int i, int i2) {

@@ -15,7 +15,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -37,6 +37,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.os.StatFs;
 import android.os.SystemClock;
@@ -45,13 +46,13 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore.Images.Media;
 import android.speech.tts.TextToSpeech;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.InputDevice;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
@@ -64,7 +65,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.appboy.Constants;
 import com.appsflyer.AppsFlyerLib;
+import com.mcal.mcpelauncher.BuildConfig;
 import com.mcal.mcpelauncher.utils.ScopedStorage;
 import com.mojang.android.StringValue;
 import com.mojang.minecraftpe.input.InputDeviceManager;
@@ -88,6 +91,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
@@ -97,7 +101,6 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -108,8 +111,9 @@ import java.util.UUID;
  * @author https://github.com/TimScriptov
  */
 
-public class MainActivity extends NativeActivity implements OnKeyListener, CrashManagerOwner {
+public class MainActivity extends NativeActivity implements OnKeyListener {
     public static MainActivity mInstance = null;
+    public static int RESULT_PICK_IMAGE = 1;
     private static boolean _isPowerVr = false;
     private final String MARKET_URL_FORMAT = "market://details?id=%s";
     private final String ACTION_TCUI_BROADCAST_LAUNCH = "com.microsoft.beambroadcast.xle.app.action.TCUI";
@@ -121,14 +125,21 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     private final String MIXER_CREATE_BETA_PACKAGE = "com.microsoft.beambroadcast.beta";
     private final String MIXER_CREATE_INTERNAL_BETA_PACKAGE = "com.microsoft.beambroadcast.beta.internal";
     private final String MIXER_CREATE_RETAIL_PACKAGE = "com.microsoft.beambroadcast";
+    private final Messenger mMessenger = new Messenger(new IncomingHandler());
+    private final List<ActivityListener> mActivityListeners = new ArrayList<ActivityListener>();
+    private final MemoryInfo mCachedMemoryInfo = new MemoryInfo();
+    private final ArrayList<StringValue> _userInputValues = new ArrayList<>();
+    private final SentryEndpointConfig mSentryEndpointAndroidTrial = new SentryEndpointConfig("https://sentry.io", "2308440", "668bc09f7bcf461796ea07c1006076fe");
+    private final SentryEndpointConfig mSentryEndpointBedrock = new SentryEndpointConfig("https://sentry.io", "2277697", "1c3f5cbd723a4a84879059d260b19ef6");
+    private final SentryEndpointConfig mSentryEndpointEDU = new SentryEndpointConfig("https://o339720.ingest.sentry.io", "5242741", "0d409f4cd2f64aa3a686a1b5193a4bf9");
     public int mLastPermissionRequestReason;
     public int virtualKeyboardHeight = 0;
+    public ParcelFileDescriptor mPickedFileDescriptor;
+    Class SystemProperties;
+    Method getPropMethod;
     private boolean mHasStoragePermission = false;
-    private final Messenger mMessenger = new Messenger(new IncomingHandler());
     private HeadsetConnectionReceiver headsetConnectionReceiver;
-    private final List<ActivityListener> mActivityListeners = new ArrayList<ActivityListener>();
     private MessageConnectionStatus mBound = MessageConnectionStatus.NOTSET;
-    private final MemoryInfo mCachedMemoryInfo = new MemoryInfo();
     private long mCachedMemoryInfoUpdateTime = 0;
     private long mCachedUsedMemory = 0;
     private long mCachedUsedMemoryUpdateTime = 0;
@@ -160,7 +171,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     private long mCallback = 0;
     private InputDeviceManager deviceManager;
     private ArrayList<SessionInfo> mSessionHistory = null;
-    private final ArrayList<StringValue> _userInputValues = new ArrayList<>();
     private long mFileDialogCallback = 0;
     private HardwareInformation mHardwareInformation;
     private TextToSpeech textToSpeechManager;
@@ -168,6 +178,8 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     private BatteryMonitor mBatteryMonitor;
     private float mVolume = 1.0f;
     private Locale initialUserLocale;
+    private boolean mCursorLocked = false;
+    private boolean mIsSoftKeyboardVisible = false;
 
     public static boolean isPowerVR() {
         return _isPowerVr;
@@ -209,6 +221,168 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
 
     private static native void nativeWaitCrashManagementSetupComplete();
 
+    public void openAndroidAppSettings() {
+        try {
+            startActivity(new Intent("android.settings.APPLICATION_DETAILS_SETTINGS", Uri.parse("package:" + getPackageName())));
+        } catch (ActivityNotFoundException e) {
+            Log.e("MCPE", "openAndroidAppSettings: Failed to open android app settings: " + e.toString());
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void lockCursor() {
+        if (getAndroidVersion() >= 26) {
+            @SuppressLint("ResourceType") View rootView = findViewById(16908290).getRootView();
+            this.mCursorLocked = true;
+            rootView.requestPointerCapture();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void unlockCursor() {
+        if (getAndroidVersion() >= 26) {
+            @SuppressLint("ResourceType") View rootView = findViewById(16908290).getRootView();
+            this.mCursorLocked = false;
+            rootView.releasePointerCapture();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean dispatchGenericMotionEvent(MotionEvent motionEvent) {
+        if (this.mCursorLocked && (motionEvent.getSource() & 8194) == 8194) {
+            lockCursor();
+        }
+        return super.dispatchGenericMotionEvent(motionEvent);
+    }
+
+    public boolean isSoftKeyboardVisible() {
+        return this.mIsSoftKeyboardVisible;
+    }
+
+    public void copyToPickedFile(String str) {
+        try {
+            FileInputStream fileInputStream = new FileInputStream(new File(str));
+            try {
+                ParcelFileDescriptor.AutoCloseOutputStream autoCloseOutputStream = new ParcelFileDescriptor.AutoCloseOutputStream(this.mPickedFileDescriptor);
+                try {
+                    copyFile(fileInputStream, autoCloseOutputStream);
+                    autoCloseOutputStream.close();
+                } catch (Throwable th) {
+                    autoCloseOutputStream.close();
+                    throw th;
+                }
+            } finally {
+                fileInputStream.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.mPickedFileDescriptor = null;
+    }
+
+    public void copyFromPickedFile(String str) {
+        try {
+            ParcelFileDescriptor.AutoCloseInputStream autoCloseInputStream = new ParcelFileDescriptor.AutoCloseInputStream(this.mPickedFileDescriptor);
+            try {
+                FileOutputStream fileOutputStream = new FileOutputStream(new File(str));
+                try {
+                    copyFile(autoCloseInputStream, fileOutputStream);
+                    fileOutputStream.close();
+                } catch (Throwable th) {
+                    fileOutputStream.close();
+                    throw th;
+                }
+            } finally {
+                autoCloseInputStream.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.mPickedFileDescriptor = null;
+    }
+
+    public byte[] getFileDataBytes(String str) {
+        BufferedInputStream bufferedInputStream;
+        if (str.isEmpty()) {
+            return null;
+        }
+        try {
+            AssetManager assets = getApplicationContext().getAssets();
+            if (assets == null) {
+                PrintStream printStream = System.err;
+                printStream.println("getAssets returned null: Could not getFileDataBytes " + str);
+                return null;
+            }
+            try {
+                bufferedInputStream = new BufferedInputStream(assets.open(str));
+            } catch (IOException unused) {
+                new File(str);
+                try {
+                    bufferedInputStream = new BufferedInputStream(new FileInputStream(str));
+                } catch (IOException unused2) {
+                    return null;
+                }
+            }
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1048576);
+            byte[] bArr = new byte[1048576];
+            try {
+                while (true) {
+                    int read = 0;
+
+                    read = bufferedInputStream.read(bArr);
+
+                    if (read > 0) {
+                        byteArrayOutputStream.write(bArr, 0, read);
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                bufferedInputStream.close();
+            } catch (IOException unused3) {
+            }
+            return byteArrayOutputStream.toByteArray();
+        } catch (NullPointerException unused4) {
+            PrintStream printStream2 = System.err;
+            printStream2.println("getAssets threw NPE: Could not getFileDataBytes " + str);
+            return null;
+        }
+    }
+
+    public int[] getImageData(String str) {
+        Bitmap decodeFile = BitmapFactory.decodeFile(str);
+        if (decodeFile == null) {
+            try {
+                AssetManager assets = getApplicationContext().getAssets();
+                if (assets != null) {
+                    try {
+                        decodeFile = BitmapFactory.decodeStream(assets.open(str));
+                    } catch (IOException unused) {
+                        PrintStream printStream = System.err;
+                        printStream.println("getImageData: Could not open image " + str);
+                        return null;
+                    }
+                } else {
+                    PrintStream printStream2 = System.err;
+                    printStream2.println("getAssets returned null: Could not open image " + str);
+                    return null;
+                }
+            } catch (NullPointerException unused2) {
+                PrintStream printStream3 = System.err;
+                printStream3.println("getAssets threw NPE: Could not open image " + str);
+                return null;
+            }
+        }
+        int width = decodeFile.getWidth();
+        int height = decodeFile.getHeight();
+        int[] iArr = new int[((width * height) + 2)];
+        iArr[0] = width;
+        iArr[1] = height;
+        decodeFile.getPixels(iArr, 2, width, 0, 0, width, height);
+        return iArr;
+    }
+
     private native void fireCrashedTelemetry(String str, String str2, String str3);
 
     private native void setUpBreakpad(String str, String str2);
@@ -247,6 +421,8 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
 
     public native void nativeOnDestroy();
 
+    public native void nativeOnPickFileSuccess(String str);
+
     public native void nativeOnPickImageCanceled(long j);
 
     public native void nativeOnPickImageSuccess(long j, String str);
@@ -270,6 +446,8 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     public native void nativeStoragePermissionRequestResult(boolean z, int i);
 
     public native void nativeSuspend();
+
+    public native void nativeOnPickFileCanceled();
 
     public void launchUri(String uri) {
         startActivity(new Intent("android.intent.action.VIEW", Uri.parse(uri)));
@@ -341,7 +519,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         int attempts = prefs.getInt("correlationAttempts", 10);
         if (attempts != 0) {
             Intent i = new Intent();
-            i.setComponent(new ComponentName(getPackageName().contains("trial") ? "com.mojang.minecraftpe" : "com.mojang.minecrafttrialpe", "com.mojang.minecraftpe.ImportService"));
+            i.setComponent(new ComponentName(getPackageName().contains("trial") ? BuildConfig.APPLICATION_ID : "com.mojang.minecrafttrialpe", "com.mojang.minecraftpe.ImportService"));
             bindService(i, mConnection, 1);
             Editor edit = prefs.edit();
             edit.putInt("correlationAttempts", attempts - 1);
@@ -370,86 +548,24 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         return mThermalMonitor;
     }
 
-
-    public void initializeCrashManager() {
-        AppConstants.loadFromContext(getApplicationContext());
-        SessionInfo sessionInfo = new SessionInfo();
-        nativeConfigureNewSession(sessionInfo);
-        sessionInfo.updateJavaConstants(this);
-        loadSessionHistory();
-        saveNewSession(sessionInfo);
-        File file = new File(getFilesDir(), "/minidumps");
-        file.mkdir();
-        Log.v("MinecraftPlatform", "Minidump directory is: " + file.getAbsolutePath());
-        Log.i("MinecraftPlatform", "Setting up crash handler");
-        CrashManager crashManager = new CrashManager(this, file.getAbsolutePath(), getCachedDeviceId(), isAndroidTrial() ? new SentryEndpointConfig("https://sentry.io", "2308440", "668bc09f7bcf461796ea07c1006076fe") : new SentryEndpointConfig("https://sentry.io", "2277697", "1c3f5cbd723a4a84879059d260b19ef6"), sessionInfo);
+    public CrashManager initializeCrashManager(String str, String str2) {
+        SentryEndpointConfig sentryEndpointConfig;
+        if (isAndroidTrial()) {
+            sentryEndpointConfig = this.mSentryEndpointAndroidTrial;
+        } else if (isEduMode()) {
+            sentryEndpointConfig = this.mSentryEndpointEDU;
+        } else {
+            sentryEndpointConfig = this.mSentryEndpointBedrock;
+        }
+        CrashManager crashManager = new CrashManager(str, str2, sentryEndpointConfig);
         crashManager.installGlobalExceptionHandler();
-        setUpBreakpad(file.getAbsolutePath(), sessionInfo.sessionId);
-    }
-
-    private void loadSessionHistory() {
-        mSessionHistory = new ArrayList<>();
-        String string = PreferenceManager.getDefaultSharedPreferences(this).getString(SESSION_HISTORY_KEY, "");
-        if (string.length() > 0) {
-            for (String fromString : string.split(SESSION_HISTORY_SEP)) {
-                try {
-                    mSessionHistory.add(SessionInfo.fromString(fromString));
-                } catch (IllegalArgumentException e) {
-                    Log.i("ModdedPE", "loadSessionHistory: failed to decode session history item: " + e.toString());
-                }
-            }
-            Log.i("ModdedPE", "loadSessionHistory: decoded " + mSessionHistory.size() + " items");
-            return;
-        }
-        Log.i("ModdedPE", "loadSessionHistory: no history found");
-    }
-
-    private void saveSessionHistory() {
-        ArrayList arrayList = new ArrayList();
-        Iterator<SessionInfo> it = this.mSessionHistory.iterator();
-        while (it.hasNext()) {
-            arrayList.add(it.next().toString());
-        }
-        String join = TextUtils.join(SESSION_HISTORY_SEP, arrayList);
-        SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(this).edit();
-        edit.putString(SESSION_HISTORY_KEY, join);
-        edit.apply();
-        Log.i("ModdedPE", "saveSessionHistory: " + this.mSessionHistory.size() + " entries saved");
-
-    }
-
-    private void saveNewSession(SessionInfo sessionInfo) {
-        mSessionHistory.add(sessionInfo);
-        for (int size = mSessionHistory.size() - 20; size > 0; size--) {
-            mSessionHistory.remove(0);
-        }
-        saveSessionHistory();
-    }
-
-    public SessionInfo findSessionInfoForCrash(CrashManager crashManager, String str) {
-        for (int size = mSessionHistory.size() - 1; size >= 0; size--) {
-            if (mSessionHistory.get(size).sessionId.equals(str)) {
-                return mSessionHistory.get(size);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public String getCachedDeviceId(CrashManager crashManager) {
-        return getCachedDeviceId();
-    }
-
-    @Override
-    public void notifyCrashUploadCompleted(CrashManager crashManager, @NotNull SessionInfo sessionInfo) {
-        fireCrashedTelemetry(sessionInfo.sessionId, sessionInfo.buildId, CrashManager.formatTimestamp(sessionInfo.crashTimestamp));
+        return crashManager;
     }
 
     @SuppressLint({"WrongConstant", "ResourceType"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        nativeWaitCrashManagementSetupComplete();
         platform = Platform.createPlatform(true);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         FMOD.init(this);
@@ -471,6 +587,16 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
     public void setVolume(float f) {
         mVolume = f;
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void onWindowFocusChanged(boolean z) {
+        if (z && this.mCursorLocked) {
+            lockCursor();
+        }
+        super.onWindowFocusChanged(z);
+        this.platform.onViewFocusChanged(z);
+    }
+
 
     private void createAlertDialog(boolean z, boolean z2, boolean z3) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -895,11 +1021,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         _isPowerVr = status;
     }
 
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        platform.onViewFocusChanged(hasFocus);
-    }
-
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         return super.onKeyDown(keyCode, event);
     }
@@ -919,100 +1040,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         return 0;
     }
 
-    public byte[] getFileDataBytes(@NotNull String filename) {
-        BufferedInputStream bufferedInputStream;
-        if (filename.isEmpty()) {
-            return null;
-        }
-        try {
-            AssetManager assets = getApplicationContext().getAssets();
-            if (assets == null) {
-                PrintStream printStream = System.err;
-                printStream.println("getAssets returned null: Could not getFileDataBytes " + filename);
-                return null;
-            }
-            try {
-                bufferedInputStream = new BufferedInputStream(assets.open(filename));
-            } catch (IOException unused) {
-                new File(filename);
-                try {
-                    bufferedInputStream = new BufferedInputStream(new FileInputStream(filename));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1048576);
-            byte[] bArr = new byte[1048576];
-            try {
-                while (true) {
-                    int read = bufferedInputStream.read(bArr);
-                    if (read > 0) {
-                        byteArrayOutputStream.write(bArr, 0, read);
-                        try {
-                            PrintStream printStream2 = System.err;
-                            printStream2.println("Cannot read from file " + filename);
-                            break;
-                        } catch (Throwable th) {
-                            try {
-                                bufferedInputStream.close();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            throw th;
-                        }
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                bufferedInputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return byteArrayOutputStream.toByteArray();
-        } catch (NullPointerException e) {
-            PrintStream printStream3 = System.err;
-            printStream3.println("getAssets threw NPE: Could not getFileDataBytes " + filename);
-            return null;
-        }
-    }
-
-    public int[] getImageData(String filename) {
-        Bitmap decodeFile = BitmapFactory.decodeFile(filename);
-        if (decodeFile == null) {
-            try {
-                AssetManager assets = getApplicationContext().getAssets();
-                if (assets != null) {
-                    try {
-                        decodeFile = BitmapFactory.decodeStream(assets.open(filename));
-                    } catch (IOException e) {
-                        PrintStream printStream = System.err;
-                        printStream.println("getImageData: Could not open image " + filename);
-                        return null;
-                    }
-                } else {
-                    PrintStream printStream2 = System.err;
-                    printStream2.println("getAssets returned null: Could not open image " + filename);
-                    return null;
-                }
-            } catch (NullPointerException e) {
-                PrintStream printStream3 = System.err;
-                printStream3.println("getAssets threw NPE: Could not open image " + filename);
-                return null;
-            }
-        }
-        Bitmap bitmap = decodeFile;
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        int[] pixels = new int[((width * height) + 2)];
-        pixels[0] = width;
-        pixels[1] = height;
-        bitmap.getPixels(pixels, 2, width, 0, 0, width, height);
-        return pixels;
-    }
-
     public int getScreenWidth() {
         @SuppressLint("WrongConstant")
         Display defaultDisplay = ((WindowManager) getSystemService("window")).getDefaultDisplay();
@@ -1027,6 +1054,43 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         int min = Math.min(defaultDisplay.getWidth(), defaultDisplay.getHeight());
         System.out.println("getheight: " + min);
         return min;
+    }
+
+    public void saveFile(String str) {
+        Intent intent = new Intent("android.intent.action.CREATE_DOCUMENT");
+        intent.addCategory("android.intent.category.OPENABLE");
+        intent.setType("*/*");
+        intent.putExtra("android.intent.extra.TITLE", str);
+        startActivityForResult(intent, 4);
+    }
+
+    public void openFile() {
+        Intent intent = new Intent("android.intent.action.OPEN_DOCUMENT");
+        intent.addCategory("android.intent.category.OPENABLE");
+        intent.setType("*/*");
+        startActivityForResult(intent, 5);
+    }
+
+    public void onPickFileSuccess(boolean z) {
+        String str = getApplicationContext().getCacheDir() + "/tempPickedFile";
+        if (z) {
+            copyFromPickedFile(str);
+        }
+        nativeOnPickFileSuccess(str);
+    }
+
+    public String getProp(String str) {
+        try {
+            if (this.getPropMethod == null || this.SystemProperties == null) {
+                @SuppressLint("PrivateApi") Class<?> cls = Class.forName("android.os.SystemProperties");
+                this.SystemProperties = cls;
+                this.getPropMethod = cls.getMethod("get", String.class);
+            }
+            return (String) this.getPropMethod.invoke(this.SystemProperties, str);
+        } catch (Exception e) {
+            Log.e("MCPE", "Exception occured while getting a property [" + str + "]\n" + e.getMessage());
+            return "";
+        }
     }
 
     public int getAndroidVersion() {
@@ -1440,6 +1504,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         mFileDialogCallback = callback;
     }
 
+    @SuppressLint("Range")
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         String[] filePathColumn = new String[]{"_data"};
         Cursor cursor;
@@ -1487,7 +1552,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         bundle.putFloat("volume", mVolume);
         this.textToSpeechManager.speak(str, 0, bundle, null);
     }
-
 
     public void stopTextToSpeech() {
         if (textToSpeechManager != null) {
@@ -1578,6 +1642,38 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
         DISCONNECTED
     }
 
+    @SuppressLint("HandlerLeak")
+    public class IncomingHandler extends Handler {
+        public void handleMessage(Message message) {
+            if (message.what != 837) {
+                super.handleMessage(message);
+                return;
+            }
+            String packageName = MainActivity.this.getApplicationContext().getPackageName();
+            SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this.getApplicationContext());
+            defaultSharedPreferences.getString("deviceId", "");
+            try {
+                long j = MainActivity.this.getPackageManager().getPackageInfo(packageName, 0).firstInstallTime;
+                String string = message.getData().getString("deviceId");
+                String string2 = message.getData().getString("sessionId");
+                long j2 = message.getData().getLong(Constants.APPBOY_LOCATION_TIME_INTERVAL_KEY);
+                if (j > j2) {
+                    defaultSharedPreferences.edit().apply();
+                    MainActivity.this.nativeDeviceCorrelation(j, string, j2, string2);
+                }
+                SharedPreferences.Editor edit = defaultSharedPreferences.edit();
+                edit.putInt("correlationAttempts", 0);
+                edit.apply();
+                if (MainActivity.this.mBound == MessageConnectionStatus.CONNECTED) {
+                    MainActivity mainActivity = MainActivity.this;
+                    mainActivity.unbindService(mainActivity.mConnection);
+                }
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private class HeadsetConnectionReceiver extends BroadcastReceiver {
         private HeadsetConnectionReceiver() {
         }
@@ -1596,37 +1692,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener, Crash
                     default:
                 }
             }
-        }
-    }
-
-    @SuppressLint("HandlerLeak")
-    class IncomingHandler extends Handler {
-        public void handleMessage(@NotNull Message msg) {
-            if (msg.what == 837) {
-                String myName = getApplicationContext().getPackageName();
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                try {
-                    long myTime = getPackageManager().getPackageInfo(myName, 0).firstInstallTime;
-                    String theirId = msg.getData().getString("deviceId");
-                    String theirLastSessionId = msg.getData().getString("sessionId");
-                    long theirTime = msg.getData().getLong("time");
-                    if (myTime > theirTime) {
-                        prefs.edit().apply();
-                        nativeDeviceCorrelation(myTime, theirId, theirTime, theirLastSessionId);
-                    }
-                    Editor edit = prefs.edit();
-                    edit.putInt("correlationAttempts", 0);
-                    edit.apply();
-                    if (mBound == MessageConnectionStatus.CONNECTED) {
-                        unbindService(mConnection);
-                        return;
-                    }
-                    return;
-                } catch (NameNotFoundException e) {
-                    return;
-                }
-            }
-            super.handleMessage(msg);
         }
     }
 }

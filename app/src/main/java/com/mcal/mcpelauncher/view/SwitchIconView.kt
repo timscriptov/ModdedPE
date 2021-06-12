@@ -15,8 +15,12 @@ import androidx.annotation.FloatRange
 import androidx.appcompat.widget.AppCompatImageView
 import com.mcal.mcpelauncher.R
 
-class SwitchIconView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
-        AppCompatImageView(context, attrs, defStyleAttr) {
+class SwitchIconView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) :
+    AppCompatImageView(context, attrs, defStyleAttr) {
 
     @FloatRange(from = 0.0, to = 1.0)
     private var fraction = 0f
@@ -54,9 +58,14 @@ class SwitchIconView @JvmOverloads constructor(context: Context, attrs: Attribut
         context.theme.obtainStyledAttributes(attrs, R.styleable.SwitchIconView, 0, 0).apply {
             try {
                 iconTintColor = getColor(R.styleable.SwitchIconView_si_tint_color, Color.BLACK)
-                animationDuration = getInteger(R.styleable.SwitchIconView_si_animation_duration, DEFAULT_ANIMATION_DURATION).toLong()
-                disabledStateAlpha = getFloat(R.styleable.SwitchIconView_si_disabled_alpha, DEFAULT_DISABLED_ALPHA)
-                disabledStateColor = getColor(R.styleable.SwitchIconView_si_disabled_color, iconTintColor)
+                animationDuration = getInteger(
+                    R.styleable.SwitchIconView_si_animation_duration,
+                    DEFAULT_ANIMATION_DURATION
+                ).toLong()
+                disabledStateAlpha =
+                    getFloat(R.styleable.SwitchIconView_si_disabled_alpha, DEFAULT_DISABLED_ALPHA)
+                disabledStateColor =
+                    getColor(R.styleable.SwitchIconView_si_disabled_color, iconTintColor)
                 isIconEnabled = getBoolean(R.styleable.SwitchIconView_si_enabled, true)
                 noDash = getBoolean(R.styleable.SwitchIconView_si_no_dash, false)
             } finally {
@@ -65,8 +74,10 @@ class SwitchIconView @JvmOverloads constructor(context: Context, attrs: Attribut
         }
 
         if (disabledStateAlpha < 0f || disabledStateAlpha > 1f) {
-            throw IllegalArgumentException("Wrong value for si_disabled_alpha [" + disabledStateAlpha + "]. "
-                    + "Must be value from range [0, 1]")
+            throw IllegalArgumentException(
+                "Wrong value for si_disabled_alpha [" + disabledStateAlpha + "]. "
+                        + "Must be value from range [0, 1]"
+            )
         }
 
         colorFilter = PorterDuffColorFilter(iconTintColor, PorterDuff.Mode.SRC_IN)
@@ -131,7 +142,8 @@ class SwitchIconView @JvmOverloads constructor(context: Context, attrs: Attribut
         super.onSizeChanged(width, height, oldWidth, oldHeight)
         dashLengthXProjection = width - paddingLeft - paddingRight
         dashLengthYProjection = height - paddingTop - paddingBottom
-        dashThickness = (DASH_THICKNESS_PART * (dashLengthXProjection + dashLengthYProjection) / 2f).toInt()
+        dashThickness =
+            (DASH_THICKNESS_PART * (dashLengthXProjection + dashLengthYProjection) / 2f).toInt()
         dashPaint.strokeWidth = dashThickness.toFloat()
         initDashCoordinates()
         updateClipPath()
@@ -181,8 +193,14 @@ class SwitchIconView @JvmOverloads constructor(context: Context, attrs: Attribut
             reset()
             moveTo(dashXStart.toFloat(), dashYStart + delta)
             lineTo(dashXStart + delta, dashYStart.toFloat())
-            lineTo(dashXStart + dashLengthXProjection * fraction, dashYStart + dashLengthYProjection * fraction - delta)
-            lineTo(dashXStart + dashLengthXProjection * fraction - delta, dashYStart + dashLengthYProjection * fraction)
+            lineTo(
+                dashXStart + dashLengthXProjection * fraction,
+                dashYStart + dashLengthYProjection * fraction - delta
+            )
+            lineTo(
+                dashXStart + dashLengthXProjection * fraction - delta,
+                dashYStart + dashLengthYProjection * fraction
+            )
         }
     }
 
@@ -201,7 +219,8 @@ class SwitchIconView @JvmOverloads constructor(context: Context, attrs: Attribut
     }
 
     private fun updateAlpha(fraction: Float) {
-        val alpha = ((disabledStateAlpha + (1f - fraction) * (1f - disabledStateAlpha)) * 255).toInt()
+        val alpha =
+            ((disabledStateAlpha + (1f - fraction) * (1f - disabledStateAlpha)) * 255).toInt()
         updateImageAlpha(alpha)
         dashPaint.alpha = alpha
     }
@@ -248,13 +267,15 @@ class SwitchIconView @JvmOverloads constructor(context: Context, attrs: Attribut
         companion object {
 
             @JvmField
-            val CREATOR: Parcelable.Creator<SwitchIconSavedState> = object : Parcelable.Creator<SwitchIconSavedState> {
-                override fun createFromParcel(parcel: Parcel): SwitchIconSavedState {
-                    return SwitchIconSavedState(parcel)
-                }
+            val CREATOR: Parcelable.Creator<SwitchIconSavedState> =
+                object : Parcelable.Creator<SwitchIconSavedState> {
+                    override fun createFromParcel(parcel: Parcel): SwitchIconSavedState {
+                        return SwitchIconSavedState(parcel)
+                    }
 
-                override fun newArray(size: Int): Array<SwitchIconSavedState?> = arrayOfNulls(size)
-            }
+                    override fun newArray(size: Int): Array<SwitchIconSavedState?> =
+                        arrayOfNulls(size)
+                }
         }
     }
 

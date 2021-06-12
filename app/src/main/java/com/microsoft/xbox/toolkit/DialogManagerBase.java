@@ -20,9 +20,9 @@ import java.util.Stack;
  */
 
 public abstract class DialogManagerBase implements IProjectSpecificDialogManager {
+    private final Stack<IXLEManagedDialog> dialogStack = new Stack<>();
     public CancellableBlockingScreen cancelableBlockingDialog;
     private BlockingScreen blockingSpinner;
-    private final Stack<IXLEManagedDialog> dialogStack = new Stack<>();
     private boolean isEnabled;
     private Toast visibleToast;
 

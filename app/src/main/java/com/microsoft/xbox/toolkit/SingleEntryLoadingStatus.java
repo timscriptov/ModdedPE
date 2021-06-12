@@ -8,9 +8,9 @@ package com.microsoft.xbox.toolkit;
  */
 
 public class SingleEntryLoadingStatus {
+    private final Object syncObj = new Object();
     private boolean isLoading = false;
     private XLEException lastError = null;
-    private final Object syncObj = new Object();
 
     public boolean getIsLoading() {
         return this.isLoading;

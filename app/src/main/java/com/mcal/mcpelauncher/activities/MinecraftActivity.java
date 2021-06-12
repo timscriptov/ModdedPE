@@ -17,6 +17,7 @@
 package com.mcal.mcpelauncher.activities;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -27,16 +28,21 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.view.View;
 
+import androidx.annotation.RequiresApi;
+
 import com.mcal.mcpelauncher.ModdedPEApplication;
 import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.mcpelauncher.services.SoundService;
 import com.mcal.pesdk.PESdk;
+
+import java.lang.ref.WeakReference;
 
 /**
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 public class MinecraftActivity extends com.mojang.minecraftpe.MainActivity {
+    public static WeakReference<Activity> current;
     private ServiceConnection sc;
     private boolean bound, paused;
     private SoundService ss;
@@ -106,6 +112,7 @@ public class MinecraftActivity extends com.mojang.minecraftpe.MainActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("ObsoleteSdkInt")
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {

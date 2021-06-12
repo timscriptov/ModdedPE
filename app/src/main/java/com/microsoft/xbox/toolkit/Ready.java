@@ -8,8 +8,8 @@ package com.microsoft.xbox.toolkit;
  */
 
 public class Ready {
-    private boolean ready = false;
     private final Object syncObj = new Object();
+    private boolean ready = false;
 
     public boolean getIsReady() {
         boolean z;

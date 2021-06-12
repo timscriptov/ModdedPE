@@ -65,7 +65,7 @@ public class DataLoadUtil {
             return safeReturnResult(null, runner, exception, AsyncActionStatus.NO_OP_FAIL);
         } else if (XLEUtil.shouldRefresh(lastRefreshedTime, lifetime) || forceLoad) {
             final IDataLoaderRunnable<T> iDataLoaderRunnable = runner;
-            ThreadManager.UIThreadSend(() -> iDataLoaderRunnable.onPreExecute());
+            ThreadManager.UIThreadSend(iDataLoaderRunnable::onPreExecute);
             XLEException error = null;
             int retryCount = runner.getShouldRetryCountOnTokenError();
             int i = 0;

@@ -31,45 +31,45 @@ public class SessionInfo implements Serializable {
     public String sessionId;
 
     public SessionInfo() {
-        sessionId = null;
-        buildId = null;
-        commitId = null;
-        branchId = null;
-        flavor = null;
-        gameVersionName = null;
-        appVersion = 0;
-        recordDate = null;
-        crashTimestamp = null;
-        sessionId = NOT_YET_CONFIGURED;
-        buildId = NOT_YET_CONFIGURED;
-        commitId = NOT_YET_CONFIGURED;
-        branchId = NOT_YET_CONFIGURED;
-        flavor = NOT_YET_CONFIGURED;
-        gameVersionName = NOT_YET_CONFIGURED;
-        recordDate = new Date();
+        this.sessionId = null;
+        this.buildId = null;
+        this.commitId = null;
+        this.branchId = null;
+        this.flavor = null;
+        this.gameVersionName = null;
+        this.appVersion = 0;
+        this.recordDate = null;
+        this.crashTimestamp = null;
+        this.sessionId = NOT_YET_CONFIGURED;
+        this.buildId = NOT_YET_CONFIGURED;
+        this.commitId = NOT_YET_CONFIGURED;
+        this.branchId = NOT_YET_CONFIGURED;
+        this.flavor = NOT_YET_CONFIGURED;
+        this.gameVersionName = NOT_YET_CONFIGURED;
+        this.recordDate = new Date();
     }
 
     public SessionInfo(String str, String str2, String str3, String str4, String str5, String str6, int i, Date date) {
-        sessionId = null;
-        buildId = null;
-        commitId = null;
-        branchId = null;
-        flavor = null;
-        gameVersionName = null;
-        appVersion = 0;
-        recordDate = null;
-        crashTimestamp = null;
-        sessionId = str;
-        buildId = str2;
-        commitId = str3;
-        branchId = str4;
-        flavor = str5;
-        gameVersionName = str6;
-        appVersion = i;
-        recordDate = date;
+        this.sessionId = null;
+        this.buildId = null;
+        this.commitId = null;
+        this.branchId = null;
+        this.flavor = null;
+        this.gameVersionName = null;
+        this.appVersion = 0;
+        this.recordDate = null;
+        this.crashTimestamp = null;
+        this.sessionId = str;
+        this.buildId = str2;
+        this.commitId = str3;
+        this.branchId = str4;
+        this.flavor = str5;
+        this.gameVersionName = str6;
+        this.appVersion = i;
+        this.recordDate = date;
     }
 
-    public static @NotNull SessionInfo fromString(String str) {
+    public static SessionInfo fromString(String str) {
         SessionInfo sessionInfo = new SessionInfo();
         if (str == null || str.length() == 0) {
             throw new IllegalArgumentException("Empty SessionInfo string");
@@ -98,38 +98,31 @@ public class SessionInfo implements Serializable {
         }
     }
 
-    public static @NotNull SimpleDateFormat getDateFormat() {
+    public static SimpleDateFormat getDateFormat() {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy-HH:mm:ss");
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return simpleDateFormat;
     }
 
     public void setContents(Context context, String str, String str2, String str3, String str4, String str5) {
-        sessionId = str;
-        buildId = str2;
-        commitId = str3;
-        branchId = str4;
-        flavor = str5;
+        this.sessionId = str;
+        this.buildId = str2;
+        this.commitId = str3;
+        this.branchId = str4;
+        this.flavor = str5;
         updateJavaConstants(context);
     }
 
-    public void updateJavaConstants(@NotNull Context context) {
-        appVersion = AppConstants.APP_VERSION;
+    public void updateJavaConstants(Context context) {
+        this.appVersion = AppConstants.APP_VERSION;
         try {
-            gameVersionName = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+            this.gameVersionName = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException unused) {
-            gameVersionName = "Not found";
+            this.gameVersionName = "Not found";
         }
     }
 
     public @NotNull String toString() {
-        return sessionId + ";" +
-                buildId + ";" +
-                commitId + ";" +
-                branchId + ";" +
-                flavor + ";" +
-                gameVersionName + ";" +
-                appVersion + ";" +
-                getDateFormat().format(recordDate);
+        return this.sessionId + ";" + this.buildId + ";" + this.commitId + ";" + this.branchId + ";" + this.flavor + ";" + this.gameVersionName + ";" + this.appVersion + ";" + getDateFormat().format(this.recordDate);
     }
 }

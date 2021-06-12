@@ -29,6 +29,7 @@ import java.util.Iterator;
 
 public class ChangeFriendshipDialogViewModel {
     private static final String TAG = ChangeFriendshipDialogViewModel.class.getSimpleName();
+    private final HashSet<ProfileScreenViewModel.ChangeFriendshipFormOptions> changeFriendshipForm = new HashSet<>();
     public boolean isAddingUserToFavoriteList;
     public boolean isAddingUserToFollowingList;
     public boolean isAddingUserToShareIdentityList;
@@ -40,7 +41,6 @@ public class ChangeFriendshipDialogViewModel {
     private AddUserToFavoriteListAsyncTask addUserToFavoriteListAsyncTask;
     private AddUserToFollowingListAsyncTask addUserToFollowingListAsyncTask;
     private AddUserToShareIdentityListAsyncTask addUserToShareIdentityListAsyncTask;
-    private final HashSet<ProfileScreenViewModel.ChangeFriendshipFormOptions> changeFriendshipForm = new HashSet<>();
     private boolean isFavorite = false;
     private boolean isFollowing = false;
     private boolean isSharingRealNameEnd;
@@ -562,8 +562,8 @@ public class ChangeFriendshipDialogViewModel {
     }
 
     private class AddUserToFavoriteListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
-        private boolean favoriteUser = false;
         private final String favoriteUserXuid;
+        private boolean favoriteUser = false;
 
         public AddUserToFavoriteListAsyncTask(String str) {
             this.favoriteUserXuid = str;
@@ -618,8 +618,8 @@ public class ChangeFriendshipDialogViewModel {
     }
 
     private class RemoveUserFromFavoriteListAsyncTask extends NetworkAsyncTask<AsyncActionStatus> {
-        private boolean favoriteUser = false;
         private final String favoriteUserXuid;
+        private boolean favoriteUser = false;
 
         public RemoveUserFromFavoriteListAsyncTask(String str) {
             this.favoriteUserXuid = str;

@@ -33,11 +33,11 @@ public class HttpClientFactory {
     public static HttpClientFactory networkOperationsFactory = new HttpClientFactory();
     public static HttpClientFactory noRedirectNetworkOperationsFactory = new HttpClientFactory(false);
     public static HttpClientFactory textureFactory = new HttpClientFactory(true);
-    private AbstractXLEHttpClient client;
     private final AbstractXLEHttpClient clientWithTimeoutOverride;
-    private ClientConnectionManager connectionManager;
     private final Object httpSyncObject;
     private final HttpParams params;
+    private AbstractXLEHttpClient client;
+    private ClientConnectionManager connectionManager;
 
     public HttpClientFactory() {
         this(false);

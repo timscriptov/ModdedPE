@@ -6,9 +6,17 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import com.android.billingclient.api.*
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-class BillingService(private val context: Context, private val inAppSkuKeys: List<String>, private val subscriptionSkuKeys: List<String>)
-    : IBillingService(), PurchasesUpdatedListener, BillingClientStateListener, AcknowledgePurchaseResponseListener {
+class BillingService(
+    private val context: Context,
+    private val nonConsumableKeys: List<String>,
+    private val consumableKeys: List<String>,
+    private val subscriptionSkuKeys: List<String>
+) : IBillingService(), PurchasesUpdatedListener, BillingClientStateListener,
+    AcknowledgePurchaseResponseListener {
 
     private lateinit var mBillingClient: BillingClient
     private var decodedKey: String? = null
@@ -20,16 +28,23 @@ class BillingService(private val context: Context, private val inAppSkuKeys: Lis
     override fun init(key: String?) {
         decodedKey = key
 
-        mBillingClient = BillingClient.newBuilder(context).setListener(this).enablePendingPurchases().build()
+        mBillingClient =
+            BillingClient.newBuilder(context).setListener(this).enablePendingPurchases().build()
         mBillingClient.startConnection(this)
     }
 
+    @DelicateCoroutinesApi
     override fun onBillingSetupFinished(billingResult: BillingResult) {
-        log("onBillingSetupFinished: billingResult: $billingResult")
+        log("onBillingSetupFinishedOkay: billingResult: $billingResult")
+
         if (billingResult.isOk()) {
-            inAppSkuKeys.querySkuDetails(BillingClient.SkuType.INAPP) {
-                subscriptionSkuKeys.querySkuDetails(BillingClient.SkuType.SUBS) {
-                    queryPurchases()
+            nonConsumableKeys.querySkuDetails(BillingClient.SkuType.INAPP) {
+                consumableKeys.querySkuDetails(BillingClient.SkuType.INAPP) {
+                    subscriptionSkuKeys.querySkuDetails(BillingClient.SkuType.SUBS) {
+                        GlobalScope.launch {
+                            queryPurchases()
+                        }
+                    }
                 }
             }
         }
@@ -39,15 +54,13 @@ class BillingService(private val context: Context, private val inAppSkuKeys: Lis
      * Query Google Play Billing for existing purchases.
      * New purchases will be provided to the PurchasesUpdatedListener.
      */
-    private fun queryPurchases() {
-        val inappResult: Purchase.PurchasesResult = mBillingClient.queryPurchases(BillingClient.SkuType.INAPP)
-        if (inappResult.purchasesList != null) {
-            processPurchases(inappResult.purchasesList, isRestore = true)
-        }
-        val subsResult: Purchase.PurchasesResult = mBillingClient.queryPurchases(BillingClient.SkuType.SUBS)
-        if (subsResult.purchasesList != null) {
-            processPurchases(subsResult.purchasesList, isRestore = true)
-        }
+    private suspend fun queryPurchases() {
+        val inappResult: PurchasesResult =
+            mBillingClient.queryPurchasesAsync(BillingClient.SkuType.INAPP)
+        processPurchases(inappResult.purchasesList, isRestore = true)
+        val subsResult: PurchasesResult =
+            mBillingClient.queryPurchasesAsync(BillingClient.SkuType.SUBS)
+        processPurchases(subsResult.purchasesList, isRestore = true)
     }
 
     override fun buy(activity: Activity, sku: String) {
@@ -72,7 +85,7 @@ class BillingService(private val context: Context, private val inAppSkuKeys: Lis
         sku.toSkuDetails(type) { skuDetails ->
             if (skuDetails != null) {
                 val purchaseParams = BillingFlowParams.newBuilder()
-                        .setSkuDetails(skuDetails).build()
+                    .setSkuDetails(skuDetails).build()
                 mBillingClient.launchBillingFlow(activity, purchaseParams)
             }
         }
@@ -100,6 +113,7 @@ class BillingService(private val context: Context, private val inAppSkuKeys: Lis
     /**
      * Called by the Billing Library when new purchases are detected.
      */
+    @DelicateCoroutinesApi
     override fun onPurchasesUpdated(billingResult: BillingResult, purchases: List<Purchase>?) {
         val responseCode = billingResult.responseCode
         val debugMessage = billingResult.debugMessage
@@ -114,15 +128,17 @@ class BillingService(private val context: Context, private val inAppSkuKeys: Lis
             BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> {
                 log("onPurchasesUpdated: The user already owns this item")
                 //item already owned? call queryPurchases to verify and process all such items
-                queryPurchases()
+                GlobalScope.launch {
+                    queryPurchases()
+                }
             }
             BillingClient.BillingResponseCode.DEVELOPER_ERROR ->
                 Log.e(
                     TAG, "onPurchasesUpdated: Developer error means that Google Play " +
-                        "does not recognize the configuration. If you are just getting started, " +
-                        "make sure you have configured the application correctly in the " +
-                        "Google Play Console. The SKU product ID must match and the APK you " +
-                        "are using must be signed with release keys."
+                            "does not recognize the configuration. If you are just getting started, " +
+                            "make sure you have configured the application correctly in the " +
+                            "Google Play Console. The SKU product ID must match and the APK you " +
+                            "are using must be signed with release keys."
                 )
         }
     }
@@ -131,38 +147,101 @@ class BillingService(private val context: Context, private val inAppSkuKeys: Lis
         if (purchasesList != null) {
             log("processPurchases: " + purchasesList.size + " purchase(s)")
             purchases@ for (purchase in purchasesList) {
-                if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED && purchase.sku.isSkuReady()) {
+                if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED && purchase.skus[0].isSkuReady()) {
                     if (!isSignatureValid(purchase)) {
                         log("processPurchases. Signature is not valid for: $purchase")
                         continue@purchases
                     }
 
                     // Grant entitlement to the user.
-                    val skuDetails = skusDetails[purchase.sku]
+                    val skuDetails = skusDetails[purchase.skus[0]]
                     when (skuDetails?.type) {
                         BillingClient.SkuType.INAPP -> {
-                            productOwned(purchase.sku, isRestore)
+                            /**
+                             * Consume the purchase
+                             */
+                            if (consumableKeys.contains(purchase.skus[0])) {
+                                mBillingClient.consumeAsync(
+                                    ConsumeParams.newBuilder()
+                                        .setPurchaseToken(purchase.purchaseToken).build()
+                                ) { billingResult, _ ->
+                                    when (billingResult.responseCode) {
+                                        BillingClient.BillingResponseCode.OK -> {
+                                            productOwned(getPurchaseInfo(purchase), false)
+                                        }
+                                        else -> {
+                                            Log.d(
+                                                TAG,
+                                                "Handling consumables : Error during consumption attempt -> ${billingResult.debugMessage}"
+                                            )
+                                        }
+                                    }
+                                }
+                            } else {
+                                productOwned(getPurchaseInfo(purchase), isRestore)
+                            }
                         }
                         BillingClient.SkuType.SUBS -> {
-                            subscriptionOwned(purchase.sku, isRestore)
+                            subscriptionOwned(getPurchaseInfo(purchase), isRestore)
                         }
                     }
 
                     // Acknowledge the purchase if it hasn't already been acknowledged.
                     if (!purchase.isAcknowledged) {
                         val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
-                                .setPurchaseToken(purchase.purchaseToken).build()
+                            .setPurchaseToken(purchase.purchaseToken).build()
                         mBillingClient.acknowledgePurchase(acknowledgePurchaseParams, this)
                     }
                 } else {
                     Log.e(
                         TAG, "processPurchases failed. purchase: $purchase " +
-                            "purchaseState: ${purchase.purchaseState} isSkuReady: ${purchase.sku.isSkuReady()}")
+                                "purchaseState: ${purchase.purchaseState} isSkuReady: ${purchase.skus[0].isSkuReady()}"
+                    )
                 }
             }
         } else {
             log("processPurchases: with no purchases")
         }
+    }
+
+    private fun getPurchaseInfo(purchase: Purchase): DataWrappers.PurchaseInfo {
+        return DataWrappers.PurchaseInfo(
+            getSkuInfo(skusDetails[purchase.skus[0]]!!),
+            purchase.purchaseState,
+            purchase.developerPayload,
+            purchase.isAcknowledged,
+            purchase.isAutoRenewing,
+            purchase.orderId,
+            purchase.originalJson,
+            purchase.packageName,
+            purchase.purchaseTime,
+            purchase.purchaseToken,
+            purchase.signature,
+            purchase.skus[0],
+            purchase.accountIdentifiers
+        )
+    }
+
+    private fun getSkuInfo(skuDetails: SkuDetails): DataWrappers.SkuInfo {
+        return DataWrappers.SkuInfo(
+            skuDetails.sku,
+            skuDetails.description,
+            skuDetails.freeTrialPeriod,
+            skuDetails.iconUrl,
+            skuDetails.introductoryPrice,
+            skuDetails.introductoryPriceAmountMicros,
+            skuDetails.introductoryPriceCycles,
+            skuDetails.introductoryPricePeriod,
+            skuDetails.originalJson,
+            skuDetails.originalPrice,
+            skuDetails.originalPriceAmountMicros,
+            skuDetails.price,
+            skuDetails.priceAmountMicros,
+            skuDetails.priceCurrencyCode,
+            skuDetails.subscriptionPeriod,
+            skuDetails.title,
+            skuDetails.type
+        )
     }
 
     private fun isSignatureValid(purchase: Purchase): Boolean {

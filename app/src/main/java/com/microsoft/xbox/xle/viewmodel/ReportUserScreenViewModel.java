@@ -27,9 +27,9 @@ import java.util.ArrayList;
  */
 
 public class ReportUserScreenViewModel extends ViewModelBase {
-    public boolean isSubmittingReport;
     private final FeedbackType[] feedbackReasons;
     private final ProfileModel model;
+    public boolean isSubmittingReport;
     private FeedbackType selectedReason;
     private SubmitReportAsyncTask submitReportAsyncTask;
 

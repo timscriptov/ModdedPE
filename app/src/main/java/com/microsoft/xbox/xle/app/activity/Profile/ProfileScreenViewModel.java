@@ -42,6 +42,8 @@ import java.util.Iterator;
 
 public class ProfileScreenViewModel extends ViewModelBase {
     private static final String TAG = ProfileScreenViewModel.class.getSimpleName();
+    private final HashSet<ChangeFriendshipFormOptions> changeFriendshipForm = new HashSet<>();
+    private final boolean isFavorite = false;
     public boolean isAddingUserToBlockList;
     public boolean isAddingUserToFollowingList;
     public boolean isAddingUserToMutedList;
@@ -58,9 +60,7 @@ public class ProfileScreenViewModel extends ViewModelBase {
     private AddUserToShareIdentityListAsyncTask addUserToShareIdentityListAsyncTask;
     private FollowersData basicData;
     private ChangeFriendshipDialogViewModel changeFriendshipDialogViewModel;
-    private final HashSet<ChangeFriendshipFormOptions> changeFriendshipForm = new HashSet<>();
     private boolean isBlocked = false;
-    private final boolean isFavorite = false;
     private boolean isFollowing = false;
     private boolean isMuted = false;
     private boolean isShowingFailureDialog;

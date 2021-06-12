@@ -38,7 +38,7 @@ class MinecraftWebViewClient extends WebViewClient {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void onReceivedError(WebView view, @NotNull WebResourceRequest request, @NotNull WebResourceError error) {
-        System.out.println(String.format("Error %s loading url %s", error.getDescription().toString(), request.getUrl().toString()));
+        System.out.printf("Error %s loading url %s%n", error.getDescription().toString(), request.getUrl().toString());
         mView.nativeOnWebError(error.getErrorCode(), error.getDescription().toString());
         super.onReceivedError(view, request, error);
     }

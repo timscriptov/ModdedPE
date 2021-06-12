@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 'android-S'
     buildToolsVersion '30.0.3'
     ndkVersion '22.0.7026061'
 
