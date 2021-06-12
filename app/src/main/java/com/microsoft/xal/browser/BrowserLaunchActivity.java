@@ -203,7 +203,7 @@ public class BrowserLaunchActivity extends AppCompatActivity {
         finish();
     }
 
-    /*@SuppressLint("ResourceAsColor")
+    @SuppressLint("ResourceAsColor")
     private void startCustomTabsInBrowser(String startUrl, String endUrl, ShowUrlType showUrlType) {
         if (showUrlType == ShowUrlType.CookieRemovalSkipIfSharedCredentials) {
             finishOperation(WebResult.SUCCESS, endUrl);
@@ -221,7 +221,7 @@ public class BrowserLaunchActivity extends AppCompatActivity {
         intentBuilder.setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_DARK, params);
         CustomTabsIntent customTabsIntent = intentBuilder.build();
         customTabsIntent.launchUrl(this, Uri.parse(startUrl));
-    }*/
+    }
 
     //private void startWebView(String startUrl, String endUrl, ShowUrlType showUrlType) {
     //m_cancelOperationOnResume = false;
