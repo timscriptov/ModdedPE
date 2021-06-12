@@ -1338,6 +1338,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         return mCachedMemoryInfo;
     }
 
+    @SuppressLint("ObsoleteSdkInt")
     public long getTotalMemory() {
         MemoryInfo memoryInfo = getMemoryInfo();
         if (VERSION.SDK_INT >= 16) {
@@ -1364,6 +1365,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         return mCachedUsedMemory;
     }
 
+    @SuppressLint("ObsoleteSdkInt")
     public long calculateAvailableDiskFreeSpace(String rootPath) {
         try {
             StatFs statFs = new StatFs(rootPath);

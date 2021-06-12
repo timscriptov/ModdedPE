@@ -214,12 +214,6 @@
                 android:resource="@xml/filepaths" />
         </provider>
 
-        <provider
-            android:name="androidx.lifecycle.ProcessLifecycleOwnerInitializer"
-            android:authorities="com.mcal.mcpelauncher.lifecycle-process"
-            android:exported="false"
-            android:multiprocess="true" />
-
         <activity
             android:name="com.mcal.mcpelauncher.addon.AddonInstallerActivity"
             android:alwaysRetainTaskState="true"
