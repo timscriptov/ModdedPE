@@ -164,6 +164,7 @@ public class MainActivity extends BaseActivity implements BackgroundSoundPlayer 
         if (!Preferences.getRated()) {
             Dialogs.rate(this);
         }
+        AdsAdmob.loadInterestialAd(this);
     }
 
     @Override

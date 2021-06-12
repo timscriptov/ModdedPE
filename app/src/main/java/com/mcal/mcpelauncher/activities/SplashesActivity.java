@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.mcal.mcpelauncher.R;
-import com.mcal.mcpelauncher.utils.AdsAdmob;
 import com.mcal.mcpelauncher.utils.DataPreloader;
 import com.mcal.mcpelauncher.utils.PreloadingFinishedListener;
 
@@ -57,7 +56,6 @@ public class SplashesActivity extends BaseActivity implements PreloadingFinished
     }
 
     private void initInstance() {
-        AdsAdmob.loadInterestialAd(this);
         new DataPreloader(this).preload(getApplicationContext());
     }
 

@@ -1,38 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    <ListView
+        android:id="@+id/picker_dir_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:divider="@null"
+        android:dividerHeight="0dip" />
 
-        <ListView
-            android:id="@+id/picker_dir_list_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@null"
-            android:dividerHeight="0dip" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/moddedpe_dir_picker_fab_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="25dp"
+        android:src="@drawable/ic_play_white"
+        tools:ignore="ContentDescription" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/moddedpe_dir_picker_fab_select"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="25dp"
-            android:src="@drawable/ic_play_white"
-            tools:ignore="ContentDescription" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/moddedpe_dir_picker_fab_reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/moddedpe_dir_picker_fab_select"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="25dp"
+        android:src="@drawable/ic_undo_white"
+        tools:ignore="ContentDescription" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/moddedpe_dir_picker_fab_reset"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/moddedpe_dir_picker_fab_select"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="25dp"
-            android:src="@drawable/ic_undo_white"
-            tools:ignore="ContentDescription" />
-
-    </RelativeLayout>
-
-</layout>
+</RelativeLayout>
