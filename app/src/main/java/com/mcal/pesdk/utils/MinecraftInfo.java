@@ -18,6 +18,7 @@ package com.mcal.pesdk.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.os.Build;
@@ -25,6 +26,7 @@ import android.os.Build;
 import com.mcal.mcpelauncher.data.Preferences;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -63,6 +65,15 @@ public class MinecraftInfo {
 
     public static Context getMinecraftPackageContext() {
         return mMCContext;
+    }
+
+    private static @Nullable ApplicationInfo getMinecraftApplicationInfo() {
+        try {
+            return mMCContext.getPackageManager().getPackageInfo(Preferences.getMinecraftPEPackageName(), 0).applicationInfo;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public boolean isSupportedMinecraftVersion(String[] versions) {

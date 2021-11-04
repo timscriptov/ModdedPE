@@ -60,6 +60,7 @@ import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
@@ -69,9 +70,11 @@ import com.appboy.Constants;
 import com.appsflyer.AppsFlyerLib;
 import com.mcal.mcpelauncher.BuildConfig;
 import com.mcal.mcpelauncher.utils.ScopedStorage;
+import com.microsoft.applications.events.HttpClient;
 import com.mojang.android.StringValue;
 import com.mojang.minecraftpe.input.InputDeviceManager;
 import com.mojang.minecraftpe.platforms.Platform;
+import com.mojang.minecraftpe.python.PythonPackageLoader;
 
 import org.fmod.FMOD;
 import org.jetbrains.annotations.NotNull;
@@ -301,51 +304,62 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         this.mPickedFileDescriptor = null;
     }
 
-    public byte[] getFileDataBytes(String str) {
-        BufferedInputStream bufferedInputStream;
-        if (str.isEmpty()) {
+    public byte[] getFileDataBytes(@NonNull String filename) {
+        if (filename.isEmpty()) {
             return null;
         }
         try {
             AssetManager assets = getApplicationContext().getAssets();
             if (assets == null) {
-                PrintStream printStream = System.err;
-                printStream.println("getAssets returned null: Could not getFileDataBytes " + str);
+                System.err.println("getAssets returned null: Could not getFileDataBytes " + filename);
                 return null;
             }
+            BufferedInputStream bis;
             try {
-                bufferedInputStream = new BufferedInputStream(assets.open(str));
-            } catch (IOException unused) {
-                new File(str);
+                bis = new BufferedInputStream(assets.open(filename));
+            } catch (IOException e) {
                 try {
-                    bufferedInputStream = new BufferedInputStream(new FileInputStream(str));
-                } catch (IOException unused2) {
+                    bis = new BufferedInputStream(new FileInputStream(filename));
+                } catch (IOException e2) {
+                    e2.printStackTrace();
                     return null;
                 }
             }
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1048576);
-            byte[] bArr = new byte[1048576];
-            try {
-                while (true) {
-                    int read = 0;
-
-                    read = bufferedInputStream.read(bArr);
-
-                    if (read > 0) {
-                        byteArrayOutputStream.write(bArr, 0, read);
+            ByteArrayOutputStream s = new ByteArrayOutputStream(1048576);
+            byte[] tmp = new byte[1048576];
+            while (true) {
+                try {
+                    int count = bis.read(tmp);
+                    if (count <= 0) {
+                        try {
+                            bis.close();
+                            break;
+                        } catch (IOException e3) {
+                        }
+                    } else {
+                        s.write(tmp, 0, count);
                     }
+                } catch (IOException e) {
+                    System.err.println("Cannot read from file " + filename);
+                    try {
+                        bis.close();
+                    } catch (IOException e2) {
+                        e2.printStackTrace();
+                    }
+                    e.printStackTrace();
+                } catch (Throwable th) {
+                    try {
+                        bis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    th.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-            try {
-                bufferedInputStream.close();
-            } catch (IOException unused3) {
-            }
-            return byteArrayOutputStream.toByteArray();
-        } catch (NullPointerException unused4) {
-            PrintStream printStream2 = System.err;
-            printStream2.println("getAssets threw NPE: Could not getFileDataBytes " + str);
+            //bis.close();
+            return s.toByteArray();
+        } catch (NullPointerException e7) {
+            System.err.println("getAssets threw NPE: Could not getFileDataBytes " + filename);
             return null;
         }
     }
@@ -383,9 +397,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         return iArr;
     }
 
-    private native void fireCrashedTelemetry(String str, String str2, String str3);
-
-    private native void setUpBreakpad(String str, String str2);
 
     public native boolean isAndroidTrial();
 
@@ -421,6 +432,8 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
 
     public native void nativeOnDestroy();
 
+    public native void nativeOnPickFileCanceled();
+
     public native void nativeOnPickFileSuccess(String str);
 
     public native void nativeOnPickImageCanceled(long j);
@@ -446,8 +459,6 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
     public native void nativeStoragePermissionRequestResult(boolean z, int i);
 
     public native void nativeSuspend();
-
-    public native void nativeOnPickFileCanceled();
 
     public void launchUri(String uri) {
         startActivity(new Intent("android.intent.action.VIEW", Uri.parse(uri)));
@@ -562,7 +573,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         return crashManager;
     }
 
-    @SuppressLint({"WrongConstant", "ResourceType"})
+    /*@SuppressLint({"WrongConstant", "ResourceType"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -582,7 +593,51 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         _fromOnCreate = true;
         textInputWidget = createTextWidget();
         findViewById(16908290).getRootView().addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> nativeResize(right - left, bottom - top));
+    }*/
+
+    @SuppressLint("ResourceType")
+    public void onCreate(Bundle bundle) {
+        Log.i("MinecraftPlatform", "MainActivity::onCreate");
+        if (isEduMode()) {
+            new HttpClient(getApplicationContext());
+        }
+        if (getResources() != null) {
+            setTheme(getResources().getIdentifier("AppTheme", "style", getPackageName()));
+        }
+        super.onCreate(bundle);
+        /*if (getResources() == null) {
+            Log.w("mcpe - replacing", "App is installing/replacing. Killing...");
+            android.os.Process.killProcess(Process.myPid());
+        }*/
+        nativeWaitCrashManagementSetupComplete();
+        this.platform = Platform.createPlatform(true);
+        setVolumeControlStream(3);
+        FMOD.init(this);
+        this.deviceManager = InputDeviceManager.create(this);
+        this.platform.onAppStart(getWindow().getDecorView());
+        mHasStoragePermission = checkPermission("android.permission.WRITE_EXTERNAL_STORAGE", android.os.Process.myPid(), android.os.Process.myUid()) == 0;
+        this.headsetConnectionReceiver = new HeadsetConnectionReceiver();
+        nativeSetHeadphonesConnected(((AudioManager) getSystemService("audio")).isWiredHeadsetOn());
+        this.clipboardManager = (ClipboardManager) getSystemService("clipboard");
+        this.initialUserLocale = Locale.getDefault();
+        mInstance = this;
+        this._fromOnCreate = true;
+        this.textInputWidget = createTextWidget();
+        findViewById(16908290).getRootView().addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            public void onLayoutChange(View view, int i, int i2, int i3, int i4, int i5, int i6, int i7, int i8) {
+                MainActivity.this.nativeResize(i3 - i, i4 - i2);
+            }
+        });
+        if (isEduMode()) {
+            new PythonPackageLoader(getApplicationContext().getAssets(), getFilesDir()).unpack();
+        }
+        if (!isTestInfrastructureDisabled() && InstrumentationRegistryHelper.getIsRunningInAppCenter()) {
+            this.isRunningInAppCenter = true;
+            Log.w("MCPE", "Automation: in MainActivity::onCreate, we are running in AppCenter");
+        }
     }
+
+    private boolean isRunningInAppCenter = false;
 
     public void setVolume(float f) {
         mVolume = f;
@@ -1372,7 +1427,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
             if (Build.VERSION.SDK_INT >= 18) {
                 return statFs.getAvailableBytes();
             }
-            return statFs.getAvailableBlocks() * statFs.getBlockSize();
+            return (long) statFs.getAvailableBlocks() * statFs.getBlockSize();
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
@@ -1626,11 +1681,19 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         return nativeGetLogText(fileInfo);
     }
 
-    @SuppressLint("WrongConstant")
     public boolean isTTSEnabled() {
         AccessibilityManager accessibilityManager;
-        return getApplicationContext() != null && (accessibilityManager = (AccessibilityManager) getSystemService("accessibility")) != null && accessibilityManager.isEnabled() && !accessibilityManager.getEnabledAccessibilityServiceList(1).isEmpty();
+        Context applicationContext = getApplicationContext();
+        if (!isTestInfrastructureDisabled() && this.isRunningInAppCenter) {
+            Log.w("MCPE", "Automation: We are running in AppCenter, forcing isTTSEnabled to false to avoid screen reader popup");
+            return false;
+        } else if (applicationContext == null || (accessibilityManager = (AccessibilityManager) getSystemService("accessibility")) == null || !accessibilityManager.isEnabled() || accessibilityManager.getEnabledAccessibilityServiceList(1).isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
     }
+
 
     public void initializeXboxLive(long xalInitArgs, long xblInitArgs) {
         runOnUiThread(() -> nativeInitializeXboxLive(xalInitArgs, xblInitArgs));
@@ -1644,7 +1707,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
 
     @SuppressLint("HandlerLeak")
     public class IncomingHandler extends Handler {
-        public void handleMessage(Message message) {
+        public void handleMessage(@NonNull Message message) {
             if (message.what != 837) {
                 super.handleMessage(message);
                 return;
