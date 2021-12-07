@@ -23,13 +23,6 @@ import com.mcal.mcpelauncher.BuildConfig
  * @author https://github.com/TimScriptov
  */
 object Constants {
-    @JvmField
-    var bannerAdId =
-        if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/6300978111" else "ca-app-pub-1411495427741055/8160854950"
-
-    @JvmField
-    var INTERESTIAL_AD_ID =
-        if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/1033173712" else "ca-app-pub-1411495427741055/5778606290"
     const val STRING_VALUE_DEFAULT = "default"
     const val NMOD_DATA_TAG = "nmod_data"
     const val NMOD_API_VERSION = "1.4.1"

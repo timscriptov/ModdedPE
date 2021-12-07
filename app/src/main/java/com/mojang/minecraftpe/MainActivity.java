@@ -23,6 +23,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
@@ -305,6 +306,69 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
     }
 
     public byte[] getFileDataBytes(@NonNull String filename) {
+        BufferedInputStream bis;
+        if (filename.isEmpty()) {
+            return null;
+        }
+        try {
+            AssetManager assets = getApplicationContext().getAssets();
+            if (assets == null) {
+                PrintStream printStream = System.err;
+                printStream.println("getAssets returned null: Could not getFileDataBytes " + filename);
+                return null;
+            }
+            try {
+                bis = new BufferedInputStream(assets.open(filename));
+            } catch (IOException unused) {
+                new File(filename);
+                try {
+                    bis = new BufferedInputStream(new FileInputStream(filename));
+                } catch (IOException unused2) {
+                    return null;
+                }
+            }
+            ByteArrayOutputStream s = new ByteArrayOutputStream(1048576);
+            byte[] tmp = new byte[1048576];
+            while (true) {
+                try {
+                    int count = bis.read(tmp);
+                    if (count <= 0) {
+                        try {
+                            bis.close();
+                            break;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        s.write(tmp, 0, count);
+                    }
+                } catch (IOException e) {
+                    System.err.println("Cannot read from file " + filename);
+                    try {
+                        bis.close();
+                    } catch (IOException e2) {
+                        e2.printStackTrace();
+                    }
+                    e.printStackTrace();
+                } catch (Throwable th) {
+                    try {
+                        bis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    th.printStackTrace();
+                }
+            }
+            //bis.close();
+            return s.toByteArray();
+        } catch (NullPointerException e) {
+            PrintStream printStream2 = System.err;
+            printStream2.println("getAssets threw NPE: Could not getFileDataBytes " + filename);
+            return null;
+        }
+    }
+
+    /*public byte[] getFileDataBytes(@NonNull String filename) {
         if (filename.isEmpty()) {
             return null;
         }
@@ -334,7 +398,8 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
                         try {
                             bis.close();
                             break;
-                        } catch (IOException e3) {
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
                     } else {
                         s.write(tmp, 0, count);
@@ -362,7 +427,7 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
             System.err.println("getAssets threw NPE: Could not getFileDataBytes " + filename);
             return null;
         }
-    }
+    }*/
 
     public int[] getImageData(String str) {
         Bitmap decodeFile = BitmapFactory.decodeFile(str);
@@ -395,6 +460,24 @@ public class MainActivity extends NativeActivity implements OnKeyListener {
         iArr[1] = height;
         decodeFile.getPixels(iArr, 2, width, 0, 0, width, height);
         return iArr;
+    }
+
+    public int getDisplayWidth() {
+        if (getAndroidVersion() < 17) {
+            return 0;
+        }
+        Point point = new Point();
+        getWindowManager().getDefaultDisplay().getRealSize(point);
+        return point.x;
+    }
+
+    public int getDisplayHeight() {
+        if (getAndroidVersion() < 17) {
+            return 0;
+        }
+        Point point = new Point();
+        getWindowManager().getDefaultDisplay().getRealSize(point);
+        return point.y;
     }
 
 

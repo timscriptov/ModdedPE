@@ -22,6 +22,7 @@ import android.os.Bundle;
 import com.google.gson.Gson;
 import com.mcal.mcpelauncher.data.Constants;
 import com.mcal.mcpelauncher.data.Preferences;
+import com.mcal.mcpelauncher.utils.ScopedStorage;
 import com.mcal.pesdk.nmod.NModLib;
 import com.mcal.pesdk.utils.AssetOverrideManager;
 import com.mcal.pesdk.utils.MinecraftInfo;
@@ -29,12 +30,17 @@ import com.mojang.minecraftpe.MainActivity;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 public class GameManager {
     private final PESdk mPESdk;
+    private final ArrayList<String> patchAssetPath = new ArrayList<>();
 
     GameManager(PESdk pesdk) {
         mPESdk = pesdk;
@@ -46,7 +52,21 @@ public class GameManager {
 
     public void onMinecraftActivityCreate(@NotNull MainActivity activity, Bundle savedInstanceState) {
         boolean safeMode = Preferences.isSafeMode();
-        AssetOverrideManager.addAssetOverride(activity.getAssets(), MinecraftInfo.getMinecraftPackageContext().getPackageResourcePath());
+        //AssetOverrideManager.addAssetOverride(activity.getAssets(), MinecraftInfo.getMinecraftPackageContext().getPackageResourcePath());
+
+        String basePath = MinecraftInfo.getMinecraftPackageContext().getPackageResourcePath();
+        patchAssetPath.add(basePath);
+        /* In 1.17.30(beta version unknown), almost all assets files were moved to
+         * split_install_pack.apk, including bootstrap.json, a file that is crucial to
+         * launching the game.
+         */
+        String splitPath = basePath.replace("base.apk", "split_install_pack.apk");
+        File splitFile = new File(splitPath);
+        if (splitFile.exists()) {
+            patchAssetPath.add(splitPath);
+        }
+
+        AssetOverrideManager.addAssetOverride(activity.getAssets(), patchAssetPath.toString());
 
         if (!safeMode) {
             Gson gson = new Gson();
