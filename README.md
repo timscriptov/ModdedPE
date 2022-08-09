@@ -1,5 +1,12 @@
 [![License Info](https://img.shields.io/badge/license-GNU_GPLv3-blue.svg?style=flat-square)](https://github.com/TimScriptov/ModdedPE) [![Play Store Info](https://img.shields.io/badge/Play_Store-v1.16.210.05-blue.svg?style=flat-square)](https://play.google.com/store/apps/details?id=com.mcal.mcpelauncher)
 
+![visitors](https://visitor-badge.glitch.me/badge?page_id=rendiix.rendiix)
+[![GitHub forks](https://img.shields.io/github/forks/rendiix/termux-aapt.svg?style=social&label=Fork&maxAge=2592000)](https://github.com/rendiix/termux-aapt/network/)
+[![GitHub stars](https://img.shields.io/github/stars/rendiix/termux-aapt.svg?style=social&label=Star&maxAge=2592000)](https://github.com/rendiix/termux-aapt/stargazers/)
+![GitHub watchers](https://img.shields.io/github/watchers/rendiix/termux-aapt.svg?style=social)
+[![GitHub followers](https://img.shields.io/github/followers/rendiix.svg?style=social&label=Follow&maxAge=2592000)](https://github.com/rendiix?tab=followers)
+[![GitHub contributors](https://img.shields.io/github/contributors/rendiix/termux-aapt.svg)](https://github.com/rendiix/termux-aapt/graphs/contributors/)
+ 
 The fresh code is in the [ModdedPE-JAVA][6] branch
 # ModdedPE!
 ![logo][1]
