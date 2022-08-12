@@ -23,6 +23,7 @@ import com.mcal.mcpelauncher.BuildConfig
  * @author https://github.com/TimScriptov
  */
 object Constants {
+    const val FILENAME_SEQUENCE_SEPARATOR = "-"
     const val STRING_VALUE_DEFAULT = "default"
     const val NMOD_DATA_TAG = "nmod_data"
     const val NMOD_API_VERSION = "1.4.1"

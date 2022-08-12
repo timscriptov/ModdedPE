@@ -40,7 +40,7 @@ public class PythonPackageLoader {
         if (parentFile != null) {
             createDirectory(parentFile);
             Files.copy(inputStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            Log.i("MCPE", "Created " + file.getAbsolutePath());
+            Log.i("ModdedPE", "Created " + file.getAbsolutePath());
             return;
         }
         throw null;
@@ -85,14 +85,14 @@ public class PythonPackageLoader {
                 if (file2.isDirectory()) {
                     traverse(file2);
                 } else {
-                    Log.i("MCPE", "Python stdLib file: '" + file2.getAbsolutePath() + "'");
+                    Log.i("ModdedPE", "Python stdLib file: '" + file2.getAbsolutePath() + "'");
                 }
             }
         }
     }
 
     private void unpackAssetPrefix(String str, File file) throws Throwable {
-        Log.i("MCPE", "Clearing out path " + file.getAbsolutePath());
+        Log.i("ModdedPE", "Clearing out path " + file.getAbsolutePath());
         delete(file);
         String[] list = this.assetManager.list(str);
         if (list == null || list.length == 0) {

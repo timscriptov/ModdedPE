@@ -20,22 +20,10 @@
         <item>^1[.]16[.]201[.]01</item>
         <item>^1[.]16[.]210[.]05</item>
         <item>^1[.]16[.]220[.]02</item>
-        <item>^1[.]16[.]220[.]02</item -->
-        <item>^1[.]17[.]0[.]02</item>
+        <item>^1[.]16[.]220[.]02</item>
+        <item>^1[.]17[.]0[.]02</item -->
+        <item>^1[.]19[.]10[.]03</item>
     </string-array>
-
-    <string name="appcenter_android_id" translatable="false">c35d56a4-fe9c-4490-9d16-600825114d4b</string>
-    <!--string name="default_web_client_id">486187589451-co2s0u4grtdlj9640npdv5b8hv7cn7rr.apps.googleusercontent.com</string>
-    <string name="firebase_database_url">https://minecraft-bedrock-57580.firebaseio.com</string>
-    <string name="gcm_defaultSenderId">486187589451</string>
-    <string name="google_api_key">AIzaSyC-QelK5mHbkAkFa-4s_enjDuIGAtNXyB4</string>
-    <string name="google_app_id">1:486187589451:android:b2331110821fe2304bd2ce</string>
-    <string name="google_crash_reporting_api_key">AIzaSyC-QelK5mHbkAkFa-4s_enjDuIGAtNXyB4</string>
-    <string name="google_storage_bucket">minecraft-bedrock-57580.appspot.com</string -->
-    <string name="com_appboy_api_key" translatable="false">6ce9b47c-2fd2-48e5-8ad2-4c1dbece4e09</string>
-    <string name="facebook_app_id" translatable="false">221094574568058</string>
-    <string name="project_id" translatable="false">minecraft-bedrock-57580</string>
-    <string name="xal_token" translatable="false">ms-xal-0000000048183522</string>
 
     <string name="app_name" translatable="false">ModdedPE</string>
     <string name="app_game" translatable="false">Minecraft</string>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2021 Тимашков Иван
+ * Copyright (C) 2018-2022 Тимашков Иван
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,164 +16,190 @@
  */
 package com.microsoft.xal.browser;
 
-import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.browser.customtabs.CustomTabColorSchemeParams;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.core.content.ContextCompat;
-
-import com.mcal.mcpelauncher.R;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * From 1.16.220.02
+ * 13.08.2022
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-
-public class BrowserLaunchActivity extends AppCompatActivity {
-    public static final String DEFAULT_BROWSER_INFO = "webkit";
-
-    public static final String CANCEL_DELAY = "CANCEL_DELAY";
+@SuppressWarnings("JavaJniMissingFunction")
+public class BrowserLaunchActivity extends Activity {
+    private static final String BROWSER_INFO_STATE_KEY = "BROWSER_INFO_STATE";
+    private static final String CUSTOM_TABS_IN_PROGRESS_STATE_KEY = "CUSTOM_TABS_IN_PROGRESS_STATE";
     public static final String END_URL = "END_URL";
-    //public static final String IN_PROC_BROWSER = "IN_PROC_BROWSER";
+    public static final String IN_PROC_BROWSER = "IN_PROC_BROWSER";
     public static final String OPERATION_ID = "OPERATION_ID";
+    private static final String OPERATION_ID_STATE_KEY = "OPERATION_ID_STATE";
     public static final String REQUEST_HEADER_KEYS = "REQUEST_HEADER_KEYS";
     public static final String REQUEST_HEADER_VALUES = "REQUEST_HEADER_VALUES";
     public static final int RESULT_FAILED = 8052;
+    private static final String SHARED_BROWSER_USED_STATE_KEY = "SHARED_BROWSER_USED_STATE";
     public static final String SHOW_TYPE = "SHOW_TYPE";
     public static final String START_URL = "START_URL";
-    //public static final int WEB_KIT_WEB_VIEW_REQUEST = 8053;
-
-    private final Lock m_lock = new ReentrantLock();
-    private long m_cancelDelay = 500;
-    private boolean m_cancelOperationOnResume = true;
+    public static final int WEB_KIT_WEB_VIEW_REQUEST = 8053;
+    private BrowserLaunchParameters m_launchParameters = null;
     private long m_operationId = 0;
+    private boolean m_customTabsInProgress = false;
+    private boolean m_sharedBrowserUsed = false;
+    private String m_browserInfo = null;
+
+    public enum WebResult {
+        SUCCESS,
+        FAIL,
+        CANCEL
+    }
 
     private static native void checkIsLoaded();
 
-    private static native void urlOperationCanceled(long operationId, boolean sharedBrowserUsed, String browserInfo);
+    private static native void urlOperationCanceled(long j, boolean z, String str);
 
-    private static native void urlOperationFailed(long operationId, boolean sharedBrowserUsed, String browserInfo);
+    private static native void urlOperationFailed(long j, boolean z, String str);
 
-    private static native void urlOperationSucceeded(long operationId, String finalUrl, boolean sharedBrowserUsed, String browserInfo);
+    private static native void urlOperationSucceeded(long j, String str, boolean z, String str2);
 
-    @SuppressLint("WrongConstant")
-    public static void showUrl(long operationId, Context context, @NotNull String startUrl, String endUrl, int showTypeInt, String[] strArr, String[] strArr2, boolean useInProcBrowser, long cancelDelay) {
-        if (!startUrl.isEmpty()) {
-            if (!endUrl.isEmpty()) {
-                ShowUrlType fromInt = ShowUrlType.fromInt(showTypeInt);
+    public static class BrowserLaunchParameters {
+        public final String EndUrl;
+        public final String[] RequestHeaderKeys;
+        public final String[] RequestHeaderValues;
+        public final ShowUrlType ShowType;
+        public final String StartUrl;
+        public boolean UseInProcBrowser;
 
-                if (fromInt == null) {
-                    urlOperationFailed(operationId, false, null);
-                    return;
-                } else if (strArr.length != strArr2.length) {
-                    urlOperationFailed(operationId, false, null);
-                    return;
-                } else {
-                    Intent intent = new Intent(context, BrowserLaunchActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putLong(OPERATION_ID, operationId);
-                    bundle.putString(START_URL, startUrl);
-                    bundle.putString(END_URL, endUrl);
-                    bundle.putSerializable(SHOW_TYPE, fromInt);
-                    bundle.putStringArray(REQUEST_HEADER_KEYS, strArr);
-                    bundle.putStringArray(REQUEST_HEADER_VALUES, strArr2);
-                    //bundle.putBoolean(IN_PROC_BROWSER, useInProcBrowser);
-                    bundle.putLong(CANCEL_DELAY, cancelDelay);
-                    intent.putExtras(bundle);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    context.startActivity(intent);
-                    return;
-                }
+        @Nullable
+        public static BrowserLaunchParameters FromArgs(@NonNull Bundle bundle) {
+            String startUrl = bundle.getString(START_URL);
+            String endUrl = bundle.getString(END_URL);
+            String[] headerKeys = bundle.getStringArray(REQUEST_HEADER_KEYS);
+            String[] headerValues = bundle.getStringArray(REQUEST_HEADER_VALUES);
+            ShowUrlType showUrlType = (ShowUrlType) bundle.get(SHOW_TYPE);
+            boolean z = bundle.getBoolean(BrowserLaunchActivity.IN_PROC_BROWSER);
+            if (startUrl == null || endUrl == null || headerKeys == null || headerValues == null || headerKeys.length != headerValues.length) {
+                return null;
             }
+            return new BrowserLaunchParameters(startUrl, endUrl, headerKeys, headerValues, showUrlType, z);
         }
-        urlOperationFailed(operationId, false, null);
+
+        private BrowserLaunchParameters(String str, String str2, String[] strArr, String[] strArr2, ShowUrlType showUrlType, boolean z) {
+            this.StartUrl = str;
+            this.EndUrl = str2;
+            this.RequestHeaderKeys = strArr;
+            this.RequestHeaderValues = strArr2;
+            this.ShowType = showUrlType;
+            this.UseInProcBrowser = true;
+        }
     }
 
+    public static void showUrl(long j, Context context, @NonNull String str, String str2, int i, String[] strArr, String[] strArr2, boolean z) {
+        if (!str.isEmpty() && !str2.isEmpty()) {
+            ShowUrlType fromInt = ShowUrlType.fromInt(i);
+            if (fromInt == null) {
+                urlOperationFailed(j, false, null);
+                return;
+            } else if (strArr.length != strArr2.length) {
+                urlOperationFailed(j, false, null);
+                return;
+            } else {
+                Intent intent = new Intent(context, BrowserLaunchActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putLong(OPERATION_ID, j);
+                bundle.putString(START_URL, str);
+                bundle.putString(END_URL, str2);
+                bundle.putSerializable(SHOW_TYPE, fromInt);
+                bundle.putStringArray(REQUEST_HEADER_KEYS, strArr);
+                bundle.putStringArray(REQUEST_HEADER_VALUES, strArr2);
+                bundle.putBoolean(IN_PROC_BROWSER, z);
+                intent.putExtras(bundle);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+                return;
+            }
+        }
+        urlOperationFailed(j, false, null);
+    }
+
+    @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        if (!checkNativeCodeLoaded() || getIntent().getData() != null) {
-            Intent launchIntentForPackage = getApplicationContext().getPackageManager().getLaunchIntentForPackage(getApplicationContext().getPackageName());
-            startActivity(launchIntentForPackage);
+        Bundle extras = getIntent().getExtras();
+        if (!checkNativeCodeLoaded()) {
+            startActivity(getApplicationContext().getPackageManager().getLaunchIntentForPackage(getApplicationContext().getPackageName()));
             finish();
-            return;
-        }
-
-        if (getIntent().getData() == null) {
-            Bundle extras = getIntent().getExtras();
-            if (extras == null) {
-                setResult(RESULT_FAILED);
-                finish();
+        } else if (bundle != null) {
+            this.m_operationId = bundle.getLong(OPERATION_ID_STATE_KEY);
+            this.m_customTabsInProgress = bundle.getBoolean(CUSTOM_TABS_IN_PROGRESS_STATE_KEY);
+            this.m_sharedBrowserUsed = bundle.getBoolean(SHARED_BROWSER_USED_STATE_KEY);
+            this.m_browserInfo = bundle.getString(BROWSER_INFO_STATE_KEY);
+        } else if (extras != null) {
+            this.m_operationId = extras.getLong(OPERATION_ID, 0L);
+            BrowserLaunchParameters FromArgs = BrowserLaunchParameters.FromArgs(extras);
+            this.m_launchParameters = FromArgs;
+            if (FromArgs != null && this.m_operationId != 0) {
                 return;
             }
-            m_operationId = extras.getLong(OPERATION_ID);
-            m_cancelDelay = extras.getLong(CANCEL_DELAY, 500);
-            String startUrl = extras.getString(START_URL, "");
-            String endUrl = extras.getString(END_URL, "");
-            //String defaultBrowserPackageName = null;
-            if (startUrl.isEmpty() || endUrl.isEmpty()) {
-                finishOperation(WebResult.FAIL, null);
-                return;
-            }
-            ShowUrlType showUrlType = (ShowUrlType) extras.get(SHOW_TYPE);
-            //boolean useInProcBrowser = extras.getBoolean(IN_PROC_BROWSER);
-            //if (showUrlType == ShowUrlType.NonAuthFlow) {
-            //useInProcBrowser = true;
-            //}
-            //@SuppressLint("WrongConstant") ResolveInfo resolveActivity = getApplicationContext().getPackageManager().resolveActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(AuthenticationConstants.Broker.REDIRECT_SSL_PREFIX)), PKIFailureInfo.notAuthorized);
-            //if (resolveActivity != null) {
-            //defaultBrowserPackageName = resolveActivity.activityInfo.packageName;
-            //}
-            //if (useInProcBrowser) {
-            //startWebView(startUrl, endUrl, showUrlType);
-            //} else if (defaultBrowserPackageName == null || defaultBrowserPackageName.equals(Constants.HTTP_USER_AGENT_ANDROID)) {
-            //startWebView(startUrl, endUrl, showUrlType);
-            //} else {
-            //if (!browserSupportsCustomTabs(defaultBrowserPackageName)) {
-            //startWebView(startUrl, endUrl, showUrlType);
-            //} else {
-            startCustomTabsInBrowser(startUrl, endUrl, showUrlType);
-            //}
-            //}
+            finishOperation(WebResult.FAIL, null);
+        } else if (getIntent().getData() != null) {
+            setResult(RESULT_FAILED);
+            finishOperation(WebResult.FAIL, null);
         } else {
-            Intent launchIntentForPackage = getApplicationContext().getPackageManager().getLaunchIntentForPackage(getApplicationContext().getPackageName());
-            startActivity(launchIntentForPackage);
-            finish();
+            setResult(RESULT_FAILED);
+            finishOperation(WebResult.FAIL, null);
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        boolean z = this.m_customTabsInProgress;
+        if (!z && this.m_launchParameters != null) {
+            BrowserLaunchParameters browserLaunchParameters = this.m_launchParameters;
+            this.m_launchParameters = null;
+            startAuthSession(browserLaunchParameters);
+        } else if (z) {
+            this.m_customTabsInProgress = false;
+            Uri data = getIntent().getData();
+            if (data != null) {
+                finishOperation(WebResult.SUCCESS, data.toString());
+                return;
+            }
+            finishOperation(WebResult.CANCEL, null);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle bundle) {
+        super.onSaveInstanceState(bundle);
+        bundle.putLong(OPERATION_ID_STATE_KEY, this.m_operationId);
+        bundle.putBoolean(CUSTOM_TABS_IN_PROGRESS_STATE_KEY, this.m_customTabsInProgress);
+        bundle.putBoolean(SHARED_BROWSER_USED_STATE_KEY, this.m_sharedBrowserUsed);
+        bundle.putString(BROWSER_INFO_STATE_KEY, this.m_browserInfo);
+    }
+
+    @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Uri data = intent.getData();
-        if (data == null) {
-            finishOperation(WebResult.FAIL, null);
-            return;
-        }
-        finishOperation(WebResult.SUCCESS, data.toString());
+        setIntent(intent);
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 8053) {
-            if (resultCode == -1) {
-                String string = data.getExtras().getString(WebKitWebViewController.RESPONSE_KEY, "");
+    @Override
+    public void onActivityResult(int i, int i2, Intent intent) {
+        if (i == 8053) {
+            if (i2 == -1) {
+                String string = intent.getExtras().getString(WebKitWebViewController.RESPONSE_KEY, "");
                 if (!string.isEmpty()) {
                     finishOperation(WebResult.SUCCESS, string);
                     return;
                 }
-            } else if (resultCode == 0) {
+            } else if (i2 == 0) {
                 finishOperation(WebResult.CANCEL, null);
                 return;
             }
@@ -181,94 +207,77 @@ public class BrowserLaunchActivity extends AppCompatActivity {
         }
     }
 
-    public void onResume() {
-        super.onResume();
-        if (m_cancelOperationOnResume) {
-            new Handler().postDelayed(() -> {
-                finishOperation(WebResult.CANCEL, null);
-            }, m_cancelDelay);
-        }
-    }
-
-    public void onPause() {
-        super.onPause();
-        m_cancelOperationOnResume = true;
-    }
-
-    public void onDestroy() {
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
-        if (m_cancelOperationOnResume) {
-            finishOperation(WebResult.CANCEL, null);
-        }
-        finish();
-    }
-
-    @SuppressLint("ResourceAsColor")
-    private void startCustomTabsInBrowser(String startUrl, String endUrl, ShowUrlType showUrlType) {
-        if (showUrlType == ShowUrlType.CookieRemovalSkipIfSharedCredentials) {
-            finishOperation(WebResult.SUCCESS, endUrl);
+        if (!isFinishing() || this.m_operationId == 0) {
             return;
         }
-        m_cancelOperationOnResume = false;
-
-        CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
-        CustomTabColorSchemeParams params = new CustomTabColorSchemeParams.Builder()
-                .setNavigationBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
-                .setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
-                .setSecondaryToolbarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
-                .build();
-        intentBuilder.setShowTitle(true);
-        intentBuilder.setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_DARK, params);
-        CustomTabsIntent customTabsIntent = intentBuilder.build();
-        customTabsIntent.launchUrl(this, Uri.parse(startUrl));
+        finishOperation(WebResult.CANCEL, null);
     }
 
-    //private void startWebView(String startUrl, String endUrl, ShowUrlType showUrlType) {
-    //m_cancelOperationOnResume = false;
-    //Intent intent = new Intent(getApplicationContext(), WebKitWebViewController.class);
-    //Bundle bundle = new Bundle();
-    //bundle.putString(START_URL, startUrl);
-    //bundle.putString(END_URL, endUrl);
-    //bundle.putSerializable(SHOW_TYPE, showUrlType);
-    //intent.putExtras(bundle);
-    //startActivityForResult(intent, WEB_KIT_WEB_VIEW_REQUEST);
-    //}
+    private void startAuthSession(@NonNull BrowserLaunchParameters browserLaunchParameters) {
+        BrowserSelectionResult selectBrowser = BrowserSelector.selectBrowser(getApplicationContext(), browserLaunchParameters.UseInProcBrowser);
+        this.m_browserInfo = selectBrowser.toString();
+        String packageName = selectBrowser.packageName();
+        if (packageName == null) {
+            startWebView(browserLaunchParameters.StartUrl, browserLaunchParameters.EndUrl, browserLaunchParameters.ShowType, browserLaunchParameters.RequestHeaderKeys, browserLaunchParameters.RequestHeaderValues);
+            return;
+        }
+        startCustomTabsInBrowser(packageName, browserLaunchParameters.StartUrl, browserLaunchParameters.EndUrl, browserLaunchParameters.ShowType);
+    }
 
-    public void finishOperation(WebResult webResult, String finalUrl) {
-        m_lock.lock();
-        long operationId = m_operationId;
-        m_operationId = 0;
-        m_cancelOperationOnResume = false;
-        m_lock.unlock();
+    private void startCustomTabsInBrowser(String str, String str2, String str3, ShowUrlType showUrlType) {
+        if (showUrlType == ShowUrlType.CookieRemovalSkipIfSharedCredentials) {
+            finishOperation(WebResult.SUCCESS, str3);
+            return;
+        }
+        this.m_customTabsInProgress = true;
+        this.m_sharedBrowserUsed = true;
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        builder.setShowTitle(true);
+        CustomTabsIntent build = builder.build();
+        build.intent.setData(Uri.parse(str2));
+        build.intent.setPackage(str);
+        startActivity(build.intent);
+    }
+
+    private void startWebView(String str, String str2, ShowUrlType showUrlType, String[] strArr, String[] strArr2) {
+        this.m_sharedBrowserUsed = false;
+        Intent intent = new Intent(getApplicationContext(), WebKitWebViewController.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(START_URL, str);
+        bundle.putString(END_URL, str2);
+        bundle.putSerializable(SHOW_TYPE, showUrlType);
+        bundle.putStringArray(REQUEST_HEADER_KEYS, strArr);
+        bundle.putStringArray(REQUEST_HEADER_VALUES, strArr2);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, WEB_KIT_WEB_VIEW_REQUEST);
+    }
+
+    private void finishOperation(WebResult webResult, String str) {
+        long j = this.m_operationId;
+        this.m_operationId = 0L;
         finish();
-        if (operationId == 0) {
+        if (j == 0) {
             return;
         }
         int result = XalWebResult.mWebResult[webResult.ordinal()];
         if (result == 1) {
-            urlOperationSucceeded(operationId, finalUrl, false, DEFAULT_BROWSER_INFO);
+            urlOperationSucceeded(j, str, this.m_sharedBrowserUsed, this.m_browserInfo);
         } else if (result == 2) {
-            urlOperationCanceled(operationId, false, DEFAULT_BROWSER_INFO);
-        } else if (result == 3) {
-            urlOperationFailed(operationId, false, DEFAULT_BROWSER_INFO);
+            urlOperationCanceled(j, this.m_sharedBrowserUsed, this.m_browserInfo);
+        } else if (result != 3) {
+        } else {
+            urlOperationFailed(j, this.m_sharedBrowserUsed, this.m_browserInfo);
         }
     }
-
-    //private boolean browserSupportsCustomTabs(String packageName) {
-    //for (ResolveInfo resolveInfo : getApplicationContext().getPackageManager().queryIntentServices(new Intent("android.support.customtabs.action.CustomTabsService"), 0)) {
-    //if (resolveInfo.serviceInfo.packageName.equals(packageName)) {
-    //return true;
-    //}
-    //}
-    //return false;
-    //}
 
     private boolean checkNativeCodeLoaded() {
         try {
             checkIsLoaded();
             return true;
-        } catch (UnsatisfiedLinkError e) {
-            e.printStackTrace();
+        } catch (UnsatisfiedLinkError unused) {
             return false;
         }
     }

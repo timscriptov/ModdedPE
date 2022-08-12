@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2021 Тимашков Иван
+ * Copyright (C) 2018-2022 Тимашков Иван
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
 package com.microsoft.xal.browser
 
 /**
+ * 13.08.2022
+ *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */

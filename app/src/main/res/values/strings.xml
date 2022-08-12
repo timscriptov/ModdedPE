@@ -2,4 +2,5 @@
 <resources>
     <string name="pref_night_mode_title">Night mode</string>
     <string name="pref_night_mode_msg">Select application theme</string>
+    <string name="preloading_loading_lib_media_decoders">--Loading libMediaDecoders_Android.so</string>
 </resources>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2021 Тимашков Иван
+ * Copyright (C) 2018-2022 Тимашков Иван
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,62 +17,38 @@
 package com.microsoft.xal.browser;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.microsoft.aad.adal.AuthenticationConstants;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.HashMap;
+import java.util.Map;
 
 /**
- * 05.10.2020
+ * 13.08.2022
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-
-public class WebKitWebViewController extends AppCompatActivity {
+public class WebKitWebViewController extends Activity {
     public static final String END_URL = "END_URL";
+    public static final String REQUEST_HEADER_KEYS = "REQUEST_HEADER_KEYS";
+    public static final String REQUEST_HEADER_VALUES = "REQUEST_HEADER_VALUES";
     public static final String RESPONSE_KEY = "RESPONSE";
     public static final int RESULT_FAILED = 8054;
     public static final String SHOW_TYPE = "SHOW_TYPE";
     public static final String START_URL = "START_URL";
-    public static final String REQUEST_HEADER_KEYS = "REQUEST_HEADER_KEYS";
-    public static final String REQUEST_HEADER_VALUES = "REQUEST_HEADER_VALUES";
-
-    public String endUrl = "";
-    public String startUrl = "";
-
-    public static void deleteCookies(String link, boolean z) {
-        CookieManager instance = CookieManager.getInstance();
-        String sslPrefix = z ? AuthenticationConstants.Broker.REDIRECT_SSL_PREFIX : "http://";
-        String cookie = instance.getCookie(sslPrefix + link);
-        if (cookie != null) {
-            String[] split = cookie.split(AuthenticationConstants.Broker.CHALLENGE_REQUEST_CERT_AUTH_DELIMETER);
-            for (String split2 : split) {
-                String str2 = split2.split("=")[0];
-                Log.d("WebKitWebViewController", "Deleting cookie: " + str2);
-                instance.setCookie(sslPrefix, str2.trim() + "=;Domain=" + link + ";Path=/");
-            }
-        }
-        if (Build.VERSION.SDK_INT >= 21) {
-            instance.flush();
-        }
-    }
+    private WebView m_webView;
 
     @SuppressLint("SetJavaScriptEnabled")
+    @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         Bundle extras = getIntent().getExtras();
@@ -81,22 +57,20 @@ public class WebKitWebViewController extends AppCompatActivity {
             finish();
             return;
         }
-        startUrl = extras.getString(START_URL, "");
-        endUrl = extras.getString(END_URL, "");
-        if (startUrl.isEmpty() || endUrl.isEmpty()) {
+        String string = extras.getString(START_URL, "");
+        final String string2 = extras.getString(END_URL, "");
+        if (string.isEmpty() || string2.isEmpty()) {
             setResult(RESULT_FAILED);
             finish();
             return;
         }
-
-        String[] keys = extras.getStringArray(REQUEST_HEADER_KEYS);
-        String[] values = extras.getStringArray(REQUEST_HEADER_VALUES);
-        if (keys.length != values.length) {
+        String[] stringArray = extras.getStringArray(REQUEST_HEADER_KEYS);
+        String[] stringArray2 = extras.getStringArray(REQUEST_HEADER_VALUES);
+        if (stringArray.length != stringArray2.length) {
             setResult(RESULT_FAILED);
             finish();
             return;
         }
-
         ShowUrlType showUrlType = (ShowUrlType) extras.get(SHOW_TYPE);
         if (showUrlType == ShowUrlType.CookieRemoval || showUrlType == ShowUrlType.CookieRemovalSkipIfSharedCredentials) {
             deleteCookies("login.live.com", true);
@@ -105,60 +79,74 @@ public class WebKitWebViewController extends AppCompatActivity {
             deleteCookies("xboxlive.com", true);
             deleteCookies("sisu.xboxlive.com", true);
             Intent intent = new Intent();
-            intent.putExtra(RESPONSE_KEY, endUrl);
-            setResult(AppCompatActivity.RESULT_OK, intent);
+            intent.putExtra(RESPONSE_KEY, string2);
+            setResult(-1, intent);
             finish();
             return;
         }
-
-        HashMap<String, String> hashMap = new HashMap<>(keys.length);
-        for (int i = 0; i < keys.length; i++) {
-            if (keys[i] == null || keys[i].isEmpty() || values[i] == null || values[i].isEmpty()) {
+        Map<String, String> hashMap = new HashMap<>(stringArray.length);
+        for (int i = 0; i < stringArray.length; i++) {
+            if (stringArray[i] == null || stringArray[i].isEmpty() || stringArray2[i] == null || stringArray2[i].isEmpty()) {
                 setResult(RESULT_FAILED);
                 finish();
                 return;
             }
-            hashMap.put(keys[i], values[i]);
+            hashMap.put(stringArray[i], stringArray2[i]);
         }
-
         WebView webView = new WebView(this);
-
-        webView.getSettings().setJavaScriptEnabled(true);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            webView.getSettings().setMixedContentMode(2);
+        this.m_webView = webView;
+        setContentView(webView);
+        this.m_webView.getSettings().setJavaScriptEnabled(true);
+        if (Build.VERSION.SDK_INT >= 21) {
+            this.m_webView.getSettings().setMixedContentMode(2);
         }
-        webView.setWebChromeClient(new XalWebChromeClient());
-        webView.setWebViewClient(new XalWebViewClient());
-        webView.loadUrl(startUrl);
-    }
+        this.m_webView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onProgressChanged(WebView webView2, int i2) {
+                WebKitWebViewController.this.setProgress(i2 * 100);
+            }
+        });
+        this.m_webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView webView2, String str) {
+                super.onPageFinished(webView2, str);
+                webView2.requestFocus(130);
+                webView2.sendAccessibilityEvent(8);
+                webView2.evaluateJavascript("if (typeof window.__xal__performAccessibilityFocus === \"function\") { window.__xal__performAccessibilityFocus(); }", null);
+            }
 
-    private class XalWebChromeClient extends WebChromeClient {
-        public void onProgressChanged(WebView view, int progress) {
-            setProgress(progress * 100);
-        }
-    }
-
-    private class XalWebViewClient extends WebViewClient {
-        @TargetApi(Build.VERSION_CODES.N)
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, @NotNull WebResourceRequest request) {
-            Intent intent = new Intent();
-            intent.putExtra(WebKitWebViewController.RESPONSE_KEY, request.getUrl().toString());
-            setResult(AppCompatActivity.RESULT_OK, intent);
-            finish();
-            return true;
-        }
-
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, @NotNull String url) {
-            if (!url.startsWith(endUrl)) {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView webView2, String str) {
+                if (str.startsWith(string2, 0)) {
+                    Intent intent2 = new Intent();
+                    intent2.putExtra(WebKitWebViewController.RESPONSE_KEY, str);
+                    setResult(-1, intent2);
+                    finish();
+                    return true;
+                }
                 return false;
             }
-            Intent intent = new Intent();
-            intent.putExtra(WebKitWebViewController.RESPONSE_KEY, url);
-            setResult(AppCompatActivity.RESULT_OK, intent);
-            finish();
-            return true;
+        });
+        this.m_webView.loadUrl(string, hashMap);
+    }
+
+    private void deleteCookies(String str, boolean z) {
+        CookieManager cookieManager = CookieManager.getInstance();
+        String sb2 = (z ? AuthenticationConstants.Broker.REDIRECT_SSL_PREFIX : "http://") + str;
+        String cookie = cookieManager.getCookie(sb2);
+        if (cookie != null) {
+            String[] split = cookie.split(AuthenticationConstants.Broker.CHALLENGE_REQUEST_CERT_AUTH_DELIMETER);
+            for (String str2 : split) {
+                String trim = str2.split("=")[0].trim();
+                String str3 = trim + "=;";
+                if (trim.startsWith("__Secure-")) {
+                    str3 = str3 + "Secure;Domain=" + str + ";Path=/";
+                }
+                cookieManager.setCookie(sb2, trim.startsWith("__Host-") ? str3 + "Secure;Path=/" : str3 + "Domain=" + str + ";Path=/");
+            }
+        }
+        if (Build.VERSION.SDK_INT >= 21) {
+            cookieManager.flush();
         }
     }
 }

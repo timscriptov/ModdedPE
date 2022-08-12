@@ -17,6 +17,17 @@ import java.util.TimeZone;
  * @author https://github.com/TimScriptov
  */
 
+import android.content.Context;
+import android.content.pm.PackageManager;
+
+import androidx.annotation.NonNull;
+
+import java.io.Serializable;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 public class SessionInfo implements Serializable {
     private static final String NOT_YET_CONFIGURED = "Not yet configured";
     private static final String SEP = ";";
@@ -49,7 +60,7 @@ public class SessionInfo implements Serializable {
         this.recordDate = new Date();
     }
 
-    public SessionInfo(String str, String str2, String str3, String str4, String str5, String str6, int i, Date date) {
+    public SessionInfo(String aSessionId, String aBuildId, String aCommitId, String aBranchId, String aFlavor, String aGameVersionName, int anAppVersion, Date aRecordDate) {
         this.sessionId = null;
         this.buildId = null;
         this.commitId = null;
@@ -59,61 +70,26 @@ public class SessionInfo implements Serializable {
         this.appVersion = 0;
         this.recordDate = null;
         this.crashTimestamp = null;
-        this.sessionId = str;
-        this.buildId = str2;
-        this.commitId = str3;
-        this.branchId = str4;
-        this.flavor = str5;
-        this.gameVersionName = str6;
-        this.appVersion = i;
-        this.recordDate = date;
+        this.sessionId = aSessionId;
+        this.buildId = aBuildId;
+        this.commitId = aCommitId;
+        this.branchId = aBranchId;
+        this.flavor = aFlavor;
+        this.gameVersionName = aGameVersionName;
+        this.appVersion = anAppVersion;
+        this.recordDate = aRecordDate;
     }
 
-    public static SessionInfo fromString(String str) {
-        SessionInfo sessionInfo = new SessionInfo();
-        if (str == null || str.length() == 0) {
-            throw new IllegalArgumentException("Empty SessionInfo string");
-        }
-        String[] split = str.split(";");
-        if (split.length == 8) {
-            sessionInfo.sessionId = split[0];
-            sessionInfo.buildId = split[1];
-            sessionInfo.commitId = split[2];
-            sessionInfo.branchId = split[3];
-            sessionInfo.flavor = split[4];
-            sessionInfo.gameVersionName = split[5];
-            try {
-                sessionInfo.appVersion = Integer.parseInt(split[6]);
-                Date parse = getDateFormat().parse(split[7], new ParsePosition(0));
-                sessionInfo.recordDate = parse;
-                if (parse != null) {
-                    return sessionInfo;
-                }
-                throw new IllegalArgumentException("Failed to parse date/time in SessionInfo string '" + str + "'");
-            } catch (NumberFormatException unused) {
-                throw new IllegalArgumentException("Failed to convert app version '" + split[6] + "' into an integer");
-            }
-        } else {
-            throw new IllegalArgumentException("Invalid SessionInfo string '" + str + "', must be 8 parts split by '" + ";" + "'");
-        }
-    }
-
-    public static SimpleDateFormat getDateFormat() {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy-HH:mm:ss");
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return simpleDateFormat;
-    }
-
-    public void setContents(Context context, String sessionId, String buildId, String commitId, String branchId, String flavor) {
-        this.sessionId = sessionId;
-        this.buildId = buildId;
-        this.commitId = commitId;
-        this.branchId = branchId;
-        this.flavor = flavor;
+    public void setContents(Context context, String aSessionId, String aBuildId, String aCommitId, String aBranchId, String aFlavor) {
+        this.sessionId = aSessionId;
+        this.buildId = aBuildId;
+        this.commitId = aCommitId;
+        this.branchId = aBranchId;
+        this.flavor = aFlavor;
         updateJavaConstants(context);
     }
 
-    public void updateJavaConstants(Context context) {
+    public void updateJavaConstants(@NonNull Context context) {
         this.appVersion = AppConstants.APP_VERSION;
         try {
             this.gameVersionName = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
@@ -122,7 +98,44 @@ public class SessionInfo implements Serializable {
         }
     }
 
-    public @NotNull String toString() {
+    @NonNull
+    public static SessionInfo fromString(String s) {
+        SessionInfo sessionInfo = new SessionInfo();
+        if (s == null || s.length() == 0) {
+            throw new IllegalArgumentException("Empty SessionInfo string");
+        }
+        String[] split = s.split(";");
+        if (split.length != 8) {
+            throw new IllegalArgumentException("Invalid SessionInfo string '" + s + "', must be 8 parts split by ';'");
+        }
+        sessionInfo.sessionId = split[0];
+        sessionInfo.buildId = split[1];
+        sessionInfo.commitId = split[2];
+        sessionInfo.branchId = split[3];
+        sessionInfo.flavor = split[4];
+        sessionInfo.gameVersionName = split[5];
+        try {
+            sessionInfo.appVersion = Integer.parseInt(split[6]);
+            Date parse = getDateFormat().parse(split[7], new ParsePosition(0));
+            sessionInfo.recordDate = parse;
+            if (parse != null) {
+                return sessionInfo;
+            }
+            throw new IllegalArgumentException("Failed to parse date/time in SessionInfo string '" + s + "'");
+        } catch (NumberFormatException unused) {
+            throw new IllegalArgumentException("Failed to convert app version '" + split[6] + "' into an integer");
+        }
+    }
+
+    @NonNull
+    public String toString() {
         return this.sessionId + ";" + this.buildId + ";" + this.commitId + ";" + this.branchId + ";" + this.flavor + ";" + this.gameVersionName + ";" + this.appVersion + ";" + getDateFormat().format(this.recordDate);
+    }
+
+    @NonNull
+    public static SimpleDateFormat getDateFormat() {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy-HH:mm:ss");
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return simpleDateFormat;
     }
 }

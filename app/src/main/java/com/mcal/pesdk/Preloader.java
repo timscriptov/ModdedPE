@@ -85,6 +85,9 @@ public class Preloader {
             mPreloadListener.onLoadFModLib();
             LibraryLoader.loadFMod(MinecraftInfo.getMinecraftPackageNativeLibraryDir());
 
+            mPreloadListener.onLoadMediaDecoders();
+            LibraryLoader.loadMediaDecoders(MinecraftInfo.getMinecraftPackageNativeLibraryDir());
+
             mPreloadListener.onLoadMinecraftPELib();
             LibraryLoader.loadMinecraftPE(MinecraftInfo.getMinecraftPackageNativeLibraryDir());
 
@@ -258,6 +261,10 @@ public class Preloader {
 
         public void onLoadFModLib() {
             Log.e(TAG, "onLoadFModLib()");
+        }
+
+        public void onLoadMediaDecoders() {
+            Log.e(TAG, "onLoadMediaDecoders()");
         }
 
         public void onLoadMinecraftPELib() {

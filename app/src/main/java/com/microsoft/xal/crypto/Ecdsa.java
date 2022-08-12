@@ -6,7 +6,6 @@ import android.util.Base64;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.spongycastle.jce.provider.BouncyCastleProvider;
 
 import java.io.ByteArrayOutputStream;
@@ -33,114 +32,148 @@ import java.security.spec.X509EncodedKeySpec;
  * @author https://github.com/TimScriptov
  */
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Base64;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import java.io.ByteArrayOutputStream;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.Security;
+import java.security.Signature;
+import java.security.SignatureException;
+import java.security.interfaces.ECPrivateKey;
+import java.security.interfaces.ECPublicKey;
+import java.security.spec.ECGenParameterSpec;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import org.spongycastle.jce.provider.BouncyCastleProvider;
+
+/**
+ * 13.08.2022
+ *
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
 public class Ecdsa {
     private static final String ANDROID_KEY_STORE = "AndroidKeyStore";
     private static final String ECDSA_SIGNATURE_NAME = "NONEwithECDSA";
     private static final String EC_ALGORITHM_NAME = "secp256r1";
     private static final String KEY_ALIAS_PREFIX = "xal_";
+    private KeyPair keyPair;
+    private String uniqueId;
 
     static {
         Security.insertProviderAt(new BouncyCastleProvider(), 1);
     }
 
-    private KeyPair keyPair;
-    private String uniqueId;
-
     @Nullable
-    public static Ecdsa restoreKeyAndId(@NotNull Context context) throws ClassCastException, IllegalArgumentException, NoSuchProviderException, NoSuchAlgorithmException, InvalidKeySpecException {
-        SharedPreferences preferences = context.getSharedPreferences("com.microsoft.xal.crypto", 0);
-        if (!preferences.contains("id") || !preferences.contains("public") || !preferences.contains("private")) {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.clear();
-            editor.apply();
+    public static Ecdsa restoreKeyAndId(@NonNull Context context) throws ClassCastException, IllegalArgumentException, NoSuchProviderException, NoSuchAlgorithmException, InvalidKeySpecException {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("com.microsoft.xal.crypto", 0);
+        if (!sharedPreferences.contains("id") || !sharedPreferences.contains("public") || !sharedPreferences.contains("private")) {
+            SharedPreferences.Editor edit = sharedPreferences.edit();
+            edit.clear();
+            edit.apply();
             return null;
         }
-        String pubKeyStr = preferences.getString("public", "");
-        String privKeyStr = preferences.getString("private", "");
-        String id = preferences.getString("id", "");
-        if (pubKeyStr.isEmpty() || privKeyStr.isEmpty() || id.isEmpty()) {
-            SharedPreferences.Editor editor2 = preferences.edit();
-            editor2.clear();
-            editor2.apply();
+        String string = sharedPreferences.getString("public", "");
+        String string2 = sharedPreferences.getString("private", "");
+        String string3 = sharedPreferences.getString("id", "");
+        if (string.isEmpty() || string2.isEmpty() || string3.isEmpty()) {
+            SharedPreferences.Editor edit2 = sharedPreferences.edit();
+            edit2.clear();
+            edit2.apply();
             return null;
         }
-        byte[] pubData = getBytesFromBase64String(pubKeyStr);
-        byte[] privData = getBytesFromBase64String(privKeyStr);
-        KeyFactory factory = KeyFactory.getInstance("ECDSA", "SC");
+        byte[] bytesFromBase64String = getBytesFromBase64String(string);
+        byte[] bytesFromBase64String2 = getBytesFromBase64String(string2);
+        KeyFactory keyFactory = KeyFactory.getInstance("ECDSA", "SC");
         Ecdsa ecdsa = new Ecdsa();
-        ecdsa.uniqueId = id;
-        ecdsa.keyPair = new KeyPair(factory.generatePublic(new X509EncodedKeySpec(pubData)), factory.generatePrivate(new PKCS8EncodedKeySpec(privData)));
+        ecdsa.uniqueId = string3;
+        ecdsa.keyPair = new KeyPair(keyFactory.generatePublic(new X509EncodedKeySpec(bytesFromBase64String)), keyFactory.generatePrivate(new PKCS8EncodedKeySpec(bytesFromBase64String2)));
         return ecdsa;
     }
 
-    @NotNull
-    @Contract(pure = true)
-    private static String getKeyAlias(String uniqueId2) {
-        return KEY_ALIAS_PREFIX + uniqueId2;
-    }
-
-    private static String getBase64StringFromBytes(byte[] array) {
-        return Base64.encodeToString(array, 0, array.length, 11);
-    }
-
-    private static byte[] getBytesFromBase64String(String string) throws IllegalArgumentException {
-        return Base64.decode(string, 11);
-    }
-
-    public void generateKey(String uniqueId2) throws NoSuchProviderException, NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+    public void generateKey(String str) throws NoSuchProviderException, NoSuchAlgorithmException, InvalidAlgorithmParameterException {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDSA", "SC");
         keyPairGenerator.initialize(new ECGenParameterSpec(EC_ALGORITHM_NAME));
-        uniqueId = uniqueId2;
-        keyPair = keyPairGenerator.generateKeyPair();
+        this.uniqueId = str;
+        this.keyPair = keyPairGenerator.generateKeyPair();
     }
 
     public EccPubKey getPublicKey() {
-        return new EccPubKey((ECPublicKey) keyPair.getPublic());
+        return new EccPubKey((ECPublicKey) this.keyPair.getPublic());
     }
 
     public String getUniqueId() {
-        return uniqueId;
+        return this.uniqueId;
     }
 
-    public boolean storeKeyPairAndId(@NotNull Context context, String uniqueId2) {
-        SharedPreferences.Editor editor = context.getSharedPreferences("com.microsoft.xal.crypto", 0).edit();
-        editor.putString("id", uniqueId2);
-        editor.putString("public", getBase64StringFromBytes(keyPair.getPublic().getEncoded()));
-        editor.putString("private", getBase64StringFromBytes(keyPair.getPrivate().getEncoded()));
-        return editor.commit();
+    public boolean storeKeyPairAndId(@NonNull Context context, String str) {
+        SharedPreferences.Editor edit = context.getSharedPreferences("com.microsoft.xal.crypto", 0).edit();
+        edit.putString("id", str);
+        edit.putString("public", getBase64StringFromBytes(this.keyPair.getPublic().getEncoded()));
+        edit.putString("private", getBase64StringFromBytes(this.keyPair.getPrivate().getEncoded()));
+        return edit.commit();
     }
 
-    public byte[] sign(byte[] buffer) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+    public byte[] sign(byte[] bArr) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
         Signature signature = Signature.getInstance(ECDSA_SIGNATURE_NAME);
-        signature.initSign(keyPair.getPrivate());
-        signature.update(buffer);
+        signature.initSign(this.keyPair.getPrivate());
+        signature.update(bArr);
         return toP1363SignedBuffer(signature.sign());
     }
 
-    public byte[] hashAndSign(byte[] buffer) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-        ShaHasher hasher = new ShaHasher();
-        hasher.AddBytes(buffer);
-        return sign(hasher.SignHash());
+    public byte[] hashAndSign(byte[] bArr) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+        ShaHasher shaHasher = new ShaHasher();
+        shaHasher.AddBytes(bArr);
+        return sign(shaHasher.SignHash());
     }
 
-    @NotNull
-    private byte[] toP1363SignedBuffer(@NotNull byte[] asn1SignedBuffer) {
-        int rOffset = 3 + 1;
-        int rLength = asn1SignedBuffer[3];
-        int sSizeOffset = rLength + 4 + 1;
-        int sOffset = sSizeOffset + 1;
-        int sLength = asn1SignedBuffer[sSizeOffset];
-        if (rLength > 32) {
-            rOffset++;
-            rLength = 32;
+    @NonNull
+    private byte[] toP1363SignedBuffer(@NonNull byte[] bArr) {
+        byte b = bArr[3];
+        int i = 4 + b + 1;
+        int i2 = i + 1;
+        byte b2 = bArr[i];
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        writeAdjustedHalfOfAsn1ToP1363(bArr, 4, b, byteArrayOutputStream);
+        writeAdjustedHalfOfAsn1ToP1363(bArr, i2, b2, byteArrayOutputStream);
+        return byteArrayOutputStream.toByteArray();
+    }
+
+    private void writeAdjustedHalfOfAsn1ToP1363(byte[] bArr, int i, int i2, ByteArrayOutputStream byteArrayOutputStream) {
+        if (i2 > 32) {
+            byteArrayOutputStream.write(bArr, i + (i2 - 32), 32);
+        } else if (i2 < 32) {
+            int i3 = 32 - i2;
+            byteArrayOutputStream.write(new byte[i3], 0, i3);
+            byteArrayOutputStream.write(bArr, i, i2);
+        } else {
+            byteArrayOutputStream.write(bArr, i, i2);
         }
-        if (sLength > 32) {
-            sOffset++;
-            sLength = 32;
-        }
-        ByteArrayOutputStream signatureStream = new ByteArrayOutputStream();
-        signatureStream.write(asn1SignedBuffer, rOffset, rLength);
-        signatureStream.write(asn1SignedBuffer, sOffset, sLength);
-        return signatureStream.toByteArray();
+    }
+
+    @NonNull
+    @Contract(pure = true)
+    private static String getKeyAlias(String str) {
+        return KEY_ALIAS_PREFIX + str;
+    }
+
+    private static String getBase64StringFromBytes(byte[] bArr) {
+        return Base64.encodeToString(bArr, 0, bArr.length, 11);
+    }
+
+    private static byte[] getBytesFromBase64String(String str) throws IllegalArgumentException {
+        return Base64.decode(str, 11);
     }
 }

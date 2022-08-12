@@ -2,27 +2,28 @@ package com.microsoft.xal.crypto;
 
 import android.util.Base64;
 
+import androidx.annotation.NonNull;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 import java.security.interfaces.ECPublicKey;
 
 /**
- * 02.10.2020
+ * 13.08.2022
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-
 public class EccPubKey {
     private final ECPublicKey publicKey;
 
-    EccPubKey(ECPublicKey publicKey2) {
-        publicKey = publicKey2;
+    public EccPubKey(ECPublicKey eCPublicKey) {
+        this.publicKey = eCPublicKey;
     }
 
     public BigInteger getX() {
-        return publicKey.getW().getAffineX();
+        return this.publicKey.getW().getAffineX();
     }
 
     public String getBase64UrlX() {
@@ -30,23 +31,23 @@ public class EccPubKey {
     }
 
     public BigInteger getY() {
-        return publicKey.getW().getAffineY();
+        return this.publicKey.getW().getAffineY();
     }
 
     public String getBase64UrlY() {
         return getBase64Coordinate(getY());
     }
 
-    private String getBase64Coordinate(@NotNull BigInteger coordinate) {
-        byte[] coordinateByteArray = coordinate.toByteArray();
-        int offset = 0;
-        if (coordinateByteArray.length > 32) {
-            offset = coordinateByteArray.length - 32;
-        } else if (coordinateByteArray.length < 32) {
-            byte[] resized = new byte[32];
-            System.arraycopy(coordinateByteArray, 0, resized, resized.length - coordinateByteArray.length, coordinateByteArray.length);
-            coordinateByteArray = resized;
+    private String getBase64Coordinate(@NonNull BigInteger bigInteger) {
+        byte[] byteArray = bigInteger.toByteArray();
+        int i = 0;
+        if (byteArray.length > 32) {
+            i = byteArray.length - 32;
+        } else if (byteArray.length < 32) {
+            byte[] bArr = new byte[32];
+            System.arraycopy(byteArray, 0, bArr, 32 - byteArray.length, byteArray.length);
+            byteArray = bArr;
         }
-        return Base64.encodeToString(coordinateByteArray, offset, 32, 11);
+        return Base64.encodeToString(byteArray, i, 32, 11);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2021 Тимашков Иван
+ * Copyright (C) 2018-2022 Тимашков Иван
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@ package com.microsoft.xal.browser
 import org.jetbrains.annotations.Contract
 
 /**
+ * 13.08.2022
+ *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
@@ -28,17 +30,17 @@ enum class ShowUrlType {
     companion object {
         @JvmStatic
         @Contract(pure = true)
-        fun fromInt(`val`: Int): ShowUrlType? {
-            if (`val` == 0) {
+        fun fromInt(value: Int): ShowUrlType? {
+            if (value == 0) {
                 return Normal
             }
-            if (`val` == 1) {
+            if (value == 1) {
                 return CookieRemoval
             }
-            if (`val` == 2) {
+            if (value == 2) {
                 return CookieRemovalSkipIfSharedCredentials
             }
-            return if (`val` != 3) {
+            return if (value != 3) {
                 null
             } else NonAuthFlow
         }

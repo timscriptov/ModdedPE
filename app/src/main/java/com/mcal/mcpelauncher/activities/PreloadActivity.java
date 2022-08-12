@@ -105,6 +105,11 @@ public class PreloadActivity extends BaseActivity {
                     }
 
                     @Override
+                    public void onLoadMediaDecoders() {
+                        writeNewText(getString(R.string.preloading_loading_lib_media_decoders));
+                    }
+
+                    @Override
                     public void onLoadXHookLib() {
                         writeNewText(getString(R.string.preloading_loading_lib_xhook));
                     }

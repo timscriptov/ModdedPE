@@ -7,6 +7,7 @@
 -dontnote
 
 -dontobfuscate
+-dontshrink # TODO: Need Update Rules for 1.19
 
 #-obfuscationdictionary proguard-dictionary.txt
 #-packageobfuscationdictionary proguard-dictionary.txt
@@ -16,7 +17,7 @@
 
 -keep class com.microsoft.xal.androidjava.DeviceInfo { *; }
 -keep class com.microsoft.xal.androidjava.PresenceManager { *; }
--keep class com.microsoft.xal.browser.BrowserLaunchActivity { *; }
+-keep class com.microsoft.xal.v.BrowserLaunchActivity { *; }
 -keep class com.microsoft.xal.crypto.EccPubKey { *; }
 -keep class com.microsoft.xal.crypto.Ecdsa { *; }
 -keep class com.microsoft.xal.crypto.SecureRandom { *; }

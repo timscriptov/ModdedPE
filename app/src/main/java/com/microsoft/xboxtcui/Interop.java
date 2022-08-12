@@ -14,12 +14,11 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 /**
- * 02.10.2020
+ * 13.08.2022
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-
 public class Interop {
     public static final String TAG = "Interop";
     public static final XboxTcuiWindowDialog.DetachedCallback detachedCallback = () -> Interop.tcui_completed_callback(0);

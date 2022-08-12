@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2021 Тимашков Иван
+ * Copyright (C) 2018-2022 Тимашков Иван
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,27 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.microsoft.xal.browser
+package com.microsoft.xal.browser;
 
-import android.annotation.SuppressLint
-import android.content.Intent
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 
 /**
- * 05.10.2020
+ * 13.08.2022
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-class IntentHandler : AppCompatActivity() {
-    @SuppressLint("WrongConstant")
-    public override fun onCreate(bundle: Bundle?) {
-        super.onCreate(bundle)
-        val intent = Intent(this, BrowserLaunchActivity::class.java)
-        intent.data = getIntent().data
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        startActivity(intent)
-        finish()
+public class IntentHandler extends Activity {
+    @Override
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        Intent intent = new Intent(this, BrowserLaunchActivity.class);
+        intent.setData(getIntent().getData());
+        intent.addFlags(603979776);
+        startActivity(intent);
+        finish();
     }
 }

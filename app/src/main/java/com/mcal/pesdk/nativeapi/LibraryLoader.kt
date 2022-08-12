@@ -54,6 +54,12 @@ object LibraryLoader {
 
     @JvmStatic
     @SuppressLint("UnsafeDynamicallyLoadedCode")
+    fun loadMediaDecoders(mcLibsPath: String?) {
+        System.load(File(mcLibsPath, "libMediaDecoders_Android.so").absolutePath)
+    }
+
+    @JvmStatic
+    @SuppressLint("UnsafeDynamicallyLoadedCode")
     fun loadMinecraftPE(mcLibsPath: String?) {
         System.load(File(mcLibsPath, "libminecraftpe.so").absolutePath)
     }

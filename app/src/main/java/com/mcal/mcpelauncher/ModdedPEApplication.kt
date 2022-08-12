@@ -17,14 +17,19 @@
 package com.mcal.mcpelauncher
 
 import android.annotation.SuppressLint
+import android.app.ActivityManager
 import android.app.Application
 import android.content.Context
 import android.content.res.AssetManager
+import android.os.Process
 import androidx.appcompat.app.AppCompatDelegate
 import com.balsikandar.crashreporter.CrashReporter
 import com.balsikandar.crashreporter.utils.CrashUtil
+import com.google.firebase.FirebaseApp
+import com.mcal.mcpelauncher.BuildConfig.APPLICATION_ID
 import com.mcal.mcpelauncher.data.Preferences.isNightMode
 import com.mcal.pesdk.PESdk
+
 
 /**
  * @author Тимашков Иван
@@ -41,6 +46,24 @@ class ModdedPEApplication : Application() {
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
+        if (!isMainProcess(this)) {
+            FirebaseApp.initializeApp(this)
+            return
+        }
+    }
+
+    private fun isMainProcess(context: Context?): Boolean {
+        if (null == context) {
+            return true
+        }
+        val manager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        val pid = Process.myPid()
+        for (processInfo in manager.runningAppProcesses) {
+            if (APPLICATION_ID == processInfo.processName && pid == processInfo.pid) {
+                return true
+            }
+        }
+        return false
     }
 
     override fun getAssets(): AssetManager {

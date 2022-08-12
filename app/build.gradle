@@ -104,4 +104,8 @@ dependencies {
 
     // androidx.fragment
     implementation "androidx.fragment:fragment-ktx:1.5.2"
+
+    implementation 'com.google.firebase:firebase-messaging:23.0.7'
+    implementation 'com.google.firebase:firebase-iid:21.1.0'
+    runtimeOnly 'com.google.gms:google-services:4.3.13'
 }
