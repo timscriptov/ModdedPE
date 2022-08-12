@@ -26,8 +26,8 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
-    <!-- uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" / -->
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
@@ -55,34 +55,35 @@
         android:name="com.mcal.mcpelauncher.ModdedPEApplication"
         android:allowBackup="false"
         android:debuggable="false"
+        android:exported="true"
         android:fullBackupContent="false"
         android:hasCode="true"
         android:hasFragileUserData="true"
-        android:exported="true"
         android:icon="@mipmap/ic_launcher"
         android:isGame="true"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:networkSecurityConfig="@xml/network_security_config"
+        android:preserveLegacyExternalStorage="true"
         android:requestLegacyExternalStorage="true"
-        android:preservedLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:testOnly="false"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="HardcodedDebugMode"
-        tools:targetApi="q">
+        tools:targetApi="r">
 
         <activity
-            android:excludeFromRecents="false"
-            android:alwaysRetainTaskState="true"
             android:name="com.mcal.mcpelauncher.activities.MainActivity"
+            android:alwaysRetainTaskState="true"
+            android:excludeFromRecents="false"
             android:label="@string/main_title"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme" />
 
         <activity
             android:name="com.mcal.mcpelauncher.activities.SplashesActivity"
+            android:exported="true"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -96,7 +97,7 @@
             android:alwaysRetainTaskState="true"
             android:configChanges="fontScale|keyboard|keyboardHidden|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
             android:excludeFromRecents="false"
-            android:label="@string/app_name"
+            android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme">
@@ -160,6 +161,7 @@
 
         <activity
             android:name="com.mcal.mcpelauncher.ui.ImportNModActivity"
+            android:exported="true"
             android:icon="@drawable/mcd_add_pack"
             android:label="@string/import_nmod_title"
             android:screenOrientation="sensorLandscape"
@@ -225,6 +227,7 @@
             android:configChanges="fontScale|keyboard|keyboardHidden|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
             android:debuggable="false"
             android:excludeFromRecents="false"
+            android:exported="true"
             android:icon="@drawable/mcd_add_pack"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape"
@@ -279,6 +282,7 @@
             android:configChanges="fontScale|keyboard|keyboardHidden|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
             android:debuggable="false"
             android:excludeFromRecents="false"
+            android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/SplashScreen">
@@ -335,13 +339,13 @@
             android:name="com.appsflyer.SingleInstallBroadcastReceiver"
             android:exported="true">
             <intent-filter>
-                <action
-                    android:name="com.android.vending.INSTALL_REFERRER" />
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
 
         <receiver
-            android:name="com.amazon.device.iap.ResponseReceiver">
+            android:name="com.amazon.device.iap.ResponseReceiver"
+            android:exported="true">
             <intent-filter>
                 <action
                     android:name="com.amazon.inapp.purchasing.NOTIFY"
@@ -365,7 +369,9 @@
             android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-                <data android:scheme="@string/xal_token" android:host="auth"/>
+                <data
+                    android:host="auth"
+                    android:scheme="@string/xal_token" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />

@@ -19,15 +19,12 @@ package com.mcal.mcpelauncher
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import android.content.SharedPreferences
 import android.content.res.AssetManager
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.preference.PreferenceManager
 import com.balsikandar.crashreporter.CrashReporter
 import com.balsikandar.crashreporter.utils.CrashUtil
 import com.mcal.mcpelauncher.data.Preferences.isNightMode
 import com.mcal.pesdk.PESdk
-import org.jetbrains.annotations.Nullable
 
 /**
  * @author Тимашков Иван
@@ -53,8 +50,6 @@ class ModdedPEApplication : Application() {
     companion object {
         @SuppressLint("StaticFieldLeak")
         private var context: Context? = null
-        private var app: Application? = null
-        private var preferences: SharedPreferences? = null
 
         @JvmStatic
         lateinit var mPESdk: PESdk
@@ -65,22 +60,6 @@ class ModdedPEApplication : Application() {
                 context = ModdedPEApplication()
             }
             return context
-        }
-
-        fun getApp(): Application? {
-            if (app == null) {
-                app = ModdedPEApplication()
-            }
-            return app
-        }
-
-        @JvmStatic
-        @Nullable
-        fun getPreferences(): SharedPreferences {
-            if (preferences == null) {
-                preferences = PreferenceManager.getDefaultSharedPreferences(this.getContext())
-            }
-            return preferences!!
         }
     }
 }
