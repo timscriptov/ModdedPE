@@ -33,15 +33,17 @@ public class HardwareInformation {
     }
 
     @NotNull
-    static String getDeviceModelName() {
+    public static String getDeviceModelName() {
         return Build.MANUFACTURER.toUpperCase() + " " + Build.MODEL;
     }
 
-    @NotNull
-    @Contract(pure = true)
-    public static String getAndroidVersion() {
-        return "Android " + VERSION.RELEASE;
+    public String getAndroidVersion() {
+        if (((MainActivity) this.context).isChromebook()) {
+            return "ChromeOS " + Build.VERSION.RELEASE;
+        }
+        return "Android " + Build.VERSION.RELEASE;
     }
+
 
     public static @NotNull String getLocale() {
         return Locale.getDefault().toString();
