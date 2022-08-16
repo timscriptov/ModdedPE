@@ -222,55 +222,6 @@
                 android:resource="@xml/filepaths" />
         </provider>
 
-        <activity
-            android:name="com.mcal.mcpelauncher.addon.AddonInstallerActivity"
-            android:alwaysRetainTaskState="true"
-            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
-            android:debuggable="false"
-            android:excludeFromRecents="false"
-            android:exported="true"
-            android:icon="@drawable/mcd_add_pack"
-            android:launchMode="singleTask"
-            android:screenOrientation="sensorLandscape"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="launcher-core" />
-            <!-- intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter -->
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="*/*" />
-                <data android:host="*" />
-                <data android:scheme="file" />
-                <data android:scheme="content" />
-                <data android:pathPattern=".*\.mcworld" />
-                <data android:pathPattern=".*\..*\.mcworld" />
-                <data android:pathPattern=".*\..*\..*\.mcworld" />
-                <data android:pathPattern=".*\..*\..*\..*\.mcworld" />
-                <data android:pathPattern=".*\..*\..*\..*\..*\.mcworld" />
-                <data android:pathPattern=".*\.mcpack" />
-                <data android:pathPattern=".*\..*\.mcpack" />
-                <data android:pathPattern=".*\..*\..*\.mcpack" />
-                <data android:pathPattern=".*\..*\..*\..*\.mcpack" />
-                <data android:pathPattern=".*\..*\..*\..*\..*\.mcpack" />
-                <data android:pathPattern=".*\.mcaddon" />
-                <data android:pathPattern=".*\..*\.mcaddon" />
-                <data android:pathPattern=".*\..*\..*\.mcaddon" />
-                <data android:pathPattern=".*\..*\..*\..*\.mcaddon" />
-                <data android:pathPattern=".*\..*\..*\..*\..*\.mcaddon" />
-                <data android:pathPattern=".*\.mctemplate" />
-                <data android:pathPattern=".*\..*\.mctemplate" />
-                <data android:pathPattern=".*\..*\..*\.mctemplate" />
-                <data android:pathPattern=".*\..*\..*\..*\.mctemplate" />
-                <data android:pathPattern=".*\..*\..*\..*\..*\.mctemplate" />
-            </intent-filter>
-        </activity>
-
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-1411495427741055~9893928391" />

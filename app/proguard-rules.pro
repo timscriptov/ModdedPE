@@ -7,13 +7,16 @@
 -dontnote
 
 -dontobfuscate
+-dontoptimize
 -dontshrink # TODO: Need Update Rules for 1.19
 
 #-obfuscationdictionary proguard-dictionary.txt
 #-packageobfuscationdictionary proguard-dictionary.txt
 #-classobfuscationdictionary proguard-dictionary.txt
 
--keep class org.slf4j.LoggerFactory
+-keep class org.apache.commons.logging.impl.Log4JLogger { *; }
+-keep class com.appboy.ui.contentcards.view.ContentCardViewHolder { *; }
+-keep class org.slf4j.LoggerFactory { *; }
 
 -keep class com.microsoft.xal.androidjava.DeviceInfo { *; }
 -keep class com.microsoft.xal.androidjava.PresenceManager { *; }

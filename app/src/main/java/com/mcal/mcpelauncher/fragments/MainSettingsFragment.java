@@ -170,10 +170,10 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
             mDataPathPreference.setSummary(Preferences.getDataSavedPath());
         }
 
-        if (Preferences.getMinecraftPEPackageName().equals("com.mojang.minecraftpe")) {
+        if (Preferences.getMinecraftPackageName().equals("com.mojang.minecraftpe")) {
             mPkgPreference.setSummary(R.string.preferences_summary_game_pkg_name);
         } else {
-            mPkgPreference.setSummary(Preferences.getMinecraftPEPackageName());
+            mPkgPreference.setSummary(Preferences.getMinecraftPackageName());
         }
     }
 

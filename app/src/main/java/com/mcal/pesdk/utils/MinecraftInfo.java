@@ -44,7 +44,7 @@ public class MinecraftInfo {
     public MinecraftInfo(@NotNull Context context) {
         mContext = context;
         try {
-            mMCContext = context.createPackageContext(Preferences.getMinecraftPEPackageName(), Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);
+            mMCContext = context.createPackageContext(Preferences.getMinecraftPackageName(), Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -69,7 +69,7 @@ public class MinecraftInfo {
 
     private static @Nullable ApplicationInfo getMinecraftApplicationInfo() {
         try {
-            return mMCContext.getPackageManager().getPackageInfo(Preferences.getMinecraftPEPackageName(), 0).applicationInfo;
+            return mMCContext.getPackageManager().getPackageInfo(Preferences.getMinecraftPackageName(), 0).applicationInfo;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
             return null;
@@ -77,7 +77,7 @@ public class MinecraftInfo {
     }
 
     public boolean isSupportedMinecraftVersion(String[] versions) {
-        String mcpeVersionName = getMinecraftVersionName();
+        final String mcpeVersionName = getMinecraftVersionName();
         if (mcpeVersionName == null)
             return false;
         for (String nameItem : versions) {

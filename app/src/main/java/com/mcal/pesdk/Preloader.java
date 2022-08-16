@@ -75,7 +75,8 @@ public class Preloader {
         boolean safeMode = Preferences.isSafeMode();
 
         try {
-            SplitParser.parse(context);
+            SplitParser.parseMinecraft(context);
+            SplitParser.parseLauncher(context);
 
             mPreloadListener.onLoadNativeLibs();
 

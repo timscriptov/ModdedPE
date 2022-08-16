@@ -25,7 +25,7 @@ import com.mcal.mcpelauncher.utils.ScopedStorage
  * @author https://github.com/TimScriptov
  */
 object Preferences {
-    private val preferences = PreferenceManager.getDefaultSharedPreferences(ModdedPEApplication.getContext()!!) // TODO remove me
+    private val preferences = PreferenceManager.getDefaultSharedPreferences(ModdedPEApplication.getContext())
 
     @JvmStatic
     var rated: Boolean
@@ -67,7 +67,7 @@ object Preferences {
         }
 
     @JvmStatic
-    val minecraftPEPackageName: String?
+    val minecraftPackageName: String?
         get() = preferences.getString("pkg_name", "com.mojang.minecraftpe")
 
     @JvmStatic

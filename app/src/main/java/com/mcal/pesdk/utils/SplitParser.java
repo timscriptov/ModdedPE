@@ -39,16 +39,16 @@ import java.util.zip.ZipFile;
  * @author Vologhat
  */
 public class SplitParser {
-    private static final String[] minecraftLibs = new String[]{"libminecraftpe.so", "libc++_shared.so", "libfmod.so"};
+    private static final String[] minecraftLibs = new String[]{"libminecraftpe.so", "libc++_shared.so", "libfmod.so", "libMediaDecoders_Android.so"};
+    private static final String[] moddedpeLibs = new String[]{"libnmod-core.so", "libxhook.so", "libsubstrate.so"};
+
     @SuppressLint("StaticFieldLeak")
-    public static Context mContext;
+    private static Context mContext;
 
     /**
      * Извлечение C++ библиотек из Minecraft
-     *
-     * @param context
      */
-    public static void parse(Context context) {
+    public static void parseMinecraft(Context context) {
         mContext = context;
 
         File lib = new File(mContext.getCacheDir().getPath() + "/lib");
@@ -56,28 +56,26 @@ public class SplitParser {
             lib.mkdir();
         }
 
-        File arm64 = new File(lib + "/" + ABIInfo.getABI());
-        if (!arm64.exists()) {
-            arm64.mkdir();
+        File abiPath = new File(lib + "/" + ABIInfo.getABI());
+        if (!abiPath.exists()) {
+            abiPath.mkdir();
         }
 
         try {
-            if (isAppBundle()) {
-                if (getMinecraftApplicationInfo() != null) {
-                    String split_path = Arrays.asList(getMinecraftApplicationInfo().splitPublicSourceDirs).get(0);
-                    byte[] buffer = new byte[2048];
-                    for (String so : minecraftLibs) {
-                        InputStream is = new ZipFile(split_path).getInputStream(new ZipEntry("lib/" + ABIInfo.getABI() + "/" + so));
-                        FileOutputStream fos = new FileOutputStream(arm64 + "/" + so);
-                        do {
-                            int numread = is.read(buffer);
-                            if (numread <= 0) {
-                                break;
-                            }
-                            fos.write(buffer, 0, numread);
-                        } while (true);
-                        fos.close();
-                    }
+            if (isAppBundle() && MinecraftInfo.getMinecraftPackageContext().getApplicationInfo() != null) {
+                String split_path = Arrays.asList(MinecraftInfo.getMinecraftPackageContext().getApplicationInfo().splitPublicSourceDirs).get(0);
+                byte[] buffer = new byte[2048];
+                for (String so : minecraftLibs) {
+                    InputStream is = new ZipFile(split_path).getInputStream(new ZipEntry("lib/" + ABIInfo.getABI() + "/" + so));
+                    FileOutputStream fos = new FileOutputStream(abiPath + "/" + so);
+                    do {
+                        int numread = is.read(buffer);
+                        if (numread <= 0) {
+                            break;
+                        }
+                        fos.write(buffer, 0, numread);
+                    } while (true);
+                    fos.close();
                 }
             }
         } catch (Exception e) {
@@ -86,30 +84,45 @@ public class SplitParser {
     }
 
     /**
+     * Извлечение C++ библиотек из Minecraft
+     */
+    public static void parseLauncher(Context context) {
+        mContext = context;
+
+        File lib = new File(mContext.getCacheDir().getPath() + "/lib");
+        if (!lib.exists()) {
+            lib.mkdir();
+        }
+
+        File abiPath = new File(lib + "/" + ABIInfo.getABI());
+        if (!abiPath.exists()) {
+            abiPath.mkdir();
+        }
+
+        try {
+            byte[] buffer = new byte[2048];
+            for (String so : moddedpeLibs) {
+                InputStream is = new ZipFile(context.getApplicationInfo().publicSourceDir).getInputStream(new ZipEntry("lib/" + ABIInfo.getABI() + "/" + so));
+                FileOutputStream fos = new FileOutputStream(abiPath + "/" + so);
+                do {
+                    int numread = is.read(buffer);
+                    if (numread <= 0) {
+                        break;
+                    }
+                    fos.write(buffer, 0, numread);
+                } while (true);
+                fos.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Проверка формата приложения на App Bundle
-     *
-     * @return
      */
     @Contract(pure = true)
     public static boolean isAppBundle() {
-        return getMinecraftContext().getApplicationInfo().splitPublicSourceDirs != null && getMinecraftContext().getApplicationInfo().splitPublicSourceDirs.length > 0;
-    }
-
-    private static @Nullable ApplicationInfo getMinecraftApplicationInfo() {
-        try {
-            return mContext.getPackageManager().getPackageInfo(Preferences.getMinecraftPEPackageName(), 0).applicationInfo;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public static @Nullable Context getMinecraftContext() {
-        try {
-            return mContext.createPackageContext(Preferences.getMinecraftPEPackageName(), Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return MinecraftInfo.getMinecraftPackageContext().getApplicationInfo().splitPublicSourceDirs != null && MinecraftInfo.getMinecraftPackageContext().getApplicationInfo().splitPublicSourceDirs.length > 0;
     }
 }
