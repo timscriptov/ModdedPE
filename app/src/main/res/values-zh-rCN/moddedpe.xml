@@ -60,7 +60,6 @@
     <string name="about_view_github">Github页</string>
     <string name="about_view_nmod_api">查看NModAPI</string>
     <string name="about_translators_message">参加过本语言翻译的人员：\nТимашков Иван\nListerily\nCreepsoGaming\nDarkShuper\nriku1227\nLeonardo Queiroz\nBayram Akdemir\nThamTvMaster\nНағымет Адаев\nMr Ikso</string>
-    <string name="about_donate">Donate</string>
 
     <!--Preferences-->
     <string name="preferences_title">设置</string>
@@ -71,10 +70,6 @@
     <string name="preferences_summary_data_saved_path">改变游戏存储数据的文件夹~</string>
     <string name="preferences_title_game_pkg_name">Minecraft包名</string>
     <string name="preferences_summary_game_pkg_name">在这里切换启动包</string>
-    <string name="preferences_update_message_data_path">成功设置数据目录：%1$s</string>
-    <string name="preferences_update_message_reset_data_path">成功设置数据目录到默认值√</string>
-    <string name="preferences_update_message_pkg_name">成功设置包名：%1$s</string>
-    <string name="preferences_update_message_reset_pkg_name">成功设置包名到默认值√</string>
     <string name="preferences_title_app">应用程序</string>
     <string name="preferences_title_about">关于</string>
     <string name="preferences_summary_about">一些介绍信息</string>
@@ -156,6 +151,5 @@
     <string name="scoped_storage_title">Android 11 R changes</string>
     <string name="scoped_storage_msg">Android 11 introduce a new file-management way called \"Scoped Storage\". You need to grant a special permission!</string>
 
-    <string name="rate">Rate</string>
     <string name="not_supported_on_your_device">Not supported on your device!</string>
 </resources>

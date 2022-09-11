@@ -60,7 +60,6 @@
     <string name="about_translators_message">この言語の翻訳参加者\nТимашков Иван\nListerily\nCreepsoGaming\nDarkShuper\nriku1227\nLeonardo Queiroz\nBayram Akdemir\nThamTvMaster\nНағымет Адаев\nMr Ikso</string>
     <string name="about_view_github">Githubページ</string>
     <string name="about_view_nmod_api">NModAPIを見る</string>
-    <string name="about_donate">Donate</string>
 
     <!--Preferences-->
     <string name="preferences_title">設定</string>
@@ -71,10 +70,6 @@
     <string name="preferences_summary_data_saved_path">ゲームデータを保存するファイルパス</string>
     <string name="preferences_title_game_pkg_name">Minecraft PEのパッケージ名</string>
     <string name="preferences_summary_game_pkg_name">ゲームのパッケージ名を変更します。</string>
-    <string name="preferences_update_message_data_path">データパスが正常に設定されました:%1$s</string>
-    <string name="preferences_update_message_reset_data_path">ゲームパスをリセットしました。</string>
-    <string name="preferences_update_message_pkg_name">パッケージ名を正常に設定しました:%1$s</string>
-    <string name="preferences_update_message_reset_pkg_name">パッケージ名をリセットしました。</string>
     <string name="preferences_title_app">アプリケーション</string>
     <string name="preferences_title_about">情報</string>
     <string name="preferences_summary_about">ModdedPEについて</string>
@@ -164,6 +159,5 @@
 
     <!--Enable Warnings-->
 
-    <string name="rate">Rate</string>
     <string name="not_supported_on_your_device">Not supported on your device!</string>
 </resources>

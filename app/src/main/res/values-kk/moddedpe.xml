@@ -60,7 +60,6 @@
     <string name="about_translators_message">Приложниені аударуға келісімін берген адамдар:\nТимашков Иван\nListerily\nCreepsoGaming\nDarkShuper\nriku1227\nLeonardo Queiroz\nBayram Akdemir\nThamTvMaster\nНағымет Адаев\nMr Ikso</string>
     <string name="about_view_github">Github Бет</string>
     <string name="about_view_nmod_api">NModAPI Көру</string>
-    <string name="about_donate">Donate</string>
 
     <!--Preferences-->
     <string name="preferences_title">Баптаулар</string>
@@ -71,10 +70,6 @@
     <string name="preferences_summary_data_saved_path">Файл жолдары, ойын деректерді қайда сақтайды.</string>
     <string name="preferences_title_game_pkg_name">Minecraft PE пакет аты</string>
     <string name="preferences_summary_game_pkg_name">Ойын пакет атын ауыстыру</string>
-    <string name="preferences_update_message_data_path">Жолы сәтті орнатылды:%1$s</string>
-    <string name="preferences_update_message_reset_data_path">Жолы сәтті жойылды.</string>
-    <string name="preferences_update_message_pkg_name">Аты сәтті аяқталды pkg :%1$s</string>
-    <string name="preferences_update_message_reset_pkg_name">Аты сәтті жойылды pkg.</string>
     <string name="preferences_title_app">Приложение</string>
     <string name="preferences_title_about">Мәлімет</string>
     <string name="preferences_summary_about">ModdedPE Туралы</string>
@@ -157,7 +152,6 @@
     <string name="scoped_storage_title">Android 11 R changes</string>
     <string name="scoped_storage_msg">Android 11 introduce a new file-management way called \"Scoped Storage\". You need to grant a special permission!</string>
 
-    <string name="rate">Rate</string>
     <string name="not_supported_on_your_device">Not supported on your device!</string>
 </resources>
 

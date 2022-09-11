@@ -60,7 +60,6 @@
     <string name="about_translators_message">Люди, які брали участь в перекладі програми:\nТимашков Иван\nListerily\nCreepsoGaming\nDarkShuper\nriku1227\nLeonardo Queiroz\nBayram Akdemir\nThamTvMaster\nНағымет Адаев\nMr Ikso</string>
     <string name="about_view_github">Github сторінка</string>
     <string name="about_view_nmod_api">Переглянути NModAPI</string>
-    <string name="about_donate">Donate</string>
 
     <!--Preferences-->
     <string name="preferences_title">Налаштування</string>
@@ -71,10 +70,6 @@
     <string name="preferences_summary_data_saved_path">Файловий шлях, де гра зберігає дані.</string>
     <string name="preferences_title_game_pkg_name">Minecraft PE ім\'я пакета</string>
     <string name="preferences_summary_game_pkg_name">Змінити ім\'я пакета гри</string>
-    <string name="preferences_update_message_data_path">Шлях успішно встановлений:%1$s</string>
-    <string name="preferences_update_message_reset_data_path">Шлях був успішно скинуто.</string>
-    <string name="preferences_update_message_pkg_name"> Ім\'я пакета успішно змінено:%1$s</string>
-    <string name="preferences_update_message_reset_pkg_name">Ім\'я пакета успішно було скинуто.</string>
     <string name="preferences_title_app">Додаток</string>
     <string name="preferences_title_about">Інформація</string>
     <string name="preferences_summary_about">Про ModdedPE</string>
@@ -158,6 +153,5 @@
     <string name="scoped_storage_title">Изменения в Android 11 R</string>
     <string name="scoped_storage_msg">В Android 11 появился новый способ управления файлами под названием \"Scoped Storage\". Вам необходимо предоставить специальное разрешение!</string>
 
-    <string name="rate">Оценить</string>
     <string name="not_supported_on_your_device">Not supported on your device!</string>
 </resources>

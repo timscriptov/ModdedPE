@@ -60,7 +60,6 @@
     <string name="about_translators_message">Que participaram deste traduções de idiomas:\nТимашков Иван\nListerily\nCreepsoGaming\nDarkShuper\nriku1227\nLeonardo Queiroz\nBayram Akdemir\nThamTvMaster\nНағымет Адаев\nMr Ikso</string>
     <string name="about_view_github">Página Github</string>
     <string name="about_view_nmod_api">Ver NModAPI</string>
-    <string name="about_donate">Donate</string>
 
     <!--Preferences-->
     <string name="preferences_title">Configurações</string>
@@ -71,10 +70,6 @@
     <string name="preferences_summary_data_saved_path">Caminho do arquivo onde o jogo economiza dados.</string>
     <string name="preferences_title_game_pkg_name">Nome do pacote Minecraft PE</string>
     <string name="preferences_summary_game_pkg_name">Mude o nome do pacote do jogo aqui.</string>
-    <string name="preferences_update_message_data_path">Caminho de dados definido com sucesso:%1$s</string>
-    <string name="preferences_update_message_reset_data_path">Caminho de dados redefinido com sucesso</string>
-    <string name="preferences_update_message_pkg_name">Nome do pacote definido com sucesso:%1$s</string>
-    <string name="preferences_update_message_reset_pkg_name">Sucesso Ao resetar o nome pkg.</string>
     <string name="preferences_title_app">Aplicação</string>
     <string name="preferences_title_about">Sobre</string>
     <string name="preferences_summary_about">Sobre ModdedPE</string>
@@ -157,6 +152,5 @@
     <string name="scoped_storage_title">Android 11 R changes</string>
     <string name="scoped_storage_msg">Android 11 introduce a new file-management way called \"Scoped Storage\". You need to grant a special permission!</string>
 
-    <string name="rate">Rate</string>
     <string name="not_supported_on_your_device">Not supported on your device!</string>
 </resources>

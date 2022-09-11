@@ -59,7 +59,6 @@
     <string name="about_translators_message">People who have participated in this language translator:\nТимашков Иван\nListerily\nCreepsoGaming\nDarkShuper\nriku1227\nLeonardo Queiroz\nBayram Akdemir\nThamTvMaster\nНағымет Адаев\nMr Ikso</string>
     <string name="about_view_github">Github Page</string>
     <string name="about_view_nmod_api">View NModAPI</string>
-    <string name="about_donate">Donate</string>
 
     <!--Preferences-->
     <string name="preferences_title">ตั้งค่า</string>
@@ -70,10 +69,6 @@
     <string name="preferences_summary_data_saved_path">เส้นทางไฟล้ที่ game saves data.</string>
     <string name="preferences_title_game_pkg_name">ชื่อ Minecraft PE Package</string>
     <string name="preferences_summary_game_pkg_name">เปลี่ยนชื่อ game package.</string>
-    <string name="preferences_update_message_data_path">ประสบความสำเร็จในการ set data path:%1$s</string>
-    <string name="preferences_update_message_reset_data_path">ประสบความสำเร็จในการ reset data path.</string>
-    <string name="preferences_update_message_pkg_name">ประสบความสำเร็จในการ set pkg name:%1$s</string>
-    <string name="preferences_update_message_reset_pkg_name">ประสบความสำเร็จในการ reset pkg name.</string>
     <string name="preferences_title_app">แอปพลิเคชัน</string>
     <string name="preferences_title_about">เกี่ยวกับ</string>
     <string name="preferences_summary_about">เกี่ยวกับ ModdedPE</string>
@@ -157,6 +152,5 @@
     <string name="scoped_storage_title">Android 11 R changes</string>
     <string name="scoped_storage_msg">Android 11 introduce a new file-management way called \"Scoped Storage\". You need to grant a special permission!</string>
 
-    <string name="rate">Rate</string>
     <string name="not_supported_on_your_device">Not supported on your device!</string>
 </resources>
