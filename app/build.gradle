@@ -67,28 +67,28 @@ dependencies {
 
     implementation 'commons-io:commons-io:2.8.0'
 
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'androidx.preference:preference-ktx:1.2.0'
     implementation 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
     implementation "androidx.browser:browser:1.4.0"
-    implementation "androidx.core:core-ktx:1.8.0"
+    implementation "androidx.core:core-ktx:1.9.0"
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
     implementation 'com.google.android.material:material:1.6.1'
-    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'com.google.code.gson:gson:2.9.1'
 
     implementation "com.android.billingclient:billing-ktx:5.0.0"
 
     implementation 'org.jetbrains:annotations:23.0.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
     //noinspection DuplicatePlatformClasses
     implementation 'org.apache.httpcomponents:httpclient:4.5.13'
     implementation 'org.apache.httpcomponents:httpmime:4.5.13'
     implementation 'org.simpleframework:simple-xml:2.7.1'
 
     implementation 'com.madgag.spongycastle:pkix:1.54.0.0'
-    implementation 'com.squareup.okhttp3:okhttp:4.8.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
 
     // Architectural Components
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
@@ -105,7 +105,7 @@ dependencies {
     // androidx.fragment
     implementation "androidx.fragment:fragment-ktx:1.5.2"
 
-    implementation 'com.google.firebase:firebase-messaging:23.0.7'
+    implementation 'com.google.firebase:firebase-messaging:23.0.8'
     implementation 'com.google.firebase:firebase-iid:21.1.0'
     runtimeOnly 'com.google.gms:google-services:4.3.13'
 }
