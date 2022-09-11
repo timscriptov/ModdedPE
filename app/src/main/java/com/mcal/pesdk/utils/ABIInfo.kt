@@ -24,7 +24,7 @@ import android.os.Build
  */
 object ABIInfo {
     @JvmStatic
-    val aBI: String
+    val ABI: String
         get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Build.SUPPORTED_ABIS[0]
         } else {

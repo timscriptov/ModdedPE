@@ -90,8 +90,9 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
 
         mDataPathPreference = findPreference("data_saved_path");
         mDataPathPreference.setOnPreferenceClickListener(p1 -> {
-            if (checkPermissions())
+            if (checkPermissions()) {
                 DirPickerActivity.startThisActivity((AppCompatActivity) requireActivity());
+            }
             return true;
         });
 

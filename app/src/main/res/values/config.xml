@@ -24,6 +24,7 @@
         <item>^1[.]17[.]0[.]02</item -->
         <item>^1[.]19[.]10[.]03</item>
         <item>^1[.]19[.]20[.]02</item>
+        <item>^1[.]19[.]30[.]22</item>
     </string-array>
 
     <string name="app_name" translatable="false">ModdedPE</string>

@@ -71,8 +71,7 @@
         android:testOnly="false"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:ignore="HardcodedDebugMode"
-        tools:targetApi="r">
+        tools:ignore="HardcodedDebugMode">
 
         <activity
             android:name="com.mcal.mcpelauncher.activities.MainActivity"
@@ -324,7 +323,6 @@
                 <data
                     android:host="auth"
                     android:scheme="@string/xal_token" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
@@ -341,13 +339,6 @@
             android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape" />
-
-        <!--activity
-            android:name="com.microsoft.xal.browser.WebView"
-            android:configChanges="orientation"
-            android:exported="false"
-            android:launchMode="singleTask"
-            android:screenOrientation="sensorLandscape" / -->
 
         <service
             android:name="com.mojang.minecraftpe.NotificationListenerService"

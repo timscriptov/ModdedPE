@@ -144,8 +144,6 @@ public class ImportNModActivity extends BaseActivity {
                         errorText.setText(R.string.nmod_import_failed_message_no_manifest);
                         break;
                     case ExtractFailedException.TYPE_UNDEFINED_PACKAGE_NAME:
-                        errorText.setText(R.string.nmod_import_failed_message_no_package_name);
-                        break;
                     case ExtractFailedException.TYPE_REDUNDANT_MANIFEST:
                         errorText.setText(R.string.nmod_import_failed_message_no_package_name);
                         break;

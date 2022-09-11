@@ -59,7 +59,8 @@ public class DataPreloader {
     }
 
     private void checkFinish() {
-        if (mIsPreloadingFinished && mIsSleepingFinished)
+        if (mIsPreloadingFinished && mIsSleepingFinished) {
             mListener.onPreloadingFinished();
+        }
     }
 }

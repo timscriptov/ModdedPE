@@ -56,8 +56,9 @@ public class MinecraftInfo {
     }
 
     public static String getMinecraftPackageNativeLibraryDir() {
-        if (SplitParser.isAppBundle()) {
-            return mContext.getCacheDir().getPath() + "/lib/" + Build.CPU_ABI;
+        final Context context = mContext;
+        if (new SplitParser(context).isAppBundle()) {
+            return context.getCacheDir().getPath() + "/lib/" + Build.CPU_ABI;
         } else {
             return mMCContext.getApplicationInfo().nativeLibraryDir;
         }

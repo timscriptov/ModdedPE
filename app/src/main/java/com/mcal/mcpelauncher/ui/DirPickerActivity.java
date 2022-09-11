@@ -54,7 +54,7 @@ public class DirPickerActivity extends BaseActivity {
     private static final int MSG_SELECT = 1;
     private File currentPath;
     private ArrayList<File> filesInCurrentPath;
-    private SelectHandler mSelectHandler = new SelectHandler();
+    private final SelectHandler mSelectHandler = new SelectHandler();
 
     public static void startThisActivity(AppCompatActivity context, @NotNull File path) {
         startThisActivity(context, path.getPath());

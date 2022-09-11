@@ -28,13 +28,6 @@ object Preferences {
     private val preferences = PreferenceManager.getDefaultSharedPreferences(ModdedPEApplication.getContext())
 
     @JvmStatic
-    var rated: Boolean
-        get() = preferences.getBoolean("isRated", false)
-        set(mode) {
-            preferences.edit().putBoolean("isRated", mode).apply()
-        }
-
-    @JvmStatic
     var isNightMode: Boolean
         get() = preferences.getBoolean("night_mode", false)
         set(value) {
