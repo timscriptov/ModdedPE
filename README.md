@@ -1,4 +1,4 @@
-[![License Info](https://img.shields.io/badge/license-GNU_GPLv3-blue.svg?style=flat-square)](https://github.com/TimScriptov/ModdedPE) [![Play Store Info](https://img.shields.io/badge/Play_Store-v1.16.210.05-blue.svg?style=flat-square)](https://play.google.com/store/apps/details?id=com.mcal.mcpelauncher)
+[![License Info](https://img.shields.io/badge/license-GNU_GPLv3-blue.svg?style=flat-square)](https://github.com/TimScriptov/ModdedPE) [![Play Store Info](https://img.shields.io/badge/Play_Store-v1.19.30.22-blue.svg?style=flat-square)](https://play.google.com/store/apps/details?id=com.mcal.mcpelauncher)
 
 The fresh code is in the [ModdedPE-JAVA][6] branch
 # ModdedPE!
