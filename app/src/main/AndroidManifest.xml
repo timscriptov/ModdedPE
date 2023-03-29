@@ -1,28 +1,15 @@
 <?xml version='1.0' encoding='utf-8'?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.mcal.mcpelauncher"
     android:installLocation="preferExternal">
 
-    <!-- Неограниченный доступ к Интернету -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="com.android.vending.BILLING" />
-    <uses-permission android:name="com.android.vending.CHECK_LICENSE" />
-    <!-- Просмотр сетевых подключений -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- Изменение/удаление данных на USB-накопителе -->
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
-    <!-- Управление функцией вибросигнала -->
     <uses-permission android:name="android.permission.VIBRATE" />
-    <!-- Поиск аккаунтов на устройстве -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <!-- Просмотр контактов -->
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <!-- Отключение спящего режима -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <!-- Просмотр подключений Wi-Fi -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
@@ -32,16 +19,6 @@
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
-
-    <uses-feature
-        android:glEsVersion="0x00020000"
-        android:required="true" />
-    <uses-feature
-        android:name="android.hardware.touchscreen"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.microphone"
-        android:required="false" />
 
     <queries>
         <package android:name="com.mojang.minecraftpe" />
@@ -54,10 +31,7 @@
 
     <application
         android:name="com.mcal.mcpelauncher.ModdedPEApplication"
-        android:allowBackup="false"
-        android:debuggable="false"
         android:exported="true"
-        android:fullBackupContent="false"
         android:hasCode="true"
         android:hasFragileUserData="true"
         android:icon="@mipmap/ic_launcher"
@@ -71,7 +45,8 @@
         android:testOnly="false"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:ignore="HardcodedDebugMode">
+        tools:ignore="HardcodedDebugMode"
+        tools:targetApi="r">
 
         <activity
             android:name="com.mcal.mcpelauncher.activities.MainActivity"
@@ -220,133 +195,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
         </provider>
-
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-1411495427741055~9893928391" />
-
-        <!-- Minecraft -->
-
-        <activity
-            android:name="com.mojang.minecraftpe.MainActivity"
-            android:alwaysRetainTaskState="true"
-            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
-            android:debuggable="false"
-            android:excludeFromRecents="false"
-            android:exported="true"
-            android:launchMode="singleTask"
-            android:screenOrientation="sensorLandscape"
-            android:theme="@style/SplashScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="xbox_live_game_invite" />
-                <action android:name="xbox_live_achievement_unlock" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="minecraft" />
-            </intent-filter>
-        </activity>
-
-        <meta-data
-            android:name="appcenter_android_trial_id"
-            android:value="@string/appcenter_android_id" />
-
-        <service
-            android:name="com.mojang.minecraftpe.ImportService"
-            android:exported="true" />
-
-        <meta-data
-            android:name="xperiaplayoptimized_content"
-            android:resource="@string/xperiaplayoptimized_content" />
-        <meta-data
-            android:name="game_display_name"
-            android:resource="@string/app_name" />
-        <meta-data
-            android:name="game_icon"
-            android:resource="@mipmap/ic_launcher_round" />
-        <meta-data
-            android:name="appcenter_android_id"
-            android:value="@string/appcenter_android_id" />
-
-        <receiver
-            android:name="com.appsflyer.SingleInstallBroadcastReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
-
-        <receiver
-            android:name="com.appsflyer.SingleInstallBroadcastReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
-
-        <receiver
-            android:name="com.amazon.device.iap.ResponseReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action
-                    android:name="com.amazon.inapp.purchasing.NOTIFY"
-                    android:permission="com.amazon.inapp.purchasing.Permission.NOTIFY"
-                    android:windowSoftInputMode="adjustResize"
-                    tools:ignore="InvalidPermission" />
-            </intent-filter>
-        </receiver>
-
-        <uses-library
-            android:name="xperiaplaycertified"
-            android:required="false" />
-
-        <!-- Xbox Live SDK -->
-
-        <activity
-            android:name="com.microsoft.xal.browser.IntentHandler"
-            android:configChanges="orientation"
-            android:exported="true"
-            android:launchMode="singleTask"
-            android:screenOrientation="sensorLandscape">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <data
-                    android:host="auth"
-                    android:scheme="@string/xal_token" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name="com.microsoft.xal.browser.WebKitWebViewController"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
-            android:screenOrientation="sensorLandscape" />
-
-        <activity
-            android:name="com.microsoft.xal.browser.BrowserLaunchActivity"
-            android:configChanges="orientation"
-            android:exported="false"
-            android:launchMode="singleTask"
-            android:screenOrientation="sensorLandscape" />
-
-        <service
-            android:name="com.mojang.minecraftpe.NotificationListenerService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
 
     </application>
 

@@ -11,7 +11,7 @@ android {
         minSdk 16
         targetSdk 33
         ndk {
-            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+            abiFilters 'armeabi-v7a'//, 'arm64-v8a', 'x86', 'x86_64'
         }
     }
 
@@ -30,6 +30,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+    namespace 'xhook'
 }
 
 dependencies {

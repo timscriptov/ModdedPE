@@ -17,5 +17,7 @@ dependencyResolutionManagement {
 include ':app'
 include ':substrate'
 include ':adal'
+include ':minecraft'
+include ':xbox'
 include ':xhook'
 include ':crashreporter'
