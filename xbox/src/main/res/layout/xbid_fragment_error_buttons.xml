@@ -15,7 +15,6 @@
         android:layout_height="match_parent"
         android:layout_marginEnd="@dimen/xbid_margin_button"
         android:layout_weight="1.0"
-        android:background="@drawable/moddedpe_main_button_drawable"
         android:focusable="true"
         android:text="@string/xbid_try_again" />
 
@@ -25,7 +24,7 @@
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/xbid_margin_button"
         android:layout_weight="1.0"
-        android:background="@drawable/moddedpe_main_button_drawable"
         android:focusable="true"
         android:text="@android:string/ok" />
+
 </androidx.appcompat.widget.LinearLayoutCompat>

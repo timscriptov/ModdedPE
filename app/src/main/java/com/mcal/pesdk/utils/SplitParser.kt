@@ -48,8 +48,7 @@ class SplitParser(private var context: Context) {
         try {
             val mcAppInfo = MinecraftInfo.getMinecraftPackageContext().applicationInfo
             if (isAppBundle() && mcAppInfo != null) {
-                val splitPath =
-                    mutableListOf(*mcAppInfo.splitPublicSourceDirs)[0]
+                val splitPath = mutableListOf(*mcAppInfo.splitPublicSourceDirs)[0]
                 val buffer = ByteArray(2048)
                 for (so in minecraftLibs) {
                     val input = ZipFile(splitPath).getInputStream(ZipEntry("$abi$so"))
@@ -69,11 +68,7 @@ class SplitParser(private var context: Context) {
         }
     }
 
-    /**
-     * Проверка формата приложения на App Bundle
-     */
     fun isAppBundle(): Boolean {
-        val mcAppInfo = MinecraftInfo.getMinecraftPackageContext().applicationInfo
-        return mcAppInfo.splitPublicSourceDirs != null && mcAppInfo.splitPublicSourceDirs.isNotEmpty()
+        return !MinecraftInfo.getMinecraftPackageContext().applicationInfo.splitPublicSourceDirs.isNullOrEmpty()
     }
 }

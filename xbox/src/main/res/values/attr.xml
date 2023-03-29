@@ -70,7 +70,6 @@
         <enum name="right" value="2" />
     </attr>
     <attr name="isUnderlined" format="boolean" />
-    <attr name="text" format="string" />
     <attr name="maxWidth" format="reference|dimension" />
     <attr name="maxHeight" format="reference|dimension" />
     <attr name="aspectX" format="integer" />
@@ -89,6 +88,7 @@
     <attr name="viewPagerHeaderStyle" format="reference" />
     <attr name="viewPagerBodyStyle" format="reference" />
     <attr name="text_title" format="reference|string" />
+    <attr name="text" format="string" />
     <attr name="text_subtitle" format="reference|string" />
     <attr name="icon_uri" format="reference|string" />
     <attr name="typefaceSource" format="string" />
@@ -102,8 +102,6 @@
     <attr name="disabledTextColor" format="color" />
     <attr name="enabledTextColor" format="color" />
     <attr name="alwaysClickable" format="boolean" />
-    <attr name="selectedState" format="integer" />
-    <attr name="state" format="integer" />
     <attr name="src" format="reference" />
     <attr name="activityBody" format="reference" />
     <attr name="showTitleBar" format="boolean" />
@@ -115,6 +113,8 @@
     <attr name="iconSymbolText" format="string" />
     <attr name="iconSymbolSize" format="dimension" />
     <attr name="iconSymbolColor" format="color" />
+    <attr name="state" format="integer" />
+    <attr name="selectedState" format="integer" />
     <attr name="iconSymbolTypeface" format="integer" />
     <attr name="iconSymbolTypefaceSource" format="string" />
     <attr name="iconSymbolStyle" format="integer" />
