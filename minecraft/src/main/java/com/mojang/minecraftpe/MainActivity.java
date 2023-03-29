@@ -64,8 +64,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.splashscreen.SplashScreen;
 
-import com.appsflyer.AFInAppEventParameterName;
-import com.appsflyer.AppsFlyerLib;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.FirebaseApp;
 import com.microsoft.aad.adal.AuthenticationConstants;
@@ -100,7 +98,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.FutureTask;
 
@@ -1212,6 +1209,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
         }
         return getProp("ro.build.characteristics").contains("tablet");
     }
+
     boolean isChromebook() {
         return getWindow().getContext().getPackageManager().hasSystemFeature("android.hardware.type.pc");
     }
@@ -1618,6 +1616,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
         }
         return z;
     }
+
     void pickImage(long callback) {
         mCallback = callback;
         try {
