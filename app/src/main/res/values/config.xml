@@ -1,20 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_version" translatable="false">Build 27</string>
     <string-array name="target_mcpe_versions">
-        <item>^1[.]7</item>
+        <!-- item>^1[.]7</item>
         <item>^1[.]8</item>
         <item>^1[.]9</item>
         <item>^1[.]10</item>
         <item>^1[.]11</item>
         <item>^1[.]12</item>
         <item>^1[.]13</item>
+        <item>^1[.]14</item>
+        <item>^1[.]15</item>
+        <item>^1[.]16[.]20</item>
+        <item>^1[.]16[.]40</item>
+        <item>^1[.]16[.]100</item>
+        <item>^1[.]16[.]100[.]04</item>
+        <item>^1[.]16[.]101</item>
+        <item>^1[.]16[.]101[.]01</item>
+        <item>^1[.]16[.]200[.]02</item>
+        <item>^1[.]16[.]201[.]01</item>
+        <item>^1[.]16[.]210[.]05</item>
+        <item>^1[.]16[.]220[.]02</item>
+        <item>^1[.]16[.]220[.]02</item>
+        <item>^1[.]17[.]0[.]02</item -->
+        <item>^1[.]19[.]10[.]03</item>
+        <item>^1[.]19[.]20[.]02</item>
+        <item>^1[.]19[.]30[.]22</item>
+        <item>^1[.]19[.]71[.]02</item>
     </string-array>
-    <string name="target_mcpe_version_info" translatable="false">Minecraft 1.7-1.13</string>
+
     <string name="app_name" translatable="false">ModdedPE</string>
-    <string name="app_name_trial" translatable="false">ModdedPE Trial</string>
-    <string name="app_name_demo" translatable="false">ModdedPE Demo</string>
-    <string name="app_name_short" translatable="false">ModdedPE</string>
-    <string name="app_name_short_trial" translatable="false">ModdedPE Trial</string>
-    <string name="app_name_short_demo" translatable="false">ModdedPE Demo</string>
+    <string name="app_game" translatable="false">Minecraft</string>
+    <string name="copyright" translatable="false">© Иван Тимашков</string>
 </resources>

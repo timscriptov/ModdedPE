@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="33"/>
+    <uses-feature android:glEsVersion="0x20000" android:required="true"/>
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="com.android.vending.CHECK_LICENSE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="https"/>
+        </intent>
+    </queries>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+    <uses-permission android:name="com.android.vending.BILLING"/>
+    <application>
+
+        <activity
+            android:name="com.mojang.minecraftpe.MainActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
+            android:excludeFromRecents="false"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/SplashScreen">
+            <meta-data android:name="android.app.lib_name" android:value="minecraftpe"/>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="*/*"/>
+                <data android:host="*"/>
+                <data android:scheme="file"/>
+                <data android:scheme="content"/>
+                <data android:pathPattern=".*\\.mcworld"/>
+                <data android:pathPattern=".*\\..*\\.mcworld"/>
+                <data android:pathPattern=".*\\..*\\..*\\.mcworld"/>
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.mcworld"/>
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.mcworld"/>
+                <data android:pathPattern=".*\\.mcpack"/>
+                <data android:pathPattern=".*\\..*\\.mcpack"/>
+                <data android:pathPattern=".*\\..*\\..*\\.mcpack"/>
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.mcpack"/>
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.mcpack"/>
+                <data android:pathPattern=".*\\.mcaddon"/>
+                <data android:pathPattern=".*\\..*\\.mcaddon"/>
+                <data android:pathPattern=".*\\..*\\..*\\.mcaddon"/>
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.mcaddon"/>
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.mcaddon"/>
+                <data android:pathPattern=".*\\.mctemplate"/>
+                <data android:pathPattern=".*\\..*\\.mctemplate"/>
+                <data android:pathPattern=".*\\..*\\..*\\.mctemplate"/>
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.mctemplate"/>
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.mctemplate"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="minecraft"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="xbox_live_game_invite"/>
+                <action android:name="xbox_live_achievement_unlock"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="appcenter_android_trial_id"
+            android:value="@string/appcenter_android_id" />
+
+        <service
+            android:name="com.mojang.minecraftpe.ImportService"
+            android:exported="true" />
+
+        <meta-data
+            android:name="xperiaplayoptimized_content"
+            android:resource="@string/xperiaplayoptimized_content" />
+        <meta-data
+            android:name="game_display_name"
+            android:resource="@string/app_name" />
+        <meta-data
+            android:name="game_icon"
+            android:resource="@mipmap/ic_launcher_round" />
+        <meta-data
+            android:name="appcenter_android_id"
+            android:value="@string/appcenter_android_id" />
+
+        <receiver
+            android:name="com.appsflyer.SingleInstallBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.appsflyer.SingleInstallBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.amazon.device.iap.ResponseReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action
+                    android:name="com.amazon.inapp.purchasing.NOTIFY"
+                    android:permission="com.amazon.inapp.purchasing.Permission.NOTIFY"
+                    android:windowSoftInputMode="adjustResize"
+                    tools:ignore="InvalidPermission" />
+            </intent-filter>
+        </receiver>
+
+        <uses-library
+            android:name="xperiaplaycertified"
+            android:required="false" />
+
+        <service
+            android:name="com.mojang.minecraftpe.NotificationListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+    </application>
+
+</manifest>

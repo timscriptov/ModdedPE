@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!--Titles-->
-    <string name="menu_title">メニュー</string>
     <string name="manage_nmod_title">NModの管理</string>
     <string name="settings_title">設定</string>
     <string name="about_title">About</string>
@@ -30,7 +29,6 @@
     <string name="nmod_import_failed_message_invalid_package_name">マニフェストで定義しているパッケージ名は無効です。要素である"package_name"は、Java方式のパッケージ名でなければいけません。</string>
     <string name="nmod_import_failed_message_no_package_name">nmod_manifest.jsonでパッケージ名が見つかりませんでした。"package_name"(String)の要素が追加してください。</string>
     <string name="nmod_import_failed_message_inequal_package_name">AndroidManifest.xmlとnmod_manifest.jsonで定義されているパッケージ名は等しくありません。ModdedPEは使用するパッケージ名を決定できませんでした。</string>
-    <string name="nmod_import_failed_message_redundant_manifest">ModdedPEはこのファイル内に２つのnmod_manifest.jsonを見つけたため、どのファイルを読めばいいのかわかりませんでした。１つ削除してください。(/nmod_manifest.json or /assets/nmod_manifest.json)</string>
     <string name="nmod_import_failed_button_full_info">エラーの情報</string>
     <string name="nmod_import_replaced_title">置き換えました</string>
     <string name="nmod_import_replaced_message">ModdedPEは同じパッケージ名でインポートされたNModを見つけました。新しいものを正常にインポートし、置き換えました。</string>
@@ -41,7 +39,6 @@
     <string name="nmod_import_failed_full_info_message">エラータイプ:\n%1$s\nエラーメッセージ:\n%2$s</string>
     <string name="nmod_add_new">新しく追加</string>
     <string name="nmod_add_new_title">新しく追加…</string>
-    <string name="nmod_export">エクスポート</string>
     <string name="nmod_add_new_message">どこからNModを選びますか？</string>
     <string name="nmod_add_new_pick_installed">インストール済みのアプリ</string>
     <string name="nmod_add_new_pick_storage">ストレージ</string>
@@ -57,14 +54,12 @@
     <string name="nmod_imported_view_more">もっと見るにはボタンをクリックしてください。</string>
 
     <!--About-->
-    <string name="about_license">ライセンス</string>
     <string name="about_copyright_owner">Copyright © MCAL, Nextdev.</string>
     <string name="about_author">MADE BY Тимашков Иван と Listerily</string>
     <string name="about_translators">翻訳者</string>
     <string name="about_translators_message">この言語の翻訳参加者\nТимашков Иван\nListerily\nCreepsoGaming\nDarkShuper\nriku1227\nLeonardo Queiroz\nBayram Akdemir\nThamTvMaster\nНағымет Адаев\nMr Ikso</string>
     <string name="about_view_github">Githubページ</string>
     <string name="about_view_nmod_api">NModAPIを見る</string>
-    <string name="about_donate">Donate</string>
 
     <!--Preferences-->
     <string name="preferences_title">設定</string>
@@ -75,10 +70,6 @@
     <string name="preferences_summary_data_saved_path">ゲームデータを保存するファイルパス</string>
     <string name="preferences_title_game_pkg_name">Minecraft PEのパッケージ名</string>
     <string name="preferences_summary_game_pkg_name">ゲームのパッケージ名を変更します。</string>
-    <string name="preferences_update_message_data_path">データパスが正常に設定されました:%1$s</string>
-    <string name="preferences_update_message_reset_data_path">ゲームパスをリセットしました。</string>
-    <string name="preferences_update_message_pkg_name">パッケージ名を正常に設定しました:%1$s</string>
-    <string name="preferences_update_message_reset_pkg_name">パッケージ名をリセットしました。</string>
     <string name="preferences_title_app">アプリケーション</string>
     <string name="preferences_title_about">情報</string>
     <string name="preferences_summary_about">ModdedPEについて</string>
@@ -86,10 +77,8 @@
     <string name="preferences_summary_language">言語を変更します。</string>
     <string name="preferences_title_music">Music</string>
     <string name="preferences_summary_music">Background music while playing</string>
-    <string name="preferences_title_moddedpe_texture_pack">ModdedPE Texture Pack</string>
-    <string name="preferences_summary_moddedpe_texture_pack">デフォルトの ModdedPE のグラフィックが、スタイリッシュな新規テクスチャで生まれ変わりました!</string>
-    <string name="preferences_title_desktop_gui">Use Desktop GUI</string>
-    <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
+    <string name="preferences_title_webview_engine">WebView Engine</string>
+    <string name="preferences_summary_webview_engine">Select WebView engine</string>
 
     <!--Open Game Dialog-->
     <string name="preloading_initing">ランチャーを起動中</string>
@@ -97,10 +86,10 @@
     <string name="preloading_initing_info_safe_mode">--セーフモードをオン\n--Minecraft PEのバージョン: %1$s</string>
     <string name="preloading_initing_loading_libs">ネイティブライブラリを読み込み中</string>
     <string name="preloading_loading_lib_substrate">--libsubstrate.soを読み込み中</string>
+    <string name="preloading_loading_lib_xhook">--libxhook.soを読み込み中</string>
     <string name="preloading_loading_lib_game_launcher">--liblauncher-core.soを読み込み中</string>
     <string name="preloading_loading_lib_fmod">--libfmod.soを読み込み中</string>
     <string name="preloading_loading_lib_minecraftpe">--libminecraftpe.soを読み込み中</string>
-    <string name="preloading_loading_lib_nmodapi">--libnmod-core.soを読み込み中</string>
     <string name="preloading_initing_loading_libs_done">ネイティブライブラリの読み込みが完了しました。</string>
     <string name="preloading_nmod_start_loading">NModを読み込み中</string>
     <string name="preloading_nmod_loaded">--NModを読み込みました: %1$s</string>
@@ -108,8 +97,7 @@
     <string name="preloading_nmod_finish_loading">NModの読み込みに完了しました。</string>
     <string name="preloading_finished">ゲームを開始…</string>
 
-
-    <string-array name="preloading_tips_text">
+    <string-array name="preloading_tips_text" tools:ignore="InconsistentArrays">
         <item>APK形式のNModもインポートできるんだ~</item>
         <item>知ってるかい？左か右にスクロールすると、メインページのページを変更できるんだ。</item>
         <item>アプリケーションを選ぶより、ファイルを選んでNModをインポートするほうがいいよ。</item>
@@ -136,7 +124,7 @@
     <!--Main Activity-->
     <string name="main_play">プレイ</string>
     <string name="main_reloading_title">リロード…</string>
-    <string name="main_default_minecraft_title">Minecraft PE : デフォルト</string>
+    <string name="main_default_minecraft_title">Resource Pack: デフォルト</string>
     <string name="no_available_mcpe_version_found">ModdedPEが、このデバイスでサポートされていないバージョンのMinecraft PE (%1$s) を検出しました。(ModdedPEがサポートしているバージョンは %2$s です！)\nゲームを続行すると、ModdedPEがクラッシュするか、問題が発生する場合があります。</string>
     <string name="no_available_mcpe_version_found_title">サポートされていないバージョンのMinecraft PE</string>
     <string name="no_available_mcpe_version_continue">プレイする(非推奨!)</string>
@@ -166,10 +154,10 @@
     <!--Permissions-->
     <string name="permission_grant_failed_title">許可されていません</string>
     <string name="permission_grant_failed_message">外部ストレージを読む権限を取得できませんでした。[設定]ページでModdedPEのストレージアクセス権限を許可してください。</string>
+    <string name="scoped_storage_title">Android 11 R changes</string>
+    <string name="scoped_storage_msg">Android 11 introduce a new file-management way called \"Scoped Storage\". You need to grant a special permission!</string>
 
     <!--Enable Warnings-->
-    <string name="enable_warning_unsupported_title">サポートしていないバージョン</string>
-    <string name="enable_warning_unsupported_message">NMod %1$s はまだMinecraft PE %2$s をサポートしていません。NModをアップデートしてください %1$s.</string>
-    <string name="enable_warning_unsupported_message_if_next">NMod %1$s はまだMinecraft PE %2$s をサポートしていません。有効化することはできますがクラッシュや不具合の原因になるかもしれません。</string>
 
+    <string name="not_supported_on_your_device">Not supported on your device!</string>
 </resources>

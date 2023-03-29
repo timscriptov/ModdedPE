@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Тимашков Иван
+ * Copyright (C) 2018-2021 Тимашков Иван
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,10 @@ import android.content.res.AssetManager;
 
 import java.lang.reflect.Method;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
 public class AssetOverrideManager {
     private static AssetOverrideManager mInstance;
     private AssetManager mLocalAssetManager;
@@ -41,17 +45,17 @@ public class AssetOverrideManager {
         }
     }
 
-    static AssetOverrideManager getInstance() {
+    public static AssetOverrideManager getInstance() {
         if (mInstance == null)
             return mInstance = new AssetOverrideManager();
         return mInstance;
     }
 
-    static void newInstance() {
+    public static void newInstance() {
         mInstance = new AssetOverrideManager();
     }
 
-    void addAssetOverride(String packageResourcePath) {
+    public void addAssetOverride(String packageResourcePath) {
         try {
             Method method = AssetManager.class.getMethod("addAssetPath", String.class);
             method.invoke(mLocalAssetManager, packageResourcePath);

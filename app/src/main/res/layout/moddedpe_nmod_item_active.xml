@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:foreground="?attr/selectableItemBackgroundBorderless"
-    card_view:cardCornerRadius="5dp"
-    card_view:cardPreventCornerOverlap="true"
-    card_view:cardUseCompatPadding="true"
-    card_view:contentPadding="1dp">
+    android:background="@drawable/moddedpe_main_button_drawable">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="70dp">
 
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:orientation="horizontal">
@@ -30,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <LinearLayout
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -41,45 +35,42 @@
                         android:id="@+id/nmod_enabled_item_card_view_text_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
                         android:maxLines="1"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:layout_marginStart="5dp" />
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/nmod_enabled_item_card_view_text_package_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
                         android:maxLines="1"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:layout_marginStart="5dp" />
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
 
-                </LinearLayout>
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
             </RelativeLayout>
 
-        </LinearLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/nmod_enabled_minus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/ic_minus"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="10dp" />
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/moddedpe_main_button_drawable"
+            android:src="@drawable/ic_minus" />
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/nmod_enabled_arrow_down"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/nmod_enabled_minus"
-            android:src="@drawable/ic_chevron_down"
-            android:layout_toStartOf="@id/nmod_enabled_minus" />
+            android:layout_toStartOf="@id/nmod_enabled_minus"
+            android:background="@drawable/moddedpe_main_button_drawable"
+            android:src="@drawable/ic_chevron_down" />
 
 
         <androidx.appcompat.widget.AppCompatImageButton
@@ -87,11 +78,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/nmod_enabled_arrow_down"
-            android:src="@drawable/ic_chevron_up"
-            android:layout_toStartOf="@id/nmod_enabled_arrow_down" />
+            android:layout_toStartOf="@id/nmod_enabled_arrow_down"
+            android:background="@drawable/moddedpe_main_button_drawable"
+            android:src="@drawable/ic_chevron_up" />
 
     </RelativeLayout>
 
-</androidx.cardview.widget.CardView>
-
+</androidx.appcompat.widget.LinearLayoutCompat>

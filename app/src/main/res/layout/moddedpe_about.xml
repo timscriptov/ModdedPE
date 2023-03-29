@@ -1,112 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <ScrollView
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical"
-        tools:ignore="UselessParent">
+        android:padding="15dp">
 
-        <LinearLayout
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="@string/app_name"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="@string/about_copyright_owner"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_margin="30dp"
-                android:src="@drawable/icon_hdpi" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="@string/about_author"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="@string/app_name"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="@string/app_version"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="15dp"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="@string/about_copyright_owner"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/about_view_github_button"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:background="@drawable/moddedpe_main_button_drawable"
+            android:src="@drawable/ic_github"
+            android:text="@string/about_view_github" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="35dp"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="@string/about_author"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/about_view_nmod_api_button"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:background="@drawable/moddedpe_main_button_drawable"
+            android:src="@drawable/ic_api"
+            android:text="@string/about_view_nmod_api" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="#6E6E6E" />
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/about_translators_button"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:background="@drawable/moddedpe_main_button_drawable"
+            android:src="@drawable/ic_translate"
+            android:text="@string/about_translators" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/donate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:onClick="donate"
-                android:text="@string/about_donate" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/about_view_github_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:text="@string/about_view_github" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/about_view_nmod_api_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:text="@string/about_view_nmod_api" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/about_translators_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:text="@string/about_translators" />
-
-        </LinearLayout>
-
-    </ScrollView>
-
-</RelativeLayout>
-
+</androidx.appcompat.widget.LinearLayoutCompat>

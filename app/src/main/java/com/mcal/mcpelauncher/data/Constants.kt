@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Тимашков Иван
+ * Copyright (C) 2018-2021 Тимашков Иван
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,8 +16,15 @@
  */
 package com.mcal.mcpelauncher.data
 
-import com.mcal.mcpelauncher.utils.Utils
+import com.mcal.mcpelauncher.BuildConfig
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
 object Constants {
-    val DONATE = Utils.fromBase64("ZG9uYXRl") // donate
+    const val FILENAME_SEQUENCE_SEPARATOR = "-"
+    const val STRING_VALUE_DEFAULT = "default"
+    const val NMOD_DATA_TAG = "nmod_data"
+    const val NMOD_API_VERSION = "1.4.1"
 }

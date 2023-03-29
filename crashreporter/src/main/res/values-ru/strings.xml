@@ -1,0 +1,8 @@
+<resources>
+    <string name="crash_reporter">CrashReporter</string>
+    <string name="crashes">Ошибки</string>
+    <string name="exceptions">Исключения</string>
+    <string name="view_crash_report">Посмотреть логи</string>
+    <string name="notification_crash_report_title">Уведомление об ошибке</string>
+    <string name="check_your_message_here">Посмотрите ошибки и исключения</string>
+</resources>

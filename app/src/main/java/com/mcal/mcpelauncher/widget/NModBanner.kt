@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Тимашков Иван
+ * Copyright (C) 2018-2021 Тимашков Иван
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,25 +27,33 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import com.mcal.mcpelauncher.ModdedPEApplication
 import com.mcal.mcpelauncher.R
-import com.mcal.mcpelauncher.app.NModDescriptionActivity
+import com.mcal.mcpelauncher.activities.NModDescriptionActivity
 import com.mcal.pesdk.nmod.NMod
 import java.util.*
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
 @SuppressLint("InflateParams", "ClickableViewAccessibility")
 class NModBanner : RelativeLayout {
     private var mBannerView: RelativeLayout? = null
     private val mRandom = Random()
     private val mNModArrayList = ArrayList<NMod>()
 
-    constructor(context: Context) : super(context) {
+    constructor(context: Context?) : super(context) {
         init()
     }
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
         init()
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         init()
     }
 
@@ -54,17 +62,17 @@ class NModBanner : RelativeLayout {
         if (mNModArrayList.isEmpty() || mNModArrayList != newNModList) {
             mNModArrayList.clear()
             mNModArrayList.addAll(newNModList)
-            if (newNModList.size > 0)
-                mBannerView = createBannerItemFor(newNModList[mRandom.nextInt(newNModList.size)])
+            if (newNModList.size > 0) mBannerView =
+                createBannerItemFor(newNModList[mRandom.nextInt(newNModList.size)])
             removeAllViews()
-            addView(mBannerView)
+            addView(mBannerView!!)
         }
         invalidate()
     }
 
     private fun init() {
         mBannerView = createEmptyBannerItem()
-        addView(mBannerView)
+        addView(mBannerView!!)
         updateNModList()
         setWillNotDraw(false)
     }
@@ -74,23 +82,30 @@ class NModBanner : RelativeLayout {
         updateNModList()
     }
 
-    override fun addView(child: View?) {
-        val params = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT)
-        params.addRule(RelativeLayout.CENTER_IN_PARENT)
+    override fun addView(child: View) {
+        val params = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+        params.addRule(CENTER_IN_PARENT)
         super.addView(child, params)
     }
 
     private fun createEmptyBannerItem(): RelativeLayout {
-        return LayoutInflater.from(context).inflate(R.layout.moddedpe_nmod_banner_item, null) as RelativeLayout
+        return LayoutInflater.from(context)
+            .inflate(R.layout.moddedpe_nmod_banner_item, null) as RelativeLayout
     }
 
     private fun createBannerItemFor(nmod_for: NMod): RelativeLayout {
         val view = createEmptyBannerItem()
-        val image = view.findViewById<AppCompatImageView>(R.id.moddedpe_nmod_banner_item_image_view)
+        val image: AppCompatImageView = view.findViewById(R.id.moddedpe_nmod_banner_item_image_view)
         image.setImageBitmap(nmod_for.bannerImage)
-        val bannerTitle = view.findViewById<AppCompatTextView>(R.id.moddedpe_nmod_banner_item_text_view_title)
+        val bannerTitle: AppCompatTextView =
+            view.findViewById(R.id.moddedpe_nmod_banner_item_text_view_title)
         bannerTitle.text = nmod_for.bannerTitle
-        view.setOnClickListener { NModDescriptionActivity.startThisActivity(context, nmod_for) }
+        view.setOnClickListener { p1: View? ->
+            NModDescriptionActivity.startThisActivity(
+                context,
+                nmod_for
+            )
+        }
         return view
     }
 }

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!--Titles-->
-    <string name="menu_title">菜单</string>
     <string name="manage_nmod_title">管理NMod</string>
     <string name="settings_title">设置</string>
     <string name="about_title">关于</string>
@@ -27,7 +26,6 @@
     <string name="nmod_import_failed_message_invalid_package_name">非法的NMOD包名格式。请确保包名格式符合命名规范。</string>
     <string name="nmod_import_failed_message_no_package_name">清单文件缺少包名标签[package_name]</string>
     <string name="nmod_import_failed_message_inequal_package_name">nmod_manifest.json与AndroidManifest.xm包名值不同。</string>
-    <string name="nmod_import_failed_message_redundant_manifest">存在冗余清单文件……请检查并删除/assets/nmod_manifest.json和/nmod_manifest.json两个清单文件其一。</string>
     <string name="nmod_import_failed_button_full_info">错误信息</string>
     <string name="nmod_import_failed_full_info_title">错误信息</string>
     <string name="nmod_import_failed_full_info_message">错误类型：\n%1$s\n错误信息：\n%2$s</string>
@@ -37,7 +35,6 @@
     <string name="nmod_import_succeed_message">导入成功！</string>
     <string name="load_fail_msg">错误类型：\n%1$s\n错误信息：\n%2$s</string>
     <string name="nmod_add_new">添加新的</string>
-    <string name="nmod_export">导出</string>
     <string name="nmod_add_new_title">添加新的…</string>
     <string name="nmod_add_new_message">从两种方式中选择一个安装NMOD方式……</string>
     <string name="nmod_add_new_pick_installed">已安装中</string>
@@ -57,14 +54,12 @@
     <string name="nmod_import_failed_view_more">点击按钮查看更多~</string>
 
     <!--About-->
-    <string name="about_license">开放源代码许可</string>
     <string name="about_copyright_owner">Copyright © MCAL, Nextdev.</string>
     <string name="about_author">Иван Тимашков 和 Listerily制作</string>
     <string name="about_translators">翻译人员</string>
     <string name="about_view_github">Github页</string>
     <string name="about_view_nmod_api">查看NModAPI</string>
     <string name="about_translators_message">参加过本语言翻译的人员：\nТимашков Иван\nListerily\nCreepsoGaming\nDarkShuper\nriku1227\nLeonardo Queiroz\nBayram Akdemir\nThamTvMaster\nНағымет Адаев\nMr Ikso</string>
-    <string name="about_donate">Donate</string>
 
     <!--Preferences-->
     <string name="preferences_title">设置</string>
@@ -75,10 +70,6 @@
     <string name="preferences_summary_data_saved_path">改变游戏存储数据的文件夹~</string>
     <string name="preferences_title_game_pkg_name">Minecraft包名</string>
     <string name="preferences_summary_game_pkg_name">在这里切换启动包</string>
-    <string name="preferences_update_message_data_path">成功设置数据目录：%1$s</string>
-    <string name="preferences_update_message_reset_data_path">成功设置数据目录到默认值√</string>
-    <string name="preferences_update_message_pkg_name">成功设置包名：%1$s</string>
-    <string name="preferences_update_message_reset_pkg_name">成功设置包名到默认值√</string>
     <string name="preferences_title_app">应用程序</string>
     <string name="preferences_title_about">关于</string>
     <string name="preferences_summary_about">一些介绍信息</string>
@@ -86,8 +77,8 @@
     <string name="preferences_summary_language">在这里更换语言Orz。</string>
     <string name="preferences_title_music">音乐</string>
     <string name="preferences_summary_music">游戏时播放的后台音乐</string>
-    <string name="preferences_title_moddedpe_texture_pack">材质包</string>
-    <string name="preferences_summary_moddedpe_texture_pack">现已新增了时尚的新材质</string>
+    <string name="preferences_title_webview_engine">WebView Engine</string>
+    <string name="preferences_summary_webview_engine">Select WebView engine</string>
 
     <!--Open Game Dialog-->
     <string name="preloading_initing">初始化启动器</string>
@@ -95,11 +86,10 @@
     <string name="preloading_initing_info_safe_mode">--安全模式开启\n--Minecraft PE版本：%1$s</string>
     <string name="preloading_initing_loading_libs">加载动态链接库</string>
     <string name="preloading_loading_lib_substrate">--加载libsubstrate.so</string>
-    <string name="preloading_loading_lib_gnustl_shared">--加载libgnustl_shared.so</string>
+    <string name="preloading_loading_lib_xhook">--加载libxhook.so</string>
     <string name="preloading_loading_lib_game_launcher">--加载liblauncher-core.so</string>
     <string name="preloading_loading_lib_fmod">--加载libfmod.so</string>
     <string name="preloading_loading_lib_minecraftpe">--加载libminecraftpe.so</string>
-    <string name="preloading_loading_lib_nmodapi">--加载libnmod-core.so</string>
     <string name="preloading_initing_loading_libs_done">加载动态链接库完成</string>
     <string name="preloading_nmod_start_loading">开始装载NMod</string>
     <string name="preloading_nmod_loaded">--已装载：%1$s</string>
@@ -107,7 +97,7 @@
     <string name="preloading_nmod_loaded_failed">--装载失败：%1$s</string>
     <string name="preloading_finished">正在打开游戏</string>
 
-    <string-array name="preloading_tips_text">
+    <string-array name="preloading_tips_text" tools:ignore="InconsistentArrays">
         <item>这是一个在角落里卖萌的句子</item>
         <item>NMOD主要由C/C++语言开发</item>
         <item>你可以在文件浏览器中直接打开NMOD并安装</item>
@@ -126,7 +116,7 @@
     <!--Main Activity-->
     <string name="main_play">开始游戏</string>
     <string name="main_reloading_title">正在刷新……</string>
-    <string name="main_default_minecraft_title">我的世界携带版：原版</string>
+    <string name="main_default_minecraft_title">Resource Pack: 原版</string>
     <string name="no_available_mcpe_version_found">抱歉，这个版本的ModdedPE暂时不支持您所安装的Minecraft PE %1$s，它所支持的是 %2$s\n点击“开始冒险”按钮可以冒险打开游戏，但是很可能会出现报错或崩溃问题。</string>
     <string name="no_available_mcpe_version_found_title">版本不支持</string>
     <string name="no_available_mcpe_version_continue">开始冒险</string>
@@ -154,11 +144,12 @@
     <string name="launch_failed_message">抱歉，ModdeddPE在打开游戏时触发了一个错误，导致启动器崩溃。如果仍然出现这个问题，请清除ModdedPE的应用数据。\n错误信息：%1$s</string>
 
     <!--Enable Warnings-->
-    <string name="enable_warning_unsupported_title">版本不支持！</string>
-    <string name="enable_warning_unsupported_message">NMOD %1$s暂未支持您安装的Minecraft %2$s。请更新NMod %1$s。</string>
-    <string name="enable_warning_unsupported_message_if_next">NMOD %1$s暂未支持您安装的Minecraft %2$s。你可以启用它，但是可能会造成错误或者崩溃。</string>
 
     <!--Permissions-->
     <string name="permission_grant_failed_title">获取权限失败</string>
     <string name="permission_grant_failed_message">无法获取权限：读取外部存储。请在设置页面授予ModdedPE相关权限。</string>
+    <string name="scoped_storage_title">Android 11 R changes</string>
+    <string name="scoped_storage_msg">Android 11 introduce a new file-management way called \"Scoped Storage\". You need to grant a special permission!</string>
+
+    <string name="not_supported_on_your_device">Not supported on your device!</string>
 </resources>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Тимашков Иван
+ * Copyright (C) 2018-2021 Тимашков Иван
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,42 +16,80 @@
  */
 package com.mcal.pesdk.nativeapi
 
+import android.annotation.SuppressLint
 import java.io.File
-import java.io.IOException
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
 object LibraryLoader {
-    private val FMOD_LIB_NAME = "libfmod.so"
-    private val MINECRAFTPE_LIB_NAME = "libminecraftpe.so"
-
-    private val API_NAME = "nmod-core"
-    private val SUBSTRATE_NAME = "substrate"
-    private val LAUNCHER_NAME = "launcher-core"
-
-    fun loadSubstrate() {
-        System.loadLibrary(SUBSTRATE_NAME)
-    }
-
-    fun loadLauncher(mcLibsPath: String) {
-        System.loadLibrary(LAUNCHER_NAME)
-        nativeOnLauncherLoaded(mcLibsPath + File.separator + MINECRAFTPE_LIB_NAME)
-    }
-
-    @Throws(IOException::class)
-    fun loadFMod(mcLibsPath: String) {
-        System.load(File(mcLibsPath, FMOD_LIB_NAME).absolutePath)
-    }
-
-    @Throws(IOException::class)
-    fun loadMinecraftPE(mcLibsPath: String) {
-        System.load(File(mcLibsPath, MINECRAFTPE_LIB_NAME).absolutePath)
-    }
-
-    fun loadNModAPI(mcLibsPath: String) {
-        System.loadLibrary(API_NAME)
-        nativeOnNModAPILoaded(mcLibsPath + File.separator + MINECRAFTPE_LIB_NAME)
-    }
-
     private external fun nativeOnLauncherLoaded(libPath: String)
-
     private external fun nativeOnNModAPILoaded(libPath: String)
+
+    @JvmStatic
+    @SuppressLint("UnsafeDynamicallyLoadedCode")
+    fun loadSubstrate() {
+        System.loadLibrary("substrate")
+    }
+
+    @JvmStatic
+    @SuppressLint("UnsafeDynamicallyLoadedCode")
+    fun loadXHook() {
+        System.loadLibrary("xhook")
+    }
+
+    @JvmStatic
+    @SuppressLint("UnsafeDynamicallyLoadedCode")
+    fun loadLauncher(mcLibsPath: String) {
+        System.loadLibrary("launcher-core")
+        nativeOnLauncherLoaded("$mcLibsPath/libminecraftpe.so")
+    }
+
+    @JvmStatic
+    @SuppressLint("UnsafeDynamicallyLoadedCode")
+    fun loadFMod(mcLibsPath: String?) {
+        try {
+            System.load(File(mcLibsPath, "libfmod.so").absolutePath)
+        } catch (e: UnsatisfiedLinkError) {
+            e.printStackTrace()
+        }
+    }
+
+    @JvmStatic
+    @SuppressLint("UnsafeDynamicallyLoadedCode")
+    fun loadMediaDecoders(mcLibsPath: String?) {
+        try {
+            System.load(File(mcLibsPath, "libMediaDecoders_Android.so").absolutePath)
+        } catch (e: UnsatisfiedLinkError) {
+            e.printStackTrace()
+        }
+    }
+
+    @JvmStatic
+    @SuppressLint("UnsafeDynamicallyLoadedCode")
+    fun loadMinecraftPE(mcLibsPath: String?) {
+        try {
+            System.load(File(mcLibsPath, "libminecraftpe.so").absolutePath)
+        } catch (e: UnsatisfiedLinkError) {
+            e.printStackTrace()
+        }
+    }
+
+    @JvmStatic
+    @SuppressLint("UnsafeDynamicallyLoadedCode")
+    fun loadCppShared(mcLibsPath: String?) {
+        try {
+            System.load(File(mcLibsPath, "libc++_shared.so").absolutePath)
+        } catch (e: UnsatisfiedLinkError) {
+            e.printStackTrace()
+        }
+    }
+
+    @JvmStatic
+    @SuppressLint("UnsafeDynamicallyLoadedCode")
+    fun loadNModAPI(mcLibsPath: String) {
+        System.loadLibrary("nmod-core")
+        nativeOnNModAPILoaded("$mcLibsPath/libminecraftpe.so")
+    }
 }

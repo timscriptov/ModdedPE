@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:baselineAligned="false"
     android:gravity="center_vertical"
     android:minHeight="?android:listPreferredItemHeight"
     android:orientation="horizontal"
-    android:padding="16dp"
-    android:baselineAligned="false">
+    android:padding="16dp">
 
     <RelativeLayout
         android:layout_width="0dp"
@@ -21,9 +20,9 @@
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
+            android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="16sp"
-            android:singleLine="true" />
+            android:textSize="16sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@android:id/summary"
@@ -34,7 +33,7 @@
 
     </RelativeLayout>
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@android:id/widget_frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,7 +41,6 @@
         android:orientation="vertical"
         tools:ignore="RtlHardcoded">
 
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </LinearLayout>
-

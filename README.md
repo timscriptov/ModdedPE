@@ -1,6 +1,4 @@
-[![License Info](https://img.shields.io/badge/license-GNU_GPLv3-blue.svg?style=flat-square)](https://github.com/TimScriptov/ModdedPE) [![Play Store Info](https://img.shields.io/badge/Play_Store-v1.19.30.22-blue.svg?style=flat-square)](https://play.google.com/store/apps/details?id=com.mcal.mcpelauncher)
-
-The fresh code is in the [ModdedPE-JAVA][6] branch
+[![License Info](https://img.shields.io/badge/license-GNU_GPLv3-blue.svg?style=flat-square)](https://github.com/TimScriptov/ModdedPE) [![Play Store Info](https://img.shields.io/badge/Play_Store-v1.19.10.03-blue.svg?style=flat-square)](https://play.google.com/store/apps/details?id=com.mcal.mcpelauncher)
 # ModdedPE!
 ![logo][1]
 --------
@@ -30,11 +28,10 @@ The Open Source NModAPI will help you a lot:)<br>
 ### Additional components
 > [XHook][4]<br>
 > [Cydia Substrate][5]<br>
-> [ELFIO][7]<br>
+> [ELFIO][6]<br>
 
 [1]: https://github.com/TimScriptov/ModdedPE/blob/master/Art/title_logo.png
 [2]: https://github.com/listerily
 [4]: https://github.com/iqiyi/xHook
 [5]: http://www.cydiasubstrate.com/
-[6]: https://github.com/TimScriptov/ModdedPE/tree/ModdedPE-JAVA
-[7]: https://github.com/serge1/ELFIO
+[6]: https://github.com/serge1/ELFIO

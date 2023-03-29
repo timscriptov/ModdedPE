@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!--Titles-->
-    <string name="menu_title">Menu</string>
     <string name="manage_nmod_title">Gerenciar NMods</string>
     <string name="settings_title">Configurações</string>
     <string name="about_title">Sobre</string>
@@ -30,7 +29,6 @@
     <string name="nmod_import_failed_message_invalid_package_name">Nome do pacote inválido definido em manifest.Element "package_name" deve ser um nome de pacote com estilo java.</string>
     <string name="nmod_import_failed_message_no_package_name">Nenhum nome do pacote encontrado em nmod_manifest.json.Por favor, adicione o elemento "package_name" (String).</string>
     <string name="nmod_import_failed_message_inequal_package_name">O nome do pacote definido no AndroidManifest.xml e nmod_manifest.json são iguais.ModdedPE não pôde decidir qual nome do pacote usar.</string>
-    <string name="nmod_import_failed_message_redundant_manifest">ModdedPE encontrou dois nmod_manifest.json neste arquivo, mas não sabia qual deles ler. Por favor elimine um. (/ Nmod_manifest.json ou /assets/nmod_manifest.json)</string>
     <string name="nmod_import_failed_button_full_info">Informação de Erro</string>
     <string name="nmod_import_replaced_title">Substituído</string>
     <string name="nmod_import_replaced_message">Modded encontrou um NMod importado com o mesmo nome do pacote. O novo foi importado com êxito e substituiu o antigo.</string>
@@ -41,7 +39,6 @@
     <string name="nmod_import_failed_full_info_message">Tipo de erro:\n%1$s\nMensagem de erro:\n%2$s</string>
     <string name="nmod_add_new">Adicionar Novo</string>
     <string name="nmod_add_new_title">Adicionar Novo&#8320;</string>
-    <string name="nmod_export">Exportar</string>
     <string name="nmod_add_new_message">De onde você deseja escolher o NMod?</string>
     <string name="nmod_add_new_pick_installed">Aplicativos</string>
     <string name="nmod_add_new_pick_storage">Armazenamento</string>
@@ -57,14 +54,12 @@
     <string name="nmod_imported_view_more">Clique no botão para ver mais.</string>
 
     <!--About-->
-    <string name="about_license">Licenças</string>
     <string name="about_copyright_owner">Direito autoral © MCAL, Nextdev.</string>
     <string name="about_author">FEITO POR Иван Тимашков e Listerily</string>
     <string name="about_translators">Tradutores</string>
     <string name="about_translators_message">Que participaram deste traduções de idiomas:\nТимашков Иван\nListerily\nCreepsoGaming\nDarkShuper\nriku1227\nLeonardo Queiroz\nBayram Akdemir\nThamTvMaster\nНағымет Адаев\nMr Ikso</string>
     <string name="about_view_github">Página Github</string>
     <string name="about_view_nmod_api">Ver NModAPI</string>
-    <string name="about_donate">Donate</string>
 
     <!--Preferences-->
     <string name="preferences_title">Configurações</string>
@@ -75,10 +70,6 @@
     <string name="preferences_summary_data_saved_path">Caminho do arquivo onde o jogo economiza dados.</string>
     <string name="preferences_title_game_pkg_name">Nome do pacote Minecraft PE</string>
     <string name="preferences_summary_game_pkg_name">Mude o nome do pacote do jogo aqui.</string>
-    <string name="preferences_update_message_data_path">Caminho de dados definido com sucesso:%1$s</string>
-    <string name="preferences_update_message_reset_data_path">Caminho de dados redefinido com sucesso</string>
-    <string name="preferences_update_message_pkg_name">Nome do pacote definido com sucesso:%1$s</string>
-    <string name="preferences_update_message_reset_pkg_name">Sucesso Ao resetar o nome pkg.</string>
     <string name="preferences_title_app">Aplicação</string>
     <string name="preferences_title_about">Sobre</string>
     <string name="preferences_summary_about">Sobre ModdedPE</string>
@@ -86,10 +77,8 @@
     <string name="preferences_summary_language">Selecione a línguagem aqui.</string>
     <string name="preferences_title_music">Music</string>
     <string name="preferences_summary_music">Background music while playing</string>
-    <string name="preferences_title_moddedpe_texture_pack">ModdedPE Texture Pack</string>
-    <string name="preferences_summary_moddedpe_texture_pack">Os gráficos padrão do ModdedPE estão atualizados com novas texturas cheias de estilo!</string>
-    <string name="preferences_title_desktop_gui">Use Desktop GUI</string>
-    <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
+    <string name="preferences_title_webview_engine">WebView Engine</string>
+    <string name="preferences_summary_webview_engine">Select WebView engine</string>
 
     <!--Open Game Dialog-->
     <string name="preloading_initing">Inicializando Launcher</string>
@@ -97,10 +86,10 @@
     <string name="preloading_initing_info_safe_mode">--Modo de segurança ativo\n--Minecraft PE Versão: %1$s</string>
     <string name="preloading_initing_loading_libs">Carregando bibliotecas Nativas</string>
     <string name="preloading_loading_lib_substrate">--Carregando libsubstrate.so</string>
+    <string name="preloading_loading_lib_xhook">--Carregando libxhook.so</string>
     <string name="preloading_loading_lib_game_launcher">--Carregando liblauncher-core.so</string>
     <string name="preloading_loading_lib_fmod">--Carregando libfmod.so</string>
     <string name="preloading_loading_lib_minecraftpe">--Carregando libminecraftpe.so</string>
-    <string name="preloading_loading_lib_nmodapi">--Carregando libnmod-core.so</string>
     <string name="preloading_initing_loading_libs_done">Carregando Native Libs</string>
     <string name="preloading_nmod_start_loading">Carregando NMods</string>
     <string name="preloading_nmod_loaded">--Carregado NMod: %1$s</string>
@@ -108,7 +97,7 @@
     <string name="preloading_nmod_finish_loading">NMods Carregados</string>
     <string name="preloading_finished">Começando o jogo&#8321;</string>
 
-    <string-array name="preloading_tips_text">
+    <string-array name="preloading_tips_text" tools:ignore="InconsistentArrays">
         <item>O mod formatado APK também pode ser importado~</item>
         <item>Você sabe? Você pode rolar para a esquerda ou para a direita para mudar a página na Página Principal.</item>
         <item>Você preferirá importar Mods escolhendo arquivos ao invés de escolher aplicativos.</item>
@@ -128,7 +117,7 @@
     <!--Main Activity-->
     <string name="main_play">Toque</string>
     <string name="main_reloading_title">Recarregar&#8321;</string>
-    <string name="main_default_minecraft_title">Minecraft PE : Padrão</string>
+    <string name="main_default_minecraft_title">Resource Pack: Padrão</string>
     <string name="no_available_mcpe_version_found">O ModdedPE encontrou uma versão não suportada do Minecraft PE (%1$s) neste aparelho.(ModdedPE suporta apenas %2$s!)\nSe continuar a abrir o jogo, o ModdedPE pode falhar ou causar problemas.</string>
     <string name="no_available_mcpe_version_found_title">Versão não suportada do Minecraft: PE</string>
     <string name="no_available_mcpe_version_continue">Continuar (DESCONTINUADA!)</string>
@@ -156,12 +145,12 @@
     <string name="launch_failed_message">Sorry, ModdeddPE triggers an error when opening the game, causing the initiator to crash. If this problem persists, clear ModdedPE\'s application data.\nError Message:%1$s</string>
 
     <!--Enable Warnings-->
-    <string name="enable_warning_unsupported_title">Unsupported Version</string>
-    <string name="enable_warning_unsupported_message">NMod %1$s hasn\'t support Minecraft PE %2$s yet.Please update NMod %1$s.</string>
-    <string name="enable_warning_unsupported_message_if_next">NMod %1$s hasn\'t support Minecraft PE %2$s yet.You can enable it but may cause issues or crashes.</string>
 
     <!--Permissions-->
     <string name="permission_grant_failed_title">Permission Grant Failed</string>
     <string name="permission_grant_failed_message">Cannot grant permission: read external storage. Please go to the settings page to grant the relevant permissions.</string>
+    <string name="scoped_storage_title">Android 11 R changes</string>
+    <string name="scoped_storage_msg">Android 11 introduce a new file-management way called \"Scoped Storage\". You need to grant a special permission!</string>
 
+    <string name="not_supported_on_your_device">Not supported on your device!</string>
 </resources>

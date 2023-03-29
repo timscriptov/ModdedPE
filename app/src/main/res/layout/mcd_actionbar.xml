@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.mcal.mcdesign.widget.RepeatableImageView
+    <com.mcal.mcpelauncher.widget.RepeatableImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/mcd_header_bg" />
@@ -25,9 +24,7 @@
         android:layout_height="30dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="10dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp" />
+        android:layout_marginEnd="10dp" />
 
     <RelativeLayout
         android:id="@+id/mcd_actionbar_ViewLeft"
@@ -35,9 +32,6 @@
         android:layout_height="30dp"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:layout_marginStart="10dp"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="10dp" />
+        android:layout_marginStart="10dp" />
 
 </RelativeLayout>
-

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!--Titles-->
-    <string name="menu_title">菜單</string>
     <string name="manage_nmod_title">管理NMod</string>
     <string name="settings_title">設置</string>
     <string name="about_title">關於</string>
@@ -27,7 +26,6 @@
     <string name="nmod_import_failed_message_invalid_package_name">似乎這個NMod的包名有些問題。\n包名必須符合Java包名規則哦~</string>
     <string name="nmod_import_failed_message_no_package_name">ModdedPE沒有在清單文件裏面找到包名標簽[package_name]\n請添加它。</string>
     <string name="nmod_import_failed_message_inequal_package_name">未解之謎：為何這個NMod裏面有兩個不一樣的包名值呢&#8230;\n請確保AndroidManifest.xml中定義的包名與nmod_manifest.json中定義的包名是同一個值。</string>
-    <string name="nmod_import_failed_message_redundant_manifest">哇！有兩個nmod_manifest.json呢！\n(選擇困難癥：我該用哪一個呢&#8230;？\n小提示：請不要在壓縮文件內放/assets/nmod_manifest.json和/nmod_manifest.json兩個清單文件。</string>
     <string name="nmod_import_failed_button_full_info">錯誤信息</string>
     <string name="nmod_import_failed_full_info_title">錯誤信息</string>
     <string name="nmod_import_failed_full_info_message">錯誤類型：\n%1$s\n錯誤信息：\n%2$s</string>
@@ -37,7 +35,6 @@
     <string name="nmod_import_succeed_message">導入成功！</string>
     <string name="load_fail_msg">錯誤類型：\n%1$s\n錯誤信息：\n%2$s</string>
     <string name="nmod_add_new">添加新的</string>
-    <string name="nmod_export">導出</string>
     <string name="nmod_add_new_title">添加新的&#8230;</string>
     <string name="nmod_add_new_message">這裏有兩種方式來添加新的NMod，選一個吧。</string>
     <string name="nmod_add_new_pick_installed">已安裝中</string>
@@ -57,14 +54,12 @@
     <string name="nmod_import_failed_view_more">點擊按鈕查看更多。</string>
 
     <!--About-->
-    <string name="about_license">開放源代碼許可</string>
     <string name="about_copyright_owner">Copyright © MCAL, Nextdev.</string>
     <string name="about_author">Иван Тимашков 和 Listerily制作</string>
     <string name="about_translators">翻譯人員</string>
     <string name="about_view_github">Github頁</string>
     <string name="about_view_nmod_api">查看NModAPI</string>
     <string name="about_translators_message">參加過本語言翻譯的人員：\nТимашков Иван\nListerily\nCreepsoGaming\nDarkShuper\nriku1227\nLeonardo Queiroz\nBayram Akdemir\nThamTvMaster\nНағымет Адаев\nMr Ikso</string>
-    <string name="about_donate">Donate</string>
 
     <!--Preferences-->
     <string name="preferences_title">設置</string>
@@ -75,10 +70,6 @@
     <string name="preferences_summary_data_saved_path">改變遊戲存儲數據的文件夾</string>
     <string name="preferences_title_game_pkg_name">Minecraft PE包名</string>
     <string name="preferences_summary_game_pkg_name">在這裏切換啟動包</string>
-    <string name="preferences_update_message_data_path">成功設置數據目錄：%1$s</string>
-    <string name="preferences_update_message_reset_data_path">成功設置數據目錄到默認值√</string>
-    <string name="preferences_update_message_pkg_name">成功設置包名：%1$s</string>
-    <string name="preferences_update_message_reset_pkg_name">成功設置包名到默認值。</string>
     <string name="preferences_title_app">應用程序</string>
     <string name="preferences_title_about">關於</string>
     <string name="preferences_summary_about">關於ModdedPE</string>
@@ -86,8 +77,8 @@
     <string name="preferences_summary_language">在這裏更換語言</string>
     <string name="preferences_title_music">Music</string>
     <string name="preferences_summary_music">Background music while playing</string>
-    <string name="preferences_title_moddedpe_texture_pack">ModdedPE Texture Pack</string>
-    <string name="preferences_summary_moddedpe_texture_pack">默认的《ModdedPE》图形，现已新增了时尚的新材质！</string>
+    <string name="preferences_title_webview_engine">WebView Engine</string>
+    <string name="preferences_summary_webview_engine">Select WebView engine</string>
 
     <!--Open Game Dialog-->
     <string name="preloading_initing">初始化啟動器</string>
@@ -95,10 +86,10 @@
     <string name="preloading_initing_info_safe_mode">--安全模式開啟\n--Minecraft PE版本：%1$s</string>
     <string name="preloading_initing_loading_libs">加載動態鏈接庫</string>
     <string name="preloading_loading_lib_substrate">--加載libsubstrate.so</string>
+    <string name="preloading_loading_lib_xhook">--加載libxhook.so</string>
     <string name="preloading_loading_lib_game_launcher">--加載liblauncher-core.so</string>
     <string name="preloading_loading_lib_fmod">--加載libfmod.so</string>
     <string name="preloading_loading_lib_minecraftpe">--加載libminecraftpe.so</string>
-    <string name="preloading_loading_lib_nmodapi">--加載libnmod-core.so</string>
     <string name="preloading_initing_loading_libs_done">加載動態鏈接庫完成~</string>
     <string name="preloading_nmod_start_loading">開始裝載NMod</string>
     <string name="preloading_nmod_loaded">--已裝載：%1$s</string>
@@ -106,7 +97,7 @@
     <string name="preloading_nmod_loaded_failed">--裝載失敗：%1$s</string>
     <string name="preloading_finished">正在打開遊戲</string>
 
-    <string-array name="preloading_tips_text">
+    <string-array name="preloading_tips_text" tools:ignore="InconsistentArrays">
         <item>你造麽，APK類型的NMod不安裝也可以導入的呢。</item>
         <item>其實NMod全稱是Native-Mod啦~（才不是Naive-Mod什麽的！</item>
         <item>如果您可以登陸GooglePlay，歡迎給我們貢獻小小的一個下載量(๑•̀ω•́๑)</item>
@@ -126,7 +117,7 @@
     <!--Main Activity-->
     <string name="main_play">開始遊戲</string>
     <string name="main_reloading_title">正在刷新……</string>
-    <string name="main_default_minecraft_title">我的世界攜帶版：原版</string>
+    <string name="main_default_minecraft_title">Resource Pack: 原版</string>
     <string name="no_available_mcpe_version_found">抱歉，這個版本的ModdedPE暫時不支持您所安裝的Minecraft PE %1$s，它所支持的是 %2$s(๑′°︿°๑)\n點擊“開始冒險”按鈕可以冒險打開遊戲，不過後果可能就是崩潰或者報錯哦~</string>
     <string name="no_available_mcpe_version_found_title">版本不支持</string>
     <string name="no_available_mcpe_version_continue">開始冒險</string>
@@ -154,11 +145,12 @@
     <string name="launch_failed_message">抱歉，ModdeddPE在打開遊戲時觸發了一個錯誤，導致啟動器崩潰。如果仍然出現這個問題，請清除ModdedPE的應用數據。 \n錯誤信息：%1$s</string>
 
     <!--Enable Warnings-->
-    <string name="enable_warning_unsupported_title">版本不支持！</string>
-    <string name="enable_warning_unsupported_message">NMod %1$s暫未支持您安裝的Minecraft PE %2$s。請更新NMod %1$s。</string>
-    <string name="enable_warning_unsupported_message_if_next">NMod %1$s暫未支持您安裝的Minecraft PE %2$s。妳可以啟用它，但是可能會造成錯誤或者崩潰哦~</string>
 
     <!--Permissions-->
     <string name="permission_grant_failed_title">獲取權限失敗</string>
     <string name="permission_grant_failed_message">無法獲取權限：讀取外部存儲。請在設置頁面授予ModdedPE相關權限。</string>
+    <string name="scoped_storage_title">Android 11 R changes</string>
+    <string name="scoped_storage_msg">Android 11 introduce a new file-management way called \"Scoped Storage\". You need to grant a special permission!</string>
+
+    <string name="not_supported_on_your_device">Not supported on your device!</string>
 </resources>

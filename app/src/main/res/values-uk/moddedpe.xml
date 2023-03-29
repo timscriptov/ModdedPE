@@ -1,8 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!--Titles-->
-    <string name="menu_title">Меню</string>
     <string name="manage_nmod_title">Налаштувати NMods</string>
     <string name="settings_title">Опції</string>
     <string name="about_title">Про додаток</string>
@@ -30,7 +29,6 @@
     <string name="nmod_import_failed_message_invalid_package_name">Неправильне ім\'я пакета в manifest. Елемент "package_name" повинен бути в java-стилі назви пакета.</string>
     <string name="nmod_import_failed_message_no_package_name">Не знайдено ім\'я пакета в nmod_ manifest.json. Будь ласка, додайте елемент "package_name"(рядок).</string>
     <string name="nmod_import_failed_message_inequal_package_name">Різні назви пакетів знайдені в AndroidManifest.xml і nmod_manifest.json. ModdedPE не зміг вибрати, яке ім\'я пакета використовувати.</string>
-    <string name="nmod_import_failed_message_redundant_manifest">ModdedPE знайшов два nmod_manifest.json в цьому файлі, але не зміг вибрати хоча б один з них. Будь ласка, видаліть один з цих файлів. (/nmod_manifest.json або /assets/nmod_manifest.json)</string>
     <string name="nmod_import_failed_button_full_info">Інформація про помилку</string>
     <string name="nmod_import_replaced_title">Замінено</string>
     <string name="nmod_import_replaced_message">ModdedPE знайшов імпортований NМod зі схожою назвою. Новий мод був імпортований, замінивши старий.</string>
@@ -41,7 +39,6 @@
     <string name="nmod_import_failed_full_info_message">Тип помилки:\n%1$s\nПовідомлення помилки:\n%2$s</string>
     <string name="nmod_add_new">Додати новий</string>
     <string name="nmod_add_new_title">Додати новий...</string>
-    <string name="nmod_export">Експорт</string>
     <string name="nmod_add_new_message">Звідки ви бажаєте вибрати NMod?</string>
     <string name="nmod_add_new_pick_installed">Додаток</string>
     <string name="nmod_add_new_pick_storage">Пристрій</string>
@@ -57,14 +54,12 @@
     <string name="nmod_imported_view_more">Натисніть на кнопку, щоб переглянути більше.</string>
 
     <!--About-->
-    <string name="about_license">Ліцензії</string>
     <string name="about_copyright_owner">Copyright © MCAL, Nextdev.</string>
     <string name="about_author">Додаток від Тимашкова Івана і Listerily</string>
     <string name="about_translators">Перекладачі</string>
     <string name="about_translators_message">Люди, які брали участь в перекладі програми:\nТимашков Иван\nListerily\nCreepsoGaming\nDarkShuper\nriku1227\nLeonardo Queiroz\nBayram Akdemir\nThamTvMaster\nНағымет Адаев\nMr Ikso</string>
     <string name="about_view_github">Github сторінка</string>
     <string name="about_view_nmod_api">Переглянути NModAPI</string>
-    <string name="about_donate">Donate</string>
 
     <!--Preferences-->
     <string name="preferences_title">Налаштування</string>
@@ -75,10 +70,6 @@
     <string name="preferences_summary_data_saved_path">Файловий шлях, де гра зберігає дані.</string>
     <string name="preferences_title_game_pkg_name">Minecraft PE ім\'я пакета</string>
     <string name="preferences_summary_game_pkg_name">Змінити ім\'я пакета гри</string>
-    <string name="preferences_update_message_data_path">Шлях успішно встановлений:%1$s</string>
-    <string name="preferences_update_message_reset_data_path">Шлях був успішно скинуто.</string>
-    <string name="preferences_update_message_pkg_name"> Ім\'я пакета успішно змінено:%1$s</string>
-    <string name="preferences_update_message_reset_pkg_name">Ім\'я пакета успішно було скинуто.</string>
     <string name="preferences_title_app">Додаток</string>
     <string name="preferences_title_about">Інформація</string>
     <string name="preferences_summary_about">Про ModdedPE</string>
@@ -86,10 +77,8 @@
     <string name="preferences_summary_language">Змінити мову лончера.</string>
     <string name="preferences_title_music">Музика</string>
     <string name="preferences_summary_music">Музика на фоні під час гри</string>
-    <string name="preferences_title_moddedpe_texture_pack">ModdedPE Texture Pack</string>
-    <string name="preferences_summary_moddedpe_texture_pack">До стандартної графіки ModdedPE додано нові стильні текстури!</string>
-    <string name="preferences_title_desktop_gui">Use Desktop GUI</string>
-    <string name="preferences_summary_desktop_gui">Change inventory and crafting windows to Desktop mode</string>
+    <string name="preferences_title_webview_engine">WebView движок</string>
+    <string name="preferences_summary_webview_engine">Выберите WebView движок</string>
 
     <!--Open Game Dialog-->
     <string name="preloading_initing">Запускаємо лончер</string>
@@ -97,17 +86,19 @@
     <string name="preloading_initing_info_safe_mode">--Безпечний режим ввімк.\n--Версія Minecraft PE: %1$s</string>
     <string name="preloading_initing_loading_libs">Завантаження Native Libs</string>
     <string name="preloading_loading_lib_substrate">--Завантаження libsubstrate.so</string>
+    <string name="preloading_loading_lib_xhook">--Завантаження libxhook.so</string><![CDATA[>
+    ]]>
     <string name="preloading_loading_lib_game_launcher">--Завантаження liblauncher-core.so</string>
     <string name="preloading_loading_lib_fmod">--Завантаження libfmod.so</string>
     <string name="preloading_loading_lib_minecraftpe">--Завантаження libminecraftpe.so</string>
-    <string name="preloading_loading_lib_nmodapi">--Завантаження libnmod-core.so</string>
     <string name="preloading_initing_loading_libs_done">Завантаження Native Libs завершено</string>
     <string name="preloading_nmod_start_loading">Завантаження NMods</string>
     <string name="preloading_nmod_loaded">--Завантажено NMod: %1$s</string>
     <string name="preloading_nmod_loaded_failed">--Завантаження не вдалося: %1$s</string>
     <string name="preloading_nmod_finish_loading">Завантаження NMods завершено</string>
     <string name="preloading_finished">Запуск гри</string>
-    <string-array name="preloading_tips_text">
+
+    <string-array name="preloading_tips_text" tools:ignore="InconsistentArrays">
         <item>APK відформатовані NMods також можуть бути імпортовані.</item>
         <item>А чи знаєте ви? Можна прокручувати вліво або вправо для зміни сторінки.</item>
         <item>Краще імпортувати NMods через файли, ніж через додаток.</item>
@@ -127,7 +118,7 @@
     <!--Main Activity-->
     <string name="main_play">Грати</string>
     <string name="main_reloading_title">Перезавантаження</string>
-    <string name="main_default_minecraft_title">Minecraft PE: За замовчуванням</string>
+    <string name="main_default_minecraft_title">Resource Pack: За замовчуванням</string>
     <string name="no_available_mcpe_version_found">ModdedPE знайшов несумісну версію Minecraft PE (%1$s) на цьому пристрої. (ModdedPE сумісний з %2$s!)\nЯкщо ви продовжите запуск, то ModdedPE може вилетіти або заглючити.</string>
     <string name="no_available_mcpe_version_found_title">Невідповідна версія Minecraft PE</string>
     <string name="no_available_mcpe_version_continue">Продовжити (НЕ РАДИМО!)</string>
@@ -155,12 +146,12 @@
     <string name="launch_failed_message">На жаль, ModdedPE видає помилки при відкритті гри, що призводить до крашів. Для вирішення цієї проблеми спробуйте очистити дані додатка ModdedPE.\nПовідомлення про помилку:%1$s</string>
 
     <!--Enable Warnings-->
-    <string name="enable_warning_unsupported_title">Непідтримувана версія</string>
-    <string name="enable_warning_unsupported_message">NMod %1$s ще не підтримує Minecraft %2$s. Будь ласка, оновіть NMod %1$s.</string>
-    <string name="enable_warning_unsupported_message_if_next">NMod %1$s ще не підтримує Minecraft %2$s.Ви можете ввімкнути його, але можуть бути проблеми або збої.</string>
 
     <!--Permissions-->
     <string name="permission_grant_failed_title">Не вдалося отримати дозволи</string>
     <string name="permission_grant_failed_message">Чи не вдалося отрмати дозвіл: Зміна даних на USB-накопичувачі. Перейдіть на сторінку налаштувань, щоб надати відповідні дозволи.</string>
+    <string name="scoped_storage_title">Изменения в Android 11 R</string>
+    <string name="scoped_storage_msg">В Android 11 появился новый способ управления файлами под названием \"Scoped Storage\". Вам необходимо предоставить специальное разрешение!</string>
 
+    <string name="not_supported_on_your_device">Not supported on your device!</string>
 </resources>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019 Тимашков Иван
+ * Copyright (C) 2018-2021 Тимашков Иван
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,29 +16,37 @@
  */
 package com.mcal.pesdk.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.os.Build;
+
+import com.mcal.mcpelauncher.data.Preferences;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author Тимашков Иван
+ * @author https://github.com/TimScriptov
+ */
 public class MinecraftInfo {
-    private static String MC_PACKAGE_NAME = "com.mojang.minecraftpe";
+    @SuppressLint("StaticFieldLeak")
+    private static Context mContext;
+    @SuppressLint("StaticFieldLeak")
+    private static Context mMCContext;
 
-    private Context mContext;
-    private Context mMCContext;
-
-    public MinecraftInfo(Context context, LauncherOptions options) {
-        this.mContext = context;
-
-        String mMinecraftPackageName = MC_PACKAGE_NAME;
-        if (!options.getMinecraftPEPackageName().equals(LauncherOptions.Companion.getSTRING_VALUE_DEFAULT()))
-            mMinecraftPackageName = options.getMinecraftPEPackageName();
-
+    public MinecraftInfo(@NotNull Context context) {
+        mContext = context;
         try {
-            mMCContext = context.createPackageContext(mMinecraftPackageName, Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);
+            mMCContext = context.createPackageContext(Preferences.getMinecraftPackageName(), Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);
         } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
 
         AssetOverrideManager.newInstance();
@@ -47,8 +55,30 @@ public class MinecraftInfo {
         AssetOverrideManager.getInstance().addAssetOverride(mContext.getPackageResourcePath());
     }
 
+    public static String getMinecraftPackageNativeLibraryDir() {
+        final Context context = mContext;
+        if (new SplitParser(context).isAppBundle()) {
+            return context.getCacheDir().getPath() + "/lib/" + Build.CPU_ABI;
+        } else {
+            return mMCContext.getApplicationInfo().nativeLibraryDir;
+        }
+    }
+
+    public static Context getMinecraftPackageContext() {
+        return mMCContext;
+    }
+
+    private static @Nullable ApplicationInfo getMinecraftApplicationInfo() {
+        try {
+            return mMCContext.getPackageManager().getPackageInfo(Preferences.getMinecraftPackageName(), 0).applicationInfo;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public boolean isSupportedMinecraftVersion(String[] versions) {
-        String mcpeVersionName = getMinecraftVersionName();
+        final String mcpeVersionName = getMinecraftVersionName();
         if (mcpeVersionName == null)
             return false;
         for (String nameItem : versions) {
@@ -66,16 +96,9 @@ public class MinecraftInfo {
         try {
             return mContext.getPackageManager().getPackageInfo(getMinecraftPackageContext().getPackageName(), PackageManager.GET_CONFIGURATIONS).versionName;
         } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
         return null;
-    }
-
-    public String getMinecraftPackageNativeLibraryDir() {
-        return mMCContext.getApplicationInfo().nativeLibraryDir;
-    }
-
-    public Context getMinecraftPackageContext() {
-        return mMCContext;
     }
 
     public boolean isMinecraftInstalled() {

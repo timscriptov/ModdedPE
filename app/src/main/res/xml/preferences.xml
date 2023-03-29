@@ -1,72 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:key="settings_fragment"
     android:layout="@layout/preference_item"
     android:title="@string/preferences_title">
-
-    <PreferenceCategory
+    <androidx.preference.PreferenceCategory
         android:layout="@layout/preference_category_widget"
         android:title="@string/preferences_title_launcher">
-
-        <SwitchPreference
+        <com.mcal.mcpelauncher.view.SwitchPreference
             android:defaultValue="false"
+            android:icon="@drawable/ic_safe_mode"
             android:key="safe_mode"
             android:summary="@string/preferences_summary_safe_mode"
             android:title="@string/preferences_title_safe_mode" />
-
-        <SwitchPreference
-            android:defaultValue="true"
+        <androidx.preference.Preference
+            android:defaultValue="false"
+            android:icon="@drawable/ic_webview_engine"
+            android:key="webview_engine"
+            android:summary="@string/preferences_summary_webview_engine"
+            android:title="@string/preferences_title_webview_engine" />
+        <com.mcal.mcpelauncher.view.SwitchPreference
+            android:defaultValue="false"
+            android:icon="@drawable/ic_theme"
+            android:key="night_mode"
+            android:summary="@string/pref_night_mode_msg"
+            android:title="@string/pref_night_mode_title" />
+        <com.mcal.mcpelauncher.view.SwitchPreference
+            android:defaultValue="false"
+            android:icon="@drawable/ic_music"
             android:key="background_music"
             android:summary="@string/preferences_summary_music"
             android:title="@string/preferences_title_music" />
-
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="moddedpe_pack"
-            android:summary="@string/preferences_summary_moddedpe_texture_pack"
-            android:title="@string/preferences_title_moddedpe_texture_pack" />
-
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="desktop_gui"
-            android:summary="@string/preferences_summary_desktop_gui"
-            android:title="@string/preferences_title_desktop_gui" />
-
-        <Preference
+        <androidx.preference.Preference
+            android:icon="@drawable/ic_folder"
             android:key="data_saved_path"
-            android:layout="@layout/preference_item"
             android:summary="@string/preferences_summary_data_saved_path"
             android:title="@string/preferences_title_data_saved_path" />
-
-        <Preference
+        <androidx.preference.Preference
+            android:icon="@drawable/ic_minecraft"
             android:key="game_pkg_name"
-            android:layout="@layout/preference_item"
             android:summary="@string/preferences_summary_game_pkg_name"
             android:title="@string/preferences_title_game_pkg_name" />
-
-    </PreferenceCategory>
-
-
-    <PreferenceCategory
+    </androidx.preference.PreferenceCategory>
+    <androidx.preference.PreferenceCategory
         android:layout="@layout/preference_category_widget"
         android:title="@string/preferences_title_app">
-
-        <ListPreference
+        <androidx.preference.ListPreference
             android:defaultValue="0"
             android:dialogTitle="@string/preferences_title_language"
             android:entries="@array/language_strings"
             android:entryValues="@array/language_values"
+            android:icon="@drawable/ic_language"
             android:key="language"
-            android:layout="@layout/preference_item"
             android:summary="@string/preferences_summary_language"
             android:title="@string/preferences_title_language" />
-
-        <Preference
+        <androidx.preference.Preference
+            android:icon="@drawable/ic_about"
             android:key="about"
-            android:layout="@layout/preference_item"
             android:summary="@string/preferences_summary_about"
             android:title="@string/preferences_title_about" />
-
-    </PreferenceCategory>
-
+    </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>
