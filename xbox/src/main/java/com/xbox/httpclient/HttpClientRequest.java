@@ -1,5 +1,8 @@
 package com.xbox.httpclient;
 
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+
 import java.io.IOException;
 import java.net.UnknownHostException;
 
@@ -27,34 +30,30 @@ public class HttpClientRequest {
     public native void OnRequestFailed(long j, String str, boolean z);
 
     public void setHttpUrl(String str) {
-        this.requestBuilder = this.requestBuilder.url(str);
+        requestBuilder = requestBuilder.url(str);
     }
 
     public void setHttpMethodAndBody(String str, long j, String str2, long j2) {
-        MediaType mediaType = null;
-        RequestBody requestBody = null;
+        RequestBody httpClientRequestBody = null;
         if (j2 == 0) {
-            if ("POST".equals(str) || "PUT".equals(str)) {
-                if (str2 != null) {
-                    mediaType = MediaType.parse(str2);
-                }
-                requestBody = RequestBody.create(NO_BODY, mediaType);
+            if (HttpPost.METHOD_NAME.equals(str) || HttpPut.METHOD_NAME.equals(str)) {
+                httpClientRequestBody = RequestBody.create(NO_BODY, str2 != null ? MediaType.parse(str2) : null);
             }
         } else {
-            requestBody = new HttpClientRequestBody(j, str2, j2);
+            httpClientRequestBody = new HttpClientRequestBody(j, str2, j2);
         }
-        this.requestBuilder.method(str, requestBody);
+        requestBuilder.method(str, httpClientRequestBody);
     }
 
     public void setHttpHeader(String str, String str2) {
-        this.requestBuilder = this.requestBuilder.addHeader(str, str2);
+        requestBuilder = requestBuilder.addHeader(str, str2);
     }
 
     public void doRequestAsync(final long j) {
-        OK_CLIENT.newCall(this.requestBuilder.build()).enqueue(new Callback() {
+        OK_CLIENT.newCall(requestBuilder.build()).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException iOException) {
-                HttpClientRequest.this.OnRequestFailed(j, iOException.getClass().getCanonicalName(), iOException instanceof UnknownHostException);
+                OnRequestFailed(j, iOException.getClass().getCanonicalName(), iOException instanceof UnknownHostException);
             }
 
             @Override

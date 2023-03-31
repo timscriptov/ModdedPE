@@ -22,15 +22,36 @@ public final class HttpClientRequestBody extends RequestBody {
     private final long contentLength;
     private final MediaType contentType;
 
+    public HttpClientRequestBody(long callHandle, String contentType, long contentLength) {
+        this.callHandle = callHandle;
+        this.contentType = contentType != null ? MediaType.parse(contentType) : null;
+        this.contentLength = contentLength;
+    }
+
+    @Override
+    public MediaType contentType() {
+        return contentType;
+    }
+
+    @Override
+    public long contentLength() {
+        return contentLength;
+    }
+
+    @Override
+    public void writeTo(@NonNull BufferedSink bufferedSink) throws IOException {
+        bufferedSink.writeAll(Okio.source(new NativeInputStream(callHandle)));
+    }
+
     private final class NativeInputStream extends InputStream {
         private final long callHandle;
         private long offset = 0;
 
-        private native int nativeRead(long j, long j2, byte[] bArr, long j3, long j4) throws IOException;
-
-        public NativeInputStream(long j) {
-            this.callHandle = j;
+        public NativeInputStream(long callHandle) {
+            this.callHandle = callHandle;
         }
+
+        private native int nativeRead(long callHandle, long offset, byte[] b, long off, long len) throws IOException;
 
         @Override
         public int read() throws IOException {
@@ -40,52 +61,31 @@ public final class HttpClientRequestBody extends RequestBody {
         }
 
         @Override
-        public int read(byte[] bArr) throws IOException {
-            return read(bArr, 0, bArr.length);
+        public int read(byte[] b) throws IOException {
+            return read(b, 0, b.length);
         }
 
         @Override
-        public int read(byte[] bArr, int i, int i2) throws IOException {
-            Objects.requireNonNull(bArr);
-            if (i < 0 || i2 < 0 || i + i2 > bArr.length) {
+        public int read(byte[] b, int off, int len) throws IOException {
+            Objects.requireNonNull(b);
+            if (off < 0 || len < 0 || off + len > b.length) {
                 throw new IndexOutOfBoundsException();
             }
-            if (i2 == 0) {
+            if (len == 0) {
                 return 0;
             }
-            int nativeRead = nativeRead(this.callHandle, this.offset, bArr, i, i2);
+            int nativeRead = nativeRead(callHandle, offset, b, off, len);
             if (nativeRead == -1) {
                 return -1;
             }
-            this.offset += nativeRead;
+            offset += nativeRead;
             return nativeRead;
         }
 
         @Override
-        public long skip(long j) throws IOException {
-            this.offset += j;
-            return j;
+        public long skip(long offset) throws IOException {
+            this.offset += offset;
+            return offset;
         }
-    }
-
-    public HttpClientRequestBody(long j, String str, long j2) {
-        this.callHandle = j;
-        this.contentType = str != null ? MediaType.parse(str) : null;
-        this.contentLength = j2;
-    }
-
-    @Override
-    public MediaType contentType() {
-        return this.contentType;
-    }
-
-    @Override
-    public long contentLength() {
-        return this.contentLength;
-    }
-
-    @Override
-    public void writeTo(@NonNull BufferedSink bufferedSink) throws IOException {
-        bufferedSink.writeAll(Okio.source(new NativeInputStream(this.callHandle)));
     }
 }

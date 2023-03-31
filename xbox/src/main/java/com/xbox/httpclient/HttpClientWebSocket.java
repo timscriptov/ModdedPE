@@ -24,12 +24,16 @@ public final class HttpClientWebSocket extends WebSocketListener {
     private final long owner;
     private WebSocket socket;
 
+    HttpClientWebSocket(long owner) {
+        this.owner = owner;
+    }
+
     public native void onBinaryMessage(ByteBuffer byteBuffer);
 
     public native void onClose(int i);
 
     @Override
-    public void onClosing(WebSocket webSocket, int i, String str) {
+    public void onClosing(WebSocket webSocket, int code, String reason) {
     }
 
     public native void onFailure();
@@ -38,29 +42,25 @@ public final class HttpClientWebSocket extends WebSocketListener {
 
     public native void onOpen();
 
-    HttpClientWebSocket(long j) {
-        this.owner = j;
+    public void addHeader(String name, String value) {
+        headers.add(name, value);
     }
 
-    public void addHeader(String str, String str2) {
-        this.headers.add(str, str2);
-    }
-
-    public void connect(String str, String str2) {
-        addHeader("Sec-WebSocket-Protocol", str2);
-        this.socket = OK_CLIENT.newWebSocket(new Request.Builder().url(str).headers(this.headers.build()).build(), this);
+    public void connect(String url, String header) {
+        addHeader("Sec-WebSocket-Protocol", header);
+        socket = OK_CLIENT.newWebSocket(new Request.Builder().url(url).headers(headers.build()).build(), this);
     }
 
     public boolean sendMessage(String str) {
-        return this.socket.send(str);
+        return socket.send(str);
     }
 
     public boolean sendBinaryMessage(ByteBuffer byteBuffer) {
-        return this.socket.send(ByteString.of(byteBuffer));
+        return socket.send(ByteString.of(byteBuffer));
     }
 
     public void disconnect(int i) {
-        this.socket.close(i, null);
+        socket.close(i, null);
     }
 
     @Override
@@ -69,26 +69,26 @@ public final class HttpClientWebSocket extends WebSocketListener {
     }
 
     @Override
-    public void onFailure(WebSocket webSocket, Throwable th, Response response) {
+    public void onFailure(WebSocket webSocket, Throwable t, Response response) {
         onFailure();
     }
 
     @Override
-    public void onClosed(WebSocket webSocket, int i, String str) {
-        onClose(i);
+    public void onClosed(WebSocket webSocket, int code, String reason) {
+        onClose(code);
     }
 
     @Override
-    public void onMessage(WebSocket webSocket, String str) {
-        onMessage(str);
+    public void onMessage(WebSocket webSocket, String text) {
+        onMessage(text);
     }
 
     @Override
-    public void onMessage(WebSocket webSocket, @NonNull ByteString byteString) {
-        onBinaryMessage(byteString.asByteBuffer());
+    public void onMessage(WebSocket webSocket, @NonNull ByteString bytes) {
+        onBinaryMessage(bytes.asByteBuffer());
     }
 
     protected void finalize() {
-        this.socket.cancel();
+        socket.cancel();
     }
 }
