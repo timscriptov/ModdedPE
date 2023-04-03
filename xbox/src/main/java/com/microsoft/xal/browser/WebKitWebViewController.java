@@ -19,15 +19,20 @@ package com.microsoft.xal.browser;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.microsoft.aad.adal.AuthenticationConstants;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,27 +56,27 @@ public class WebKitWebViewController extends Activity {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        Bundle extras = getIntent().getExtras();
+        final Bundle extras = getIntent().getExtras();
         if (extras == null) {
             setResult(RESULT_FAILED);
             finish();
             return;
         }
-        String string = extras.getString(START_URL, "");
-        final String string2 = extras.getString(END_URL, "");
-        if (string.isEmpty() || string2.isEmpty()) {
+        final String url = extras.getString(START_URL, "");
+        final String endUrl = extras.getString(END_URL, "");
+        if (url.isEmpty() || endUrl.isEmpty()) {
             setResult(RESULT_FAILED);
             finish();
             return;
         }
-        String[] stringArray = extras.getStringArray(REQUEST_HEADER_KEYS);
-        String[] stringArray2 = extras.getStringArray(REQUEST_HEADER_VALUES);
-        if (stringArray.length != stringArray2.length) {
+        final String[] requestHeaderKeys = extras.getStringArray(REQUEST_HEADER_KEYS);
+        final String[] requestHeaderValues = extras.getStringArray(REQUEST_HEADER_VALUES);
+        if (requestHeaderKeys.length != requestHeaderValues.length) {
             setResult(RESULT_FAILED);
             finish();
             return;
         }
-        ShowUrlType showUrlType = (ShowUrlType) extras.get(SHOW_TYPE);
+        final ShowUrlType showUrlType = (ShowUrlType) extras.get(SHOW_TYPE);
         if (showUrlType == ShowUrlType.CookieRemoval || showUrlType == ShowUrlType.CookieRemovalSkipIfSharedCredentials) {
             deleteCookies("login.live.com", true);
             deleteCookies("account.live.com", true);
@@ -79,74 +84,119 @@ public class WebKitWebViewController extends Activity {
             deleteCookies("xboxlive.com", true);
             deleteCookies("sisu.xboxlive.com", true);
             Intent intent = new Intent();
-            intent.putExtra(RESPONSE_KEY, string2);
+            intent.putExtra(RESPONSE_KEY, endUrl);
             setResult(-1, intent);
             finish();
             return;
         }
-        Map<String, String> hashMap = new HashMap<>(stringArray.length);
-        for (int i = 0; i < stringArray.length; i++) {
-            if (stringArray[i] == null || stringArray[i].isEmpty() || stringArray2[i] == null || stringArray2[i].isEmpty()) {
+        final Map<String, String> hashMap = new HashMap<>(requestHeaderKeys.length);
+        for (int i = 0; i < requestHeaderKeys.length; i++) {
+            if (requestHeaderKeys[i] == null || requestHeaderKeys[i].isEmpty() || requestHeaderValues[i] == null || requestHeaderValues[i].isEmpty()) {
                 setResult(RESULT_FAILED);
                 finish();
                 return;
             }
-            hashMap.put(stringArray[i], stringArray2[i]);
+            hashMap.put(requestHeaderKeys[i], requestHeaderValues[i]);
         }
-        WebView webView = new WebView(this);
-        this.m_webView = webView;
+        final WebView webView = new WebView(this);
+        m_webView = webView;
         setContentView(webView);
-        this.m_webView.getSettings().setJavaScriptEnabled(true);
-        if (Build.VERSION.SDK_INT >= 21) {
-            this.m_webView.getSettings().setMixedContentMode(2);
-        }
-        this.m_webView.setWebChromeClient(new WebChromeClient() {
+        m_webView.getSettings().setJavaScriptEnabled(true);
+        m_webView.getSettings().setMixedContentMode(2);
+        m_webView.setWebChromeClient(new WebChromeClient() {
             @Override
-            public void onProgressChanged(WebView webView2, int i2) {
-                WebKitWebViewController.this.setProgress(i2 * 100);
+            public void onProgressChanged(WebView webView, int i) {
+                setProgress(i * 100);
             }
         });
-        this.m_webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageFinished(WebView webView2, String str) {
-                super.onPageFinished(webView2, str);
-                webView2.requestFocus(130);
-                webView2.sendAccessibilityEvent(8);
-                webView2.evaluateJavascript("if (typeof window.__xal__performAccessibilityFocus === \"function\") { window.__xal__performAccessibilityFocus(); }", null);
-            }
-
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView webView2, String str) {
-                if (str.startsWith(string2, 0)) {
-                    Intent intent2 = new Intent();
-                    intent2.putExtra(WebKitWebViewController.RESPONSE_KEY, str);
-                    setResult(-1, intent2);
-                    finish();
-                    return true;
-                }
-                return false;
-            }
-        });
-        this.m_webView.loadUrl(string, hashMap);
+        m_webView.setWebViewClient(new XalWebViewClient(this, endUrl));
+        m_webView.loadUrl(url);
     }
 
-    private void deleteCookies(String str, boolean z) {
-        CookieManager cookieManager = CookieManager.getInstance();
-        String sb2 = (z ? AuthenticationConstants.Broker.REDIRECT_SSL_PREFIX : "http://") + str;
-        String cookie = cookieManager.getCookie(sb2);
+    private void deleteCookies(String domain, boolean useHttps) {
+        final CookieManager cookieManager = CookieManager.getInstance();
+        final String url = (useHttps ? AuthenticationConstants.Broker.REDIRECT_SSL_PREFIX : "http://") + domain;
+        final String cookie = cookieManager.getCookie(url);
         if (cookie != null) {
-            String[] split = cookie.split(AuthenticationConstants.Broker.CHALLENGE_REQUEST_CERT_AUTH_DELIMETER);
+            final String[] split = cookie.split(AuthenticationConstants.Broker.CHALLENGE_REQUEST_CERT_AUTH_DELIMETER);
             for (String str2 : split) {
-                String trim = str2.split("=")[0].trim();
+                final String trim = str2.split("=")[0].trim();
                 String str3 = trim + "=;";
                 if (trim.startsWith("__Secure-")) {
-                    str3 = str3 + "Secure;Domain=" + str + ";Path=/";
+                    str3 = str3 + "Secure;Domain=" + domain + ";Path=/";
                 }
-                cookieManager.setCookie(sb2, trim.startsWith("__Host-") ? str3 + "Secure;Path=/" : str3 + "Domain=" + str + ";Path=/");
+                cookieManager.setCookie(url, trim.startsWith("__Host-") ? str3 + "Secure;Path=/" : str3 + "Domain=" + domain + ";Path=/");
             }
         }
-        if (Build.VERSION.SDK_INT >= 21) {
-            cookieManager.flush();
+        cookieManager.flush();
+    }
+
+    public class XalWebViewClient extends WebViewClient {
+        private final Activity mActivity;
+        private final String mUrl;
+
+        public XalWebViewClient(Activity activity, String url) {
+            mActivity = activity;
+            mUrl = url;
+        }
+
+        @Override
+        public void onPageFinished(WebView webView, String url) {
+            super.onPageFinished(webView, url);
+            webView.requestFocus(130);
+            webView.sendAccessibilityEvent(8);
+            webView.evaluateJavascript("if (typeof window.__xal__performAccessibilityFocus === \"function\") { window.__xal__performAccessibilityFocus(); }", null);
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView webView2, @NonNull String str) {
+            if (str.startsWith(mUrl, 0)) {
+                Intent intent2 = new Intent();
+                intent2.putExtra(WebKitWebViewController.RESPONSE_KEY, str);
+                setResult(-1, intent2);
+                finish();
+                return true;
+            }
+            return false;
+        }
+
+
+        @Override
+        public WebResourceResponse shouldInterceptRequest(WebView webView, @NonNull WebResourceRequest webResourceRequest) {
+            final String uri = webResourceRequest.getUrl().toString();
+            if (uri.contains("favicon.ico") || uri.contains("AppLogos")) {
+                new Thread(() -> webView.loadUrl(uri));
+            }
+            if (uri.contains(".css") && uri.contains("splash")) {
+                new Thread(() -> webView.loadUrl(uri));
+            }
+            if (uri.contains(".css") && ((uri.contains("login") || uri.contains("signup")) && !uri.contains("bootstrap"))) {
+                return webResponseFromAssets("resources/login.css");
+            }
+            if (uri.contains("images-eds") && uri.contains("xbox")) {
+                System.out.println("User Finished Login");
+            }
+            if (!uri.contains("microsoft_logo") &&
+                    !uri.contains("AppLogos") &&
+                    !uri.contains("applogos") &&
+                    !uri.contains("xboxlivelogo") &&
+                    !uri.contains("logo")) {
+                if (!uri.contains("AppBackgrounds") && !uri.contains("appbackgrounds")) {
+                    if (uri.contains("minecraft") && (uri.contains(".png") || uri.contains(".jpg"))) {
+                        return webResponseFromAssets("resources/bg32.png");
+                    } else return super.shouldInterceptRequest(webView, webResourceRequest);
+                } else return webResponseFromAssets("resources/bg32.png");
+            } else return webResponseFromAssets("resources/title.png");
+        }
+
+        @Nullable
+        private WebResourceResponse webResponseFromAssets(String resName) {
+            try {
+                return new WebResourceResponse("text/css", "UTF-8", mActivity.getAssets().open(resName));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
         }
     }
 }
