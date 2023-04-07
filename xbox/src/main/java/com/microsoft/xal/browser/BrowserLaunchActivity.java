@@ -24,6 +24,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
 
 /**
@@ -33,7 +34,7 @@ import androidx.browser.customtabs.CustomTabsIntent;
  * @author https://github.com/TimScriptov
  */
 @SuppressWarnings("JavaJniMissingFunction")
-public class BrowserLaunchActivity extends Activity {
+public class BrowserLaunchActivity extends AppCompatActivity {
     public static final String END_URL = "END_URL";
     public static final String IN_PROC_BROWSER = "IN_PROC_BROWSER";
     public static final String OPERATION_ID = "OPERATION_ID";
@@ -63,7 +64,7 @@ public class BrowserLaunchActivity extends Activity {
 
     public static void showUrl(long operationId, Context context, @NonNull String startUrl, String endUrl, int showTypeInt, String[] requestHeaderKeys, String[] requestHeaderValues, boolean useInProcBrowser) {
         if (!startUrl.isEmpty() && !endUrl.isEmpty()) {
-            ShowUrlType fromInt = ShowUrlType.fromInt(showTypeInt);
+            final ShowUrlType fromInt = ShowUrlType.fromInt(showTypeInt);
             if (fromInt == null) {
                 urlOperationFailed(operationId, false, null);
                 return;
@@ -71,8 +72,8 @@ public class BrowserLaunchActivity extends Activity {
                 urlOperationFailed(operationId, false, null);
                 return;
             } else {
-                Intent intent = new Intent(context, BrowserLaunchActivity.class);
-                Bundle bundle = new Bundle();
+                final Intent intent = new Intent(context, BrowserLaunchActivity.class);
+                final Bundle bundle = new Bundle();
                 bundle.putLong(OPERATION_ID, operationId);
                 bundle.putString(START_URL, startUrl);
                 bundle.putString(END_URL, endUrl);
@@ -92,7 +93,7 @@ public class BrowserLaunchActivity extends Activity {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        Bundle extras = getIntent().getExtras();
+        final Bundle extras = getIntent().getExtras();
         if (!checkNativeCodeLoaded()) {
             startActivity(getApplicationContext().getPackageManager().getLaunchIntentForPackage(getApplicationContext().getPackageName()));
             finish();
@@ -103,7 +104,7 @@ public class BrowserLaunchActivity extends Activity {
             m_browserInfo = bundle.getString(BROWSER_INFO_STATE_KEY);
         } else if (extras != null) {
             m_operationId = extras.getLong(OPERATION_ID, 0L);
-            BrowserLaunchParameters FromArgs = BrowserLaunchParameters.FromArgs(extras);
+            final BrowserLaunchParameters FromArgs = BrowserLaunchParameters.FromArgs(extras);
             m_launchParameters = FromArgs;
             if (FromArgs != null && m_operationId != 0) {
                 return;
@@ -121,14 +122,14 @@ public class BrowserLaunchActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        boolean z = m_customTabsInProgress;
+        final boolean z = m_customTabsInProgress;
         if (!z && m_launchParameters != null) {
-            BrowserLaunchParameters browserLaunchParameters = m_launchParameters;
+            final BrowserLaunchParameters browserLaunchParameters = m_launchParameters;
             m_launchParameters = null;
             startAuthSession(browserLaunchParameters);
         } else if (z) {
             m_customTabsInProgress = false;
-            Uri data = getIntent().getData();
+            final Uri data = getIntent().getData();
             if (data != null) {
                 finishOperation(WebResult.SUCCESS, data.toString());
                 return;
@@ -154,14 +155,15 @@ public class BrowserLaunchActivity extends Activity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == WEB_KIT_WEB_VIEW_REQUEST) {
-            if (resultCode == -1) {
-                String string = intent.getExtras().getString(WebKitWebViewController.RESPONSE_KEY, "");
+            if (resultCode == RESULT_OK) {
+                final String string = intent.getExtras().getString(WebKitWebViewController.RESPONSE_KEY, "");
                 if (!string.isEmpty()) {
                     finishOperation(WebResult.SUCCESS, string);
                     return;
                 }
-            } else if (resultCode == 0) {
+            } else if (resultCode == RESULT_CANCELED) {
                 finishOperation(WebResult.CANCEL, null);
                 return;
             }
@@ -179,9 +181,9 @@ public class BrowserLaunchActivity extends Activity {
     }
 
     private void startAuthSession(@NonNull BrowserLaunchParameters browserLaunchParameters) {
-        BrowserSelectionResult selectBrowser = BrowserSelector.selectBrowser(getApplicationContext(), browserLaunchParameters.UseInProcBrowser);
+        final BrowserSelectionResult selectBrowser = BrowserSelector.selectBrowser(getApplicationContext(), browserLaunchParameters.UseInProcBrowser);
         m_browserInfo = selectBrowser.toString();
-        String packageName = selectBrowser.packageName();
+        final String packageName = selectBrowser.packageName();
         if (packageName == null) {
             startWebView(browserLaunchParameters.StartUrl, browserLaunchParameters.EndUrl, browserLaunchParameters.ShowType, browserLaunchParameters.RequestHeaderKeys, browserLaunchParameters.RequestHeaderValues);
             return;
@@ -196,9 +198,9 @@ public class BrowserLaunchActivity extends Activity {
         }
         m_customTabsInProgress = true;
         m_sharedBrowserUsed = true;
-        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        final CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         builder.setShowTitle(true);
-        CustomTabsIntent build = builder.build();
+        final CustomTabsIntent build = builder.build();
         build.intent.setData(Uri.parse(startUrl));
         build.intent.setPackage(packageName);
         startActivity(build.intent);
@@ -206,8 +208,8 @@ public class BrowserLaunchActivity extends Activity {
 
     private void startWebView(String startUrl, String endUrl, ShowUrlType showUrlType, String[] requestHeaderKeys, String[] requestHeaderValues) {
         m_sharedBrowserUsed = false;
-        Intent intent = new Intent(getApplicationContext(), WebKitWebViewController.class);
-        Bundle bundle = new Bundle();
+        final Intent intent = new Intent(getApplicationContext(), WebKitWebViewController.class);
+        final Bundle bundle = new Bundle();
         bundle.putString(START_URL, startUrl);
         bundle.putString(END_URL, endUrl);
         bundle.putSerializable(SHOW_TYPE, showUrlType);
@@ -218,13 +220,13 @@ public class BrowserLaunchActivity extends Activity {
     }
 
     private void finishOperation(WebResult webResult, String finalUrl) {
-        long j = m_operationId;
+        final long j = m_operationId;
         m_operationId = 0L;
         finish();
         if (j == 0) {
             return;
         }
-        int result = XalWebResult.mWebResult[webResult.ordinal()];
+        final int result = XalWebResult.mWebResult[webResult.ordinal()];
         if (result == 1) {
             urlOperationSucceeded(j, finalUrl, m_sharedBrowserUsed, m_browserInfo);
         } else if (result == 2) {
@@ -269,12 +271,12 @@ public class BrowserLaunchActivity extends Activity {
 
         @Nullable
         public static BrowserLaunchParameters FromArgs(@NonNull Bundle bundle) {
-            String startUrl = bundle.getString(START_URL);
-            String endUrl = bundle.getString(END_URL);
-            String[] headerKeys = bundle.getStringArray(REQUEST_HEADER_KEYS);
-            String[] headerValues = bundle.getStringArray(REQUEST_HEADER_VALUES);
-            ShowUrlType showUrlType = (ShowUrlType) bundle.get(SHOW_TYPE);
-            boolean z = bundle.getBoolean(BrowserLaunchActivity.IN_PROC_BROWSER);
+            final String startUrl = bundle.getString(START_URL);
+            final String endUrl = bundle.getString(END_URL);
+            final String[] headerKeys = bundle.getStringArray(REQUEST_HEADER_KEYS);
+            final String[] headerValues = bundle.getStringArray(REQUEST_HEADER_VALUES);
+            final ShowUrlType showUrlType = (ShowUrlType) bundle.get(SHOW_TYPE);
+            final boolean z = bundle.getBoolean(BrowserLaunchActivity.IN_PROC_BROWSER);
             if (startUrl == null || endUrl == null || headerKeys == null || headerValues == null || headerKeys.length != headerValues.length) {
                 return null;
             }

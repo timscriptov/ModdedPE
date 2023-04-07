@@ -8,7 +8,8 @@
             android:configChanges="orientation"
             android:exported="true"
             android:launchMode="singleTask"
-            android:screenOrientation="sensorLandscape">
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <data
@@ -21,17 +22,18 @@
         </activity>
 
         <activity
-            android:theme="@style/AppTheme"
             android:name="com.microsoft.xal.browser.WebKitWebViewController"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/AppTheme" />
 
         <activity
             android:name="com.microsoft.xal.browser.BrowserLaunchActivity"
             android:configChanges="orientation"
             android:exported="false"
             android:launchMode="singleTask"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/AppTheme" />
 
     </application>
 

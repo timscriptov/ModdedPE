@@ -29,6 +29,7 @@ import android.webkit.WebViewClient;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.microsoft.aad.adal.AuthenticationConstants;
 
@@ -42,7 +43,7 @@ import java.util.Map;
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-public class WebKitWebViewController extends Activity {
+public class WebKitWebViewController extends AppCompatActivity {
     public static final String END_URL = "END_URL";
     public static final String REQUEST_HEADER_KEYS = "REQUEST_HEADER_KEYS";
     public static final String REQUEST_HEADER_VALUES = "REQUEST_HEADER_VALUES";
@@ -159,7 +160,6 @@ public class WebKitWebViewController extends Activity {
             }
             return false;
         }
-
 
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView webView, @NonNull WebResourceRequest webResourceRequest) {

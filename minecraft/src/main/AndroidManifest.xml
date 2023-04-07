@@ -35,15 +35,6 @@
 
     <application>
 
-<!--        <activity-->
-<!--            android:name="com.mojang.minecraftpe.MainActivity"-->
-<!--            android:alwaysRetainTaskState="true"-->
-<!--            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"-->
-<!--            android:excludeFromRecents="false"-->
-<!--            android:exported="true"-->
-<!--            android:launchMode="singleTask"-->
-<!--            android:screenOrientation="sensorLandscape" />-->
-
         <meta-data
             android:name="appcenter_android_trial_id"
             android:value="@string/appcenter_android_id" />

@@ -16,9 +16,10 @@
  */
 package com.microsoft.xal.browser;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * 13.08.2022
@@ -26,13 +27,13 @@ import android.os.Bundle;
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-public class IntentHandler extends Activity {
+public class IntentHandler extends AppCompatActivity {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         Intent intent = new Intent(this, BrowserLaunchActivity.class);
         intent.setData(getIntent().getData());
-        intent.addFlags(603979776);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
     }
