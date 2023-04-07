@@ -21,6 +21,7 @@
         </activity>
 
         <activity
+            android:theme="@style/AppTheme"
             android:name="com.microsoft.xal.browser.WebKitWebViewController"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:screenOrientation="sensorLandscape" />

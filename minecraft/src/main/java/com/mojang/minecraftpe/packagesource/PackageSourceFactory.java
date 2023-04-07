@@ -12,6 +12,6 @@ public class PackageSourceFactory {
     @Nullable
     @Contract(pure = true)
     static PackageSource createGooglePlayPackageSource(String googlePlayLicenseKey, PackageSourceListener packageSourceListener) {
-        return null;
+        return new StubPackageSource(packageSourceListener);
     }
 }

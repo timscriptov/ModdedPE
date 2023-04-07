@@ -26,7 +26,7 @@ public class MinecraftWebview {
     private MainActivity mActivity = MainActivity.mInstance;
 
     public MinecraftWebview() {
-        mActivity.runOnUiThread(() -> _createWebView());
+        mActivity.runOnUiThread(this::_createWebView);
     }
 
     public native void nativeDismiss();
@@ -73,7 +73,7 @@ public class MinecraftWebview {
     }
 
     public void _injectApi() {
-        String apiScript = _readResource(mActivity.getResources().getIdentifier("code_builder_hosted_editor", "raw", mActivity.getPackageName()));
+        @SuppressLint("DiscouragedApi") String apiScript = _readResource(mActivity.getResources().getIdentifier("code_builder_hosted_editor", "raw", mActivity.getPackageName()));
         if (apiScript != null) {
             mWebView.evaluateJavascript(apiScript, null);
         } else {
@@ -113,7 +113,7 @@ public class MinecraftWebview {
                 return super.performClick();
             }
         };
-        mWebView.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
+        mWebView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mWebView.setWebViewClient(new MinecraftWebViewClient(this));
         mWebView.setWebChromeClient(new MinecraftChromeClient(this));
         mWebView.addJavascriptInterface(new WebviewHostInterface(this), "codeBuilderHostInterface");
@@ -122,7 +122,7 @@ public class MinecraftWebview {
         settings.setDomStorageEnabled(true);
         settings.setRenderPriority(WebSettings.RenderPriority.HIGH);
         mWebViewPopup = new PopupView(mActivity);
-        @SuppressLint("ResourceType") View activityRootView = mActivity.findViewById(16908290).getRootView();
+        @SuppressLint("ResourceType") View activityRootView = mActivity.findViewById(android.R.id.content).getRootView();
         mWebViewPopup.setContentView(mWebView);
         mWebViewPopup.setParentView(activityRootView);
     }

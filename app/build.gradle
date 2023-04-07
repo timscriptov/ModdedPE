@@ -57,6 +57,8 @@ dependencies {
     implementation project(':minecraft')
     implementation project(':substrate')
     implementation project(':xhook')
+    implementation project(':xbox')
+    implementation project(':fmod')
     implementation project(':crashreporter')
 
     implementation 'commons-io:commons-io:2.11.0'

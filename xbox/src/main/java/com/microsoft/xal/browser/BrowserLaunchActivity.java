@@ -34,30 +34,24 @@ import androidx.browser.customtabs.CustomTabsIntent;
  */
 @SuppressWarnings("JavaJniMissingFunction")
 public class BrowserLaunchActivity extends Activity {
-    private static final String BROWSER_INFO_STATE_KEY = "BROWSER_INFO_STATE";
-    private static final String CUSTOM_TABS_IN_PROGRESS_STATE_KEY = "CUSTOM_TABS_IN_PROGRESS_STATE";
     public static final String END_URL = "END_URL";
     public static final String IN_PROC_BROWSER = "IN_PROC_BROWSER";
     public static final String OPERATION_ID = "OPERATION_ID";
-    private static final String OPERATION_ID_STATE_KEY = "OPERATION_ID_STATE";
     public static final String REQUEST_HEADER_KEYS = "REQUEST_HEADER_KEYS";
     public static final String REQUEST_HEADER_VALUES = "REQUEST_HEADER_VALUES";
     public static final int RESULT_FAILED = 8052;
-    private static final String SHARED_BROWSER_USED_STATE_KEY = "SHARED_BROWSER_USED_STATE";
     public static final String SHOW_TYPE = "SHOW_TYPE";
     public static final String START_URL = "START_URL";
     public static final int WEB_KIT_WEB_VIEW_REQUEST = 8053;
+    private static final String BROWSER_INFO_STATE_KEY = "BROWSER_INFO_STATE";
+    private static final String CUSTOM_TABS_IN_PROGRESS_STATE_KEY = "CUSTOM_TABS_IN_PROGRESS_STATE";
+    private static final String OPERATION_ID_STATE_KEY = "OPERATION_ID_STATE";
+    private static final String SHARED_BROWSER_USED_STATE_KEY = "SHARED_BROWSER_USED_STATE";
     private BrowserLaunchParameters m_launchParameters = null;
     private long m_operationId = 0;
     private boolean m_customTabsInProgress = false;
     private boolean m_sharedBrowserUsed = false;
     private String m_browserInfo = null;
-
-    public enum WebResult {
-        SUCCESS,
-        FAIL,
-        CANCEL
-    }
 
     private static native void checkIsLoaded();
 
@@ -66,38 +60,6 @@ public class BrowserLaunchActivity extends Activity {
     private static native void urlOperationFailed(long operationId, boolean sharedBrowserUsed, String browserInfo);
 
     private static native void urlOperationSucceeded(long operationId, String finalUrl, boolean sharedBrowserUsed, String browserInfo);
-
-    public static class BrowserLaunchParameters {
-        public final String EndUrl;
-        public final String[] RequestHeaderKeys;
-        public final String[] RequestHeaderValues;
-        public final ShowUrlType ShowType;
-        public final String StartUrl;
-        public boolean UseInProcBrowser;
-
-        @Nullable
-        public static BrowserLaunchParameters FromArgs(@NonNull Bundle bundle) {
-            String startUrl = bundle.getString(START_URL);
-            String endUrl = bundle.getString(END_URL);
-            String[] headerKeys = bundle.getStringArray(REQUEST_HEADER_KEYS);
-            String[] headerValues = bundle.getStringArray(REQUEST_HEADER_VALUES);
-            ShowUrlType showUrlType = (ShowUrlType) bundle.get(SHOW_TYPE);
-            boolean z = bundle.getBoolean(BrowserLaunchActivity.IN_PROC_BROWSER);
-            if (startUrl == null || endUrl == null || headerKeys == null || headerValues == null || headerKeys.length != headerValues.length) {
-                return null;
-            }
-            return new BrowserLaunchParameters(startUrl, endUrl, headerKeys, headerValues, showUrlType, z);
-        }
-
-        private BrowserLaunchParameters(String startUrl, String endUrl, String[] requestHeaderKeys, String[] requestHeaderValues, ShowUrlType showUrlType, boolean useInProcBrowser) {
-            StartUrl = startUrl;
-            EndUrl = endUrl;
-            RequestHeaderKeys = requestHeaderKeys;
-            RequestHeaderValues = requestHeaderValues;
-            ShowType = showUrlType;
-            UseInProcBrowser = true;
-        }
-    }
 
     public static void showUrl(long operationId, Context context, @NonNull String startUrl, String endUrl, int showTypeInt, String[] requestHeaderKeys, String[] requestHeaderValues, boolean useInProcBrowser) {
         if (!startUrl.isEmpty() && !endUrl.isEmpty()) {
@@ -279,6 +241,44 @@ public class BrowserLaunchActivity extends Activity {
             return true;
         } catch (UnsatisfiedLinkError unused) {
             return false;
+        }
+    }
+
+    public enum WebResult {
+        SUCCESS,
+        FAIL,
+        CANCEL
+    }
+
+    public static class BrowserLaunchParameters {
+        public final String EndUrl;
+        public final String[] RequestHeaderKeys;
+        public final String[] RequestHeaderValues;
+        public final ShowUrlType ShowType;
+        public final String StartUrl;
+        public boolean UseInProcBrowser;
+
+        private BrowserLaunchParameters(String startUrl, String endUrl, String[] requestHeaderKeys, String[] requestHeaderValues, ShowUrlType showUrlType, boolean useInProcBrowser) {
+            StartUrl = startUrl;
+            EndUrl = endUrl;
+            RequestHeaderKeys = requestHeaderKeys;
+            RequestHeaderValues = requestHeaderValues;
+            ShowType = showUrlType;
+            UseInProcBrowser = true;
+        }
+
+        @Nullable
+        public static BrowserLaunchParameters FromArgs(@NonNull Bundle bundle) {
+            String startUrl = bundle.getString(START_URL);
+            String endUrl = bundle.getString(END_URL);
+            String[] headerKeys = bundle.getStringArray(REQUEST_HEADER_KEYS);
+            String[] headerValues = bundle.getStringArray(REQUEST_HEADER_VALUES);
+            ShowUrlType showUrlType = (ShowUrlType) bundle.get(SHOW_TYPE);
+            boolean z = bundle.getBoolean(BrowserLaunchActivity.IN_PROC_BROWSER);
+            if (startUrl == null || endUrl == null || headerKeys == null || headerValues == null || headerKeys.length != headerValues.length) {
+                return null;
+            }
+            return new BrowserLaunchParameters(startUrl, endUrl, headerKeys, headerValues, showUrlType, z);
         }
     }
 }

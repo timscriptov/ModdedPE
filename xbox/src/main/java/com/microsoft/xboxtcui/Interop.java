@@ -100,12 +100,12 @@ public class Interop {
     @Nullable
     private static Activity getForegroundActivity() {
         try {
-            @SuppressLint("PrivateApi") Class activityThreadClass = Class.forName("android.app.ActivityThread");
+            @SuppressLint("PrivateApi") Class<?> activityThreadClass = Class.forName("android.app.ActivityThread");
             Object activityThread = activityThreadClass.getMethod("currentActivityThread", new Class[0]).invoke(null);
-            Field activitiesField = activityThreadClass.getDeclaredField("mActivities");
+            @SuppressLint("DiscouragedPrivateApi") Field activitiesField = activityThreadClass.getDeclaredField("mActivities");
             activitiesField.setAccessible(true);
             for (Object activityRecord : ((Map) activitiesField.get(activityThread)).values()) {
-                Class activityRecordClass = activityRecord.getClass();
+                Class<?> activityRecordClass = activityRecord.getClass();
                 Field pausedField = activityRecordClass.getDeclaredField("paused");
                 pausedField.setAccessible(true);
                 if (!pausedField.getBoolean(activityRecord)) {

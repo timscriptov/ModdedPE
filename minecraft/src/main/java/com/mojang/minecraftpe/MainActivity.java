@@ -62,7 +62,6 @@ import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.splashscreen.SplashScreen;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.FirebaseApp;
@@ -428,7 +427,6 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.i("MinecraftPlatform", "MainActivity::onCreate");
-        SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
         if (getResources() == null) {
             Log.w("ModdedPE - replacing", "App is installing/replacing. Killing...");
