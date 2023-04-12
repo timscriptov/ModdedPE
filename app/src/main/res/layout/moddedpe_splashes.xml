@@ -8,7 +8,10 @@
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/splash_screen_logo" />
+        android:layout_centerInParent="true"
+        android:adjustViewBounds="true"
+        android:maxWidth="512dp"
+        android:src="@drawable/logo" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
 

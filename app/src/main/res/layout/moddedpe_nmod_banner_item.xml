@@ -10,7 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:adjustViewBounds="true"
-        android:src="@drawable/splash_screen_logo" />
+        android:maxWidth="512dp"
+        android:src="@drawable/logo" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
