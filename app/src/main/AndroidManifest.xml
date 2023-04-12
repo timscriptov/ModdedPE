@@ -23,7 +23,6 @@
     <queries>
         <package android:name="com.mojang.minecraftpe" />
         <package android:name="com.mojang.minecrafttrialpe" />
-
         <intent>
             <action android:name="android.support.customtabs.action.CustomTabsService" />
         </intent>

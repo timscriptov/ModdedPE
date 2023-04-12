@@ -18,6 +18,7 @@ package com.mcal.pesdk.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import com.mcal.pesdk.utils.ABIInfo.ABI
 import java.io.File
 import java.io.FileOutputStream
@@ -48,19 +49,26 @@ class SplitParser(private var context: Context) {
         try {
             val mcAppInfo = MinecraftInfo.getMinecraftPackageContext().applicationInfo
             if (isAppBundle() && mcAppInfo != null) {
-                val splitPath = mutableListOf(*mcAppInfo.splitPublicSourceDirs)[0]
-                val buffer = ByteArray(2048)
-                for (so in minecraftLibs) {
-                    val input = ZipFile(splitPath).getInputStream(ZipEntry("$abi$so"))
-                    val fos = FileOutputStream("$abiPath/$so")
-                    do {
-                        val numRead = input.read(buffer)
-                        if (numRead <= 0) {
-                            break
+                mutableListOf(*mcAppInfo.splitPublicSourceDirs).forEach { path ->
+                    Log.e("TEST", path)
+                    val name = File(path).name
+                    if (name.contains("arm") || name.contains("x86")) {
+                        val buffer = ByteArray(2048)
+                        for (so in minecraftLibs) {
+                            val input = ZipFile(path).getInputStream(ZipEntry("$abi$so"))
+                            if (input != null) {
+                                val fos = FileOutputStream("$abiPath/$so")
+                                do {
+                                    val numRead = input.read(buffer)
+                                    if (numRead <= 0) {
+                                        break
+                                    }
+                                    fos.write(buffer, 0, numRead)
+                                } while (true)
+                                fos.close()
+                            }
                         }
-                        fos.write(buffer, 0, numRead)
-                    } while (true)
-                    fos.close()
+                    }
                 }
             }
         } catch (e: Exception) {

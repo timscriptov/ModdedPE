@@ -37,6 +37,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.mcal.mcpelauncher.R;
 import com.mcal.mcpelauncher.activities.MCPkgPickerActivity;
 import com.mcal.mcpelauncher.activities.SplashesActivity;
+import com.mcal.mcpelauncher.data.Constants;
 import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.mcpelauncher.services.BackgroundSoundPlayer;
 import com.mcal.mcpelauncher.ui.AboutActivity;
@@ -136,32 +137,32 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
         updatePreferences();
     }
 
-    /*@Override
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == DirPickerActivity.REQUEST_PICK_DIR && resultCode == AppCompatActivity.RESULT_OK) {
             String dir = data.getExtras().getString(DirPickerActivity.TAG_DIR_PATH);
             Preferences.setDataSavedPath(dir);
-            if (dir.equals(Constants.STRING_VALUE_DEFAULT)) {
-                Snackbar.make(requireActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_reset_data_path), 2500).show();
-            } else {
-                Snackbar.make(requireActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_data_path, dir), 2500).show();
-            }
+//            if (dir.equals(Constants.STRING_VALUE_DEFAULT)) {
+//                Snackbar.make(requireActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_reset_data_path), 2500).show();
+//            } else {
+//                Snackbar.make(requireActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_data_path, dir), 2500).show();
+//            }
         } else if (requestCode == MCPkgPickerActivity.REQUEST_PICK_PACKAGE && resultCode == AppCompatActivity.RESULT_OK) {
             String pkgName = data.getExtras().getString("package_name");
             Preferences.setMinecraftPackageName(pkgName);
-            if (pkgName.equals(Constants.STRING_VALUE_DEFAULT)) {
-                Snackbar.make(requireActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_reset_pkg_name), 2500).show();
-            } else {
-                Snackbar.make(requireActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_pkg_name, pkgName), 2500).show();
-            }
+//            if (pkgName.equals(Constants.STRING_VALUE_DEFAULT)) {
+//                Snackbar.make(requireActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_reset_pkg_name), 2500).show();
+//            } else {
+//                Snackbar.make(requireActivity().getWindow().getDecorView(), getString(R.string.preferences_update_message_pkg_name, pkgName), 2500).show();
+//            }
             Intent intent = new Intent(getActivity(), SplashesActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             requireActivity().startActivity(intent);
         }
         updatePreferences();
-    }*/
+    }
 
     private void updatePreferences() {
         if (Preferences.getDataSavedPath().equals("default")) {
