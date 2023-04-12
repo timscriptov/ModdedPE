@@ -8,11 +8,11 @@ group = 'com.mcal'
 version = project.artifactVersion
 
 android {
-    compileSdk 33
+    compileSdk project.compileSDK.toInteger()
 
     defaultConfig {
-        minSdk 21
-        targetSdk 33
+        minSdk project.minSDK.toInteger()
+        targetSdk project.targetSDK.toInteger()
     }
     buildTypes {
         release {

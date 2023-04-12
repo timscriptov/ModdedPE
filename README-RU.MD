@@ -1,6 +1,4 @@
-[![License Info](https://img.shields.io/badge/license-GNU_GPLv3-blue.svg?style=flat-square)](https://github.com/TimScriptov/ModdedPE) [![Play Store Info](https://img.shields.io/badge/Play_Store-v1.19.30.22-blue.svg?style=flat-square)](https://play.google.com/store/apps/details?id=com.mcal.mcpelauncher)
- 
-Свежий код находится в ветке [ModdedPE-JAVA][6]
+[![License Info](https://img.shields.io/badge/license-GNU_GPLv3-blue.svg?style=flat-square)](https://github.com/TimScriptov/ModdedPE) [![Play Store Info](https://img.shields.io/badge/Play_Store-v1.19.30.22-blue.svg?style=flat-square)](https://play.google.com/store/apps/details?id=com.mcal.mcpelauncher) [![](https://jitpack.io/v/TimScriptov/ModdedPE.svg)](https://jitpack.io/#TimScriptov/ModdedPE)
 # ModdedPE!
 ![logo][1]
 --------
@@ -15,7 +13,16 @@ target="_blank">
 <img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"
 alt="IMAGE ALT TEXT HERE" width="200"/></a>
 
-[![](https://jitpack.io/v/TimScriptov/ModdedPE.svg)](https://jitpack.io/#TimScriptov/ModdedPE)
+### Jitpack
+```groovy
+    implementation 'com.github.TimScriptov:ModdedPE:TAG'
+
+    implementation 'com.github.TimScriptov.ModdedPE:adal:TAG'
+    implementation 'com.github.TimScriptov.ModdedPE:minecraft:TAG'
+    implementation 'com.github.TimScriptov.ModdedPE:xbox:TAG'
+    implementation 'com.github.TimScriptov.ModdedPE:fmod:TAG'
+    
+```
 
 ### NMod примеры
 Вот несколько примеров, которые помогут вам разрабатывать NMod's:<br>
