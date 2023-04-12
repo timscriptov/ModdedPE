@@ -61,39 +61,17 @@ dependencies {
     implementation project(':fmod')
     implementation project(':crashreporter')
 
-    implementation 'commons-io:commons-io:2.11.0'
+    implementation jetpack.appcompat
+    implementation jetpack.preference
+    implementation jetpack.vectordrawable.animated
+    implementation jetpack.core
+    implementation jetpack.constraint
+    implementation jetpack.vp2
+    implementation jetpack.material
 
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.preference:preference-ktx:1.2.0'
-    implementation 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
-    implementation "androidx.core:core-ktx:1.9.0"
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation "androidx.viewpager2:viewpager2:1.0.0"
-
-    implementation 'com.google.android.material:material:1.8.0'
-    implementation 'com.google.code.gson:gson:2.10.1'
-
-    implementation 'org.jetbrains:annotations:24.0.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
-    //noinspection DuplicatePlatformClasses
-    implementation 'org.apache.httpcomponents:httpclient:4.5.14'
-    implementation 'org.apache.httpcomponents:httpmime:4.5.14'
-
-    implementation 'com.madgag.spongycastle:pkix:1.54.0.0'
-    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.2'
-
-    // Architectural Components
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-
-    // Room
-    implementation "androidx.room:room-runtime:2.5.1"
-
-    // Kotlin Extensions and Coroutines support for Room
-    implementation "androidx.room:room-ktx:2.5.1"
-
-    // androidx.fragment
-    implementation "androidx.fragment:fragment-ktx:1.5.6"
+    implementation misc.gson
+    implementation misc.annotations
+    implementation misc.annotations.android
+    implementation misc.commons.io
+    implementation misc.coroutines.core
 }

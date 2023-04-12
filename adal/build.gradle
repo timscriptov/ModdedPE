@@ -44,9 +44,9 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.code.gson:gson:2.10.1'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'org.jetbrains:annotations:24.0.1'
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation jetpack.appcompat
+    implementation jetpack.material
+
+    implementation misc.gson
+    implementation misc.annotations
 }

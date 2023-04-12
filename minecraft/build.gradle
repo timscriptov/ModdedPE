@@ -33,17 +33,18 @@ dependencies {
     implementation project(':adal')
     implementation project(':xbox')
 
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.code.gson:gson:2.10.1'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'org.jetbrains:annotations:24.0.1'
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation jetpack.appcompat
+    implementation jetpack.material
 
+    implementation fb.firebase.messaging
+    implementation fb.firebase.iid
+
+    implementation misc.gson
+    implementation misc.annotations
+    implementation misc.annotations.android
     //noinspection DuplicatePlatformClasses
-    implementation 'org.apache.httpcomponents:httpclient:4.5.14'
-    implementation 'org.apache.httpcomponents:httpmime:4.5.14'
+    implementation misc.httpclient
+    implementation misc.httpmime
 
-    implementation 'com.google.firebase:firebase-messaging:23.1.2'
-    implementation 'com.google.firebase:firebase-iid:21.1.0'
-    runtimeOnly 'com.google.gms:google-services:4.3.15'
+    runtimeOnly google.services
 }

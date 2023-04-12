@@ -24,5 +24,6 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.annotation:annotation:1.6.0'
+    implementation misc.annotations
+    implementation misc.annotations.android
 }
