@@ -55,20 +55,20 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void setDefaultActionBar() {
-        ActionBar actionBar = getSupportActionBar();
+        final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            @SuppressLint("InflateParams") RelativeLayout actionBarCustomView = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.mcd_actionbar, null);
-            ActionBar.LayoutParams layoutParams = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
+            final @SuppressLint("InflateParams") RelativeLayout actionBarCustomView = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.mcd_actionbar, null);
+            final ActionBar.LayoutParams layoutParams = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
             layoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
             actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
             actionBar.setDisplayShowHomeEnabled(false);
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setCustomView(actionBarCustomView, layoutParams);
-            Toolbar parent = (Toolbar) actionBarCustomView.getParent();
+            final Toolbar parent = (Toolbar) actionBarCustomView.getParent();
             parent.setContentInsetsAbsolute(0, 0);
 
-            AppCompatTextView titleTV = actionBarCustomView.findViewById(R.id.mcd_actionbar_title);
+            final AppCompatTextView titleTV = actionBarCustomView.findViewById(R.id.mcd_actionbar_title);
             titleTV.setText(getTitle());
         }
     }
@@ -76,10 +76,9 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void setTitle(int titleId) {
         super.setTitle(titleId);
-
         if (getSupportActionBar() != null) {
-            View actionBarCustomView = getSupportActionBar().getCustomView();
-            AppCompatTextView titleTV = actionBarCustomView.findViewById(R.id.mcd_actionbar_title);
+            final View actionBarCustomView = getSupportActionBar().getCustomView();
+            final AppCompatTextView titleTV = actionBarCustomView.findViewById(R.id.mcd_actionbar_title);
             titleTV.setText(titleId);
         }
     }
@@ -87,18 +86,17 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void setTitle(CharSequence title) {
         super.setTitle(title);
-
         if (getSupportActionBar() != null) {
-            View actionBarCustomView = getSupportActionBar().getCustomView();
-            AppCompatTextView titleTV = actionBarCustomView.findViewById(R.id.mcd_actionbar_title);
+            final View actionBarCustomView = getSupportActionBar().getCustomView();
+            final AppCompatTextView titleTV = actionBarCustomView.findViewById(R.id.mcd_actionbar_title);
             titleTV.setText(title);
         }
     }
 
     protected void setActionBarViewRight(View view) {
         if (getSupportActionBar() != null) {
-            View actionBarCustomView = getSupportActionBar().getCustomView();
-            RelativeLayout layout = actionBarCustomView.findViewById(R.id.mcd_actionbar_ViewRight);
+            final View actionBarCustomView = getSupportActionBar().getCustomView();
+            final RelativeLayout layout = actionBarCustomView.findViewById(R.id.mcd_actionbar_ViewRight);
             layout.removeAllViews();
             layout.addView(view);
         }
@@ -106,15 +104,15 @@ public class BaseActivity extends AppCompatActivity {
 
     protected void setActionBarViewLeft(View view) {
         if (getSupportActionBar() != null) {
-            View actionBarCustomView = getSupportActionBar().getCustomView();
-            RelativeLayout layout = actionBarCustomView.findViewById(R.id.mcd_actionbar_ViewLeft);
+            final View actionBarCustomView = getSupportActionBar().getCustomView();
+            final RelativeLayout layout = actionBarCustomView.findViewById(R.id.mcd_actionbar_ViewLeft);
             layout.removeAllViews();
             layout.addView(view);
         }
     }
 
     protected void setActionBarButtonCloseRight() {
-        View buttonClose = getLayoutInflater().inflate(R.layout.moddedpe_ui_button_close, null);
+        final View buttonClose = getLayoutInflater().inflate(R.layout.moddedpe_ui_button_close, null);
         buttonClose.findViewById(R.id.moddedpe_ui_button_item_image_button).setOnClickListener(p1 -> finish());
         setActionBarViewRight(buttonClose);
     }
@@ -123,7 +121,6 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mcd_bg);
         bitmap = BitmapRepeater.repeat(getWindowManager().getDefaultDisplay().getWidth(), getWindowManager().getDefaultDisplay().getHeight(), bitmap);
         getWindow().getDecorView().setBackground(new BitmapDrawable(bitmap));

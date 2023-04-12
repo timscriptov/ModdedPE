@@ -5,7 +5,7 @@
     <androidx.preference.PreferenceCategory
         android:layout="@layout/preference_category_widget"
         android:title="@string/preferences_title_launcher">
-        <com.mcal.mcpelauncher.view.SwitchPreference
+        <androidx.preference.SwitchPreference
             android:defaultValue="false"
             android:icon="@drawable/ic_safe_mode"
             android:key="safe_mode"
@@ -17,13 +17,13 @@
             android:key="webview_engine"
             android:summary="@string/preferences_summary_webview_engine"
             android:title="@string/preferences_title_webview_engine" />
-        <com.mcal.mcpelauncher.view.SwitchPreference
+        <androidx.preference.SwitchPreference
             android:defaultValue="false"
             android:icon="@drawable/ic_theme"
             android:key="night_mode"
             android:summary="@string/pref_night_mode_msg"
             android:title="@string/pref_night_mode_title" />
-        <com.mcal.mcpelauncher.view.SwitchPreference
+        <androidx.preference.SwitchPreference
             android:defaultValue="false"
             android:icon="@drawable/ic_music"
             android:key="background_music"

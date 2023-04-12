@@ -31,6 +31,7 @@ import androidx.core.content.ContextCompat;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SwitchPreference;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.mcal.mcpelauncher.R;
@@ -41,7 +42,6 @@ import com.mcal.mcpelauncher.services.BackgroundSoundPlayer;
 import com.mcal.mcpelauncher.ui.AboutActivity;
 import com.mcal.mcpelauncher.ui.DirPickerActivity;
 import com.mcal.mcpelauncher.utils.I18n;
-import com.mcal.mcpelauncher.view.SwitchPreference;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -81,7 +81,6 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
         });
 
         SwitchPreference mSafeModePreference = findPreference("safe_mode");
-        mSafeModePreference.setWidgetLayoutResource(R.layout.switch_preference);
         mSafeModePreference.setOnPreferenceChangeListener((p1, p2) -> {
             Preferences.setSafeMode((boolean) p2);
             return true;
