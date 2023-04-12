@@ -8,6 +8,7 @@ import android.content.res.AssetManager;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 
+import com.google.android.material.color.DynamicColors;
 import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.pesdk.PESdk;
 
@@ -31,6 +32,7 @@ public class ModdedPEApplication extends Application {
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+        DynamicColors.applyToActivitiesIfAvailable(this);
     }
 
     public static Context getContext() {
