@@ -1,7 +1,11 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'maven-publish'
 }
+
+group = 'com.mcal'
+version = project.artifactVersion
 
 android {
     compileSdk 33
@@ -26,4 +30,18 @@ android {
 dependencies {
     implementation misc.annotations
     implementation misc.annotations.android
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.mcal'
+                artifactId = 'fmod'
+                version = project.artifactVersion
+            }
+        }
+    }
 }
