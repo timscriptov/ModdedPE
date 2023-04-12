@@ -14,7 +14,9 @@ ModdedPE - это лаунчер для запуска Minecraft PE и загр�
 target="_blank">
 <img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"
 alt="IMAGE ALT TEXT HERE" width="200"/></a>
- 
+
+[![](https://jitpack.io/v/TimScriptov/ModdedPE.svg)](https://jitpack.io/#TimScriptov/ModdedPE)
+
 ### NMod примеры
 Вот несколько примеров, которые помогут вам разрабатывать NMod's:<br>
 <https://github.com/TimScriptov/NMOD-Examples>

@@ -13,6 +13,8 @@ target="_blank">
 <img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"
 alt="IMAGE ALT TEXT HERE" width="200"/></a>
 
+[![](https://jitpack.io/v/TimScriptov/ModdedPE.svg)](https://jitpack.io/#TimScriptov/ModdedPE)
+
 ### NMOD Examples
 Here are some samples can help you develop NMods:<br>
 <https://github.com/TimScriptov/NMOD-Examples>
