@@ -1,24 +1,23 @@
 package com.mcal.moddedpe
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.mcal.core.data.StorageHelper.VERSION
 import com.mcal.core.data.StorageHelper.behaviorPackFile
+import com.mcal.core.data.StorageHelper.getNativeLibrariesFile
 import com.mcal.core.data.StorageHelper.mainPackFile
 import com.mcal.core.data.StorageHelper.resourcePackFile
-import com.mcal.core.data.StorageHelper.version
+import com.mcal.core.utils.ABIHelper.getABI
+import com.mcal.core.utils.NetHelper
+import com.mcal.moddedpe.adapters.DownloaderAdapter
 import com.mcal.moddedpe.base.BaseActivity
 import com.mcal.moddedpe.data.DownloadItem
 import com.mcal.moddedpe.data.ResourceType
 import com.mcal.moddedpe.databinding.ActivityLoadingPackBinding
 import kotlinx.coroutines.*
-import okhttp3.*
-import okio.buffer
-import okio.sink
-import java.io.IOException
 
 class LoadingActivity : BaseActivity() {
     private val binding by lazy(LazyThreadSafetyMode.NONE) {
@@ -30,68 +29,85 @@ class LoadingActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        if (installedBehaviorPack && installedMainPack && installedResourcePack) {
-            startActivity(Intent(this, GameActivity::class.java))
+        val context = this
+        if (installedBehaviorPack && installedMainPack && installedResourcePack && installedNative) {
+            startActivity(Intent(context, GameActivity::class.java))
             finish()
         } else {
+            runBlocking {
+                notAvailableDialog()
+            }
+            val list = mutableListOf<DownloadItem>()
             if (!installedResourcePack) {
                 val resourcePackFile = resourcePackFile(this)
                 if (resourcePackFile.exists()) {
                     resourcePackFile.delete()
                 }
-                download(
+                list.add(
                     DownloadItem(
                         ResourceType.RESOURCE,
-                        "https://github.com/TimScriptov/lokicraft/raw/main/$version/resource_pack_$version.zip",
+                        "Downloading resource pack",
+                        "https://github.com/TimScriptov/lokicraft/raw/main/moddedpe/$VERSION/resource_pack.zip",
                         resourcePackFile,
-                        binding.progressBarResourcePack,
-                        binding.progressTextLengthResourcePack
                     )
                 )
-            } else {
-                (binding.progressBarResourcePack.parent as? ViewGroup)?.visibility = View.GONE
-            }
-            if (!installedMainPack) {
-                val mainPackFile = mainPackFile(this)
-                if (mainPackFile.exists()) {
-                    mainPackFile.delete()
-                }
-                download(
-                    DownloadItem(
-                        ResourceType.MAIN,
-                        "https://github.com/TimScriptov/lokicraft/raw/main/$version/main_pack_$version.zip",
-                        mainPackFile,
-                        binding.progressBarMainPack,
-                        binding.progressTextLengthMainPack
-                    )
-                )
-            } else {
-                (binding.progressBarMainPack.parent as? ViewGroup)?.visibility = View.GONE
             }
             if (!installedBehaviorPack) {
                 val behaviorPackFile = behaviorPackFile(this)
                 if (behaviorPackFile.exists()) {
                     behaviorPackFile.delete()
                 }
-                download(
+                list.add(
                     DownloadItem(
                         ResourceType.BEHAVIOR,
-                        "https://github.com/TimScriptov/lokicraft/raw/main/$version/behavior_pack_$version.zip",
+                        "Downloading behavior pack",
+                        "https://github.com/TimScriptov/lokicraft/raw/main/moddedpe/$VERSION/behavior_pack.zip",
                         behaviorPackFile,
-                        binding.progressBarBehaviorPack,
-                        binding.progressTextLengthBehaviorPack
                     )
                 )
-            } else {
-                (binding.progressBarBehaviorPack.parent as? ViewGroup)?.visibility = View.GONE
+            }
+            if (!installedMainPack) {
+                val mainPackFile = mainPackFile(this)
+                if (mainPackFile.exists()) {
+                    mainPackFile.delete()
+                }
+                list.add(
+                    DownloadItem(
+                        ResourceType.MAIN,
+                        "Downloading main pack",
+                        "https://github.com/TimScriptov/lokicraft/raw/main/moddedpe/$VERSION/main_pack.zip",
+                        mainPackFile,
+                    )
+                )
+            }
+            if (!installedNative) {
+                val nativeLibrariesFile = getNativeLibrariesFile(this)
+                if (nativeLibrariesFile.exists()) {
+                    nativeLibrariesFile.delete()
+                }
+                list.add(
+                    DownloadItem(
+                        ResourceType.LIBS,
+                        "Downloading dynamical libraries",
+                        "https://github.com/TimScriptov/lokicraft/raw/main/moddedpe/$VERSION/${getABI()}/libraries.zip",
+                        nativeLibrariesFile,
+                    )
+                )
+            }
+            binding.recyclerview.apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = DownloaderAdapter(
+                    context,
+                    list
+                )
             }
             CoroutineScope(Dispatchers.IO).launch {
                 repeat(Int.MAX_VALUE) {
                     withContext(Dispatchers.Main) {
-                        if (installedResourcePack && installedBehaviorPack && installedMainPack) {
+                        if (installedResourcePack && installedBehaviorPack && installedMainPack && installedNative) {
                             startActivity(
                                 Intent(
-                                    this@LoadingActivity,
+                                    context,
                                     GameActivity::class.java
                                 )
                             )
@@ -124,96 +140,41 @@ class LoadingActivity : BaseActivity() {
                 behaviorPackFile.delete()
             }
         }
+        if (!installedNative) {
+            val nativeLibrariesFile = getNativeLibrariesFile(this)
+            if (nativeLibrariesFile.exists()) {
+                nativeLibrariesFile.delete()
+            }
+        }
     }
 
-    private fun download(item: DownloadItem) {
-        val request = Request.Builder()
-            .url(item.url)
-            .build()
-
-        CoroutineScope(Dispatchers.IO).launch {
-            OkHttpClient().newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    val resourcePackFile = item.file
-                    if (resourcePackFile.exists()) {
-                        resourcePackFile.delete()
-                    }
-                    CoroutineScope(Dispatchers.Main).launch {
-                        showDialog()
-                    }
-                }
-
-                @Throws(IOException::class)
-                override fun onResponse(call: Call, response: Response) {
-                    if (!response.isSuccessful) {
-                        throw IOException("Unexpected code $response")
-                    }
-                    response.body?.let { body ->
-                        val contentLength = body.contentLength().toInt()
-                        body.source().use { sourceBytes ->
-                            val sink = item.file.sink().buffer()
-                            var totalRead = 0L
-                            var lastRead: Long
-                            while (sourceBytes
-                                    .read(sink.buffer, 8L * 1024)
-                                    .also { lastRead = it } != -1L
-                            ) {
-                                totalRead += lastRead
-                                sink.emitCompleteSegments()
-                                updateProgress(item, contentLength, totalRead)
+    private suspend fun notAvailableDialog() {
+        val context = this@LoadingActivity
+        if (!NetHelper.isNetworkAvailable(context)) {
+            withContext(Dispatchers.Main) {
+                MaterialAlertDialogBuilder(context).apply {
+                    setMessage(getString(R.string.dialog_message_not_available_internet))
+                    setCancelable(false)
+                    setPositiveButton(getString(R.string.btn_check_internet)) { d, _ ->
+                        CoroutineScope(Dispatchers.IO).launch {
+                            if (NetHelper.isNetworkAvailable(context)) {
+                                withContext(Dispatchers.Main) {
+                                    d.dismiss()
+                                }
+                            } else {
+                                withContext(Dispatchers.Main) {
+                                    this@apply.show()
+                                    Toast.makeText(
+                                        context,
+                                        getString(R.string.toast_message_not_available_internet),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
-                            sink.writeAll(sourceBytes)
-                            sink.close()
-                            finishDownloading(item)
                         }
                     }
-                }
-            })
-        }
-    }
-
-    private fun finishDownloading(item: DownloadItem) {
-        when (item.type) {
-            ResourceType.RESOURCE -> {
-                installedResourcePack = true
+                }.show()
             }
-            ResourceType.BEHAVIOR -> {
-                installedBehaviorPack = true
-            }
-            ResourceType.MAIN -> {
-                installedMainPack = true
-            }
-        }
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun updateProgress(item: DownloadItem, contentLength: Int, totalRead: Long) {
-        CoroutineScope(Dispatchers.Main).launch {
-            item.progressBarView.visibility = View.VISIBLE
-            if (contentLength != -1) {
-                item.progressBarView.progress = (totalRead * 100 / contentLength).toInt()
-            } else {
-                item.progressBarView.isIndeterminate = true
-            }
-            val total = totalRead / (1024 * 1024)
-            val length = contentLength / (1024 * 1024)
-            item.textLengthView.text = "$total / $length MB"
-        }
-    }
-
-    private fun showDialog() {
-        CoroutineScope(Dispatchers.Main).launch {
-            MaterialAlertDialogBuilder(this@LoadingActivity).apply {
-                setMessage(R.string.download_resource_pack_failed)
-                setPositiveButton(R.string.download_repeat) { dialog, _ ->
-                    dialog.dismiss()
-                    recreate()
-                }
-                setNegativeButton(R.string.exit) { dialog, _ ->
-                    dialog.dismiss()
-                    finish()
-                }
-            }.show()
         }
     }
 }

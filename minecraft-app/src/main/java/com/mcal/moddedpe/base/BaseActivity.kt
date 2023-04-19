@@ -36,6 +36,15 @@ open class BaseActivity : AppCompatActivity() {
                 "main_pack_installed", flag
             )?.apply()
         }
+    var installedNative: Boolean
+        get() = preferences?.getBoolean(
+            "native_installed", false
+        ) ?: false
+        set(flag) {
+            preferences?.edit()?.putBoolean(
+                "native_installed", flag
+            )?.apply()
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

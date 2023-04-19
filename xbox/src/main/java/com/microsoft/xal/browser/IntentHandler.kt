@@ -14,12 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.microsoft.xal.browser;
+package com.microsoft.xal.browser
 
-import android.content.Intent;
-import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 
 /**
  * 13.08.2022
@@ -27,14 +26,13 @@ import androidx.appcompat.app.AppCompatActivity;
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-public class IntentHandler extends AppCompatActivity {
-    @Override
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        Intent intent = new Intent(this, BrowserLaunchActivity.class);
-        intent.setData(getIntent().getData());
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        finish();
+class IntentHandler : AppCompatActivity() {
+    public override fun onCreate(bundle: Bundle?) {
+        super.onCreate(bundle)
+        startActivity(Intent(this, BrowserLaunchActivity::class.java).apply {
+            data = intent.data
+            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        })
+        finish()
     }
 }

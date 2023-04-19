@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
@@ -12,112 +11,10 @@
         android:layout_height="100dp"
         android:src="@drawable/title" />
 
-    <TextView
-        android:id="@+id/progress_text_behavior_pack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Downloading behavior pack" />
-
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <View
-            android:layout_width="100dp"
-            android:layout_height="0dp"
-            android:gravity="center"
-            tools:text="15/100mb" />
-
-        <ProgressBar
-            android:id="@+id/progress_bar_behavior_pack"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_weight="1" />
-
-        <TextView
-            android:id="@+id/progress_text_length_behavior_pack"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            tools:text="15/100mb" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/progress_text_resource_pack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Downloading resource pack" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <View
-            android:layout_width="100dp"
-            android:layout_height="0dp"
-            android:gravity="center"
-            tools:text="15/100mb" />
-
-        <ProgressBar
-            android:id="@+id/progress_bar_resource_pack"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_weight="1" />
-
-        <TextView
-            android:id="@+id/progress_text_length_resource_pack"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            tools:text="15/100mb" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/progress_text_main_pack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Downloading main pack" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <View
-            android:layout_width="100dp"
-            android:layout_height="0dp"
-            android:gravity="center"
-            tools:text="15/100mb" />
-
-        <ProgressBar
-            android:id="@+id/progress_bar_main_pack"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_weight="1" />
-
-        <TextView
-            android:id="@+id/progress_text_length_main_pack"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            tools:text="15/100mb" />
-
-    </LinearLayout>
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
 </LinearLayout>

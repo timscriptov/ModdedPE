@@ -4,18 +4,30 @@ import android.content.Context
 import java.io.File
 
 object StorageHelper {
-    val version = "1.19.71.02"
+    const val VERSION = "1.19.71.02"
 
     fun resourcePackFile(context: Context): File {
-        return File(resourcesDir(context), "resource_pack_$version.zip")
+        return File(resourcesDir(context), "resource_pack_$VERSION.zip")
     }
 
     fun behaviorPackFile(context: Context): File {
-        return File(resourcesDir(context), "behavior_pack_$version.zip")
+        return File(resourcesDir(context), "behavior_pack_$VERSION.zip")
     }
 
     fun mainPackFile(context: Context): File {
-        return File(resourcesDir(context), "main_pack_$version.zip")
+        return File(resourcesDir(context), "main_pack_$VERSION.zip")
+    }
+
+    fun getNativeLibrariesFile(context: Context): File {
+        return File(resourcesDir(context), "libraries.zip")
+    }
+
+    fun nativeDir(context: Context): File {
+        val libDir = File(context.filesDir, "native")
+        if (!libDir.exists()) {
+            libDir.mkdirs()
+        }
+        return libDir
     }
 
     private fun resourcesDir(context: Context): File {
@@ -26,15 +38,11 @@ object StorageHelper {
         return libDir
     }
 
-    fun getTmpLibLokiCraftFile(context: Context): File {
-        return File(context.cacheDir, "liblokicraft.zip")
-    }
-
-    fun nativeDir(context: Context): File {
-        val libDir = File(context.filesDir, "native")
-        if (!libDir.exists()) {
-            libDir.mkdirs()
+    fun minecraftPEDir(context: Context): File {
+        val minecraftPEDir = File(context.filesDir.parent, "games/com.mojang/minecraftpe/")
+        if (!minecraftPEDir.exists()) {
+            minecraftPEDir.mkdirs()
         }
-        return libDir
+        return minecraftPEDir
     }
 }
