@@ -27,7 +27,6 @@ import android.util.Base64
 import android.util.Log
 import androidx.browser.customtabs.CustomTabsService
 import androidx.core.os.EnvironmentCompat
-import com.microsoft.xal.browser.BrowserSelectionResult.BrowserInfo
 import org.jetbrains.annotations.Contract
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException

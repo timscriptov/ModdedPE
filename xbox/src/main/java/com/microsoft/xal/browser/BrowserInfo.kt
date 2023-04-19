@@ -16,34 +16,17 @@
  */
 package com.microsoft.xal.browser
 
-import java.util.*
-
 /**
  * 13.08.2022
  *
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-class BrowserSelectionResult constructor(
-    private val m_defaultBrowserInfo: BrowserInfo,
-    private val m_notes: String,
-    private val m_useCustomTabs: Boolean,
-) {
-    override fun toString(): String {
-        val locale = Locale.US
-        val arrayList = arrayOfNulls<String>(4)
-        arrayList[0] = if (m_useCustomTabs) "CT" else "WK"
-        arrayList[1] = m_defaultBrowserInfo.packageName
-        arrayList[2] = m_notes
-        arrayList[3] = m_defaultBrowserInfo.versionName
-        return String.format(locale, "%s-%s-%s::%s", *arrayList)
-    }
-
-    fun packageName(): String? {
-        return if (m_useCustomTabs) {
-            m_defaultBrowserInfo.packageName
-        } else {
-            null
-        }
-    }
-}
+class BrowserInfo(
+    @JvmField
+    val packageName: String,
+    @JvmField
+    val versionCode: Int,
+    @JvmField
+    val versionName: String,
+)
