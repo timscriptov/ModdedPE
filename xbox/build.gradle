@@ -34,6 +34,7 @@ android {
 
 dependencies {
     implementation project(':adal')
+    implementation project(':core')
 
     implementation jetpack.appcompat
     implementation jetpack.material

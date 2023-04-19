@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dialog_message_not_available_internet">There is no Internet connection. Please turn on the Internet and try again.</string>
+    <string name="toast_message_not_available_internet">There is no Internet connection.</string>
+    <string name="btn_check_internet">Repeat</string>
+    <string name="download_resource_pack_failed">An error has occurred. Please check your Internet connection and try again.</string>
+    <string name="download_repeat">Repeat</string>
+    <string name="exit">Exit</string>
+</resources>

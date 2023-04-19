@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dialog_message_not_available_internet">Отсутствует Интернет подключение. Пожалуйста включите Интернет и повторите попытку.</string>
+    <string name="toast_message_not_available_internet">Отсутствует Интернет подключение</string>
+    <string name="btn_check_internet">Повторить</string>
+    <string name="download_resource_pack_failed">Произошла ошибка. Пожалуйста проверьте Интернет подключение и повторите снова.</string>
+    <string name="download_repeat">Повторить</string>
+    <string name="exit">Выход</string>
+</resources>

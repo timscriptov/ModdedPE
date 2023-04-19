@@ -31,6 +31,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.mcal.core.AssetInstaller;
 import com.microsoft.aad.adal.AuthenticationConstants;
 
 import java.io.IOException;
@@ -56,6 +57,7 @@ public class WebKitWebViewController extends AppCompatActivity {
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void onCreate(Bundle bundle) {
+        new AssetInstaller(this).install();
         super.onCreate(bundle);
         final Bundle extras = getIntent().getExtras();
         if (extras == null) {

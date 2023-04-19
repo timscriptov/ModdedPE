@@ -1,0 +1,113 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    compileSdkVersion 33
+
+    defaultConfig {
+        applicationId "com.mcal.lokicraft"
+        minSdkVersion 21
+        targetSdkVersion 33
+        versionCode 951907102
+        versionName "1.19.71.02"
+        multiDexEnabled true
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86'
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/DEPENDENCIES', 'META-INF/LICENSE', 'META-INF/LICENSE.txt', 'META-INF/license.txt', 'META-INF/NOTICE', 'META-INF/NOTICE.txt', 'META-INF/notice.txt', 'META-INF/ASL2.0', 'META-INF/INDEX.LIST', 'META-INF/*.kotlin_module']
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+    buildFeatures {
+        viewBinding true
+    }
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+    namespace 'com.mcal.moddedpe'
+}
+
+// play_screen.json
+// start_screen.json
+// settings_screen.json
+// progress_screen.json
+// pause_screen.json
+// world_templates_screen.json
+// world_section.json
+// hud_screen.json
+// settings_section/general_section.json
+
+// Найти и заменить в либе: https://aka.ms/MinecraftAndroidExternalStorage
+
+// https://fontmeme.com/minecraft-font/
+dependencies {
+    implementation project(':minecraft')
+    implementation project(':xbox')
+    implementation project(':fmod')
+    implementation project(':core')
+
+    implementation 'commons-io:commons-io:2.11.0'
+
+    implementation 'androidx.core:core-splashscreen:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.preference:preference-ktx:1.2.0'
+    implementation 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
+    implementation "androidx.core:core-ktx:1.10.0"
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'com.google.code.gson:gson:2.10.1'
+
+    implementation 'org.jetbrains:annotations:24.0.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
+    //noinspection DuplicatePlatformClasses
+    implementation 'org.apache.httpcomponents:httpclient:4.5.14'
+    implementation 'org.apache.httpcomponents:httpmime:4.5.14'
+
+    implementation 'com.madgag.spongycastle:pkix:1.54.0.0'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.2'
+
+    // Architectural Components
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+
+    // Room
+    implementation "androidx.room:room-runtime:2.5.1"
+
+    // Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-ktx:2.5.1"
+
+    // androidx.fragment
+    implementation "androidx.fragment:fragment-ktx:1.5.6"
+    implementation 'androidx.core:core-ktx:1.10.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
+}
