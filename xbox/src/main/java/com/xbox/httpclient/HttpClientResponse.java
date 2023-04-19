@@ -18,8 +18,8 @@ public class HttpClientResponse {
     private final long callHandle;
     private final Response response;
 
-    public HttpClientResponse(long j, Response response) {
-        callHandle = j;
+    public HttpClientResponse(long callHandle, Response response) {
+        this.callHandle = callHandle;
         this.response = response;
     }
 
@@ -63,29 +63,29 @@ public class HttpClientResponse {
     private final class NativeOutputStream extends OutputStream {
         private final long callHandle;
 
-        public NativeOutputStream(long j) {
-            this.callHandle = j;
+        public NativeOutputStream(long callHandle) {
+            this.callHandle = callHandle;
         }
 
-        private native void nativeWrite(long j, byte[] bArr, int i, int i2) throws IOException;
+        private native void nativeWrite(long callHandle, byte[] b, int off, int len) throws IOException;
 
         @Override
-        public void write(byte[] bArr) throws IOException {
-            write(bArr, 0, bArr.length);
+        public void write(byte[] b) throws IOException {
+            write(b, 0, b.length);
         }
 
         @Override
-        public void write(byte[] bArr, int i, int i2) throws IOException {
-            Objects.requireNonNull(bArr);
-            if (i < 0 || i2 < 0 || i + i2 > bArr.length) {
+        public void write(byte[] b, int off, int len) throws IOException {
+            Objects.requireNonNull(b);
+            if (off < 0 || len < 0 || off + len > b.length) {
                 throw new IndexOutOfBoundsException();
             }
-            nativeWrite(callHandle, bArr, i, i2);
+            nativeWrite(callHandle, b, off, len);
         }
 
         @Override
-        public void write(int i) throws IOException {
-            write(new byte[]{(byte) i});
+        public void write(int b) throws IOException {
+            write(new byte[]{(byte) b});
         }
     }
 }
