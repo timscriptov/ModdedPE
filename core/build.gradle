@@ -1,7 +1,11 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'maven-publish'
 }
+
+group = 'com.mcal'
+version = project.artifactVersion
 
 android {
     compileSdk project.compileSDK.toInteger()
@@ -33,4 +37,18 @@ dependencies {
     implementation jetpack.material
 
     implementation misc.annotations
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.mcal'
+                artifactId = 'core'
+                version = project.artifactVersion
+            }
+        }
+    }
 }
