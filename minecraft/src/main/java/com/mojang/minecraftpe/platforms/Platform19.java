@@ -1,15 +1,12 @@
 package com.mojang.minecraftpe.platforms;
 
-import android.annotation.TargetApi;
 import android.os.Handler;
 import android.view.View;
 
 /**
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 
-@TargetApi(19)
 public class Platform19 extends Platform9 {
     public Runnable decorViewSettings;
     public View decoreView;

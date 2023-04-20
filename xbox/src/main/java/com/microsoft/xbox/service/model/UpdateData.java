@@ -5,8 +5,7 @@ import android.os.Bundle;
 /**
  * 07.01.2021
  *
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 
 public final class UpdateData {

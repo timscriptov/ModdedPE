@@ -22,10 +22,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
-
 public class PDFWriter {
     private final Rect mImageRect;
     private final Rect mPageRect = new Rect(0, 0, 612, 792);

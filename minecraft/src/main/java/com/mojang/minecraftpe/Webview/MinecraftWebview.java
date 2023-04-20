@@ -16,10 +16,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
-
 public class MinecraftWebview {
     public WebView mWebView;
     public PopupView mWebViewPopup;

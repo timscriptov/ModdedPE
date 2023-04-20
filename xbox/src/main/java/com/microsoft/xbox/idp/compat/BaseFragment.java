@@ -6,8 +6,7 @@ import android.app.Fragment;
 /**
  * 07.01.2021
  *
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 
 public abstract class BaseFragment extends Fragment {

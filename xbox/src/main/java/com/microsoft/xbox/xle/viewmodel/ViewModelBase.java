@@ -31,8 +31,7 @@ import java.util.Iterator;
 /**
  * 07.01.2021
  *
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 
 public abstract class ViewModelBase implements XLEObserver<UpdateData> {

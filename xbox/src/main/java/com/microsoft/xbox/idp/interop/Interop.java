@@ -123,7 +123,6 @@ public class Interop {
         }
     }
 
-    /* loaded from: classes.dex */
     public enum ErrorType {
         BAN(0),
         CREATION(1),

@@ -1,10 +1,8 @@
 package com.mojang.minecraftpe.store;
 
 /**
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
-
 public class ExtraLicenseResponseData {
     private long mRetryAttempts = 0;
     private long mRetryUntilTime = 0;

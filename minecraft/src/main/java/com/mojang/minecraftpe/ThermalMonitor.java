@@ -9,6 +9,9 @@ import android.os.PowerManager;
 
 import androidx.annotation.NonNull;
 
+/**
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ */
 public class ThermalMonitor extends BroadcastReceiver {
     private final Context mContext;
     private boolean mLowPowerModeEnabled = false;
@@ -32,9 +35,7 @@ public class ThermalMonitor extends BroadcastReceiver {
         readPowerMode(context);
     }
 
-    private void readPowerMode(Context context) {
-        if (Build.VERSION.SDK_INT >= 21) {
-            this.mLowPowerModeEnabled = ((PowerManager) context.getSystemService(Context.POWER_SERVICE)).isPowerSaveMode();
-        }
+    private void readPowerMode(@NonNull Context context) {
+        this.mLowPowerModeEnabled = ((PowerManager) context.getSystemService(Context.POWER_SERVICE)).isPowerSaveMode();
     }
 }

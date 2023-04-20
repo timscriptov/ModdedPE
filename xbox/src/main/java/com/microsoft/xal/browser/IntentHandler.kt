@@ -23,8 +23,7 @@ import androidx.appcompat.app.AppCompatActivity
 /**
  * 13.08.2022
  *
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 class IntentHandler : AppCompatActivity() {
     public override fun onCreate(bundle: Bundle?) {

@@ -17,10 +17,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.PrintStream;
 
 /**
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
-
 public class ActiveDirectorySignIn implements ActivityListener {
     private final boolean mIsActivityListening = false;
     public String mAccessToken;
@@ -87,7 +85,7 @@ public class ActiveDirectorySignIn implements ActivityListener {
             z = true;
         }
         MainActivity.mInstance.runOnUiThread(() -> {
-            AuthenticationContext unused = mAuthenticationContext = new AuthenticationContext(MainActivity.mInstance, "https://login.windows.net/common", true);
+            mAuthenticationContext = new AuthenticationContext(MainActivity.mInstance, "https://login.windows.net/common", true);
             if (z) {
                 mAuthenticationContext.acquireTokenSilent("https://meeservices.minecraft.net", "b36b1432-1a1c-4c82-9b76-24de1cab42f2", mUserId, ActiveDirectorySignIn.this.getAdalCallback());
             } else {
@@ -98,20 +96,12 @@ public class ActiveDirectorySignIn implements ActivityListener {
 
     public void clearCookies() {
         CookieManager instance = CookieManager.getInstance();
-        if (Build.VERSION.SDK_INT >= 21) {
-            instance.removeAllCookies(null);
-            instance.flush();
-            return;
-        }
-        CookieSyncManager createInstance = CookieSyncManager.createInstance(MainActivity.mInstance);
-        createInstance.startSync();
-        instance.removeAllCookie();
-        createInstance.stopSync();
-        createInstance.sync();
+        instance.removeAllCookies(null);
+        instance.flush();
     }
 
     public AuthenticationCallback<AuthenticationResult> getAdalCallback() {
-        return new AuthenticationCallback<AuthenticationResult>() {
+        return new AuthenticationCallback<>() {
             public void onSuccess(AuthenticationResult authenticationResult) {
                 System.out.println("ADAL sign in success");
                 mResultObtained = true;

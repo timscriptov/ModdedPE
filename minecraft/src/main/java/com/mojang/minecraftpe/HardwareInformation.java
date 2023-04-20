@@ -22,10 +22,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
-
 @SuppressLint({"DefaultLocale"})
 public class HardwareInformation {
     private static final CPUInfo cpuInfo = getCPUInfo();

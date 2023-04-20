@@ -1,10 +1,8 @@
 package com.mojang.minecraftpe;
 
 /**
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
-
 public class SentryEndpointConfig {
     public String projectId;
     public String publicKey;

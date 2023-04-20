@@ -8,8 +8,7 @@ import java.util.Set;
 /**
  * 29.03.2023
  *
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 public class CPUCluster implements Comparable<CPUCluster> {
     private final BitSet bitmask = new BitSet();
@@ -20,57 +19,57 @@ public class CPUCluster implements Comparable<CPUCluster> {
     String siblingsString;
 
     public CPUCluster(String siblingCPUs, @NonNull Set<SystemCPU> cpus) {
-        this.minFreq = 2147483647L;
-        this.maxFreq = -2147483648L;
-        this.clusterCPUs = cpus;
-        this.siblingsString = siblingCPUs;
-        this.cpuIds = new int[cpus.size()];
+        minFreq = Integer.MAX_VALUE;
+        maxFreq = Integer.MIN_VALUE;
+        clusterCPUs = cpus;
+        siblingsString = siblingCPUs;
+        cpuIds = new int[cpus.size()];
         int i = 0;
         for (SystemCPU systemCPU : cpus) {
-            this.cpuIds[i] = systemCPU.getCPUId();
-            this.bitmask.or(systemCPU.getCPUMask());
-            this.minFreq = Math.min(systemCPU.getMinFrequencyHz(), this.minFreq);
-            this.maxFreq = Math.max(systemCPU.getMaxFrequencyHz(), this.maxFreq);
+            cpuIds[i] = systemCPU.getCPUId();
+            bitmask.or(systemCPU.getCPUMask());
+            minFreq = Math.min(systemCPU.getMinFrequencyHz(), minFreq);
+            maxFreq = Math.max(systemCPU.getMaxFrequencyHz(), maxFreq);
             i++;
         }
     }
 
     public String getSiblingsString() {
-        return this.siblingsString;
+        return siblingsString;
     }
 
     public boolean contains(int cpuId) {
-        return this.clusterCPUs.contains(cpuId);
+        return clusterCPUs.contains(cpuId);
     }
 
     public int[] getCPUIds() {
-        return (int[]) this.cpuIds.clone();
+        return (int[]) cpuIds.clone();
     }
 
     public int getClusterCoreCount() {
-        return this.clusterCPUs.size();
+        return clusterCPUs.size();
     }
 
     public SystemCPU[] getCPUArray() {
-        Set<SystemCPU> set = this.clusterCPUs;
+        Set<SystemCPU> set = clusterCPUs;
         return (SystemCPU[]) set.toArray(new SystemCPU[set.size()]);
     }
 
     public long getMinFreq() {
-        return this.minFreq;
+        return minFreq;
     }
 
     public long getMaxFreq() {
-        return this.maxFreq;
+        return maxFreq;
     }
 
     public int hashCode() {
-        return this.bitmask.hashCode();
+        return bitmask.hashCode();
     }
 
     @Override
     public int compareTo(@NonNull CPUCluster other) {
-        BitSet bitSet = (BitSet) this.bitmask.clone();
+        BitSet bitSet = (BitSet) bitmask.clone();
         bitSet.xor(other.bitmask);
         if (bitSet.isEmpty()) {
             return 0;

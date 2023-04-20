@@ -15,8 +15,7 @@ import com.microsoft.xbox.toolkit.ui.XLEButton;
 /**
  * 02.10.2020
  *
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 
 public class XboxTcuiWindowDialog extends Dialog {

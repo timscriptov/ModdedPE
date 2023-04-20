@@ -15,8 +15,7 @@ import okio.ByteString;
 /**
  * 29.03.2023
  *
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 public final class HttpClientWebSocket extends WebSocketListener {
     private static final OkHttpClient OK_CLIENT = new OkHttpClient();

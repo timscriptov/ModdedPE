@@ -13,8 +13,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 /**
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 
 import android.content.Context;
@@ -28,6 +27,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+/**
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ */
 public class SessionInfo implements Serializable {
     private static final String NOT_YET_CONFIGURED = "Not yet configured";
     private static final String SEP = ";";

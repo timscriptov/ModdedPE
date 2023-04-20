@@ -19,8 +19,7 @@ package com.microsoft.xal.browser
 /**
  * 13.08.2022
  *
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 class BrowserInfo(
     @JvmField

@@ -13,8 +13,7 @@ import java.lang.ref.WeakReference;
 /**
  * 07.01.2021
  *
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 
 public class XLETextTask extends AsyncTask<XLETextArg, Void, Bitmap> {

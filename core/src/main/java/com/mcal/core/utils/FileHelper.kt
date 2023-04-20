@@ -27,6 +27,9 @@ object FileHelper {
 
     fun writeToFile(file: File, content: ByteArray) = file.writeBytes(content)
 
+    @JvmStatic
+    fun writeToFile(file: File, content: InputStream) = file.writeBytes(readAllBytes(content))
+
     fun readAllBytes(file: File): ByteArray {
         return readAllBytes(FileInputStream(file))
     }

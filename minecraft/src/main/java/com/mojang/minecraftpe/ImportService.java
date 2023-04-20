@@ -1,5 +1,6 @@
 package com.mojang.minecraftpe;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,15 +16,14 @@ import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 
 /**
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
-
 public class ImportService extends Service {
     static final int MSG_CORRELATION_CHECK = 672;
     static final int MSG_CORRELATION_RESPONSE = 837;
     final Messenger mMessenger = new Messenger(new IncomingHandler());
 
+    @SuppressLint("HandlerLeak")
     class IncomingHandler extends Handler {
         IncomingHandler() {
         }

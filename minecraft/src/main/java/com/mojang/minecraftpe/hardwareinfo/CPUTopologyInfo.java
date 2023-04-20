@@ -21,8 +21,7 @@ import java.util.regex.Pattern;
 /**
  * 29.03.2023
  *
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 public class CPUTopologyInfo {
     private static final Pattern CPU_LIST_VALUE_FORMAT = Pattern.compile("(\\d{1,4})(?:-(\\d{1,4}))?");
@@ -43,13 +42,13 @@ public class CPUTopologyInfo {
     private CPUTopologyInfo() {
         try {
             initializeCPUInformation();
-            this.CLUSTERS = getClustersFromSiblingCPUs();
+            CLUSTERS = getClustersFromSiblingCPUs();
         } catch (Exception unused) {
             Log.w("ModdedPE", "Failed to initialize CPU topology information");
-            this.CPU_PROCESSOR_COUNT = 0;
-            this.CPUS_BITSET = new BitSet();
-            this.CPUS = new ArrayList<>();
-            this.CLUSTERS = new TreeSet<>();
+            CPU_PROCESSOR_COUNT = 0;
+            CPUS_BITSET = new BitSet();
+            CPUS = new ArrayList<>();
+            CLUSTERS = new TreeSet<>();
         }
     }
 
@@ -57,22 +56,22 @@ public class CPUTopologyInfo {
         File file = new File("/sys/devices/system/cpu/present");
         int i = 0;
         if (!file.exists() || !file.canRead()) {
-            this.CPU_PROCESSOR_COUNT = 0;
-            this.CPUS_BITSET = new BitSet();
-            this.CPUS = new ArrayList<>();
+            CPU_PROCESSOR_COUNT = 0;
+            CPUS_BITSET = new BitSet();
+            CPUS = new ArrayList<>();
         }
         String readLine = new BufferedReader(new FileReader(file)).readLine();
         BitSetCollector bitSetCollector = new BitSetCollector();
         parseCPUListString(readLine, bitSetCollector);
-        this.CPU_PROCESSOR_COUNT = bitSetCollector.getBitCount();
-        this.CPUS = new ArrayList<>(this.CPU_PROCESSOR_COUNT);
-        this.CPUS_BITSET = bitSetCollector.getBitSet();
+        CPU_PROCESSOR_COUNT = bitSetCollector.getBitCount();
+        CPUS = new ArrayList<>(CPU_PROCESSOR_COUNT);
+        CPUS_BITSET = bitSetCollector.getBitSet();
         while (true) {
-            int nextSetBit = this.CPUS_BITSET.nextSetBit(i);
+            int nextSetBit = CPUS_BITSET.nextSetBit(i);
             if (nextSetBit < 0) {
                 return;
             }
-            this.CPUS.add(new SystemCPU(nextSetBit));
+            CPUS.add(new SystemCPU(nextSetBit));
             i = nextSetBit + 1;
         }
     }
@@ -104,11 +103,11 @@ public class CPUTopologyInfo {
     }
 
     public List<SystemCPU> getCPUS() {
-        return this.CPUS;
+        return CPUS;
     }
 
     public int getCPUCount() {
-        return this.CPU_PROCESSOR_COUNT;
+        return CPU_PROCESSOR_COUNT;
     }
 
     public Set<SystemCPU> cpuSetFromCPUListString(@NonNull String siblingInfo) {
@@ -116,9 +115,7 @@ public class CPUTopologyInfo {
         if (siblingInfo.isEmpty()) {
             return treeSet;
         }
-        parseCPUListString(siblingInfo, i -> {
-            treeSet.add(CPUS.get(i));
-        });
+        parseCPUListString(siblingInfo, i -> treeSet.add(CPUS.get(i)));
         return treeSet;
     }
 
@@ -127,17 +124,17 @@ public class CPUTopologyInfo {
         private final BitSet bits = new BitSet();
 
         int getBitCount() {
-            return this.bitsCounted;
+            return bitsCounted;
         }
 
         BitSet getBitSet() {
-            return this.bits;
+            return bits;
         }
 
         @Override
         public void setBit(int bitIndex) {
-            this.bits.set(bitIndex);
-            this.bitsCounted++;
+            bits.set(bitIndex);
+            bitsCounted++;
         }
     }
 
@@ -169,18 +166,18 @@ public class CPUTopologyInfo {
     }
 
     public Set<CPUCluster> getClusterSet() {
-        return new TreeSet<>(this.CLUSTERS);
+        return new TreeSet<>(CLUSTERS);
     }
 
     public CPUCluster[] getClusterArray() {
-        return (CPUCluster[]) this.CLUSTERS.toArray(new CPUCluster[0]);
+        return (CPUCluster[]) CLUSTERS.toArray(new CPUCluster[0]);
     }
 
     public boolean isMultiClusterSystem() {
-        return this.CLUSTERS.size() > 1;
+        return CLUSTERS.size() > 1;
     }
 
     public int getCPUClusterCount() {
-        return this.CLUSTERS.size();
+        return CLUSTERS.size();
     }
 }

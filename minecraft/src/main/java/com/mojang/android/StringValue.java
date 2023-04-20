@@ -4,10 +4,8 @@
 package com.mojang.android;
 
 /**
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
-
 public interface StringValue {
     String getStringValue();
 }

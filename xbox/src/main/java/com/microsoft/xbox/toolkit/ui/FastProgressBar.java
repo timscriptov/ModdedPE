@@ -9,8 +9,7 @@ import android.widget.ProgressBar;
 /**
  * 07.01.2021
  *
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 
 public class FastProgressBar extends ProgressBar {

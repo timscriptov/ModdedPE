@@ -21,8 +21,7 @@ import java.util.*
 /**
  * 13.08.2022
  *
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 class BrowserSelectionResult constructor(
     private val m_defaultBrowserInfo: BrowserInfo,

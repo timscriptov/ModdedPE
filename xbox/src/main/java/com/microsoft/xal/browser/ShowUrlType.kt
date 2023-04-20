@@ -21,8 +21,7 @@ import org.jetbrains.annotations.Contract
 /**
  * 13.08.2022
  *
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 enum class ShowUrlType {
     Normal, CookieRemoval, CookieRemovalSkipIfSharedCredentials, NonAuthFlow;

@@ -1,10 +1,8 @@
 package com.mojang.minecraftpe.packagesource;
 
 /**
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
-
 public class NativePackageSourceListener implements PackageSourceListener {
     long mPackageSourceListener = 0;
 

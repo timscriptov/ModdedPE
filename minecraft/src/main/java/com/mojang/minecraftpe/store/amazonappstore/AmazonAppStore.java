@@ -7,6 +7,9 @@ import com.mojang.minecraftpe.store.ExtraLicenseResponseData;
 import com.mojang.minecraftpe.store.Store;
 import com.mojang.minecraftpe.store.StoreListener;
 
+/**
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ */
 public class AmazonAppStore implements Store {
     static final String IAB_BROADCAST_ACTION = "com.android.vending.billing.PURCHASES_UPDATED";
     MainActivity mActivity;

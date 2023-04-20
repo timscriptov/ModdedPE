@@ -2,6 +2,11 @@ package com.mojang.minecraftpe.python;
 
 import android.content.res.AssetManager;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.mcal.core.utils.FileHelper;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -9,12 +14,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 
+/**
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ */
 public class PythonPackageLoader {
-    private AssetManager assetManager;
-    private File destination;
+    private final AssetManager assetManager;
+    private final File destination;
 
     public enum CreateDirectory {
         Created,
@@ -35,15 +41,13 @@ public class PythonPackageLoader {
         return !new BufferedReader(new FileReader(file)).readLine().equals(new BufferedReader(new InputStreamReader(this.assetManager.open(list[0]), StandardCharsets.UTF_8)).readLine());
     }
 
-    private final void copy(InputStream inputStream, File file) throws Throwable {
+    private void copy(InputStream inputStream, @NonNull File file) throws Throwable {
         File parentFile = file.getParentFile();
         if (parentFile != null) {
             createDirectory(parentFile);
-            Files.copy(inputStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            FileHelper.writeToFile(file, inputStream);
             Log.i("ModdedPE", "Created " + file.getAbsolutePath());
-            return;
         }
-        throw null;
     }
 
     public void unpack() {
@@ -59,7 +63,7 @@ public class PythonPackageLoader {
         }
     }
 
-    private CreateDirectory createDirectory(File file) throws Throwable {
+    private CreateDirectory createDirectory(@NonNull File file) throws Throwable {
         if (file.exists()) {
             return CreateDirectory.Exists;
         }
@@ -69,49 +73,54 @@ public class PythonPackageLoader {
         throw new IOException("Failed to mkdir " + file.getAbsolutePath());
     }
 
-    private void delete(File file) {
+    private void delete(@NonNull File file) {
         if (file.isDirectory()) {
-            for (File file2 : file.listFiles()) {
-                delete(file2);
+            File[] listFiles = file.listFiles();
+            if (listFiles != null) {
+                for (File f : listFiles) {
+                    delete(f);
+                }
             }
         }
         file.delete();
     }
 
-    private void traverse(File file) {
+    private void traverse(@NonNull File file) {
         if (file.exists()) {
             File[] listFiles = file.listFiles();
-            for (File file2 : listFiles) {
-                if (file2.isDirectory()) {
-                    traverse(file2);
-                } else {
-                    Log.i("ModdedPE", "Python stdLib file: '" + file2.getAbsolutePath() + "'");
+            if (listFiles != null) {
+                for (File f : listFiles) {
+                    if (f.isDirectory()) {
+                        traverse(f);
+                    } else {
+                        Log.i("ModdedPE", "Python stdLib file: '" + f.getAbsolutePath() + "'");
+                    }
                 }
             }
         }
     }
 
-    private void unpackAssetPrefix(String str, File file) throws Throwable {
+    private void unpackAssetPrefix(String path, @NonNull File file) throws Throwable {
         Log.i("ModdedPE", "Clearing out path " + file.getAbsolutePath());
         delete(file);
-        String[] list = this.assetManager.list(str);
+        String[] list = assetManager.list(path);
         if (list == null || list.length == 0) {
-            throw new IOException("No assets at prefix " + str);
+            throw new IOException("No assets at prefix " + path);
         }
-        for (String str2 : list) {
-            unpackAssetPath(str + '/' + str2, str.length(), file);
+        for (String fileName : list) {
+            unpackAssetPath(path + '/' + fileName, path.length(), file);
         }
     }
 
-    private final void unpackAssetPath(String str, int i, File file) throws Throwable {
-        String[] list = this.assetManager.list(String.valueOf(str));
+    private void unpackAssetPath(String path, int i, File file) throws Throwable {
+        String[] list = assetManager.list(String.valueOf(path));
         if (list == null) {
-            throw new IOException("Unable to list assets at path " + str + '/');
+            throw new IOException("Unable to list assets at path " + path + '/');
         } else if (list.length == 0) {
-            copy(this.assetManager.open(str), new File(file.getAbsolutePath() + '/' + str.substring(i)));
+            copy(assetManager.open(path), new File(file.getAbsolutePath() + '/' + path.substring(i)));
         } else {
-            for (String str2 : list) {
-                unpackAssetPath(str + '/' + str2, i, file);
+            for (String fileName : list) {
+                unpackAssetPath(path + '/' + fileName, i, file);
             }
         }
     }

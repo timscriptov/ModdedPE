@@ -7,8 +7,7 @@ import androidx.annotation.NonNull;
 import java.util.EnumMap;
 
 /**
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 public abstract class PackageSource {
     static final EnumMap<StringResourceId, String> stringMap = new EnumMap<>(StringResourceId.class);

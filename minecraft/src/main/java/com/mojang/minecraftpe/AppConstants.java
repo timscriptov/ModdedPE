@@ -8,10 +8,8 @@ import android.os.Build;
 import android.util.Log;
 
 /**
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
-
 public class AppConstants {
     public static String ANDROID_BUILD;
     public static String ANDROID_VERSION;

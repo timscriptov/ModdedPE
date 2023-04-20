@@ -1,20 +1,19 @@
 package com.mojang.minecraftpe.platforms;
 
-import android.annotation.TargetApi;
 import android.os.Build;
 
+import java.util.Arrays;
+
 /**
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 
-@TargetApi(21)
 public class Platform21 extends Platform19 {
     public Platform21(boolean initEventHandler) {
         super(initEventHandler);
     }
 
     public String getABIS() {
-        return Build.SUPPORTED_ABIS.toString();
+        return Arrays.toString(Build.SUPPORTED_ABIS);
     }
 }

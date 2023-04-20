@@ -3,8 +3,7 @@ package com.microsoft.xbox.service.model.sls;
 /**
  * 07.01.2021
  *
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 
 public enum UserProfileSetting {

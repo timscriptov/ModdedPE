@@ -21,8 +21,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * 02.10.2020
  *
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 
 public class XboxAppDeepLinker {

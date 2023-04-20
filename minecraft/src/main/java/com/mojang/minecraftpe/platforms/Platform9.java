@@ -4,8 +4,7 @@ import android.os.Build;
 import android.view.View;
 
 /**
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 
 public class Platform9 extends Platform {

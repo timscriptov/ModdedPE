@@ -3,23 +3,27 @@ package com.mojang.minecraftpe;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.apache.http.HttpResponse;
 import org.jetbrains.annotations.Contract;
 
 import java.io.File;
 
+/**
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ */
 public class CrashManager {
     private String mCrashDumpFolder;
     private String mCrashUploadURI;
     private String mCrashUploadURIWithSentryKey;
     private String mCurrentSessionId;
     private String mExceptionUploadURI;
-    private Thread.UncaughtExceptionHandler mPreviousUncaughtExceptionHandler = null;
+    private final Thread.UncaughtExceptionHandler mPreviousUncaughtExceptionHandler = null;
 
     private static native String nativeNotifyUncaughtException();
 
-    public CrashManager(String crashDumpFolder, String currentSessionId, SentryEndpointConfig sentryEndpointConfig) {
+    public CrashManager(String crashDumpFolder, String currentSessionId, @NonNull SentryEndpointConfig sentryEndpointConfig) {
         this.mCrashUploadURI = null;
         this.mCrashUploadURIWithSentryKey = null;
         this.mExceptionUploadURI = null;
@@ -28,11 +32,7 @@ public class CrashManager {
         this.mCrashDumpFolder = crashDumpFolder;
         this.mCurrentSessionId = currentSessionId;
         this.mCrashUploadURI = sentryEndpointConfig.url + "/api/" + sentryEndpointConfig.projectId + "/minidump/";
-        StringBuilder sb = new StringBuilder();
-        sb.append(this.mCrashUploadURI);
-        sb.append("?sentry_key=");
-        sb.append(sentryEndpointConfig.publicKey);
-        this.mCrashUploadURIWithSentryKey = sb.toString();
+        this.mCrashUploadURIWithSentryKey = mCrashUploadURI + "?sentry_key=" + sentryEndpointConfig.publicKey;
         this.mExceptionUploadURI = sentryEndpointConfig.url + "/api/" + sentryEndpointConfig.projectId + "/store/?sentry_version=7&sentry_key=" + sentryEndpointConfig.publicKey;
     }
 
@@ -51,10 +51,14 @@ public class CrashManager {
         mPreviousUncaughtExceptionHandler.uncaughtException(t, e);
     }
 
+    @NonNull
+    @Contract("_ -> new")
     private Pair<HttpResponse, String> uploadException(File fp) {
         return new Pair<>(null, null);
     }
 
+    @Nullable
+    @Contract(pure = true)
     private String uploadCrashFile(String filePath, String sessionID, String sentryParametersJSON) {
         return null;
     }

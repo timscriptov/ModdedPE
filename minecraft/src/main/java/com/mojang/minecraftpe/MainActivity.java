@@ -103,8 +103,7 @@ import java.util.concurrent.FutureTask;
 /**
  * 13.08.2022
  *
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 @SuppressWarnings("JavaJniMissingFunction")
 public class MainActivity extends NativeActivity implements View.OnKeyListener, FilePickerManagerHandler {

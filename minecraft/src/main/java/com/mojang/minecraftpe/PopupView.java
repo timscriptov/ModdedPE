@@ -9,6 +9,9 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 
+/**
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ */
 public class PopupView {
     private View mContentView;
     private final Context mContext;

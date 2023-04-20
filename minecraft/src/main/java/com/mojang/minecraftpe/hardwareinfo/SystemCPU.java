@@ -18,8 +18,7 @@ import java.util.TreeSet;
 /**
  * 29.03.2023
  *
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 public class SystemCPU implements Comparable<SystemCPU> {
     protected static final String SYSTEM_CPU_PATH = "/sys/devices/system/cpu";
@@ -31,44 +30,44 @@ public class SystemCPU implements Comparable<SystemCPU> {
     private long cpuMaxFreq = 0;
 
     public SystemCPU(int cpuId) {
-        this.CPU_ID = cpuId;
+        CPU_ID = cpuId;
         BitSet bitSet = new BitSet();
-        this.CPU_BIT_MASK = bitSet;
+        CPU_BIT_MASK = bitSet;
         bitSet.set(cpuId);
-        this.PATH = "/sys/devices/system/cpu/cpu" + cpuId;
+        PATH = SYSTEM_CPU_PATH + "/cpu" + cpuId;
     }
 
     public int getCPUId() {
-        return this.CPU_ID;
+        return CPU_ID;
     }
 
     public BitSet getCPUMask() {
-        return (BitSet) this.CPU_BIT_MASK.clone();
+        return (BitSet) CPU_BIT_MASK.clone();
     }
 
     public long getMinFrequencyHz() {
-        return this.cpuMinFreq;
+        return cpuMinFreq;
     }
 
     public long getMaxFrequencyHz() {
-        return this.cpuMaxFreq;
+        return cpuMaxFreq;
     }
 
     public void updateCPUFreq() {
         long tryReadFreq = tryReadFreq("cpuinfo", "min");
-        this.cpuMinFreq = tryReadFreq;
+        cpuMinFreq = tryReadFreq;
         if (tryReadFreq == 0) {
-            this.cpuMinFreq = tryReadFreq("scaling", "min");
+            cpuMinFreq = tryReadFreq("scaling", "min");
         }
         long tryReadFreq2 = tryReadFreq("cpuinfo", "max");
-        this.cpuMaxFreq = tryReadFreq2;
+        cpuMaxFreq = tryReadFreq2;
         if (tryReadFreq2 == 0) {
-            this.cpuMaxFreq = tryReadFreq("scaling", "max");
+            cpuMaxFreq = tryReadFreq("scaling", "max");
         }
     }
 
     private long tryReadFreq(String source, String value) {
-        File file = new File(this.PATH + "/cpufreq/" + source + "_" + value + "_freq");
+        File file = new File(PATH + "/cpufreq/" + source + "_" + value + "_freq");
         if (file.exists() && file.canRead()) {
             try {
                 Scanner scanner = new Scanner(file);
@@ -89,20 +88,20 @@ public class SystemCPU implements Comparable<SystemCPU> {
 
     @Nullable
     private File getSystemCPUFile() {
-        File file = new File(this.PATH);
+        File file = new File(PATH);
         if (!file.exists()) {
-            Log.v("ModdedPE", "cpu" + this.CPU_ID + " directory doesn't exist: " + this.PATH);
+            Log.v("ModdedPE", "cpu" + CPU_ID + " directory doesn't exist: " + this.PATH);
             return null;
         } else if (file.canRead()) {
             return file;
         } else {
-            Log.v("ModdedPE", "Cannot read directory: " + this.PATH);
+            Log.v("ModdedPE", "Cannot read directory: " + PATH);
             return null;
         }
     }
 
     public String getSiblingString() {
-        String str = this.PATH + "/topology";
+        String str = PATH + "/topology";
         File file = new File(str + "/core_siblings_list");
         if (!file.exists() || !file.canRead()) {
             Log.v("ModdedPE", "Cannot read file: " + file.getAbsolutePath());
@@ -124,17 +123,17 @@ public class SystemCPU implements Comparable<SystemCPU> {
     }
 
     public BitSet getSiblingsMask() {
-        if (this.siblingCoresMask == null) {
-            this.siblingCoresMask = retrieveSiblingsMask();
+        if (siblingCoresMask == null) {
+            siblingCoresMask = retrieveSiblingsMask();
         }
-        return this.siblingCoresMask;
+        return siblingCoresMask;
     }
 
     @Nullable
     private BitSet retrieveSiblingsMask() {
         File file;
         String[] strArr = {"/core_siblings", "/package_cpus"};
-        String str = this.PATH + "/topology";
+        String str = PATH + "/topology";
         int i = 0;
         while (true) {
             if (i >= 2) {
@@ -185,23 +184,23 @@ public class SystemCPU implements Comparable<SystemCPU> {
     }
 
     public int hashCode() {
-        return this.CPU_ID;
+        return CPU_ID;
     }
 
     public boolean equals(Object other) {
         if (this == other) {
             return true;
         }
-        return other != null && other.getClass() == getClass() && ((SystemCPU) other).CPU_ID == this.CPU_ID;
+        return other != null && other.getClass() == getClass() && ((SystemCPU) other).CPU_ID == CPU_ID;
     }
 
     @NonNull
     public String toString() {
-        return this.PATH;
+        return PATH;
     }
 
     @Override
     public int compareTo(@NonNull SystemCPU other) {
-        return Integer.compare(this.CPU_ID, other.CPU_ID);
+        return Integer.compare(CPU_ID, other.CPU_ID);
     }
 }

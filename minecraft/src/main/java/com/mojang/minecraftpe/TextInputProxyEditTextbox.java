@@ -15,6 +15,9 @@ import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
 
+/**
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ */
 public class TextInputProxyEditTextbox extends AppCompatEditText {
     private MCPEKeyWatcher _mcpeKeyWatcher;
     public int allowedLength;

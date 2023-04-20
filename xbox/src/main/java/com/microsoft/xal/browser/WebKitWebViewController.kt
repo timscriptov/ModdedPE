@@ -30,8 +30,7 @@ import java.io.IOException
 /**
  * 13.08.2022
  *
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 class WebKitWebViewController : AppCompatActivity() {
     private var mWebView: WebView? = null

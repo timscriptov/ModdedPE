@@ -16,8 +16,7 @@ import java.util.Map;
 /**
  * 13.08.2022
  *
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 public class Interop {
     public static final String TAG = "Interop";

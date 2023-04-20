@@ -22,8 +22,7 @@ import java.util.TimeZone;
 /**
  * 07.01.2021
  *
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 
 public class UTCDateConverter {
@@ -48,7 +47,7 @@ public class UTCDateConverter {
                     value = value.replace("+01:00", "");
                     timeZone = TimeZone.getTimeZone("GMT+01:00");
                 } else if (value.contains(".")) {
-                    value = value.replaceAll("([.][0-9]{3})[0-9]*$", "$1");
+                    value = value.replaceAll("([.]\\d{3})\\d*$", "$1");
                 }
                 boolean noMsDate = value.length() == NO_MS_STRING_LENGTH;
                 if (timeZone == null) {
@@ -91,8 +90,7 @@ public class UTCDateConverter {
             try {
                 return UTCDateConverter.shortDateFormat.parse(asString);
             } catch (ParseException unused) {
-                String access$200 = UTCDateConverter.TAG;
-                Log.d(access$200, "failed to parse date " + asString);
+                Log.d(TAG, "failed to parse date " + asString);
                 return null;
             }
         }
@@ -107,7 +105,7 @@ public class UTCDateConverter {
             try {
                 date = UTCDateConverter.shortDateFormat.parse(asString);
             } catch (ParseException unused) {
-                Log.d(UTCDateConverter.TAG, "failed to parse short date " + asString);
+                Log.d(TAG, "failed to parse short date " + asString);
                 date = null;
             }
             if (date == null || date.getYear() + 1900 >= 2000) {
@@ -117,7 +115,7 @@ public class UTCDateConverter {
             try {
                 return UTCDateConverter.shortDateAlternateFormat.parse(asString);
             } catch (ParseException unused2) {
-                Log.d(UTCDateConverter.TAG, "failed to parse alternate short date " + asString);
+                Log.d(TAG, "failed to parse alternate short date " + asString);
                 return date;
             }
         }
@@ -133,7 +131,7 @@ public class UTCDateConverter {
             try {
                 return UTCDateConverter.defaultFormatNoMs.parse(asString);
             } catch (ParseException unused) {
-                Log.d(UTCDateConverter.TAG, "failed to parse date " + asString);
+                Log.d(TAG, "failed to parse date " + asString);
                 return null;
             }
         }

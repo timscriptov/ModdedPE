@@ -1,12 +1,13 @@
 package com.mojang.minecraftpe;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Intent;
 
 /**
  * 13.08.2022
  *
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 public class FilePickerManager implements ActivityListener {
     static final int PICK_DIRECTORY_REQUEST_CODE = 246242755;
@@ -45,7 +46,7 @@ public class FilePickerManager implements ActivityListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PICK_DIRECTORY_REQUEST_CODE) {
-            if (resultCode == -1) {
+            if (resultCode == RESULT_OK) {
                 nativeDirectoryPickResult(data.getData().toString(), "");
             } else {
                 nativeDirectoryPickResult("", "No directory selected");

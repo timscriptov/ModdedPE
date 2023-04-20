@@ -1,25 +1,19 @@
 package com.mojang.minecraftpe.input;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.Log;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
-
 public abstract class InputDeviceManager {
     @NotNull
     @Contract("_ -> new")
     public static InputDeviceManager create(Context ctx) {
-        if (Build.VERSION.SDK_INT >= 16) {
-            return new JellyBeanDeviceManager(ctx);
-        }
-        return new DefaultDeviceManager();
+        return new JellyBeanDeviceManager(ctx);
     }
 
     public abstract void register();

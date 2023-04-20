@@ -16,8 +16,7 @@ import org.spongycastle.asn1.cmp.PKIFailureInfo;
 /**
  * 07.01.2021
  *
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 
 public class XLECheckBox extends ViewGroup {

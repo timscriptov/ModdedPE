@@ -36,6 +36,7 @@ dependencies {
     implementation project(':fmod')
     implementation project(':adal')
     implementation project(':xbox')
+    implementation project(':core')
 
     implementation jetpack.appcompat
     implementation jetpack.material
