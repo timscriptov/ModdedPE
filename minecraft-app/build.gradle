@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
+    compileSdk project.compileSDK.toInteger()
 
     defaultConfig {
         applicationId "com.mcal.lokicraft"
-        minSdkVersion 21
-        targetSdkVersion 33
+        minSdk project.minSDK.toInteger()
+        targetSdk project.targetSDK.toInteger()
         versionCode 951907102
         versionName "1.19.71.02"
         multiDexEnabled true
@@ -19,11 +19,6 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-        debug {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

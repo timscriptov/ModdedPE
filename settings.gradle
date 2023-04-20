@@ -25,7 +25,6 @@ dependencyResolutionManagement {
         jetpack {
             library('core_splashscreen', 'androidx.core:core-splashscreen:1.0.0')
             library('multidex', 'androidx.multidex:multidex:2.0.1')
-
             library('mvvm_viewmodel', 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1')
             library('mvvm_runtime', 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1')
             library('mvvm_livedata', 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1')
