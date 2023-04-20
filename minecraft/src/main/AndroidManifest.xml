@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-sdk
         android:minSdkVersion="21"
@@ -8,17 +9,18 @@
     <uses-feature
         android:glEsVersion="0x20000"
         android:required="true" />
+
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="com.android.vending.CHECK_LICENSE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -30,9 +32,6 @@
         </intent>
     </queries>
 
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="com.android.vending.BILLING" />
-
     <application>
 
         <meta-data
@@ -41,24 +40,19 @@
 
         <service
             android:name="com.mojang.minecraftpe.ImportService"
-            android:exported="true" />
+            android:exported="false" />
 
-        <meta-data
-            android:name="xperiaplayoptimized_content"
-            android:resource="@string/xperiaplayoptimized_content" />
         <meta-data
             android:name="game_display_name"
             android:resource="@string/app_name" />
+
         <meta-data
             android:name="game_icon"
             android:resource="@mipmap/ic_launcher_round" />
+
         <meta-data
             android:name="appcenter_android_id"
             android:value="@string/appcenter_android_id" />
-
-        <uses-library
-            android:name="xperiaplaycertified"
-            android:required="false" />
 
         <service
             android:name="com.mojang.minecraftpe.NotificationListenerService"
