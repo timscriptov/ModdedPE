@@ -2,10 +2,12 @@ package com.mcal.core
 
 import android.annotation.SuppressLint
 import android.content.Context
+import com.mcal.core.data.StorageHelper.getLibMinecraftPEFile
 import com.mcal.core.data.StorageHelper.getNativeLibrariesFile
 import com.mcal.core.data.StorageHelper.nativeDir
 import com.mcal.core.utils.ABIHelper.getNameAppABI
 import com.mcal.core.utils.FileHelper
+import com.mcal.core.utils.FileHelper.writeToFile
 import com.mcal.core.utils.Patcher
 import java.io.File
 import java.lang.reflect.InvocationTargetException
@@ -59,13 +61,13 @@ class NativeInstaller(private val context: Context) {
             }
             ZipFile(tmpLibLokiCraftFile).getInputStream(ZipEntry(libName))
                 ?.let {
-                    FileHelper.writeToFile(libFilePath, it)
+                    writeToFile(libFilePath, it)
                 }
         }
     }
 
     private fun patchingMinecraftLibrary() {
-        val libraryFile = getNativeLibrariesFile(context)
+        val libraryFile = getLibMinecraftPEFile(context)
 
         val libraryBytes = libraryFile.readBytes()
         val origImgBytes = context.assets.open("resources/title_original.png").readBytes()
@@ -80,7 +82,7 @@ class NativeInstaller(private val context: Context) {
         val libraryPatchedBytes = libraryBytes.copyOf()
         System.arraycopy(newImgBytes, 0, libraryPatchedBytes, indexOfOrigImg, newImgBytes.size)
 
-        FileHelper.writeToFile(libraryFile, libraryPatchedBytes)
+        writeToFile(libraryFile, libraryPatchedBytes)
     }
 
     @SuppressLint("UnsafeDynamicallyLoadedCode")

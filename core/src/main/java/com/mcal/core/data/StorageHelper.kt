@@ -22,6 +22,10 @@ object StorageHelper {
         return File(resourcesDir(context), "libraries.zip")
     }
 
+    fun getLibMinecraftPEFile(context: Context): File {
+        return File(nativeDir(context), "libminecraftpe.so")
+    }
+
     fun nativeDir(context: Context): File {
         val libDir = File(context.filesDir, "native")
         if (!libDir.exists()) {
