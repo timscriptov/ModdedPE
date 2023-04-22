@@ -36,7 +36,7 @@ public class NotificationListenerService extends FirebaseMessagingService {
 
     private static void retrieveDeviceToken() {
         if (Thread.currentThread().equals(Looper.getMainLooper().getThread())) {
-            Log.e("Minecraft", "NotificationListenerService.retrieveDeviceToken() should not run on main thread.");
+            Log.e("ModdedPE", "NotificationListenerService.retrieveDeviceToken() should not run on main thread.");
         }
         if (sDeviceRegistrationToken.isEmpty()) {
             FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
@@ -44,7 +44,7 @@ public class NotificationListenerService extends FirebaseMessagingService {
                 if (result != null && !result.isEmpty()) {
                     sDeviceRegistrationToken = result;
                 } else {
-                    Log.e("Minecraft", "Unable to get Firebase Messaging token, trying again...");
+                    Log.e("ModdedPE", "Unable to get Firebase Messaging token, trying again...");
                 }
             });
         }

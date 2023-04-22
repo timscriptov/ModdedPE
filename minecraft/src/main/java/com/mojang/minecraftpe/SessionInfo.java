@@ -106,7 +106,7 @@ public class SessionInfo implements Serializable {
         if (s == null || s.length() == 0) {
             throw new IllegalArgumentException("Empty SessionInfo string");
         }
-        String[] split = s.split(";");
+        String[] split = s.split(SEP);
         if (split.length != 8) {
             throw new IllegalArgumentException("Invalid SessionInfo string '" + s + "', must be 8 parts split by ';'");
         }
@@ -131,7 +131,7 @@ public class SessionInfo implements Serializable {
 
     @NonNull
     public String toString() {
-        return this.sessionId + ";" + this.buildId + ";" + this.commitId + ";" + this.branchId + ";" + this.flavor + ";" + this.gameVersionName + ";" + this.appVersion + ";" + getDateFormat().format(this.recordDate);
+        return sessionId + SEP + buildId + SEP + commitId + SEP + branchId + SEP + flavor + SEP + gameVersionName + SEP + appVersion + SEP + getDateFormat().format(recordDate);
     }
 
     @NonNull

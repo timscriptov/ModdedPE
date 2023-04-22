@@ -1,5 +1,7 @@
 package com.mojang.minecraftpe;
 
+import static com.mcal.core.utils.FileHelper.writeToFile;
+
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
@@ -8,6 +10,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.documentfile.provider.DocumentFile;
+
+import com.mcal.core.utils.FileHelper;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -63,12 +68,12 @@ public class WorldRecovery {
 
     public void doMigrateFolderContents(DocumentFile root, @NonNull File destFolder) {
         ArrayList<DocumentFile> arrayList = new ArrayList<>();
-        this.mTotalFilesToCopy = 0;
+        mTotalFilesToCopy = 0;
         long j = 0;
-        this.mTotalBytesRequired = 0L;
+        mTotalBytesRequired = 0L;
         generateCopyFilesRecursively(arrayList, root);
         long availableBytes = new StatFs(destFolder.getAbsolutePath()).getAvailableBytes();
-        long j2 = this.mTotalBytesRequired;
+        long j2 = mTotalBytesRequired;
         if (j2 >= availableBytes) {
             nativeError("Insufficient space", j2, availableBytes);
             return;
@@ -76,7 +81,6 @@ public class WorldRecovery {
         String path = root.getUri().getPath();
         String str = destFolder + "_temp";
         File file = new File(str);
-        byte[] bArr = new byte[8192];
         Iterator<DocumentFile> it = arrayList.iterator();
         long j3 = 0;
         int i = 0;
@@ -98,20 +102,9 @@ public class WorldRecovery {
                 Log.i("Minecraft", "Copying '" + next.getUri().getPath() + "' to '" + str2 + "'");
                 String sb = "Copying: " + str2;
                 i++;
-                nativeUpdate(sb, this.mTotalFilesToCopy, i, this.mTotalBytesRequired, j3);
+                nativeUpdate(sb, mTotalFilesToCopy, i, mTotalBytesRequired, j3);
                 try {
-                    InputStream openInputStream = this.mContentResolver.openInputStream(next.getUri());
-                    FileOutputStream fileOutputStream = new FileOutputStream(str2);
-                    while (true) {
-                        int read = openInputStream.read(bArr, 0, 8192);
-                        if (read < 0) {
-                            break;
-                        }
-                        fileOutputStream.write(bArr, 0, read);
-                        j3 += read;
-                    }
-                    fileOutputStream.close();
-                    openInputStream.close();
+                    writeToFile(new File(str2), mContentResolver.openInputStream(next.getUri()));
                 } catch (IOException e) {
                     e.printStackTrace();
                     nativeError(e.getMessage(), 0L, 0L);
@@ -136,7 +129,6 @@ public class WorldRecovery {
     }
 
     private void generateCopyFilesRecursively(ArrayList<DocumentFile> result, @NonNull DocumentFile root) {
-        DocumentFile[] listFiles;
         for (DocumentFile documentFile : root.listFiles()) {
             result.add(documentFile);
             if (documentFile.isDirectory()) {

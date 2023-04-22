@@ -17,17 +17,17 @@ public class ThermalMonitor extends BroadcastReceiver {
     private boolean mLowPowerModeEnabled = false;
 
     public ThermalMonitor(@NonNull Context context) {
-        this.mContext = context;
-        context.registerReceiver(this, new IntentFilter("android.os.action.POWER_SAVE_MODE_CHANGED"));
+        mContext = context;
+        context.registerReceiver(this, new IntentFilter(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED));
         readPowerMode(context);
     }
 
     protected void finalize() {
-        this.mContext.unregisterReceiver(this);
+        mContext.unregisterReceiver(this);
     }
 
     public boolean getLowPowerModeEnabled() {
-        return this.mLowPowerModeEnabled;
+        return mLowPowerModeEnabled;
     }
 
     @Override

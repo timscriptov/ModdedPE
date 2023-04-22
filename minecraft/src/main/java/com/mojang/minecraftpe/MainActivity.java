@@ -1,5 +1,6 @@
 package com.mojang.minecraftpe;
 
+import android.Manifest;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -44,6 +45,7 @@ import android.os.Vibrator;
 import android.os.storage.StorageManager;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
 import android.text.Editable;
 import android.text.InputType;
@@ -315,22 +317,22 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     }
 
     public void launchUri(String uri) {
-        startActivity(new Intent("android.intent.action.VIEW", Uri.parse(uri)));
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(uri)));
     }
 
     public void share(String title, String description, String uri) {
         Intent intent = new Intent();
-        intent.setAction("android.intent.action.SEND");
-        intent.putExtra("android.intent.extra.SUBJECT", title);
-        intent.putExtra("android.intent.extra.TITLE", description);
-        intent.putExtra("android.intent.extra.TEXT", uri);
+        intent.setAction(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_SUBJECT, title);
+        intent.putExtra(Intent.EXTRA_TITLE, description);
+        intent.putExtra(Intent.EXTRA_TEXT, uri);
         intent.setType("text/plain");
         startActivity(Intent.createChooser(intent, title));
     }
 
     public void openAndroidAppSettings() {
         try {
-            startActivity(new Intent("android.settings.APPLICATION_DETAILS_SETTINGS", Uri.parse("package:" + getPackageName())));
+            startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getPackageName())));
         } catch (ActivityNotFoundException e) {
             Log.e("ModdedPE", "openAndroidAppSettings: Failed to open android app settings: " + e);
         }
@@ -445,38 +447,38 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
                 requestPushPermission();
             }
         }
-        this.platform = Platform.createPlatform(true);
+        platform = Platform.createPlatform(true);
         setVolumeControlStream(3);
         FMOD.init(this);
-        this.deviceManager = InputDeviceManager.create(this);
-        this.headsetConnectionReceiver = new HeadsetConnectionReceiver();
-        this.networkReceiver = new NetworkReceiver();
-        this.platform.onAppStart(getWindow().getDecorView());
-        mHasStoragePermission = checkPermission("android.permission.WRITE_EXTERNAL_STORAGE", Process.myPid(), Process.myUid()) == 0;
+        deviceManager = InputDeviceManager.create(this);
+        headsetConnectionReceiver = new HeadsetConnectionReceiver();
+        networkReceiver = new NetworkReceiver();
+        platform.onAppStart(getWindow().getDecorView());
+        mHasStoragePermission = checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, Process.myPid(), Process.myUid()) == 0;
         nativeSetHeadphonesConnected(((AudioManager) getSystemService(Context.AUDIO_SERVICE)).isWiredHeadsetOn());
-        this.clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        this.initialUserLocale = Locale.getDefault();
+        clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        initialUserLocale = Locale.getDefault();
         FilePickerManager filePickerManager = new FilePickerManager(this);
-        this.mFilePickerManager = filePickerManager;
+        mFilePickerManager = filePickerManager;
         addListener(filePickerManager);
         mInstance = this;
-        this._fromOnCreate = true;
-        this.textInputWidget = createTextWidget();
+        _fromOnCreate = true;
+        textInputWidget = createTextWidget();
         findViewById(android.R.id.content).getRootView().addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> nativeResize(right - left, bottom - top));
         if (isEduMode()) {
             new PythonPackageLoader(getApplicationContext().getAssets(), getFilesDir()).unpack();
         }
         if (!isTestInfrastructureDisabled() && InstrumentationRegistryHelper.getIsRunningInAppCenter()) {
-            this.isRunningInAppCenter = true;
+            isRunningInAppCenter = true;
             Log.w("ModdedPE", "Automation: in MainActivity::onCreate, we are running in AppCenter");
         }
-        this.mWorldRecovery = new WorldRecovery(getApplicationContext(), getApplicationContext().getContentResolver());
+        mWorldRecovery = new WorldRecovery(getApplicationContext(), getApplicationContext().getContentResolver());
     }
 
     public void lockCursor() {
-        if (getAndroidVersion() >= 26) {
+        if (getAndroidVersion() >= Build.VERSION_CODES.O) {
             @SuppressLint("ResourceType") View rootView = findViewById(android.R.id.content).getRootView();
-            this.mCursorLocked = true;
+            mCursorLocked = true;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 rootView.requestPointerCapture();
             }
@@ -484,9 +486,9 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     }
 
     public void unlockCursor() {
-        if (getAndroidVersion() >= 26) {
+        if (getAndroidVersion() >= Build.VERSION_CODES.O) {
             @SuppressLint("ResourceType") View rootView = findViewById(android.R.id.content).getRootView();
-            this.mCursorLocked = false;
+            mCursorLocked = false;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 rootView.releasePointerCapture();
             }
@@ -495,7 +497,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
 
     @Override
     public boolean dispatchGenericMotionEvent(MotionEvent event) {
-        if (this.mCursorLocked && (event.getSource() & 8194) == 8194) {
+        if (mCursorLocked && (event.getSource() & 8194) == 8194) {
             lockCursor();
         }
         return super.dispatchGenericMotionEvent(event);
@@ -556,32 +558,32 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
 
     public void setTextToSpeechEnabled(boolean enabled) {
         if (enabled) {
-            if (this.textToSpeechManager != null) {
+            if (textToSpeechManager != null) {
                 return;
             }
             try {
-                this.textToSpeechManager = new TextToSpeech(getApplicationContext(), status -> {
+                textToSpeechManager = new TextToSpeech(getApplicationContext(), status -> {
                 });
                 return;
             } catch (Exception unused) {
                 return;
             }
         }
-        this.textToSpeechManager = null;
+        textToSpeechManager = null;
     }
 
     public void requestStoragePermission(int permissionReason) {
-        this.mLastPermissionRequestReason = permissionReason;
+        mLastPermissionRequestReason = permissionReason;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 1);
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         }
     }
 
     @TargetApi(33)
     public void requestPushPermission() {
         Log.i("ModdedPE", "MainActivity::requestPushPermission");
-        if (checkPermission("android.permission.POST_NOTIFICATIONS", Process.myPid(), Process.myUid()) != PackageManager.PERMISSION_GRANTED) {
-            runOnUiThread(() -> requestPermissions(new String[]{"android.permission.POST_NOTIFICATIONS"}, 2));
+        if (checkPermission(Manifest.permission.POST_NOTIFICATIONS, Process.myPid(), Process.myUid()) != PackageManager.PERMISSION_GRANTED) {
+            runOnUiThread(() -> requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 2));
         }
     }
 
@@ -589,12 +591,12 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 1) {
             mHasStoragePermission = grantResults.length > 0 && grantResults[0] == 0;
-            nativeStoragePermissionRequestResult(mHasStoragePermission, this.mLastPermissionRequestReason);
+            nativeStoragePermissionRequestResult(mHasStoragePermission, mLastPermissionRequestReason);
         }
     }
 
     public boolean hasWriteExternalStoragePermission() {
-        boolean z = checkPermission("android.permission.WRITE_EXTERNAL_STORAGE", Process.myPid(), Process.myUid()) == PackageManager.PERMISSION_GRANTED;
+        boolean z = checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, Process.myPid(), Process.myUid()) == PackageManager.PERMISSION_GRANTED;
         mHasStoragePermission = z;
         return z;
     }

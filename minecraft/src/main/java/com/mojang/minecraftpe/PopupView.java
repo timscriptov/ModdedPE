@@ -32,30 +32,30 @@ public class PopupView {
 
     public PopupView(@NonNull Context context) {
         this.mContext = context;
-        this.mWindowManager = (WindowManager) context.getSystemService("window");
+        this.mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     }
 
     public void setContentView(View contentView) {
-        this.mContentView = contentView;
+        mContentView = contentView;
     }
 
     public void setParentView(View parentView) {
-        this.mParentView = parentView;
+        mParentView = parentView;
     }
 
     public void setWidth(int width) {
-        this.mWidth = width;
+        mWidth = width;
     }
 
     public void setHeight(int height) {
-        this.mHeight = height;
+        mHeight = height;
     }
 
     public void setRect(int minX, int maxX, int minY, int maxY) {
-        this.mWidth = maxX - minX;
-        this.mHeight = maxY - minY;
-        this.mOriginX = minX;
-        this.mOriginY = minY;
+        mWidth = maxX - minX;
+        mHeight = maxY - minY;
+        mOriginX = minX;
+        mOriginY = minY;
     }
 
     public void setVisible(boolean visible) {
@@ -69,45 +69,45 @@ public class PopupView {
     }
 
     public boolean getVisible() {
-        View view = this.mPopupView;
+        View view = mPopupView;
         return view != null && view.getParent() != null;
     }
 
     public void dismiss() {
-        if (this.mPopupView != null) {
+        if (mPopupView != null) {
             removePopupView();
-            View view = this.mPopupView;
-            View view2 = this.mContentView;
+            View view = mPopupView;
+            View view2 = mContentView;
             if (view != view2 && (view instanceof ViewGroup)) {
                 ((ViewGroup) view).removeView(view2);
             }
-            this.mPopupView = null;
+            mPopupView = null;
         }
     }
 
     public void update() {
         if (getVisible()) {
-            WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) this.mPopupView.getLayoutParams();
+            WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) mPopupView.getLayoutParams();
             int computeFlags = computeFlags(layoutParams.flags);
             if (computeFlags != layoutParams.flags) {
                 layoutParams.flags = computeFlags;
             }
             setLayoutRect(layoutParams);
-            this.mWindowManager.updateViewLayout(this.mPopupView, layoutParams);
+            this.mWindowManager.updateViewLayout(mPopupView, layoutParams);
         }
     }
 
     private void addPopupView() {
-        this.mPopupView = this.mContentView;
-        WindowManager.LayoutParams createPopupLayout = createPopupLayout(this.mParentView.getWindowToken());
+        mPopupView = mContentView;
+        WindowManager.LayoutParams createPopupLayout = createPopupLayout(mParentView.getWindowToken());
         setLayoutRect(createPopupLayout);
         invokePopup(createPopupLayout);
     }
 
     private void removePopupView() {
         try {
-            this.mParentView.requestFocus();
-            this.mWindowManager.removeView(this.mPopupView);
+            mParentView.requestFocus();
+            mWindowManager.removeView(mPopupView);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -127,17 +127,17 @@ public class PopupView {
     }
 
     private void invokePopup(@NonNull WindowManager.LayoutParams p) {
-        p.packageName = this.mContext.getPackageName();
-        this.mWindowManager.addView(this.mPopupView, p);
-        this.mParentView.requestFocus();
+        p.packageName = mContext.getPackageName();
+        mWindowManager.addView(mPopupView, p);
+        mParentView.requestFocus();
     }
 
     @SuppressLint("WrongConstant")
     private void setLayoutRect(@NonNull WindowManager.LayoutParams p) {
-        p.width = this.mWidth;
-        p.height = this.mHeight;
-        p.x = this.mOriginX;
-        p.y = this.mOriginY;
+        p.width = mWidth;
+        p.height = mHeight;
+        p.x = mOriginX;
+        p.y = mOriginY;
         p.gravity = 51;
     }
 }

@@ -12,6 +12,8 @@ import android.text.TextPaint;
 
 import androidx.core.view.ViewCompat;
 
+import com.mcal.core.utils.FileHelper;
+
 import org.apache.http.HttpStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -123,12 +125,7 @@ public class PDFWriter {
     @NotNull
     @Contract("_ -> new")
     private String _readFileToString(String filename) throws IOException {
-        File textFile = new File(filename);
-        FileInputStream textStream = new FileInputStream(textFile);
-        byte[] textBytes = new byte[((int) textFile.length())];
-        textStream.read(textBytes);
-        textStream.close();
-        return new String(textBytes);
+        return FileHelper.readFile(filename);
     }
 
     @NotNull

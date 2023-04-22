@@ -7,8 +7,10 @@ import java.io.InputStream
 import java.nio.charset.StandardCharsets
 
 object FileHelper {
+    @JvmStatic
     fun readFile(file: File) = file.inputStream().readBytes().toString(StandardCharsets.UTF_8)
 
+    @JvmStatic
     fun readFile(path: String) =
         File(path).inputStream().readBytes().toString(StandardCharsets.UTF_8)
 

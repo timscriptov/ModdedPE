@@ -31,19 +31,19 @@ public class TextInputProxyEditTextbox extends AppCompatEditText {
 
     public TextInputProxyEditTextbox(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        this._mcpeKeyWatcher = null;
-        this.allowedLength = 160;
+        _mcpeKeyWatcher = null;
+        allowedLength = 160;
     }
 
     public TextInputProxyEditTextbox(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this._mcpeKeyWatcher = null;
-        this.allowedLength = 160;
+        _mcpeKeyWatcher = null;
+        allowedLength = 160;
     }
 
     public TextInputProxyEditTextbox(Context context) {
         super(context);
-        this._mcpeKeyWatcher = null;
+        _mcpeKeyWatcher = null;
     }
 
     public void updateFilters(int allowedLength, boolean singleLine) {
@@ -60,7 +60,7 @@ public class TextInputProxyEditTextbox extends AppCompatEditText {
     }
 
     public boolean shouldSendText() {
-        return this.mLastSentText == null || !getText().toString().equals(this.mLastSentText);
+        return mLastSentText == null || !getText().toString().equals(mLastSentText);
     }
 
     public void setTextFromGame(String text) {
@@ -69,7 +69,7 @@ public class TextInputProxyEditTextbox extends AppCompatEditText {
     }
 
     public void updateLastSentText() {
-        this.mLastSentText = getText().toString();
+        mLastSentText = getText().toString();
     }
 
     @Override
@@ -79,8 +79,8 @@ public class TextInputProxyEditTextbox extends AppCompatEditText {
 
     @Override
     public boolean onKeyPreIme(int keyCode, KeyEvent event) {
-        if (keyCode == 4 && event.getAction() == 1) {
-            MCPEKeyWatcher mCPEKeyWatcher = this._mcpeKeyWatcher;
+        if (keyCode == 4 && event.getAction() == KeyEvent.ACTION_UP) {
+            MCPEKeyWatcher mCPEKeyWatcher = _mcpeKeyWatcher;
             if (mCPEKeyWatcher == null) {
                 return false;
             }
@@ -90,7 +90,7 @@ public class TextInputProxyEditTextbox extends AppCompatEditText {
     }
 
     public void setOnMCPEKeyWatcher(MCPEKeyWatcher mcpeKeyWatcher) {
-        this._mcpeKeyWatcher = mcpeKeyWatcher;
+        _mcpeKeyWatcher = mcpeKeyWatcher;
     }
 
     @NonNull
@@ -137,11 +137,11 @@ public class TextInputProxyEditTextbox extends AppCompatEditText {
 
         @Override
         public boolean sendKeyEvent(KeyEvent event) {
-            if (this.textbox.getText().length() == 0 && event.getAction() == 0 && event.getKeyCode() == 67) {
-                if (TextInputProxyEditTextbox.this._mcpeKeyWatcher == null) {
+            if (textbox.getText().length() == 0 && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == 67) {
+                if (_mcpeKeyWatcher == null) {
                     return false;
                 }
-                TextInputProxyEditTextbox.this._mcpeKeyWatcher.onDeleteKeyPressed();
+                _mcpeKeyWatcher.onDeleteKeyPressed();
                 return false;
             }
             return super.sendKeyEvent(event);
