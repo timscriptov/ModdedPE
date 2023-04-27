@@ -6,7 +6,6 @@ import com.mcal.core.data.StorageHelper.getLibMinecraftPEFile
 import com.mcal.core.data.StorageHelper.getNativeLibrariesFile
 import com.mcal.core.data.StorageHelper.nativeDir
 import com.mcal.core.utils.ABIHelper.getNameAppABI
-import com.mcal.core.utils.FileHelper
 import com.mcal.core.utils.FileHelper.writeToFile
 import com.mcal.core.utils.Patcher
 import java.io.File
