@@ -6,4 +6,5 @@
     <string name="download_resource_pack_failed">Сталася помилка. Будь ласка провірте Інтернет підключення і спробуйте знову.</string>
     <string name="download_repeat">Спробуйте знову</string>
     <string name="exit">Вихід</string>
+    <string name="done">Done</string>
 </resources>

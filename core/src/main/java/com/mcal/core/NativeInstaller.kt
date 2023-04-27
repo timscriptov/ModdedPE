@@ -58,14 +58,10 @@ class NativeInstaller(private val context: Context) {
         arrayListOf(
             "libc++_shared.so",
             "libfmod.so",
-            "liblokicraft.so",
+            "libminecraftpe.so",
             "libMediaDecoders_Android.so"
         ).forEach { libName ->
-            val libFilePath = if (libName.contains("liblokicraft.so")) {
-                File(nativeDir, "libminecraftpe.so")
-            } else {
-                File(nativeDir, libName)
-            }
+            val libFilePath = File(nativeDir, libName)
             ZipFile(tmpLibLokiCraftFile).getInputStream(ZipEntry(libName))
                 ?.let {
                     writeToFile(libFilePath, it)

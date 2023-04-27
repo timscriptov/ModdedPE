@@ -6,4 +6,5 @@
     <string name="download_resource_pack_failed">An error has occurred. Please check your Internet connection and try again.</string>
     <string name="download_repeat">Repeat</string>
     <string name="exit">Exit</string>
+    <string name="done">Done</string>
 </resources>

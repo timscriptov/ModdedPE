@@ -91,7 +91,7 @@ class DownloaderAdapter(
                             }
                             sink.writeAll(sourceBytes)
                             sink.close()
-                            finishDownloading(item)
+                            finishDownloading(holder, item)
                         }
                     }
                 }
@@ -99,7 +99,7 @@ class DownloaderAdapter(
         }
     }
 
-    private fun finishDownloading(item: DownloadItem) {
+    private fun finishDownloading(holder: AppListViewHolder, item: DownloadItem) {
         when (item.type) {
             ResourceType.RESOURCE -> {
                 activity.installedResourcePack = true
@@ -114,6 +114,7 @@ class DownloaderAdapter(
                 activity.installedNative = true
             }
         }
+        holder.progressLengthView.text = activity.getString(R.string.done)
     }
 
     @SuppressLint("SetTextI18n")
