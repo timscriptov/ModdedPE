@@ -22,7 +22,14 @@ class NativeInstaller(private val context: Context) {
             (abi.contains("x86_64")) || (abi.contains("x86"))
         ) {
             extractLibraries(nativeDir)
-            patchingMinecraftLibrary()
+            patchingMinecraftLibrary(
+                context.assets.open("resources/title_original.png").readBytes(),
+                context.assets.open("resources/title_replace.png").readBytes()
+            )
+            patchingMinecraftLibrary(
+                "https://aka.ms/MinecraftAndroidExternalStorage".toByteArray(),
+                "https://t.me/apkeditorproofficial${"\u0000".repeat(13)}".toByteArray()
+            )
             loadLibraries()
         }
         try {
@@ -66,12 +73,9 @@ class NativeInstaller(private val context: Context) {
         }
     }
 
-    private fun patchingMinecraftLibrary() {
+    private fun patchingMinecraftLibrary(origImgBytes: ByteArray, newImgBytes: ByteArray) {
         val libraryFile = getLibMinecraftPEFile(context)
-
         val libraryBytes = libraryFile.readBytes()
-        val origImgBytes = context.assets.open("resources/title_original.png").readBytes()
-        val newImgBytes = context.assets.open("resources/title_replace.png").readBytes()
 
         val indexOfOrigImg = hexIndexOf(libraryBytes, origImgBytes)
         if (indexOfOrigImg == -1) {
