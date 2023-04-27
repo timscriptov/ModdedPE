@@ -36,6 +36,6 @@ public class ThermalMonitor extends BroadcastReceiver {
     }
 
     private void readPowerMode(@NonNull Context context) {
-        this.mLowPowerModeEnabled = ((PowerManager) context.getSystemService(Context.POWER_SERVICE)).isPowerSaveMode();
+        mLowPowerModeEnabled = ((PowerManager) context.getSystemService(Context.POWER_SERVICE)).isPowerSaveMode();
     }
 }

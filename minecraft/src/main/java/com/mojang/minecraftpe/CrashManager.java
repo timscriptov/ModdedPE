@@ -48,7 +48,9 @@ public class CrashManager {
     }
 
     public void handleUncaughtException(Thread t, Throwable e) {
-        mPreviousUncaughtExceptionHandler.uncaughtException(t, e);
+        if (mPreviousUncaughtExceptionHandler != null) {
+            mPreviousUncaughtExceptionHandler.uncaughtException(t, e);
+        }
     }
 
     @NonNull

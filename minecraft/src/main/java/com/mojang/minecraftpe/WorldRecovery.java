@@ -11,12 +11,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.documentfile.provider.DocumentFile;
 
-import com.mcal.core.utils.FileHelper;
-
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Objects;
@@ -90,16 +86,16 @@ public class WorldRecovery {
             if (next.isDirectory()) {
                 File file2 = new File(str2);
                 if (!file2.isDirectory()) {
-                    Log.i("Minecraft", "Creating directory '" + str2 + "'");
+                    Log.i("ModdedPE", "Creating directory '" + str2 + "'");
                     if (!file2.mkdirs()) {
                         nativeError("Could not create directory: " + str2, j, j);
                         return;
                     }
                 } else {
-                    Log.i("Minecraft", "Directory '" + str2 + "' already exists");
+                    Log.i("ModdedPE", "Directory '" + str2 + "' already exists");
                 }
             } else {
-                Log.i("Minecraft", "Copying '" + next.getUri().getPath() + "' to '" + str2 + "'");
+                Log.i("ModdedPE", "Copying '" + next.getUri().getPath() + "' to '" + str2 + "'");
                 String sb = "Copying: " + str2;
                 i++;
                 nativeUpdate(sb, mTotalFilesToCopy, i, mTotalBytesRequired, j3);
@@ -134,8 +130,8 @@ public class WorldRecovery {
             if (documentFile.isDirectory()) {
                 generateCopyFilesRecursively(result, documentFile);
             } else {
-                this.mTotalBytesRequired += documentFile.length();
-                this.mTotalFilesToCopy++;
+                mTotalBytesRequired += documentFile.length();
+                mTotalFilesToCopy++;
             }
         }
     }

@@ -28,8 +28,7 @@ public class FilePickerManager implements ActivityListener {
     }
 
     public FilePickerManager(FilePickerManagerHandler handler) {
-        this.mHandler = null;
-        this.mHandler = handler;
+        mHandler = handler;
     }
 
     public void pickDirectory(String prompt, String startingLocationURI) {
@@ -40,7 +39,7 @@ public class FilePickerManager implements ActivityListener {
         if (startingLocationURI != null && !startingLocationURI.isEmpty()) {
             intent.putExtra("android.provider.extra.INITIAL_URI", startingLocationURI);
         }
-        this.mHandler.startPickerActivity(intent, PICK_DIRECTORY_REQUEST_CODE);
+        mHandler.startPickerActivity(intent, PICK_DIRECTORY_REQUEST_CODE);
     }
 
     @Override

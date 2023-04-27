@@ -38,9 +38,9 @@ public class ImportService extends Service {
                     return;
                 }
                 try {
-                    long j = getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).firstInstallTime;
+                    long firstInstallTime = getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).firstInstallTime;
                     Bundle bundle = new Bundle();
-                    bundle.putLong("time", j);
+                    bundle.putLong("time", firstInstallTime);
                     bundle.putString("deviceId", string);
                     bundle.putString("sessionId", string2);
                     Message obtain = Message.obtain(null, ImportService.MSG_CORRELATION_RESPONSE);
@@ -57,6 +57,6 @@ public class ImportService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        return this.mMessenger.getBinder();
+        return mMessenger.getBinder();
     }
 }

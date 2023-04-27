@@ -78,8 +78,8 @@ public class ActiveDirectorySignIn implements ActivityListener {
     }
 
     public void authenticate(int i) {
-        this.mResultObtained = false;
-        this.mDialogOpen = true;
+        mResultObtained = false;
+        mDialogOpen = true;
         final PromptBehavior promptBehavior = i == 0 ? PromptBehavior.Always : PromptBehavior.Auto;
         if (i == 2) {
             z = true;

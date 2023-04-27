@@ -40,7 +40,7 @@ public class HardwareInformation {
 
     public static String getSoCName() {
         String cPULine;
-        if (Build.VERSION.SDK_INT >= 31) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             cPULine = Build.SOC_MODEL.equals("unknown") ? "" : Build.SOC_MODEL;
         } else {
             cPULine = cpuInfo.getCPULine("Hardware");
@@ -71,7 +71,7 @@ public class HardwareInformation {
     }
 
     public String getAndroidVersion() {
-        if (((MainActivity) this.context).isChromebook()) {
+        if (((MainActivity) context).isChromebook()) {
             return "ChromeOS " + Build.VERSION.RELEASE;
         }
         return "Android " + Build.VERSION.RELEASE;
