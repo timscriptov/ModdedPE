@@ -4,7 +4,7 @@ import android.content.Context
 import java.io.File
 
 object StorageHelper {
-    const val VERSION = "1.19.71.02"
+    const val VERSION = "1.20.0.01"
 
     fun resourcePackFile(context: Context): File {
         return File(resourcesDir(context), "resource_pack_$VERSION.zip")
@@ -18,15 +18,15 @@ object StorageHelper {
         return File(resourcesDir(context), "main_pack_$VERSION.zip")
     }
 
-    fun getNativeLibrariesFile(context: Context): File {
-        return File(resourcesDir(context), "libraries.zip")
+    fun nativeLibrariesFile(context: Context): File {
+        return File(resourcesDir(context), "libraries_$VERSION.zip")
     }
 
     fun vanillaResourcePackFile(context: Context): File {
-        return File(resourcesDir(context), "resource_pack_vanilla.zip")
+        return File(resourcesDir(context), "resource_pack_vanilla_$VERSION.zip")
     }
 
-    fun getLibMinecraftPEFile(context: Context): File {
+    fun libMinecraftPEFile(context: Context): File {
         return File(nativeDir(context), "libminecraftpe.so")
     }
 
@@ -39,7 +39,7 @@ object StorageHelper {
     }
 
     private fun resourcesDir(context: Context): File {
-        val libDir = File(context.cacheDir, "resources")
+        val libDir = File(context.filesDir, "resources")
         if (!libDir.exists()) {
             libDir.mkdirs()
         }

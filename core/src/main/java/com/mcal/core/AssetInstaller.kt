@@ -5,6 +5,7 @@ import android.content.res.AssetManager
 import com.mcal.core.data.StorageHelper.behaviorPackFile
 import com.mcal.core.data.StorageHelper.mainPackFile
 import com.mcal.core.data.StorageHelper.resourcePackFile
+import com.mcal.core.data.StorageHelper.vanillaResourcePackFile
 import java.io.IOException
 import java.lang.reflect.InvocationTargetException
 
@@ -16,6 +17,7 @@ class AssetInstaller(private val context: Context) {
             patchAssetPath.add(resourcePackFile(context).path)
             patchAssetPath.add(mainPackFile(context).path)
             patchAssetPath.add(behaviorPackFile(context).path)
+            patchAssetPath.add(vanillaResourcePackFile(context).path)
             for (packageResourcePath in patchAssetPath) {
                 val addAssetPath =
                     AssetManager::class.java.getMethod("addAssetPath", String::class.java)

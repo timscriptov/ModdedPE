@@ -2,8 +2,8 @@ package com.mcal.core
 
 import android.annotation.SuppressLint
 import android.content.Context
-import com.mcal.core.data.StorageHelper.getLibMinecraftPEFile
-import com.mcal.core.data.StorageHelper.getNativeLibrariesFile
+import com.mcal.core.data.StorageHelper.libMinecraftPEFile
+import com.mcal.core.data.StorageHelper.nativeLibrariesFile
 import com.mcal.core.data.StorageHelper.nativeDir
 import com.mcal.core.utils.ABIHelper.getNameAppABI
 import com.mcal.core.utils.FileHelper.writeToFile
@@ -53,7 +53,7 @@ class NativeInstaller(private val context: Context) {
 
     @SuppressLint("UnsafeDynamicallyLoadedCode")
     private fun extractLibraries(nativeDir: File) {
-        val tmpLibLokiCraftFile = getNativeLibrariesFile(context)
+        val tmpLibLokiCraftFile = nativeLibrariesFile(context)
         arrayListOf(
             "libc++_shared.so",
             "libfmod.so",
@@ -69,7 +69,7 @@ class NativeInstaller(private val context: Context) {
     }
 
     private fun patchingMinecraftLibrary(origImgBytes: ByteArray, newImgBytes: ByteArray) {
-        val libraryFile = getLibMinecraftPEFile(context)
+        val libraryFile = libMinecraftPEFile(context)
         val libraryBytes = libraryFile.readBytes()
 
         val indexOfOrigImg = hexIndexOf(libraryBytes, origImgBytes)
