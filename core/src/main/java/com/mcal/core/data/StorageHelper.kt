@@ -22,6 +22,10 @@ object StorageHelper {
         return File(resourcesDir(context), "libraries.zip")
     }
 
+    fun vanillaResourcePackFile(context: Context): File {
+        return File(resourcesDir(context), "resource_pack_vanilla.zip")
+    }
+
     fun getLibMinecraftPEFile(context: Context): File {
         return File(nativeDir(context), "libminecraftpe.so")
     }

@@ -104,14 +104,21 @@ class DownloaderAdapter(
             ResourceType.RESOURCE -> {
                 activity.installedResourcePack = true
             }
+
             ResourceType.BEHAVIOR -> {
                 activity.installedBehaviorPack = true
             }
+
             ResourceType.MAIN -> {
                 activity.installedMainPack = true
             }
+
             ResourceType.LIBS -> {
                 activity.installedNative = true
+            }
+
+            ResourceType.VANILLA -> {
+                activity.installedVanillaResourcePack = true
             }
         }
         holder.progressLengthView.text = activity.getString(R.string.done)

@@ -5,4 +5,5 @@ enum class ResourceType {
     MAIN,
     BEHAVIOR,
     LIBS,
+    VANILLA,
 }

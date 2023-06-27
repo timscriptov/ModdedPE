@@ -10,6 +10,7 @@ import com.mcal.core.data.StorageHelper.behaviorPackFile
 import com.mcal.core.data.StorageHelper.getNativeLibrariesFile
 import com.mcal.core.data.StorageHelper.mainPackFile
 import com.mcal.core.data.StorageHelper.resourcePackFile
+import com.mcal.core.data.StorageHelper.vanillaResourcePackFile
 import com.mcal.core.utils.ABIHelper.getABI
 import com.mcal.core.utils.NetHelper
 import com.mcal.moddedpe.adapters.DownloaderAdapter
@@ -20,6 +21,17 @@ import com.mcal.moddedpe.databinding.ActivityLoadingPackBinding
 import kotlinx.coroutines.*
 
 class LoadingActivity : BaseActivity() {
+    private val LINK_RESOURCE_PACK =
+        "https://github.com/TimScriptov/lokicraft/raw/main/$VERSION/resource_pack.zip"
+    private val LINK_VANILLA_RESOURCE_PACK =
+        "https://github.com/TimScriptov/lokicraft/raw/main/$VERSION/resource_pack_vanilla.zip"
+    private val LINK_BEHAVIOR_PACK =
+        "https://github.com/TimScriptov/lokicraft/raw/main/$VERSION/behavior_pack.zip"
+    private val LINK_MAIN_PACK =
+        "https://github.com/TimScriptov/lokicraft/raw/main/$VERSION/main_pack.zip"
+    private val LINK_LIBRARIES =
+        "https://github.com/TimScriptov/lokicraft/raw/main/$VERSION/${getABI()}/libraries.zip"
+
     private val binding by lazy(LazyThreadSafetyMode.NONE) {
         ActivityLoadingPackBinding.inflate(
             layoutInflater
@@ -30,13 +42,10 @@ class LoadingActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         val context = this
-        if (installedBehaviorPack && installedMainPack && installedResourcePack && installedNative) {
+        if (installedResourcePack && installedBehaviorPack && installedMainPack && installedVanillaResourcePack) {
             startActivity(Intent(context, GameActivity::class.java))
             finish()
         } else {
-            runBlocking {
-                notAvailableDialog()
-            }
             val list = mutableListOf<DownloadItem>()
             if (!installedResourcePack) {
                 val resourcePackFile = resourcePackFile(this)
@@ -47,7 +56,7 @@ class LoadingActivity : BaseActivity() {
                     DownloadItem(
                         ResourceType.RESOURCE,
                         "Downloading resource pack",
-                        "https://github.com/TimScriptov/lokicraft/raw/main/moddedpe/$VERSION/resource_pack.zip",
+                        LINK_RESOURCE_PACK,
                         resourcePackFile,
                     )
                 )
@@ -61,7 +70,7 @@ class LoadingActivity : BaseActivity() {
                     DownloadItem(
                         ResourceType.BEHAVIOR,
                         "Downloading behavior pack",
-                        "https://github.com/TimScriptov/lokicraft/raw/main/moddedpe/$VERSION/behavior_pack.zip",
+                        LINK_BEHAVIOR_PACK,
                         behaviorPackFile,
                     )
                 )
@@ -75,7 +84,7 @@ class LoadingActivity : BaseActivity() {
                     DownloadItem(
                         ResourceType.MAIN,
                         "Downloading main pack",
-                        "https://github.com/TimScriptov/lokicraft/raw/main/moddedpe/$VERSION/main_pack.zip",
+                        LINK_MAIN_PACK,
                         mainPackFile,
                     )
                 )
@@ -89,7 +98,21 @@ class LoadingActivity : BaseActivity() {
                     DownloadItem(
                         ResourceType.LIBS,
                         "Downloading dynamical libraries",
-                        "https://github.com/TimScriptov/lokicraft/raw/main/moddedpe/$VERSION/${getABI()}/libraries.zip",
+                        LINK_LIBRARIES,
+                        nativeLibrariesFile,
+                    )
+                )
+            }
+            if (!installedVanillaResourcePack) {
+                val nativeLibrariesFile = getNativeLibrariesFile(this)
+                if (nativeLibrariesFile.exists()) {
+                    nativeLibrariesFile.delete()
+                }
+                list.add(
+                    DownloadItem(
+                        ResourceType.VANILLA,
+                        "Downloading textures pack",
+                        LINK_LIBRARIES,
                         nativeLibrariesFile,
                     )
                 )
@@ -104,7 +127,7 @@ class LoadingActivity : BaseActivity() {
             CoroutineScope(Dispatchers.IO).launch {
                 repeat(Int.MAX_VALUE) {
                     withContext(Dispatchers.Main) {
-                        if (installedResourcePack && installedBehaviorPack && installedMainPack && installedNative) {
+                        if (installedResourcePack && installedBehaviorPack && installedMainPack && installedVanillaResourcePack) {
                             startActivity(
                                 Intent(
                                     context,
@@ -146,34 +169,10 @@ class LoadingActivity : BaseActivity() {
                 nativeLibrariesFile.delete()
             }
         }
-    }
-
-    private suspend fun notAvailableDialog() {
-        val context = this@LoadingActivity
-        if (!NetHelper.isNetworkAvailable(context)) {
-            withContext(Dispatchers.Main) {
-                MaterialAlertDialogBuilder(context).apply {
-                    setMessage(getString(R.string.dialog_message_not_available_internet))
-                    setCancelable(false)
-                    setPositiveButton(getString(R.string.btn_check_internet)) { d, _ ->
-                        CoroutineScope(Dispatchers.IO).launch {
-                            if (NetHelper.isNetworkAvailable(context)) {
-                                withContext(Dispatchers.Main) {
-                                    d.dismiss()
-                                }
-                            } else {
-                                withContext(Dispatchers.Main) {
-                                    this@apply.show()
-                                    Toast.makeText(
-                                        context,
-                                        getString(R.string.toast_message_not_available_internet),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            }
-                        }
-                    }
-                }.show()
+        if (!installedVanillaResourcePack) {
+            val vanillaResourcePackFile = vanillaResourcePackFile(this)
+            if (vanillaResourcePackFile.exists()) {
+                vanillaResourcePackFile.delete()
             }
         }
     }

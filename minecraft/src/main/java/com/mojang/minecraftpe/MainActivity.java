@@ -28,6 +28,7 @@ import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
@@ -97,6 +98,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
 /**
@@ -138,7 +140,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     private boolean mIsSoftKeyboardVisible = false;
     private long mFileDialogCallback = 0;
     private float mVolume = 1.0f;
-    private boolean isRunningInAppCenter = false;
+    private boolean mIsRunningInAppCenter = false;
     private final String mSentryEndpointConfigUrl = "https://sentry.io";
     private final SentryEndpointConfig mSentryEndpointBedrockPublish = new SentryEndpointConfig("https://sentry.io", "2277697", "1c3f5cbd723a4a84879059d260b19ef6");
     private final SentryEndpointConfig mSentryEndpointBedrockRelease = new SentryEndpointConfig(this.mSentryEndpointConfigUrl, "2277697", "d49eacb334d847599b87629a6ff2ef3b");
@@ -151,6 +153,8 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     private WorldRecovery mWorldRecovery = null;
     Messenger mService = null;
     MessageConnectionStatus mBound = MessageConnectionStatus.NOTSET;
+    private WifiManager mWifiManager = null;
+    private WifiManager.MulticastLock mMulticastLock = null;
     final Messenger mMessenger = new Messenger(new IncomingHandler());
     private final ServiceConnection mConnection = new ServiceConnection() {
         @Override
@@ -216,6 +220,14 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     native boolean isAndroidTrial();
 
     native boolean isBrazeEnabled();
+
+    public boolean isBrazeSDKDisabled() {
+        return true;
+    }
+
+    public boolean getIsRunningInAppCenter() {
+        return this.mIsRunningInAppCenter;
+    }
 
     protected boolean isDemo() {
         return false;
@@ -421,7 +433,6 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
             Log.w("ModdedPE - replacing", "App is installing/replacing. Killing...");
             Process.killProcess(Process.myPid());
         }
-        nativeWaitCrashManagementSetupComplete();
         if (isEduMode()) {
             try {
                 getClassLoader().loadClass("com.microsoft.applications.events.HttpClient").getConstructor(Context.class).newInstance(getApplicationContext());
@@ -430,7 +441,6 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
                 throw new RuntimeException(e);
             }
         } else {
-            configureBrazeAtRuntime();
             if (Build.VERSION.SDK_INT >= 33) {
                 requestPushPermission();
             }
@@ -457,10 +467,40 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
             new PythonPackageLoader(getApplicationContext().getAssets(), getFilesDir()).unpack();
         }
         if (!isTestInfrastructureDisabled() && InstrumentationRegistryHelper.getIsRunningInAppCenter()) {
-            isRunningInAppCenter = true;
+            mIsRunningInAppCenter = true;
             Log.w("ModdedPE", "Automation: in MainActivity::onCreate, we are running in AppCenter");
         }
         mWorldRecovery = new WorldRecovery(getApplicationContext(), getApplicationContext().getContentResolver());
+    }
+
+    public void initializeMulticast() {
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        mWifiManager = wifiManager;
+        if (wifiManager != null) {
+            mMulticastLock = wifiManager.createMulticastLock("MinecraftMCLock");
+            setMulticastReferenceCounting(false);
+        }
+    }
+
+    public void releaseMulticast() {
+        if (mMulticastLock == null || !isMulticastHeld()) {
+            return;
+        }
+        mMulticastLock.release();
+    }
+
+    public void acquireMulticast() {
+        if (mMulticastLock == null || isMulticastHeld()) {
+            return;
+        }
+        mMulticastLock.acquire();
+    }
+
+    public void setMulticastReferenceCounting(boolean useReferenceCounting) {
+        WifiManager.MulticastLock multicastLock = mMulticastLock;
+        if (multicastLock != null) {
+            multicastLock.setReferenceCounted(useReferenceCounting);
+        }
     }
 
     public void lockCursor() {
@@ -1522,11 +1562,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
                                     openInputStream.close();
                                     return;
                                 } catch (IOException e3) {
-                                    e = e3;
-                                    sb = new StringBuilder();
-                                    sb.append("IOException while closing input stream\n");
-                                    sb.append(e);
-                                    Log.e("ModdedPE", sb.toString());
+                                    Log.e("ModdedPE","IOException while closing input stream\n" + e3 );
                                 }
                             }
                         }
@@ -1536,11 +1572,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
                         try {
                             openInputStream.close();
                         } catch (IOException e5) {
-                            e = e5;
-                            sb = new StringBuilder();
-                            sb.append("IOException while closing input stream\n");
-                            sb.append(e);
-                            Log.e("ModdedPE", sb.toString());
+                            Log.e("ModdedPE", "IOException while closing input stream\n" + e5);
                         }
                     }
                 } catch (Throwable th) {
@@ -1582,6 +1614,14 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
             edit.apply();
         }
         return z;
+    }
+
+    public boolean isMulticastHeld() {
+        WifiManager.MulticastLock multicastLock = this.mMulticastLock;
+        if (multicastLock != null) {
+            return multicastLock.isHeld();
+        }
+        return false;
     }
 
     void pickImage(long callback) {
@@ -1807,7 +1847,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
 
     public boolean isTTSEnabled() {
         final Context applicationContext = getApplicationContext();
-        if (isTestInfrastructureDisabled() || !this.isRunningInAppCenter) {
+        if (isTestInfrastructureDisabled() || !this.mIsRunningInAppCenter) {
             final AccessibilityManager accessibilityManager;
             return applicationContext != null && (accessibilityManager = (AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE)) != null && accessibilityManager.isEnabled() && !accessibilityManager.getEnabledAccessibilityServiceList(1).isEmpty();
         }

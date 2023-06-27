@@ -36,6 +36,15 @@ open class BaseActivity : AppCompatActivity() {
                 "main_pack_installed", flag
             )?.apply()
         }
+    var installedVanillaResourcePack: Boolean
+        get() = preferences?.getBoolean(
+            "resource_pack_vanilla_installed", false
+        ) ?: false
+        set(flag) {
+            preferences?.edit()?.putBoolean(
+                "resource_pack_vanilla_installed", flag
+            )?.apply()
+        }
     var installedNative: Boolean
         get() = preferences?.getBoolean(
             "native_installed", false
