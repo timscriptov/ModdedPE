@@ -11,8 +11,8 @@ android {
         applicationId "com.mcal.mcpelauncher"
         minSdk project.minSDK.toInteger()
         targetSdk project.targetSDK.toInteger()
-        versionCode 951907102
-        versionName "1.19.71.02"
+        versionCode 952000001
+        versionName "1.20.0.01"
         multiDexEnabled true
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
