@@ -15,10 +15,11 @@ import com.mcal.moddedpe.data.ResourceType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.*
 import okio.buffer
 import okio.sink
-import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 class DownloaderAdapter(
     private val activity: LoadingActivity,
@@ -53,51 +54,51 @@ class DownloaderAdapter(
         val progressLengthView: TextView = itemView.findViewById(R.id.progress_length)
     }
 
-    private fun download(holder: AppListViewHolder, item: DownloadItem) {
-        val request = Request.Builder()
-            .url(item.url)
-            .build()
+    private fun download(holder: AppListViewHolder, item: DownloadItem) =
+        CoroutineScope(Dispatchers.Main).launch {
+            val client = OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(120, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .build()
 
-        CoroutineScope(Dispatchers.IO).launch {
-            OkHttpClient().newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    val resourcePackFile = item.file
-                    if (resourcePackFile.exists()) {
-                        resourcePackFile.delete()
-                    }
-                    CoroutineScope(Dispatchers.Main).launch {
-                        showDialog()
-                    }
-                }
+            val request = Request.Builder()
+                .url(item.url)
+                .build()
 
-                @Throws(IOException::class)
-                override fun onResponse(call: Call, response: Response) {
-                    if (!response.isSuccessful) {
-                        throw IOException("Unexpected code $response")
-                    }
+            client.newCall(request).execute().use { response ->
+                if (response.isSuccessful) {
                     response.body?.let { body ->
                         val contentLength = body.contentLength().toInt()
                         body.source().use { sourceBytes ->
                             val sink = item.file.sink().buffer()
                             var totalRead = 0L
                             var lastRead: Long
-                            while (sourceBytes
-                                    .read(sink.buffer, 8L * 1024)
+                            while (sourceBytes.read(sink.buffer, 8L * 1024)
                                     .also { lastRead = it } != -1L
                             ) {
                                 totalRead += lastRead
                                 sink.emitCompleteSegments()
-                                updateProgress(holder, contentLength, totalRead)
+                                withContext(Dispatchers.Main) {
+                                    updateProgress(holder, contentLength, totalRead)
+                                }
                             }
                             sink.writeAll(sourceBytes)
                             sink.close()
                             finishDownloading(holder, item)
                         }
                     }
+                } else {
+                    val resourcePackFile = item.file
+                    if (resourcePackFile.exists()) {
+                        resourcePackFile.delete()
+                    }
+                    withContext(Dispatchers.Main) {
+                        showDialog()
+                    }
                 }
-            })
+            }
         }
-    }
 
     private fun finishDownloading(holder: AppListViewHolder, item: DownloadItem) {
         when (item.type) {
@@ -130,17 +131,15 @@ class DownloaderAdapter(
         contentLength: Int,
         totalRead: Long,
     ) {
-        CoroutineScope(Dispatchers.Main).launch {
-            holder.progressBarView.visibility = View.VISIBLE
-            if (contentLength != -1) {
-                holder.progressBarView.progress = (totalRead * 100 / contentLength).toInt()
-            } else {
-                holder.progressBarView.isIndeterminate = true
-            }
-            val total = totalRead / (1024 * 1024)
-            val length = contentLength / (1024 * 1024)
-            holder.progressLengthView.text = "$total / $length MB"
+        holder.progressBarView.visibility = View.VISIBLE
+        if (contentLength != -1) {
+            holder.progressBarView.progress = (totalRead * 100 / contentLength).toInt()
+        } else {
+            holder.progressBarView.isIndeterminate = true
         }
+        val total = totalRead / (1024 * 1024)
+        val length = contentLength / (1024 * 1024)
+        holder.progressLengthView.text = "$total / $length MB"
     }
 
     private fun showDialog() {

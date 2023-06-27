@@ -22,15 +22,15 @@ import kotlinx.coroutines.*
 
 class LoadingActivity : BaseActivity() {
     private val LINK_RESOURCE_PACK =
-        "https://github.com/TimScriptov/lokicraft/raw/main/$VERSION/resource_pack.zip"
+        "https://github.com/TimScriptov/resource_pack/raw/main/$VERSION/resource_pack.zip"
     private val LINK_VANILLA_RESOURCE_PACK =
-        "https://github.com/TimScriptov/lokicraft/raw/main/$VERSION/resource_pack_vanilla.zip"
+        "https://github.com/TimScriptov/resource_pack/raw/main/$VERSION/resource_pack_vanilla.zip"
     private val LINK_BEHAVIOR_PACK =
-        "https://github.com/TimScriptov/lokicraft/raw/main/$VERSION/behavior_pack.zip"
+        "https://github.com/TimScriptov/resource_pack/raw/main/$VERSION/behavior_pack.zip"
     private val LINK_MAIN_PACK =
-        "https://github.com/TimScriptov/lokicraft/raw/main/$VERSION/main_pack.zip"
+        "https://github.com/TimScriptov/resource_pack/raw/main/$VERSION/main_pack.zip"
     private val LINK_LIBRARIES =
-        "https://github.com/TimScriptov/lokicraft/raw/main/$VERSION/${getABI()}/libraries.zip"
+        "https://github.com/TimScriptov/resource_pack/raw/main/$VERSION/${getABI()}.zip"
 
     private val binding by lazy(LazyThreadSafetyMode.NONE) {
         ActivityLoadingPackBinding.inflate(
@@ -112,7 +112,7 @@ class LoadingActivity : BaseActivity() {
                     DownloadItem(
                         ResourceType.VANILLA,
                         "Downloading textures pack",
-                        LINK_LIBRARIES,
+                        LINK_VANILLA_RESOURCE_PACK,
                         nativeLibrariesFile,
                     )
                 )
