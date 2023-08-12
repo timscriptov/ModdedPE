@@ -5,7 +5,6 @@ plugins {
 
 android {
     compileSdk project.compileSDK.toInteger()
-
     defaultConfig {
         minSdk project.minSDK.toInteger()
         targetSdk project.targetSDK.toInteger()

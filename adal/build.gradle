@@ -40,6 +40,9 @@ android {
     kotlinOptions {
         jvmTarget = '17'
     }
+    buildFeatures {
+        aidl true
+    }
     lint {
         abortOnError true
         disable 'MissingPermission', 'LongLogTag', 'DefaultLocale', 'UnusedResources', 'GradleDependency', 'GradleOverrides', 'OldTargetApi'

@@ -5,7 +5,6 @@ plugins {
 
 android {
     compileSdk project.compileSDK.toInteger()
-
     defaultConfig {
         applicationId "com.mcal.moddedpe"
         minSdk project.minSDK.toInteger()

@@ -6,7 +6,6 @@ plugins {
 android {
     compileSdk project.compileSDK.toInteger()
     ndkVersion '24.0.8215888'
-
     defaultConfig {
         applicationId "com.mcal.mcpelauncher"
         minSdk project.minSDK.toInteger()
