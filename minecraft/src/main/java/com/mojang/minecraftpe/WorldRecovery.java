@@ -28,18 +28,18 @@ public class WorldRecovery {
     private int mTotalFilesToCopy = 0;
     private long mTotalBytesRequired = 0;
 
-    private static native void nativeComplete();
-
-    private static native void nativeError(String error, long bytesRequired, long bytesAvailable);
-
-    private static native void nativeUpdate(String status, int filesTotal, int filesCompleted, long bytesTotal, long bytesCompleted);
-
     public WorldRecovery(Context context, ContentResolver contentResolver) {
         this.mContext = null;
         this.mContentResolver = null;
         this.mContext = context;
         this.mContentResolver = contentResolver;
     }
+
+    private static native void nativeComplete();
+
+    private static native void nativeError(String error, long bytesRequired, long bytesAvailable);
+
+    private static native void nativeUpdate(String status, int filesTotal, int filesCompleted, long bytesTotal, long bytesCompleted);
 
     public String migrateFolderContents(String srcURIString, String destFolderString) {
         final DocumentFile fromTreeUri = DocumentFile.fromTreeUri(this.mContext, Uri.parse(srcURIString));

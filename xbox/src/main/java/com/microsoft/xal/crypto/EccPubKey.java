@@ -4,8 +4,6 @@ import android.util.Base64;
 
 import androidx.annotation.NonNull;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.math.BigInteger;
 import java.security.interfaces.ECPublicKey;
 

@@ -23,6 +23,11 @@ public class ImportService extends Service {
     static final int MSG_CORRELATION_RESPONSE = 837;
     final Messenger mMessenger = new Messenger(new IncomingHandler());
 
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mMessenger.getBinder();
+    }
+
     @SuppressLint("HandlerLeak")
     class IncomingHandler extends Handler {
         IncomingHandler() {
@@ -53,10 +58,5 @@ public class ImportService extends Service {
             }
             super.handleMessage(msg);
         }
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return mMessenger.getBinder();
     }
 }

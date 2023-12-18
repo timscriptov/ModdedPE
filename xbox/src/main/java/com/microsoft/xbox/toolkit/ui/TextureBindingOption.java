@@ -1,6 +1,5 @@
 package com.microsoft.xbox.toolkit.ui;
 
-import com.microsoft.aad.adal.AuthenticationConstants;
 import com.microsoft.xbox.toolkit.XLERValueHelper;
 
 import org.jetbrains.annotations.Contract;
@@ -17,7 +16,7 @@ public class TextureBindingOption {
     public static final int DO_NOT_USE_PLACEHOLDER = -1;
     public static final TextureBindingOption DefaultBindingOption = new TextureBindingOption();
     public static final int DefaultResourceIdForEmpty = XLERValueHelper.getDrawableRValue("empty");
-    public static final int DefaultResourceIdForError = XLERValueHelper.getDrawableRValue(AuthenticationConstants.OAuth2.ERROR);
+    public static final int DefaultResourceIdForError = XLERValueHelper.getDrawableRValue("error");
     public static final int DefaultResourceIdForLoading = XLERValueHelper.getDrawableRValue("empty");
     public static final TextureBindingOption KeepAsIsBindingOption = new TextureBindingOption(-1, -1, -1, -1, false);
     public final int height;

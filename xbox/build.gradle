@@ -35,7 +35,6 @@ android {
 }
 
 dependencies {
-    implementation project(':adal')
     implementation project(':core')
 
     implementation(libs.androidx.appcompat)

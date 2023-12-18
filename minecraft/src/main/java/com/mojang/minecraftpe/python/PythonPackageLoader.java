@@ -22,11 +22,6 @@ public class PythonPackageLoader {
     private final AssetManager assetManager;
     private final File destination;
 
-    public enum CreateDirectory {
-        Created,
-        Exists
-    }
-
     public PythonPackageLoader(AssetManager assetManager2, File file) {
         this.assetManager = assetManager2;
         this.destination = new File(file + "/python");
@@ -123,5 +118,10 @@ public class PythonPackageLoader {
                 unpackAssetPath(path + '/' + fileName, i, file);
             }
         }
+    }
+
+    public enum CreateDirectory {
+        Created,
+        Exists
     }
 }

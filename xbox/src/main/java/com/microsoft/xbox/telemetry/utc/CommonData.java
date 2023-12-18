@@ -10,7 +10,6 @@ import android.view.accessibility.AccessibilityManager;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
-import com.microsoft.aad.adal.AuthenticationConstants;
 import com.microsoft.xbox.idp.interop.Interop;
 import com.microsoft.xbox.idp.interop.XboxLiveAppConfig;
 import com.microsoft.xbox.telemetry.helpers.UTCLog;
@@ -39,8 +38,7 @@ public class CommonData {
     private static final String staticAppName = getAppName();
     private static final String staticDeviceModel = getDeviceModel();
     private static final String staticOSLocale = getDeviceLocale();
-    private static NetworkType netType = getNetworkConnection();
-    private final String accessibilityInfo = staticAccessibilityInfo;
+    private final String accessibilityInfo = staticAccessibilityInfo;    private static NetworkType netType = getNetworkConnection();
     public HashMap<String, Object> additionalInfo = new HashMap<>();
     public String appName = staticAppName;
     public String appSessionId = getApplicationSession();
@@ -53,9 +51,8 @@ public class CommonData {
     public String titleSessionId = get_title_telemetry_session_id();
     public String userId = UNKNOWNUSER;
     public String xsapiVersion = "1.0";
-
     public CommonData(int i) {
-        this.eventVersion = String.format("%s.%s", EVENTVERSION, Integer.valueOf(i));
+        this.eventVersion = String.format("%s.%s", EVENTVERSION, i);
     }
 
     private static native String get_title_telemetry_device_id();
@@ -68,7 +65,7 @@ public class CommonData {
 
     private static String getDeviceModel() {
         String str = Build.MODEL;
-        return (str == null || str.isEmpty()) ? UNKNOWNAPP : str.replace(AuthenticationConstants.Broker.CALLER_CACHEKEY_PREFIX, "");
+        return (str == null || str.isEmpty()) ? UNKNOWNAPP : str.replace("|", "");
     }
 
     private static String getAppName() {
@@ -197,4 +194,6 @@ public class CommonData {
             this.value = i;
         }
     }
+
+
 }

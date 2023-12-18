@@ -3,7 +3,6 @@ package com.mojang.minecraftpe;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
-import android.os.Build.VERSION;
 
 import com.mojang.minecraftpe.hardwareinfo.CPUCluster;
 import com.mojang.minecraftpe.hardwareinfo.CPUTopologyInfo;
@@ -70,12 +69,6 @@ public class HardwareInformation {
         }
     }
 
-    public String getAndroidVersion() {
-        if (((MainActivity) context).isChromebook()) {
-            return "ChromeOS " + Build.VERSION.RELEASE;
-        }
-        return "Android " + Build.VERSION.RELEASE;
-    }
     public static @NotNull String getLocale() {
         return Locale.getDefault().toString();
     }
@@ -143,6 +136,13 @@ public class HardwareInformation {
 
     public static String getBoard() {
         return Build.BOARD;
+    }
+
+    public String getAndroidVersion() {
+        if (((MainActivity) context).isChromebook()) {
+            return "ChromeOS " + Build.VERSION.RELEASE;
+        }
+        return "Android " + Build.VERSION.RELEASE;
     }
 
     public String getSecureId() {

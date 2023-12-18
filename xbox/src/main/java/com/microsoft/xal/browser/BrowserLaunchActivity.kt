@@ -208,11 +208,14 @@ class BrowserLaunchActivity : AppCompatActivity() {
             1 -> {
                 urlOperationSucceeded(operationId, finalUrl, mSharedBrowserUsed, mBrowserInfo)
             }
+
             2 -> {
                 urlOperationCanceled(operationId, mSharedBrowserUsed, mBrowserInfo)
             }
+
             3 -> {
             }
+
             else -> {
                 urlOperationFailed(operationId, mSharedBrowserUsed, mBrowserInfo)
             }

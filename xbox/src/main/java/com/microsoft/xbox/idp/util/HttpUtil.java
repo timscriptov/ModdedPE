@@ -3,8 +3,6 @@ package com.microsoft.xbox.idp.util;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.microsoft.aad.adal.WebRequestHandler;
-
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,7 +42,7 @@ public class HttpUtil {
     @Contract("_, _ -> param1")
     public static @NotNull HttpCall appendCommonParameters(@NotNull HttpCall httpCall, String str) {
         httpCall.setXboxContractVersionHeaderValue(str);
-        httpCall.setContentTypeHeaderValue(WebRequestHandler.HEADER_ACCEPT_JSON);
+        httpCall.setContentTypeHeaderValue("application/json");
         httpCall.setRetryAllowed(true);
         return httpCall;
     }

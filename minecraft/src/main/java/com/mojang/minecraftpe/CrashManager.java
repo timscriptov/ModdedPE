@@ -14,14 +14,12 @@ import java.io.File;
  * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 public class CrashManager {
+    private final Thread.UncaughtExceptionHandler mPreviousUncaughtExceptionHandler = null;
     private String mCrashDumpFolder;
     private String mCrashUploadURI;
     private String mCrashUploadURIWithSentryKey;
     private String mCurrentSessionId;
     private String mExceptionUploadURI;
-    private final Thread.UncaughtExceptionHandler mPreviousUncaughtExceptionHandler = null;
-
-    private static native String nativeNotifyUncaughtException();
 
     public CrashManager(String crashDumpFolder, String currentSessionId, @NonNull SentryEndpointConfig sentryEndpointConfig) {
         this.mCrashUploadURI = null;
@@ -34,6 +32,14 @@ public class CrashManager {
         this.mCrashUploadURI = sentryEndpointConfig.url + "/api/" + sentryEndpointConfig.projectId + "/minidump/";
         this.mCrashUploadURIWithSentryKey = mCrashUploadURI + "?sentry_key=" + sentryEndpointConfig.publicKey;
         this.mExceptionUploadURI = sentryEndpointConfig.url + "/api/" + sentryEndpointConfig.projectId + "/store/?sentry_version=7&sentry_key=" + sentryEndpointConfig.publicKey;
+    }
+
+    private static native String nativeNotifyUncaughtException();
+
+    @NonNull
+    @Contract("_, _, _, _ -> new")
+    private static Pair<HttpResponse, String> uploadDump(File dumpFile, final String crashUploadURI, final String sessionID, final String sentryParametersJSON) {
+        return new Pair<>(null, null);
     }
 
     public void installGlobalExceptionHandler() {
@@ -63,11 +69,5 @@ public class CrashManager {
     @Contract(pure = true)
     private String uploadCrashFile(String filePath, String sessionID, String sentryParametersJSON) {
         return null;
-    }
-
-    @NonNull
-    @Contract("_, _, _, _ -> new")
-    private static Pair<HttpResponse, String> uploadDump(File dumpFile, final String crashUploadURI, final String sessionID, final String sentryParametersJSON) {
-        return new Pair<>(null, null);
     }
 }

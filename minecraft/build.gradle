@@ -35,7 +35,6 @@ android {
 
 dependencies {
     implementation project(':fmod')
-    implementation project(':adal')
     implementation project(':xbox')
     implementation project(':core')
 

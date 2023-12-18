@@ -24,7 +24,6 @@ import android.webkit.*
 import android.webkit.WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
 import androidx.appcompat.app.AppCompatActivity
 import com.mcal.core.AssetInstaller
-import com.microsoft.aad.adal.AuthenticationConstants
 import java.io.IOException
 
 /**
@@ -103,24 +102,37 @@ class WebKitWebViewController : AppCompatActivity() {
 
     private fun deleteCookies(domain: String, useHttps: Boolean) {
         val cookieManager = CookieManager.getInstance()
-        val url =
-            (if (useHttps) AuthenticationConstants.Broker.REDIRECT_SSL_PREFIX else "http://") + domain
+        val url = (if (useHttps) {
+            "https://"
+        } else {
+            "http://"
+        }) + domain
         cookieManager.getCookie(url)?.let { cookie ->
-            val split =
-                cookie.split(AuthenticationConstants.Broker.CHALLENGE_REQUEST_CERT_AUTH_DELIMETER.toRegex())
-                    .dropLastWhile { it.isEmpty() }
-                    .toTypedArray()
+            val isDeleted = false
+            val split = cookie.split(";".toRegex()).dropLastWhile {
+                it.isEmpty()
+            }.toTypedArray()
             for (str2 in split) {
-                val trim = str2.split("=".toRegex()).dropLastWhile { it.isEmpty() }
-                    .toTypedArray()[0].trim()
+                val trim = str2.split("=".toRegex()).dropLastWhile {
+                    it.isEmpty()
+                }.toTypedArray()[0].trim()
                 var str3 = "$trim=;"
                 if (trim.startsWith("__Secure-")) {
                     str3 = str3 + "Secure;Domain=" + domain + ";Path=/"
                 }
                 cookieManager.setCookie(
                     url,
-                    if (trim.startsWith("__Host-")) str3 + "Secure;Path=/" else str3 + "Domain=" + domain + ";Path=/"
+                    if (trim.startsWith("__Host-")) {
+                        str3 + "Secure;Path=/"
+                    } else {
+                        str3 + "Domain=" + domain + ";Path=/"
+                    }
                 )
+            }
+            if (isDeleted) {
+                println("deleteCookies() Deleted cookies for $domain");
+            } else {
+                println("deleteCookies() Found no cookies for $domain");
             }
         }
         cookieManager.flush()

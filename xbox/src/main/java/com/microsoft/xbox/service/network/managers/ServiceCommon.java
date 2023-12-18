@@ -3,7 +3,6 @@ package com.microsoft.xbox.service.network.managers;
 import android.text.TextUtils;
 
 import com.google.gson.JsonObject;
-import com.microsoft.aad.adal.AuthenticationConstants;
 import com.microsoft.xbox.toolkit.JavaUtil;
 import com.microsoft.xbox.toolkit.StreamUtil;
 import com.microsoft.xbox.toolkit.TimeMonitor;
@@ -212,7 +211,7 @@ public class ServiceCommon {
                     str3 = str3.substring(0, 2048);
                 }
                 jsonObject.addProperty("Request", str3);
-                jsonObject2.addProperty(AuthenticationConstants.OAuth2.CODE, Integer.valueOf(i2));
+                jsonObject2.addProperty("code", i2);
                 jsonObject2.addProperty("description", str2);
                 jsonObject.add("Response", jsonObject2);
                 throw e;

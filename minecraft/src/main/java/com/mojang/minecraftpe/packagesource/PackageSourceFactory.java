@@ -3,7 +3,6 @@ package com.mojang.minecraftpe.packagesource;
 import androidx.annotation.NonNull;
 
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author <a href="https://github.com/TimScriptov">TimScriptov</a>

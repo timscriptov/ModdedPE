@@ -13,26 +13,26 @@ import androidx.annotation.NonNull;
  * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 public class PopupView {
-    private View mContentView;
     private final Context mContext;
+    private final WindowManager mWindowManager;
+    private View mContentView;
     private int mHeight;
     private int mOriginX;
     private int mOriginY;
     private View mParentView;
     private View mPopupView;
     private int mWidth;
-    private final WindowManager mWindowManager;
+
+    public PopupView(@NonNull Context context) {
+        this.mContext = context;
+        this.mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    }
 
     private int computeFlags(int curFlags) {
         return curFlags | 32;
     }
 
     private void preparePopup(WindowManager.LayoutParams p) {
-    }
-
-    public PopupView(@NonNull Context context) {
-        this.mContext = context;
-        this.mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     }
 
     public void setContentView(View contentView) {
@@ -58,6 +58,11 @@ public class PopupView {
         mOriginY = minY;
     }
 
+    public boolean getVisible() {
+        View view = mPopupView;
+        return view != null && view.getParent() != null;
+    }
+
     public void setVisible(boolean visible) {
         if (visible != getVisible()) {
             if (visible) {
@@ -66,11 +71,6 @@ public class PopupView {
                 removePopupView();
             }
         }
-    }
-
-    public boolean getVisible() {
-        View view = mPopupView;
-        return view != null && view.getParent() != null;
     }
 
     public void dismiss() {

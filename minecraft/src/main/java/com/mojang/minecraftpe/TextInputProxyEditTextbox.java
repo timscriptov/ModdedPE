@@ -19,15 +19,9 @@ import java.util.ArrayList;
  * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 public class TextInputProxyEditTextbox extends AppCompatEditText {
-    private MCPEKeyWatcher _mcpeKeyWatcher;
     public int allowedLength;
+    private MCPEKeyWatcher _mcpeKeyWatcher;
     private String mLastSentText;
-
-    public interface MCPEKeyWatcher {
-        boolean onBackKeyPressed();
-
-        void onDeleteKeyPressed();
-    }
 
     public TextInputProxyEditTextbox(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -125,6 +119,12 @@ public class TextInputProxyEditTextbox extends AppCompatEditText {
             }
             return null;
         };
+    }
+
+    public interface MCPEKeyWatcher {
+        boolean onBackKeyPressed();
+
+        void onDeleteKeyPressed();
     }
 
     private class MCPEInputConnection extends InputConnectionWrapper {

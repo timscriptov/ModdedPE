@@ -17,16 +17,8 @@ import com.microsoft.xbox.service.notification.NotificationResult;
 public class NotificationListenerService extends FirebaseMessagingService {
     private static String sDeviceRegistrationToken = "";
 
-    native void nativePushNotificationReceived(final int type, String title, String description, String data);
-
     public NotificationListenerService() {
         retrieveDeviceToken();
-    }
-
-    @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
-        NotificationResult tryParseXboxLiveNotification = NotificationHelper.tryParseXboxLiveNotification(remoteMessage, this);
-        nativePushNotificationReceived(tryParseXboxLiveNotification.notificationType.ordinal(), tryParseXboxLiveNotification.title, tryParseXboxLiveNotification.body, tryParseXboxLiveNotification.data);
     }
 
     public static String getDeviceRegistrationToken() {
@@ -48,5 +40,13 @@ public class NotificationListenerService extends FirebaseMessagingService {
                 }
             });
         }
+    }
+
+    native void nativePushNotificationReceived(final int type, String title, String description, String data);
+
+    @Override
+    public void onMessageReceived(RemoteMessage remoteMessage) {
+        NotificationResult tryParseXboxLiveNotification = NotificationHelper.tryParseXboxLiveNotification(remoteMessage, this);
+        nativePushNotificationReceived(tryParseXboxLiveNotification.notificationType.ordinal(), tryParseXboxLiveNotification.title, tryParseXboxLiveNotification.body, tryParseXboxLiveNotification.data);
     }
 }

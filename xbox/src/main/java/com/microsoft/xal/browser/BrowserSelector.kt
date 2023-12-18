@@ -93,10 +93,12 @@ object BrowserSelector {
                 Log.e("ModdedPE", "userDefaultBrowserInfo() No default browser resolved.")
                 BrowserInfo("none", 0, "none")
             }
+
             "android" -> {
                 Log.e("ModdedPE", "userDefaultBrowserInfo() System resolved as default browser.")
                 BrowserInfo("android", 0, "none")
             }
+
             else -> {
                 var versionCode = -1
                 try {

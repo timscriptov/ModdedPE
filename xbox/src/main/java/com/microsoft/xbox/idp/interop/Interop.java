@@ -21,14 +21,6 @@ public class Interop {
     private static final String TAG = "Interop";
     private static Context s_context;
 
-    public interface ErrorCallback {
-        void onError(int i, int i2, String str);
-    }
-
-    public interface EventInitializationCallback extends ErrorCallback {
-        void onSuccess();
-    }
-
     public static native boolean deinitializeInterop();
 
     public static native boolean initializeInterop(Context context);
@@ -153,5 +145,13 @@ public class Interop {
         public int getId() {
             return this.id;
         }
+    }
+
+    public interface ErrorCallback {
+        void onError(int i, int i2, String str);
+    }
+
+    public interface EventInitializationCallback extends ErrorCallback {
+        void onSuccess();
     }
 }

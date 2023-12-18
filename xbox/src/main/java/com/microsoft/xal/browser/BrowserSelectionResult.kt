@@ -16,7 +16,7 @@
  */
 package com.microsoft.xal.browser
 
-import java.util.*
+import java.util.Locale
 
 /**
  * 13.08.2022

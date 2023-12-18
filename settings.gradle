@@ -16,7 +16,6 @@ dependencyResolutionManagement {
 
 include ':app'
 include ':substrate'
-include ':adal'
 include ':minecraft'
 include ':minecraft-app'
 include ':core'

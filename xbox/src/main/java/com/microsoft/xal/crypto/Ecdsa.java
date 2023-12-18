@@ -4,40 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.spongycastle.jce.provider.BouncyCastleProvider;
-
-import java.io.ByteArrayOutputStream;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.Security;
-import java.security.Signature;
-import java.security.SignatureException;
-import java.security.interfaces.ECPublicKey;
-import java.security.spec.ECGenParameterSpec;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
-
-/**
- * 02.10.2020
- *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
- */
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Base64;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.jetbrains.annotations.Contract;
+import org.spongycastle.jce.provider.BouncyCastleProvider;
+
 import java.io.ByteArrayOutputStream;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -49,13 +21,11 @@ import java.security.NoSuchProviderException;
 import java.security.Security;
 import java.security.Signature;
 import java.security.SignatureException;
-import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECGenParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import org.spongycastle.jce.provider.BouncyCastleProvider;
 
 /**
  * 13.08.2022
@@ -67,12 +37,13 @@ public class Ecdsa {
     private static final String ECDSA_SIGNATURE_NAME = "NONEwithECDSA";
     private static final String EC_ALGORITHM_NAME = "secp256r1";
     private static final String KEY_ALIAS_PREFIX = "xal_";
-    private KeyPair keyPair;
-    private String uniqueId;
 
     static {
         Security.insertProviderAt(new BouncyCastleProvider(), 1);
     }
+
+    private KeyPair keyPair;
+    private String uniqueId;
 
     @Nullable
     public static Ecdsa restoreKeyAndId(@NonNull Context context) throws ClassCastException, IllegalArgumentException, NoSuchProviderException, NoSuchAlgorithmException, InvalidKeySpecException {
@@ -99,6 +70,20 @@ public class Ecdsa {
         ecdsa.uniqueId = string3;
         ecdsa.keyPair = new KeyPair(keyFactory.generatePublic(new X509EncodedKeySpec(bytesFromBase64String)), keyFactory.generatePrivate(new PKCS8EncodedKeySpec(bytesFromBase64String2)));
         return ecdsa;
+    }
+
+    @NonNull
+    @Contract(pure = true)
+    private static String getKeyAlias(String str) {
+        return KEY_ALIAS_PREFIX + str;
+    }
+
+    private static String getBase64StringFromBytes(byte[] bArr) {
+        return Base64.encodeToString(bArr, 0, bArr.length, 11);
+    }
+
+    private static byte[] getBytesFromBase64String(String str) throws IllegalArgumentException {
+        return Base64.decode(str, 11);
     }
 
     public void generateKey(String str) throws NoSuchProviderException, NoSuchAlgorithmException, InvalidAlgorithmParameterException {
@@ -159,19 +144,5 @@ public class Ecdsa {
         } else {
             byteArrayOutputStream.write(bArr, i, i2);
         }
-    }
-
-    @NonNull
-    @Contract(pure = true)
-    private static String getKeyAlias(String str) {
-        return KEY_ALIAS_PREFIX + str;
-    }
-
-    private static String getBase64StringFromBytes(byte[] bArr) {
-        return Base64.encodeToString(bArr, 0, bArr.length, 11);
-    }
-
-    private static byte[] getBytesFromBase64String(String str) throws IllegalArgumentException {
-        return Base64.decode(str, 11);
     }
 }

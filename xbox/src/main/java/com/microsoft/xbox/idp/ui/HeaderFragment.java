@@ -69,7 +69,6 @@ public class HeaderFragment extends BaseFragment implements View.OnClickListener
             userImageView.setImageBitmap(null);
         }
     };
-    public AppCompatTextView userName;
     LoaderManager.LoaderCallbacks<ObjectLoader.Result<UserAccount>> userAccountCallbacks = new LoaderManager.LoaderCallbacks<ObjectLoader.Result<UserAccount>>() {
         public void onLoaderReset(Loader<ObjectLoader.Result<UserAccount>> loader) {
         }
@@ -97,6 +96,7 @@ public class HeaderFragment extends BaseFragment implements View.OnClickListener
             Log.e(HeaderFragment.TAG, "Error getting UserAccount");
         }
     };
+    public AppCompatTextView userName;
     private Callbacks callbacks = NO_OP_CALLBACKS;
 
     public void onAttach(Activity activity) {

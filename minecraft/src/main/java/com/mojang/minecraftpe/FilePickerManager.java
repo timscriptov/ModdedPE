@@ -13,6 +13,10 @@ public class FilePickerManager implements ActivityListener {
     static final int PICK_DIRECTORY_REQUEST_CODE = 246242755;
     FilePickerManagerHandler mHandler;
 
+    public FilePickerManager(FilePickerManagerHandler handler) {
+        mHandler = handler;
+    }
+
     private static native void nativeDirectoryPickResult(String uri, String error);
 
     @Override
@@ -25,10 +29,6 @@ public class FilePickerManager implements ActivityListener {
 
     @Override
     public void onStop() {
-    }
-
-    public FilePickerManager(FilePickerManagerHandler handler) {
-        mHandler = handler;
     }
 
     public void pickDirectory(String prompt, String startingLocationURI) {

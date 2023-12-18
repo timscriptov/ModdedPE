@@ -19,8 +19,6 @@ public class NetworkMonitor {
     private HashMap<Integer, HashSet<Network>> mAvailableNetworksPerCategory;
     private Context mContext;
 
-    private native void nativeUpdateNetworkStatus(boolean isEthernetConnected, boolean isWifiConnected, boolean isOtherConnected);
-
     public NetworkMonitor(Context context) {
         this.mContext = context;
         HashMap<Integer, HashSet<Network>> hashMap = new HashMap<>();
@@ -36,6 +34,8 @@ public class NetworkMonitor {
             _addNetworkCallbacksForTransport(8, 2);
         }
     }
+
+    private native void nativeUpdateNetworkStatus(boolean isEthernetConnected, boolean isWifiConnected, boolean isOtherConnected);
 
     private void _addNetworkCallbacksForTransport(int transport, final int networkCategory) {
         ((ConnectivityManager) this.mContext.getSystemService(Context.CONNECTIVITY_SERVICE)).registerNetworkCallback(_createNetworkRequestForTransport(transport), new ConnectivityManager.NetworkCallback() { // from class: com.mojang.minecraftpe.NetworkMonitor.1

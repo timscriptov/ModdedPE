@@ -4,21 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.io.Serializable;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
-
-/**
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
- */
-
-import android.content.Context;
-import android.content.pm.PackageManager;
-
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
@@ -82,24 +67,6 @@ public class SessionInfo implements Serializable {
         this.recordDate = aRecordDate;
     }
 
-    public void setContents(Context context, String aSessionId, String aBuildId, String aCommitId, String aBranchId, String aFlavor) {
-        this.sessionId = aSessionId;
-        this.buildId = aBuildId;
-        this.commitId = aCommitId;
-        this.branchId = aBranchId;
-        this.flavor = aFlavor;
-        updateJavaConstants(context);
-    }
-
-    public void updateJavaConstants(@NonNull Context context) {
-        this.appVersion = AppConstants.APP_VERSION;
-        try {
-            this.gameVersionName = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-        } catch (PackageManager.NameNotFoundException unused) {
-            this.gameVersionName = "Not found";
-        }
-    }
-
     @NonNull
     public static SessionInfo fromString(String s) {
         SessionInfo sessionInfo = new SessionInfo();
@@ -130,14 +97,32 @@ public class SessionInfo implements Serializable {
     }
 
     @NonNull
-    public String toString() {
-        return sessionId + SEP + buildId + SEP + commitId + SEP + branchId + SEP + flavor + SEP + gameVersionName + SEP + appVersion + SEP + getDateFormat().format(recordDate);
-    }
-
-    @NonNull
     public static SimpleDateFormat getDateFormat() {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy-HH:mm:ss");
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return simpleDateFormat;
+    }
+
+    public void setContents(Context context, String aSessionId, String aBuildId, String aCommitId, String aBranchId, String aFlavor) {
+        this.sessionId = aSessionId;
+        this.buildId = aBuildId;
+        this.commitId = aCommitId;
+        this.branchId = aBranchId;
+        this.flavor = aFlavor;
+        updateJavaConstants(context);
+    }
+
+    public void updateJavaConstants(@NonNull Context context) {
+        this.appVersion = AppConstants.APP_VERSION;
+        try {
+            this.gameVersionName = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException unused) {
+            this.gameVersionName = "Not found";
+        }
+    }
+
+    @NonNull
+    public String toString() {
+        return sessionId + SEP + buildId + SEP + commitId + SEP + branchId + SEP + flavor + SEP + gameVersionName + SEP + appVersion + SEP + getDateFormat().format(recordDate);
     }
 }

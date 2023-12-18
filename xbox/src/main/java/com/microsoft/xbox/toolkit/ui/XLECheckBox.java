@@ -110,6 +110,7 @@ public class XLECheckBox extends ViewGroup {
             obtainStyledAttributes.recycle();
         }*/
     }
+
     @SuppressLint("WrongConstant")
     public void onMeasure(int i, int i2) {
         int size = View.MeasureSpec.getSize(i);

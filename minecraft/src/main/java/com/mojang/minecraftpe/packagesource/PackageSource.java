@@ -12,6 +12,27 @@ import java.util.EnumMap;
 public abstract class PackageSource {
     static final EnumMap<StringResourceId, String> stringMap = new EnumMap<>(StringResourceId.class);
 
+    public static void setStringResource(int key, String value) {
+        setStringResource(StringResourceId.fromInt(key), value);
+    }
+
+    public static void setStringResource(StringResourceId id, String value) {
+        EnumMap<StringResourceId, String> enumMap = stringMap;
+        if (enumMap.containsKey(id)) {
+            Log.w("PackageSource", String.format("setStringResource - id: %s already set.", id.name()));
+        }
+        enumMap.put(id, value);
+    }
+
+    public static String getStringResource(StringResourceId id) {
+        EnumMap<StringResourceId, String> enumMap = stringMap;
+        if (enumMap.containsKey(id)) {
+            return enumMap.get(id);
+        }
+        Log.e("PackageSource", String.format("getStringResource - id: %s is not set.", id.name()));
+        return id.name();
+    }
+
     public abstract void abortDownload();
 
     public abstract void destructor();
@@ -62,10 +83,6 @@ public abstract class PackageSource {
             this.value = value;
         }
 
-        public int getValue() {
-            return this.value;
-        }
-
         @NonNull
         public static StringResourceId fromInt(int value) {
             StringResourceId[] values = values();
@@ -76,26 +93,9 @@ public abstract class PackageSource {
             }
             throw new IllegalArgumentException("Invalid value");
         }
-    }
 
-    public static void setStringResource(int key, String value) {
-        setStringResource(StringResourceId.fromInt(key), value);
-    }
-
-    public static void setStringResource(StringResourceId id, String value) {
-        EnumMap<StringResourceId, String> enumMap = stringMap;
-        if (enumMap.containsKey(id)) {
-            Log.w("PackageSource", String.format("setStringResource - id: %s already set.", id.name()));
+        public int getValue() {
+            return this.value;
         }
-        enumMap.put(id, value);
-    }
-
-    public static String getStringResource(StringResourceId id) {
-        EnumMap<StringResourceId, String> enumMap = stringMap;
-        if (enumMap.containsKey(id)) {
-            return enumMap.get(id);
-        }
-        Log.e("PackageSource", String.format("getStringResource - id: %s is not set.", id.name()));
-        return id.name();
     }
 }

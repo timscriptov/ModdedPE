@@ -31,14 +31,6 @@ public class CPUTopologyInfo {
     private BitSet CPUS_BITSET;
     private int CPU_PROCESSOR_COUNT;
 
-    public interface BitCollector {
-        void setBit(int bitIndex);
-    }
-
-    public static CPUTopologyInfo getInstance() {
-        return SINGLETON_INSTANCE;
-    }
-
     private CPUTopologyInfo() {
         try {
             initializeCPUInformation();
@@ -50,6 +42,37 @@ public class CPUTopologyInfo {
             CPUS = new ArrayList<>();
             CLUSTERS = new TreeSet<>();
         }
+    }
+
+    public static CPUTopologyInfo getInstance() {
+        return SINGLETON_INSTANCE;
+    }
+
+    @Contract("_, _ -> param2")
+    public static <T extends BitCollector> T parseCPUListString(@NonNull String listString, T collector) {
+        String[] split;
+        if (listString.isEmpty()) {
+            return collector;
+        }
+        for (String str : listString.split(",")) {
+            Matcher matcher = CPU_LIST_VALUE_FORMAT.matcher(str);
+            if (matcher.find()) {
+                int parseInt = Integer.parseInt(matcher.group(1));
+                String group = matcher.group(2);
+                if (group != null && !group.isEmpty()) {
+                    int parseInt2 = Integer.parseInt(group);
+                    while (parseInt <= parseInt2) {
+                        collector.setBit(parseInt);
+                        parseInt++;
+                    }
+                } else {
+                    collector.setBit(parseInt);
+                }
+            } else {
+                Log.w("ModdedPE", "Unknown CPU List format: " + str);
+            }
+        }
+        return collector;
     }
 
     private void initializeCPUInformation() throws Exception {
@@ -119,52 +142,6 @@ public class CPUTopologyInfo {
         return treeSet;
     }
 
-    public static class BitSetCollector implements BitCollector {
-        private int bitsCounted = 0;
-        private final BitSet bits = new BitSet();
-
-        int getBitCount() {
-            return bitsCounted;
-        }
-
-        BitSet getBitSet() {
-            return bits;
-        }
-
-        @Override
-        public void setBit(int bitIndex) {
-            bits.set(bitIndex);
-            bitsCounted++;
-        }
-    }
-
-    @Contract("_, _ -> param2")
-    public static <T extends BitCollector> T parseCPUListString(@NonNull String listString, T collector) {
-        String[] split;
-        if (listString.isEmpty()) {
-            return collector;
-        }
-        for (String str : listString.split(",")) {
-            Matcher matcher = CPU_LIST_VALUE_FORMAT.matcher(str);
-            if (matcher.find()) {
-                int parseInt = Integer.parseInt(matcher.group(1));
-                String group = matcher.group(2);
-                if (group != null && !group.isEmpty()) {
-                    int parseInt2 = Integer.parseInt(group);
-                    while (parseInt <= parseInt2) {
-                        collector.setBit(parseInt);
-                        parseInt++;
-                    }
-                } else {
-                    collector.setBit(parseInt);
-                }
-            } else {
-                Log.w("ModdedPE", "Unknown CPU List format: " + str);
-            }
-        }
-        return collector;
-    }
-
     public Set<CPUCluster> getClusterSet() {
         return new TreeSet<>(CLUSTERS);
     }
@@ -179,5 +156,28 @@ public class CPUTopologyInfo {
 
     public int getCPUClusterCount() {
         return CLUSTERS.size();
+    }
+
+    public interface BitCollector {
+        void setBit(int bitIndex);
+    }
+
+    public static class BitSetCollector implements BitCollector {
+        private final BitSet bits = new BitSet();
+        private int bitsCounted = 0;
+
+        int getBitCount() {
+            return bitsCounted;
+        }
+
+        BitSet getBitSet() {
+            return bits;
+        }
+
+        @Override
+        public void setBit(int bitIndex) {
+            bits.set(bitIndex);
+            bitsCounted++;
+        }
     }
 }

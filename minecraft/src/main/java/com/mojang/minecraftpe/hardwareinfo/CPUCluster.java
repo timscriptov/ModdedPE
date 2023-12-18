@@ -14,9 +14,9 @@ public class CPUCluster implements Comparable<CPUCluster> {
     private final BitSet bitmask = new BitSet();
     private final Set<SystemCPU> clusterCPUs;
     int[] cpuIds;
+    String siblingsString;
     private long maxFreq;
     private long minFreq;
-    String siblingsString;
 
     public CPUCluster(String siblingCPUs, @NonNull Set<SystemCPU> cpus) {
         minFreq = Integer.MAX_VALUE;

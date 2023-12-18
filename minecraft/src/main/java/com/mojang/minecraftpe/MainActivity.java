@@ -59,18 +59,15 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.FirebaseApp;
-import com.microsoft.aad.adal.AuthenticationConstants;
 import com.mojang.android.StringValue;
 import com.mojang.minecraftpe.input.InputDeviceManager;
 import com.mojang.minecraftpe.platforms.Platform;
@@ -100,7 +97,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
-import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -115,53 +111,33 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     static final int MSG_CORRELATION_CHECK = 672;
     static final int MSG_CORRELATION_RESPONSE = 837;
     static final int OPEN_FILE_RESULT_CODE = 5;
-    private static final int POST_NOTIFICATIONS_PERMISSION_ID = 2;
-    public static int RESULT_PICK_IMAGE = 1;
     static final int SAVE_FILE_RESULT_CODE = 4;
+    private static final int POST_NOTIFICATIONS_PERMISSION_ID = 2;
     private static final String SESSION_HISTORY_SEP = "&";
     private static final int STORAGE_PERMISSION_ID = 1;
+    public static int RESULT_PICK_IMAGE = 1;
+    public static MainActivity mInstance;
     private static boolean _isPowerVr = false;
     private static boolean mHasStoragePermission;
-    public static MainActivity mInstance;
-    Class SystemProperties;
-    private ClipboardManager clipboardManager;
-    private InputDeviceManager deviceManager;
-    Method getPropMethod;
-    HeadsetConnectionReceiver headsetConnectionReceiver;
-    private Locale initialUserLocale;
-    private BatteryMonitor mBatteryMonitor;
-    private AlertDialog mDialog;
-    private HardwareInformation mHardwareInformation;
-    public int mLastPermissionRequestReason;
-    public ParcelFileDescriptor mPickedFileDescriptor;
-    private ThermalMonitor mThermalMonitor;
-    Platform platform;
-    TextInputProxyEditTextbox textInputWidget;
-    private TextToSpeech textToSpeechManager;
-    public int virtualKeyboardHeight = 0;
-    private boolean _fromOnCreate = false;
-    private boolean mCursorLocked = false;
-    private boolean mIsSoftKeyboardVisible = false;
-    private long mFileDialogCallback = 0;
-    private float mVolume = 1.0f;
-    private boolean mIsRunningInAppCenter = false;
+    final Messenger mMessenger = new Messenger(new IncomingHandler());
     private final String mSentryEndpointConfigUrl = "https://sentry.io";
     private final SentryEndpointConfig mSentryEndpointBedrockPublish = new SentryEndpointConfig("https://sentry.io", "2277697", "1c3f5cbd723a4a84879059d260b19ef6");
     private final SentryEndpointConfig mSentryEndpointBedrockRelease = new SentryEndpointConfig(this.mSentryEndpointConfigUrl, "2277697", "d49eacb334d847599b87629a6ff2ef3b");
     private final SentryEndpointConfig mSentryEndpointAndroidTrial = new SentryEndpointConfig(this.mSentryEndpointConfigUrl, "2308440", "668bc09f7bcf461796ea07c1006076fe");
     private final SentryEndpointConfig mSentryEndpointAndroidAmazon = new SentryEndpointConfig(this.mSentryEndpointConfigUrl, "5885058", "c218789c079e41128de0b1892bcc738f");
     private final SentryEndpointConfig mSentryEndpointEDU = new SentryEndpointConfig("https://o339720.ingest.sentry.io", "5242741", "0d409f4cd2f64aa3a686a1b5193a4bf9");
+    private final ArrayList<StringValue> _userInputValues = new ArrayList<>();
+    public int mLastPermissionRequestReason;
+    public ParcelFileDescriptor mPickedFileDescriptor;
+    public int virtualKeyboardHeight = 0;
+    Class SystemProperties;
+    Method getPropMethod;
+    HeadsetConnectionReceiver headsetConnectionReceiver;
+    Platform platform;
+    TextInputProxyEditTextbox textInputWidget;
     List<ActivityListener> mActivityListeners = new ArrayList<>();
-    private CrashManager mCrashManager = null;
-    private FilePickerManager mFilePickerManager = null;
-    private WorldRecovery mWorldRecovery = null;
     Messenger mService = null;
     MessageConnectionStatus mBound = MessageConnectionStatus.NOTSET;
-    private WifiManager mWifiManager = null;
-    private WifiManager.MulticastLock mMulticastLock = null;
-    AtomicInteger mCaretPositionMirror = new AtomicInteger(0);
-    AtomicReference<String> mCurrentTextMirror = new AtomicReference<>("");
-    final Messenger mMessenger = new Messenger(new IncomingHandler());
     private final ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
@@ -182,30 +158,70 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
             mBound = MessageConnectionStatus.DISCONNECTED;
         }
     };
-    private int _userInputStatus = -1;
-    private String[] _userInputText = null;
-    private final ArrayList<StringValue> _userInputValues = new ArrayList<>();
+    AtomicInteger mCaretPositionMirror = new AtomicInteger(0);
+    AtomicReference<String> mCurrentTextMirror = new AtomicReference<>("");
     ActivityManager.MemoryInfo mCachedMemoryInfo = new ActivityManager.MemoryInfo();
     long mCachedMemoryInfoUpdateTime = 0;
     long mCachedUsedMemory = 0;
     long mCachedUsedMemoryUpdateTime = 0;
     Debug.MemoryInfo mCachedDebugMemoryInfo = new Debug.MemoryInfo();
     long mCachedDebugMemoryUpdateTime = 0;
+    private ClipboardManager clipboardManager;
+    private InputDeviceManager deviceManager;
+    private Locale initialUserLocale;
+    private BatteryMonitor mBatteryMonitor;
+    private AlertDialog mDialog;
+    private HardwareInformation mHardwareInformation;
+    private ThermalMonitor mThermalMonitor;
+    private TextToSpeech textToSpeechManager;
+    private boolean _fromOnCreate = false;
+    private boolean mCursorLocked = false;
+    private boolean mIsSoftKeyboardVisible = false;
+    private long mFileDialogCallback = 0;
+    private float mVolume = 1.0f;
+    private boolean mIsRunningInAppCenter = false;
+    private CrashManager mCrashManager = null;
+    private FilePickerManager mFilePickerManager = null;
+    private WorldRecovery mWorldRecovery = null;
+    private WifiManager mWifiManager = null;
+    private WifiManager.MulticastLock mMulticastLock = null;
+    private int _userInputStatus = -1;
+    private String[] _userInputText = null;
     private long mCallback = 0;
 
     private NetworkMonitor mNetworkMonitor;
 
-    enum MessageConnectionStatus {
-        NOTSET,
-        CONNECTED,
-        DISCONNECTED
+    private static native void nativeWaitCrashManagementSetupComplete();
+
+    public static boolean isPowerVR() {
+        return _isPowerVr;
+    }
+
+    public static void saveScreenshot(String filename, int w, int h, int[] pixels) {
+        final Bitmap createBitmap = Bitmap.createBitmap(pixels, w, h, Bitmap.Config.ARGB_8888);
+        try {
+            final FileOutputStream fileOutputStream = new FileOutputStream(filename);
+            createBitmap.compress(Bitmap.CompressFormat.JPEG, 85, fileOutputStream);
+            try {
+                fileOutputStream.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                fileOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            final PrintStream printStream = System.err;
+            printStream.println("Couldn't create file: " + filename);
+            e.printStackTrace();
+        }
     }
 
     native void nativeFireNetworkChangedEvent(String networkConnectionType);
 
     native boolean isAndroidChromebook();
-
-    private static native void nativeWaitCrashManagementSetupComplete();
 
     public void buyGame() {
     }
@@ -555,42 +571,6 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
         return super.onKeyUp(keyCode, event);
     }
 
-    @SuppressLint("HandlerLeak")
-    class IncomingHandler extends Handler {
-        IncomingHandler() {
-        }
-
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            if (msg.what == MainActivity.MSG_CORRELATION_RESPONSE) {
-                final String packageName = getApplicationContext().getPackageName();
-                final SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                defaultSharedPreferences.getString("deviceId", "");
-                try {
-                    final long firstInstallTime = getPackageManager().getPackageInfo(packageName, 0).firstInstallTime;
-                    final String deviceId = msg.getData().getString("deviceId");
-                    final String sessionId = msg.getData().getString("sessionId");
-                    long time = msg.getData().getLong("time");
-                    if (firstInstallTime > time) {
-                        defaultSharedPreferences.edit().apply();
-                        nativeDeviceCorrelation(firstInstallTime, deviceId, time, sessionId);
-                    }
-                    final SharedPreferences.Editor edit = defaultSharedPreferences.edit();
-                    edit.putInt("correlationAttempts", 0);
-                    edit.apply();
-                    if (mBound != MessageConnectionStatus.CONNECTED) {
-                        return;
-                    }
-                    unbindService(mConnection);
-                    return;
-                } catch (PackageManager.NameNotFoundException unused) {
-                    return;
-                }
-            }
-            super.handleMessage(msg);
-        }
-    }
-
     public void setTextToSpeechEnabled(boolean enabled) {
         if (enabled) {
             if (textToSpeechManager != null) {
@@ -838,10 +818,6 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
         _isPowerVr = status;
     }
 
-    public static boolean isPowerVR() {
-        return _isPowerVr;
-    }
-
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         if (hasFocus && mCursorLocked) {
@@ -869,28 +845,6 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
             return 0;
         }
         return device.getKeyCharacterMap().get(keyCode, metaState);
-    }
-
-    public static void saveScreenshot(String filename, int w, int h, int[] pixels) {
-        final Bitmap createBitmap = Bitmap.createBitmap(pixels, w, h, Bitmap.Config.ARGB_8888);
-        try {
-            final FileOutputStream fileOutputStream = new FileOutputStream(filename);
-            createBitmap.compress(Bitmap.CompressFormat.JPEG, 85, fileOutputStream);
-            try {
-                fileOutputStream.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                fileOutputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (FileNotFoundException e) {
-            final PrintStream printStream = System.err;
-            printStream.println("Couldn't create file: " + filename);
-            e.printStackTrace();
-        }
     }
 
     public void copyToPickedFile(String inPath) {
@@ -1483,7 +1437,6 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
         });
     }
 
-
     @Override
     protected void onPause() {
         Log.d("ModdedPE", "onPause");
@@ -1809,26 +1762,6 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
         return -1;
     }
 
-    private class HeadsetConnectionReceiver extends BroadcastReceiver {
-        private HeadsetConnectionReceiver() {
-        }
-
-        @Override
-        public void onReceive(Context context, @NonNull Intent intent) {
-            if (intent.getAction().equals("android.intent.action.HEADSET_PLUG")) {
-                final int intExtra = intent.getIntExtra(AuthenticationConstants.OAuth2.STATE, -1);
-                if (intExtra == 0) {
-                    Log.d("ModdedPE", "Headset unplugged");
-                    nativeSetHeadphonesConnected(false);
-                } else if (intExtra != 1) {
-                } else {
-                    Log.d("ModdedPE", "Headset plugged in");
-                    nativeSetHeadphonesConnected(true);
-                }
-            }
-        }
-    }
-
     private void configureBrazeAtRuntime() {
     }
 
@@ -1948,5 +1881,67 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
             return SystemClock.elapsedRealtime() - Process.getStartElapsedRealtime();
         }
         return 0L;
+    }
+
+    enum MessageConnectionStatus {
+        NOTSET,
+        CONNECTED,
+        DISCONNECTED
+    }
+
+    @SuppressLint("HandlerLeak")
+    class IncomingHandler extends Handler {
+        IncomingHandler() {
+        }
+
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            if (msg.what == MainActivity.MSG_CORRELATION_RESPONSE) {
+                final String packageName = getApplicationContext().getPackageName();
+                final SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                defaultSharedPreferences.getString("deviceId", "");
+                try {
+                    final long firstInstallTime = getPackageManager().getPackageInfo(packageName, 0).firstInstallTime;
+                    final String deviceId = msg.getData().getString("deviceId");
+                    final String sessionId = msg.getData().getString("sessionId");
+                    long time = msg.getData().getLong("time");
+                    if (firstInstallTime > time) {
+                        defaultSharedPreferences.edit().apply();
+                        nativeDeviceCorrelation(firstInstallTime, deviceId, time, sessionId);
+                    }
+                    final SharedPreferences.Editor edit = defaultSharedPreferences.edit();
+                    edit.putInt("correlationAttempts", 0);
+                    edit.apply();
+                    if (mBound != MessageConnectionStatus.CONNECTED) {
+                        return;
+                    }
+                    unbindService(mConnection);
+                    return;
+                } catch (PackageManager.NameNotFoundException unused) {
+                    return;
+                }
+            }
+            super.handleMessage(msg);
+        }
+    }
+
+    private class HeadsetConnectionReceiver extends BroadcastReceiver {
+        private HeadsetConnectionReceiver() {
+        }
+
+        @Override
+        public void onReceive(Context context, @NonNull Intent intent) {
+            if (intent.getAction().equals("android.intent.action.HEADSET_PLUG")) {
+                final int intExtra = intent.getIntExtra("state", -1);
+                if (intExtra == 0) {
+                    Log.d("ModdedPE", "Headset unplugged");
+                    nativeSetHeadphonesConnected(false);
+                } else if (intExtra != 1) {
+                } else {
+                    Log.d("ModdedPE", "Headset plugged in");
+                    nativeSetHeadphonesConnected(true);
+                }
+            }
+        }
     }
 }

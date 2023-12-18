@@ -16,12 +16,6 @@ public class NotificationResult {
     public NotificationType notificationType;
     public String title;
 
-    public enum NotificationType {
-        Achievement,
-        Invite,
-        Unknown
-    }
-
     public NotificationResult(@NonNull RemoteMessage remoteMessage, Context context) {
         Map<String, String> data = remoteMessage.getData();
         String str = data.get("type");
@@ -51,5 +45,11 @@ public class NotificationResult {
             this.notificationType = NotificationType.Unknown;
         }
         this.data = data.get("xbl");
+    }
+
+    public enum NotificationType {
+        Achievement,
+        Invite,
+        Unknown
     }
 }

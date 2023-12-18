@@ -2,8 +2,6 @@ package com.microsoft.xal.crypto;
 
 import androidx.annotation.NonNull;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * 13.08.2022
  *
