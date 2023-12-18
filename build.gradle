@@ -1,8 +1,8 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    id 'com.android.application' version '7.4.1' apply false // 8.0.1 not build aidl
-    id 'com.android.library' version '7.4.1' apply false // 8.0.1 not build aidl
-    id 'org.jetbrains.kotlin.android' version '1.8.10' apply false
+    id 'com.android.application' version '8.1.4' apply false // 8.0.1 not build aidl
+    id 'com.android.library' version '8.1.4' apply false // 8.0.1 not build aidl
+    id 'org.jetbrains.kotlin.android' version '1.9.21' apply false
 }
 
 task clean(type: Delete) {

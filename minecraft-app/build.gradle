@@ -1,6 +1,6 @@
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
+    id("com.android.application")
+    id("kotlin-android")
 }
 
 android {
@@ -70,7 +70,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.viewpager2)
-    implementation(libs.androidx.vectordrawable.animated)
+//    implementation(libs.androidx.vectordrawable.animated)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.multidex)
 
