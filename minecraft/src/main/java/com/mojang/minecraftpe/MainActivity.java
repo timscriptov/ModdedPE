@@ -59,9 +59,11 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -100,6 +102,8 @@ import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * 13.08.2022
@@ -155,6 +159,8 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     MessageConnectionStatus mBound = MessageConnectionStatus.NOTSET;
     private WifiManager mWifiManager = null;
     private WifiManager.MulticastLock mMulticastLock = null;
+    AtomicInteger mCaretPositionMirror = new AtomicInteger(0);
+    AtomicReference<String> mCurrentTextMirror = new AtomicReference<>("");
     final Messenger mMessenger = new Messenger(new IncomingHandler());
     private final ServiceConnection mConnection = new ServiceConnection() {
         @Override
@@ -187,7 +193,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     long mCachedDebugMemoryUpdateTime = 0;
     private long mCallback = 0;
 
-    NetworkReceiver networkReceiver;
+    private NetworkMonitor mNetworkMonitor;
 
     enum MessageConnectionStatus {
         NOTSET,
@@ -282,6 +288,8 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     native void nativeSetHeadphonesConnected(boolean connected);
 
     native String nativeSetOptions(String optionsString);
+
+    native void nativeCaretPosition(final int caretPosition);
 
     native void nativeSetTextboxText(String text);
 
@@ -450,7 +458,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
         FMOD.init(this);
         deviceManager = InputDeviceManager.create(this);
         headsetConnectionReceiver = new HeadsetConnectionReceiver();
-        networkReceiver = new NetworkReceiver();
+        this.mNetworkMonitor = new NetworkMonitor(getApplicationContext());
         platform.onAppStart(getWindow().getDecorView());
         mHasStoragePermission = checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, Process.myPid(), Process.myUid()) == 0;
         nativeSetHeadphonesConnected(((AudioManager) getSystemService(Context.AUDIO_SERVICE)).isWiredHeadsetOn());
@@ -637,21 +645,19 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
             textInputWidget = createTextWidget();
         }
         textInputWidget.updateFilters(maxLength, !isMultiline);
-        textInputWidget.setTextFromGame(text);
+        setTextBoxBackend(text);
         textInputWidget.setVisibility(View.VISIBLE);
-        textInputWidget.setInputType(isMultiline ? InputType.TYPE_TEXT_FLAG_MULTI_LINE : InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        textInputWidget.setInputType(isMultiline ? 131072 : 524288);
+        TextInputProxyEditTextbox textInputProxyEditTextbox = textInputWidget;
         if (numbersOnly) {
-            TextInputProxyEditTextbox textInputProxyEditTextbox = textInputWidget;
-            textInputProxyEditTextbox.setInputType(textInputProxyEditTextbox.getInputType() | InputType.TYPE_CLASS_NUMBER);
+            textInputProxyEditTextbox.setInputType(textInputProxyEditTextbox.getInputType() | 2);
         } else {
-            TextInputProxyEditTextbox textInputProxyEditTextbox2 = textInputWidget;
-            textInputProxyEditTextbox2.setInputType(textInputProxyEditTextbox2.getInputType() | InputType.TYPE_CLASS_TEXT);
+            textInputProxyEditTextbox.setInputType(textInputProxyEditTextbox.getInputType() | 1);
         }
         textInputWidget.requestFocus();
         getInputMethodManager().showSoftInput(textInputWidget, 0);
-        TextInputProxyEditTextbox textInputProxyEditTextbox3 = textInputWidget;
-        textInputProxyEditTextbox3.setSelection(textInputProxyEditTextbox3.length());
     }
+
 
     @SuppressLint({"ResourceType", "SetTextI18n"})
     public TextInputProxyEditTextbox createTextWidget() {
@@ -662,25 +668,25 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
         textInputProxyEditTextbox.setImeOptions(268435461);
         textInputProxyEditTextbox.setOnEditorActionListener((v, actionId, event) -> {
             Log.w("ModdedPE - keyboard", "onEditorAction: " + actionId);
-            final boolean z = actionId == 5;
-            final boolean z2 = actionId == 0 && event != null && event.getAction() == 0;
+            boolean z = actionId == 5;
+            boolean z2 = actionId == 0 && event != null && event.getAction() == 0;
             if (z || z2) {
                 if (z) {
-                    nativeReturnKeyPressed();
+                    MainActivity.this.nativeReturnKeyPressed();
                 }
-                final String obj = textInputProxyEditTextbox.getText().toString();
+                String obj = textInputProxyEditTextbox.getText().toString();
                 int selectionEnd = textInputProxyEditTextbox.getSelectionEnd();
                 if (selectionEnd < 0 || selectionEnd > obj.length()) {
                     selectionEnd = obj.length();
                 }
-                if ((InputType.TYPE_TEXT_FLAG_MULTI_LINE & textInputProxyEditTextbox.getInputType()) != 0) {
-                    textInputProxyEditTextbox.setText(obj.substring(0, selectionEnd) + "\n" + obj.substring(selectionEnd));
+                if ((131072 & textInputProxyEditTextbox.getInputType()) != 0) {
+                    textInputProxyEditTextbox.setText(obj.substring(0, selectionEnd) + "\n" + obj.substring(selectionEnd, obj.length()));
                     textInputProxyEditTextbox.setSelection(Math.min(selectionEnd + 1, textInputProxyEditTextbox.getText().length()));
                 }
             } else if (actionId != 7) {
                 return false;
             } else {
-                nativeBackPressed();
+                MainActivity.this.nativeBackPressed();
             }
             return true;
         });
@@ -694,17 +700,24 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-                final String obj = s.toString();
-                if (textInputProxyEditTextbox != null) {
-                    if (!textInputProxyEditTextbox.shouldSendText()) {
-                        return;
-                    }
-                    nativeSetTextboxText(obj);
-                    textInputProxyEditTextbox.updateLastSentText();
+            public void afterTextChanged(Editable editable) {
+                String obj = editable.toString();
+                if (obj.equals(mCurrentTextMirror.get())) {
                     return;
                 }
+                mCurrentTextMirror.set(obj);
                 nativeSetTextboxText(obj);
+            }
+        });
+        textInputProxyEditTextbox.setAccessibilityDelegate(new View.AccessibilityDelegate() {
+            @Override
+            public void sendAccessibilityEvent(View view, int eventType) {
+                super.sendAccessibilityEvent(view, eventType);
+                if (eventType == 8192) {
+                    int selectionStart = textInputProxyEditTextbox.getSelectionStart();
+                    mCaretPositionMirror.set(selectionStart);
+                    nativeCaretPosition(selectionStart);
+                }
             }
         });
         textInputProxyEditTextbox.setOnMCPEKeyWatcher(new TextInputProxyEditTextbox.MCPEKeyWatcher() {
@@ -725,7 +738,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
         ((ViewGroup) findViewById(android.R.id.content)).addView(textInputProxyEditTextbox, new ViewGroup.LayoutParams(320, 50));
         final View rootView = findViewById(android.R.id.content).getRootView();
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
-            final Rect rect = new Rect();
+            Rect rect = new Rect();
             rootView.getWindowVisibleDisplayFrame(rect);
             virtualKeyboardHeight = rootView.getRootView().getHeight() - rect.height();
             if (rootView.getRootView().getHeight() - rect.bottom > 0) {
@@ -733,14 +746,14 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
                     return;
                 }
                 mIsSoftKeyboardVisible = true;
-            } else if (!mIsSoftKeyboardVisible) {
-            } else {
+            } else if (mIsSoftKeyboardVisible) {
                 mIsSoftKeyboardVisible = false;
                 onSoftKeyboardClosed();
             }
         });
         return textInputProxyEditTextbox;
     }
+
 
     public void updateLocalization(final String lang, final String region) {
         runOnUiThread(() -> {
@@ -1414,9 +1427,6 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
         Log.d("ModdedPE", "onStart");
         super.onStart();
         deviceManager.register();
-        final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-        registerReceiver(networkReceiver, intentFilter);
         if (_fromOnCreate) {
             _fromOnCreate = false;
             try {
@@ -1444,6 +1454,35 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
             activityListener.onResume();
         }
     }
+
+    public String getTextBoxBackend() {
+        return mCurrentTextMirror.get();
+    }
+
+    public void setTextBoxBackend(final String newText) {
+        runOnUiThread(() -> {
+            mCurrentTextMirror.set(newText);
+            textInputWidget.setText(newText);
+            setCaretPosition(-1);
+        });
+    }
+
+    public int getCaretPosition() {
+        return mCaretPositionMirror.get();
+    }
+
+    public void setCaretPosition(final int caretPosition) {
+        runOnUiThread(() -> {
+            int i = caretPosition;
+            int length = textInputWidget.getText().toString().length();
+            if (i < 0 || i > length) {
+                i = length;
+            }
+            textInputWidget.setSelection(i);
+            mCaretPositionMirror.set(i);
+        });
+    }
+
 
     @Override
     protected void onPause() {
@@ -1562,7 +1601,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
                                     openInputStream.close();
                                     return;
                                 } catch (IOException e3) {
-                                    Log.e("ModdedPE","IOException while closing input stream\n" + e3 );
+                                    Log.e("ModdedPE", "IOException while closing input stream\n" + e3);
                                 }
                             }
                         }
@@ -1790,29 +1829,6 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
         }
     }
 
-    private class NetworkReceiver extends BroadcastReceiver {
-        private NetworkReceiver() {
-        }
-
-        @Override
-        public void onReceive(@NonNull Context context, Intent intent) {
-            String str;
-            final ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-            if (networkInfo == null || !networkInfo.isAvailable()) {
-                return;
-            }
-            networkInfo = connectivityManager.getNetworkInfo(9);
-            if (networkInfo == null || !networkInfo.isConnected()) {
-                networkInfo = connectivityManager.getNetworkInfo(1);
-                str = (networkInfo == null || !networkInfo.isConnected()) ? "Cellular" : "Wifi";
-            } else {
-                str = "Wired";
-            }
-            nativeFireNetworkChangedEvent(str);
-        }
-    }
-
     private void configureBrazeAtRuntime() {
     }
 
@@ -1911,6 +1927,12 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
         return 0L;
     }
 
+    public int getPlatformDpi() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return (int) ((displayMetrics.xdpi + displayMetrics.ydpi) * 0.5f);
+    }
+
     public void setKeepScreenOnFlag(final boolean keepScreenOn) {
         runOnUiThread(() -> {
             if (keepScreenOn) {
@@ -1919,5 +1941,12 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
                 getWindow().clearFlags(128);
             }
         });
+    }
+
+    public long getTimeFromProcessStart() {
+        if (Build.VERSION.SDK_INT >= 24) {
+            return SystemClock.elapsedRealtime() - Process.getStartElapsedRealtime();
+        }
+        return 0L;
     }
 }

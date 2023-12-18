@@ -194,6 +194,10 @@
                 android:resource="@xml/filepaths" />
         </provider>
 
+        <meta-data
+            android:name="game_icon"
+            android:resource="@mipmap/ic_launcher_round" />
+
     </application>
 
 </manifest>

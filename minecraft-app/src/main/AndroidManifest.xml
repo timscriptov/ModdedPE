@@ -22,7 +22,6 @@
     <application
         android:name=".App"
         android:exported="true"
-        android:extractNativeLibs="false"
         android:hasCode="true"
         android:hasFragileUserData="true"
         android:icon="@mipmap/ic_launcher"

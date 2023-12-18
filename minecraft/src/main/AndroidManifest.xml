@@ -47,9 +47,9 @@
             android:name="game_display_name"
             android:resource="@string/app_name" />
 
-        <meta-data
-            android:name="game_icon"
-            android:resource="@mipmap/ic_launcher_round" />
+<!--        <meta-data-->
+<!--            android:name="game_icon"-->
+<!--            android:resource="@mipmap/ic_launcher_round" />-->
 
         <meta-data
             android:name="appcenter_android_id"

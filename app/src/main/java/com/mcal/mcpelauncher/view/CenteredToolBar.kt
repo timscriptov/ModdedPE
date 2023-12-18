@@ -73,7 +73,7 @@ class CenteredToolBar : Toolbar {
                 gravity = Gravity.CENTER
                 setTextAppearance(
                     context,
-                    R.style.TextAppearance_AppCompat_Widget_ActionBar_Title
+                    androidx.appcompat.R.style.TextAppearance_AppCompat_Widget_ActionBar_Title
                 )
                 layoutParams =
                     LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {

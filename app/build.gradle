@@ -5,13 +5,13 @@ plugins {
 
 android {
     compileSdk project.compileSDK.toInteger()
-    ndkVersion '24.0.8215888'
+    ndkVersion '26.1.10909125'
     defaultConfig {
         applicationId "com.mcal.mcpelauncher"
         minSdk project.minSDK.toInteger()
         targetSdk project.targetSDK.toInteger()
-        versionCode 952000001
-        versionName "1.20.0.01"
+        versionCode 952005101
+        versionName "1.20.51.01"
         multiDexEnabled true
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
@@ -31,7 +31,20 @@ android {
     }
     packagingOptions {
         resources {
-            excludes += ['META-INF/DEPENDENCIES', 'META-INF/LICENSE', 'META-INF/LICENSE.txt', 'META-INF/license.txt', 'META-INF/NOTICE', 'META-INF/NOTICE.txt', 'META-INF/notice.txt', 'META-INF/ASL2.0', 'META-INF/INDEX.LIST', 'META-INF/*.kotlin_module']
+            excludes += [
+                    'META-INF/DEPENDENCIES',
+                    'META-INF/LICENSE',
+                    'META-INF/LICENSE.txt',
+                    'META-INF/license.txt',
+                    'META-INF/NOTICE',
+                    'META-INF/NOTICE.txt',
+                    'META-INF/notice.txt',
+                    'META-INF/AL2.0',
+                    'META-INF/ASL2.0',
+                    'META-INF/LGPL2.1',
+                    'META-INF/INDEX.LIST',
+                    'META-INF/*.kotlin_module'
+            ]
         }
     }
     compileOptions {
@@ -60,9 +73,10 @@ dependencies {
     implementation project(':fmod')
     implementation project(':crashreporter')
 
+    implementation(libs.androidx.legacy.support.v4)
+
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.preference.ktx)
-//    implementation(libs.androidx.vectordrawable.animated)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.viewpager2)
@@ -74,4 +88,9 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
 
     implementation(libs.commons.io)
+}
+
+configurations.all {
+    exclude group: "net.sf.kxml", module: "kxml2"
+    exclude group: "xpp3", module: "xpp3"
 }

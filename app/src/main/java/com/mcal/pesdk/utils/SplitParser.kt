@@ -49,8 +49,7 @@ class SplitParser(private var context: Context) {
         try {
             val mcAppInfo = MinecraftInfo.getMinecraftPackageContext().applicationInfo
             if (isAppBundle() && mcAppInfo != null) {
-                mutableListOf(*mcAppInfo.splitPublicSourceDirs).forEach { path ->
-                    Log.e("TEST", path)
+                mcAppInfo.splitPublicSourceDirs?.forEach { path ->
                     val name = File(path).name
                     if (name.contains("arm") || name.contains("x86")) {
                         val buffer = ByteArray(2048)
