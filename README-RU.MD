@@ -1,4 +1,4 @@
-[![License Info](https://img.shields.io/badge/license-GNU_GPLv3-blue.svg?style=flat-square)](https://github.com/TimScriptov/ModdedPE) [![Play Store Info](https://img.shields.io/badge/Play_Store-v1.19.30.22-blue.svg?style=flat-square)](https://play.google.com/store/apps/details?id=com.mcal.mcpelauncher) [![](https://jitpack.io/v/TimScriptov/ModdedPE.svg)](https://jitpack.io/#TimScriptov/ModdedPE)
+[![License Info](https://img.shields.io/badge/license-GNU_GPLv3-blue.svg?style=flat-square)](https://github.com/TimScriptov/ModdedPE) [![](https://jitpack.io/v/TimScriptov/ModdedPE.svg)](https://jitpack.io/#TimScriptov/ModdedPE)
 # ModdedPE!
 ![logo][1]
 --------
