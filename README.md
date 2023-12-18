@@ -6,13 +6,6 @@
 ### What is ModdedPE?
 ModdedPE is a launcher which allows you to open Minecraft PE and load NMods. ModdedPE can also be used as a library for your project.
 
-Download in Google Play Store
-
-<a href="https://play.google.com/store/apps/details?id=com.mcal.mcpelauncher"
-target="_blank">
-<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"
-alt="IMAGE ALT TEXT HERE" width="200"/></a>
-
 ### Jitpack
 ```groovy
     implementation 'com.github.TimScriptov:ModdedPE:TAG'
