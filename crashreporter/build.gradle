@@ -27,10 +27,10 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation jetpack.recyclerview
-    implementation jetpack.appcompat
-    implementation jetpack.material
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
 
-    implementation misc.annotations
-    implementation misc.annotations.android
+    implementation(libs.annotations)
+    implementation(libs.androidx.annotation)
 }

@@ -39,20 +39,20 @@ dependencies {
     implementation project(':xbox')
     implementation project(':core')
 
-    implementation jetpack.appcompat
-    implementation jetpack.material
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
 
-    implementation fb.firebase.messaging
-    implementation fb.firebase.iid
+    implementation(libs.firebase.messaging)
+    implementation(libs.firebase.iid)
 
-    implementation misc.gson
-    implementation misc.annotations
-    implementation misc.annotations.android
+    implementation(libs.gson)
+    implementation(libs.annotations)
+    implementation(libs.androidx.annotation)
     //noinspection DuplicatePlatformClasses
-    implementation misc.httpclient
-    implementation misc.httpmime
+    implementation(libs.httpclient)
+    implementation(libs.httpmime)
 
-    runtimeOnly google.services
+    runtimeOnly(libs.google.services)
 }
 
 afterEvaluate {

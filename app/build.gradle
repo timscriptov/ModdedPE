@@ -60,17 +60,18 @@ dependencies {
     implementation project(':fmod')
     implementation project(':crashreporter')
 
-    implementation jetpack.appcompat
-    implementation jetpack.preference
-    implementation jetpack.vectordrawable.animated
-    implementation jetpack.core
-    implementation jetpack.constraint
-    implementation jetpack.vp2
-    implementation jetpack.material
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.preference.ktx)
+    implementation(libs.androidx.vectordrawable.animated)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.viewpager2)
+    implementation(libs.androidx.annotation)
+    implementation(libs.material)
 
-    implementation misc.gson
-    implementation misc.annotations
-    implementation misc.annotations.android
-    implementation misc.commons.io
-    implementation misc.coroutines.core
+    implementation(libs.gson)
+    implementation(libs.annotations)
+    implementation(libs.kotlinx.coroutines.core)
+
+    implementation(libs.commons.io)
 }

@@ -30,8 +30,8 @@ android {
 }
 
 dependencies {
-    implementation misc.annotations
-    implementation misc.annotations.android
+    implementation(libs.annotations)
+    implementation(libs.androidx.annotation)
 }
 
 afterEvaluate {

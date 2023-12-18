@@ -51,11 +51,11 @@ android {
 }
 
 dependencies {
-    implementation jetpack.appcompat
-    implementation jetpack.material
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
 
-    implementation misc.gson
-    implementation misc.annotations
+    implementation(libs.gson)
+    implementation(libs.annotations)
 }
 
 afterEvaluate {

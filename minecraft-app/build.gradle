@@ -64,29 +64,30 @@ dependencies {
     implementation project(':fmod')
     implementation project(':core')
 
-    implementation jetpack.appcompat
-    implementation jetpack.material
-    implementation jetpack.preference
-    implementation jetpack.core
-    implementation jetpack.constraint
-    implementation jetpack.vp2
-    implementation jetpack.vectordrawable.animated
-    implementation jetpack.core.splashscreen
-    implementation jetpack.multidex
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.preference.ktx)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.viewpager2)
+    implementation(libs.androidx.vectordrawable.animated)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.multidex)
 
-    implementation jetpack.mvvm.viewmodel
-    implementation jetpack.mvvm.runtime
-    implementation jetpack.mvvm.livedata
-    implementation jetpack.mvvm.extensions
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.extensions)
 
-    implementation misc.gson
-    implementation misc.commons.io
-    implementation misc.annotations
-    implementation misc.coroutines.core
+    implementation(libs.gson)
+    implementation(libs.commons.io)
+    implementation(libs.annotations)
+    implementation(libs.androidx.annotation)
+    implementation(libs.kotlinx.coroutines.core)
     //noinspection DuplicatePlatformClasses
-    implementation misc.httpclient
-    implementation misc.httpmime
-    implementation misc.net
+    implementation(libs.httpclient)
+    implementation(libs.httpmime)
+    implementation(libs.okhttp)
 
-    implementation signing.pkix
+    implementation(libs.pkix)
 }
