@@ -38,7 +38,8 @@ public class CommonData {
     private static final String staticAppName = getAppName();
     private static final String staticDeviceModel = getDeviceModel();
     private static final String staticOSLocale = getDeviceLocale();
-    private final String accessibilityInfo = staticAccessibilityInfo;    private static NetworkType netType = getNetworkConnection();
+    private static NetworkType netType = getNetworkConnection();
+    private final String accessibilityInfo = staticAccessibilityInfo;
     public HashMap<String, Object> additionalInfo = new HashMap<>();
     public String appName = staticAppName;
     public String appSessionId = getApplicationSession();
@@ -51,6 +52,7 @@ public class CommonData {
     public String titleSessionId = get_title_telemetry_session_id();
     public String userId = UNKNOWNUSER;
     public String xsapiVersion = "1.0";
+
     public CommonData(int i) {
         this.eventVersion = String.format("%s.%s", EVENTVERSION, i);
     }
@@ -194,6 +196,4 @@ public class CommonData {
             this.value = i;
         }
     }
-
-
 }
