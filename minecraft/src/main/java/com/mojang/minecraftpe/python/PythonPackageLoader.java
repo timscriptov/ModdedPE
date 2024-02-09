@@ -4,8 +4,7 @@ import android.content.res.AssetManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-
-import com.mcal.core.utils.FileHelper;
+import com.mojang.minecraftpe.utils.FileHelper;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -1,7 +1,5 @@
 package com.mojang.minecraftpe;
 
-import static com.mcal.core.utils.FileHelper.writeToFile;
-
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
@@ -10,6 +8,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.documentfile.provider.DocumentFile;
+import com.mojang.minecraftpe.utils.FileHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,52 +64,50 @@ public class WorldRecovery {
     public void doMigrateFolderContents(DocumentFile root, @NonNull File destFolder) {
         ArrayList<DocumentFile> arrayList = new ArrayList<>();
         mTotalFilesToCopy = 0;
-        long j = 0;
+        long bytesAvailable = 0;
         mTotalBytesRequired = 0L;
         generateCopyFilesRecursively(arrayList, root);
         long availableBytes = new StatFs(destFolder.getAbsolutePath()).getAvailableBytes();
-        long j2 = mTotalBytesRequired;
-        if (j2 >= availableBytes) {
-            nativeError("Insufficient space", j2, availableBytes);
+        long bytesTotal = mTotalBytesRequired;
+        if (bytesTotal >= availableBytes) {
+            nativeError("Insufficient space", bytesTotal, availableBytes);
             return;
         }
         String path = root.getUri().getPath();
-        String str = destFolder + "_temp";
-        File file = new File(str);
+        String tmpDirPath = destFolder + "_temp";
+        File tmpDir = new File(tmpDirPath);
         Iterator<DocumentFile> it = arrayList.iterator();
-        long j3 = 0;
-        int i = 0;
+        long bytesCompleted = 0;
+        int filesCompleted = 0;
         while (it.hasNext()) {
             DocumentFile next = it.next();
-            String str2 = str + next.getUri().getPath().substring(path.length());
+            String dir = tmpDirPath + next.getUri().getPath().substring(path.length());
             if (next.isDirectory()) {
-                File file2 = new File(str2);
+                File file2 = new File(dir);
                 if (!file2.isDirectory()) {
-                    Log.i("ModdedPE", "Creating directory '" + str2 + "'");
+                    Log.i("ModdedPE", "Creating directory '" + dir + "'");
                     if (!file2.mkdirs()) {
-                        nativeError("Could not create directory: " + str2, j, j);
+                        nativeError("Could not create directory: " + dir, bytesAvailable, bytesAvailable);
                         return;
                     }
                 } else {
-                    Log.i("ModdedPE", "Directory '" + str2 + "' already exists");
+                    Log.i("ModdedPE", "Directory '" + dir + "' already exists");
                 }
             } else {
-                Log.i("ModdedPE", "Copying '" + next.getUri().getPath() + "' to '" + str2 + "'");
-                String sb = "Copying: " + str2;
-                i++;
-                nativeUpdate(sb, mTotalFilesToCopy, i, mTotalBytesRequired, j3);
+                Log.i("ModdedPE", "Copying '" + next.getUri().getPath() + "' to '" + dir + "'");
+                String status = "Copying: " + dir;
+                filesCompleted++;
+                nativeUpdate(status, mTotalFilesToCopy, filesCompleted, mTotalBytesRequired, bytesCompleted);
                 try {
-                    writeToFile(new File(str2), mContentResolver.openInputStream(next.getUri()));
+                    FileHelper.writeToFile(new File(dir), mContentResolver.openInputStream(next.getUri()));
                 } catch (IOException e) {
-                    e.printStackTrace();
                     nativeError(e.getMessage(), 0L, 0L);
                     return;
                 }
             }
-            j = 0;
         }
         if (destFolder.delete()) {
-            if (file.renameTo(destFolder)) {
+            if (tmpDir.renameTo(destFolder)) {
                 nativeComplete();
                 return;
             } else if (destFolder.mkdir()) {

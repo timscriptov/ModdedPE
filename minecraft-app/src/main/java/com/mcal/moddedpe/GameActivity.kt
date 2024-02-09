@@ -2,26 +2,38 @@ package com.mcal.moddedpe
 
 import android.os.Bundle
 import android.util.Log
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.preference.PreferenceManager
-import com.mcal.core.AssetInstaller
-import com.mcal.core.NativeInstaller
-import com.mcal.core.data.StorageHelper.minecraftPEDir
-import com.mcal.core.utils.FileHelper.readFileAsLines
-import com.mcal.core.utils.FileHelper.writeToFile
-import com.mcal.moddedpe.base.BaseNativeActivity
+import com.mcal.moddedpe.data.StorageHelper.getMinecraftPeDir
+import com.mojang.minecraftpe.MainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
+import java.nio.charset.StandardCharsets
 
-class GameActivity : BaseNativeActivity() {
+class GameActivity : MainActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
-        AssetInstaller(this).install()
-        NativeInstaller(this).install()
+        System.loadLibrary("c++_shared");
+        try {
+            System.loadLibrary("maesdk");
+        } catch (e: UnsatisfiedLinkError) {
+            Log.d("ModdedPE", "maesdk library not found. This is expected if we're not in Edu mode");
+        }
+        try {
+            System.loadLibrary("ovrfmod");
+        } catch (e: UnsatisfiedLinkError) {
+            Log.d("ModdedPE", "OVRfmod library not found");
+        }
+        try {
+            System.loadLibrary("ovrplatformloader");
+        } catch (e: UnsatisfiedLinkError) {
+            Log.d("ModdedPE", "OVRplatform library not found");
+        }
+        System.loadLibrary("fmod");
+        System.loadLibrary("minecraftpe")
         addMyServers()
+        MapsInstaller(this).install()
         super.onCreate(savedInstanceState)
     }
 
@@ -32,11 +44,11 @@ class GameActivity : BaseNativeActivity() {
 
     private fun updateSettings() {
         CoroutineScope(Dispatchers.IO).launch {
-            val minecraftPEDir = minecraftPEDir(this@GameActivity)
+            val minecraftPEDir = getMinecraftPeDir(this@GameActivity)
             val options = File(minecraftPEDir, "options.txt")
+            var content = ""
             if (options.exists()) {
-                var content = ""
-                for (line in readFileAsLines(options)) {
+                for (line in options.bufferedReader().readLines()) {
                     if (line.isEmpty()) {
                         continue
                     }
@@ -51,11 +63,14 @@ class GameActivity : BaseNativeActivity() {
                     }
                     content += "\n" + line
                 }
-                writeToFile(options, content)
             } else {
-                val content = "new_edit_world_screen_beta:0\nnew_play_screen_beta:0"
-                writeToFile(options, content)
+                content = "new_edit_world_screen_beta:0\nnew_play_screen_beta:0"
             }
+            options.writeBytes(
+                content.toByteArray(
+                    StandardCharsets.UTF_8
+                )
+            )
             val treatmentsDir = File(filesDir.parent, "treatments")
             if (treatmentsDir.exists()) {
                 treatmentsDir.deleteRecursively()

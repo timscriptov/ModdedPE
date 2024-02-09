@@ -37,7 +37,7 @@ public interface PackageSourceListener {
 
     void onDownloadStarted();
 
-    void onDownloadStateChanged(boolean needCelularPermission, boolean progressIndeterminate, boolean isPaused, boolean isCompleted, boolean isFailed, int pausedReason, int failedReason);
+    void onDownloadStateChanged(boolean needCellularPermission, boolean progressIndeterminate, boolean isPaused, boolean isCompleted, boolean isFailed, int pausedReason, int failedReason);
 
     void onMountStateChanged(String mountPath, int mountState);
 }

@@ -32,24 +32,10 @@
         android:preserveLegacyExternalStorage="true"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:theme="@style/FullscreenTheme"
+        android:theme="@style/FullScreen"
         android:usesCleartextTraffic="true"
         tools:ignore="HardcodedDebugMode"
         tools:targetApi="r">
-
-        <activity
-            android:name=".LoadingActivity"
-            android:alwaysRetainTaskState="true"
-            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
-            android:excludeFromRecents="false"
-            android:exported="true"
-            android:launchMode="singleTask"
-            android:screenOrientation="sensorLandscape">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
         <activity
             android:name=".GameActivity"
@@ -58,11 +44,16 @@
             android:excludeFromRecents="false"
             android:exported="true"
             android:launchMode="singleTask"
-            android:screenOrientation="sensorLandscape">
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/FullScreen">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="minecraftpe" />
 
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -77,11 +68,43 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="*/*" />
+                <data android:host="*" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:pathPattern=".*\\.mcworld" />
+                <data android:pathPattern=".*\\..*\\.mcworld" />
+                <data android:pathPattern=".*\\..*\\..*\\.mcworld" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.mcworld" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.mcworld" />
+                <data android:pathPattern=".*\\.mcpack" />
+                <data android:pathPattern=".*\\..*\\.mcpack" />
+                <data android:pathPattern=".*\\..*\\..*\\.mcpack" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.mcpack" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.mcpack" />
+                <data android:pathPattern=".*\\.mcaddon" />
+                <data android:pathPattern=".*\\..*\\.mcaddon" />
+                <data android:pathPattern=".*\\..*\\..*\\.mcaddon" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.mcaddon" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.mcaddon" />
+                <data android:pathPattern=".*\\.mctemplate" />
+                <data android:pathPattern=".*\\..*\\.mctemplate" />
+                <data android:pathPattern=".*\\..*\\..*\\.mctemplate" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.mctemplate" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.mctemplate" />
+            </intent-filter>
         </activity>
+
+        <service android:name=".googleplay.ApkXDownloaderService" />
+        <receiver android:name=".googleplay.ApkXDownloaderAlarmReceiver" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.mcal.moddedpe.fileprovider"
+            android:authorities="${applicationId}"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

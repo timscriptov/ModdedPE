@@ -23,7 +23,6 @@ import android.os.Bundle
 import android.webkit.*
 import android.webkit.WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
 import androidx.appcompat.app.AppCompatActivity
-import com.mcal.core.AssetInstaller
 import java.io.IOException
 
 /**
@@ -36,7 +35,6 @@ class WebKitWebViewController : AppCompatActivity() {
 
     @SuppressLint("SetJavaScriptEnabled")
     public override fun onCreate(bundle: Bundle?) {
-        AssetInstaller(this).install()
         super.onCreate(bundle)
         val extras = intent.extras
         if (extras == null) {

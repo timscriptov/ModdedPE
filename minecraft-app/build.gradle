@@ -1,10 +1,14 @@
 plugins {
     id("com.android.application")
-    id("kotlin-android")
+    id("org.jetbrains.kotlin.android")
 }
 
+// (=.*)(Minecraft)(.*)
+// $1MyNewName$3
 android {
     compileSdk project.compileSDK.toInteger()
+    namespace 'com.mcal.moddedpe'
+
     defaultConfig {
         applicationId "com.mcal.moddedpe"
         minSdk project.minSDK.toInteger()
@@ -16,6 +20,9 @@ android {
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
         }
     }
+    sourceSets {
+        debug.assets.srcDirs = ['../assets-pack/src/main/assets']
+    }
     buildTypes {
         release {
             minifyEnabled true
@@ -25,7 +32,7 @@ android {
     }
     packagingOptions {
         resources {
-            excludes += ['META-INF/DEPENDENCIES', 'META-INF/LICENSE', 'META-INF/LICENSE.txt', 'META-INF/license.txt', 'META-INF/NOTICE', 'META-INF/NOTICE.txt', 'META-INF/notice.txt', 'META-INF/ASL2.0', 'META-INF/INDEX.LIST', 'META-INF/*.kotlin_module']
+            excludes += ['META-INF/AL2.0', 'META-INF/LGPL2.1', 'META-INF/DEPENDENCIES', 'META-INF/LICENSE', 'META-INF/LICENSE.txt', 'META-INF/license.txt', 'META-INF/NOTICE', 'META-INF/NOTICE.txt', 'META-INF/notice.txt', 'META-INF/ASL2.0', 'META-INF/INDEX.LIST', 'META-INF/*.kotlin_module']
         }
         jniLibs {
             useLegacyPackaging false
@@ -45,7 +52,23 @@ android {
         abortOnError false
         checkReleaseBuilds false
     }
-    namespace 'com.mcal.moddedpe'
+    bundle {
+        language {
+            enableSplit = true
+        }
+        density {
+            enableSplit = true
+        }
+        abi {
+            enableSplit = true
+        }
+    }
+    configurations {
+        all {
+            exclude group: 'xpp3', module: 'xpp3'
+        }
+    }
+    assetPacks = [":assets-pack"]
 }
 
 // play_screen.json
@@ -65,7 +88,8 @@ dependencies {
     implementation project(':minecraft')
     implementation project(':xbox')
     implementation project(':fmod')
-    implementation project(':core')
+    implementation project(':licensing')
+    implementation project(':downloader')
 
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -92,4 +116,9 @@ dependencies {
     implementation(libs.okhttp)
 
     implementation(libs.pkix)
+}
+
+configurations.all {
+    exclude group: "net.sf.kxml", module: "kxml2"
+    exclude group: "xpp3", module: "xpp3"
 }

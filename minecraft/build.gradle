@@ -28,7 +28,7 @@ android {
     }
     lint {
         abortOnError true
-        disable 'MissingPermission', 'LongLogTag', 'DefaultLocale', 'UnusedResources', 'GradleDependency', 'GradleOverrides', 'OldTargetApi'
+        disable = ['MissingPermission', 'LongLogTag', 'DefaultLocale', 'UnusedResources', 'GradleDependency', 'GradleOverrides', 'OldTargetApi']
     }
     namespace 'com.mojang.minecraftpe'
 }
@@ -36,7 +36,6 @@ android {
 dependencies {
     implementation project(':fmod')
     implementation project(':xbox')
-    implementation project(':core')
 
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

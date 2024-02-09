@@ -9,11 +9,8 @@ import android.os.Environment;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-
 import androidx.core.view.ViewCompat;
-
-import com.mcal.core.utils.FileHelper;
-
+import com.mojang.minecraftpe.utils.FileHelper;
 import org.apache.http.HttpStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

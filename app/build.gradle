@@ -1,11 +1,13 @@
 plugins {
     id("com.android.application")
-    id("kotlin-android")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
     compileSdk project.compileSDK.toInteger()
     ndkVersion '26.1.10909125'
+    namespace 'com.mcal.mcpelauncher'
+
     defaultConfig {
         applicationId "com.mcal.mcpelauncher"
         minSdk project.minSDK.toInteger()
@@ -61,7 +63,6 @@ android {
         abortOnError false
         checkReleaseBuilds false
     }
-    namespace 'com.mcal.mcpelauncher'
 }
 
 dependencies {

@@ -6,16 +6,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.NativeActivity;
-import android.content.ActivityNotFoundException;
-import android.content.BroadcastReceiver;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
@@ -29,20 +20,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Debug;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.ParcelFileDescriptor;
 import android.os.Process;
-import android.os.RemoteException;
-import android.os.StatFs;
-import android.os.SystemClock;
-import android.os.Vibrator;
+import android.os.*;
 import android.os.storage.StorageManager;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
@@ -53,50 +32,28 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
-import android.view.InputDevice;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.view.*;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.InputMethodManager;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.FirebaseApp;
 import com.mojang.android.StringValue;
 import com.mojang.minecraftpe.input.InputDeviceManager;
 import com.mojang.minecraftpe.platforms.Platform;
 import com.mojang.minecraftpe.python.PythonPackageLoader;
-
 import org.fmod.FMOD;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -262,6 +219,8 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     native boolean isTestInfrastructureDisabled();
 
     native void nativeBackPressed();
+
+    native void nativeRunNativeCallbackOnUiThread(long fn);
 
     native void nativeBackSpacePressed();
 
@@ -1161,6 +1120,18 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
 
     public String getProfileName() {
         return PreferenceManager.getDefaultSharedPreferences(this).getString("profileName", "");
+    }
+
+    public void runNativeCallbackOnUiThread(final long fn) {
+        FutureTask futureTask = new FutureTask(() -> {
+            nativeRunNativeCallbackOnUiThread(fn);
+            return null;
+        });
+        runOnUiThread(futureTask);
+        try {
+            futureTask.get();
+        } catch (Exception unused) {
+        }
     }
 
     public String[] getBroadcastAddresses() {
