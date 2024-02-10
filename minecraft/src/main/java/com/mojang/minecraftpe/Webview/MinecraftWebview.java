@@ -5,10 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-
 import com.mojang.minecraftpe.MainActivity;
 import com.mojang.minecraftpe.PopupView;
-
 import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayOutputStream;

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.NativeActivity;
 import android.content.*;
@@ -131,6 +132,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     private HardwareInformation mHardwareInformation;
     private ThermalMonitor mThermalMonitor;
     private TextToSpeech textToSpeechManager;
+    private Thread mMainThread = null;
     private boolean _fromOnCreate = false;
     private boolean mCursorLocked = false;
     private boolean mIsSoftKeyboardVisible = false;
@@ -411,16 +413,17 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.i("MinecraftPlatform", "MainActivity::onCreate");
+        mMainThread = Thread.currentThread();
         super.onCreate(savedInstanceState);
         if (getResources() == null) {
             Log.w("ModdedPE - replacing", "App is installing/replacing. Killing...");
             Process.killProcess(Process.myPid());
         }
+        nativeWaitCrashManagementSetupComplete();
         if (isEduMode()) {
             try {
                 getClassLoader().loadClass("com.microsoft.applications.events.HttpClient").getConstructor(Context.class).newInstance(getApplicationContext());
             } catch (Exception e) {
-                e.printStackTrace();
                 throw new RuntimeException(e);
             }
         } else {
@@ -619,7 +622,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
                     selectionEnd = obj.length();
                 }
                 if ((131072 & textInputProxyEditTextbox.getInputType()) != 0) {
-                    textInputProxyEditTextbox.setText(obj.substring(0, selectionEnd) + "\n" + obj.substring(selectionEnd, obj.length()));
+                    textInputProxyEditTextbox.setText(obj.substring(0, selectionEnd) + "\n" + obj.substring(selectionEnd));
                     textInputProxyEditTextbox.setSelection(Math.min(selectionEnd + 1, textInputProxyEditTextbox.getText().length()));
                 }
             } else if (actionId != 7) {
@@ -808,8 +811,8 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
 
     public void copyToPickedFile(String inPath) {
         try {
-            final FileInputStream fileInputStream = new FileInputStream(new File(inPath));
-            final ParcelFileDescriptor.AutoCloseOutputStream autoCloseOutputStream = new ParcelFileDescriptor.AutoCloseOutputStream(this.mPickedFileDescriptor);
+            final FileInputStream fileInputStream = new FileInputStream(inPath);
+            final ParcelFileDescriptor.AutoCloseOutputStream autoCloseOutputStream = new ParcelFileDescriptor.AutoCloseOutputStream(mPickedFileDescriptor);
             copyFile(fileInputStream, autoCloseOutputStream);
             autoCloseOutputStream.close();
             fileInputStream.close();
@@ -821,8 +824,8 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
 
     public void copyFromPickedFile(String outPath) {
         try {
-            final ParcelFileDescriptor.AutoCloseInputStream autoCloseInputStream = new ParcelFileDescriptor.AutoCloseInputStream(this.mPickedFileDescriptor);
-            final FileOutputStream fileOutputStream = new FileOutputStream(new File(outPath));
+            final ParcelFileDescriptor.AutoCloseInputStream autoCloseInputStream = new ParcelFileDescriptor.AutoCloseInputStream(mPickedFileDescriptor);
+            final FileOutputStream fileOutputStream = new FileOutputStream(outPath);
             copyFile(autoCloseInputStream, fileOutputStream);
             fileOutputStream.close();
             autoCloseInputStream.close();
@@ -844,54 +847,34 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     }
 
     public byte[] getFileDataBytes(@NonNull String filename) {
-        BufferedInputStream bufferedInputStream;
         if (filename.isEmpty()) {
             return null;
         }
+
         try {
             final AssetManager assets = getApplicationContext().getAssets();
             if (assets == null) {
                 System.err.println("getAssets returned null: Could not getFileDataBytes " + filename);
                 return null;
             }
-            try {
-                bufferedInputStream = new BufferedInputStream(assets.open(filename));
-            } catch (IOException unused) {
-                new File(filename);
-                try {
-                    bufferedInputStream = new BufferedInputStream(new FileInputStream(filename));
-                } catch (IOException unused2) {
-                    return null;
+
+            try (BufferedInputStream bufferedInputStream = new BufferedInputStream(assets.open(filename))) {
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                byte[] buffer = new byte[4096]; // Лучше использовать меньший размер буфера
+
+                int bytesRead;
+                while ((bytesRead = bufferedInputStream.read(buffer)) != -1) {
+                    byteArrayOutputStream.write(buffer, 0, bytesRead);
                 }
+
+                return byteArrayOutputStream.toByteArray();
+            } catch (IOException e) {
+                System.err.println("Error reading file " + filename + ": " + e.getMessage());
             }
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1048576);
-            final byte[] bArr = new byte[1048576];
-            while (true) {
-                try {
-                    try {
-                        int read = bufferedInputStream.read(bArr);
-                        if (read > 0) {
-                            byteArrayOutputStream.write(bArr, 0, read);
-                        }
-                    } catch (Throwable th) {
-                        try {
-                            bufferedInputStream.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        throw th;
-                    }
-                } catch (IOException unused4) {
-                    System.err.println("Cannot read from file " + filename);
-                }
-                break;
-            }
-            bufferedInputStream.close();
-        } catch (NullPointerException unused6) {
+        } catch (NullPointerException e) {
             System.err.println("getAssets threw NPE: Could not getFileDataBytes " + filename);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+
         return null;
     }
 
@@ -1272,7 +1255,6 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     }
 
     public long getDebugMemoryInfo(String statName) {
-        int totalPss;
         if (statName == null) {
             return 0L;
         }
@@ -1281,7 +1263,6 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
             Debug.getMemoryInfo(mCachedDebugMemoryInfo);
             mCachedDebugMemoryUpdateTime = uptimeMillis + 1000;
         }
-        statName.hashCode();
         char c = 65535;
         switch (statName.hashCode()) {
             case -785265396:
@@ -1303,6 +1284,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
                 }
                 break;
         }
+        int totalPss;
         switch (c) {
             case 0:
                 totalPss = mCachedDebugMemoryInfo.getTotalPss();
@@ -1354,11 +1336,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
         deviceManager.register();
         if (_fromOnCreate) {
             _fromOnCreate = false;
-            try {
-                processIntent(getIntent());
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            processIntent(getIntent());
         }
     }
 
@@ -1368,12 +1346,14 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
         super.onResume();
         registerReceiver(headsetConnectionReceiver, new IntentFilter("android.intent.action.HEADSET_PLUG"));
         if (isTextWidgetActive()) {
-            final String obj = textInputWidget.getText().toString();
-            final int i = textInputWidget.allowedLength;
-            final boolean z = (textInputWidget.getInputType() & 2) == 2;
-            final boolean z2 = (textInputWidget.getInputType() & 131072) == 131072;
+            final String text = textInputWidget.getText().toString();
+            final int allowedLength = textInputWidget.allowedLength;
+            final int inputType = textInputWidget.getInputType();
+
+            final boolean isNumberInput = (inputType & InputType.TYPE_CLASS_NUMBER) == 2;
+            final boolean isMultiline = (inputType & InputType.TYPE_TEXT_FLAG_MULTI_LINE) == 131072;
             dismissTextWidget();
-            showKeyboard(obj, i, false, z, z2);
+            showKeyboard(text, allowedLength, false, isNumberInput, isMultiline);
         }
         for (ActivityListener activityListener : mActivityListeners) {
             activityListener.onResume();
@@ -1438,6 +1418,8 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
         for (ActivityListener listener : new ArrayList<>(mActivityListeners)) {
             listener.onDestroy();
         }
+        removeListener(this.mFilePickerManager);
+        mInstance = null;
         nativeOnDestroy();
         super.onDestroy();
         System.exit(0);
@@ -1446,24 +1428,18 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     @Override
     public void onNewIntent(Intent intent) {
         setIntent(intent);
-        try {
-            processIntent(intent);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        processIntent(intent);
     }
 
-    private void processIntent(Intent intent) throws FileNotFoundException {
-        IOException e;
-        StringBuilder sb;
+    private void processIntent(Intent intent) {
         if (intent == null) {
             return;
         }
-        final String stringExtra = intent.getStringExtra("intent_cmd");
-        if (stringExtra != null && stringExtra.length() > 0) {
+        String stringExtra = intent.getStringExtra("intent_cmd");
+        if (stringExtra != null && !stringExtra.isEmpty()) {
             try {
-                final JSONObject jSONObject = new JSONObject(stringExtra);
-                final String string = jSONObject.getString("Command");
+                JSONObject jSONObject = new JSONObject(stringExtra);
+                String string = jSONObject.getString("Command");
                 if (string.equals("keyboardResult")) {
                     nativeSetTextboxText(jSONObject.getString("Text"));
                     return;
@@ -1478,15 +1454,14 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
                     mFileDialogCallback = 0L;
                     return;
                 }
-            } catch (JSONException e2) {
-                Log.d("ModdedPE", "JSONObject exception:" + e2);
+            } catch (JSONException e) {
+                Log.d("ModdedPE", "JSONObject exception:" + e);
                 return;
             }
         }
-        final String action = intent.getAction();
-        intent.getType();
+        String action = intent.getAction();
         if ("xbox_live_game_invite".equals(action)) {
-            final String stringExtra2 = intent.getStringExtra("xbl");
+            String stringExtra2 = intent.getStringExtra("xbl");
             Log.d("ModdedPE", "[XboxLive] Received Invite " + stringExtra2);
             nativeProcessIntentUriQuery(action, stringExtra2);
         } else if (!"android.intent.action.VIEW".equals(action) && !"org.chromium.arc.intent.action.VIEW".equals(action)) {
@@ -1497,58 +1472,66 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
                 return;
             }
             if ("minecraft".equalsIgnoreCase(scheme) || "minecraftedu".equalsIgnoreCase(scheme)) {
-                final String host = data.getHost();
-                final String query = data.getQuery();
+                String host = data.getHost();
+                String query = data.getQuery();
                 if (host == null && query == null) {
                     return;
                 }
                 nativeProcessIntentUriQuery(host, query);
             } else if ("file".equalsIgnoreCase(scheme)) {
-                nativeProcessIntentUriQuery("fileIntent", data.getPath() + SESSION_HISTORY_SEP + data.getPath());
+                nativeProcessIntentUriQuery("fileIntent", data.getPath() + "&" + data.getPath());
             } else if (!"content".equalsIgnoreCase(scheme)) {
             } else {
-                final String name = new File(data.getPath()).getName();
-                final File file = new File(getApplicationContext().getCacheDir() + "/" + name);
-                final InputStream openInputStream = getContentResolver().openInputStream(data);
+                String name = new File(data.getPath()).getName();
+                File file = new File(getApplicationContext().getCacheDir() + "/" + name);
                 try {
+                    InputStream openInputStream = getContentResolver().openInputStream(data);
                     try {
-                        final FileOutputStream fileOutputStream = new FileOutputStream(file);
-                        final byte[] bArr = new byte[1048576];
-                        while (true) {
-                            final int read = openInputStream.read(bArr);
-                            if (read != -1) {
-                                fileOutputStream.write(bArr, 0, read);
-                            } else {
-                                fileOutputStream.close();
-                                nativeProcessIntentUriQuery("contentIntent", data.getPath() + SESSION_HISTORY_SEP + file.getAbsolutePath());
-                                try {
-                                    openInputStream.close();
-                                    return;
-                                } catch (IOException e3) {
-                                    Log.e("ModdedPE", "IOException while closing input stream\n" + e3);
+                        try {
+                            FileOutputStream fileOutputStream = new FileOutputStream(file);
+                            byte[] bArr = new byte[1048576];
+                            while (true) {
+                                int read = openInputStream.read(bArr);
+                                if (read != -1) {
+                                    fileOutputStream.write(bArr, 0, read);
+                                } else {
+                                    fileOutputStream.close();
+                                    nativeProcessIntentUriQuery("contentIntent", data.getPath() + "&" + file.getAbsolutePath());
+                                    try {
+                                        openInputStream.close();
+                                        return;
+                                    } catch (IOException e) {
+                                        Log.e("ModdedPE", "IOException while closing input stream\n" + e.toString());
+                                    }
                                 }
                             }
+                        } catch (Throwable th) {
+                            try {
+                                openInputStream.close();
+                            } catch (IOException e3) {
+                                Log.e("ModdedPE", "IOException while closing input stream\n" + e3);
+                            }
+                            throw th;
                         }
                     } catch (IOException e4) {
                         Log.e("ModdedPE", "IOException while copying file from content intent\n" + e4);
-                        file.delete();
+                        try {
+                            file.delete();
+                        } catch (Exception unused) {
+                        }
                         try {
                             openInputStream.close();
-                        } catch (IOException e5) {
-                            Log.e("ModdedPE", "IOException while closing input stream\n" + e5);
+                        } catch (IOException e) {
+                            Log.e("ModdedPE", "IOException while closing input stream\n" + e.toString());
                         }
                     }
-                } catch (Throwable th) {
-                    try {
-                        openInputStream.close();
-                    } catch (IOException e6) {
-                        Log.e("ModdedPE", "IOException while closing input stream\n" + e6);
-                    }
-                    throw th;
+                } catch (IOException e) {
+                    Log.e("ModdedPE", "IOException while opening file from content intent\n" + e);
                 }
             }
         }
     }
+
 
     public boolean isFirstSnooperStart() {
         return PreferenceManager.getDefaultSharedPreferences(this).getString("snooperId", "").isEmpty();
@@ -1629,51 +1612,54 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
         for (ActivityListener activityListener : mActivityListeners) {
             activityListener.onActivityResult(requestCode, resultCode, intentData);
         }
-        if (resultCode == 0) {
+        if (resultCode == Activity.RESULT_CANCELED) {
             nativeOnPickFileCanceled();
             return;
         }
         if (requestCode != RESULT_PICK_IMAGE) {
             if (requestCode == SAVE_FILE_RESULT_CODE || requestCode == OPEN_FILE_RESULT_CODE) {
-                final boolean z = requestCode == OPEN_FILE_RESULT_CODE;
-                if (resultCode != RESULT_OK || intentData == null || intentData.getData() == null) {
+                boolean isWriting = requestCode == OPEN_FILE_RESULT_CODE;
+                if (resultCode != Activity.RESULT_OK || intentData == null || intentData.getData() == null) {
                     return;
                 }
                 try {
-                    final ParcelFileDescriptor parcelFileDescriptor = mPickedFileDescriptor;
+                    ParcelFileDescriptor parcelFileDescriptor = mPickedFileDescriptor;
                     if (parcelFileDescriptor != null) {
                         parcelFileDescriptor.close();
                     }
-                    mPickedFileDescriptor = getContentResolver().openFileDescriptor(intentData.getData(), z ? "r" : "w");
+                    mPickedFileDescriptor = getContentResolver().openFileDescriptor(intentData.getData(), isWriting ? "r" : "w");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                onPickFileSuccess(z);
+                onPickFileSuccess(isWriting);
             }
-        } else if (resultCode == RESULT_OK && intentData != null) {
-            final Uri data = intentData.getData();
+        } else if (resultCode == Activity.RESULT_OK && intentData != null) {
+            Uri data = intentData.getData();
             if (data != null) {
-                final String[] strArr = {"_data"};
-                final Cursor query = getContentResolver().query(data, strArr, null, null, null);
-                if (query != null) {
-                    query.moveToFirst();
-                    @SuppressLint("Range") String string = query.getString(query.getColumnIndex(strArr[0]));
-                    final long j = mCallback;
-                    if (j != 0) {
-                        nativeOnPickImageSuccess(j, string);
-                        mCallback = 0L;
+                String[] projection = {"_data"};
+                Cursor query = getContentResolver().query(data, projection, null, null, null);
+                if (query != null && query.moveToFirst()) {
+                    int columnIndex = query.getColumnIndex(projection[0]);
+                    if (columnIndex >= 0) {
+                        String filePath = query.getString(columnIndex);
+                        long callback = mCallback;
+                        if (callback != 0) {
+                            nativeOnPickImageSuccess(callback, filePath);
+                            mCallback = 0L;
+                        }
                     }
                     query.close();
                 }
             }
         } else {
-            final long j2 = mCallback;
-            if (j2 != 0) {
-                nativeOnPickImageCanceled(j2);
+            long callback = mCallback;
+            if (callback != 0) {
+                nativeOnPickImageCanceled(callback);
                 mCallback = 0L;
             }
         }
     }
+
 
     @Override
     public void startPickerActivity(Intent intent, int requestCode) {
@@ -1809,7 +1795,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     public boolean supportsSizeQuery(String path) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             try {
-                ((StorageManager) getApplicationContext().getSystemService(StorageManager.class)).getUuidForPath(new File(path));
+                getApplicationContext().getSystemService(StorageManager.class).getUuidForPath(new File(path));
                 return true;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -1821,7 +1807,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     public long getAllocatableBytes(String path) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             try {
-                final StorageManager storageManager = (StorageManager) getApplicationContext().getSystemService(StorageManager.class);
+                final StorageManager storageManager = getApplicationContext().getSystemService(StorageManager.class);
                 return storageManager.getAllocatableBytes(storageManager.getUuidForPath(new File(path)));
             } catch (IOException e) {
                 Log.e("ModdedPE", "IOException while attempting to get allocatable bytes\n" + e);

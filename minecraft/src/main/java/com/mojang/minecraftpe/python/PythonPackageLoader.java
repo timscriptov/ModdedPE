@@ -2,16 +2,10 @@ package com.mojang.minecraftpe.python;
 
 import android.content.res.AssetManager;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 import com.mojang.minecraftpe.utils.FileHelper;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 /**

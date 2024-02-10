@@ -3,7 +3,6 @@ package com.mojang.minecraftpe.input;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.hardware.input.InputManager;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

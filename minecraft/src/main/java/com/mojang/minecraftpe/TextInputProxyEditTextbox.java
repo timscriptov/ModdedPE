@@ -7,10 +7,8 @@ import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputConnectionWrapper;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatEditText;
-
 import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;

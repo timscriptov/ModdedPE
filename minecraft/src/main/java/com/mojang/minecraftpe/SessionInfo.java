@@ -3,7 +3,6 @@ package com.mojang.minecraftpe;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
-
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;

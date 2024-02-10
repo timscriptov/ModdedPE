@@ -2,7 +2,6 @@ package com.mojang.minecraftpe.Webview;
 
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-
 import com.mojang.minecraftpe.MainActivity;
 
 /**

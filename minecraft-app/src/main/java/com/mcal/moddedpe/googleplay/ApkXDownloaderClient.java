@@ -13,16 +13,8 @@ import android.os.storage.OnObbStateChangeListener;
 import android.os.storage.StorageManager;
 import android.provider.Settings;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
-
-import com.google.android.vending.expansion.downloader.DownloadProgressInfo;
-import com.google.android.vending.expansion.downloader.DownloaderClientMarshaller;
-import com.google.android.vending.expansion.downloader.DownloaderServiceMarshaller;
-import com.google.android.vending.expansion.downloader.Helpers;
-import com.google.android.vending.expansion.downloader.IDownloaderClient;
-import com.google.android.vending.expansion.downloader.IDownloaderService;
-import com.google.android.vending.expansion.downloader.IStub;
+import com.google.android.vending.expansion.downloader.*;
 import com.google.android.vending.licensing.AESObfuscator;
 import com.google.android.vending.licensing.APKExpansionPolicy;
 import com.google.android.vending.licensing.LicenseChecker;
@@ -40,11 +32,11 @@ public class ApkXDownloaderClient extends PackageSource implements IDownloaderCl
     private static String licenseKey;
     private static String notificationChannelId;
     private final MainActivity mActivity;
-    private IStub mDownloaderClientStub;
     private final PackageSourceListener mListener;
     private final NotificationManager mNotificationManager;
-    private IDownloaderService mRemoteService;
     private final StorageManager mStorageManager;
+    private IStub mDownloaderClientStub;
+    private IDownloaderService mRemoteService;
 
     public ApkXDownloaderClient(@NonNull MainActivity activity, String googlePlayLicenseKey, PackageSourceListener listener) {
         licenseKey = googlePlayLicenseKey;

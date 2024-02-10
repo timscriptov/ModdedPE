@@ -9,10 +9,8 @@ import com.mojang.minecraftpe.store.StoreListener;
  * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 public class GooglePlayStore implements Store {
-    static final String IAB_BROADCAST_ACTION = "com.android.vending.billing.PURCHASES_UPDATED";
     MainActivity mActivity;
     StoreListener mListener;
-    int mPurchaseRequestCode;
 
     public GooglePlayStore(MainActivity activity, String licenseKey, StoreListener listener) {
         mActivity = activity;
@@ -35,14 +33,12 @@ public class GooglePlayStore implements Store {
     }
 
     public void queryProducts(String[] productIds) {
-        System.out.println("GooglePlayStore: Query products");
     }
 
     public void acknowledgePurchase(String receipt, String productType) {
     }
 
     public void queryPurchases() {
-        System.out.println("GooglePlayStore: Query purchases");
     }
 
     public String getProductSkuPrefix() {
@@ -58,7 +54,6 @@ public class GooglePlayStore implements Store {
     }
 
     public void destructor() {
-        System.out.println("GooglePlayStore: Destructor");
     }
 
     public void purchase(String productId, boolean isSubscription, String payload) {

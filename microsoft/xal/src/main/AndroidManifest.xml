@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+
+        <activity
+            android:name="com.microsoft.xal.browser.IntentHandler"
+            android:configChanges="orientation"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorLandscape">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <data
+                    android:host="auth"
+                    android:scheme="@string/xal_token" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.microsoft.xal.browser.WebKitWebViewController"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
+            android:screenOrientation="sensorLandscape" />
+
+        <activity
+            android:name="com.microsoft.xal.browser.BrowserLaunchActivity"
+            android:configChanges="orientation"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorLandscape" />
+
+    </application>
+
+</manifest>

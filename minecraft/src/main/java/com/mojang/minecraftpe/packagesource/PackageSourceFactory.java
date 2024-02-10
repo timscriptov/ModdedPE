@@ -1,7 +1,6 @@
 package com.mojang.minecraftpe.packagesource;
 
 import androidx.annotation.NonNull;
-
 import org.jetbrains.annotations.Contract;
 
 /**

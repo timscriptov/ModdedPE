@@ -2,7 +2,6 @@ package com.mojang.minecraftpe.input;
 
 import android.content.Context;
 import android.util.Log;
-
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

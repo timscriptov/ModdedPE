@@ -3,11 +3,9 @@ package com.mojang.minecraftpe;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
-
 import com.mojang.minecraftpe.hardwareinfo.CPUCluster;
 import com.mojang.minecraftpe.hardwareinfo.CPUTopologyInfo;
 import com.mojang.minecraftpe.platforms.Platform;
-
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

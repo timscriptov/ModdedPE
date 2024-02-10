@@ -7,11 +7,8 @@ import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
 import androidx.annotation.RequiresApi;
-
 import com.mojang.minecraftpe.MainActivity;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

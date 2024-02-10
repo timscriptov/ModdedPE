@@ -1,10 +1,8 @@
 package com.mojang.minecraftpe;
 
 import android.util.Pair;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import org.apache.http.HttpResponse;
 import org.jetbrains.annotations.Contract;
 

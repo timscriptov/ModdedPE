@@ -1,8 +1,8 @@
 package com.mojang.minecraftpe;
 
-import static android.app.Activity.RESULT_OK;
-
 import android.content.Intent;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * 13.08.2022

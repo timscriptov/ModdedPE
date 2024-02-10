@@ -1,7 +1,6 @@
 package com.mojang.minecraftpe.input;
 
 import android.view.InputDevice;
-
 import androidx.core.view.InputDeviceCompat;
 
 import java.io.File;

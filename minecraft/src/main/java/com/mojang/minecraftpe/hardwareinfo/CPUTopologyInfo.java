@@ -1,20 +1,13 @@
 package com.mojang.minecraftpe.hardwareinfo;
 
 import android.util.Log;
-
 import androidx.annotation.NonNull;
-
 import org.jetbrains.annotations.Contract;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

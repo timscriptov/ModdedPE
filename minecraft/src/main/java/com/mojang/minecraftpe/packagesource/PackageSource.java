@@ -1,7 +1,6 @@
 package com.mojang.minecraftpe.packagesource;
 
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import java.util.EnumMap;

@@ -1,7 +1,6 @@
 package com.mojang.minecraftpe.store.amazonappstore;
 
 import android.content.Context;
-
 import com.mojang.minecraftpe.MainActivity;
 import com.mojang.minecraftpe.store.ExtraLicenseResponseData;
 import com.mojang.minecraftpe.store.Store;

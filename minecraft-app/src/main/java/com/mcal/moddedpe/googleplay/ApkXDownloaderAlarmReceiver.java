@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.util.Log;
-
 import com.google.android.vending.expansion.downloader.DownloaderClientMarshaller;
 
 public class ApkXDownloaderAlarmReceiver extends BroadcastReceiver {
