@@ -44,7 +44,6 @@
 -keep class org.fmod.FMOD { *; }
 
 -keep class com.mojang.minecraftpe.CrashManager { *; }
--keep class com.mojang.minecraftpe.ActiveDirectorySignIn { *; }
 -keep class com.mojang.minecraftpe.BatteryMonitor { *; }
 -keep class com.mojang.minecraftpe.HardwareInformation { *; }
 -keep class com.mojang.minecraftpe.MainActivity { *; }
