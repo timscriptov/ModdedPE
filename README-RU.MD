@@ -1,4 +1,5 @@
-[![License Info](https://img.shields.io/badge/license-GNU_GPLv3-blue.svg?style=flat-square)](https://github.com/TimScriptov/ModdedPE) [![](https://jitpack.io/v/TimScriptov/ModdedPE.svg)](https://jitpack.io/#TimScriptov/ModdedPE)
+[![License Info](https://img.shields.io/badge/license-GNU_GPLv3-blue.svg?style=flat-square)](https://github.com/TimScriptov/ModdedPE)
+
 # ModdedPE!
 ![logo][1]
 --------
