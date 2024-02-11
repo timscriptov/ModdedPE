@@ -54,7 +54,7 @@ public class HeaderFragment extends BaseFragment implements View.OnClickListener
         }
 
         @SuppressLint("WrongConstant")
-        public void onLoadFinished(Loader<BitmapLoader.Result> loader, BitmapLoader.@NotNull Result result) {
+        public void onLoadFinished(Loader<BitmapLoader.Result> loader, @NotNull BitmapLoader.Result result) {
             Log.d(HeaderFragment.TAG, "LOADER_USER_IMAGE_URL finished");
             if (result.hasData()) {
                 userImageView.setVisibility(0);
@@ -80,7 +80,7 @@ public class HeaderFragment extends BaseFragment implements View.OnClickListener
         }
 
         @SuppressLint("WrongConstant")
-        public void onLoadFinished(Loader<ObjectLoader.Result<UserAccount>> loader, ObjectLoader.@NotNull Result<UserAccount> result) {
+        public void onLoadFinished(Loader<ObjectLoader.Result<UserAccount>> loader, @NotNull ObjectLoader.Result<UserAccount> result) {
             Log.d(HeaderFragment.TAG, "LOADER_GET_PROFILE finished");
             if (result.hasData()) {
                 userEmail.setText(userAccount.email);

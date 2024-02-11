@@ -101,7 +101,7 @@ public class ThreadSafeFixedSizeHashtable<K, V> {
             index = i;
         }
 
-        public int compareTo(ThreadSafeFixedSizeHashtable<K, V>.@NotNull KeyTuple keyTuple) {
+        public int compareTo(@NotNull ThreadSafeFixedSizeHashtable<K, V>.KeyTuple keyTuple) {
             return index - keyTuple.index;
         }
 

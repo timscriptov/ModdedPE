@@ -52,7 +52,8 @@ public class XLERValueHelper {
         }
     }
 
-    public static int @Nullable [] getStyleableRValueArray(String str) {
+    @Nullable
+    public static int [] getStyleableRValueArray(String str) {
         try {
             return (int[]) getStyleableRClass().getDeclaredField(str).get(null);
         } catch (Exception unused) {

@@ -54,8 +54,7 @@ class BrowserLaunchActivity : AppCompatActivity() {
             mBrowserInfo = bundle.getString(BROWSER_INFO_STATE_KEY)
         } else if (extras != null) {
             mOperationId = extras.getLong(OPERATION_ID, 0L)
-            val parameters =
-                BrowserLaunchParameters.parameters(extras).also { mLaunchParameters = it }
+            val parameters = BrowserLaunchParameters.parameters(extras).also { mLaunchParameters = it }
             if (parameters != null && mOperationId != 0L) {
                 return
             }

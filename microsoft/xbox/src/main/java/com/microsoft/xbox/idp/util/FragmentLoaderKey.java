@@ -15,13 +15,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class FragmentLoaderKey implements Parcelable {
     public static final Parcelable.Creator<FragmentLoaderKey> CREATOR = new Parcelable.Creator<FragmentLoaderKey>() {
+        @NotNull
         @Contract("_ -> new")
-        public @NotNull FragmentLoaderKey createFromParcel(Parcel parcel) {
+        public FragmentLoaderKey createFromParcel(Parcel parcel) {
             return new FragmentLoaderKey(parcel);
         }
 
+        @NotNull
         @Contract(value = "_ -> new", pure = true)
-        public FragmentLoaderKey @NotNull [] newArray(int i) {
+        public FragmentLoaderKey [] newArray(int i) {
             return new FragmentLoaderKey[i];
         }
     };

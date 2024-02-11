@@ -27,10 +27,5 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-
-    //noinspection DuplicatePlatformClasses
     implementation(libs.httpclient)
-    implementation(libs.httpmime)
 }

@@ -19,7 +19,8 @@ import java.io.OutputStream;
  */
 
 public class StreamUtil {
-    public static byte @Nullable [] CreateByteArray(InputStream inputStream) {
+    @Nullable
+    public static byte [] CreateByteArray(InputStream inputStream) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try {
             CopyStream(byteArrayOutputStream, inputStream);
@@ -69,8 +70,9 @@ public class StreamUtil {
         } while (bufferedInputStream.read() != -1);
     }
 
+    @NotNull
     @Contract("null -> fail")
-    public static byte @NotNull [] HexStringToByteArray(String str) {
+    public static byte [] HexStringToByteArray(String str) {
         if (str != null) {
             if (str.length() % 2 != 0) {
                 str = "0" + str;

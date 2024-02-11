@@ -24,8 +24,7 @@ public class UserProfileData {
     public UserProfileData() {
     }
 
-    @Contract(pure = true)
-    public UserProfileData(IPeopleHubResult.@NotNull PeopleHubPersonSummary peopleHubPersonSummary) {
+    public UserProfileData(@NotNull IPeopleHubResult.PeopleHubPersonSummary peopleHubPersonSummary) {
         this.xuid = peopleHubPersonSummary.xuid;
         this.profileImageUrl = peopleHubPersonSummary.displayPicRaw;
         this.gamerTag = peopleHubPersonSummary.gamertag;

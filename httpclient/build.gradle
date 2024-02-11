@@ -1,11 +1,6 @@
 plugins {
     id("com.android.library")
-    id("kotlin-android")
-    id("maven-publish")
 }
-
-group = 'com.mcal'
-version = project.artifactVersion
 
 android {
     compileSdk project.compileSDK.toInteger()
@@ -31,47 +26,11 @@ android {
         abortOnError true
         disable 'MissingPermission', 'LongLogTag', 'DefaultLocale', 'UnusedResources', 'GradleDependency', 'GradleOverrides', 'OldTargetApi'
     }
-    namespace 'com.mcal.xbox'
+    namespace 'com.xbox.httpclient'
 }
 
 dependencies {
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.browser)
-
-    implementation(libs.firebase.messaging)
-    implementation(libs.firebase.iid)
-
-    implementation(libs.pkix)
-
-    implementation(libs.gson)
     implementation(libs.okhttp)
-    //noinspection DuplicatePlatformClasses
     implementation(libs.httpclient)
-    implementation(libs.httpmime)
-    implementation(libs.annotations)
     implementation(libs.androidx.annotation)
-    implementation(libs.simple.xml)
-
-    // Architectural Components
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.lifecycle.extensions)
-
-    runtimeOnly(libs.google.services)
-}
-
-afterEvaluate {
-    publishing {
-        publications {
-            // Creates a Maven publication called "release".
-            release(MavenPublication) {
-                from components.release
-                groupId = 'com.mcal'
-                artifactId = 'xbox'
-                version = project.artifactVersion
-            }
-        }
-    }
 }

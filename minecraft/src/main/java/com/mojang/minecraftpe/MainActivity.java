@@ -78,12 +78,6 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     private static boolean _isPowerVr = false;
     private static boolean mHasStoragePermission;
     final Messenger mMessenger = new Messenger(new IncomingHandler());
-    private final String mSentryEndpointConfigUrl = "https://sentry.io";
-    private final SentryEndpointConfig mSentryEndpointBedrockPublish = new SentryEndpointConfig("https://sentry.io", "2277697", "1c3f5cbd723a4a84879059d260b19ef6");
-    private final SentryEndpointConfig mSentryEndpointBedrockRelease = new SentryEndpointConfig(this.mSentryEndpointConfigUrl, "2277697", "d49eacb334d847599b87629a6ff2ef3b");
-    private final SentryEndpointConfig mSentryEndpointAndroidTrial = new SentryEndpointConfig(this.mSentryEndpointConfigUrl, "2308440", "668bc09f7bcf461796ea07c1006076fe");
-    private final SentryEndpointConfig mSentryEndpointAndroidAmazon = new SentryEndpointConfig(this.mSentryEndpointConfigUrl, "5885058", "c218789c079e41128de0b1892bcc738f");
-    private final SentryEndpointConfig mSentryEndpointEDU = new SentryEndpointConfig("https://o339720.ingest.sentry.io", "5242741", "0d409f4cd2f64aa3a686a1b5193a4bf9");
     private final ArrayList<StringValue> _userInputValues = new ArrayList<>();
     public int mLastPermissionRequestReason;
     public ParcelFileDescriptor mPickedFileDescriptor;
@@ -139,7 +133,6 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     private long mFileDialogCallback = 0;
     private float mVolume = 1.0f;
     private boolean mIsRunningInAppCenter = false;
-    private CrashManager mCrashManager = null;
     private FilePickerManager mFilePickerManager = null;
     private WorldRecovery mWorldRecovery = null;
     private WifiManager mWifiManager = null;
@@ -391,22 +384,10 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     }
 
     public CrashManager initializeCrashManager(String crashDumpFolder, String sessionId) {
-        SentryEndpointConfig sentryEndpointConfig;
-        if (isAndroidTrial()) {
-            sentryEndpointConfig = mSentryEndpointAndroidTrial;
-        } else if (isAndroidAmazon()) {
-            sentryEndpointConfig = mSentryEndpointAndroidAmazon;
-        } else if (isEduMode()) {
-            sentryEndpointConfig = mSentryEndpointEDU;
-        } else if (isPublishBuild()) {
-            sentryEndpointConfig = mSentryEndpointBedrockPublish;
-        } else {
-            sentryEndpointConfig = mSentryEndpointBedrockRelease;
-        }
-        final CrashManager crashManager = new CrashManager(crashDumpFolder, sessionId, sentryEndpointConfig);
-        mCrashManager = crashManager;
-        crashManager.installGlobalExceptionHandler();
-        return mCrashManager;
+        return new CrashManager();
+    }
+
+    public void initializeCrashManager() {
     }
 
     @SuppressLint("ResourceType")

@@ -86,7 +86,6 @@ public class FollowersData implements Serializable {
         }
     }
 
-    @Contract(pure = true)
     public FollowersData(@NotNull FollowersData followersData) {
         this.personSummary = null;
         this.isCurrentlyPlaying = false;

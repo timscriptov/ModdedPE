@@ -31,11 +31,6 @@ android {
 
 dependencies {
     implementation(project(":licensing"))
-
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-
-    //noinspection DuplicatePlatformClasses
+    implementation(libs.androidx.annotation)
     implementation(libs.httpclient)
-    implementation(libs.httpmime)
 }

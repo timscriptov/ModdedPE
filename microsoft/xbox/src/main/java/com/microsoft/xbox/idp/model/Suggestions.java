@@ -25,13 +25,15 @@ public class Suggestions {
 
     public static class Response implements Parcelable {
         public static final Parcelable.Creator<Response> CREATOR = new Parcelable.Creator<Response>() {
+            @NotNull
             @Contract("_ -> new")
-            public @NotNull Response createFromParcel(Parcel parcel) {
+            public Response createFromParcel(Parcel parcel) {
                 return new Response(parcel);
             }
 
+            @NotNull
             @Contract(value = "_ -> new", pure = true)
-            public Response @NotNull [] newArray(int i) {
+            public Response [] newArray(int i) {
                 return new Response[i];
             }
         };

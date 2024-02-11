@@ -251,7 +251,7 @@ public class JavaUtil {
         return sb3.toString();
     }
 
-    public static @NotNull String concatenateStringsWithDelimiter(String str, boolean z, String @NotNull ... strArr) {
+    public static @NotNull String concatenateStringsWithDelimiter(String str, boolean z, @NotNull String ... strArr) {
         StringBuilder sb = new StringBuilder();
         sb.append(z ? " " : "");
         sb.append(str);

@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class HttpUtil {
 
-    public static Uri.Builder getImageSizeUrlParams(Uri.@NotNull Builder builder, @NotNull ImageSize imageSize) {
+    public static Uri.Builder getImageSizeUrlParams(@NotNull Uri.Builder builder, @NotNull ImageSize imageSize) {
         return builder.appendQueryParameter("w", Integer.toString(imageSize.w)).appendQueryParameter("h", Integer.toString(imageSize.h));
     }
 

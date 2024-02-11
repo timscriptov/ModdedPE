@@ -1,11 +1,7 @@
 plugins {
     id("com.android.library")
-    id("kotlin-android")
-    id("maven-publish")
+    id("org.jetbrains.kotlin.android")
 }
-
-group = 'com.mcal'
-version = project.artifactVersion
 
 android {
     compileSdk project.compileSDK.toInteger()
@@ -22,9 +18,6 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = '17'
     }
     lint {
         abortOnError true
@@ -44,27 +37,4 @@ dependencies {
 
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.iid)
-
-    implementation(libs.gson)
-    implementation(libs.annotations)
-    implementation(libs.androidx.annotation)
-    //noinspection DuplicatePlatformClasses
-    implementation(libs.httpclient)
-    implementation(libs.httpmime)
-
-    runtimeOnly(libs.google.services)
-}
-
-afterEvaluate {
-    publishing {
-        publications {
-            // Creates a Maven publication called "release".
-            release(MavenPublication) {
-                from components.release
-                groupId = 'com.mcal'
-                artifactId = 'minecraft'
-                version = project.artifactVersion
-            }
-        }
-    }
 }

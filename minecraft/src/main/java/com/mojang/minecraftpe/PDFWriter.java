@@ -11,7 +11,6 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import androidx.core.view.ViewCompat;
 import com.mojang.minecraftpe.utils.FileHelper;
-import org.apache.http.HttpStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,7 +33,7 @@ public class PDFWriter {
         mTitleRect.offset(0, (int) (((float) mPageRect.height()) * 0.3f));
         mTextRect = new Rect(mPageRect);
         mTextRect.inset(20, 20);
-        mImageRect = new Rect(0, 0, HttpStatus.SC_INTERNAL_SERVER_ERROR, HttpStatus.SC_INTERNAL_SERVER_ERROR);
+        mImageRect = new Rect(0, 0, 500, 500);
         mImageRect.offset(mPageRect.centerX() - mImageRect.centerX(), mPageRect.centerY() - mImageRect.centerY());
         Typeface titleFont = Typeface.DEFAULT_BOLD;
         try {

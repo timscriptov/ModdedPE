@@ -241,7 +241,7 @@ public class SLSXsapiServiceManager implements ISLSServiceManager {
         return responseSyncSucceeded;
     }
 
-    public PrivacySettings.PrivacySetting getPrivacySetting(PrivacySettings.@NotNull PrivacySettingId privacySettingId) throws XLEException {
+    public PrivacySettings.PrivacySetting getPrivacySetting(@NotNull PrivacySettings.PrivacySettingId privacySettingId) throws XLEException {
         Log.i(TAG, "getPrivacySetting");
         XLEAssert.assertTrue(Thread.currentThread() != ThreadManager.UIThread);
         PrivacySettings.PrivacySetting privacySetting = TcuiHttpUtil.getResponseSync(HttpUtil.appendCommonParameters(new HttpCall(HttpGet.METHOD_NAME, String.format(XboxLiveEnvironment.Instance().getProfileSettingUrlFormat(), privacySettingId.name()), ""), "4"), PrivacySettings.PrivacySetting.class);

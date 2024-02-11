@@ -25,13 +25,15 @@ import org.jetbrains.annotations.Nullable;
 
 public final class ErrorHelper implements Parcelable {
     public static final Parcelable.Creator<ErrorHelper> CREATOR = new Parcelable.Creator<ErrorHelper>() {
+        @NotNull
         @Contract("_ -> new")
-        public @NotNull ErrorHelper createFromParcel(Parcel parcel) {
+        public ErrorHelper createFromParcel(Parcel parcel) {
             return new ErrorHelper(parcel);
         }
 
+        @NotNull
         @Contract(value = "_ -> new", pure = true)
-        public ErrorHelper @NotNull [] newArray(int i) {
+        public ErrorHelper [] newArray(int i) {
             return new ErrorHelper[i];
         }
     };
@@ -71,7 +73,7 @@ public final class ErrorHelper implements Parcelable {
         this.activityContext = activityContext2;
     }
 
-    public void startErrorActivity(ErrorActivity.@NotNull ErrorScreen errorScreen) {
+    public void startErrorActivity(@NotNull ErrorActivity.ErrorScreen errorScreen) {
         Intent intent = new Intent(this.activityContext.getActivity(), ErrorActivity.class);
         intent.putExtra(ErrorActivity.ARG_ERROR_TYPE, errorScreen.type.getId());
         this.activityContext.startActivityForResult(intent, 63);

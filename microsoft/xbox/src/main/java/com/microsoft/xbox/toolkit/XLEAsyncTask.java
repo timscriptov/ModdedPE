@@ -27,7 +27,7 @@ public abstract class XLEAsyncTask<Result> {
         };
     }
 
-    public static void executeAll(XLEAsyncTask @NotNull ... xLEAsyncTaskArr) {
+    public static void executeAll(@NotNull XLEAsyncTask ... xLEAsyncTaskArr) {
         if (xLEAsyncTaskArr.length > 0) {
             int i = 0;
             while (i < xLEAsyncTaskArr.length - 1) {

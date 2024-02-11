@@ -28,7 +28,7 @@ public class XLETextTask extends AsyncTask<XLETextArg, Void, Bitmap> {
         this.imgHeight = imageView.getHeight();
     }
 
-    public Bitmap doInBackground(XLETextArg @NotNull ... xLETextArgArr) {
+    public Bitmap doInBackground(@NotNull XLETextArg ... xLETextArgArr) {
         int i;
         int i2;
         if (xLETextArgArr.length <= 0) {
