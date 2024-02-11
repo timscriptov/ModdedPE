@@ -1,6 +1,7 @@
 package com.mcal.moddedpe
 
 import android.os.Bundle
+import android.view.KeyEvent
 import com.mcal.moddedpe.task.CustomServers
 import com.mcal.moddedpe.task.MapsInstaller
 import com.mcal.moddedpe.task.NativeInstaller
@@ -17,6 +18,15 @@ class GameActivity : MainActivity() {
         patchNativeLibraryDir()
         loadLibraries()
         super.onCreate(savedInstanceState)
+    }
+
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if(nativeKeyHandler(event.keyCode, event.action)) {
+            if(event.action == KeyEvent.ACTION_DOWN) {
+                //
+            }
+        }
+        return super.dispatchKeyEvent(event)
     }
 
     private fun patchNativeLibraryDir() {

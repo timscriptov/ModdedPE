@@ -237,7 +237,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
 
     native long nativeInitializeXboxLive(long xalInitArgs, long xblInitArgs);
 
-    native boolean nativeKeyHandler(final int keycode, final int action);
+    public native boolean nativeKeyHandler(final int keycode, final int action);
 
     native void nativeOnDestroy();
 

@@ -276,7 +276,7 @@ public class ApkXDownloaderClient extends PackageSource implements IDownloaderCl
                     }
                     int startDownloadServiceIfRequired = DownloaderClientMarshaller.startDownloadServiceIfRequired(mActivity, PendingIntent.getActivity(mActivity, 0, intent2, PendingIntent.FLAG_IMMUTABLE), ApkXDownloaderService.class);
                     mListener.onDownloadStarted();
-                    Log.i(ApkXDownloaderClient.LOG_TAG, String.format("launchDownloader - startResult %d", Integer.valueOf(startDownloadServiceIfRequired)));
+                    Log.i(ApkXDownloaderClient.LOG_TAG, String.format("launchDownloader - startResult %d", startDownloadServiceIfRequired));
                     if (startDownloadServiceIfRequired == 0) {
                         mListener.onDownloadStateChanged(false, false, false, true, false, 0, 0);
                     }

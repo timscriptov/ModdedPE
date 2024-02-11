@@ -10,8 +10,7 @@ class CustomServers(
     private val context: Context
 ) {
     fun install() {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        if (sharedPreferences.getBoolean("added_custom_servers", true)) {
+        if (isAddedServers()) {
             val arraySet = mutableSetOf(
                 ":§l§a#1 Сервер (RU):s46.minesrv.ru:19132:1568120063",
                 ":§l§a#2 Сервер (RU):s47.minesrv.ru:19132:1568120044",
@@ -57,10 +56,20 @@ class CustomServers(
                         }
                     }
                 }
-                sharedPreferences.edit().putBoolean("added_custom_servers", false).apply()
+                setAddedServers(false)
             } catch (e: IOException) {
                 Log.e("ModdedPE", "IOException while creating file: $e")
             }
         }
+    }
+
+    private fun isAddedServers(): Boolean {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        return sharedPreferences.getBoolean("added_custom_servers", true)
+    }
+
+    private fun setAddedServers(mode: Boolean) {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        sharedPreferences.edit().putBoolean("added_custom_servers", mode).apply()
     }
 }
