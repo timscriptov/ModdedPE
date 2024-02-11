@@ -29,6 +29,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.appcompat)
+    implementation(libs.material)
 
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.iid)
