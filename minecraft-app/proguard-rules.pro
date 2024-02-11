@@ -1,8 +1,8 @@
 -keepattributes SourceFile, LineNumberTable
 -renamesourcefileattribute
 
-#-dontoptimize
-#-dontshrink
+-dontoptimize
+-dontshrink
 
 #-obfuscationdictionary proguard-dictionary.txt
 #-packageobfuscationdictionary proguard-dictionary.txt
@@ -90,3 +90,12 @@
 -dontwarn org.ietf.jgss.GSSManager
 -dontwarn org.ietf.jgss.GSSName
 -dontwarn org.ietf.jgss.Oid
+-dontwarn javax.naming.Binding
+-dontwarn javax.servlet.ServletContextEvent
+-dontwarn javax.servlet.ServletContextListener
+-dontwarn org.apache.avalon.framework.logger.Logger
+-dontwarn org.apache.log.Hierarchy
+-dontwarn org.apache.log.Logger
+-dontwarn org.apache.log4j.Level
+-dontwarn org.apache.log4j.Logger
+-dontwarn org.apache.log4j.Priority
