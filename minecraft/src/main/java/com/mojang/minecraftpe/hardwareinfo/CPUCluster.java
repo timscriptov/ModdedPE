@@ -43,7 +43,7 @@ public class CPUCluster implements Comparable<CPUCluster> {
     }
 
     public int[] getCPUIds() {
-        return (int[]) cpuIds.clone();
+        return cpuIds.clone();
     }
 
     public int getClusterCoreCount() {
@@ -52,7 +52,7 @@ public class CPUCluster implements Comparable<CPUCluster> {
 
     public SystemCPU[] getCPUArray() {
         Set<SystemCPU> set = clusterCPUs;
-        return (SystemCPU[]) set.toArray(new SystemCPU[set.size()]);
+        return set.toArray(new SystemCPU[set.size()]);
     }
 
     public long getMinFreq() {

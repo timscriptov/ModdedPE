@@ -18,8 +18,6 @@ package com.mcal.pesdk.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
-import com.mcal.pesdk.utils.ABIInfo.ABI
 import java.io.File
 import java.io.FileOutputStream
 import java.util.zip.ZipEntry
@@ -43,7 +41,7 @@ class SplitParser(private var context: Context) {
      * Извлечение C++ библиотек из Minecraft
      */
     fun parseMinecraft() {
-        val abi = "/lib/$ABI"
+        val abi = "/lib/${ABIInfo.getABI()}"
         val abiPath = File(context.cacheDir.path + abi)
         if (!abiPath.exists()) abiPath.mkdirs()
         try {

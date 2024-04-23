@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.text.Html
 import android.text.Spanned
 import android.view.KeyEvent
+import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.moddedpe.task.CustomServers
 import com.mcal.moddedpe.task.MapsInstaller
@@ -31,8 +32,10 @@ class GameActivity : MainActivity() {
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         if (nativeKeyHandler(event.keyCode, event.action)) {
-            if (event.action == KeyEvent.ACTION_DOWN) {
-                //
+            when (event.action) {
+                KeyEvent.ACTION_DOWN -> {
+                    //
+                }
             }
         }
         return super.dispatchKeyEvent(event)
@@ -89,7 +92,7 @@ class GameActivity : MainActivity() {
     }
 
     private fun getPreferences(): SharedPreferences {
-        return getSharedPreferences("preferences", 0)
+        return PreferenceManager.getDefaultSharedPreferences(this)
     }
 
     private fun isAgreePrivacyPolice(): Boolean {

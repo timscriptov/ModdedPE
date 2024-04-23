@@ -26,8 +26,10 @@
         <item>^1[.]19[.]20[.]02</item>
         <item>^1[.]19[.]30[.]22</item>
         <item>^1[.]19[.]71[.]02</item>
-        <item>^1.20.0.01</item -->
-        <item>^1.20.51.01</item>
+        <item>^1[.]20[.]0[.]01</item -->
+        <item>^1[.]20[.]51[.]01</item>
+        <item>^1[.]20[.]60[.]04</item>
+        <item>^1[.]20[.]73[.]01</item>
     </string-array>
 
     <string name="app_name" translatable="false">ModdedPE</string>

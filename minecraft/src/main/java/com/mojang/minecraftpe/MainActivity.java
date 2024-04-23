@@ -191,6 +191,10 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
 
     native boolean isAndroidAmazon();
 
+    native void nativeSetIntegrityToken(String integrityToken);
+
+    native void nativeSetIntegrityTokenErrorMessage(String errorMessage);
+
     native boolean isAndroidTrial();
 
     native boolean isBrazeEnabled();

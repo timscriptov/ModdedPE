@@ -49,40 +49,32 @@ object LibraryLoader {
     @JvmStatic
     @SuppressLint("UnsafeDynamicallyLoadedCode")
     fun loadFMod(mcLibsPath: String) {
-        try {
+        runCatching {
             System.load(File(mcLibsPath, "libfmod.so").absolutePath)
-        } catch (e: UnsatisfiedLinkError) {
-            e.printStackTrace()
         }
     }
 
     @JvmStatic
     @SuppressLint("UnsafeDynamicallyLoadedCode")
     fun loadMediaDecoders(mcLibsPath: String) {
-        try {
+        runCatching {
             System.load(File(mcLibsPath, "libMediaDecoders_Android.so").absolutePath)
-        } catch (e: UnsatisfiedLinkError) {
-            e.printStackTrace()
         }
     }
 
     @JvmStatic
     @SuppressLint("UnsafeDynamicallyLoadedCode")
     fun loadMinecraftPE(mcLibsPath: String) {
-        try {
+        runCatching {
             System.load(File(mcLibsPath, "libminecraftpe.so").absolutePath)
-        } catch (e: UnsatisfiedLinkError) {
-            e.printStackTrace()
         }
     }
 
     @JvmStatic
     @SuppressLint("UnsafeDynamicallyLoadedCode")
     fun loadCppShared(mcLibsPath: String) {
-        try {
+        runCatching {
             System.load(File(mcLibsPath, "libc++_shared.so").absolutePath)
-        } catch (e: UnsatisfiedLinkError) {
-            e.printStackTrace()
         }
     }
 

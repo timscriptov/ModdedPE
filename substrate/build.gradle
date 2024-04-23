@@ -4,7 +4,7 @@ plugins {
 
 android {
     compileSdk project.compileSDK.toInteger()
-    ndkVersion '24.0.8215888'
+    ndkVersion '26.1.10909125'
     defaultConfig {
         minSdk project.minSDK.toInteger()
         targetSdk project.targetSDK.toInteger()
