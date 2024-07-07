@@ -213,7 +213,7 @@ class WebKitWebViewController : AppCompatActivity() {
         const val REQUEST_HEADER_KEYS = "REQUEST_HEADER_KEYS"
         const val REQUEST_HEADER_VALUES = "REQUEST_HEADER_VALUES"
         const val RESPONSE_KEY = "RESPONSE"
-        const val RESULT_FAILED = 8054
+        const val RESULT_FAILED = 8052
         const val SHOW_TYPE = "SHOW_TYPE"
         const val START_URL = "START_URL"
     }

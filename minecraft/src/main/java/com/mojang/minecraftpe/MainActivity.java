@@ -143,6 +143,9 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
 
     private NetworkMonitor mNetworkMonitor;
 
+    private void assertIsMainThread() {
+    }
+
     private static native void nativeWaitCrashManagementSetupComplete();
 
     public static boolean isPowerVR() {
@@ -201,10 +204,6 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
 
     public boolean isBrazeSDKDisabled() {
         return true;
-    }
-
-    public boolean getIsRunningInAppCenter() {
-        return this.mIsRunningInAppCenter;
     }
 
     protected boolean isDemo() {
@@ -1727,6 +1726,14 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
         return isTestInfrastructureDisabled() ? "" : nativeGetLogText(fileInfo);
     }
 
+    public boolean getIsRunningInAppCenter() {
+        return mIsRunningInAppCenter;
+    }
+
+    public boolean getIsRunningInBrowserStack() {
+        return getIntent().getBooleanExtra("IS_BROWSERSTACK", false);
+    }
+
     public boolean isTTSInstalled() {
         for (AccessibilityServiceInfo accessibilityServiceInfo : ((AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE)).getInstalledAccessibilityServiceList()) {
             if ((accessibilityServiceInfo.feedbackType & 1) != 0) {
@@ -1738,7 +1745,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
 
     public boolean isTTSEnabled() {
         final Context applicationContext = getApplicationContext();
-        if (isTestInfrastructureDisabled() || !this.mIsRunningInAppCenter) {
+        if (isTestInfrastructureDisabled() || !mIsRunningInAppCenter) {
             final AccessibilityManager accessibilityManager;
             return applicationContext != null && (accessibilityManager = (AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE)) != null && accessibilityManager.isEnabled() && !accessibilityManager.getEnabledAccessibilityServiceList(1).isEmpty();
         }
@@ -1833,9 +1840,6 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
 
     @SuppressLint("HandlerLeak")
     class IncomingHandler extends Handler {
-        IncomingHandler() {
-        }
-
         @Override
         public void handleMessage(@NonNull Message msg) {
             if (msg.what == MainActivity.MSG_CORRELATION_RESPONSE) {
@@ -1868,12 +1872,9 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     }
 
     private class HeadsetConnectionReceiver extends BroadcastReceiver {
-        private HeadsetConnectionReceiver() {
-        }
-
         @Override
         public void onReceive(Context context, @NonNull Intent intent) {
-            if (intent.getAction().equals("android.intent.action.HEADSET_PLUG")) {
+            if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
                 final int intExtra = intent.getIntExtra("state", -1);
                 if (intExtra == 0) {
                     Log.d("ModdedPE", "Headset unplugged");

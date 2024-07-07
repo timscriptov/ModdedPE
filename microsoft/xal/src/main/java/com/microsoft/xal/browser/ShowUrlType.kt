@@ -24,7 +24,10 @@ import org.jetbrains.annotations.Contract
  * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 enum class ShowUrlType {
-    Normal, CookieRemoval, CookieRemovalSkipIfSharedCredentials, NonAuthFlow;
+    Normal,
+    CookieRemoval,
+    CookieRemovalSkipIfSharedCredentials,
+    NonAuthFlow;
 
     companion object {
         @JvmStatic
@@ -42,6 +45,25 @@ enum class ShowUrlType {
             return if (value != 3) {
                 null
             } else NonAuthFlow
+        }
+    }
+
+    override fun toString(): String {
+        val i = entries[ordinal].ordinal
+        return if (i != 1) {
+            if (i != 2) {
+                if (i != 3) {
+                    if (i != 4) {
+                        "Unknown"
+                    } else {
+                        "NonAuthFlow"
+                    }
+                } else {
+                    "CookieRemovalSkipIfSharedCredentials"
+                }
+            } else "CookieRemoval"
+        } else {
+            "Normal"
         }
     }
 }

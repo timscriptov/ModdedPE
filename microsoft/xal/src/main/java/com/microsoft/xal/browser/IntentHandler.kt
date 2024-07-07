@@ -28,10 +28,10 @@ import androidx.appcompat.app.AppCompatActivity
 class IntentHandler : AppCompatActivity() {
     public override fun onCreate(bundle: Bundle?) {
         super.onCreate(bundle)
-        startActivity(Intent(this, BrowserLaunchActivity::class.java).apply {
-            data = intent.data
-            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        })
+        val intent = Intent(this, BrowserLaunchActivity::class.java)
+        intent.data = intent.data
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity(intent)
         finish()
     }
 }

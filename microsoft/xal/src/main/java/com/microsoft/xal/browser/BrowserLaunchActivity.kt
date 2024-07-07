@@ -20,10 +20,12 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import com.microsoft.xal.browser.BrowserSelector.selectBrowser
 import com.microsoft.xal.browser.ShowUrlType.Companion.fromInt
+
 
 /**
  * 13.08.2022
@@ -41,6 +43,7 @@ class BrowserLaunchActivity : AppCompatActivity() {
         super.onCreate(bundle)
         val extras = intent.extras
         if (!checkNativeCodeLoaded()) {
+            Log.e(TAG, "onCreate() Called while XAL not loaded. Dropping flow and starting app's main activity.")
             startActivity(
                 applicationContext.packageManager.getLaunchIntentForPackage(
                     applicationContext.packageName
@@ -48,21 +51,27 @@ class BrowserLaunchActivity : AppCompatActivity() {
             )
             finish()
         } else if (bundle != null) {
+            Log.e(TAG, "onCreate() Recreating with saved state.")
             mOperationId = bundle.getLong(OPERATION_ID_STATE_KEY)
             mCustomTabsInProgress = bundle.getBoolean(CUSTOM_TABS_IN_PROGRESS_STATE_KEY)
             mSharedBrowserUsed = bundle.getBoolean(SHARED_BROWSER_USED_STATE_KEY)
             mBrowserInfo = bundle.getString(BROWSER_INFO_STATE_KEY)
         } else if (extras != null) {
+            Log.e(TAG, "onCreate() Created with intent args. Starting auth session.")
             mOperationId = extras.getLong(OPERATION_ID, 0L)
-            val parameters = BrowserLaunchParameters.parameters(extras).also { mLaunchParameters = it }
-            if (parameters != null && mOperationId != 0L) {
+            val parameters = BrowserLaunchParameters.parameters(extras)
+            mLaunchParameters = parameters
+            if (parameters == null || mOperationId == 0L) {
+                Log.e(TAG, "onCreate() Found invalid args, failing operation.")
+                finishOperation(WebResult.FAIL, null);
                 return
             }
-            finishOperation(WebResult.FAIL, null)
         } else if (intent.data != null) {
+            Log.e(TAG, "onCreate() Unexpectedly created with intent data. Finishing with failure.")
             setResult(RESULT_FAILED)
             finishOperation(WebResult.FAIL, null)
         } else {
+            Log.e(TAG, "onCreate() Unexpectedly created, reason unknown. Finishing with failure.")
             setResult(RESULT_FAILED)
             finishOperation(WebResult.FAIL, null)
         }
@@ -70,52 +79,64 @@ class BrowserLaunchActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        Log.e(TAG, "onResume()");
         val z = mCustomTabsInProgress
         val browserLaunchParameters = mLaunchParameters
         if (!z && browserLaunchParameters != null) {
+            Log.e(TAG, "onResume() Resumed with launch parameters. Starting auth session.")
             mLaunchParameters = null
             startAuthSession(browserLaunchParameters)
-        } else if (z) {
+            return
+        }
+        if (z) {
             mCustomTabsInProgress = false
             val data = intent.data
             if (data != null) {
+                Log.e(TAG, "onResume() Resumed with intent data. Finishing operation successfully.")
                 finishOperation(WebResult.SUCCESS, data.toString())
                 return
+            } else {
+                Log.e(TAG, "onResume() Resumed with no intent data. Canceling operation.")
+                finishOperation(WebResult.CANCEL, null)
+                return
             }
-            finishOperation(WebResult.CANCEL, null)
         }
+        Log.e(TAG, "onResume() No action to take. This shouldn't happen.")
     }
 
     override fun onSaveInstanceState(bundle: Bundle) {
         super.onSaveInstanceState(bundle)
-        bundle.apply {
-            putLong(OPERATION_ID_STATE_KEY, mOperationId)
-            putBoolean(CUSTOM_TABS_IN_PROGRESS_STATE_KEY, mCustomTabsInProgress)
-            putBoolean(SHARED_BROWSER_USED_STATE_KEY, mSharedBrowserUsed)
-            putString(BROWSER_INFO_STATE_KEY, mBrowserInfo)
-        }
+        Log.e(TAG, "onSaveInstanceState() Preserving state.")
+        bundle.putLong(OPERATION_ID_STATE_KEY, mOperationId)
+        bundle.putBoolean(CUSTOM_TABS_IN_PROGRESS_STATE_KEY, mCustomTabsInProgress)
+        bundle.putBoolean(SHARED_BROWSER_USED_STATE_KEY, mSharedBrowserUsed)
+        bundle.putString(BROWSER_INFO_STATE_KEY, mBrowserInfo)
     }
 
     public override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        Log.e(TAG, "onNewIntent() Received intent.")
         setIntent(intent)
     }
 
     @Deprecated("Deprecated in Java")
     public override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
+        Log.e(TAG, "onActivityResult() Result received.")
         if (requestCode == WEB_KIT_WEB_VIEW_REQUEST) {
             if (resultCode == RESULT_OK) {
-                intent?.extras?.getString(WebKitWebViewController.RESPONSE_KEY, "")
-                    ?.takeIf {
-                        it.isNotEmpty()
-                    }?.let {
-                        finishOperation(WebResult.SUCCESS, it)
-                        return
-                    }
+                val response = intent?.extras?.getString(WebKitWebViewController.RESPONSE_KEY, "")
+                if (response.isNullOrEmpty()) {
+                    Log.e(TAG, "onActivityResult() Invalid final URL received from web view.")
+                } else {
+                    finishOperation(WebResult.SUCCESS, response)
+                    return
+                }
             } else if (resultCode == RESULT_CANCELED) {
                 finishOperation(WebResult.CANCEL, null)
                 return
+            } else if (resultCode == 8054) {
+                Log.w(TAG, "onActivityResult() Unrecognized result code received from web view: $resultCode")
             }
             finishOperation(WebResult.FAIL, null)
         }
@@ -123,40 +144,51 @@ class BrowserLaunchActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.w(TAG, "onDestroy()")
         if (!isFinishing || mOperationId == 0L) {
             return
         }
+        Log.w(TAG, "onDestroy() Activity is finishing with operation in progress, canceling.")
         finishOperation(WebResult.CANCEL, null)
     }
 
     private fun startAuthSession(browserLaunchParameters: BrowserLaunchParameters) {
-        val selectBrowser =
-            selectBrowser(applicationContext, browserLaunchParameters.UseInProcBrowser)
+        val selectBrowser = selectBrowser(applicationContext, browserLaunchParameters.useInProcBrowser)
         mBrowserInfo = selectBrowser.toString()
+        Log.i(TAG, "startAuthSession() Set browser info: $mBrowserInfo")
+        Log.i(
+            TAG,
+            "startAuthSession() Starting auth session for ShowUrlType: " + browserLaunchParameters.showType.toString()
+        );
         val packageName = selectBrowser.packageName()
         if (packageName == null) {
+            Log.i(TAG, "startAuthSession() BrowserSelector returned null package name. Choosing WebKit strategy.")
             startWebView(
-                browserLaunchParameters.StartUrl,
-                browserLaunchParameters.EndUrl,
-                browserLaunchParameters.ShowType,
-                browserLaunchParameters.RequestHeaderKeys,
-                browserLaunchParameters.RequestHeaderValues
+                browserLaunchParameters.startUrl,
+                browserLaunchParameters.endUrl,
+                browserLaunchParameters.showType,
+                browserLaunchParameters.requestHeaderKeys,
+                browserLaunchParameters.requestHeaderValues
             )
-            return
+        } else {
+            Log.i(
+                TAG,
+                "startAuthSession() BrowserSelector returned non-null package name. Choosing CustomTabs strategy."
+            )
+            startCustomTabsInBrowser(
+                packageName,
+                browserLaunchParameters.startUrl,
+                browserLaunchParameters.endUrl,
+                browserLaunchParameters.showType
+            )
         }
-        startCustomTabsInBrowser(
-            packageName,
-            browserLaunchParameters.StartUrl,
-            browserLaunchParameters.EndUrl,
-            browserLaunchParameters.ShowType
-        )
     }
 
     private fun startCustomTabsInBrowser(
         packageName: String,
         startUrl: String,
         endUrl: String,
-        showUrlType: ShowUrlType?,
+        showUrlType: ShowUrlType,
     ) {
         if (showUrlType === ShowUrlType.CookieRemovalSkipIfSharedCredentials) {
             finishOperation(WebResult.SUCCESS, endUrl)
@@ -164,36 +196,36 @@ class BrowserLaunchActivity : AppCompatActivity() {
         }
         mCustomTabsInProgress = true
         mSharedBrowserUsed = true
-        startActivity(CustomTabsIntent.Builder().apply {
-            setShowTitle(true)
-        }.build().apply {
-            intent.data = Uri.parse(startUrl)
-            intent.setPackage(packageName)
-        }.intent)
+
+        val builder = CustomTabsIntent.Builder()
+        builder.setShowTitle(true)
+
+        val build = builder.build()
+        build.intent.data = Uri.parse(startUrl)
+        build.intent.setPackage(packageName)
+
+        startActivity(build.intent)
     }
 
     private fun startWebView(
         startUrl: String,
         endUrl: String,
-        showUrlType: ShowUrlType?,
+        showUrlType: ShowUrlType,
         requestHeaderKeys: Array<String>,
         requestHeaderValues: Array<String>,
     ) {
         mSharedBrowserUsed = false
-        startActivityForResult(
-            Intent(
-                applicationContext,
-                WebKitWebViewController::class.java
-            ).apply {
-                putExtras(Bundle().apply {
-                    putString(START_URL, startUrl)
-                    putString(END_URL, endUrl)
-                    putSerializable(SHOW_TYPE, showUrlType)
-                    putStringArray(REQUEST_HEADER_KEYS, requestHeaderKeys)
-                    putStringArray(REQUEST_HEADER_VALUES, requestHeaderValues)
-                })
-            }, WEB_KIT_WEB_VIEW_REQUEST
-        )
+        val bundle = Bundle()
+        bundle.putString(START_URL, startUrl)
+        bundle.putString(END_URL, endUrl)
+        bundle.putSerializable(SHOW_TYPE, showUrlType)
+        bundle.putStringArray(REQUEST_HEADER_KEYS, requestHeaderKeys)
+        bundle.putStringArray(REQUEST_HEADER_VALUES, requestHeaderValues)
+
+        val intent = Intent(applicationContext, WebKitWebViewController::class.java as Class<*>)
+        intent.putExtras(bundle)
+
+        startActivityForResult(intent, WEB_KIT_WEB_VIEW_REQUEST)
     }
 
     private fun finishOperation(webResult: WebResult, finalUrl: String?) {
@@ -204,20 +236,10 @@ class BrowserLaunchActivity : AppCompatActivity() {
             return
         }
         when (XalWebResult.mWebResult[webResult.ordinal]) {
-            1 -> {
-                urlOperationSucceeded(operationId, finalUrl, mSharedBrowserUsed, mBrowserInfo)
-            }
-
-            2 -> {
-                urlOperationCanceled(operationId, mSharedBrowserUsed, mBrowserInfo)
-            }
-
-            3 -> {
-            }
-
-            else -> {
-                urlOperationFailed(operationId, mSharedBrowserUsed, mBrowserInfo)
-            }
+            1 -> urlOperationSucceeded(operationId, finalUrl, mSharedBrowserUsed, mBrowserInfo)
+            2 -> urlOperationCanceled(operationId, mSharedBrowserUsed, mBrowserInfo)
+            3 -> return
+            else -> urlOperationFailed(operationId, mSharedBrowserUsed, mBrowserInfo)
         }
     }
 
@@ -227,42 +249,6 @@ class BrowserLaunchActivity : AppCompatActivity() {
             true
         } catch (unused: UnsatisfiedLinkError) {
             false
-        }
-    }
-
-    enum class WebResult {
-        SUCCESS, FAIL, CANCEL
-    }
-
-    class BrowserLaunchParameters private constructor(
-        val StartUrl: String,
-        val EndUrl: String,
-        val RequestHeaderKeys: Array<String>,
-        val RequestHeaderValues: Array<String>,
-        val ShowType: ShowUrlType?,
-        useInProcBrowser: Boolean
-    ) {
-        var UseInProcBrowser = true
-
-        companion object {
-            fun parameters(bundle: Bundle): BrowserLaunchParameters? {
-                val startUrl = bundle.getString(START_URL)
-                val endUrl = bundle.getString(END_URL)
-                val headerKeys = bundle.getStringArray(REQUEST_HEADER_KEYS)
-                val headerValues = bundle.getStringArray(REQUEST_HEADER_VALUES)
-                val showUrlType = bundle[SHOW_TYPE] as ShowUrlType?
-                val z = bundle.getBoolean(IN_PROC_BROWSER)
-                return if (startUrl == null || endUrl == null || headerKeys == null || headerValues == null || headerKeys.size != headerValues.size) {
-                    null
-                } else BrowserLaunchParameters(
-                    startUrl,
-                    endUrl,
-                    headerKeys,
-                    headerValues,
-                    showUrlType,
-                    z
-                )
-            }
         }
     }
 
@@ -280,6 +266,7 @@ class BrowserLaunchActivity : AppCompatActivity() {
         private const val CUSTOM_TABS_IN_PROGRESS_STATE_KEY = "CUSTOM_TABS_IN_PROGRESS_STATE"
         private const val OPERATION_ID_STATE_KEY = "OPERATION_ID_STATE"
         private const val SHARED_BROWSER_USED_STATE_KEY = "SHARED_BROWSER_USED_STATE"
+        private const val TAG = "BrowserLaunchActivity"
 
         @JvmStatic
         private external fun checkIsLoaded()
@@ -313,34 +300,76 @@ class BrowserLaunchActivity : AppCompatActivity() {
             startUrl: String,
             endUrl: String,
             showTypeInt: Int,
+            useInProcBrowser: Boolean,
+            j: Long
+        ) {
+            showUrl(operationId, context, startUrl, endUrl, showTypeInt, emptyArray(), emptyArray(), false)
+        }
+
+        @JvmStatic
+        fun showUrl(
+            operationId: Long,
+            context: Context,
+            startUrl: String,
+            endUrl: String,
+            showTypeInt: Int,
+            requestHeaderKeys: Array<String?>,
+            requestHeaderValues: Array<String?>,
+            useInProcBrowser: Boolean,
+            j2: Long
+        ) {
+            showUrl(
+                operationId,
+                context,
+                startUrl,
+                endUrl,
+                showTypeInt,
+                requestHeaderKeys,
+                requestHeaderValues,
+                true
+            )
+        }
+
+        @JvmStatic
+        fun showUrl(
+            operationId: Long,
+            context: Context,
+            startUrl: String,
+            endUrl: String,
+            showTypeInt: Int,
             requestHeaderKeys: Array<String?>,
             requestHeaderValues: Array<String?>,
             useInProcBrowser: Boolean
         ) {
             if (startUrl.isNotEmpty() && endUrl.isNotEmpty()) {
+                Log.i(TAG, "JNI call received.");
                 val fromInt = fromInt(showTypeInt)
                 if (fromInt == null) {
+                    Log.e(TAG, "Unrecognized show type received: $showTypeInt");
                     urlOperationFailed(operationId, false, null)
-                    return
-                } else if (requestHeaderKeys.size != requestHeaderValues.size) {
-                    urlOperationFailed(operationId, false, null)
-                    return
-                } else {
-                    context.startActivity(Intent(context, BrowserLaunchActivity::class.java).apply {
-                        putExtras(Bundle().apply {
-                            putLong(OPERATION_ID, operationId)
-                            putString(START_URL, startUrl)
-                            putString(END_URL, endUrl)
-                            putSerializable(SHOW_TYPE, fromInt)
-                            putStringArray(REQUEST_HEADER_KEYS, requestHeaderKeys)
-                            putStringArray(REQUEST_HEADER_VALUES, requestHeaderValues)
-                            putBoolean(IN_PROC_BROWSER, useInProcBrowser)
-                        })
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    })
                     return
                 }
+                if (requestHeaderKeys.size != requestHeaderValues.size) {
+                    Log.e(TAG, "requestHeaderKeys different length than requestHeaderValues.");
+                    urlOperationFailed(operationId, false, null)
+                    return
+                }
+                val bundle = Bundle()
+                bundle.putLong(OPERATION_ID, operationId)
+                bundle.putString(START_URL, startUrl)
+                bundle.putString(END_URL, endUrl)
+                bundle.putSerializable(SHOW_TYPE, fromInt)
+                bundle.putStringArray(REQUEST_HEADER_KEYS, requestHeaderKeys)
+                bundle.putStringArray(REQUEST_HEADER_VALUES, requestHeaderValues)
+                bundle.putBoolean(IN_PROC_BROWSER, useInProcBrowser)
+
+                val intent = Intent(context, BrowserLaunchActivity::class.java)
+                intent.putExtras(bundle)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                context.startActivity(intent)
+                return
             }
+            Log.e(TAG, "Received invalid start or end URL.");
             urlOperationFailed(operationId, false, null)
         }
     }

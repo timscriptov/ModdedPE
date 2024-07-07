@@ -23,24 +23,24 @@ import java.util.*
  *
  * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
-class BrowserSelectionResult constructor(
-    private val m_defaultBrowserInfo: BrowserInfo,
-    private val m_notes: String,
-    private val m_useCustomTabs: Boolean,
+class BrowserSelectionResult(
+    private val mDefaultBrowserInfo: BrowserInfo,
+    private val mNotes: String,
+    private val mUseCustomTabs: Boolean,
 ) {
     override fun toString(): String {
         val locale = Locale.US
         val arrayList = arrayOfNulls<String>(4)
-        arrayList[0] = if (m_useCustomTabs) "CT" else "WK"
-        arrayList[1] = m_defaultBrowserInfo.packageName
-        arrayList[2] = m_notes
-        arrayList[3] = m_defaultBrowserInfo.versionName
+        arrayList[0] = if (mUseCustomTabs) "CT" else "WK"
+        arrayList[1] = mDefaultBrowserInfo.packageName
+        arrayList[2] = mNotes
+        arrayList[3] = mDefaultBrowserInfo.versionName
         return String.format(locale, "%s-%s-%s::%s", *arrayList)
     }
 
     fun packageName(): String? {
-        return if (m_useCustomTabs) {
-            m_defaultBrowserInfo.packageName
+        return if (mUseCustomTabs) {
+            mDefaultBrowserInfo.packageName
         } else {
             null
         }

@@ -19,7 +19,6 @@ package com.microsoft.xal.browser
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.Signature
 import android.net.Uri
@@ -49,11 +48,11 @@ object BrowserSelector {
     }
 
     @JvmStatic
-    fun selectBrowser(context: Context, z: Boolean): BrowserSelectionResult {
+    fun selectBrowser(context: Context, useInProcBrowser: Boolean): BrowserSelectionResult {
         val notes: String
         val userDefaultBrowserInfo = userDefaultBrowserInfo(context)
         var useCustomTabs = false
-        if (z) {
+        if (useInProcBrowser) {
             notes = "inProcRequested"
         } else if (browserInfoImpliesNoUserDefault(userDefaultBrowserInfo)) {
             notes = "noDefault"
@@ -82,12 +81,8 @@ object BrowserSelector {
 
     private fun userDefaultBrowserInfo(context: Context): BrowserInfo {
         var versionName: String
-        val resolveActivity = context.packageManager.resolveActivity(
-            Intent(
-                "android.intent.action.VIEW",
-                Uri.parse("https://microsoft.com")
-            ), PackageManager.MATCH_DEFAULT_ONLY
-        )
+        val intent = Intent("android.intent.action.VIEW", Uri.parse("https://microsoft.com"))
+        val resolveActivity = context.packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
         return when (val packageName = resolveActivity?.activityInfo?.packageName) {
             null -> {
                 Log.e("ModdedPE", "userDefaultBrowserInfo() No default browser resolved.")
@@ -125,11 +120,9 @@ object BrowserSelector {
 
     @SuppressLint("PackageManagerGetSignatures")
     private fun browserAllowedForCustomTabs(context: Context, packageName: String): Boolean {
-        val packageInfo: PackageInfo?
         val signatureBrowser = customTabsAllowedBrowsers[packageName] ?: return false
         try {
-            packageInfo =
-                context.packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+            val packageInfo = context.packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
             if (packageInfo == null) {
                 Log.e("ModdedPE", "No package info found for package: $packageName")
                 return false
@@ -149,10 +142,8 @@ object BrowserSelector {
 
     @SuppressLint("QueryPermissionsNeeded")
     private fun browserSupportsCustomTabs(context: Context, packageName: String): Boolean {
-        for (resolveInfo in context.packageManager.queryIntentServices(
-            Intent(CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION),
-            0
-        )) {
+        val intent = Intent(CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION)
+        for (resolveInfo in context.packageManager.queryIntentServices(intent, 0)) {
             if (resolveInfo.serviceInfo.packageName == packageName) {
                 return true
             }
@@ -162,8 +153,8 @@ object BrowserSelector {
 
     @Throws(NoSuchAlgorithmException::class)
     private fun hashFromSignature(signature: Signature): String {
-        return Base64.encodeToString(MessageDigest.getInstance("SHA").apply {
-            update(signature.toByteArray())
-        }.digest(), 2)
+        val messageDigest = MessageDigest.getInstance("SHA")
+        messageDigest.update(signature.toByteArray())
+        return Base64.encodeToString(messageDigest.digest(), Base64.NO_WRAP)
     }
 }
