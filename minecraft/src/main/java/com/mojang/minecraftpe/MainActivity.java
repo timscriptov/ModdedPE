@@ -1328,7 +1328,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     public void onResume() {
         Log.d("ModdedPE", "onResume");
         super.onResume();
-        registerReceiver(headsetConnectionReceiver, new IntentFilter("android.intent.action.HEADSET_PLUG"));
+        registerReceiver(headsetConnectionReceiver, new IntentFilter(Intent.ACTION_HEADSET_PLUG));
         if (isTextWidgetActive()) {
             final String text = textInputWidget.getText().toString();
             final int allowedLength = textInputWidget.allowedLength;
@@ -1396,6 +1396,9 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     @Override
     protected void onDestroy() {
         Log.d("ModdedPE", "onDestroy");
+        if (isChangingConfigurations()) {
+            Log.d("ModdedPE", "Unhandled changing configurations, changingConfigurations=" + getChangingConfigurations());
+        }
         mInstance = null;
         System.out.println("onDestroy");
         FMOD.close();

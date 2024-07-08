@@ -22,7 +22,7 @@ open class AdActivity : MainActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Helper.isNetworkConnected(this)) {
-            WortiseSdk.initialize(this, App.AD_UNIT_WORTISE_ID) {
+            WortiseSdk.initialize(this, App.AD_UNIT_ID) {
                 requestIfRequired(this)
                 loadDelay()
             }
@@ -33,7 +33,7 @@ open class AdActivity : MainActivity() {
         if (nativeKeyHandler(event.keyCode, event.action)) {
             when (event.action) {
                 KeyEvent.ACTION_DOWN -> {
-                    showInterstitialAd()
+                    showInterstitialAd() // If user click hard BACK show ads
                 }
             }
         }
@@ -50,10 +50,10 @@ open class AdActivity : MainActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             repeat(Int.MAX_VALUE) {
                 if (isFirstShown) {
-                    delay(15 * 1000)
+                    delay(App.FIRST_SHOW_AD_TIME)
                     isFirstShown = false
                 } else {
-                    delay(180 * 1000)
+                    delay(App.SHOW_AD_TIME)
                 }
                 showInterstitialAd()
             }
@@ -61,7 +61,7 @@ open class AdActivity : MainActivity() {
     }
 
     private fun showInterstitialAd() {
-        mInterstitial = InterstitialAd(this, App.AD_UNIT_WORTISE_ID).also { interstitial ->
+        mInterstitial = InterstitialAd(this, App.AD_UNIT_INTERSTITIAL_ID).also { interstitial ->
             interstitial.loadAd()
             interstitial.listener = object : InterstitialAd.Listener {
                 override fun onInterstitialClicked(ad: InterstitialAd) {

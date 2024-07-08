@@ -54,6 +54,9 @@ android {
             enableSplit = true
         }
     }
+    buildFeatures {
+        buildConfig true
+    }
     configurations {
         all {
             exclude group: 'xpp3', module: 'xpp3'
