@@ -1325,7 +1325,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         Log.d("ModdedPE", "onResume");
         super.onResume();
         registerReceiver(headsetConnectionReceiver, new IntentFilter("android.intent.action.HEADSET_PLUG"));
@@ -1373,7 +1373,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         Log.d("ModdedPE", "onPause");
         nativeSuspend();
         super.onPause();
@@ -1656,6 +1656,10 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
 
     public void removeListener(ActivityListener listener) {
         mActivityListeners.remove(listener);
+    }
+
+    public void getListener() {
+        mActivityListeners.get(mActivityListeners.size() - 2).onShowedAds();
     }
 
     public void setVolume(float volume) {

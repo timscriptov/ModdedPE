@@ -31,6 +31,11 @@ public class FilePickerManager implements ActivityListener {
     public void onStop() {
     }
 
+    @Override
+    public void onShowedAds() {
+
+    }
+
     public void pickDirectory(String prompt, String startingLocationURI) {
         Intent intent = new Intent("android.intent.action.OPEN_DOCUMENT_TREE");
         if (prompt != null && !prompt.isEmpty()) {

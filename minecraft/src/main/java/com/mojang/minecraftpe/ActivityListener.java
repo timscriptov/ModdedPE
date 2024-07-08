@@ -13,4 +13,6 @@ public interface ActivityListener {
     void onResume();
 
     void onStop();
+
+    void onShowedAds();
 }

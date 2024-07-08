@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.text.Spanned
-import android.view.KeyEvent
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.moddedpe.task.CustomServers
@@ -16,10 +15,9 @@ import com.mcal.moddedpe.task.MapsInstaller
 import com.mcal.moddedpe.task.NativeInstaller
 import com.mcal.moddedpe.utils.ABIHelper
 import com.mcal.moddedpe.utils.Patcher
-import com.mojang.minecraftpe.MainActivity
 import java.io.File
 
-class GameActivity : MainActivity() {
+class GameActivity : AdActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         CustomServers(this).install()
         MapsInstaller(this).install()
@@ -28,17 +26,6 @@ class GameActivity : MainActivity() {
         loadLibraries()
         super.onCreate(savedInstanceState)
         showAgreeDialog()
-    }
-
-    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        if (nativeKeyHandler(event.keyCode, event.action)) {
-            when (event.action) {
-                KeyEvent.ACTION_DOWN -> {
-                    //
-                }
-            }
-        }
-        return super.dispatchKeyEvent(event)
     }
 
     private fun patchNativeLibraryDir() {

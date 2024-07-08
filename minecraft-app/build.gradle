@@ -14,7 +14,7 @@ android {
         minSdk project.minSDK.toInteger()
         targetSdk project.targetSDK.toInteger()
         versionCode 952006004
-        versionName "1.20.60.04"
+        versionName "1.21.01.03"
         multiDexEnabled true
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
@@ -87,6 +87,8 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.preference.ktx)
+
+    implementation("com.wortise:android-sdk:1.5.0")
 }
 
 configurations.all {
