@@ -1,4 +1,5 @@
 [versions]
+android-sdk = "1.5.0"
 annotation = "1.8.0"
 annotations = "24.1.0"
 appcompat = "1.7.0"
@@ -26,6 +27,7 @@ simple-xml = "2.7.1"
 viewpager2 = "1.1.0"
 
 [libraries]
+android-sdk = { module = "com.wortise:android-sdk", version.ref = "android-sdk" }
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-browser = { module = "androidx.browser:browser", version.ref = "browser" }

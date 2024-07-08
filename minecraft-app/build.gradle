@@ -13,7 +13,7 @@ android {
         applicationId "com.mcal.moddedpe"
         minSdk project.minSDK.toInteger()
         targetSdk project.targetSDK.toInteger()
-        versionCode 952006004
+        versionCode 972100103
         versionName "1.21.01.03"
         multiDexEnabled true
         ndk {
@@ -88,7 +88,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.preference.ktx)
 
-    implementation("com.wortise:android-sdk:1.5.0")
+    implementation(libs.android.sdk)
 }
 
 configurations.all {
