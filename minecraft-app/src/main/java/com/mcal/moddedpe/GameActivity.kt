@@ -66,7 +66,7 @@ class GameActivity : AdActivity() {
                     )
                 )
                 setCancelable(false)
-                setNeutralButton("Privacy Policy") { dialogInterface: DialogInterface, _: Int ->
+                setNeutralButton("Privacy Policy") { _: DialogInterface, _: Int ->
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(gamePrivacyPolice)))
                     show()
                 }
