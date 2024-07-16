@@ -63,6 +63,7 @@ class App : Application() {
             "https://aka.ms/privacy",
             "https://aka.ms/mcedulogs",
             "https://aka.ms/meeterms",
+            "https://aka.ms/MinecraftAndroidExternalStorage",
         )
 
         // Change game privacy police

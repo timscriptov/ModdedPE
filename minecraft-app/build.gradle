@@ -71,11 +71,9 @@ android {
 // progress_screen.json
 // pause_screen.json
 // world_templates_screen.json
-// world_section.json
 // hud_screen.json
+// settings_section/world_section.json
 // settings_section/general_section.json
-
-// Найти и заменить в либе: https://aka.ms/MinecraftAndroidExternalStorage
 
 // https://fontmeme.com/minecraft-font/
 dependencies {

@@ -20,6 +20,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.webkit.*
 import android.webkit.WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
 import androidx.appcompat.app.AppCompatActivity
@@ -169,6 +170,7 @@ class WebKitWebViewController : AppCompatActivity() {
             webResourceRequest: WebResourceRequest
         ): WebResourceResponse? {
             val uri = webResourceRequest.url.toString()
+            Log.e("XBOX_URI", uri)
             if (uri.contains("favicon.ico") || uri.contains("AppLogos")) {
                 Thread { webView.loadUrl(uri) }
             }
@@ -188,9 +190,10 @@ class WebKitWebViewController : AppCompatActivity() {
                 !uri.contains("AppLogos") &&
                 !uri.contains("applogos") &&
                 !uri.contains("xboxlivelogo") &&
-                !uri.contains("logo")
+                !uri.contains("logo") &&
+                !uri.contains("14_298176657f8069ea5220")
             ) {
-                if (!uri.contains("AppBackgrounds") && !uri.contains("appbackgrounds")) {
+                if (!uri.contains("AppBackgrounds") && !uri.contains("appbackgrounds") && !uri.contains("73_b46031e02b69c55b4305")) {
                     if (uri.contains("minecraft") && (uri.contains(".png") || uri.contains(".jpg"))) {
                         webResponseFromAssets("resources/bg32.png")
                     } else super.shouldInterceptRequest(webView, webResourceRequest)
