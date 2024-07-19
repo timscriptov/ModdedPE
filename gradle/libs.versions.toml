@@ -2,6 +2,7 @@
 android-sdk = "1.5.0"
 annotation = "1.8.0"
 annotations = "24.1.0"
+apkparser = "1.2.7"
 appcompat = "1.7.0"
 browser = "1.8.0"
 commons-io = "2.13.0"
@@ -44,6 +45,7 @@ androidx-preference-ktx = { module = "androidx.preference:preference-ktx", versi
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
 annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
+apkparser = { module = "com.github.timscriptov:apkparser", version.ref = "apkparser" }
 commons-io = { module = "commons-io:commons-io", version.ref = "commons-io" }
 firebase-iid = { module = "com.google.firebase:firebase-iid", version.ref = "firebase-iid" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebase-messaging" }

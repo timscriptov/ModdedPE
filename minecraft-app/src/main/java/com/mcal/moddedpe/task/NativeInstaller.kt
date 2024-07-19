@@ -12,39 +12,46 @@ class NativeInstaller(
     private val context: Context
 ) {
     fun install() {
-        val deviceABI = ABIHelper.getABI()
-        val abi = if (deviceABI == "x86_64") {
-            "x86"
-        } else {
-            deviceABI
-        }
+        val abi = getDeviceABI()
         extractLibArchive(abi)
         extractLibraries(abi)
     }
 
+    private fun getDeviceABI(): String {
+        val deviceABI = ABIHelper.getABI()
+        return if (deviceABI == "x86_64") "x86" else deviceABI
+    }
+
     private fun extractLibArchive(abi: String) {
         runCatching {
-            val nativeDir = File("${context.filesDir}/native")
-            if (!nativeDir.exists()) {
-                nativeDir.mkdirs()
+            val nativeDir = File("${context.filesDir}/native").apply {
+                if (!exists()) mkdirs()
             }
             val archive = File(nativeDir, "libgame.zip")
             if (isAppBundle()) {
-                context.applicationInfo.splitPublicSourceDirs?.forEach { path ->
-                    val name = File(path).name
-                    if (name.contains("arm") || name.contains("x86")) {
-                        ZipFile(path).getInputStream(ZipEntry("lib/$abi/libgame.so"))?.use {
-                            FileHelper.writeToFile(archive, it)
-                        }
-                    }
-                }
+                extractFromAppBundle(abi, archive)
             } else {
-                ZipFile(context.applicationInfo.sourceDir).getInputStream(
-                    ZipEntry("lib/$abi/libgame.so")
-                )?.use {
+                extractFromAPK(abi, archive)
+            }
+        }
+    }
+
+    private fun extractFromAppBundle(abi: String, archive: File) {
+        context.applicationInfo.splitPublicSourceDirs?.forEach { path ->
+            val name = File(path).name
+            if (name.contains("arm") || name.contains("x86")) {
+                ZipFile(path).getInputStream(ZipEntry("lib/$abi/libgame.so"))?.use {
                     FileHelper.writeToFile(archive, it)
                 }
             }
+        }
+    }
+
+    private fun extractFromAPK(abi: String, archive: File) {
+        ZipFile(context.applicationInfo.sourceDir).getInputStream(
+            ZipEntry("lib/$abi/libgame.so")
+        )?.use {
+            FileHelper.writeToFile(archive, it)
         }
     }
 
@@ -55,24 +62,27 @@ class NativeInstaller(
     @SuppressLint("UnsafeDynamicallyLoadedCode")
     private fun extractLibraries(abi: String) {
         val archive = File("${context.filesDir}/native/libgame.zip")
-        val outDir = File("${context.filesDir}/native/$abi/")
-        if (!outDir.exists()) {
-            outDir.mkdirs()
+        val outDir = File("${context.filesDir}/native/$abi/").apply {
+            if (!exists()) mkdirs()
         }
-        arrayListOf(
+        listOf(
             "libc++_shared.so",
             "libminecraftpe.so",
             "libMediaDecoders_Android.so"
         ).forEach { libName ->
-            val libFile = File(outDir, libName)
-            ZipFile(archive).getInputStream(ZipEntry(libName))?.use {
-                FileHelper.writeToFile(libFile, it)
-            }
-            libFile.apply {
-                setExecutable(true)
-                setReadable(true)
-                setWritable(true)
-            }
+            extractLibrary(archive, outDir, libName)
+        }
+    }
+
+    private fun extractLibrary(archive: File, outDir: File, libName: String) {
+        val libFile = File(outDir, libName)
+        ZipFile(archive).getInputStream(ZipEntry(libName))?.use {
+            FileHelper.writeToFile(libFile, it)
+        }
+        libFile.apply {
+            setExecutable(true)
+            setReadable(true)
+            setWritable(true)
         }
     }
 }

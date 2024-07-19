@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.google.android.material.color.DynamicColors
 import com.mcal.moddedpe.task.CustomServers
-import com.mcal.moddedpe.task.MapsInstaller
+import com.mcal.moddedpe.task.ResourceInstaller
 import com.mcal.moddedpe.task.NativeInstaller
 import com.mcal.moddedpe.utils.ABIHelper
 import com.mcal.moddedpe.utils.Patcher
@@ -16,7 +16,7 @@ class App : Application() {
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
         CustomServers(this).install()
-        MapsInstaller(this).install()
+        ResourceInstaller(this).install()
         NativeInstaller(this).install()
         patchNativeLibraryDir()
         loadLibraries()

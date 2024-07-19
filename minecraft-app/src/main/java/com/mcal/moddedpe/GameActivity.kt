@@ -13,12 +13,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.moddedpe.App.Companion.PRIVACY_POLICE_GAME
 import com.mcal.moddedpe.App.Companion.PRIVACY_POLICE_MINECRAFT
 import com.mcal.moddedpe.App.Companion.PRIVACY_POLICE_XBOX
-import com.mcal.moddedpe.task.CustomServers
-import com.mcal.moddedpe.task.MapsInstaller
-import com.mcal.moddedpe.task.NativeInstaller
-import com.mcal.moddedpe.utils.ABIHelper
-import com.mcal.moddedpe.utils.Patcher
-import java.io.File
 
 class GameActivity : AdActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
