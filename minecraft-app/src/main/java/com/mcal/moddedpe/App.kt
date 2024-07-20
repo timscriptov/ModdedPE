@@ -4,8 +4,8 @@ import android.app.Application
 import android.content.Context
 import com.google.android.material.color.DynamicColors
 import com.mcal.moddedpe.task.CustomServers
-import com.mcal.moddedpe.task.ResourceInstaller
 import com.mcal.moddedpe.task.NativeInstaller
+import com.mcal.moddedpe.task.ResourceInstaller
 import com.mcal.moddedpe.utils.ABIHelper
 import com.mcal.moddedpe.utils.Patcher
 import com.wortise.ads.AdSettings
@@ -25,8 +25,8 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         DynamicColors.applyToActivitiesIfAvailable(this)
-        WortiseSdk.initialize(this, AD_UNIT_ID)
-        if (BuildConfig.DEBUG) {
+        if (!BuildConfig.DEBUG) {
+            WortiseSdk.initialize(this, AD_UNIT_ID)
             AdSettings.testEnabled = true
         }
     }
@@ -51,8 +51,8 @@ class App : Application() {
     }
 
     companion object {
-        const val AD_UNIT_ID = ""
-        const val AD_UNIT_INTERSTITIAL_ID = ""
+        const val AD_UNIT_ID = "f839a705-cf8f-4d43-88fa-42014c6fc886"
+        const val AD_UNIT_INTERSTITIAL_ID = "b667b65a-7523-4562-8b40-b2d413c8e3de"
         const val FIRST_SHOW_AD_TIME = 15L * 1000L // 15 sec
         const val SHOW_AD_TIME = 180L * 1000L // 3 min
 

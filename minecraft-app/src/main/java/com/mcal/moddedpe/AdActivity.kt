@@ -15,13 +15,11 @@ import kotlinx.coroutines.launch
 
 open class AdActivity : MainActivity() {
     private var mInterstitial: InterstitialAd? = null
-    private var mBackInterstitial: InterstitialAd? = null
-
     private var isFirstShown: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Helper.isNetworkConnected(this)) {
+        if (!BuildConfig.DEBUG && Helper.isNetworkConnected(this)) {
             WortiseSdk.initialize(this, App.AD_UNIT_ID) {
                 requestIfRequired(this)
                 loadDelay()
@@ -30,12 +28,8 @@ open class AdActivity : MainActivity() {
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        if (nativeKeyHandler(event.keyCode, event.action)) {
-            when (event.action) {
-                KeyEvent.ACTION_DOWN -> {
-                    showInterstitialAd() // If user click hard BACK show ads
-                }
-            }
+        if (nativeKeyHandler(event.keyCode, event.action) && event.action == KeyEvent.ACTION_DOWN && !BuildConfig.DEBUG) {
+            showInterstitialAd() // If user clicks hard BACK show ads
         }
         return super.dispatchKeyEvent(event)
     }
@@ -43,49 +37,33 @@ open class AdActivity : MainActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mInterstitial?.destroy()
-        mBackInterstitial?.destroy()
     }
 
     private fun loadDelay() {
         CoroutineScope(Dispatchers.IO).launch {
-            repeat(Int.MAX_VALUE) {
-                if (isFirstShown) {
-                    delay(App.FIRST_SHOW_AD_TIME)
-                    isFirstShown = false
-                } else {
-                    delay(App.SHOW_AD_TIME)
-                }
+            while (true) {
+                delay(if (isFirstShown) App.FIRST_SHOW_AD_TIME else App.SHOW_AD_TIME)
+                isFirstShown = false
                 showInterstitialAd()
             }
         }
     }
 
     private fun showInterstitialAd() {
-        mInterstitial = InterstitialAd(this, App.AD_UNIT_INTERSTITIAL_ID).also { interstitial ->
-            interstitial.loadAd()
-            interstitial.listener = object : InterstitialAd.Listener {
-                override fun onInterstitialClicked(ad: InterstitialAd) {
-                }
-
-                override fun onInterstitialDismissed(ad: InterstitialAd) {
-                }
-
+        mInterstitial = InterstitialAd(this, App.AD_UNIT_INTERSTITIAL_ID).apply {
+            loadAd()
+            listener = object : InterstitialAd.Listener {
+                override fun onInterstitialClicked(ad: InterstitialAd) {}
+                override fun onInterstitialDismissed(ad: InterstitialAd) {}
                 override fun onInterstitialFailedToLoad(ad: InterstitialAd, error: AdError) {
-                    interstitial.destroy()
+                    destroy()
                 }
-
-                override fun onInterstitialFailedToShow(ad: InterstitialAd, error: AdError) {
-                }
-
-                override fun onInterstitialImpression(ad: InterstitialAd) {
-                }
-
+                override fun onInterstitialFailedToShow(ad: InterstitialAd, error: AdError) {}
+                override fun onInterstitialImpression(ad: InterstitialAd) {}
                 override fun onInterstitialLoaded(ad: InterstitialAd) {
-                    interstitial.showAd(this@AdActivity)
+                    showAd(this@AdActivity)
                 }
-
-                override fun onInterstitialShown(ad: InterstitialAd) {
-                }
+                override fun onInterstitialShown(ad: InterstitialAd) {}
             }
         }
     }
