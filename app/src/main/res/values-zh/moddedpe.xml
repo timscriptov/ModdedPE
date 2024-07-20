@@ -59,7 +59,7 @@
     <string name="about_translators">翻譯人員</string>
     <string name="about_view_github">Github頁</string>
     <string name="about_view_nmod_api">查看NModAPI</string>
-    <string name="about_translators_message">參加過本語言翻譯的人員：\nТимашков Иван\nListerily\nCreepsoGaming\nDarkShuper\nriku1227\nLeonardo Queiroz\nBayram Akdemir\nThamTvMaster\nНағымет Адаев\nMr Ikso</string>
+    <string name="about_translators_message">參加過本語言翻譯的人員：\ntimscriptov\nListerily\nCreepsoGaming\nDarkShuper\nriku1227\nLeonardo Queiroz\nBayram Akdemir\nThamTvMaster\nНағымет Адаев\nMr Ikso</string>
 
     <!--Preferences-->
     <string name="preferences_title">設置</string>

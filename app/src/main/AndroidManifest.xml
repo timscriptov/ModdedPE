@@ -1,29 +1,29 @@
 <?xml version='1.0' encoding='utf-8'?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:installLocation="preferExternal">
+          xmlns:tools="http://schemas.android.com/tools"
+          android:installLocation="preferExternal">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+        tools:ignore="ScopedStorage"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission
         android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
+        tools:ignore="ScopedStorage"/>
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
-        tools:ignore="QueryAllPackagesPermission" />
+        tools:ignore="QueryAllPackagesPermission"/>
 
     <queries>
-        <package android:name="com.mojang.minecraftpe" />
-        <package android:name="com.mojang.minecrafttrialpe" />
+        <package android:name="com.mojang.minecraftpe"/>
+        <package android:name="com.mojang.minecrafttrialpe"/>
         <intent>
-            <action android:name="android.support.customtabs.action.CustomTabsService" />
+            <action android:name="android.support.customtabs.action.CustomTabsService"/>
         </intent>
     </queries>
 
@@ -52,7 +52,7 @@
             android:excludeFromRecents="false"
             android:label="@string/main_title"
             android:screenOrientation="sensorLandscape"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
 
         <activity
             android:name="com.mcal.mcpelauncher.activities.SplashesActivity"
@@ -60,8 +60,8 @@
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
@@ -76,11 +76,11 @@
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.app.lib_name"
-                android:value="launcher-core" />
+                android:value="launcher-core"/>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
@@ -88,49 +88,49 @@
             android:name="com.mcal.mcpelauncher.ui.AboutActivity"
             android:label="@string/about_title"
             android:screenOrientation="sensorLandscape"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
 
         <activity
             android:name="com.mcal.mcpelauncher.activities.NModDescriptionActivity"
             android:screenOrientation="sensorLandscape"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
 
         <activity
             android:name="com.mcal.mcpelauncher.activities.NModFilePickerActivity"
             android:label="@string/nmod_picker_file_title"
             android:screenOrientation="sensorLandscape"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
 
         <activity
             android:name="com.mcal.mcpelauncher.ui.DirPickerActivity"
             android:label="@string/dir_picker_title"
             android:screenOrientation="sensorLandscape"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
 
         <activity
             android:name="com.mcal.mcpelauncher.activities.MCPkgPickerActivity"
             android:label="@string/pkg_picker_title"
             android:screenOrientation="sensorLandscape"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
 
         <activity
             android:name="com.mcal.mcpelauncher.activities.NModPackagePickerActivity"
             android:label="@string/nmod_picker_package_title"
             android:screenOrientation="sensorLandscape"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
 
         <activity
             android:name="com.mcal.mcpelauncher.activities.NModLoadFailActivity"
             android:label="@string/nmods_load_failed_title"
             android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
 
         <activity
             android:name="com.mcal.mcpelauncher.activities.PreloadActivity"
             android:label="@string/prestart_title"
             android:screenOrientation="sensorLandscape"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
 
         <activity
             android:name="com.mcal.mcpelauncher.ui.ImportNModActivity"
@@ -140,49 +140,44 @@
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
                 <data
                     android:host="*"
                     android:mimeType="*/*"
                     android:pathPattern=".*\.mcnmod"
-                    android:scheme="file" />
+                    android:scheme="file"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
                 <data
                     android:host="*"
                     android:mimeType="*/*"
                     android:pathPattern=".*\.zip"
-                    android:scheme="file" />
+                    android:scheme="file"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
                 <data
                     android:host="*"
                     android:mimeType="*/*"
                     android:pathPattern=".*\.apk"
-                    android:scheme="file" />
+                    android:scheme="file"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
                 <data
                     android:host="*"
                     android:mimeType="*/*"
                     android:pathPattern=".*\.nmod"
-                    android:scheme="file" />
+                    android:scheme="file"/>
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".activities.ExceptionActivity"
-            android:label="Application Error"
-            android:theme="@style/AppErrorTheme" />
-
-        <service android:name="com.mcal.mcpelauncher.services.SoundService" />
+        <service android:name="com.mcal.mcpelauncher.services.SoundService"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -191,12 +186,12 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths" />
+                android:resource="@xml/filepaths"/>
         </provider>
 
         <meta-data
             android:name="game_icon"
-            android:resource="@mipmap/ic_launcher_round" />
+            android:resource="@mipmap/ic_launcher_round"/>
 
     </application>
 

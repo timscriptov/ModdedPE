@@ -17,36 +17,21 @@
 package com.mcal.mcpelauncher.activities;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.ComponentName;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.IBinder;
 import android.view.View;
-
 import androidx.annotation.RequiresApi;
-
 import com.mcal.mcpelauncher.ModdedPEApplication;
 import com.mcal.mcpelauncher.data.Preferences;
-import com.mcal.mcpelauncher.services.SoundService;
 import com.mcal.pesdk.PESdk;
-
-import java.lang.ref.WeakReference;
 
 /**
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 public class MinecraftActivity extends com.mojang.minecraftpe.MainActivity {
-    public static WeakReference<Activity> current;
-    private ServiceConnection sc;
-    private boolean bound, paused;
-    private SoundService ss;
-
     protected PESdk getPESdk() {
         return ModdedPEApplication.mPESdk;
     }
@@ -60,21 +45,6 @@ public class MinecraftActivity extends com.mojang.minecraftpe.MainActivity {
     public void onCreate(Bundle p1) {
         getPESdk().getGameManager().onMinecraftActivityCreate(this, p1);
         super.onCreate(p1);
-        if (Preferences.isBackgroundMusic()) {
-            sc = new ServiceConnection() {
-                @Override
-                public void onServiceConnected(ComponentName p1, IBinder p2) {
-                    bound = true;
-                    ss = ((SoundService.SoundBinder) p2).getService();
-                }
-
-                @Override
-                public void onServiceDisconnected(ComponentName p1) {
-                    bound = false;
-                }
-            };
-            bindService(new Intent(getApplicationContext(), SoundService.class), sc, BIND_AUTO_CREATE);
-        }
     }
 
     @Override
@@ -83,32 +53,6 @@ public class MinecraftActivity extends com.mojang.minecraftpe.MainActivity {
             return this.getFilesDir().getAbsolutePath();
         } else {
             return Preferences.getDataSavedPath();
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (bound && paused) {
-            ss.play();
-            paused = false;
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (bound && !paused) {
-            ss.pause();
-            paused = true;
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (bound) {
-            unbindService(sc);
         }
     }
 

@@ -20,7 +20,7 @@
     </queries>
 
     <application
-            android:name=".App"
+            android:name="com.mcal.moddedpe.App"
             android:exported="true"
             android:hasCode="true"
             android:hasFragileUserData="true"
@@ -38,7 +38,7 @@
             tools:targetApi="r">
 
         <activity
-                android:name=".GameActivity"
+                android:name="com.mcal.moddedpe.GameActivity"
                 android:exported="true"
                 android:excludeFromRecents="false"
                 android:launchMode="singleTask"
@@ -99,8 +99,8 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".googleplay.ApkXDownloaderService" />
-        <receiver android:name=".googleplay.ApkXDownloaderAlarmReceiver" />
+        <service android:name="com.mcal.moddedpe.googleplay.ApkXDownloaderService" />
+        <receiver android:name="com.mcal.moddedpe.googleplay.ApkXDownloaderAlarmReceiver" />
 
         <provider
                 android:name="androidx.core.content.FileProvider"

@@ -22,7 +22,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -32,18 +31,14 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
-
 import com.google.android.material.snackbar.Snackbar;
 import com.mcal.mcpelauncher.R;
 import com.mcal.mcpelauncher.activities.MCPkgPickerActivity;
 import com.mcal.mcpelauncher.activities.SplashesActivity;
-import com.mcal.mcpelauncher.data.Constants;
 import com.mcal.mcpelauncher.data.Preferences;
-import com.mcal.mcpelauncher.services.BackgroundSoundPlayer;
 import com.mcal.mcpelauncher.ui.AboutActivity;
 import com.mcal.mcpelauncher.ui.DirPickerActivity;
 import com.mcal.mcpelauncher.utils.I18n;
-
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -57,16 +52,6 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.preferences);
-
-        SwitchPreference mBackgroundMusicPreference = findPreference("background_music");
-        mBackgroundMusicPreference.setOnPreferenceChangeListener((p1, p2) -> {
-            if ((boolean) p2) {
-                ((BackgroundSoundPlayer) requireActivity()).bind();
-            } else {
-                ((BackgroundSoundPlayer) requireActivity()).unbind();
-            }
-            return true;
-        });
 
         Preference mWebViewCorePreference = findPreference("webview_engine");
         mWebViewCorePreference.setOnPreferenceClickListener(p1 -> {

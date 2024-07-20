@@ -35,10 +35,6 @@ object Preferences {
         }
 
     @JvmStatic
-    val isBackgroundMusic: Boolean
-        get() = preferences.getBoolean("background_music", false)
-
-    @JvmStatic
     var isSafeMode: Boolean
         get() = preferences.getBoolean("safe_mode", false)
         set(flag) {

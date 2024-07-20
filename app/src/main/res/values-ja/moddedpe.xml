@@ -55,9 +55,9 @@
 
     <!--About-->
     <string name="about_copyright_owner">Copyright © MCAL, Nextdev.</string>
-    <string name="about_author">MADE BY Тимашков Иван と Listerily</string>
+    <string name="about_author">MADE BY timscriptov と Listerily</string>
     <string name="about_translators">翻訳者</string>
-    <string name="about_translators_message">この言語の翻訳参加者\nТимашков Иван\nListerily\nCreepsoGaming\nDarkShuper\nriku1227\nLeonardo Queiroz\nBayram Akdemir\nThamTvMaster\nНағымет Адаев\nMr Ikso</string>
+    <string name="about_translators_message">この言語の翻訳参加者\ntimscriptov\nListerily\nCreepsoGaming\nDarkShuper\nriku1227\nLeonardo Queiroz\nBayram Akdemir\nThamTvMaster\nНағымет Адаев\nMr Ikso</string>
     <string name="about_view_github">Githubページ</string>
     <string name="about_view_nmod_api">NModAPIを見る</string>
 

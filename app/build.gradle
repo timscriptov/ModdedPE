@@ -75,7 +75,6 @@ dependencies {
     implementation project(':microsoft:xal')
     implementation project(':microsoft:xbox')
     implementation project(':fmod')
-    implementation project(':crashreporter')
 
     implementation(libs.androidx.legacy.support.v4)
 

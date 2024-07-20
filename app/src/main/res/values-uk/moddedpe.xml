@@ -57,7 +57,7 @@
     <string name="about_copyright_owner">Copyright © MCAL, Nextdev.</string>
     <string name="about_author">Додаток від Тимашкова Івана і Listerily</string>
     <string name="about_translators">Перекладачі</string>
-    <string name="about_translators_message">Люди, які брали участь в перекладі програми:\nТимашков Иван\nListerily\nCreepsoGaming\nDarkShuper\nriku1227\nLeonardo Queiroz\nBayram Akdemir\nThamTvMaster\nНағымет Адаев\nMr Ikso</string>
+    <string name="about_translators_message">Люди, які брали участь в перекладі програми:\ntimscriptov\nListerily\nCreepsoGaming\nDarkShuper\nriku1227\nLeonardo Queiroz\nBayram Akdemir\nThamTvMaster\nНағымет Адаев\nMr Ikso</string>
     <string name="about_view_github">Github сторінка</string>
     <string name="about_view_nmod_api">Переглянути NModAPI</string>
 

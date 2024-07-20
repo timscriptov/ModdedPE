@@ -16,34 +16,25 @@
  */
 package com.mcal.mcpelauncher.activities;
 
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.IBinder;
 import android.provider.Settings;
 import android.view.MenuItem;
 import android.view.View;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-
 import com.mcal.mcpelauncher.R;
 import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.mcpelauncher.fragments.MainManageNModFragment;
 import com.mcal.mcpelauncher.fragments.MainSettingsFragment;
 import com.mcal.mcpelauncher.fragments.MainStartFragment;
-import com.mcal.mcpelauncher.services.BackgroundSoundPlayer;
-import com.mcal.mcpelauncher.services.SoundService;
 import com.mcal.mcpelauncher.ui.view.Dialogs;
-import com.mcal.mcpelauncher.utils.ExceptionHandler;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -53,44 +44,14 @@ import java.util.List;
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
-public class MainActivity extends BaseActivity implements BackgroundSoundPlayer {
-    private ServiceConnection sc;
-    private SoundService ss;
-    private boolean bound, paused;
+public class MainActivity extends BaseActivity {
     private ViewPager mMainViewPager;
     private MainManageNModFragment mManageNModFragment;
     private MainSettingsFragment mMainSettingsFragment;
 
     @Override
-    public void bind() {
-        bindService(new Intent(this, SoundService.class), sc, BIND_AUTO_CREATE);
-    }
-
-    @Override
-    public void unbind() {
-        unbindService(sc);
-    }
-
-    @Override
-    public void play() {
-        if (bound && paused) {
-            ss.play();
-            paused = false;
-        }
-    }
-
-    @Override
-    public void pause() {
-        if (bound && !paused && !isFinishing()) {
-            ss.pause();
-            paused = true;
-        }
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
         setContentView(R.layout.moddedpe_main_pager);
         ArrayList<Fragment> fragment_list = new ArrayList<>();
         ArrayList<CharSequence> titles_list = new ArrayList<>();
@@ -129,23 +90,6 @@ public class MainActivity extends BaseActivity implements BackgroundSoundPlayer 
             }
         });
 
-        sc = new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName p1, IBinder p2) {
-                bound = true;
-                ss = ((SoundService.SoundBinder) p2).getService();
-            }
-
-            @Override
-            public void onServiceDisconnected(ComponentName p1) {
-                bound = false;
-            }
-        };
-
-        if (!bound && Preferences.isBackgroundMusic()) {
-            bind();
-        }
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Settings.ACTION_MANAGE_OVERLAY_PERMISSION) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, Settings.ACTION_MANAGE_OVERLAY_PERMISSION}, 1);
@@ -154,20 +98,6 @@ public class MainActivity extends BaseActivity implements BackgroundSoundPlayer 
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q && !Environment.isExternalStorageManager()) {
             Dialogs.showScopedStorageDialog(this);
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        pause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (bound) {
-            unbind();
         }
     }
 
@@ -218,7 +148,6 @@ public class MainActivity extends BaseActivity implements BackgroundSoundPlayer 
             dialog.show();
             Preferences.setOpenGameFailed(null);
         }
-        play();
     }
 
     private class MainFragmentPagerAdapter extends FragmentPagerAdapter {
