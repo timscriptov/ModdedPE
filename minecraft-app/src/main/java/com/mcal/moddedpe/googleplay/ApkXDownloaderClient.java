@@ -38,6 +38,37 @@ public class ApkXDownloaderClient extends PackageSource implements IDownloaderCl
     private IStub mDownloaderClientStub;
     private IDownloaderService mRemoteService;
 
+    // Define constants for OBB states
+    private static final int OBB_STATE_MOUNTED = 1;
+    private static final int OBB_STATE_UNMOUNTED = 2;
+    private static final int OBB_STATE_ERROR_INTERNAL = 20;
+    private static final int OBB_STATE_ERROR_COULD_NOT_MOUNT = 21;
+    private static final int OBB_STATE_ERROR_COULD_NOT_UNMOUNT = 22;
+    private static final int OBB_STATE_ERROR_NOT_MOUNTED = 23;
+    private static final int OBB_STATE_ERROR_ALREADY_MOUNTED = 24;
+    private static final int OBB_STATE_ERROR_PERMISSION_DENIED = 25;
+
+    // Define constants for download states
+    private static final int DOWNLOAD_STATE_IDLE = 1;
+    private static final int DOWNLOAD_STATE_FETCHING_URL = 2;
+    private static final int DOWNLOAD_STATE_CONNECTING = 3;
+    private static final int DOWNLOAD_STATE_DOWNLOADING = 4;
+    private static final int DOWNLOAD_STATE_COMPLETED = 5;
+    private static final int DOWNLOAD_STATE_PAUSED_NETWORK_UNAVAILABLE = 6;
+    private static final int DOWNLOAD_STATE_PAUSED_BY_REQUEST = 7;
+    private static final int DOWNLOAD_STATE_PAUSED_WIFI_DISABLED_NEED_CELLULAR_PERMISSION = 8;
+    private static final int DOWNLOAD_STATE_PAUSED_NEED_CELLULAR_PERMISSION = 9;
+    private static final int DOWNLOAD_STATE_PAUSED_ROAMING = 10;
+    private static final int DOWNLOAD_STATE_PAUSED_NETWORK_SETUP_FAILURE = 11;
+    private static final int DOWNLOAD_STATE_PAUSED_SDCARD_UNAVAILABLE = 12;
+    private static final int DOWNLOAD_STATE_PAUSED_SDCARD_FULL = 13;
+    private static final int DOWNLOAD_STATE_PAUSED_WAITING_TO_RETRY = 14;
+    private static final int DOWNLOAD_STATE_FAILED_UNLICENSED = 15;
+    private static final int DOWNLOAD_STATE_FAILED_FETCHING_URL = 16;
+    private static final int DOWNLOAD_STATE_FAILED_SDCARD_FULL = 17;
+    private static final int DOWNLOAD_STATE_FAILED_CANCELED = 18;
+    private static final int DOWNLOAD_STATE_FAILED = 19;
+
     public ApkXDownloaderClient(@NonNull MainActivity activity, String googlePlayLicenseKey, PackageSourceListener listener) {
         licenseKey = googlePlayLicenseKey;
         mListener = listener;
@@ -49,15 +80,15 @@ public class ApkXDownloaderClient extends PackageSource implements IDownloaderCl
     }
 
     public static int convertOBBStateToMountState(int state) {
-        if (state != 1) {
-            if (state != 2) {
+        if (state != OBB_STATE_MOUNTED) {
+            if (state != OBB_STATE_UNMOUNTED) {
                 return switch (state) {
-                    case 20 -> 4;
-                    case 21 -> 2;
-                    case 22 -> 3;
-                    case 23 -> 5;
-                    case 24 -> 1;
-                    case 25 -> 6;
+                    case OBB_STATE_ERROR_INTERNAL -> 4;
+                    case OBB_STATE_ERROR_COULD_NOT_MOUNT -> 2;
+                    case OBB_STATE_ERROR_COULD_NOT_UNMOUNT -> 3;
+                    case OBB_STATE_ERROR_NOT_MOUNTED -> 5;
+                    case OBB_STATE_ERROR_ALREADY_MOUNTED -> 1;
+                    case OBB_STATE_ERROR_PERMISSION_DENIED -> 6;
                     default -> 0;
                 };
             }
@@ -68,25 +99,25 @@ public class ApkXDownloaderClient extends PackageSource implements IDownloaderCl
 
     public static int convertStateToFailedReason(int state) {
         return switch (state) {
-            case 15 -> 2;
-            case 16 -> 3;
-            case 17 -> 4;
-            case 18 -> 5;
+            case DOWNLOAD_STATE_FAILED_UNLICENSED -> 2;
+            case DOWNLOAD_STATE_FAILED_FETCHING_URL -> 3;
+            case DOWNLOAD_STATE_FAILED_SDCARD_FULL -> 4;
+            case DOWNLOAD_STATE_FAILED_CANCELED -> 5;
             default -> 0;
         };
     }
 
     public static int convertStateToPausedReason(int state) {
         return switch (state) {
-            case 6 -> 1;
-            case 7 -> 2;
-            case 8 -> 3;
-            case 9 -> 4;
-            case 10 -> 5;
-            case 11 -> 6;
-            case 12 -> 7;
-            case 13 -> 8;
-            case 14 -> 9;
+            case DOWNLOAD_STATE_PAUSED_NETWORK_UNAVAILABLE -> 1;
+            case DOWNLOAD_STATE_PAUSED_BY_REQUEST -> 2;
+            case DOWNLOAD_STATE_PAUSED_WIFI_DISABLED_NEED_CELLULAR_PERMISSION -> 3;
+            case DOWNLOAD_STATE_PAUSED_NEED_CELLULAR_PERMISSION -> 4;
+            case DOWNLOAD_STATE_PAUSED_ROAMING -> 5;
+            case DOWNLOAD_STATE_PAUSED_NETWORK_SETUP_FAILURE -> 6;
+            case DOWNLOAD_STATE_PAUSED_SDCARD_UNAVAILABLE -> 7;
+            case DOWNLOAD_STATE_PAUSED_SDCARD_FULL -> 8;
+            case DOWNLOAD_STATE_PAUSED_WAITING_TO_RETRY -> 9;
             default -> 0;
         };
     }
@@ -323,7 +354,7 @@ public class ApkXDownloaderClient extends PackageSource implements IDownloaderCl
         int failedReason;
         String stringResource = PackageSource.getStringResource(StringResourceId.fromInt(Helpers.getDownloaderStringResourceIDFromState(state)));
         switch (state) {
-            case 1, 2, 3 -> {
+            case DOWNLOAD_STATE_IDLE, DOWNLOAD_STATE_FETCHING_URL, DOWNLOAD_STATE_CONNECTING -> {
                 needCellularPermission = false;
                 progressIndeterminate = true;
                 isPaused = false;
@@ -332,7 +363,7 @@ public class ApkXDownloaderClient extends PackageSource implements IDownloaderCl
                 pausedReason = 0;
                 failedReason = 0;
             }
-            case 4 -> {
+            case DOWNLOAD_STATE_DOWNLOADING -> {
                 needCellularPermission = false;
                 progressIndeterminate = false;
                 isPaused = false;
@@ -341,7 +372,7 @@ public class ApkXDownloaderClient extends PackageSource implements IDownloaderCl
                 pausedReason = 0;
                 failedReason = 0;
             }
-            case 5 -> {
+            case DOWNLOAD_STATE_COMPLETED -> {
                 needCellularPermission = false;
                 progressIndeterminate = false;
                 isPaused = false;
@@ -350,9 +381,13 @@ public class ApkXDownloaderClient extends PackageSource implements IDownloaderCl
                 pausedReason = 0;
                 failedReason = 0;
             }
-            case 6, 7, 8, 9, 10, 11, 12, 13, 14 -> {
+            case DOWNLOAD_STATE_PAUSED_NETWORK_UNAVAILABLE, DOWNLOAD_STATE_PAUSED_BY_REQUEST,
+                 DOWNLOAD_STATE_PAUSED_WIFI_DISABLED_NEED_CELLULAR_PERMISSION,
+                 DOWNLOAD_STATE_PAUSED_NEED_CELLULAR_PERMISSION, DOWNLOAD_STATE_PAUSED_ROAMING,
+                 DOWNLOAD_STATE_PAUSED_NETWORK_SETUP_FAILURE, DOWNLOAD_STATE_PAUSED_SDCARD_UNAVAILABLE,
+                 DOWNLOAD_STATE_PAUSED_SDCARD_FULL, DOWNLOAD_STATE_PAUSED_WAITING_TO_RETRY -> {
                 int convertStateToPausedReason = convertStateToPausedReason(state);
-                needCellularPermission = state == 8 || state == 9;
+                needCellularPermission = state == DOWNLOAD_STATE_PAUSED_WIFI_DISABLED_NEED_CELLULAR_PERMISSION || state == DOWNLOAD_STATE_PAUSED_NEED_CELLULAR_PERMISSION;
                 pausedReason = convertStateToPausedReason;
                 progressIndeterminate = false;
                 isPaused = true;
@@ -360,7 +395,8 @@ public class ApkXDownloaderClient extends PackageSource implements IDownloaderCl
                 isFailed = false;
                 failedReason = 0;
             }
-            case 15, 16, 17, 18, 19 -> {
+            case DOWNLOAD_STATE_FAILED_UNLICENSED, DOWNLOAD_STATE_FAILED_FETCHING_URL,
+                 DOWNLOAD_STATE_FAILED_SDCARD_FULL, DOWNLOAD_STATE_FAILED_CANCELED, DOWNLOAD_STATE_FAILED -> {
                 failedReason = convertStateToFailedReason(state);
                 needCellularPermission = false;
                 progressIndeterminate = false;

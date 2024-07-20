@@ -26,8 +26,8 @@ import androidx.appcompat.app.AppCompatActivity
  * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
  */
 class IntentHandler : AppCompatActivity() {
-    public override fun onCreate(bundle: Bundle?) {
-        super.onCreate(bundle)
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         val intent = Intent(this, BrowserLaunchActivity::class.java)
         intent.data = intent.data
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)

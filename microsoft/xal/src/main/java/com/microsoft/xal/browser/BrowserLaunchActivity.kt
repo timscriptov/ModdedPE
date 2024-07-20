@@ -124,21 +124,27 @@ class BrowserLaunchActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, intent)
         Log.e(TAG, "onActivityResult() Result received.")
         if (requestCode == WEB_KIT_WEB_VIEW_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                val response = intent?.extras?.getString(WebKitWebViewController.RESPONSE_KEY, "")
-                if (response.isNullOrEmpty()) {
-                    Log.e(TAG, "onActivityResult() Invalid final URL received from web view.")
-                } else {
-                    finishOperation(WebResult.SUCCESS, response)
+            when (resultCode) {
+                RESULT_OK -> {
+                    val response = intent?.extras?.getString(WebKitWebViewController.RESPONSE_KEY, "")
+                    if (response.isNullOrEmpty()) {
+                        Log.e(TAG, "onActivityResult() Invalid final URL received from web view.")
+                    } else {
+                        finishOperation(WebResult.SUCCESS, response)
+                        return
+                    }
+                }
+                RESULT_CANCELED -> {
+                    finishOperation(WebResult.CANCEL, null)
                     return
                 }
-            } else if (resultCode == RESULT_CANCELED) {
-                finishOperation(WebResult.CANCEL, null)
-                return
-            } else if (resultCode == 8054) {
-                Log.w(TAG, "onActivityResult() Unrecognized result code received from web view: $resultCode")
+                RESULT_UNRECOGNIZED -> {
+                    Log.w(TAG, "onActivityResult() Unrecognized result code received from web view: $resultCode")
+                }
+                else -> {
+                    finishOperation(WebResult.FAIL, null)
+                }
             }
-            finishOperation(WebResult.FAIL, null)
         }
     }
 
@@ -259,6 +265,7 @@ class BrowserLaunchActivity : AppCompatActivity() {
         const val REQUEST_HEADER_KEYS = "REQUEST_HEADER_KEYS"
         const val REQUEST_HEADER_VALUES = "REQUEST_HEADER_VALUES"
         const val RESULT_FAILED = 8052
+        const val RESULT_UNRECOGNIZED = 8054
         const val SHOW_TYPE = "SHOW_TYPE"
         const val START_URL = "START_URL"
         const val WEB_KIT_WEB_VIEW_REQUEST = 8053

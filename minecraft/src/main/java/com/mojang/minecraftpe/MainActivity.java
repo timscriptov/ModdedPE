@@ -1570,19 +1570,23 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
         mFileDialogCallback = callback;
     }
 
-    void saveFile(String defaultFileName) {
-        final Intent intent = new Intent("android.intent.action.CREATE_DOCUMENT");
-        intent.addCategory("android.intent.category.OPENABLE");
+    private void showFilePickerDialog(String title, int requestCode) {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*");
-        intent.putExtra("android.intent.extra.TITLE", defaultFileName);
-        startActivityForResult(intent, SAVE_FILE_RESULT_CODE);
+        startActivityForResult(Intent.createChooser(intent, title), requestCode);
     }
 
     void openFile() {
-        final Intent intent = new Intent("android.intent.action.OPEN_DOCUMENT");
-        intent.addCategory("android.intent.category.OPENABLE");
+        showFilePickerDialog("Select a file", OPEN_FILE_RESULT_CODE);
+    }
+
+    void saveFile(String defaultFileName) {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*");
-        startActivityForResult(intent, OPEN_FILE_RESULT_CODE);
+        intent.putExtra(Intent.EXTRA_TITLE, defaultFileName);
+        startActivityForResult(intent, SAVE_FILE_RESULT_CODE);
     }
 
     void onPickFileSuccess(boolean shouldCopy) {
@@ -1596,54 +1600,30 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intentData) {
         super.onActivityResult(requestCode, resultCode, intentData);
-        for (ActivityListener activityListener : mActivityListeners) {
-            activityListener.onActivityResult(requestCode, resultCode, intentData);
-        }
         if (resultCode == Activity.RESULT_CANCELED) {
             nativeOnPickFileCanceled();
             return;
         }
-        if (requestCode != RESULT_PICK_IMAGE) {
-            if (requestCode == SAVE_FILE_RESULT_CODE || requestCode == OPEN_FILE_RESULT_CODE) {
-                boolean isWriting = requestCode == OPEN_FILE_RESULT_CODE;
-                if (resultCode != Activity.RESULT_OK || intentData == null || intentData.getData() == null) {
-                    return;
-                }
-                try {
-                    ParcelFileDescriptor parcelFileDescriptor = mPickedFileDescriptor;
-                    if (parcelFileDescriptor != null) {
-                        parcelFileDescriptor.close();
-                    }
-                    mPickedFileDescriptor = getContentResolver().openFileDescriptor(intentData.getData(), isWriting ? "r" : "w");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                onPickFileSuccess(isWriting);
-            }
-        } else if (resultCode == Activity.RESULT_OK && intentData != null) {
+        if (resultCode == Activity.RESULT_OK && intentData != null && intentData.getData() != null) {
             Uri data = intentData.getData();
-            if (data != null) {
-                String[] projection = {"_data"};
-                Cursor query = getContentResolver().query(data, projection, null, null, null);
-                if (query != null && query.moveToFirst()) {
-                    int columnIndex = query.getColumnIndex(projection[0]);
-                    if (columnIndex >= 0) {
-                        String filePath = query.getString(columnIndex);
-                        long callback = mCallback;
-                        if (callback != 0) {
-                            nativeOnPickImageSuccess(callback, filePath);
-                            mCallback = 0L;
-                        }
+            try {
+                if (requestCode == OPEN_FILE_RESULT_CODE || requestCode == SAVE_FILE_RESULT_CODE) {
+                    mPickedFileDescriptor = getContentResolver().openFileDescriptor(data, requestCode == OPEN_FILE_RESULT_CODE ? "r" : "w");
+                    onPickFileSuccess(requestCode == OPEN_FILE_RESULT_CODE);
+                } else if (requestCode == RESULT_PICK_IMAGE) {
+                    String[] projection = {MediaStore.Images.Media.DATA};
+                    Cursor cursor = getContentResolver().query(data, projection, null, null, null);
+                    if (cursor != null && cursor.moveToFirst()) {
+                        String filePath = cursor.getString(cursor.getColumnIndexOrThrow(projection[0]));
+                        nativeOnPickImageSuccess(mCallback, filePath);
+                        cursor.close();
                     }
-                    query.close();
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } else {
-            long callback = mCallback;
-            if (callback != 0) {
-                nativeOnPickImageCanceled(callback);
-                mCallback = 0L;
-            }
+        } else if (requestCode == RESULT_PICK_IMAGE) {
+            nativeOnPickImageCanceled(mCallback);
         }
     }
 

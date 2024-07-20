@@ -9,8 +9,12 @@ import com.google.android.vending.expansion.downloader.DownloaderClientMarshalle
 
 
 class ApkXDownloaderAlarmReceiver : BroadcastReceiver() {
+    companion object {
+        private val TAG = ApkXDownloaderAlarmReceiver::javaClass.name
+    }
+
     override fun onReceive(context: Context, intent: Intent) {
-        Log.d("ApkXDownloaderAlarmReceiver", "Alarm received")
+        Log.d(TAG, "Alarm received")
         try {
             DownloaderClientMarshaller.startDownloadServiceIfRequired(
                 context,
@@ -18,7 +22,7 @@ class ApkXDownloaderAlarmReceiver : BroadcastReceiver() {
                 ApkXDownloaderService::class.java
             )
         } catch (e: PackageManager.NameNotFoundException) {
-            Log.d("ApkXDownloaderAlarmReceiver", "Exception: " + e.javaClass.name + ":" + e.message)
+            Log.d(TAG, "Exception: " + e.javaClass.name + ":" + e.message)
         }
     }
 }
