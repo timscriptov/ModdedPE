@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="LibraryPatcher-jvm">
-    <output-path>$PROJECT_DIR$/build/libs</output-path>
-    <root id="archive" name="LibraryPatcher-jvm.jar">
-      <element id="module-output" name="LibraryPatcher.jvmMain" />
-    </root>
-  </artifact>
-</component>

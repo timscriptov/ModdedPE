@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * 29.03.2023
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public class CPUCluster implements Comparable<CPUCluster> {
     private final BitSet bitmask = new BitSet();

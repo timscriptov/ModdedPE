@@ -6,7 +6,7 @@ import java.util.Iterator;
 /**
  * 07.01.2021
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 
 public final class NeverListResultContainer {

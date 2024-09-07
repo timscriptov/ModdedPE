@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 07.01.2021
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 
 public class BanErrorFragment extends BaseFragment {
@@ -25,7 +25,7 @@ public class BanErrorFragment extends BaseFragment {
         return layoutInflater.inflate(R.layout.xbid_fragment_error_ban, viewGroup, false);
     }
 
-    public void onViewCreated(View view, Bundle bundle) {
+    public void onViewCreated(@NotNull View view, Bundle bundle) {
         super.onViewCreated(view, bundle);
         Bundle arguments = getArguments();
         if (arguments == null) {

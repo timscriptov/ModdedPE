@@ -1,7 +1,7 @@
 package com.mojang.minecraftpe.packagesource;
 
 /**
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public interface PackageSourceListener {
     public static final int DOWNLOADFAILEDREASON_CANCELED = 5;

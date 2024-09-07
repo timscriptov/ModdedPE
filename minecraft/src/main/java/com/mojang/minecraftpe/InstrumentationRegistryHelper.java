@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 /**
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public class InstrumentationRegistryHelper {
     public static boolean getIsRunningInAppCenter() {

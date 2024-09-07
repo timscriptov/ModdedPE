@@ -13,13 +13,11 @@ import com.wortise.ads.WortiseSdk
 import java.io.File
 
 class App : Application() {
-    override fun attachBaseContext(base: Context?) {
+    override fun attachBaseContext(base: Context) {
+        CustomServers(base).install()
+        ResourceInstaller(base).install()
+        NativeInstaller(base).install()
         super.attachBaseContext(base)
-        CustomServers(this).install()
-        ResourceInstaller(this).install()
-        NativeInstaller(this).install()
-        patchNativeLibraryDir()
-        loadLibraries()
     }
 
     override fun onCreate() {
@@ -28,25 +26,6 @@ class App : Application() {
         if (!BuildConfig.DEBUG) {
             WortiseSdk.initialize(this, AD_UNIT_ID)
             AdSettings.testEnabled = true
-        }
-    }
-
-    private fun patchNativeLibraryDir() {
-        runCatching {
-            Patcher.patchNativeLibraryDir(classLoader, File("${filesDir}/native/${ABIHelper.getABI()}/"))
-        }
-    }
-
-    private fun loadLibraries() {
-        System.loadLibrary("fmod")
-        arrayListOf(
-            "c++_shared",
-            "minecraftpe",
-            "MediaDecoders_Android"
-        ).forEach {
-            runCatching {
-                System.loadLibrary(it)
-            }
         }
     }
 

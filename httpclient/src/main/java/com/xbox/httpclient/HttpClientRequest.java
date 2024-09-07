@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 13.08.2022
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public class HttpClientRequest {
     private static final byte[] NO_BODY = new byte[0];

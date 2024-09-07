@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * 13.08.2022
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public class ShaHasher {
     private final MessageDigest md = MessageDigest.getInstance("SHA-256");

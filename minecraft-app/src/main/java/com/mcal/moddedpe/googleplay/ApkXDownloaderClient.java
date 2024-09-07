@@ -448,11 +448,6 @@ public class ApkXDownloaderClient extends PackageSource implements IDownloaderCl
     }
 
     @Override
-    public void onShowedAds() {
-
-    }
-
-    @Override
     public void onDestroy() {
         Log.i(LOG_TAG, "onDestroy");
         mActivity.removeListener(this);

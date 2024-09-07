@@ -18,7 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public class PDFWriter {
     private final Rect mImageRect;
@@ -44,12 +44,12 @@ public class PDFWriter {
         mTitleTextPaint = new TextPaint();
         mTitleTextPaint.setAntiAlias(true);
         mTitleTextPaint.setTextSize(64.0f);
-        mTitleTextPaint.setColor(ViewCompat.MEASURED_STATE_MASK);
+        mTitleTextPaint.setColor(-16777216);
         mTitleTextPaint.setTypeface(titleFont);
         mPageTextPaint = new TextPaint();
         mPageTextPaint.setAntiAlias(true);
         mPageTextPaint.setTextSize(32.0f);
-        mPageTextPaint.setColor(ViewCompat.MEASURED_STATE_MASK);
+        mPageTextPaint.setColor(-16777216);
     }
 
     public boolean createDocument(String[] orderedFilenames, String title) {

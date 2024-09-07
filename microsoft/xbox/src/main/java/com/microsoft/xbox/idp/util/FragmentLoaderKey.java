@@ -1,16 +1,16 @@
 package com.microsoft.xbox.idp.util;
 
-import android.app.Fragment;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.fragment.app.Fragment;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * 07.01.2021
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 
 public class FragmentLoaderKey implements Parcelable {

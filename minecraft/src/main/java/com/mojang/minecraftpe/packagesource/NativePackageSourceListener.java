@@ -1,7 +1,7 @@
 package com.mojang.minecraftpe.packagesource;
 
 /**
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public class NativePackageSourceListener implements PackageSourceListener {
     long mPackageSourceListener = 0;

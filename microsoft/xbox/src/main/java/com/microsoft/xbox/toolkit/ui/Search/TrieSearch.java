@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 07.01.2021
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 
 public class TrieSearch {
@@ -46,7 +46,7 @@ public class TrieSearch {
                 if (findWordIndex2 != -1) {
                     String upperCase = next.Text.substring(findWordIndex2).toUpperCase();
                     if (!hashtable.containsKey(upperCase)) {
-                        ArrayList arrayList = new ArrayList();
+                        ArrayList<Object> arrayList = new ArrayList<>();
                         arrayList.add(next.Context);
                         hashtable.put(upperCase, arrayList);
                     } else if (!hashtable.get(upperCase).contains(next.Context)) {
@@ -88,10 +88,10 @@ public class TrieSearch {
                 if (trieNode2.MoreNodes == null) {
                     trieNode2.MoreNodes = new Hashtable<>(26);
                 }
-                if (!trieNode2.MoreNodes.containsKey(Character.valueOf(charAt))) {
-                    trieNode2.MoreNodes.put(Character.valueOf(charAt), new TrieNode());
+                if (!trieNode2.MoreNodes.containsKey(charAt)) {
+                    trieNode2.MoreNodes.put(charAt, new TrieNode());
                 }
-                trieNode2 = trieNode2.MoreNodes.get(Character.valueOf(charAt));
+                trieNode2 = trieNode2.MoreNodes.get(charAt);
                 i2++;
             }
             if (i2 > i) {
@@ -108,7 +108,7 @@ public class TrieSearch {
     }
 
     public static @NotNull List<String> getWordMatches(TrieNode trieNode, int i, String str) {
-        ArrayList arrayList = new ArrayList();
+        ArrayList<String> arrayList = new ArrayList<>();
         if (JavaUtil.isNullOrEmpty(str)) {
             return arrayList;
         }
@@ -120,10 +120,10 @@ public class TrieSearch {
             if (i2 < upperCase.length() && i2 <= i) {
                 char charAt = upperCase.charAt(i2);
                 str2 = str2 + charAt;
-                if (trieNode.MoreNodes == null || !trieNode.MoreNodes.containsKey(Character.valueOf(charAt))) {
+                if (trieNode.MoreNodes == null || !trieNode.MoreNodes.containsKey(charAt)) {
                     break;
                 }
-                trieNode = trieNode.MoreNodes.get(Character.valueOf(charAt));
+                trieNode = trieNode.MoreNodes.get(charAt);
                 i2++;
             } else {
                 z = true;
@@ -144,7 +144,7 @@ public class TrieSearch {
     }
 
     public static @NotNull List<String> getRemainingWordMatches(TrieNode trieNode, int i, String str) {
-        ArrayList arrayList = new ArrayList();
+        ArrayList<String> arrayList = new ArrayList<>();
         if (trieNode != null && !JavaUtil.isNullOrEmpty(str)) {
             if (trieNode.IsWord && str.length() <= i) {
                 arrayList.add(str);
@@ -152,8 +152,8 @@ public class TrieSearch {
             if (trieNode.MoreNodes != null) {
                 Enumeration<Character> keys = trieNode.MoreNodes.keys();
                 while (keys.hasMoreElements()) {
-                    char charValue = keys.nextElement().charValue();
-                    arrayList.addAll(getRemainingWordMatches(trieNode.MoreNodes.get(Character.valueOf(charValue)), i, str + charValue));
+                    char charValue = keys.nextElement();
+                    arrayList.addAll(getRemainingWordMatches(trieNode.MoreNodes.get(charValue), i, str + charValue));
                 }
             }
             if (trieNode.Words != null) {

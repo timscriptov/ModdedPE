@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import org.jetbrains.annotations.Contract;
 
 /**
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 
 public class PackageSourceFactory {

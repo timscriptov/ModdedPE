@@ -1,5 +1,7 @@
 package com.microsoft.xbox.idp.util;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -7,11 +9,11 @@ import java.util.List;
 /**
  * 07.01.2021
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 
 public class HttpHeaders {
-    private final List<Header> headers = new ArrayList();
+    private final List<Header> headers = new ArrayList<>();
 
     public void add(String str, String str2) {
         this.headers.add(new Header(str, str2));
@@ -46,6 +48,7 @@ public class HttpHeaders {
         return null;
     }
 
+    @NotNull
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("[ ");
@@ -73,6 +76,7 @@ public class HttpHeaders {
             return this.value;
         }
 
+        @NotNull
         public String toString() {
             return "{ " + "\"" + this.key + "\": " + "\"" + this.value + "\"" + " }";
         }

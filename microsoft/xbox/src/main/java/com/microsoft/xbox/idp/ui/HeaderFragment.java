@@ -2,20 +2,17 @@ package com.microsoft.xbox.idp.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.LoaderManager;
-import android.content.Loader;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
-
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 import com.google.gson.GsonBuilder;
-import com.microsoft.xboxtcui.R;
 import com.microsoft.xbox.idp.compat.BaseFragment;
 import com.microsoft.xbox.idp.model.UserAccount;
 import com.microsoft.xbox.idp.services.EndpointsFactory;
@@ -25,7 +22,7 @@ import com.microsoft.xbox.idp.util.CacheUtil;
 import com.microsoft.xbox.idp.util.FragmentLoaderKey;
 import com.microsoft.xbox.idp.util.HttpCall;
 import com.microsoft.xbox.idp.util.HttpUtil;
-
+import com.microsoft.xboxtcui.R;
 import org.apache.http.client.methods.HttpGet;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 07.01.2021
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 
 public class HeaderFragment extends BaseFragment implements View.OnClickListener {
@@ -45,7 +42,9 @@ public class HeaderFragment extends BaseFragment implements View.OnClickListener
     public UserAccount userAccount;
     public AppCompatTextView userEmail;
     public AppCompatImageView userImageView;
-    public final LoaderManager.LoaderCallbacks<BitmapLoader.Result> imageCallbacks = new LoaderManager.LoaderCallbacks<BitmapLoader.Result>() {
+    private LoaderManager loaderManager;
+
+    public final LoaderManager.LoaderCallbacks<BitmapLoader.Result> imageCallbacks = new LoaderManager.LoaderCallbacks<>() {
         @Contract("_, _ -> new")
         public @NotNull Loader<BitmapLoader.Result> onCreateLoader(int i, Bundle bundle) {
             Log.d(HeaderFragment.TAG, "Creating LOADER_USER_IMAGE_URL");
@@ -54,7 +53,7 @@ public class HeaderFragment extends BaseFragment implements View.OnClickListener
         }
 
         @SuppressLint("WrongConstant")
-        public void onLoadFinished(Loader<BitmapLoader.Result> loader, @NotNull BitmapLoader.Result result) {
+        public void onLoadFinished(@NotNull Loader<BitmapLoader.Result> loader, @NotNull BitmapLoader.Result result) {
             Log.d(HeaderFragment.TAG, "LOADER_USER_IMAGE_URL finished");
             if (result.hasData()) {
                 userImageView.setVisibility(0);
@@ -65,22 +64,22 @@ public class HeaderFragment extends BaseFragment implements View.OnClickListener
             }
         }
 
-        public void onLoaderReset(Loader<BitmapLoader.Result> loader) {
+        public void onLoaderReset(@NotNull Loader<BitmapLoader.Result> loader) {
             userImageView.setImageBitmap(null);
         }
     };
-    LoaderManager.LoaderCallbacks<ObjectLoader.Result<UserAccount>> userAccountCallbacks = new LoaderManager.LoaderCallbacks<ObjectLoader.Result<UserAccount>>() {
-        public void onLoaderReset(Loader<ObjectLoader.Result<UserAccount>> loader) {
+    LoaderManager.LoaderCallbacks<ObjectLoader.Result<UserAccount>> userAccountCallbacks = new LoaderManager.LoaderCallbacks<>() {
+        public void onLoaderReset(@NotNull Loader<ObjectLoader.Result<UserAccount>> loader) {
         }
 
         @Contract("_, _ -> new")
         public @NotNull Loader<ObjectLoader.Result<UserAccount>> onCreateLoader(int i, Bundle bundle) {
             Log.d(HeaderFragment.TAG, "Creating LOADER_GET_PROFILE");
-            return new ObjectLoader(getActivity(), CacheUtil.getObjectLoaderCache(), new FragmentLoaderKey(HeaderFragment.class, 1), UserAccount.class, UserAccount.registerAdapters(new GsonBuilder()).create(), HttpUtil.appendCommonParameters(new HttpCall(HttpGet.METHOD_NAME, EndpointsFactory.get().accounts(), "/users/current/profile"), "4"));
+            return new ObjectLoader<>(getActivity(), CacheUtil.getObjectLoaderCache(), new FragmentLoaderKey(HeaderFragment.class, 1), UserAccount.class, UserAccount.registerAdapters(new GsonBuilder()).create(), HttpUtil.appendCommonParameters(new HttpCall(HttpGet.METHOD_NAME, EndpointsFactory.get().accounts(), "/users/current/profile"), "4"));
         }
 
         @SuppressLint("WrongConstant")
-        public void onLoadFinished(Loader<ObjectLoader.Result<UserAccount>> loader, @NotNull ObjectLoader.Result<UserAccount> result) {
+        public void onLoadFinished(@NotNull Loader<ObjectLoader.Result<UserAccount>> loader, @NotNull ObjectLoader.Result<UserAccount> result) {
             Log.d(HeaderFragment.TAG, "LOADER_GET_PROFILE finished");
             if (result.hasData()) {
                 userEmail.setText(userAccount.email);
@@ -90,7 +89,7 @@ public class HeaderFragment extends BaseFragment implements View.OnClickListener
                 } else {
                     userName.setVisibility(8);
                 }
-                getLoaderManager().initLoader(2, null, imageCallbacks);
+                loaderManager.initLoader(2, null, imageCallbacks);
                 return;
             }
             Log.e(HeaderFragment.TAG, "Error getting UserAccount");
@@ -111,13 +110,14 @@ public class HeaderFragment extends BaseFragment implements View.OnClickListener
 
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        loaderManager = LoaderManager.getInstance(this);
     }
 
     public View onCreateView(@NotNull LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         return layoutInflater.inflate(R.layout.xbid_fragment_header, viewGroup, false);
     }
 
-    public void onViewCreated(View view, Bundle bundle) {
+    public void onViewCreated(@NotNull View view, Bundle bundle) {
         super.onViewCreated(view, bundle);
         view.findViewById(R.id.xbid_close).setOnClickListener(this);
         userImageView = view.findViewById(R.id.xbid_user_image);
@@ -129,7 +129,7 @@ public class HeaderFragment extends BaseFragment implements View.OnClickListener
         super.onResume();
         Bundle arguments = getArguments();
         if (arguments != null) {
-            getLoaderManager().initLoader(1, arguments, userAccountCallbacks);
+            loaderManager.initLoader(1, arguments, userAccountCallbacks);
         } else {
             Log.e(TAG, "No arguments provided");
         }

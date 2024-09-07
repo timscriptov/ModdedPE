@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 
 /**
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public class Minecraft_Market_Demo extends MainActivity {
     public void buyGame() {

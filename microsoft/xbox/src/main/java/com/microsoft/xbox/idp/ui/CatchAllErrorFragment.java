@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 07.01.2021
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 
 public class CatchAllErrorFragment extends BaseFragment {
@@ -26,7 +26,7 @@ public class CatchAllErrorFragment extends BaseFragment {
         return layoutInflater.inflate(R.layout.xbid_fragment_error_catch_all, viewGroup, false);
     }
 
-    public void onViewCreated(View view, Bundle bundle) {
+    public void onViewCreated(@NotNull View view, Bundle bundle) {
         super.onViewCreated(view, bundle);
         UiUtil.ensureClickableSpanOnUnderlineSpan(view.findViewById(R.id.xbid_error_message), R.string.xbid_catchall_error_android, new ClickableSpan() {
             public void onClick(View view) {

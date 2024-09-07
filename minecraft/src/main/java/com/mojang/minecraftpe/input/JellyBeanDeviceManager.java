@@ -6,7 +6,7 @@ import android.hardware.input.InputManager;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public class JellyBeanDeviceManager extends InputDeviceManager implements InputManager.InputDeviceListener {
     private final InputManager inputManager;

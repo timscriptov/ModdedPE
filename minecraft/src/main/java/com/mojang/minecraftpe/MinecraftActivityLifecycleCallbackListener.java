@@ -6,7 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 /**
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public class MinecraftActivityLifecycleCallbackListener implements Application.ActivityLifecycleCallbacks {
     native void nativeDisableBraze();

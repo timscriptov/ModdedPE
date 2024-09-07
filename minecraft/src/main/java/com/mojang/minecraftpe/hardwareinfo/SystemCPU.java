@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * 29.03.2023
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public class SystemCPU implements Comparable<SystemCPU> {
     protected static final String SYSTEM_CPU_PATH = "/sys/devices/system/cpu";

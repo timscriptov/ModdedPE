@@ -13,11 +13,35 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.moddedpe.App.Companion.PRIVACY_POLICE_GAME
 import com.mcal.moddedpe.App.Companion.PRIVACY_POLICE_MINECRAFT
 import com.mcal.moddedpe.App.Companion.PRIVACY_POLICE_XBOX
+import com.mcal.moddedpe.utils.ABIHelper
+import com.mcal.moddedpe.utils.Patcher
+import java.io.File
 
 class GameActivity : AdActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        patchNativeLibraryDir()
+        loadLibraries()
         super.onCreate(savedInstanceState)
         showAgreeDialog()
+    }
+
+    private fun patchNativeLibraryDir() {
+        runCatching {
+            Patcher.patchNativeLibraryDir(classLoader, File("${filesDir}/native/${ABIHelper.getABI()}/"))
+        }
+    }
+
+    private fun loadLibraries() {
+        System.loadLibrary("fmod")
+        arrayListOf(
+            "c++_shared",
+            "minecraftpe",
+            "MediaDecoders_Android"
+        ).forEach {
+            runCatching {
+                System.loadLibrary(it)
+            }
+        }
     }
 
     override fun launchUri(uri: String?) {

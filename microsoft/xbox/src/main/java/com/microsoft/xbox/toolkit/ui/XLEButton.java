@@ -8,16 +8,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
+import androidx.appcompat.widget.AppCompatButton;
 import com.microsoft.xbox.toolkit.XLERValueHelper;
 
 /**
  * 07.01.2021
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 
-@SuppressLint("AppCompatCustomView")
-public class XLEButton extends Button {
+public class XLEButton extends AppCompatButton {
     protected boolean disableSound;
     protected ButtonStateHandler stateHandler;
     private boolean alwaysClickable;

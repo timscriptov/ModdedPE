@@ -21,7 +21,7 @@ import java.util.Collections;
 /**
  * 07.01.2021
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 
 public class SystemUtil {
@@ -32,11 +32,11 @@ public class SystemUtil {
     }
 
     public static int DIPtoPixels(float f) {
-        return (int) TypedValue.applyDimension(1, f, XboxTcuiSdk.getResources().getDisplayMetrics());
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, f, XboxTcuiSdk.getResources().getDisplayMetrics());
     }
 
     public static int SPtoPixels(float f) {
-        return (int) TypedValue.applyDimension(2, f, XboxTcuiSdk.getResources().getDisplayMetrics());
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, f, XboxTcuiSdk.getResources().getDisplayMetrics());
     }
 
     public static int getScreenWidth() {
@@ -125,7 +125,7 @@ public class SystemUtil {
                     }
                     StringBuilder buf = new StringBuilder();
                     for (int idx = 0; idx < mac.length; idx++) {
-                        buf.append(String.format("%02X:", Byte.valueOf(mac[idx])));
+                        buf.append(String.format("%02X:", mac[idx]));
                     }
                     if (buf.length() > 0) {
                         buf.deleteCharAt(buf.length() - 1);

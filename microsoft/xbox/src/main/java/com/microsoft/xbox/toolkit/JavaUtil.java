@@ -29,7 +29,7 @@ import java.util.TimeZone;
 /**
  * 07.01.2021
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 
 public class JavaUtil {
@@ -305,11 +305,11 @@ public class JavaUtil {
     public static @NotNull String JavaDateToJSONDate(Date date) {
         GregorianCalendar gregorianCalendar = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
         gregorianCalendar.setTime(date);
-        return String.format("/Date(%d)/", Long.valueOf(gregorianCalendar.getTimeInMillis()));
+        return String.format("/Date(%d)/", gregorianCalendar.getTimeInMillis());
     }
 
     public static <T> @NotNull List<T> listIteratorToList(ListIterator<T> listIterator) {
-        ArrayList arrayList = new ArrayList();
+        ArrayList<T> arrayList = new ArrayList<>();
         while (listIterator != null && listIterator.hasNext()) {
             arrayList.add(listIterator.next());
         }
@@ -323,7 +323,7 @@ public class JavaUtil {
         if (i == 1) {
             return str2;
         }
-        return String.format(str3, Integer.valueOf(i));
+        return String.format(str3, i);
     }
 
     public static int randInRange(@NotNull Random random, int i, int i2) {
@@ -334,7 +334,7 @@ public class JavaUtil {
     public static <T> @NotNull ArrayList<T> sublistShuffle(ArrayList<T> arrayList, int i) {
         Random random = new Random();
         ArrayList<T> arrayList2 = new ArrayList<>(i);
-        if (!(arrayList == null || arrayList.size() == 0)) {
+        if (!(arrayList == null || arrayList.isEmpty())) {
             boolean z = true;
             if (arrayList.size() >= i) {
                 for (int i2 = 0; i2 < i; i2++) {

@@ -2,7 +2,6 @@ package com.microsoft.xbox.idp.util;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.LoaderManager;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -11,6 +10,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import androidx.loader.app.LoaderManager;
 import com.microsoft.xbox.idp.ui.ErrorActivity;
 
 import org.jetbrains.annotations.Contract;
@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * 07.01.2021
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 
 public final class ErrorHelper implements Parcelable {
@@ -52,7 +52,7 @@ public final class ErrorHelper implements Parcelable {
 
     protected ErrorHelper(@NotNull Parcel parcel) {
         this.loaderId = parcel.readInt();
-        this.loaderArgs = parcel.readBundle();
+        this.loaderArgs = parcel.readBundle(getClass().getClassLoader());
     }
 
     public int describeContents() {
@@ -99,8 +99,7 @@ public final class ErrorHelper implements Parcelable {
                 z2 = loaderInfo.hasCachedData(obj);
             }
             if (z2 || loaderManager.getLoader(i) != null || !z || isConnected()) {
-                String str = TAG;
-                Log.d(str, "initializing loader #" + this.loaderId);
+                Log.d(TAG, "initializing loader #" + this.loaderId);
                 loaderManager.initLoader(i, bundle, loaderInfo.getLoaderCallbacks());
                 return true;
             }

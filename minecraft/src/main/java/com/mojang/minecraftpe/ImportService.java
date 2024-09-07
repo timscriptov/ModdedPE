@@ -6,11 +6,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.*;
-import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 
 /**
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public class ImportService extends Service {
     static final int MSG_CORRELATION_CHECK = 672;
@@ -31,17 +31,17 @@ public class ImportService extends Service {
         public void handleMessage(@NonNull Message msg) {
             if (msg.what == ImportService.MSG_CORRELATION_CHECK) {
                 SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                String string = defaultSharedPreferences.getString("deviceId", "?");
-                String string2 = defaultSharedPreferences.getString("LastDeviceSessionId", "");
-                if (string.equals("?")) {
+                String deviceId = defaultSharedPreferences.getString("deviceId", "?");
+                String sessionnnId = defaultSharedPreferences.getString("LastDeviceSessionId", "");
+                if (deviceId.equals("?")) {
                     return;
                 }
                 try {
                     long firstInstallTime = getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).firstInstallTime;
                     Bundle bundle = new Bundle();
                     bundle.putLong("time", firstInstallTime);
-                    bundle.putString("deviceId", string);
-                    bundle.putString("sessionId", string2);
+                    bundle.putString("deviceId", deviceId);
+                    bundle.putString("sessionId", sessionnnId);
                     Message obtain = Message.obtain(null, ImportService.MSG_CORRELATION_RESPONSE);
                     obtain.setData(bundle);
                     msg.replyTo.send(obtain);

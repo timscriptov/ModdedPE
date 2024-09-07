@@ -3,7 +3,7 @@ package com.microsoft.xal.logging;
 /**
  * 02.10.2020
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 
 public class LogEntry {

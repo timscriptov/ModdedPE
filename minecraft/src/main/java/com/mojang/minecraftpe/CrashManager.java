@@ -4,7 +4,7 @@ import androidx.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 
 /**
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public class CrashManager {
     private static native String nativeNotifyUncaughtException();

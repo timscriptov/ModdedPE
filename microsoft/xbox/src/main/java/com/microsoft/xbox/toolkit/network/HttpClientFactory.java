@@ -22,7 +22,7 @@ import org.spongycastle.asn1.cmp.PKIFailureInfo;
 /**
  * 07.01.2021
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 
 public class HttpClientFactory {
@@ -75,18 +75,15 @@ public class HttpClientFactory {
                 if (this.client == null) {
                     this.client = new XLEHttpClient(this.connectionManager, this.params);
                 }
-                AbstractXLEHttpClient abstractXLEHttpClient = this.client;
-                return abstractXLEHttpClient;
+                return this.client;
             } else if (this.clientWithTimeoutOverride == null) {
                 HttpParams copy = this.params.copy();
                 int i2 = i * 1000;
                 HttpConnectionParams.setConnectionTimeout(copy, i2);
                 HttpConnectionParams.setSoTimeout(copy, i2);
-                XLEHttpClient xLEHttpClient = new XLEHttpClient(this.connectionManager, copy);
-                return xLEHttpClient;
+                return new XLEHttpClient(this.connectionManager, copy);
             } else {
-                AbstractXLEHttpClient abstractXLEHttpClient2 = this.clientWithTimeoutOverride;
-                return abstractXLEHttpClient2;
+                return this.clientWithTimeoutOverride;
             }
         }
     }

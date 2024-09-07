@@ -24,8 +24,16 @@ The Open Source NModAPI will help you a lot:)<br>
 
 ### Additional components
 > [XHook][4]<br>
-> [Cydia Substrate][5]<br>
-> [ELFIO][6]<br>
+[Cydia Substrate][5]<br>
+[ELFIO][6]<br>
+
+### Telegram
+> Developer:<br>
+https://t.me/timscriptov<br>
+Group:<br>
+https://t.me/dexprotect<br>
+Channel:<br>
+https://t.me/apkeditorproofficial
 
 [1]: Art/title_logo.png
 [2]: https://github.com/listerily

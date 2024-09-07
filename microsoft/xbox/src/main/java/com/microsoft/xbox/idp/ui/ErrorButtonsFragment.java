@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 07.01.2021
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 
 public class ErrorButtonsFragment extends BaseFragment implements View.OnClickListener {
@@ -30,7 +30,8 @@ public class ErrorButtonsFragment extends BaseFragment implements View.OnClickLi
     };
     private Callbacks callbacks = NO_OP_CALLBACKS;
 
-    public void onAttach(Activity activity) {
+    @Override
+    public void onAttach(@NotNull Activity activity) {
         super.onAttach(activity);
         this.callbacks = (Callbacks) activity;
     }
@@ -44,7 +45,7 @@ public class ErrorButtonsFragment extends BaseFragment implements View.OnClickLi
         return layoutInflater.inflate(R.layout.xbid_fragment_error_buttons, viewGroup, false);
     }
 
-    public void onViewCreated(View view, Bundle bundle) {
+    public void onViewCreated(@NotNull View view, Bundle bundle) {
         super.onViewCreated(view, bundle);
         AppCompatButton button = view.findViewById(R.id.xbid_error_left_button);
         button.setOnClickListener(this);

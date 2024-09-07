@@ -6,15 +6,15 @@ import android.graphics.Bitmap;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
+import androidx.appcompat.widget.AppCompatImageView;
 
 /**
  * 07.01.2021
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 
-@SuppressLint("AppCompatCustomView")
-public class XLEImageView extends ImageView {
+public class XLEImageView extends AppCompatImageView {
     public static final int IMAGE_ERROR = 2;
     public static final int IMAGE_FINAL = 0;
     public static final int IMAGE_LOADING = 1;

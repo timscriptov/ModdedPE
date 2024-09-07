@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * 07.01.2021
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 
 public final class Privacy {
@@ -62,7 +62,7 @@ public final class Privacy {
 
         public static @NotNull Settings newWithMap() {
             Settings settings2 = new Settings();
-            settings2.settings = new HashMap();
+            settings2.settings = new HashMap<>();
             return settings2;
         }
 
@@ -79,19 +79,20 @@ public final class Privacy {
         public void write(JsonWriter jsonWriter, @NotNull Map<Key, Value> map) throws IOException {
             Setting[] settingArr = new Setting[map.size()];
             int i = -1;
-            for (Map.Entry next : map.entrySet()) {
+            for (Map.Entry<Key, Value> next : map.entrySet()) {
                 Setting setting = new Setting();
-                setting.setting = (Key) next.getKey();
-                setting.value = (Value) next.getValue();
+                setting.setting = next.getKey();
+                setting.value = next.getValue();
                 i++;
                 settingArr[i] = setting;
             }
             new Gson().toJson(settingArr, Setting[].class, jsonWriter);
         }
 
+        @NotNull
         public Map<Key, Value> read(JsonReader jsonReader) throws IOException {
             Setting[] settingArr = new Gson().fromJson(jsonReader, Setting[].class);
-            HashMap hashMap = new HashMap();
+            HashMap<Key, Value> hashMap = new HashMap<>();
             for (Setting setting : settingArr) {
                 if (!(setting.setting == null || setting.value == null)) {
                     hashMap.put(setting.setting, setting.value);

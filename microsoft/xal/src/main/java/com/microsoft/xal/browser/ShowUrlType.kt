@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Contract
 /**
  * 13.08.2022
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 enum class ShowUrlType {
     Normal,
@@ -33,37 +33,24 @@ enum class ShowUrlType {
         @JvmStatic
         @Contract(pure = true)
         fun fromInt(value: Int): ShowUrlType? {
-            if (value == 0) {
-                return Normal
+            return when (value) {
+                0 -> Normal
+                1 -> CookieRemoval
+                2 -> CookieRemovalSkipIfSharedCredentials
+                3 -> NonAuthFlow
+                else -> null
             }
-            if (value == 1) {
-                return CookieRemoval
-            }
-            if (value == 2) {
-                return CookieRemovalSkipIfSharedCredentials
-            }
-            return if (value != 3) {
-                null
-            } else NonAuthFlow
         }
     }
 
     override fun toString(): String {
         val i = entries[ordinal].ordinal
-        return if (i != 1) {
-            if (i != 2) {
-                if (i != 3) {
-                    if (i != 4) {
-                        "Unknown"
-                    } else {
-                        "NonAuthFlow"
-                    }
-                } else {
-                    "CookieRemovalSkipIfSharedCredentials"
-                }
-            } else "CookieRemoval"
-        } else {
-            "Normal"
+        return when (i) {
+            0 -> "Normal"
+            1 -> "CookieRemoval"
+            2 -> "CookieRemovalSkipIfSharedCredentials"
+            3 -> "NonAuthFlow"
+            else -> "Unknown"
         }
     }
 }

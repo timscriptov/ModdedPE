@@ -2,35 +2,28 @@ package com.mojang.minecraftpe;
 
 import android.content.Context;
 import android.text.InputFilter;
-import android.util.AttributeSet;
+import android.text.Spanned;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputConnectionWrapper;
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatEditText;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
 /**
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public class TextInputProxyEditTextbox extends AppCompatEditText {
-    public int allowedLength;
     private MCPEKeyWatcher _mcpeKeyWatcher;
-    private String mLastSentText;
+    public int allowedLength;
 
-    public TextInputProxyEditTextbox(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        _mcpeKeyWatcher = null;
-        allowedLength = 160;
-    }
+    public interface MCPEKeyWatcher {
+        boolean onBackKeyPressed();
 
-    public TextInputProxyEditTextbox(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        _mcpeKeyWatcher = null;
-        allowedLength = 160;
+        void onDeleteKeyPressed();
     }
 
     public TextInputProxyEditTextbox(Context context) {
@@ -51,78 +44,62 @@ public class TextInputProxyEditTextbox extends AppCompatEditText {
         setFilters(arrayList.toArray(new InputFilter[arrayList.size()]));
     }
 
-    public boolean shouldSendText() {
-        return mLastSentText == null || !getText().toString().equals(mLastSentText);
-    }
-
-    public void setTextFromGame(String text) {
-        this.mLastSentText = text;
-        setText(text);
-    }
-
-    public void updateLastSentText() {
-        mLastSentText = getText().toString();
+    @Override
+    public InputConnection onCreateInputConnection(@NotNull EditorInfo editorInfo) {
+        return new MCPEInputConnection(super.onCreateInputConnection(editorInfo), true, this);
     }
 
     @Override
-    public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
-        return new MCPEInputConnection(super.onCreateInputConnection(outAttrs), true, this);
-    }
-
-    @Override
-    public boolean onKeyPreIme(int keyCode, KeyEvent event) {
-        if (keyCode == 4 && event.getAction() == KeyEvent.ACTION_UP) {
+    public boolean onKeyPreIme(int keyCode, KeyEvent keyEvent) {
+        if (keyCode == 4 && keyEvent.getAction() == 1) {
             MCPEKeyWatcher mCPEKeyWatcher = _mcpeKeyWatcher;
-            if (mCPEKeyWatcher == null) {
-                return false;
+            if (mCPEKeyWatcher != null) {
+                return mCPEKeyWatcher.onBackKeyPressed();
             }
-            return mCPEKeyWatcher.onBackKeyPressed();
+            return false;
         }
-        return super.onKeyPreIme(keyCode, event);
+        return super.onKeyPreIme(keyCode, keyEvent);
     }
 
-    public void setOnMCPEKeyWatcher(MCPEKeyWatcher mcpeKeyWatcher) {
-        _mcpeKeyWatcher = mcpeKeyWatcher;
+    public void setOnMCPEKeyWatcher(MCPEKeyWatcher mCPEKeyWatcher) {
+        _mcpeKeyWatcher = mCPEKeyWatcher;
     }
 
-    @NonNull
-    @Contract(pure = true)
-    private InputFilter createSingleLineFilter() {
-        return (source, start, end, dest, destStart, destEnd) -> {
-            while (start < end) {
-                if (source.charAt(start) == '\n') {
-                    return dest.subSequence(destStart, destEnd);
-                }
-                start++;
-            }
-            return null;
-        };
-    }
-
-    @NonNull
-    @Contract(pure = true)
-    private InputFilter createUnicodeFilter() {
-        return (source, start, end, dest, destStart, destEnd) -> {
-            StringBuilder sb = null;
-            for (int i = start; i < end; i++) {
-                if (source.charAt(i) == 12288) {
-                    if (sb == null) {
-                        sb = new StringBuilder(source);
+    @Contract(" -> new")
+    private @NotNull InputFilter createSingleLineFilter() {
+        return new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                for (int i = start; i < end; i++) {
+                    if (source.charAt(i) == '\n') {
+                        return source.subSequence(start, i);
                     }
-                    sb.setCharAt(i, ' ');
                 }
+                return null;
             }
-            if (sb != null) {
-                return sb.subSequence(start, end);
-            }
-            return null;
         };
     }
 
-    public interface MCPEKeyWatcher {
-        boolean onBackKeyPressed();
-
-        void onDeleteKeyPressed();
+    @Contract(" -> new")
+    private @NotNull InputFilter createUnicodeFilter() {
+        return new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                StringBuilder sb = null;
+                for (int i = start; i < end; i++) {
+                    if (source.charAt(i) == 12288) {
+                        if (sb == null) {
+                            sb = new StringBuilder(source);
+                        }
+                        sb.setCharAt(i, ' ');
+                    }
+                }
+                if (sb != null) {
+                    return sb.subSequence(start, end);
+                }
+                return null;
+            }
+        };
     }
 
     private class MCPEInputConnection extends InputConnectionWrapper {
@@ -134,15 +111,15 @@ public class TextInputProxyEditTextbox extends AppCompatEditText {
         }
 
         @Override
-        public boolean sendKeyEvent(KeyEvent event) {
-            if (textbox.getText().length() == 0 && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == 67) {
+        public boolean sendKeyEvent(KeyEvent keyEvent) {
+            if (textbox.getText().length() == 0 && keyEvent.getAction() == 0 && keyEvent.getKeyCode() == 67) {
                 if (_mcpeKeyWatcher == null) {
                     return false;
                 }
                 _mcpeKeyWatcher.onDeleteKeyPressed();
                 return false;
             }
-            return super.sendKeyEvent(event);
+            return super.sendKeyEvent(keyEvent);
         }
     }
 }

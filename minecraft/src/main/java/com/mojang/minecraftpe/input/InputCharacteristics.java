@@ -6,7 +6,7 @@ import androidx.core.view.InputDeviceCompat;
 import java.io.File;
 
 /**
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public class InputCharacteristics {
     public static boolean allControllersHaveDoubleTriggers() {

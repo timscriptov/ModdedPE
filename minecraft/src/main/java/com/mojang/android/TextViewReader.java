@@ -6,7 +6,7 @@ package com.mojang.android;
 import android.widget.TextView;
 
 /**
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public class TextViewReader implements StringValue {
     private final TextView _view;

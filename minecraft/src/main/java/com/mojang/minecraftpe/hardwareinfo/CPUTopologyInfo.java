@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 /**
  * 29.03.2023
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public class CPUTopologyInfo {
     private static final Pattern CPU_LIST_VALUE_FORMAT = Pattern.compile("(\\d{1,4})(?:-(\\d{1,4}))?");

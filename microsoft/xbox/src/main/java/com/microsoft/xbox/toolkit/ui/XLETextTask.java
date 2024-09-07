@@ -13,7 +13,7 @@ import java.lang.ref.WeakReference;
 /**
  * 07.01.2021
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 
 public class XLETextTask extends AsyncTask<XLETextArg, Void, Bitmap> {
@@ -52,7 +52,7 @@ public class XLETextTask extends AsyncTask<XLETextArg, Void, Bitmap> {
             i = round2;
         }
         if (params.hasTextAspectRatio()) {
-            float floatValue = params.getTextAspectRatio().floatValue();
+            float floatValue = params.getTextAspectRatio();
             if (floatValue > 0.0f) {
                 float f = (float) i;
                 float f2 = ((float) i2) * floatValue;
@@ -67,7 +67,7 @@ public class XLETextTask extends AsyncTask<XLETextArg, Void, Bitmap> {
         if (params.hasEraseColor()) {
             createBitmap.eraseColor(params.getEraseColor());
         }
-        new Canvas(createBitmap).drawText(text, (float) ((Math.max(0, i2 - round) / 2) + 0), (-textPaint.ascent()) + ((float) (Math.max(0, i - round2) / 2)), textPaint);
+        new Canvas(createBitmap).drawText(text, (float) ((Math.max(0, i2 - round) / 2)), (-textPaint.ascent()) + ((float) (Math.max(0, i - round2) / 2)), textPaint);
         return createBitmap;
     }
 

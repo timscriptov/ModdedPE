@@ -14,7 +14,7 @@ import java.io.StringWriter;
 /**
  * 07.01.2021
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 
 public class ObjectLoader<T> extends WorkerLoader<ObjectLoader.Result<T>> {
@@ -105,22 +105,14 @@ public class ObjectLoader<T> extends WorkerLoader<ObjectLoader.Result<T>> {
                 } else if (cls == Void.class) {
                     listener.onResult(new Result(null));
                 } else {
-                    StringWriter sw = new StringWriter();
-                    try {
-                        InputStreamReader r1 = new InputStreamReader(new BufferedInputStream(stream));
-                        try {
-                            Result<T> result2 = new Result<>(gson.fromJson(r1, cls));
-                            if (hasCache()) {
-                                synchronized (cache) {
-                                    cache.put(resultKey, result2);
-                                }
+                    try (InputStreamReader r1 = new InputStreamReader(new BufferedInputStream(stream))) {
+                        Result<T> result2 = new Result<>(gson.fromJson(r1, cls));
+                        if (hasCache()) {
+                            synchronized (cache) {
+                                cache.put(resultKey, result2);
                             }
-                            listener.onResult(result2);
-                        } finally {
-                            r1.close();
                         }
-                    } finally {
-                        sw.close();
+                        listener.onResult(result2);
                     }
                 }
             });

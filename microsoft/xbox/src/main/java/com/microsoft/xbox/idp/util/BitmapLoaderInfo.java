@@ -1,13 +1,12 @@
 package com.microsoft.xbox.idp.util;
 
-import android.app.LoaderManager;
-
+import androidx.loader.app.LoaderManager;
 import com.microsoft.xbox.idp.toolkit.BitmapLoader;
 
 /**
  * 07.01.2021
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 
 public class BitmapLoaderInfo implements ErrorHelper.LoaderInfo {

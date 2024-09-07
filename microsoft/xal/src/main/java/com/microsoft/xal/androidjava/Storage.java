@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 02.10.2020
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 
 public class Storage {

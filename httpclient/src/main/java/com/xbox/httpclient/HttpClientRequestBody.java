@@ -14,7 +14,7 @@ import okio.Okio;
 /**
  * 13.08.2022
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public final class HttpClientRequestBody extends RequestBody {
     private final long callHandle;

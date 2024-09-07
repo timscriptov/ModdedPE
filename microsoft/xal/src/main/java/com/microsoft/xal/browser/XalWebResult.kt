@@ -19,7 +19,7 @@ package com.microsoft.xal.browser
 /**
  * 13.08.2022
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 object XalWebResult {
     @JvmField

@@ -8,7 +8,7 @@ import android.os.Build;
 import android.util.Log;
 
 /**
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public class AppConstants {
     public static String ANDROID_BUILD;

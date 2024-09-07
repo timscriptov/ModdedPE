@@ -2,6 +2,8 @@ package com.mcal.moddedpe.task
 
 import android.annotation.SuppressLint
 import android.content.Context
+import androidx.preference.PreferenceManager
+import com.mcal.moddedpe.BuildConfig
 import com.mcal.moddedpe.utils.ABIHelper
 import com.mcal.moddedpe.utils.FileHelper
 import java.io.File
@@ -12,9 +14,12 @@ class NativeInstaller(
     private val context: Context
 ) {
     fun install() {
-        val abi = getDeviceABI()
-        extractLibArchive(abi)
-        extractLibraries(abi)
+        if(!isInstalled()) {
+            val abi = getDeviceABI()
+            extractLibArchive(abi)
+            extractLibraries(abi)
+            setIsInstalled(true)
+        }
     }
 
     private fun getDeviceABI(): String {
@@ -84,5 +89,15 @@ class NativeInstaller(
             setReadable(true)
             setWritable(true)
         }
+    }
+
+    private fun isInstalled(): Boolean {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        return sharedPreferences.getBoolean("installed_native_" + BuildConfig.VERSION_CODE, false)
+    }
+
+    private fun setIsInstalled(mode: Boolean) {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        sharedPreferences.edit().putBoolean("installed_native_" + BuildConfig.VERSION_CODE, mode).apply()
     }
 }

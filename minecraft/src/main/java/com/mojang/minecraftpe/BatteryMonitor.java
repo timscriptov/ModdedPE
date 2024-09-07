@@ -8,7 +8,7 @@ import androidx.core.app.NotificationCompat;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public class BatteryMonitor extends BroadcastReceiver {
     private final Context mContext;
@@ -46,7 +46,7 @@ public class BatteryMonitor extends BroadcastReceiver {
     public void onReceive(Context context, @NotNull Intent intent) {
         mBatteryLevel = intent.getIntExtra("level", -1);
         mBatteryScale = intent.getIntExtra("scale", -1);
-        mBatteryStatus = intent.getIntExtra(NotificationCompat.CATEGORY_STATUS, -1);
+        mBatteryStatus = intent.getIntExtra("status", -1);
         mBatteryTemperature = intent.getIntExtra("temperature", -1);
     }
 }

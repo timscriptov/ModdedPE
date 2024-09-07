@@ -7,7 +7,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * 13.08.2022
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public class FilePickerManager implements ActivityListener {
     static final int PICK_DIRECTORY_REQUEST_CODE = 246242755;
@@ -29,11 +29,6 @@ public class FilePickerManager implements ActivityListener {
 
     @Override
     public void onStop() {
-    }
-
-    @Override
-    public void onShowedAds() {
-
     }
 
     public void pickDirectory(String prompt, String startingLocationURI) {

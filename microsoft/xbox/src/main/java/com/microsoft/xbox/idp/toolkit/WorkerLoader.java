@@ -1,14 +1,14 @@
 package com.microsoft.xbox.idp.toolkit;
 
 import android.content.Context;
-import android.content.Loader;
 import android.os.Build;
 import android.os.Handler;
+import androidx.loader.content.Loader;
 
 /**
  * 07.01.2021
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 
 public abstract class WorkerLoader<D> extends Loader<D> {

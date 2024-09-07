@@ -1,7 +1,7 @@
 package com.mojang.minecraftpe.store;
 
 /**
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public interface Store {
     void acknowledgePurchase(String str, String str2);

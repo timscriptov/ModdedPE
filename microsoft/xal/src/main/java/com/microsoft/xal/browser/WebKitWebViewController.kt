@@ -29,16 +29,17 @@ import java.io.IOException
 /**
  * 13.08.2022
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 class WebKitWebViewController : AppCompatActivity() {
     private var mWebView: WebView? = null
 
     @SuppressLint("SetJavaScriptEnabled")
-    public override fun onCreate(bundle: Bundle?) {
-        super.onCreate(bundle)
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         val extras = intent.extras
         if (extras == null) {
+            Log.e(TAG, "onCreate() Called with no extras.")
             setResult(RESULT_FAILED)
             finish()
             return
@@ -46,57 +47,67 @@ class WebKitWebViewController : AppCompatActivity() {
         val url = extras.getString(START_URL, "")
         val endUrl = extras.getString(END_URL, "")
         if (url.isEmpty() || endUrl.isEmpty()) {
+            Log.e(TAG, "onCreate() Received invalid start or end URL.");
             setResult(RESULT_FAILED)
             finish()
             return
         }
-        val requestHeaderKeys = extras.getStringArray(REQUEST_HEADER_KEYS)
-        val requestHeaderValues = extras.getStringArray(REQUEST_HEADER_VALUES)
-        if (!requestHeaderKeys.isNullOrEmpty() && !requestHeaderValues.isNullOrEmpty()) {
-            if (requestHeaderKeys.size != requestHeaderValues.size) {
+        val requestHeaderKeys = extras.getStringArray(REQUEST_HEADER_KEYS) ?: emptyArray()
+        val requestHeaderValues = extras.getStringArray(REQUEST_HEADER_VALUES) ?: emptyArray()
+        if (requestHeaderKeys.size != requestHeaderValues.size) {
+            Log.e(TAG, "onCreate() Received request header and key arrays of different lengths.");
+            setResult(RESULT_FAILED)
+            finish()
+            return
+        }
+
+        when (extras[SHOW_TYPE] as? ShowUrlType) {
+            ShowUrlType.CookieRemoval, ShowUrlType.CookieRemovalSkipIfSharedCredentials -> {
+                Log.i(TAG, "onCreate() WebView invoked for cookie removal. Deleting cookies and finishing.")
+                if (requestHeaderKeys.isNotEmpty()) {
+                    Log.w(TAG, "onCreate() WebView invoked for cookie removal with requestHeaders.")
+                }
+                deleteCookies("login.live.com", true)
+                deleteCookies("account.live.com", true)
+                deleteCookies("live.com", true)
+                deleteCookies("xboxlive.com", true)
+                deleteCookies("sisu.xboxlive.com", true)
+
+                val intent = Intent()
+                intent.putExtra(RESPONSE_KEY, endUrl)
+                setResult(RESULT_OK, intent)
+                finish()
+                return
+            }
+
+            else -> {}
+        }
+
+        val hashMap = HashMap<String, String>(requestHeaderKeys.size)
+        for (i in requestHeaderKeys.indices) {
+            val str2 = requestHeaderKeys[i]
+            val str = requestHeaderValues[i]
+            if (str2.isNullOrEmpty() || str.isNullOrEmpty()) {
+                Log.e(TAG, "onCreate() Received null or empty request field.")
                 setResult(RESULT_FAILED)
                 finish()
                 return
             }
-            val hashMap: MutableMap<String?, String?> = HashMap(requestHeaderKeys.size)
-            for (i in requestHeaderKeys.indices) {
-                if (requestHeaderKeys[i] == null || requestHeaderKeys[i]!!
-                        .isEmpty() || requestHeaderValues[i] == null || requestHeaderValues[i]!!
-                        .isEmpty()
-                ) {
-                    setResult(RESULT_FAILED)
-                    finish()
-                    return
-                }
-                hashMap[requestHeaderKeys[i]] = requestHeaderValues[i]
-            }
+            hashMap[requestHeaderKeys[i]] = requestHeaderValues[i]
         }
-        val showUrlType = extras[SHOW_TYPE] as ShowUrlType?
-        if (showUrlType === ShowUrlType.CookieRemoval || showUrlType === ShowUrlType.CookieRemovalSkipIfSharedCredentials) {
-            deleteCookies("login.live.com", true)
-            deleteCookies("account.live.com", true)
-            deleteCookies("live.com", true)
-            deleteCookies("xboxlive.com", true)
-            deleteCookies("sisu.xboxlive.com", true)
-            setResult(RESULT_OK, Intent().apply {
-                putExtra(RESPONSE_KEY, endUrl)
-            })
-            finish()
-            return
-        }
+
         val webView = WebView(this)
         setContentView(webView)
-        webView.apply {
-            settings.javaScriptEnabled = true
-            settings.mixedContentMode = MIXED_CONTENT_COMPATIBILITY_MODE
-            webChromeClient = object : WebChromeClient() {
-                override fun onProgressChanged(webView: WebView, i: Int) {
-                    setProgress(i * 100)
-                }
+        webView.settings.javaScriptEnabled = true
+        webView.settings.mixedContentMode = MIXED_CONTENT_COMPATIBILITY_MODE
+        webView.webChromeClient = object : WebChromeClient() {
+            override fun onProgressChanged(webView: WebView, i: Int) {
+                setProgress(i * 100)
             }
-            webViewClient = XalWebViewClient(this@WebKitWebViewController, endUrl)
-            loadUrl(url)
-        }.also { mWebView = it }
+        }
+        webView.webViewClient = XalWebViewClient(this@WebKitWebViewController, endUrl)
+        webView.loadUrl(url)
+        mWebView = webView
     }
 
     private fun deleteCookies(domain: String, useHttps: Boolean) {
@@ -143,26 +154,24 @@ class WebKitWebViewController : AppCompatActivity() {
     ) : WebViewClient() {
         override fun onPageFinished(webView: WebView, url: String) {
             super.onPageFinished(webView, url)
-            webView.apply {
-                requestFocus(130)
-                sendAccessibilityEvent(8)
-                evaluateJavascript(
-                    "if (typeof window.__xal__performAccessibilityFocus === \"function\") { window.__xal__performAccessibilityFocus(); }",
-                    null
-                )
-            }
+            webView.requestFocus(130)
+            webView.sendAccessibilityEvent(8)
+            webView.evaluateJavascript(
+                "if (typeof window.__xal__performAccessibilityFocus === \"function\") { window.__xal__performAccessibilityFocus(); }",
+                null
+            )
         }
 
         @Deprecated("Deprecated in Java")
         override fun shouldOverrideUrlLoading(webView: WebView, url: String): Boolean {
-            if (url.startsWith(mUrl, 0)) {
-                setResult(RESULT_OK, Intent().apply {
-                    putExtra(RESPONSE_KEY, url)
-                })
-                finish()
-                return true
+            if (!url.startsWith(mUrl, 0)) {
+                return false
             }
-            return false
+            val intent = Intent()
+            intent.putExtra(RESPONSE_KEY, url)
+            setResult(RESULT_OK, intent)
+            finish()
+            return true
         }
 
         override fun shouldInterceptRequest(
@@ -170,7 +179,7 @@ class WebKitWebViewController : AppCompatActivity() {
             webResourceRequest: WebResourceRequest
         ): WebResourceResponse? {
             val uri = webResourceRequest.url.toString()
-            Log.e("XBOX_URI", uri)
+//            Log.e("XBOX_URI", uri)
             if (uri.contains("favicon.ico") || uri.contains("AppLogos")) {
                 Thread { webView.loadUrl(uri) }
             }
@@ -212,6 +221,7 @@ class WebKitWebViewController : AppCompatActivity() {
     }
 
     companion object {
+        private const val TAG = "WebKitWebViewController"
         const val END_URL = "END_URL"
         const val REQUEST_HEADER_KEYS = "REQUEST_HEADER_KEYS"
         const val REQUEST_HEADER_VALUES = "REQUEST_HEADER_VALUES"

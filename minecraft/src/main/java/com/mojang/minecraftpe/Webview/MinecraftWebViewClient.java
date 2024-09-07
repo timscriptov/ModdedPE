@@ -12,7 +12,7 @@ import com.mojang.minecraftpe.MainActivity;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 class MinecraftWebViewClient extends WebViewClient {
     private final MinecraftWebview mView;

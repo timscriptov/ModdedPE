@@ -22,6 +22,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.Signature
 import android.net.Uri
+import android.os.Build
 import android.util.Base64
 import android.util.Log
 import androidx.browser.customtabs.CustomTabsService
@@ -33,7 +34,7 @@ import java.security.NoSuchAlgorithmException
 /**
  * 13.08.2022
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 object BrowserSelector {
     private val customTabsAllowedBrowsers = HashMap<String, String>()
@@ -99,7 +100,7 @@ object BrowserSelector {
                 try {
                     val packageInfo = context.packageManager.getPackageInfo(packageName, 0)
                     versionCode = packageInfo.versionCode
-                    versionName = packageInfo.versionName
+                    versionName = packageInfo.versionName ?: "unknown"
                 } catch (e: PackageManager.NameNotFoundException) {
                     Log.e("ModdedPE", "userDefaultBrowserInfo() Error in getPackageInfo(): $e")
                     versionName = EnvironmentCompat.MEDIA_UNKNOWN
@@ -120,16 +121,52 @@ object BrowserSelector {
 
     @SuppressLint("PackageManagerGetSignatures")
     private fun browserAllowedForCustomTabs(context: Context, packageName: String): Boolean {
+//        val signatureBrowser = customTabsAllowedBrowsers[packageName] ?: return false
+//        try {
+//            val packageInfo = context.packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+//            if (packageInfo == null) {
+//                Log.e("ModdedPE", "No package info found for package: $packageName")
+//                return false
+//            }
+//            packageInfo.signatures?.let { signatures->
+//                for (signature in signatures) {
+//                    if (hashFromSignature(signature) == signatureBrowser) {
+//                        return true
+//                    }
+//                }
+//            }
+//        } catch (e: PackageManager.NameNotFoundException) {
+//            Log.e("ModdedPE", "browserAllowedForCustomTabs() Error in getPackageInfo(): $e")
+//        } catch (e: NoSuchAlgorithmException) {
+//            Log.e("ModdedPE", "browserAllowedForCustomTabs() Error in hashFromSignature(): $e")
+//        }
+//        return false
         val signatureBrowser = customTabsAllowedBrowsers[packageName] ?: return false
         try {
-            val packageInfo = context.packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+            val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                context.packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNING_CERTIFICATES)
+            } else {
+                context.packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+            }
             if (packageInfo == null) {
                 Log.e("ModdedPE", "No package info found for package: $packageName")
                 return false
             }
-            for (signature in packageInfo.signatures) {
-                if (hashFromSignature(signature) == signatureBrowser) {
-                    return true
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                packageInfo.signingInfo?.let { signingInfo -> // Изменено на signingInfo
+                    for (signature in signingInfo.apkContentsSigners) { // Используем apkContentsSigners вместо signatures
+                        if (hashFromSignature(signature) == signatureBrowser) { // Преобразуем в байтовый массив
+                            return true
+                        }
+                    }
+                }
+            } else {
+                packageInfo.signatures?.let { signatures ->
+                    for (signature in signatures) {
+                        if (hashFromSignature(signature) == signatureBrowser) {
+                            return true
+                        }
+                    }
                 }
             }
         } catch (e: PackageManager.NameNotFoundException) {

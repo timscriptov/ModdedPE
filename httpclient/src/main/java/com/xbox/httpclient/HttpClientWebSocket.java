@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 29.03.2023
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public final class HttpClientWebSocket extends WebSocketListener {
     private static final OkHttpClient OK_CLIENT = new OkHttpClient();

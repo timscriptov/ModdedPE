@@ -16,6 +16,7 @@
  */
 package com.microsoft.xal.browser
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -23,14 +24,13 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
-import com.microsoft.xal.browser.BrowserSelector.selectBrowser
 import com.microsoft.xal.browser.ShowUrlType.Companion.fromInt
 
 
 /**
  * 13.08.2022
  *
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 class BrowserLaunchActivity : AppCompatActivity() {
     private var mLaunchParameters: BrowserLaunchParameters? = null
@@ -39,8 +39,8 @@ class BrowserLaunchActivity : AppCompatActivity() {
     private var mSharedBrowserUsed = false
     private var mBrowserInfo: String? = null
 
-    override fun onCreate(bundle: Bundle?) {
-        super.onCreate(bundle)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         val extras = intent.extras
         if (!checkNativeCodeLoaded()) {
             Log.e(TAG, "onCreate() Called while XAL not loaded. Dropping flow and starting app's main activity.")
@@ -50,12 +50,12 @@ class BrowserLaunchActivity : AppCompatActivity() {
                 )
             )
             finish()
-        } else if (bundle != null) {
+        } else if (savedInstanceState != null) {
             Log.e(TAG, "onCreate() Recreating with saved state.")
-            mOperationId = bundle.getLong(OPERATION_ID_STATE_KEY)
-            mCustomTabsInProgress = bundle.getBoolean(CUSTOM_TABS_IN_PROGRESS_STATE_KEY)
-            mSharedBrowserUsed = bundle.getBoolean(SHARED_BROWSER_USED_STATE_KEY)
-            mBrowserInfo = bundle.getString(BROWSER_INFO_STATE_KEY)
+            mOperationId = savedInstanceState.getLong(OPERATION_ID_STATE_KEY)
+            mCustomTabsInProgress = savedInstanceState.getBoolean(CUSTOM_TABS_IN_PROGRESS_STATE_KEY)
+            mSharedBrowserUsed = savedInstanceState.getBoolean(SHARED_BROWSER_USED_STATE_KEY)
+            mBrowserInfo = savedInstanceState.getString(BROWSER_INFO_STATE_KEY)
         } else if (extras != null) {
             Log.e(TAG, "onCreate() Created with intent args. Starting auth session.")
             mOperationId = extras.getLong(OPERATION_ID, 0L)
@@ -64,7 +64,6 @@ class BrowserLaunchActivity : AppCompatActivity() {
             if (parameters == null || mOperationId == 0L) {
                 Log.e(TAG, "onCreate() Found invalid args, failing operation.")
                 finishOperation(WebResult.FAIL, null);
-                return
             }
         } else if (intent.data != null) {
             Log.e(TAG, "onCreate() Unexpectedly created with intent data. Finishing with failure.")
@@ -79,34 +78,32 @@ class BrowserLaunchActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        Log.e(TAG, "onResume()");
-        val z = mCustomTabsInProgress
+        Log.i(TAG, "onResume()");
+        val customTabsInProgress = mCustomTabsInProgress
         val browserLaunchParameters = mLaunchParameters
-        if (!z && browserLaunchParameters != null) {
-            Log.e(TAG, "onResume() Resumed with launch parameters. Starting auth session.")
+        if (!customTabsInProgress && browserLaunchParameters != null) {
+            Log.i(TAG, "onResume() Resumed with launch parameters. Starting auth session.")
             mLaunchParameters = null
             startAuthSession(browserLaunchParameters)
             return
         }
-        if (z) {
+        if (customTabsInProgress) {
             mCustomTabsInProgress = false
             val data = intent.data
             if (data != null) {
-                Log.e(TAG, "onResume() Resumed with intent data. Finishing operation successfully.")
+                Log.i(TAG, "onResume() Resumed with intent data. Finishing operation successfully.")
                 finishOperation(WebResult.SUCCESS, data.toString())
                 return
-            } else {
-                Log.e(TAG, "onResume() Resumed with no intent data. Canceling operation.")
-                finishOperation(WebResult.CANCEL, null)
-                return
             }
+            Log.w(TAG, "onResume() Resumed with no intent data. Canceling operation.")
+            finishOperation(WebResult.CANCEL, null)
         }
-        Log.e(TAG, "onResume() No action to take. This shouldn't happen.")
+        Log.w(TAG, "onResume() No action to take. This shouldn't happen.")
     }
 
     override fun onSaveInstanceState(bundle: Bundle) {
         super.onSaveInstanceState(bundle)
-        Log.e(TAG, "onSaveInstanceState() Preserving state.")
+        Log.i(TAG, "onSaveInstanceState() Preserving state.")
         bundle.putLong(OPERATION_ID_STATE_KEY, mOperationId)
         bundle.putBoolean(CUSTOM_TABS_IN_PROGRESS_STATE_KEY, mCustomTabsInProgress)
         bundle.putBoolean(SHARED_BROWSER_USED_STATE_KEY, mSharedBrowserUsed)
@@ -115,7 +112,7 @@ class BrowserLaunchActivity : AppCompatActivity() {
 
     public override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        Log.e(TAG, "onNewIntent() Received intent.")
+        Log.i(TAG, "onNewIntent() Received intent.")
         setIntent(intent)
     }
 
@@ -134,13 +131,16 @@ class BrowserLaunchActivity : AppCompatActivity() {
                         return
                     }
                 }
+
                 RESULT_CANCELED -> {
                     finishOperation(WebResult.CANCEL, null)
                     return
                 }
+
                 RESULT_UNRECOGNIZED -> {
                     Log.w(TAG, "onActivityResult() Unrecognized result code received from web view: $resultCode")
                 }
+
                 else -> {
                     finishOperation(WebResult.FAIL, null)
                 }
@@ -159,35 +159,35 @@ class BrowserLaunchActivity : AppCompatActivity() {
     }
 
     private fun startAuthSession(browserLaunchParameters: BrowserLaunchParameters) {
-        val selectBrowser = selectBrowser(applicationContext, browserLaunchParameters.useInProcBrowser)
-        mBrowserInfo = selectBrowser.toString()
-        Log.i(TAG, "startAuthSession() Set browser info: $mBrowserInfo")
-        Log.i(
-            TAG,
-            "startAuthSession() Starting auth session for ShowUrlType: " + browserLaunchParameters.showType.toString()
-        );
-        val packageName = selectBrowser.packageName()
-        if (packageName == null) {
-            Log.i(TAG, "startAuthSession() BrowserSelector returned null package name. Choosing WebKit strategy.")
-            startWebView(
-                browserLaunchParameters.startUrl,
-                browserLaunchParameters.endUrl,
-                browserLaunchParameters.showType,
-                browserLaunchParameters.requestHeaderKeys,
-                browserLaunchParameters.requestHeaderValues
-            )
-        } else {
-            Log.i(
-                TAG,
-                "startAuthSession() BrowserSelector returned non-null package name. Choosing CustomTabs strategy."
-            )
-            startCustomTabsInBrowser(
-                packageName,
-                browserLaunchParameters.startUrl,
-                browserLaunchParameters.endUrl,
-                browserLaunchParameters.showType
-            )
-        }
+//        val selectBrowser = selectBrowser(applicationContext, browserLaunchParameters.useInProcBrowser)
+//        mBrowserInfo = selectBrowser.toString()
+//        Log.i(TAG, "startAuthSession() Set browser info: $mBrowserInfo")
+//        Log.i(
+//            TAG,
+//            "startAuthSession() Starting auth session for ShowUrlType: " + browserLaunchParameters.showType.toString()
+//        );
+//        val packageName = selectBrowser.packageName()
+//        if (packageName == null) {
+        Log.i(TAG, "startAuthSession() BrowserSelector returned null package name. Choosing WebKit strategy.")
+        startWebView(
+            browserLaunchParameters.startUrl,
+            browserLaunchParameters.endUrl,
+            browserLaunchParameters.showType,
+            browserLaunchParameters.requestHeaderKeys,
+            browserLaunchParameters.requestHeaderValues
+        )
+//        } else {
+//            Log.i(
+//                TAG,
+//                "startAuthSession() BrowserSelector returned non-null package name. Choosing CustomTabs strategy."
+//            )
+//            startCustomTabsInBrowser(
+//                packageName,
+//                browserLaunchParameters.startUrl,
+//                browserLaunchParameters.endUrl,
+//                browserLaunchParameters.showType
+//            )
+//        }
     }
 
     private fun startCustomTabsInBrowser(
@@ -207,7 +207,7 @@ class BrowserLaunchActivity : AppCompatActivity() {
         builder.setShowTitle(true)
 
         val build = builder.build()
-        build.intent.data = Uri.parse(startUrl)
+        build.intent.setData(Uri.parse(startUrl))
         build.intent.setPackage(packageName)
 
         startActivity(build.intent)
@@ -228,7 +228,7 @@ class BrowserLaunchActivity : AppCompatActivity() {
         bundle.putStringArray(REQUEST_HEADER_KEYS, requestHeaderKeys)
         bundle.putStringArray(REQUEST_HEADER_VALUES, requestHeaderValues)
 
-        val intent = Intent(applicationContext, WebKitWebViewController::class.java as Class<*>)
+        val intent = Intent(applicationContext, WebKitWebViewController::class.java)
         intent.putExtras(bundle)
 
         startActivityForResult(intent, WEB_KIT_WEB_VIEW_REQUEST)
@@ -239,13 +239,14 @@ class BrowserLaunchActivity : AppCompatActivity() {
         mOperationId = 0L
         finish()
         if (operationId == 0L) {
+            Log.e(TAG, "finishOperation() No operation ID to complete.");
             return
         }
         when (XalWebResult.mWebResult[webResult.ordinal]) {
             1 -> urlOperationSucceeded(operationId, finalUrl, mSharedBrowserUsed, mBrowserInfo)
             2 -> urlOperationCanceled(operationId, mSharedBrowserUsed, mBrowserInfo)
-            3 -> return
-            else -> urlOperationFailed(operationId, mSharedBrowserUsed, mBrowserInfo)
+            3 -> urlOperationFailed(operationId, mSharedBrowserUsed, mBrowserInfo)
+            else -> return
         }
     }
 
@@ -372,7 +373,7 @@ class BrowserLaunchActivity : AppCompatActivity() {
 
                 val intent = Intent(context, BrowserLaunchActivity::class.java)
                 intent.putExtras(bundle)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(intent)
                 return
             }

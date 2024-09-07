@@ -3,7 +3,7 @@ package com.mojang.minecraftpe.Webview;
 import android.webkit.JavascriptInterface;
 
 /**
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 class WebviewHostInterface {
     private final MinecraftWebview mView;

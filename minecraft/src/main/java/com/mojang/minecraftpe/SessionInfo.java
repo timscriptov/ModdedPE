@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 /**
- * @author <a href="https://github.com/TimScriptov">TimScriptov</a>
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public class SessionInfo implements Serializable {
     private static final String NOT_YET_CONFIGURED = "Not yet configured";
@@ -69,7 +69,7 @@ public class SessionInfo implements Serializable {
     @NonNull
     public static SessionInfo fromString(String s) {
         SessionInfo sessionInfo = new SessionInfo();
-        if (s == null || s.length() == 0) {
+        if (s == null || s.isEmpty()) {
             throw new IllegalArgumentException("Empty SessionInfo string");
         }
         String[] split = s.split(SEP);

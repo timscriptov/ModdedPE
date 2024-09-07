@@ -1,22 +1,22 @@
 package com.mcal.moddedpe.task
 
 import android.content.Context
+import androidx.preference.PreferenceManager
+import com.mcal.moddedpe.BuildConfig
 import com.mcal.moddedpe.utils.FileHelper
 import com.mcal.moddedpe.utils.ZipHelper
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.io.File
 
 class ResourceInstaller(
     private val context: Context
 ) {
     fun install() {
-        CoroutineScope(Dispatchers.IO).launch {
+        if (!isInstalled()) {
             extract("resources/worlds.zip", "games/com.mojang/minecraftWorlds")
             extract("resources/behavior_packs.zip", "games/com.mojang/behavior_packs")
             extract("resources/resource_packs.zip", "games/com.mojang/resource_packs")
             extract("resources/skin_packs.zip", "games/com.mojang/skin_packs")
+            setIsInstalled(true)
         }
     }
 
@@ -32,5 +32,15 @@ class ResourceInstaller(
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    private fun isInstalled(): Boolean {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        return sharedPreferences.getBoolean("installed_resources_" + BuildConfig.VERSION_CODE, false)
+    }
+
+    private fun setIsInstalled(mode: Boolean) {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        sharedPreferences.edit().putBoolean("installed_resources_" + BuildConfig.VERSION_CODE, mode).apply()
     }
 }
