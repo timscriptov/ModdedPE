@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.update
 import ru.mcal.mclibpatcher.data.model.MainScreenState
 import ru.mcal.mclibpatcher.data.repositories.MainRepository
 import java.io.File
-import java.io.InputStream
 
 class MainViewModel(
     private val mainRepository: MainRepository
@@ -28,6 +27,14 @@ class MainViewModel(
         }
     }
 
+    fun setOriginalLogoPath(path: String) {
+        _screenState.update {
+            it.copy(
+                originalLogoPath = path
+            )
+        }
+    }
+
     fun setLogoPath(path: String) {
         _screenState.update {
             it.copy(
@@ -36,19 +43,35 @@ class MainViewModel(
         }
     }
 
-    fun isValidLogoSize(file: File): Boolean {
-        val fileSize = file.length()
-        val inputStreamSize = mainRepository.originalLogoInputStream().use { it.readBytes().size.toLong() }
-        return fileSize <= inputStreamSize
+    fun isValidLogoSize(originalLogo: String, newLogo: String): Boolean {
+        return mainRepository.isValidLogoSize(originalLogo, newLogo)
     }
 
-    fun patch(libraryPath: String, newLogo: String) {
+    fun chooseFile(
+        buttonText: String,
+        description: String,
+        baseDirectory: String = "/",
+        onResult: (path: String) -> Unit,
+    ) {
+        mainRepository.chooseFile(buttonText, description, baseDirectory, onResult)
+    }
+
+    fun chooseDirectory(
+        buttonText: String,
+        description: String,
+        baseDirectory: String = "/",
+        onResult: (path: String) -> Unit,
+    ) {
+        mainRepository.chooseDirectory(buttonText, description, baseDirectory, onResult)
+    }
+
+    fun patch(libraryPath: String, originalLogo: String, newLogo: String) {
         _screenState.update {
             it.copy(
                 isPatching = true
             )
         }
-        mainRepository.patchingMinecraftLib(libraryPath, File(newLogo).readBytes())
+        mainRepository.patchingMinecraftLib(libraryPath, File(originalLogo).readBytes(), File(newLogo).readBytes())
         _screenState.update {
             it.copy(
                 isPatching = false

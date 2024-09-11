@@ -26,7 +26,11 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
 
+            implementation(libs.coil.core)
+            implementation(libs.coil)
+
             implementation(libs.bundles.koin)
+            implementation(libs.bundles.voyager)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -40,6 +44,15 @@ kotlin {
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
+            implementation(compose.components.resources)
+
+            // Common dependencies
+            implementation(libs.coil.compose)
+            implementation(libs.coil.compose.core)
+            implementation(libs.coil)
+            implementation(libs.coil.network.ktor)
+
+            // Desktop-specific dependency
             implementation(libs.kotlinx.coroutines.swing)
 
             implementation(libs.koin.core.jvm)
