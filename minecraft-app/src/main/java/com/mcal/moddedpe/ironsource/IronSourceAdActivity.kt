@@ -50,7 +50,6 @@ open class IronSourceAdActivity : MainActivity() {
         checkPermission()
         loadInterstitial()
         loadDelay()
-
     }
 
     private fun initBanner() {
