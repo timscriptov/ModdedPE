@@ -7,11 +7,6 @@ import org.jetbrains.annotations.Contract;
  * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public class CrashManager {
-    private static native String nativeNotifyUncaughtException();
-
-    public void installGlobalExceptionHandler() {
-    }
-
     public String getCrashUploadURI() {
         return "http://localhost:1234/";
     }

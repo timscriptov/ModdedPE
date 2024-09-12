@@ -177,8 +177,6 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.mcal.mcpelauncher.services.SoundService"/>
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.mcal.mcpelauncher.fileprovider"

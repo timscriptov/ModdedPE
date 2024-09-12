@@ -23,7 +23,7 @@ public class PythonPackageLoader {
     private boolean shouldUnpack() throws Throwable {
         File file = new File(this.destination.getAbsolutePath() + "/python-tracker.txt");
         String[] list = this.assetManager.list("python-tracker.txt");
-        if (!file.exists() || list == null || list.length <= 0) {
+        if (!file.exists() || list == null || list.length == 0) {
             return true;
         }
         return !new BufferedReader(new FileReader(file)).readLine().equals(new BufferedReader(new InputStreamReader(this.assetManager.open(list[0]), StandardCharsets.UTF_8)).readLine());

@@ -1,4 +1,5 @@
 [versions]
+activity-ktx = "1.9.2"
 android-sdk = "1.5.0"
 annotation = "1.8.2"
 annotations = "24.1.0"
@@ -20,6 +21,7 @@ legacy-support-v4 = "1.0.0"
 lifecycle-extensions = "2.2.0"
 lifecycle-viewmodel-ktx = "2.8.4"
 material = "1.12.0"
+mediationsdk = "8.3.0"
 multidex = "2.0.1"
 okhttp = "4.12.0"
 pkix = "1.54.0.0"
@@ -30,6 +32,8 @@ viewpager2 = "1.1.0"
 
 [libraries]
 android-sdk = { module = "com.wortise:android-sdk", version.ref = "android-sdk" }
+androidx-activity = { module = "androidx.activity:activity", version.ref = "activity-ktx" }
+androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activity-ktx" }
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-browser = { module = "androidx.browser:browser", version.ref = "browser" }
@@ -57,6 +61,7 @@ httpmime = { module = "org.apache.httpcomponents:httpmime", version.ref = "httpc
 integrity = { module = "com.google.android.play:integrity", version.ref = "integrity" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines-core" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
+mediationsdk = { module = "com.ironsource.sdk:mediationsdk", version.ref = "mediationsdk" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 pkix = { module = "com.madgag.spongycastle:pkix", version.ref = "pkix" }
 simple-xml = { module = "org.simpleframework:simple-xml", version.ref = "simple-xml" }

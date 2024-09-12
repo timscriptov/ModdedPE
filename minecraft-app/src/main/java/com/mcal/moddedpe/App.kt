@@ -22,11 +22,10 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        DynamicColors.applyToActivitiesIfAvailable(this)
-        if (!BuildConfig.DEBUG) {
-            WortiseSdk.initialize(this, AD_UNIT_ID)
-            AdSettings.testEnabled = true
-        }
+//        if (!BuildConfig.DEBUG) {
+//            WortiseSdk.initialize(this, AD_UNIT_ID)
+//            AdSettings.testEnabled = true
+//        }
     }
 
     companion object {

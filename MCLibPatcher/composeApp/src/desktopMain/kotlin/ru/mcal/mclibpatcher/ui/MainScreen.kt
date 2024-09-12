@@ -83,7 +83,7 @@ class MainScreen : Screen {
                                         .clickable {
                                             viewModel.chooseFile(
                                                 buttonText = "Select",
-                                                description = "Select original logo(PNG file 87 129 byte)",
+                                                description = "Select original logo(PNG file 87129 byte)",
                                                 onResult = { path ->
                                                     path.takeIf { it.isNotEmpty() && File(it).exists() }?.let {
                                                         viewModel.setOriginalLogoPath(it)
@@ -127,7 +127,7 @@ class MainScreen : Screen {
                                             )
                                             Text(
                                                 modifier = Modifier.align(Alignment.BottomCenter),
-                                                text = "Select original logo\nPNG file 87 129 byte",
+                                                text = "Select original logo\nPNG file 87129 byte",
                                                 style = TextStyle(
                                                     color = Color.DarkGray,
                                                     textAlign = TextAlign.Center,
@@ -143,7 +143,7 @@ class MainScreen : Screen {
                                         .clickable {
                                             viewModel.chooseFile(
                                                 buttonText = "Select",
-                                                description = "Select new logo(PNG file 87 129 byte)",
+                                                description = "Select new logo(PNG file 87129 byte)",
                                                 onResult = { path ->
                                                     path.takeIf { it.isNotEmpty() && File(it).exists() }?.let {
                                                         viewModel.setLogoPath(it)
@@ -187,7 +187,7 @@ class MainScreen : Screen {
                                             )
                                             Text(
                                                 modifier = Modifier.align(Alignment.BottomCenter),
-                                                text = "Select new logo\nPNG file 87 129 byte",
+                                                text = "Select new logo\nPNG file 87129 byte",
                                                 style = TextStyle(
                                                     color = Color.DarkGray,
                                                     textAlign = TextAlign.Center,
@@ -203,7 +203,7 @@ class MainScreen : Screen {
                                         .clickable {
                                             viewModel.chooseFile(
                                                 buttonText = "Select",
-                                                description = "Select new logo(PNG file 87 129 byte)",
+                                                description = "Select new logo(PNG file 87129 byte)",
                                                 onResult = { path ->
                                                     path.takeIf { it.isNotEmpty() && File(it).exists() }?.let {
                                                         viewModel.setLibPath(it)
@@ -288,7 +288,7 @@ class MainScreen : Screen {
                                             }
                                         } else if (!viewModel.isValidLogoSize(originalLogoPath, logoPath)) {
                                             scope.launch {
-                                                snackbarHostState.showSnackbar("Reduce the quality of the logo")
+                                                snackbarHostState.showSnackbar("The logo size must be less than or equal to the weight of the original logo 87129 bytes")
                                             }
                                         } else {
                                             viewModel.patch(

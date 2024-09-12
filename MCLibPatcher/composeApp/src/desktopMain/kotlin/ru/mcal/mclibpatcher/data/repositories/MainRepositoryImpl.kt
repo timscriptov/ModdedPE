@@ -51,12 +51,19 @@ class MainRepositoryImpl : MainRepository {
     }
 
     override fun isValidLogoSize(originalLogo: String, newLogo: String): Boolean {
-        return File(originalLogo).length() == File(newLogo).length()
+        return File(newLogo).length() <= File(originalLogo).length()
     }
 
     override fun patchingMinecraftLib(libraryPath: String, originalBytes: ByteArray, newBytes: ByteArray) {
         val inputFile = File(libraryPath)
         val libraryBytes = inputFile.readBytes()
+        val originalLogoSize = originalBytes.size
+        val newLogoSize = newBytes.size
+        val newLogoBytes = if (newLogoSize < originalLogoSize) {
+            newBytes + "\u0000".repeat(originalLogoSize - newLogoSize).toByteArray()
+        } else {
+            newBytes
+        }
 
         val indexOfOrigImg = hexIndexOf(libraryBytes, originalBytes)
         if (indexOfOrigImg == -1) {
@@ -65,7 +72,7 @@ class MainRepositoryImpl : MainRepository {
         }
 
         val libraryPatchedBytes = libraryBytes.copyOf()
-        System.arraycopy(newBytes, 0, libraryPatchedBytes, indexOfOrigImg, newBytes.size)
+        System.arraycopy(newLogoBytes, 0, libraryPatchedBytes, indexOfOrigImg, newLogoBytes.size)
         inputFile.writeBytes(libraryPatchedBytes)
     }
 

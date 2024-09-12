@@ -2,7 +2,11 @@ package com.mojang.minecraftpe;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Build;
+import android.provider.Settings;
 import com.mojang.minecraftpe.hardwareinfo.CPUCluster;
 import com.mojang.minecraftpe.hardwareinfo.CPUTopologyInfo;
 import com.mojang.minecraftpe.platforms.Platform;
@@ -24,10 +28,15 @@ import java.util.regex.Pattern;
 @SuppressLint({"DefaultLocale"})
 public class HardwareInformation {
     private static final CPUInfo cpuInfo = getCPUInfo();
+    private final ApplicationInfo appInfo;
     private final Context context;
+    private final PackageManager packageManager;
 
     HardwareInformation(Context context) {
+        this.packageManager = context.getPackageManager();
+        this.appInfo = context.getApplicationInfo();
         this.context = context;
+
     }
 
     @NotNull
@@ -78,17 +87,21 @@ public class HardwareInformation {
     @NotNull
     @Contract(pure = true)
     public static String getCPUName() {
-        return "unknown";
+        CPUInfo cPUInfo = cpuInfo;
+        String cPULine = cPUInfo.getCPULine("model name");
+        return !cPULine.isEmpty() ? cPULine : cPUInfo.getCPULine("Hardware");
+
     }
 
     @NotNull
     @Contract(pure = true)
     public static String getCPUFeatures() {
-        return "unknown";
+        return cpuInfo.getCPULine("Features");
     }
 
     public static int getNumCores() {
-        return 1;
+        int cPUCount = CPUTopologyInfo.getInstance().getCPUCount();
+        return cPUCount == 0 ? cpuInfo.getNumberCPUCores() : cPUCount;
     }
 
     public static int getNumClusters() {
@@ -144,19 +157,67 @@ public class HardwareInformation {
     }
 
     public String getSecureId() {
-        return "SecureId";
+        return Settings.Secure.getString(context.getContentResolver(), "android_id");
     }
 
     public String getInstallerPackageName() {
-        return "installer.package.name";
+        PackageManager packageManager = this.packageManager;
+        return (packageManager == null || this.appInfo == null) ? "" : packageManager.getInstallerPackageName(this.context.getPackageName());
     }
 
     public int getSignaturesHashCode() {
-        return 0;
+        int hashCode = 0;
+
+        try {
+            // Retrieve the package info with signatures
+            Signature[] signatures = this.packageManager.getPackageInfo(this.context.getPackageName(), PackageManager.GET_SIGNATURES).signatures;
+
+            // Compute the combined hash code of the signatures
+            for (Signature signature : signatures) {
+                hashCode ^= signature.hashCode();
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the exception
+        }
+        return hashCode;
     }
 
     public boolean getIsRooted() {
+        return checkRootA() || checkRootB() || checkRootC();
+    }
+
+    private boolean checkRootA() {
+        String str = Build.TAGS;
+        return str != null && str.contains("test-keys");
+    }
+
+    private boolean checkRootB() {
+        String[] strArr = {"/sbin/su", "/system/bin/su", "/system/xbin/su", "/data/local/xbin/su", "/data/local/bin/su", "/system/sd/xbin/su", "/system/bin/failsafe/su", "/system/app/Superuser.apk", "/data/local/su", "/su/bin/su"};
+        for (int i = 0; i < 10; i++) {
+            if (new File(strArr[i]).exists()) {
+                return true;
+            }
+        }
         return false;
+    }
+
+    private boolean checkRootC() {
+        String[] strArr = {"eu.chainfire.supersu", "eu.chainfire.supersu.pro"};
+        for (int i = 0; i < 2; i++) {
+            if (appInstalled(strArr[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean appInstalled(String str) {
+        try {
+            this.packageManager.getPackageInfo(str, 0);
+            return true;
+        } catch (Exception unused) {
+            return false;
+        }
     }
 
     public static class CPUInfo {

@@ -164,7 +164,7 @@ public class SystemCPU implements Comparable<SystemCPU> {
         List<SystemCPU> cpus = CPUTopologyInfo.getInstance().getCPUS();
         TreeSet<SystemCPU> treeSet = new TreeSet<>();
         BitSet siblingsMask = getSiblingsMask();
-        if (siblingsMask != null && siblingsMask.length() != 0) {
+        if (siblingsMask != null && !siblingsMask.isEmpty()) {
             int i = 0;
             while (true) {
                 int nextSetBit = siblingsMask.nextSetBit(i);

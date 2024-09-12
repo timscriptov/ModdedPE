@@ -9,16 +9,6 @@ import androidx.annotation.NonNull;
  * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public class MinecraftActivityLifecycleCallbackListener implements Application.ActivityLifecycleCallbacks {
-    native void nativeDisableBraze();
-
-    native void nativeEnableBraze();
-
-    native boolean nativeNeedsIntegrityCheck();
-
-    native void nativePlayIntegrityComplete(int errorCode, String packageName, String appRecognitionVerdict, String deviceIntegrity, String appLicensingVerdict);
-
-    native void nativeSetBrazeReady(boolean isReady);
-
     @Override
     public void onActivityDestroyed(Activity activity) {
     }
