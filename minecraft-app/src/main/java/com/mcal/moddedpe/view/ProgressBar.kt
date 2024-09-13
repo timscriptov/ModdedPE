@@ -22,7 +22,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.widget.ProgressBar
-import androidx.core.content.ContextCompat
 
 /**
  * @author Тимашков Иван

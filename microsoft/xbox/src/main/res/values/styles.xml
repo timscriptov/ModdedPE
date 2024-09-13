@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="TcuiDialog" parent="@android:style/Theme.DeviceDefault.NoActionBar">
+    <style name="TcuiDialog" parent="@style/Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowAnimationStyle">@style/TcuiDialogAnimations</item>
     </style>
 
