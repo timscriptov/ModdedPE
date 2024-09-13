@@ -1,31 +1,13 @@
 package com.mcal.moddedpe
 
-import android.app.Application
-import android.content.Context
-import com.google.android.material.color.DynamicColors
-import com.mcal.moddedpe.task.CustomServers
-import com.mcal.moddedpe.task.NativeInstaller
-import com.mcal.moddedpe.task.ResourceInstaller
-import com.mcal.moddedpe.utils.ABIHelper
-import com.mcal.moddedpe.utils.Patcher
 import com.wortise.ads.AdSettings
 import com.wortise.ads.WortiseSdk
-import java.io.File
 
-class App : Application() {
-    override fun attachBaseContext(base: Context) {
-        CustomServers(base).install()
-        ResourceInstaller(base).install()
-        NativeInstaller(base).install()
-        super.attachBaseContext(base)
-    }
-
+class App : PmsHookApplication() {
     override fun onCreate() {
         super.onCreate()
-//        if (!BuildConfig.DEBUG) {
-//            WortiseSdk.initialize(this, AD_UNIT_ID)
-//            AdSettings.testEnabled = true
-//        }
+        WortiseSdk.initialize(this, AD_UNIT_ID)
+        AdSettings.testEnabled = BuildConfig.DEBUG
     }
 
     companion object {

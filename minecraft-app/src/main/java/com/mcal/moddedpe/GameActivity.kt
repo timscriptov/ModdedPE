@@ -1,6 +1,5 @@
 package com.mcal.moddedpe
 
-import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
@@ -10,27 +9,31 @@ import android.os.Bundle
 import android.text.Html
 import android.text.Spanned
 import android.view.View
-import androidx.annotation.RequiresApi
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.moddedpe.App.Companion.PRIVACY_POLICE_GAME
 import com.mcal.moddedpe.App.Companion.PRIVACY_POLICE_MINECRAFT
 import com.mcal.moddedpe.App.Companion.PRIVACY_POLICE_XBOX
-import com.mcal.moddedpe.ironsource.IronSourceAdActivity
+import com.mcal.moddedpe.ads.wortise.WortiseAdActivity
+import com.mcal.moddedpe.task.ResourceInstaller
 import com.mcal.moddedpe.utils.ABIHelper
 import com.mcal.moddedpe.utils.Patcher
+import kotlinx.coroutines.runBlocking
 import java.io.File
 
-class GameActivity : IronSourceAdActivity() {
+class GameActivity : WortiseAdActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        patchNativeLibraryDir()
-        loadLibraries()
-        super.onCreate(savedInstanceState)
-        showAgreeDialog()
+        runBlocking {
+            ResourceInstaller.install(this@GameActivity)
+            runOnUiThread {
+                patchNativeLibraryDir()
+                loadLibraries()
+                super.onCreate(savedInstanceState)
+                showAgreeDialog()
+            }
+        }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @SuppressLint("ObsoleteSdkInt")
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

@@ -1,4 +1,4 @@
-package com.mcal.moddedpe.ironsource
+package com.mcal.moddedpe.ads.ironsource
 
 import android.content.Intent
 import android.content.res.Resources.getSystem
@@ -105,7 +105,7 @@ open class IronSourceAdActivity : MainActivity() {
         if (nativeKeyHandler(
                 event.keyCode,
                 event.action
-            ) && event.action == KeyEvent.ACTION_DOWN && !BuildConfig.DEBUG
+            ) && event.action == KeyEvent.ACTION_DOWN
         ) {
             showInterstitial() // If user clicks hard BACK show ads
         }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme.SplashScreen" parent="@style/Theme.SplashScreen">
+        <item name="android:windowSplashScreenBackground">#FF000000</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_splashscreen_logo_animated</item>
+        <item name="android:windowSplashScreenAnimationDuration">2147483647</item>
+        <item name="android:windowSplashScreenBrandingImage">@drawable/ic_splashscreen_branding</item>
+    </style>
+</resources>

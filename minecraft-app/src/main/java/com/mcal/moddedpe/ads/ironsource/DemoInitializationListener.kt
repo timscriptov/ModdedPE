@@ -1,4 +1,4 @@
-package com.mcal.moddedpe.ironsource
+package com.mcal.moddedpe.ads.ironsource
 
 import android.util.Log
 import com.ironsource.mediationsdk.sdk.InitializationListener

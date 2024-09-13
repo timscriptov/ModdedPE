@@ -1,7 +1,9 @@
-package com.mcal.moddedpe
+package com.mcal.moddedpe.ads.wortise
 
 import android.os.Bundle
 import android.view.KeyEvent
+import com.mcal.moddedpe.App
+import com.mcal.moddedpe.BuildConfig
 import com.mcal.moddedpe.utils.Helper
 import com.mojang.minecraftpe.MainActivity
 import com.wortise.ads.AdError
@@ -13,13 +15,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-open class AdActivity : MainActivity() {
+open class WortiseAdActivity : MainActivity() {
     private var mInterstitial: InterstitialAd? = null
     private var isFirstShown: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!BuildConfig.DEBUG && Helper.isNetworkConnected(this)) {
+        if (Helper.isNetworkConnected(this)) {
             WortiseSdk.initialize(this, App.AD_UNIT_ID) {
                 requestIfRequired(this)
                 loadDelay()
@@ -28,8 +30,8 @@ open class AdActivity : MainActivity() {
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        if (nativeKeyHandler(event.keyCode, event.action) && event.action == KeyEvent.ACTION_DOWN && !BuildConfig.DEBUG) {
-            showInterstitialAd() // If user clicks hard BACK show ads
+        if (nativeKeyHandler(event.keyCode, event.action) && event.action == KeyEvent.ACTION_DOWN) {
+            showInterstitialAd()
         }
         return super.dispatchKeyEvent(event)
     }
@@ -61,7 +63,7 @@ open class AdActivity : MainActivity() {
                 override fun onInterstitialFailedToShow(ad: InterstitialAd, error: AdError) {}
                 override fun onInterstitialImpression(ad: InterstitialAd) {}
                 override fun onInterstitialLoaded(ad: InterstitialAd) {
-                    showAd(this@AdActivity)
+                    showAd(this@WortiseAdActivity)
                 }
                 override fun onInterstitialShown(ad: InterstitialAd) {}
             }

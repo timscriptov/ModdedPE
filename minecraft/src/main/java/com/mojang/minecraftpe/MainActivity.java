@@ -39,6 +39,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
+import androidx.core.splashscreen.SplashScreen;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.FirebaseApp;
@@ -56,8 +57,6 @@ import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -401,6 +400,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     public void onCreate(Bundle savedInstanceState) {
         Log.i("ModdedPEPlatform", "MainActivity::onCreate");
         mMainThread = Thread.currentThread();
+        SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
         if (getResources() == null) {
             Log.w("ModdedPE - replacing", "App is installing/replacing. Killing...");

@@ -22,8 +22,6 @@
 
     <application
         android:name="com.mcal.moddedpe.App"
-        android:exported="true"
-        android:hasCode="true"
         android:hasFragileUserData="true"
         android:icon="@mipmap/ic_launcher"
         android:isGame="true"
@@ -33,7 +31,6 @@
         android:preserveLegacyExternalStorage="true"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:theme="@style/FullScreen"
         android:usesCleartextTraffic="true"
         tools:ignore="HardcodedDebugMode"
         tools:targetApi="r">
@@ -46,7 +43,7 @@
             android:screenOrientation="sensorLandscape"
             android:configChanges="fontScale|smallestScreenSize|screenSize|uiMode|screenLayout|orientation|navigation|keyboardHidden|keyboard|touchscreen|locale|mnc|mcc"
             android:alwaysRetainTaskState="true"
-            android:theme="@style/FullScreen">
+            android:theme="@style/AppTheme.SplashScreen">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="minecraftpe"/>
