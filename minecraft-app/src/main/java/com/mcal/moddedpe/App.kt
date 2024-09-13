@@ -1,9 +1,10 @@
 package com.mcal.moddedpe
 
+import android.app.Application
 import com.wortise.ads.AdSettings
 import com.wortise.ads.WortiseSdk
 
-class App : PmsHookApplication() {
+class App : Application() {
     override fun onCreate() {
         super.onCreate()
         WortiseSdk.initialize(this, AD_UNIT_ID)
