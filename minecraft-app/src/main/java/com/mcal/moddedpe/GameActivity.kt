@@ -15,22 +15,27 @@ import com.mcal.moddedpe.App.Companion.PRIVACY_POLICE_GAME
 import com.mcal.moddedpe.App.Companion.PRIVACY_POLICE_MINECRAFT
 import com.mcal.moddedpe.App.Companion.PRIVACY_POLICE_XBOX
 import com.mcal.moddedpe.ads.wortise.WortiseAdActivity
-import com.mcal.moddedpe.task.ResourceInstaller
 import com.mcal.moddedpe.utils.ABIHelper
 import com.mcal.moddedpe.utils.Patcher
-import kotlinx.coroutines.runBlocking
 import java.io.File
 
 class GameActivity : WortiseAdActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        runBlocking {
-            ResourceInstaller.install(this@GameActivity)
-            runOnUiThread {
-                patchNativeLibraryDir()
-                loadLibraries()
-                super.onCreate(savedInstanceState)
-                showAgreeDialog()
-            }
+        loadLibraries()
+        super.onCreate(savedInstanceState)
+        showAgreeDialog()
+    }
+
+    private fun loadLibraries() {
+        val nativeDir = File("${filesDir}/native/${ABIHelper.getABI()}/")
+        Patcher.patchNativeLibraryDir(classLoader, nativeDir)
+        arrayListOf(
+            "fmod",
+            "c++_shared",
+            "minecraftpe",
+            "MediaDecoders_Android"
+        ).forEach {
+            System.loadLibrary(it)
         }
     }
 
@@ -44,25 +49,6 @@ class GameActivity : WortiseAdActivity() {
                     or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                     or View.SYSTEM_UI_FLAG_FULLSCREEN
                     or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-        }
-    }
-
-    private fun patchNativeLibraryDir() {
-        runCatching {
-            Patcher.patchNativeLibraryDir(classLoader, File("${filesDir}/native/${ABIHelper.getABI()}/"))
-        }
-    }
-
-    private fun loadLibraries() {
-        System.loadLibrary("fmod")
-        arrayListOf(
-            "c++_shared",
-            "minecraftpe",
-            "MediaDecoders_Android"
-        ).forEach {
-            runCatching {
-                System.loadLibrary(it)
-            }
         }
     }
 

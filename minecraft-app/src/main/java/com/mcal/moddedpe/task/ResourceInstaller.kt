@@ -2,7 +2,7 @@ package com.mcal.moddedpe.task
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
+import android.util.Log
 import androidx.preference.PreferenceManager
 import com.mcal.moddedpe.BuildConfig
 import com.mcal.moddedpe.utils.ABIHelper
@@ -70,7 +70,8 @@ object ResourceInstaller {
             }.onSuccess {
                 setExtractedNatives(context, true)
             }.onFailure {
-                restartApp(context)
+                Log.e("tet", it.toString())
+                //App.restartApp(context)
             }
         }
     }
@@ -97,8 +98,10 @@ object ResourceInstaller {
 
     private fun extractNatives(context: Context) {
         val abi = getDeviceABI()
-        extractLibArchive(context, abi)
-        extractLibraries(context, abi)
+        val tempFile = File(getNativeDir(context), "libgame.zip")
+        extractLibArchive(context, abi, tempFile)
+        extractLibraries(context, abi, tempFile)
+        tempFile.delete()
     }
 
     private fun updateSettings(context: Context) {
@@ -181,26 +184,16 @@ object ResourceInstaller {
         }
     }
 
-    private fun restartApp(context: Context) {
-        val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
-        intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(intent)
-    }
-
     private fun getDeviceABI(): String {
         val deviceABI = ABIHelper.getABI()
         return if (deviceABI == "x86_64") "x86" else deviceABI
     }
 
-    private fun extractLibArchive(context: Context, abi: String) {
-        runCatching {
-            val archive = File(getNativeDir(context), "libgame.zip")
-            if (isAppBundle(context)) {
-                extractFromAppBundle(context, abi, archive)
-            } else {
-                extractFromAPK(context, abi, archive)
-            }
-            archive.delete()
+    private fun extractLibArchive(context: Context, abi: String, tempFile: File) {
+        if (isAppBundle(context)) {
+            extractFromAppBundle(context, abi, tempFile)
+        } else {
+            extractFromAPK(context, abi, tempFile)
         }
     }
 
@@ -229,8 +222,7 @@ object ResourceInstaller {
 
 
     @SuppressLint("UnsafeDynamicallyLoadedCode")
-    private fun extractLibraries(context: Context, abi: String) {
-        val archive = File(getNativeDir(context), "libgame.zip")
+    private fun extractLibraries(context: Context, abi: String, tempFile: File) {
         val outDir = File(getNativeDir(context), abi)
         if (!outDir.exists()) {
             outDir.mkdirs()
@@ -240,7 +232,7 @@ object ResourceInstaller {
             "libminecraftpe.so",
             "libMediaDecoders_Android.so"
         ).forEach { libName ->
-            extractLibrary(archive, outDir, libName)
+            extractLibrary(tempFile, outDir, libName)
         }
     }
 

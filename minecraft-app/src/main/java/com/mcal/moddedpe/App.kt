@@ -1,8 +1,18 @@
 package com.mcal.moddedpe
 
 import android.app.Application
+import android.content.Context
+import android.content.Intent
+import com.mcal.moddedpe.task.ResourceInstaller
+import com.mcal.moddedpe.utils.ABIHelper
+import com.mcal.moddedpe.utils.Patcher
 import com.wortise.ads.AdSettings
 import com.wortise.ads.WortiseSdk
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import java.io.File
 
 class App : Application() {
     override fun onCreate() {
@@ -31,5 +41,11 @@ class App : Application() {
         const val PRIVACY_POLICE_GAME = "https://github.com/timscriptov/ModdedPE/tree/master/PrivacyPolicy/README.md"
         const val PRIVACY_POLICE_MINECRAFT = "https://account.mojang.com/terms#privacy"
         const val PRIVACY_POLICE_XBOX = "https://privacy.microsoft.com/en-us/privacystatement"
+
+        fun restartApp(context: Context) {
+            val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+            intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
+        }
     }
 }

@@ -36,6 +36,21 @@
         tools:targetApi="r">
 
         <activity
+            android:name="com.mcal.moddedpe.LauncherActivity"
+            android:exported="true"
+            android:excludeFromRecents="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="fontScale|smallestScreenSize|screenSize|uiMode|screenLayout|orientation|navigation|keyboardHidden|keyboard|touchscreen|locale|mnc|mcc"
+            android:alwaysRetainTaskState="true"
+            android:theme="@style/FullScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name="com.mcal.moddedpe.GameActivity"
             android:exported="true"
             android:excludeFromRecents="false"
@@ -48,10 +63,6 @@
                 android:name="android.app.lib_name"
                 android:value="minecraftpe"/>
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 

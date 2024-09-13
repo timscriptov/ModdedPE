@@ -3,13 +3,7 @@
     <style name="AppTheme.SplashScreen" parent="@style/Theme.SplashScreen">
     </style>
 
-    <style name="AppBaseTheme" parent="@android:style/Theme.NoTitleBar.Fullscreen">
-    </style>
-
-    <style name="AppTheme" parent="@style/AppBaseTheme">
-    </style>
-
-    <style name="FullScreen" parent="@style/Theme.Material3.DayNight">
+    <style name="FullScreen" parent="@style/Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowFullscreen">true</item>
     </style>
 </resources>
