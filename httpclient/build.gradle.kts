@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.google.android.vending.licensing"
+    namespace = "com.xbox.httpclient"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
@@ -27,5 +27,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.okhttp)
     implementation(libs.httpclient)
+    implementation(libs.androidx.annotation)
 }

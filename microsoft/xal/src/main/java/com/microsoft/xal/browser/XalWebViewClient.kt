@@ -42,17 +42,14 @@ class XalWebViewClient(
         webResourceRequest: WebResourceRequest
     ): WebResourceResponse? {
         val uri = webResourceRequest.url.toString()
-        Log.e("XBOX_URI", uri)
+//        Log.e("XBOX_URI", uri)
         if (uri.contains("favicon.ico") || uri.contains("AppLogos")) {
             Thread { webView.loadUrl(uri) }
         }
         if (uri.contains(".css") && uri.contains("splash")) {
             Thread { webView.loadUrl(uri) }
         }
-//        if (uri.contains(".css") && (uri.contains("login") || uri.contains("signup")) && !uri.contains(
-//                "bootstrap"
-//            )
-//        ) {
+//        if (uri.contains(".css") && (uri.contains("login") || uri.contains("signup")) && !uri.contains("bootstrap")) {
 //            return webResponseFromAssets("resources/splash.min.css")
 //        }
 //        if (uri.contains("cred_option_forgot")) {

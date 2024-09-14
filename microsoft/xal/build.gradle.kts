@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.google.android.vending.licensing"
+    namespace = "com.microsoft.xal"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
@@ -27,5 +27,15 @@ android {
 }
 
 dependencies {
-    implementation(libs.httpclient)
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.browser)
+
+    implementation(libs.pkix)
+
+    // Architectural Components
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.extensions)
 }

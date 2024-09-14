@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.google.android.vending.licensing"
+    namespace = "com.microsoft.xboxtcui"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
@@ -27,5 +27,16 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.fragment.ktx)
+
+    implementation(libs.firebase.messaging)
+    implementation(libs.firebase.iid)
+
+    implementation(libs.pkix)
+
+    implementation(libs.gson)
     implementation(libs.httpclient)
+    implementation(libs.simple.xml)
 }

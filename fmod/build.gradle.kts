@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.google.android.vending.licensing"
+    namespace = "org.fmod"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
@@ -27,5 +27,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.httpclient)
+    implementation(libs.annotations)
+    implementation(libs.androidx.annotation)
 }
