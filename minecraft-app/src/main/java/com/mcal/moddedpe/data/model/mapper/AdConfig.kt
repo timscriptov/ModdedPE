@@ -1,10 +1,10 @@
-package com.mcal.moddedpe.ads.ironsource.data.model.mapper
+package com.mcal.moddedpe.data.model.mapper
 
-import com.mcal.moddedpe.ads.ironsource.data.model.domain.AdModel
-import com.mcal.moddedpe.ads.ironsource.data.model.remote.AdModelNT
+import com.mcal.moddedpe.data.model.domain.AdConfigModel
+import com.mcal.moddedpe.data.model.remote.AdConfigModelNT
 
-fun AdModelNT.toDomain(): AdModel {
-    return AdModel(
+fun AdConfigModelNT.toDomain(): AdConfigModel {
+    return AdConfigModel(
         interIsId = interIsId,
         openAdsAdmobId = openAdsAdmobId,
         interAdmobId = interAdmobId,

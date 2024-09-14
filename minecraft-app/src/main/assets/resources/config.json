@@ -1,0 +1,16 @@
+{
+  "inter_is_id": "1f3cf1d02",
+  "open_ads_admob_id": "ca-app-pub-8190506959251235/3309130247",
+  "inter_admob_id": "ca-app-pub-3940256099942544/1033173712",
+  "inter_admob_delay": 60,
+  "native_admob_id": "ca-app-pub-3940256099942544/2247696110",
+  "native_admob_width": 48,
+  "native_admob_height": 15,
+  "native_admob_click_width": 68,
+  "native_admob_click_height": 29,
+  "native_admob_reload_time": 30,
+  "mrec_admob_id": "ca-app-pub-8190506959251235/6374277910",
+  "random_time_from": 180,
+  "random_time_to": 250,
+  "status": 1
+}

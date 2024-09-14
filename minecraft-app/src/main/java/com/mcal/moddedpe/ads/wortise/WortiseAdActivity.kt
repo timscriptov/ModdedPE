@@ -3,7 +3,6 @@ package com.mcal.moddedpe.ads.wortise
 import android.os.Bundle
 import android.view.KeyEvent
 import com.mcal.moddedpe.App
-import com.mcal.moddedpe.BuildConfig
 import com.mcal.moddedpe.utils.Helper
 import com.mojang.minecraftpe.MainActivity
 import com.wortise.ads.AdError
@@ -60,11 +59,13 @@ open class WortiseAdActivity : MainActivity() {
                 override fun onInterstitialFailedToLoad(ad: InterstitialAd, error: AdError) {
                     destroy()
                 }
+
                 override fun onInterstitialFailedToShow(ad: InterstitialAd, error: AdError) {}
                 override fun onInterstitialImpression(ad: InterstitialAd) {}
                 override fun onInterstitialLoaded(ad: InterstitialAd) {
                     showAd(this@WortiseAdActivity)
                 }
+
                 override fun onInterstitialShown(ad: InterstitialAd) {}
             }
         }

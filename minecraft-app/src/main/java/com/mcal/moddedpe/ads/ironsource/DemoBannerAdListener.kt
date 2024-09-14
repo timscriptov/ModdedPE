@@ -1,7 +1,6 @@
 package com.mcal.moddedpe.ads.ironsource
 
 import android.util.Log
-import android.view.View
 import com.ironsource.mediationsdk.adunit.adapter.utility.AdInfo
 import com.ironsource.mediationsdk.logger.IronSourceError
 import com.ironsource.mediationsdk.sdk.LevelPlayBannerListener

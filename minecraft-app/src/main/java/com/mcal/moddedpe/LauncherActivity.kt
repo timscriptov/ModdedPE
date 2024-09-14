@@ -1,25 +1,24 @@
 package com.mcal.moddedpe
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import com.mcal.moddedpe.task.ResourceInstaller
-import kotlinx.coroutines.*
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.material3.MaterialTheme
+import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.transitions.SlideTransition
+import com.mcal.moddedpe.ui.LauncherScreen
 
-class LauncherActivity : AppCompatActivity() {
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
-
+class LauncherActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.layout_activity)
-        coroutineScope.launch {
-            ResourceInstaller.install(this@LauncherActivity)
-            delay(3000L)
-            runOnUiThread {
-                startGame()
-                coroutineScope.cancel()
+        setContent {
+            MaterialTheme {
+                val screen = LauncherScreen()
+                Navigator(screen) { nav ->
+                    SlideTransition(nav)
+                }
             }
         }
     }
@@ -35,12 +34,5 @@ class LauncherActivity : AppCompatActivity() {
                     or View.SYSTEM_UI_FLAG_FULLSCREEN
                     or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
         }
-    }
-
-    private fun startGame() {
-        val intent = Intent(this, GameActivity::class.java)
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME)
-        startActivity(intent)
-        finish()
     }
 }

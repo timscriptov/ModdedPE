@@ -38,6 +38,7 @@
 
         <activity
             android:name="com.mcal.moddedpe.LauncherActivity"
+            android:theme="@android:style/Theme.Material.Light.NoActionBar"
             android:exported="true"
             android:excludeFromRecents="false"
             android:launchMode="singleTask"

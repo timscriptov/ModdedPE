@@ -15,7 +15,6 @@ import androidx.annotation.RequiresApi
 import com.ironsource.mediationsdk.ISBannerSize
 import com.ironsource.mediationsdk.IronSource
 import com.ironsource.mediationsdk.integration.IntegrationHelper
-import com.ironsource.sdk.controller.m
 import com.mcal.moddedpe.App
 import com.mcal.moddedpe.BuildConfig
 import com.mojang.minecraftpe.MainActivity
@@ -32,7 +31,6 @@ open class IronSourceAdActivity : MainActivity() {
         private const val ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 5469
         private const val APP_KEY = "85460dcd"
 
-        private val Int.dp: Int get() = (this / getSystem().displayMetrics.density).toInt()
         private val Int.px: Int get() = (this * getSystem().displayMetrics.density).toInt()
     }
 

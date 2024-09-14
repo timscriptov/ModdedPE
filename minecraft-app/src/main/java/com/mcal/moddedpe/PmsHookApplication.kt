@@ -12,8 +12,6 @@ import java.lang.reflect.Method
 import java.lang.reflect.Proxy
 
 open class PmsHookApplication : Application(), InvocationHandler {
-    private val GET_SIGNATURES = 0x00000040
-
     private var mBase: Any? = null
     private var mSign = arrayOf<ByteArray>()
     private var mPackageName: String = ""
@@ -89,5 +87,9 @@ open class PmsHookApplication : Application(), InvocationHandler {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    companion object {
+        private const val GET_SIGNATURES = 0x00000040
     }
 }

@@ -1,8 +1,10 @@
-package com.mcal.moddedpe.ads.ironsource.data.model.domain
+package com.mcal.moddedpe.data.model.domain
 
-import kotlinx.serialization.SerialName
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-data class AdModel(
+@Parcelize
+data class AdConfigModel(
     val interIsId: String,
     val openAdsAdmobId: String,
     val interAdmobId: String,
@@ -17,4 +19,4 @@ data class AdModel(
     val randomTimeFrom: Int,
     val randomTimeTo: Int,
     val status: Int,
-)
+) : Parcelable

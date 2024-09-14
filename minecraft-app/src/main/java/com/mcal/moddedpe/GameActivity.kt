@@ -14,12 +14,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.moddedpe.App.Companion.PRIVACY_POLICE_GAME
 import com.mcal.moddedpe.App.Companion.PRIVACY_POLICE_MINECRAFT
 import com.mcal.moddedpe.App.Companion.PRIVACY_POLICE_XBOX
-import com.mcal.moddedpe.ads.wortise.WortiseAdActivity
-import com.mcal.moddedpe.utils.ABIHelper
+import com.mcal.moddedpe.ads.ironsource.IronSourceAdActivity
 import com.mcal.moddedpe.utils.Patcher
 import java.io.File
 
-class GameActivity : WortiseAdActivity() {
+class GameActivity : IronSourceAdActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         loadLibraries()
         super.onCreate(savedInstanceState)
@@ -27,7 +26,7 @@ class GameActivity : WortiseAdActivity() {
     }
 
     private fun loadLibraries() {
-        val nativeDir = File("${filesDir}/native/${ABIHelper.getABI()}/")
+        val nativeDir = File("${filesDir}/native/")
         Patcher.patchNativeLibraryDir(classLoader, nativeDir)
         arrayListOf(
             "fmod",
@@ -100,9 +99,7 @@ class GameActivity : WortiseAdActivity() {
     }
 
     private fun setAgreePrivacyPolice(mode: Boolean) {
-        val editor = getPreferences().edit()
-        editor.putBoolean("privacyAcc", mode)
-        editor.apply()
+        getPreferences().edit().putBoolean("privacyAcc", mode).apply()
     }
 
     private fun fromHtml(source: String): Spanned {

@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.androidApplication)
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.compose.compiler)
+
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.kotlinxParcelize)
 }
@@ -24,6 +26,9 @@ android {
                     "arm64-v8a",
                 )
             )
+        }
+        vectorDrawables {
+            useSupportLibrary = true
         }
     }
     sourceSets {
@@ -65,19 +70,12 @@ android {
         abortOnError = false
         checkReleaseBuilds = false
     }
-//    bundle {
-//        language {
-//            enableSplit = true
-//        }
-//        density {
-//            enableSplit = true
-//        }
-//        abi {
-//            enableSplit = true
-//        }
-//    }
     buildFeatures {
         buildConfig = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
     configurations {
         all {
@@ -93,6 +91,13 @@ dependencies {
     implementation(project(":microsoft:xal"))
     implementation(project(":microsoft:xbox"))
     implementation(project(":fmod"))
+
+    implementation(libs.activity.compose)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.ui)
+    implementation(libs.ui.graphics)
+    implementation(libs.ui.tooling.preview)
+    implementation(libs.material3)
 
     implementation(libs.ktor.client.okhttp)
     implementation(libs.ktor.client.core)

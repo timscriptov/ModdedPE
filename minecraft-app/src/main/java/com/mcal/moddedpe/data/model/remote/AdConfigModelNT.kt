@@ -1,10 +1,10 @@
-package com.mcal.moddedpe.ads.ironsource.data.model.remote
+package com.mcal.moddedpe.data.model.remote
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AdModelNT(
+data class AdConfigModelNT(
     @SerialName("inter_is_id") val interIsId: String,
     @SerialName("open_ads_admob_id") val openAdsAdmobId: String,
     @SerialName("inter_admob_id") val interAdmobId: String,

@@ -3,22 +3,29 @@ package com.mcal.moddedpe
 import android.app.Application
 import android.content.Context
 import android.content.Intent
-import com.mcal.moddedpe.task.ResourceInstaller
-import com.mcal.moddedpe.utils.ABIHelper
-import com.mcal.moddedpe.utils.Patcher
+import cafe.adriel.voyager.core.registry.ScreenRegistry
+import com.mcal.moddedpe.di.LauncherModules
+import com.mcal.moddedpe.navigation.launcherScreenModule
 import com.wortise.ads.AdSettings
 import com.wortise.ads.WortiseSdk
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import java.io.File
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
         WortiseSdk.initialize(this, AD_UNIT_ID)
         AdSettings.testEnabled = BuildConfig.DEBUG
+        startKoin {
+            androidContext(this@App)
+            val featureModules = listOf(
+                LauncherModules.modules,
+            ).flatten()
+            modules(featureModules)
+        }
+        ScreenRegistry {
+            launcherScreenModule()
+        }
     }
 
     companion object {
