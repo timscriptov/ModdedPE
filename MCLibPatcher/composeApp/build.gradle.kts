@@ -1,6 +1,4 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -10,7 +8,7 @@ plugins {
 
 kotlin {
     jvm("desktop")
-    
+
     sourceSets {
         val desktopMain by getting
 
@@ -50,6 +48,20 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "ru.mcal.mclibpatcher"
             packageVersion = "1.0.0"
+
+            val iconsRoot = project.file("src/desktopMain/resources/drawable")
+
+            linux {
+                iconFile.set(iconsRoot.resolve("linux.png"))
+            }
+
+            windows {
+                iconFile.set(iconsRoot.resolve("windows.ico"))
+            }
+
+            macOS {
+                iconFile.set(iconsRoot.resolve("macos.icns"))
+            }
         }
     }
 }
