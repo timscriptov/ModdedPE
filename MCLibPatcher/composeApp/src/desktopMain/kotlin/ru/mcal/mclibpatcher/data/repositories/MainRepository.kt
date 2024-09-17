@@ -16,6 +16,5 @@ interface MainRepository {
         baseDirectory: String,
         onResult: (path: String) -> Unit,
     )
-    fun isValidLogoSize(originalLogo: String, newLogo: String): Boolean
-    fun patchingMinecraftLib(libraryPath: String, originalBytes: ByteArray, newBytes: ByteArray)
+    suspend fun patchingMinecraftLib(libraryPath: String, originalBytes: ByteArray, newBytes: ByteArray)
 }

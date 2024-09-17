@@ -1,10 +1,12 @@
 package ru.mcal.mclibpatcher.ui
 
 import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import ru.mcal.mclibpatcher.data.model.MainScreenState
 import ru.mcal.mclibpatcher.data.repositories.MainRepository
 import java.io.File
@@ -13,6 +15,12 @@ class MainViewModel(
     private val mainRepository: MainRepository
 ) : ScreenModel {
     private val _exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        _screenState.update {
+            it.copy(
+                isPatching = false,
+                errorMessage = throwable.toString()
+            )
+        }
         throwable.printStackTrace()
     }
 
@@ -38,13 +46,9 @@ class MainViewModel(
     fun setLogoPath(path: String) {
         _screenState.update {
             it.copy(
-                logoPath = path
+                newLogoPath = path
             )
         }
-    }
-
-    fun isValidLogoSize(originalLogo: String, newLogo: String): Boolean {
-        return mainRepository.isValidLogoSize(originalLogo, newLogo)
     }
 
     fun chooseFile(
@@ -65,7 +69,7 @@ class MainViewModel(
         mainRepository.chooseDirectory(buttonText, description, baseDirectory, onResult)
     }
 
-    fun patch(libraryPath: String, originalLogo: String, newLogo: String) {
+    fun patch(libraryPath: String, originalLogo: String, newLogo: String) = screenModelScope.launch(_exceptionHandler) {
         _screenState.update {
             it.copy(
                 isPatching = true

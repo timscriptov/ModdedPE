@@ -1,7 +1,6 @@
 package ru.mcal.mclibpatcher
 
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import cafe.adriel.voyager.core.registry.ScreenRegistry
