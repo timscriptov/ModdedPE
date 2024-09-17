@@ -6,5 +6,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class ScreenState(
     val isLoading: Boolean = false,
-    var config: AdConfigModel,
+    val isOnline: Boolean = true,
+    val isError: Boolean = false,
 ) : Parcelable

@@ -26,7 +26,6 @@ private val repositoriesModule = module {
     factory<LauncherRepository> {
         LauncherRepositoryImpl(
             context = get(),
-//            httpClient = get(),
         )
     }
 }

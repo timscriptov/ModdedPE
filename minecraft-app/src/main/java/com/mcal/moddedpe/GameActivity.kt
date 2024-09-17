@@ -14,11 +14,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mcal.moddedpe.App.Companion.PRIVACY_POLICE_GAME
 import com.mcal.moddedpe.App.Companion.PRIVACY_POLICE_MINECRAFT
 import com.mcal.moddedpe.App.Companion.PRIVACY_POLICE_XBOX
-import com.mcal.moddedpe.ads.ironsource.IronSourceAdActivity
 import com.mcal.moddedpe.utils.Patcher
+import com.mojang.minecraftpe.MainActivity
 import java.io.File
 
-class GameActivity : IronSourceAdActivity() {
+class GameActivity : MainActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         loadLibraries()
         super.onCreate(savedInstanceState)

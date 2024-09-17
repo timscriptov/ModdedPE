@@ -34,14 +34,15 @@ dependencyResolutionManagement {
 }
 
 include(":app")
-include(":substrate")
-include(":minecraft")
 include(":minecraft-app")
+
+include(":minecraft")
 include(":httpclient")
 include(":microsoft:xal")
 include(":microsoft:xbox")
-include(":xhook")
+
 include(":fmod")
-include(":downloader")
-include(":licensing")
+include(":xhook")
+include(":substrate")
+
 include(":assets-pack")

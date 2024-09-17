@@ -1,14 +1,9 @@
 package com.mcal.moddedpe.data.repository
 
 import android.app.Activity
-import com.mcal.moddedpe.data.model.domain.AdConfigModel
-import kotlinx.coroutines.flow.Flow
+import android.content.Context
 
 interface LauncherRepository {
-    fun getDataFlow(): Flow<AdConfigModel>
-    suspend fun getData(): AdConfigModel
-    suspend fun updateData(): AdConfigModel
-
     suspend fun installServers()
     fun isInstalledServers(): Boolean
 
@@ -19,4 +14,5 @@ interface LauncherRepository {
     fun isInstalledNatives(): Boolean
 
     fun startGame(activity: Activity)
+    fun isOnline(context: Context): Boolean
 }
