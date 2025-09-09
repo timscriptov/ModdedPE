@@ -12,13 +12,19 @@ import org.jetbrains.annotations.NotNull;
 public class StoreFactory {
     @NotNull
     @Contract("_, _ -> new")
-    static Store createGooglePlayStore(String googlePlayLicenseKey, StoreListener storeListener) {
+    public static Store createGooglePlayStore(String googlePlayLicenseKey, StoreListener storeListener) {
         return new GooglePlayStore(MainActivity.mInstance, googlePlayLicenseKey, storeListener);
     }
 
     @NotNull
     @Contract("_, _ -> new")
-    static Store createAmazonAppStore(StoreListener storeListener, boolean forFireTV) {
+    public static Store createAmazonAppStore(StoreListener storeListener, boolean forFireTV) {
         return new AmazonAppStore(MainActivity.mInstance, storeListener, forFireTV);
     }
+
+    @Contract("_ -> new")
+    public static @NotNull Store createAmazonAppStore(StoreListener storeListener) {
+        return new AmazonAppStore(MainActivity.mInstance, storeListener);
+    }
+
 }

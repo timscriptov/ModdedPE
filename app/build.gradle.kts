@@ -12,13 +12,13 @@ android {
         applicationId = "com.mcal.mcpelauncher"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 952102301
-        versionName = "1.21.23.01"
+        versionCode = 972110101
+        versionName = "1.21.101.1"
 
         ndk {
             abiFilters.addAll(
                 setOf(
-                    "armeabi-v7a",
+                    "arm64-v8a",
                 )
             )
         }
@@ -88,6 +88,7 @@ dependencies {
     implementation(project(":microsoft:xbox"))
     implementation(project(":fmod"))
 
+    implementation("androidx.games:games-activity:4.0.0")
     implementation(libs.androidx.legacy.support.v4)
 
     implementation(libs.androidx.appcompat)

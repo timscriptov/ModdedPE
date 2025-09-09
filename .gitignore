@@ -9,6 +9,3 @@ gradlew.bat
 /captures
 .externalNativeBuild
 *.keystore
-
-/assets-pack/src/main/assets
-/minecraft-app/src/main/jniLibs

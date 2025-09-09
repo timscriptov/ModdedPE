@@ -16,8 +16,8 @@ android {
         applicationId = "com.mcal.moddedpe"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 972100103
-        versionName = "1.21.01.03"
+        versionCode = 972110101
+        versionName = "1.21.101.1"
 
         ndk {
             abiFilters.addAll(
@@ -93,6 +93,7 @@ dependencies {
     implementation(project(":microsoft:xbox"))
     implementation(project(":fmod"))
 
+    implementation("androidx.games:games-activity:4.0.0")
     implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)

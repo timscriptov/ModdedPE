@@ -28,8 +28,7 @@ import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.pesdk.PESdk;
 
 /**
- * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 public class MinecraftActivity extends com.mojang.minecraftpe.MainActivity {
     protected PESdk getPESdk() {

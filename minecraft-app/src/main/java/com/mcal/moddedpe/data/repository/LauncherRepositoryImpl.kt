@@ -15,8 +15,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import androidx.core.content.edit
 
 class LauncherRepositoryImpl(
     private val context: Context,
@@ -57,7 +59,7 @@ class LauncherRepositoryImpl(
             extractFiles(tempFile, outputDir)
             tempFile.delete()
         }
-        sharedPreferences.edit().putBoolean(PREF_INSTALLED_RESOURCES, true).apply()
+        sharedPreferences.edit { putBoolean(PREF_INSTALLED_RESOURCES, true) }
     }
 
     override fun isInstalledResources(): Boolean {
@@ -81,39 +83,67 @@ class LauncherRepositoryImpl(
         if (sourcePaths.isNullOrEmpty()) {
             sourcePaths = listOf(context.applicationInfo.sourceDir)
         }
+
+        var libFound = false
         for (apkPath in sourcePaths) {
             val apkFile = File(apkPath)
             val name = apkFile.name
             if (name.contains("arm") || name == "base.apk") {
                 runCatching {
-                    getZipEntry(apkFile, "lib/$abi/libgame.so").copyTo(FileOutputStream(tempLibSoFile))
+                    extractZipEntry(apkFile, "lib/$abi/libgame.so", tempLibSoFile)
+                    libFound = true
+                    Log.d(TAG, "Found libgame.so in: $apkPath")
                 }.onFailure {
-                    Log.e(TAG, "Not found libgame.so: $abi $apkPath")
+                    Log.e(TAG, "Not found libgame.so: $abi $apkPath - ${it.message}")
                 }
+                if (libFound) break
             } else {
-                Log.e(TAG, "Unknown APK file: $apkPath")
+                Log.d(TAG, "Skipping APK file: $apkPath")
             }
         }
+
+        if (!libFound) {
+            Log.e(TAG, "Failed to find libgame.so in any APK")
+            tempLibSoFile.delete()
+            throw RuntimeException("Failed to find native library libgame.so")
+        }
+
         listOf(
-            "libc++_shared.so",
             "libminecraftpe.so",
-            "libMediaDecoders_Android.so"
+            "libMediaDecoders_Android.so",
         ).forEach { libName ->
             val libFile = File(nativeDir, libName)
-            getZipEntry(tempLibSoFile, libName).copyTo(FileOutputStream(libFile))
-            libFile.setExecutable(true)
-            libFile.setReadable(true)
-            libFile.setWritable(true)
+            runCatching {
+                extractZipEntry(tempLibSoFile, libName, libFile)
+                libFile.setExecutable(true)
+                libFile.setReadable(true)
+                libFile.setWritable(true)
+                Log.d(TAG, "Successfully extracted: $libName")
+            }.onFailure {
+                Log.e(TAG, "Failed to extract $libName: ${it.message}")
+                throw RuntimeException("Failed to extract native library $libName", it)
+            }
         }
         tempLibSoFile.delete()
-        sharedPreferences.edit().putBoolean(PREF_INSTALLED_NATIVES, true).apply()
+        sharedPreferences.edit { putBoolean(PREF_INSTALLED_NATIVES, true) }
+        Log.d(TAG, "Native libraries installed successfully")
     }
 
-    private fun getZipEntry(input: File, entry: String): ByteArrayInputStream {
-        ZipFile(input).use { zipFile ->
-            val zipEntry = zipFile.getEntry(entry)
-            zipFile.getInputStream(zipEntry).use { inputStream ->
-                return inputStream.readBytes().inputStream()
+    private fun extractZipEntry(zipFile: File, entryPath: String, outputFile: File) {
+        ZipFile(zipFile).use { zip ->
+            val entry = zip.getEntry(entryPath)
+            if (entry == null) {
+                throw RuntimeException("Entry not found: $entryPath in ${zipFile.name}")
+            }
+
+            zip.getInputStream(entry).use { inputStream ->
+                FileOutputStream(outputFile).use { outputStream ->
+                    val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+                    var bytesRead: Int
+                    while (inputStream.read(buffer).also { bytesRead = it } != -1) {
+                        outputStream.write(buffer, 0, bytesRead)
+                    }
+                }
             }
         }
     }
@@ -168,10 +198,12 @@ class LauncherRepositoryImpl(
     }
 
     companion object {
-        private val TAG = LauncherRepositoryImpl::class.java.name
+        private val TAG = LauncherRepositoryImpl::class.java.simpleName
 
         private const val PREF_INSTALLED_SERVERS = "pref_installed_servers"
         private const val PREF_INSTALLED_RESOURCES = "pref_installed_resources"
         private const val PREF_INSTALLED_NATIVES = "pref_installed_natives"
+
+        private const val DEFAULT_BUFFER_SIZE = 8192 // 8KB buffer
     }
 }

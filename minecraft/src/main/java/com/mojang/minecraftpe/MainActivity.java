@@ -3,10 +3,8 @@ package com.mojang.minecraftpe;
 import android.Manifest;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.NativeActivity;
 import android.content.*;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
@@ -21,8 +19,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
-import android.os.Process;
 import android.os.*;
+import android.os.Process;
 import android.os.storage.StorageManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -42,12 +40,14 @@ import androidx.core.content.FileProvider;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.androidgamesdk.GameActivity;
 import com.google.firebase.FirebaseApp;
 import com.mojang.android.StringValue;
 import com.mojang.minecraftpe.input.InputDeviceManager;
 import com.mojang.minecraftpe.platforms.Platform;
 import com.mojang.minecraftpe.python.PythonPackageLoader;
 import org.fmod.FMOD;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -68,7 +68,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 @SuppressWarnings("JavaJniMissingFunction")
-public class MainActivity extends NativeActivity implements View.OnKeyListener, FilePickerManagerHandler {
+public class MainActivity extends GameActivity implements View.OnKeyListener, FilePickerManagerHandler {
     static final int MSG_CORRELATION_CHECK = 672;
     static final int MSG_CORRELATION_RESPONSE = 837;
     static final int OPEN_FILE_RESULT_CODE = 5;
@@ -78,6 +78,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     private static final int STORAGE_PERMISSION_ID = 1;
     private static boolean _isPowerVr;
     private static boolean mHasStoragePermission;
+    private static boolean mHasReadMediaImagesPermission;
     public static MainActivity mInstance;
     Class SystemProperties;
     private ClipboardManager clipboardManager;
@@ -111,6 +112,9 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
     private WorldRecovery mWorldRecovery = null;
     private WifiManager mWifiManager = null;
     private WifiManager.MulticastLock mMulticastLock = null;
+    private AppExitInfoHelper mAppExitInfoHelper = null;
+    private BrazeManager mBrazeManager = null;
+
     Messenger mService = null;
     MessageConnectionStatus mBound = MessageConnectionStatus.NOTSET;
     final Messenger mMessenger = new Messenger(new IncomingHandler());
@@ -276,6 +280,8 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
 
     native void nativeSuspend();
 
+    native void nativeSuspendGameplayUpdates(boolean z);
+
     @Override
     public void onBackPressed() {
     }
@@ -311,6 +317,13 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
         intent.putExtra(Intent.EXTRA_TEXT, uri);
         intent.setType("text/plain");
         startActivity(Intent.createChooser(intent, title));
+    }
+
+    public AppExitInfoHelper initializeAppExitInfoHelper() {
+        if (mAppExitInfoHelper == null) {
+            mAppExitInfoHelper = new AppExitInfoHelper(getApplicationContext());
+        }
+        return mAppExitInfoHelper;
     }
 
     public void openAndroidAppSettings() {
@@ -360,7 +373,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
             return;
         }
         final Intent intent = new Intent();
-        intent.setComponent(new ComponentName(getPackageName().contains("trial") ? getPackageName() : "com.mojang.minecrafttrialpe", "com.mojang.minecraftpe.ImportService"));
+        intent.setComponent(new ComponentName(getPackageName(), "com.mojang.minecraftpe.ImportService"));
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         SharedPreferences.Editor edit = defaultSharedPreferences.edit();
         edit.putInt("correlationAttempts", i - 1);
@@ -407,6 +420,8 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
             Process.killProcess(Process.myPid());
         }
         nativeWaitCrashManagementSetupComplete();
+        initializeAppExitInfoHelper();
+        mBrazeManager = new BrazeManager(this);
         if (isEduMode()) {
             try {
                 getClassLoader().loadClass("com.microsoft.applications.events.HttpClient").getConstructor(Context.class).newInstance(getApplicationContext());
@@ -416,7 +431,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
         } else {
             configureBrazeAtRuntime();
             if (Build.VERSION.SDK_INT >= 33) {
-                requestPushPermission();
+                mBrazeManager.requestPushPermission();
             }
         }
         platform = Platform.createPlatform(true);
@@ -427,6 +442,7 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
         mNetworkMonitor = new NetworkMonitor(getApplicationContext());
         platform.onAppStart(getWindow().getDecorView());
         mHasStoragePermission = checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, Process.myPid(), Process.myUid()) == 0;
+        mHasReadMediaImagesPermission = Build.VERSION.SDK_INT < 33 || checkPermission("android.permission.READ_MEDIA_IMAGES", Process.myPid(), Process.myUid()) == 0;
         nativeSetHeadphonesConnected(((AudioManager) getSystemService(Context.AUDIO_SERVICE)).isWiredHeadsetOn());
         clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         initialUserLocale = Locale.getDefault();
@@ -450,6 +466,19 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
             Log.w("ModdedPE", "Automation: in MainActivity::onCreate, we are running in AppCenter");
         }
         mWorldRecovery = new WorldRecovery(getApplicationContext(), getApplicationContext().getContentResolver());
+    }
+
+    public long getLowMemoryThreshold() {
+        return getMemoryInfo().threshold;
+    }
+
+    public long getUsableSpace(String str) {
+        try {
+            return new File(str).getUsableSpace();
+        } catch (SecurityException e) {
+            Log.e("ModdedPE", "SecurityException while attempting to get usable space\n" + e);
+            return 0L;
+        }
     }
 
     public void initializeMulticast() {
@@ -542,29 +571,67 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
         textToSpeechManager = null;
     }
 
-    public void requestStoragePermission(int permissionReason) {
-        mLastPermissionRequestReason = permissionReason;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_ID);
-        }
+    public void requestStoragePermission(int i) {
+        mLastPermissionRequestReason = i;
+        suspendGameplayUpdates();
+        requestPermissions(new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 1);
     }
 
-    @TargetApi(33)
-    public void requestPushPermission() {
-        Log.i("ModdedPE", "MainActivity::requestPushPermission");
-        if (checkPermission(Manifest.permission.POST_NOTIFICATIONS, Process.myPid(), Process.myUid()) != PackageManager.PERMISSION_GRANTED) {
-            runOnUiThread(() -> requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, POST_NOTIFICATIONS_PERMISSION_ID));
+
+    public void requestMediaImagesPermission(int i) {
+        if (Build.VERSION.SDK_INT >= 33) {
+            mLastPermissionRequestReason = i;
+            suspendGameplayUpdates();
+            requestPermissions(new String[]{"android.permission.READ_MEDIA_IMAGES"}, 3);
+            return;
         }
+        requestStoragePermission(i);
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        Log.i("ModdedPE", "MainActivity::onRequestPermissionsResult");
+    public void onRequestPermissionsResult(int requestCode, String @NotNull [] permissions, int @NotNull [] grantResults) {
+        Log.i("MinecraftPlatform", "MainActivity::onRequestPermissionsResult");
+        resumeGameplayUpdates();
         if (requestCode == STORAGE_PERMISSION_ID) {
             mHasStoragePermission = grantResults.length > 0 && grantResults[0] == 0;
-            nativeStoragePermissionRequestResult(mHasStoragePermission, mLastPermissionRequestReason);
+            nativeStoragePermissionRequestResult(mHasStoragePermission, this.mLastPermissionRequestReason);
+            return;
         }
+        if (requestCode == 2) {
+            if (grantResults.length == 0 || grantResults[0] != 0) {
+                return;
+            }
+            mBrazeManager.requestImmediateDataFlush();
+            return;
+        }
+        if (requestCode != 3) {
+            return;
+        }
+        mHasReadMediaImagesPermission = grantResults.length > 0 && grantResults[0] == 0;
+        nativeStoragePermissionRequestResult(mHasReadMediaImagesPermission, this.mLastPermissionRequestReason);
     }
+
+    public boolean hasReadMediaImagesPermission() {
+        final boolean z;
+        if (Build.VERSION.SDK_INT >= 33) {
+            z = checkPermission("android.permission.READ_MEDIA_IMAGES", Process.myPid(), Process.myUid()) == 0;
+            mHasReadMediaImagesPermission = z;
+        } else {
+            z = checkPermission("android.permission.WRITE_EXTERNAL_STORAGE", Process.myPid(), Process.myUid()) == 0;
+            mHasStoragePermission = z;
+        }
+        return z;
+    }
+
+    public void resumeGameplayUpdates() {
+        new Handler(getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                nativeSuspendGameplayUpdates(false);
+            }
+        });
+    }
+
 
     public boolean hasWriteExternalStoragePermission() {
         final boolean hasStoragePermission = checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, Process.myPid(), Process.myUid()) == PackageManager.PERMISSION_GRANTED;
@@ -1755,6 +1822,19 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
         return false;
     }
 
+    public boolean supportsTTSLanguage(String str) {
+        int iIsLanguageAvailable;
+        final TextToSpeech textToSpeech = textToSpeechManager;
+        return textToSpeech != null && (iIsLanguageAvailable = textToSpeech.isLanguageAvailable(Locale.forLanguageTag(str))) != -2 && iIsLanguageAvailable != -1;
+    }
+
+    public void setTTSLanguage(String str) {
+        final TextToSpeech textToSpeech = textToSpeechManager;
+        if (textToSpeech != null) {
+            textToSpeech.setLanguage(Locale.forLanguageTag(str));
+        }
+    }
+
     public long initializeLibHttpClient(final long hcInitArgs) {
         final FutureTask<Long> futureTask = new FutureTask<>(() -> nativeInitializeLibHttpClient(hcInitArgs));
         runOnUiThread(futureTask);
@@ -1882,5 +1962,9 @@ public class MainActivity extends NativeActivity implements View.OnKeyListener, 
                 }
             }
         }
+    }
+
+    public void suspendGameplayUpdates() {
+        nativeSuspendGameplayUpdates(true);
     }
 }

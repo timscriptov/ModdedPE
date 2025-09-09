@@ -3,3 +3,4 @@
 /.cxx
 /release
 /jniLibs
+/src/main/jniLibs

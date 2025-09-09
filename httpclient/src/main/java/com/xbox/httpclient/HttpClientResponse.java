@@ -1,12 +1,11 @@
 package com.xbox.httpclient;
 
+import okhttp3.Response;
+import okio.Okio;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Objects;
-
-import okhttp3.Response;
-import okhttp3.ResponseBody;
-import okio.Okio;
 
 /**
  * 13.08.2022
@@ -17,13 +16,13 @@ public class HttpClientResponse {
     private final long callHandle;
     private final Response response;
 
-    public HttpClientResponse(long callHandle, Response response) {
-        this.callHandle = callHandle;
+    public HttpClientResponse(long j, Response response) {
+        callHandle = j;
         this.response = response;
     }
 
     public int getNumHeaders() {
-        return response.headers().size();
+        return this.response.headers().size();
     }
 
     public String getHeaderNameAtIndex(int i) {
@@ -40,14 +39,10 @@ public class HttpClientResponse {
         return response.headers().value(i);
     }
 
-    public void getResponseBodyBytes() {
+    public void getResponseBodyBytes() throws IOException {
         try {
-            final ResponseBody body = response.body();
-            if (body != null) {
-                body.source().readAll(Okio.sink(new NativeOutputStream(callHandle)));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+            response.body().source().readAll(Okio.sink(new NativeOutputStream(callHandle)));
+        } catch (IOException unused) {
         } catch (Throwable th) {
             response.close();
             throw th;
@@ -69,13 +64,13 @@ public class HttpClientResponse {
         private native void nativeWrite(long callHandle, byte[] b, int off, int len) throws IOException;
 
         @Override
-        public void write(byte[] b) throws IOException {
-            write(b, 0, b.length);
+        public void write(byte[] bArr) throws IOException {
+            write(bArr, 0, bArr.length);
         }
 
         @Override
-        public void write(byte[] b, int off, int len) throws IOException {
-            Objects.requireNonNull(b);
+        public void write(@NotNull byte[] b, int off, int len) throws IOException {
+            b.getClass();
             if (off < 0 || len < 0 || off + len > b.length) {
                 throw new IndexOutOfBoundsException();
             }

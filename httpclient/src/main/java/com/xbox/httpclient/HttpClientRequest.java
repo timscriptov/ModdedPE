@@ -1,19 +1,17 @@
 package com.xbox.httpclient;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import okhttp3.*;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.UnknownHostException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * 13.08.2022
@@ -23,44 +21,77 @@ import org.jetbrains.annotations.NotNull;
 public class HttpClientRequest {
     private static final byte[] NO_BODY = new byte[0];
     private static final OkHttpClient OK_CLIENT = new OkHttpClient.Builder().retryOnConnectionFailure(false).build();
+    private final Context appContext;
     private Request.Builder requestBuilder = new Request.Builder();
 
-    public native void OnRequestCompleted(long j, HttpClientResponse httpClientResponse);
-
-    public native void OnRequestFailed(long j, String str, boolean z);
-
-    public void setHttpUrl(String str) {
-        requestBuilder = requestBuilder.url(str);
+    public HttpClientRequest(Context context) {
+        appContext = context;
     }
 
-    public void setHttpMethodAndBody(String str, long j, String str2, long j2) {
-        RequestBody httpClientRequestBody = null;
-        if (j2 == 0) {
-            if (HttpPost.METHOD_NAME.equals(str) || HttpPut.METHOD_NAME.equals(str)) {
-                httpClientRequestBody = RequestBody.create(NO_BODY, str2 != null ? MediaType.parse(str2) : null);
+    private native void OnRequestCompleted(long requestId, HttpClientResponse httpClientResponse);
+
+    private native void OnRequestFailed(long requestId, String exceptionType, String stackTrace, String networkInfo, boolean isUnknownHost);
+
+    public void setHttpUrl(String url) {
+        requestBuilder = requestBuilder.url(url);
+    }
+
+    public void setHttpMethodAndBody(String method, long contentLength, String contentType, long bodyOffset) {
+        RequestBody requestBody;
+        if (bodyOffset == 0) {
+            requestBody = null;
+            if (HttpPost.METHOD_NAME.equals(method) || HttpPut.METHOD_NAME.equals(method)) {
+                MediaType mediaType = contentType != null ? MediaType.parse(contentType) : null;
+                requestBody = RequestBody.create(NO_BODY, mediaType);
             }
         } else {
-            httpClientRequestBody = new HttpClientRequestBody(j, str2, j2);
+            requestBody = new HttpClientRequestBody(contentLength, contentType, bodyOffset);
         }
-        requestBuilder.method(str, httpClientRequestBody);
+        requestBuilder.method(method, requestBody);
     }
 
-    public void setHttpHeader(String str, String str2) {
-        requestBuilder = requestBuilder.addHeader(str, str2);
+    public void setHttpHeader(String name, String value) {
+        requestBuilder = requestBuilder.addHeader(name, value);
     }
 
-    public void doRequestAsync(final long j) {
+    public void doRequestAsync(final long requestId) {
         OK_CLIENT.newCall(requestBuilder.build()).enqueue(new Callback() {
             @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException iOException) {
-                OnRequestFailed(j, iOException.getClass().getCanonicalName(), iOException instanceof UnknownHostException);
+            public void onFailure(@NotNull Call call, @NotNull IOException exception) {
+                StringWriter stringWriter = new StringWriter();
+                exception.printStackTrace(new PrintWriter(stringWriter));
+                OnRequestFailed(
+                        requestId,
+                        exception.getClass().getCanonicalName(),
+                        stringWriter.toString(),
+                        GetAllNetworksInfo(),
+                        exception instanceof UnknownHostException
+                );
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) {
-                HttpClientRequest httpClientRequest = HttpClientRequest.this;
-                httpClientRequest.OnRequestCompleted(j, new HttpClientResponse(j, response));
+                OnRequestCompleted(requestId, new HttpClientResponse(requestId, response));
             }
         });
+    }
+
+    @NotNull
+    private String GetAllNetworksInfo() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) appContext.getSystemService("connectivity");
+        StringBuilder sb = new StringBuilder("Has default proxy: ");
+        sb.append(connectivityManager.getDefaultProxy() != null)
+                .append("\nHas active network: ")
+                .append(connectivityManager.getActiveNetwork() != null)
+                .append('\n');
+
+        Network[] allNetworks = connectivityManager.getAllNetworks();
+        for (int i = 0; i < allNetworks.length; i++) {
+            if (i > 0) {
+                sb.append("\n");
+            }
+            sb.append(NetworkObserver.NetworkDetails.getNetworkDetails(allNetworks[i], connectivityManager));
+        }
+        return sb.toString();
     }
 }

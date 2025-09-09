@@ -30,11 +30,9 @@ class GameActivity : MainActivity() {
         Patcher.patchNativeLibraryDir(classLoader, nativeDir)
         arrayListOf(
             "fmod",
-            "c++_shared",
             "minecraftpe",
-            "MediaDecoders_Android"
         ).forEach {
-            System.loadLibrary(it)
+            runCatching { System.loadLibrary(it) }
         }
     }
 

@@ -10,7 +10,7 @@ interface LauncherRepository {
     suspend fun installResources()
     fun isInstalledResources(): Boolean
 
-    suspend fun installNatives()
+    suspend fun installNatives(): Int
     fun isInstalledNatives(): Boolean
 
     fun startGame(activity: Activity)
