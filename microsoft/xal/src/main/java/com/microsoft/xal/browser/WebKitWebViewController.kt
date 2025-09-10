@@ -17,14 +17,14 @@
 package com.microsoft.xal.browser
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.webkit.*
+import android.webkit.CookieManager
+import android.webkit.WebChromeClient
 import android.webkit.WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
+import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
-import java.io.IOException
 
 /**
  * 13.08.2022
@@ -154,7 +154,7 @@ class WebKitWebViewController : AppCompatActivity() {
         const val REQUEST_HEADER_KEYS = "REQUEST_HEADER_KEYS"
         const val REQUEST_HEADER_VALUES = "REQUEST_HEADER_VALUES"
         const val RESPONSE_KEY = "RESPONSE"
-        const val RESULT_FAILED = 8052
+        const val RESULT_FAILED = 8054
         const val SHOW_TYPE = "SHOW_TYPE"
         const val START_URL = "START_URL"
     }

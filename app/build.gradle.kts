@@ -88,9 +88,10 @@ dependencies {
     implementation(project(":microsoft:xbox"))
     implementation(project(":fmod"))
 
-    implementation("androidx.games:games-activity:4.0.0")
+    implementation(libs.androidx.games.activity)
     implementation(libs.androidx.legacy.support.v4)
 
+    implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.preference.ktx)
     implementation(libs.androidx.core.ktx)

@@ -11,6 +11,10 @@
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
     </style>
 
+    <style name="FullScreen" parent="@style/Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
     <style name="AppErrorTheme" parent="@style/Theme.Material3.DayNight">
         <item name="colorPrimary">#444444</item>
         <item name="colorPrimaryDark">#212121</item>

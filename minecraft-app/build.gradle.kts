@@ -93,7 +93,7 @@ dependencies {
     implementation(project(":microsoft:xbox"))
     implementation(project(":fmod"))
 
-    implementation("androidx.games:games-activity:4.0.0")
+    implementation(libs.androidx.games.activity)
     implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)

@@ -1,5 +1,6 @@
 [versions]
 agp = "8.11.0"
+gamesActivity = "4.0.0"
 kotlin = "2.2.10"
 compose-plugin = "1.8.2"
 
@@ -51,6 +52,7 @@ exposed = "0.61.0"
 xerial = "3.50.3.0"
 
 [libraries]
+androidx-games-activity = { module = "androidx.games:games-activity", version.ref = "gamesActivity" }
 play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
 wortise-sdk = { module = "com.wortise:android-sdk", version.ref = "wortise-sdk" }
 androidx-activity = { module = "androidx.activity:activity", version.ref = "activity-ktx" }

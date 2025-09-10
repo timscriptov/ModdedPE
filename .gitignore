@@ -9,3 +9,4 @@ gradlew.bat
 /captures
 .externalNativeBuild
 *.keystore
+/.kotlin
