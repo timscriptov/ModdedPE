@@ -2,7 +2,6 @@ package com.microsoft.xbox.toolkit;
 
 import com.microsoft.xbox.toolkit.system.SystemUtil;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

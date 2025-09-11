@@ -1,23 +1,12 @@
 package com.microsoft.xbox.service.network.managers;
 
 import android.text.TextUtils;
-
 import com.google.gson.JsonObject;
-import com.microsoft.xbox.toolkit.JavaUtil;
-import com.microsoft.xbox.toolkit.StreamUtil;
-import com.microsoft.xbox.toolkit.TimeMonitor;
-import com.microsoft.xbox.toolkit.UrlUtil;
-import com.microsoft.xbox.toolkit.XLEErrorCode;
-import com.microsoft.xbox.toolkit.XLEException;
+import com.microsoft.xbox.toolkit.*;
 import com.microsoft.xbox.toolkit.network.HttpClientFactory;
 import com.microsoft.xbox.toolkit.network.XLEHttpStatusAndStream;
-
 import org.apache.http.Header;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.methods.*;
 import org.apache.http.entity.ByteArrayEntity;
 import org.jetbrains.annotations.NotNull;
 

@@ -8,10 +8,8 @@ import android.provider.Settings;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.WindowManager;
-
 import com.microsoft.xbox.toolkit.XLEAssert;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
-
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,8 +1,6 @@
 package com.microsoft.xbox.service.model;
 
 import com.microsoft.xbox.service.network.managers.IPeopleHubResult;
-
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**

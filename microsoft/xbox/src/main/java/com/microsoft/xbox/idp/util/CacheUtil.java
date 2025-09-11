@@ -1,7 +1,6 @@
 package com.microsoft.xbox.idp.util;
 
 import android.util.Log;
-
 import com.microsoft.xbox.idp.toolkit.BitmapLoader;
 import com.microsoft.xbox.idp.toolkit.ObjectLoader;
 

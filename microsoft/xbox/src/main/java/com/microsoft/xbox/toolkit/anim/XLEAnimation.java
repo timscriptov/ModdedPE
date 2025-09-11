@@ -2,7 +2,6 @@ package com.microsoft.xbox.toolkit.anim;
 
 import android.view.View;
 import android.view.animation.Interpolator;
-
 import com.microsoft.xbox.toolkit.ThreadManager;
 
 /**

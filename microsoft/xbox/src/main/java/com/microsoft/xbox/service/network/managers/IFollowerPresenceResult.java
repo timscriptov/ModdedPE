@@ -3,7 +3,6 @@ package com.microsoft.xbox.service.network.managers;
 import com.microsoft.xbox.service.model.serialization.UTCDateConverterGson;
 import com.microsoft.xbox.toolkit.GsonUtil;
 import com.microsoft.xbox.toolkit.XLEConstants;
-
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;

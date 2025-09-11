@@ -10,11 +10,9 @@ import android.widget.Button;
 import android.widget.Checkable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.microsoft.xboxtcui.R;
 import com.microsoft.xbox.toolkit.XLERValueHelper;
 import com.microsoft.xbox.toolkit.ui.FontManager;
-
+import com.microsoft.xboxtcui.R;
 import org.jetbrains.annotations.NotNull;
 
 /**

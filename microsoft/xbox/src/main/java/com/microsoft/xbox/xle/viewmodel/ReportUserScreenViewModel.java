@@ -1,20 +1,14 @@
 package com.microsoft.xbox.xle.viewmodel;
 
-import com.microsoft.xboxtcui.R;
 import com.microsoft.xbox.service.model.ProfileModel;
 import com.microsoft.xbox.service.model.sls.FeedbackType;
 import com.microsoft.xbox.telemetry.helpers.UTCPageView;
-import com.microsoft.xbox.toolkit.AsyncActionStatus;
-import com.microsoft.xbox.toolkit.DialogManager;
-import com.microsoft.xbox.toolkit.JavaUtil;
-import com.microsoft.xbox.toolkit.NetworkAsyncTask;
-import com.microsoft.xbox.toolkit.XLEAssert;
-import com.microsoft.xbox.toolkit.XLEException;
+import com.microsoft.xbox.toolkit.*;
 import com.microsoft.xbox.toolkit.ui.NavigationManager;
 import com.microsoft.xbox.toolkit.ui.ScreenLayout;
 import com.microsoft.xbox.xle.app.adapter.ReportUserScreenAdapter;
+import com.microsoft.xboxtcui.R;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
-
 import com.microsoft.xbox.toolkit.XLERValueHelper;
 
 /**

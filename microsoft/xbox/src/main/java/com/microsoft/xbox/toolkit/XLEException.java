@@ -1,7 +1,6 @@
 package com.microsoft.xbox.toolkit;
 
 import android.annotation.SuppressLint;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

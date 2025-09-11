@@ -42,8 +42,6 @@ public class HeaderFragment extends BaseFragment implements View.OnClickListener
     public UserAccount userAccount;
     public AppCompatTextView userEmail;
     public AppCompatImageView userImageView;
-    private LoaderManager loaderManager;
-
     public final LoaderManager.LoaderCallbacks<BitmapLoader.Result> imageCallbacks = new LoaderManager.LoaderCallbacks<>() {
         @Contract("_, _ -> new")
         public @NotNull Loader<BitmapLoader.Result> onCreateLoader(int i, Bundle bundle) {
@@ -68,6 +66,8 @@ public class HeaderFragment extends BaseFragment implements View.OnClickListener
             userImageView.setImageBitmap(null);
         }
     };
+    public AppCompatTextView userName;
+    private LoaderManager loaderManager;
     LoaderManager.LoaderCallbacks<ObjectLoader.Result<UserAccount>> userAccountCallbacks = new LoaderManager.LoaderCallbacks<>() {
         public void onLoaderReset(@NotNull Loader<ObjectLoader.Result<UserAccount>> loader) {
         }
@@ -95,7 +95,6 @@ public class HeaderFragment extends BaseFragment implements View.OnClickListener
             Log.e(HeaderFragment.TAG, "Error getting UserAccount");
         }
     };
-    public AppCompatTextView userName;
     private Callbacks callbacks = NO_OP_CALLBACKS;
 
     public void onAttach(Activity activity) {

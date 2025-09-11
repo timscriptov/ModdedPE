@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.os.AsyncTask;
 import android.text.TextPaint;
 import android.widget.ImageView;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
@@ -28,7 +27,7 @@ public class XLETextTask extends AsyncTask<XLETextArg, Void, Bitmap> {
         this.imgHeight = imageView.getHeight();
     }
 
-    public Bitmap doInBackground(@NotNull XLETextArg ... xLETextArgArr) {
+    public Bitmap doInBackground(@NotNull XLETextArg... xLETextArgArr) {
         int i;
         int i2;
         if (xLETextArgArr.length <= 0) {

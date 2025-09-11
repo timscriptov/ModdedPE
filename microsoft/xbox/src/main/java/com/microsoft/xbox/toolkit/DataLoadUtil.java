@@ -2,7 +2,6 @@ package com.microsoft.xbox.toolkit;
 
 import com.microsoft.xbox.toolkit.network.IDataLoaderRunnable;
 import com.microsoft.xbox.xle.app.XLEUtil;
-
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -1,8 +1,6 @@
 package com.microsoft.xbox.xle.app.activity.Profile;
 
 import android.app.AlertDialog;
-
-import com.microsoft.xboxtcui.R;
 import com.microsoft.xbox.service.model.FollowersData;
 import com.microsoft.xbox.service.model.ProfileModel;
 import com.microsoft.xbox.service.network.managers.AddFollowingUserResponseContainer;
@@ -10,12 +8,7 @@ import com.microsoft.xbox.service.network.managers.MutedListResultContainer;
 import com.microsoft.xbox.service.network.managers.NeverListResultContainer;
 import com.microsoft.xbox.telemetry.helpers.UTCChangeRelationship;
 import com.microsoft.xbox.telemetry.helpers.UTCPeopleHub;
-import com.microsoft.xbox.toolkit.AsyncActionStatus;
-import com.microsoft.xbox.toolkit.DialogManager;
-import com.microsoft.xbox.toolkit.NetworkAsyncTask;
-import com.microsoft.xbox.toolkit.ThreadManager;
-import com.microsoft.xbox.toolkit.XLEAssert;
-import com.microsoft.xbox.toolkit.XLEException;
+import com.microsoft.xbox.toolkit.*;
 import com.microsoft.xbox.toolkit.ui.NavigationManager;
 import com.microsoft.xbox.toolkit.ui.ScreenLayout;
 import com.microsoft.xbox.xle.app.SGProjectSpecificDialogManager;
@@ -24,9 +17,9 @@ import com.microsoft.xbox.xle.app.adapter.ProfileScreenAdapter;
 import com.microsoft.xbox.xle.viewmodel.ChangeFriendshipDialogViewModel;
 import com.microsoft.xbox.xle.viewmodel.ViewModelBase;
 import com.microsoft.xbox.xle.viewmodel.XLEGlobalData;
+import com.microsoft.xboxtcui.R;
 import com.microsoft.xboxtcui.XboxAppDeepLinker;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

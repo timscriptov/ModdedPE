@@ -9,10 +9,8 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
-
 import androidx.loader.app.LoaderManager;
 import com.microsoft.xbox.idp.ui.ErrorActivity;
-
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +31,7 @@ public final class ErrorHelper implements Parcelable {
 
         @NotNull
         @Contract(value = "_ -> new", pure = true)
-        public ErrorHelper [] newArray(int i) {
+        public ErrorHelper[] newArray(int i) {
             return new ErrorHelper[i];
         }
     };

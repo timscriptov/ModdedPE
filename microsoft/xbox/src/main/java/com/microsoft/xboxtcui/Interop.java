@@ -4,10 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
-
 import com.microsoft.xbox.toolkit.ui.ActivityParameters;
 import com.microsoft.xbox.xle.app.activity.Profile.ProfileScreen;
-
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;

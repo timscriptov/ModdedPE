@@ -1,6 +1,5 @@
 package com.microsoft.xbox.xle.viewmodel;
 
-import com.microsoft.xboxtcui.R;
 import com.microsoft.xbox.service.model.FollowersData;
 import com.microsoft.xbox.service.model.ProfileModel;
 import com.microsoft.xbox.service.network.managers.AddFollowingUserResponseContainer;
@@ -12,8 +11,8 @@ import com.microsoft.xbox.toolkit.XLEAssert;
 import com.microsoft.xbox.toolkit.network.ListState;
 import com.microsoft.xbox.xle.app.SGProjectSpecificDialogManager;
 import com.microsoft.xbox.xle.app.activity.Profile.ProfileScreenViewModel;
+import com.microsoft.xboxtcui.R;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

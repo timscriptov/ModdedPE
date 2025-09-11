@@ -5,10 +5,8 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.Interpolator;
-
 import com.microsoft.xbox.toolkit.ThreadManager;
 import com.microsoft.xbox.toolkit.XLEAssert;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

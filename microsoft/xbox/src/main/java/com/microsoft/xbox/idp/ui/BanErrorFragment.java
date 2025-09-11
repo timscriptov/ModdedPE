@@ -5,9 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.microsoft.xbox.idp.compat.BaseFragment;
-
 import com.microsoft.xboxtcui.R;
 import org.jetbrains.annotations.NotNull;
 

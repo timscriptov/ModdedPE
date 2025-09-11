@@ -5,22 +5,14 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.util.AttributeSet;
-import android.view.ContextMenu;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
+import android.view.*;
 import android.widget.FrameLayout;
-
 import com.microsoft.xbox.toolkit.ThreadManager;
 import com.microsoft.xbox.toolkit.XLEAssert;
 import com.microsoft.xbox.toolkit.XLERValueHelper;
 import com.microsoft.xbox.toolkit.anim.XLEAnimationPackage;
 import com.microsoft.xbox.toolkit.system.SystemUtil;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

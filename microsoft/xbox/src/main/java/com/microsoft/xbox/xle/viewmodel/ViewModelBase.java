@@ -4,23 +4,15 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
-
 import com.microsoft.xbox.service.model.UpdateData;
 import com.microsoft.xbox.service.model.UpdateType;
-import com.microsoft.xbox.toolkit.AsyncResult;
-import com.microsoft.xbox.toolkit.DialogManager;
-import com.microsoft.xbox.toolkit.ThreadManager;
-import com.microsoft.xbox.toolkit.XLEAssert;
-import com.microsoft.xbox.toolkit.XLEErrorCode;
-import com.microsoft.xbox.toolkit.XLEException;
-import com.microsoft.xbox.toolkit.XLEObserver;
+import com.microsoft.xbox.toolkit.*;
 import com.microsoft.xbox.toolkit.anim.XLEAnimation;
 import com.microsoft.xbox.toolkit.anim.XLEAnimationPackage;
 import com.microsoft.xbox.toolkit.ui.ActivityParameters;
 import com.microsoft.xbox.toolkit.ui.NavigationManager;
 import com.microsoft.xbox.toolkit.ui.ScreenLayout;
 import com.microsoft.xbox.xle.app.XLEUtil;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

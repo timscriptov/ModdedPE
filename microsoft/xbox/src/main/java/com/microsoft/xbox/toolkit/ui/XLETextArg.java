@@ -1,7 +1,6 @@
 package com.microsoft.xbox.toolkit.ui;
 
 import android.graphics.Typeface;
-
 import com.microsoft.xbox.toolkit.system.SystemUtil;
 
 /**

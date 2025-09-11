@@ -2,7 +2,6 @@ package com.microsoft.xbox.toolkit;
 
 import android.app.ActivityManager;
 import android.os.Debug;
-
 import com.microsoft.xboxtcui.XboxTcuiSdk;
 
 /**

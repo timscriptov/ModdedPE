@@ -1,15 +1,12 @@
 package com.microsoft.xbox.idp.toolkit;
 
 import android.content.Context;
-
 import com.google.gson.Gson;
 import com.microsoft.xbox.idp.util.HttpCall;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedInputStream;
 import java.io.InputStreamReader;
-import java.io.StringWriter;
 
 /**
  * 07.01.2021

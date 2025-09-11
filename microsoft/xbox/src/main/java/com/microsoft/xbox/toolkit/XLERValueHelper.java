@@ -1,10 +1,8 @@
 package com.microsoft.xbox.toolkit;
 
 import android.view.View;
-
 import com.microsoft.xboxtcui.R;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
-
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
@@ -53,7 +51,7 @@ public class XLERValueHelper {
     }
 
     @Nullable
-    public static int [] getStyleableRValueArray(String str) {
+    public static int[] getStyleableRValueArray(String str) {
         try {
             return (int[]) getStyleableRClass().getDeclaredField(str).get(null);
         } catch (Exception unused) {

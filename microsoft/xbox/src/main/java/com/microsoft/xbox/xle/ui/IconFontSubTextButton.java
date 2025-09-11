@@ -8,11 +8,10 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-
-import com.microsoft.xboxtcui.R;
 import com.microsoft.xbox.toolkit.XLERValueHelper;
 import com.microsoft.xbox.toolkit.ui.CustomTypefaceTextView;
 import com.microsoft.xbox.xle.app.XLEUtil;
+import com.microsoft.xboxtcui.R;
 
 /**
  * 07.01.2021

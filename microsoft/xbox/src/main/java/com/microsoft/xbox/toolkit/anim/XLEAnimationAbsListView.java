@@ -4,7 +4,6 @@ import android.view.View;
 import android.view.animation.Interpolator;
 import android.view.animation.LayoutAnimationController;
 import android.widget.AbsListView;
-
 import com.microsoft.xbox.toolkit.XLEAssert;
 
 /**

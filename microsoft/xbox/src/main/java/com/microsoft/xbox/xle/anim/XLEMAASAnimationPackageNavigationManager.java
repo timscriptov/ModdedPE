@@ -1,11 +1,9 @@
 package com.microsoft.xbox.xle.anim;
 
 import android.view.View;
-
 import com.microsoft.xbox.toolkit.anim.MAAS;
 import com.microsoft.xbox.toolkit.anim.MAASAnimation;
 import com.microsoft.xbox.toolkit.anim.XLEAnimation;
-
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 

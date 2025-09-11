@@ -2,7 +2,6 @@ package com.microsoft.xbox.idp.model;
 
 import com.google.gson.GsonBuilder;
 import com.microsoft.xbox.idp.model.serialization.UTCDateConverter;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;

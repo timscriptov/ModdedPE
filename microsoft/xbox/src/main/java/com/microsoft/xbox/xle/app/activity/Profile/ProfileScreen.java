@@ -2,10 +2,9 @@ package com.microsoft.xbox.xle.app.activity.Profile;
 
 import android.content.Context;
 import android.util.AttributeSet;
-
-import com.microsoft.xboxtcui.R;
 import com.microsoft.xbox.telemetry.helpers.UTCPeopleHub;
 import com.microsoft.xbox.xle.app.activity.ActivityBase;
+import com.microsoft.xboxtcui.R;
 
 /**
  * 07.01.2021

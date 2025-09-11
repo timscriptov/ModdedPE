@@ -2,7 +2,6 @@ package com.microsoft.xbox.service.model;
 
 import com.microsoft.xbox.toolkit.JavaUtil;
 import com.microsoft.xbox.toolkit.ui.Search.TrieSearch;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

@@ -2,7 +2,6 @@ package com.microsoft.xbox.idp.util;
 
 import android.graphics.Bitmap;
 import android.util.LruCache;
-
 import com.microsoft.xbox.idp.toolkit.BitmapLoader;
 
 /**

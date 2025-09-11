@@ -2,14 +2,7 @@ package com.microsoft.xbox.service.network.managers.xblshared;
 
 import com.microsoft.xbox.service.model.privacy.PrivacySettings;
 import com.microsoft.xbox.service.model.privacy.PrivacySettingsResult;
-import com.microsoft.xbox.service.network.managers.AddFollowingUserResponseContainer;
-import com.microsoft.xbox.service.network.managers.FamilySettings;
-import com.microsoft.xbox.service.network.managers.IPeopleHubResult;
-import com.microsoft.xbox.service.network.managers.IUserProfileResult;
-import com.microsoft.xbox.service.network.managers.MutedListResultContainer;
-import com.microsoft.xbox.service.network.managers.NeverListResultContainer;
-import com.microsoft.xbox.service.network.managers.ProfilePreferredColor;
-import com.microsoft.xbox.service.network.managers.ProfileSummaryResultContainer;
+import com.microsoft.xbox.service.network.managers.*;
 import com.microsoft.xbox.toolkit.XLEException;
 
 /**

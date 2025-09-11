@@ -5,12 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.appcompat.widget.AppCompatButton;
-
-import com.microsoft.xboxtcui.R;
 import com.microsoft.xbox.idp.compat.BaseFragment;
-
+import com.microsoft.xboxtcui.R;
 import org.jetbrains.annotations.NotNull;
 
 /**

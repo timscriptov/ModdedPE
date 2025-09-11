@@ -2,8 +2,6 @@ package com.microsoft.xbox.xle.app.adapter;
 
 import android.annotation.SuppressLint;
 import android.widget.ScrollView;
-
-import com.microsoft.xboxtcui.R;
 import com.microsoft.xbox.telemetry.helpers.UTCPeopleHub;
 import com.microsoft.xbox.toolkit.JavaUtil;
 import com.microsoft.xbox.toolkit.ui.CustomTypefaceTextView;
@@ -15,6 +13,7 @@ import com.microsoft.xbox.xle.app.activity.Profile.ProfileScreenViewModel;
 import com.microsoft.xbox.xle.ui.IconFontToggleButton;
 import com.microsoft.xbox.xle.ui.XLERootView;
 import com.microsoft.xbox.xle.viewmodel.AdapterBase;
+import com.microsoft.xboxtcui.R;
 import com.microsoft.xboxtcui.XboxAppDeepLinker;
 
 /**

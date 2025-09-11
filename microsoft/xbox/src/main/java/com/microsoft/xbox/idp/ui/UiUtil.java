@@ -11,11 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
-import com.microsoft.xboxtcui.R;
 import com.microsoft.xbox.idp.compat.BaseActivity;
 import com.microsoft.xbox.idp.compat.BaseFragment;
-
+import com.microsoft.xboxtcui.R;
 import org.jetbrains.annotations.NotNull;
 
 /**

@@ -1,7 +1,6 @@
 package com.microsoft.xbox.xle.viewmodel;
 
 import android.view.View;
-
 import com.microsoft.xbox.toolkit.DialogManager;
 import com.microsoft.xbox.toolkit.XLEAllocationTracker;
 import com.microsoft.xbox.toolkit.XLEAssert;

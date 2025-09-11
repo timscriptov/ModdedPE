@@ -3,14 +3,12 @@ package com.microsoft.xbox.xle.app;
 import android.content.res.Configuration;
 import android.util.Base64;
 import android.util.DisplayMetrics;
-
 import com.microsoft.xbox.service.model.ProfileModel;
 import com.microsoft.xbox.toolkit.GsonUtil;
 import com.microsoft.xbox.toolkit.IProjectSpecificDataProvider;
 import com.microsoft.xbox.toolkit.JavaUtil;
 import com.microsoft.xbox.toolkit.network.XboxLiveEnvironment;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;

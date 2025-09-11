@@ -2,7 +2,6 @@ package com.microsoft.xbox.idp.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +32,7 @@ public class Suggestions {
 
             @NotNull
             @Contract(value = "_ -> new", pure = true)
-            public Response [] newArray(int i) {
+            public Response[] newArray(int i) {
                 return new Response[i];
             }
         };

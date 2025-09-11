@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.widget.FrameLayout;
-
 import com.microsoft.xbox.toolkit.XLEException;
 import com.microsoft.xbox.toolkit.ui.ActivityParameters;
 import com.microsoft.xbox.toolkit.ui.NavigationManager;

@@ -3,11 +3,9 @@ package com.microsoft.xbox.toolkit;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.widget.Toast;
-
 import com.microsoft.xbox.toolkit.ui.BlockingScreen;
 import com.microsoft.xbox.toolkit.ui.CancellableBlockingScreen;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Stack;

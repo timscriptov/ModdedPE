@@ -1,12 +1,6 @@
 package com.microsoft.xbox.toolkit.ui;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.RectF;
-
+import android.graphics.*;
 import org.jetbrains.annotations.NotNull;
 
 /**

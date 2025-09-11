@@ -2,7 +2,6 @@ package com.microsoft.xbox.toolkit.ui;
 
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

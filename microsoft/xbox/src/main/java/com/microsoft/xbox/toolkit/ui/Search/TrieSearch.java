@@ -1,7 +1,6 @@
 package com.microsoft.xbox.toolkit.ui.Search;
 
 import com.microsoft.xbox.toolkit.JavaUtil;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

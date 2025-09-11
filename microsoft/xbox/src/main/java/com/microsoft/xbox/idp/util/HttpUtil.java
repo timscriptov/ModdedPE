@@ -2,7 +2,6 @@ package com.microsoft.xbox.idp.util;
 
 import android.net.Uri;
 import android.text.TextUtils;
-
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

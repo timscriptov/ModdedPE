@@ -2,7 +2,6 @@ package com.microsoft.xbox.idp.util;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import androidx.fragment.app.Fragment;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +22,7 @@ public class FragmentLoaderKey implements Parcelable {
 
         @NotNull
         @Contract(value = "_ -> new", pure = true)
-        public FragmentLoaderKey [] newArray(int i) {
+        public FragmentLoaderKey[] newArray(int i) {
             return new FragmentLoaderKey[i];
         }
     };

@@ -2,7 +2,6 @@ package com.microsoft.xbox.toolkit.ui;
 
 import android.view.KeyEvent;
 import android.view.View;
-
 import com.microsoft.xbox.toolkit.ThreadManager;
 import com.microsoft.xbox.toolkit.XLEAssert;
 import com.microsoft.xbox.toolkit.XLEException;

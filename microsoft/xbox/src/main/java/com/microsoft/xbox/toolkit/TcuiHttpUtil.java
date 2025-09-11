@@ -1,9 +1,7 @@
 package com.microsoft.xbox.toolkit;
 
 import android.util.Pair;
-
 import com.microsoft.xbox.idp.util.HttpCall;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;

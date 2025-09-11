@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;

@@ -1,7 +1,6 @@
 package com.microsoft.xbox.toolkit.network;
 
 import com.microsoft.xbox.toolkit.XLEException;
-
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;

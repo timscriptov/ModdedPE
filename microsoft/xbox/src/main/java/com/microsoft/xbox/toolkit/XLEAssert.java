@@ -9,8 +9,6 @@ import org.jetbrains.annotations.NotNull;
  */
 
 public class XLEAssert {
-    static final boolean $assertionsDisabled = false;
-
     public static void assertTrue(String str, boolean z) {
     }
 

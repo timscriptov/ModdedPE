@@ -2,7 +2,6 @@ package com.microsoft.xbox.toolkit.anim;
 
 import com.microsoft.xbox.toolkit.ThreadManager;
 import com.microsoft.xbox.toolkit.XLEAssert;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;

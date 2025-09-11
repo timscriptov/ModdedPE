@@ -1,7 +1,6 @@
 package com.microsoft.xbox.toolkit.network;
 
 import com.microsoft.xbox.toolkit.XLEAssert;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

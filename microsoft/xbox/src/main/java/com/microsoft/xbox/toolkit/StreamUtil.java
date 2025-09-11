@@ -4,13 +4,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 
 /**
  * 07.01.2021
@@ -20,7 +14,7 @@ import java.io.OutputStream;
 
 public class StreamUtil {
     @Nullable
-    public static byte [] CreateByteArray(InputStream inputStream) {
+    public static byte[] CreateByteArray(InputStream inputStream) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try {
             CopyStream(byteArrayOutputStream, inputStream);
@@ -72,7 +66,7 @@ public class StreamUtil {
 
     @NotNull
     @Contract("null -> fail")
-    public static byte [] HexStringToByteArray(String str) {
+    public static byte[] HexStringToByteArray(String str) {
         if (str != null) {
             if (str.length() % 2 != 0) {
                 str = "0" + str;

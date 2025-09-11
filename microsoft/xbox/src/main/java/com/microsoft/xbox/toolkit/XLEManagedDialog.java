@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.view.View;
-
 import com.microsoft.xbox.toolkit.anim.MAAS;
 import com.microsoft.xbox.toolkit.anim.XLEAnimation;
 import com.microsoft.xbox.toolkit.anim.XLEAnimationPackage;

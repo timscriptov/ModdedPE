@@ -1,57 +1,23 @@
 package com.microsoft.xbox.service.model;
 
 import android.util.Log;
-
 import com.microsoft.xbox.service.model.privacy.PrivacySettingsResult;
-import com.microsoft.xbox.service.model.sls.AddShareIdentityRequest;
-import com.microsoft.xbox.service.model.sls.FavoriteListRequest;
-import com.microsoft.xbox.service.model.sls.FeedbackType;
-import com.microsoft.xbox.service.model.sls.MutedListRequest;
-import com.microsoft.xbox.service.model.sls.NeverListRequest;
-import com.microsoft.xbox.service.model.sls.SubmitFeedbackRequest;
-import com.microsoft.xbox.service.model.sls.UserProfileRequest;
-import com.microsoft.xbox.service.model.sls.UserProfileSetting;
-import com.microsoft.xbox.service.network.managers.AddFollowingUserResponseContainer;
-import com.microsoft.xbox.service.network.managers.FamilySettings;
-import com.microsoft.xbox.service.network.managers.FollowingSummaryResult;
-import com.microsoft.xbox.service.network.managers.IFollowerPresenceResult;
-import com.microsoft.xbox.service.network.managers.IPeopleHubResult;
-import com.microsoft.xbox.service.network.managers.IUserProfileResult;
-import com.microsoft.xbox.service.network.managers.MutedListResultContainer;
-import com.microsoft.xbox.service.network.managers.NeverListResultContainer;
-import com.microsoft.xbox.service.network.managers.ProfileSummaryResultContainer;
-import com.microsoft.xbox.service.network.managers.ServiceManagerFactory;
+import com.microsoft.xbox.service.model.sls.*;
+import com.microsoft.xbox.service.network.managers.*;
 import com.microsoft.xbox.service.network.managers.xblshared.ISLSServiceManager;
-import com.microsoft.xbox.toolkit.AsyncActionStatus;
-import com.microsoft.xbox.toolkit.AsyncResult;
-import com.microsoft.xbox.toolkit.DataLoadUtil;
-import com.microsoft.xbox.toolkit.JavaUtil;
-import com.microsoft.xbox.toolkit.ProjectSpecificDataProvider;
-import com.microsoft.xbox.toolkit.SingleEntryLoadingStatus;
-import com.microsoft.xbox.toolkit.ThreadManager;
-import com.microsoft.xbox.toolkit.ThreadSafeFixedSizeHashtable;
-import com.microsoft.xbox.toolkit.XLEAssert;
-import com.microsoft.xbox.toolkit.XLEErrorCode;
-import com.microsoft.xbox.toolkit.XLEException;
-import com.microsoft.xbox.toolkit.XLERValueHelper;
+import com.microsoft.xbox.toolkit.*;
 import com.microsoft.xbox.toolkit.network.IDataLoaderRunnable;
 import com.microsoft.xbox.toolkit.network.XLEThreadPool;
 import com.microsoft.xbox.toolkit.network.XboxLiveEnvironment;
 import com.microsoft.xbox.xle.app.XLEUtil;
 import com.microsoft.xbox.xle.viewmodel.ShareRealNameSettingFilter;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * 07.01.2021

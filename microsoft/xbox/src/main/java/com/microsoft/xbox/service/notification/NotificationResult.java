@@ -2,9 +2,7 @@ package com.microsoft.xbox.service.notification;
 
 import android.content.Context;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
-
 import com.google.firebase.messaging.RemoteMessage;
 import com.microsoft.xboxtcui.R;
 

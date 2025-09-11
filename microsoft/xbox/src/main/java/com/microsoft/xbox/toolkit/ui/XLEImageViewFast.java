@@ -5,7 +5,6 @@ import android.content.res.TypedArray;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.View;
-
 import com.microsoft.xbox.toolkit.XLERValueHelper;
 
 import java.net.URI;

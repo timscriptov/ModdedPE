@@ -9,11 +9,9 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
-
 import com.microsoft.xbox.telemetry.helpers.UTCDeepLink;
 import com.microsoft.xbox.telemetry.utc.model.UTCNames;
 import com.microsoft.xbox.toolkit.XLEAssert;
-
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

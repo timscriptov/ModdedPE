@@ -8,9 +8,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-
 import com.microsoft.xboxtcui.R;
-
 import org.spongycastle.asn1.cmp.PKIFailureInfo;
 
 /**
@@ -110,6 +108,7 @@ public class XLECheckBox extends ViewGroup {
             obtainStyledAttributes.recycle();
         }*/
     }
+
     @SuppressLint("WrongConstant")
     public void onMeasure(int i, int i2) {
         int size = View.MeasureSpec.getSize(i);

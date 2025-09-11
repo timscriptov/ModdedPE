@@ -1,9 +1,7 @@
 package com.microsoft.xbox.xle.app;
 
 import android.annotation.SuppressLint;
-
 import com.microsoft.xboxtcui.XboxTcuiSdk;
-
 import org.jetbrains.annotations.Nullable;
 import org.spongycastle.crypto.tls.CipherSuite;
 

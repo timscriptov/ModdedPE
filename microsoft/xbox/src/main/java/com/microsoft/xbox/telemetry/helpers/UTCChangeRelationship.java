@@ -2,7 +2,6 @@ package com.microsoft.xbox.telemetry.helpers;
 
 import com.microsoft.xbox.telemetry.utc.model.UTCNames;
 import com.microsoft.xbox.toolkit.XLEAssert;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -18,8 +17,8 @@ public class UTCChangeRelationship {
     public static String currentXUID = "";
 
     private static void verifyTrackedDefaults() {
-        XLEAssert.assertFalse("Called trackPeopleHubView without set currentXUID", currentXUID.equals(""));
-        XLEAssert.assertFalse("Called trackPeopleHubView without set activityTitle", currentActivityTitle.toString().equals(""));
+        XLEAssert.assertFalse("Called trackPeopleHubView without set currentXUID", currentXUID.isEmpty());
+        XLEAssert.assertFalse("Called trackPeopleHubView without set activityTitle", currentActivityTitle.toString().isEmpty());
     }
 
     public static @NotNull HashMap<String, Object> getAdditionalInfo(String str) {
@@ -43,9 +42,9 @@ public class UTCChangeRelationship {
 
     public static void trackChangeRelationshipAction(final CharSequence charSequence, final String str, final boolean z, final boolean z2) {
         UTCEventTracker.callTrackWrapper(() -> {
-            HashMap access$200 = UTCChangeRelationship.getAdditionalInfo(str);
-            access$200.put("relationship", Integer.valueOf((z ? Relationship.EXISTINGFRIEND : Relationship.ADDFRIEND).getValue()));
-            UTCPageAction.track(UTCNames.PageAction.ChangeRelationship.Action, charSequence, access$200);
+            HashMap<String, Object> hashMap = UTCChangeRelationship.getAdditionalInfo(str);
+            hashMap.put("relationship", (z ? Relationship.EXISTINGFRIEND : Relationship.ADDFRIEND).getValue());
+            UTCPageAction.track(UTCNames.PageAction.ChangeRelationship.Action, charSequence, hashMap);
             if (z2) {
                 UTCChangeRelationship.trackChangeRelationshipDone(charSequence, str, Relationship.ADDFRIEND, RealNameStatus.SHARINGON, FavoriteStatus.NOTFAVORITED, GamerType.FACEBOOK);
             }
@@ -59,9 +58,9 @@ public class UTCChangeRelationship {
 
     public static void trackChangeRelationshipRemoveFriend(final CharSequence charSequence, final String str) {
         UTCEventTracker.callTrackWrapper(() -> {
-            HashMap access$200 = UTCChangeRelationship.getAdditionalInfo(str);
-            access$200.put("relationship", Relationship.REMOVEFRIEND);
-            UTCPageAction.track(UTCNames.PageAction.ChangeRelationship.Action, charSequence, access$200);
+            HashMap<String, Object> hashMap = UTCChangeRelationship.getAdditionalInfo(str);
+            hashMap.put("relationship", Relationship.REMOVEFRIEND);
+            UTCPageAction.track(UTCNames.PageAction.ChangeRelationship.Action, charSequence, hashMap);
         });
     }
 
@@ -71,19 +70,13 @@ public class UTCChangeRelationship {
     }
 
     public static void trackChangeRelationshipDone(CharSequence charSequence, String str, Relationship relationship, RealNameStatus realNameStatus, FavoriteStatus favoriteStatus, GamerType gamerType) {
-        final String str2 = str;
-        final Relationship relationship2 = relationship;
-        final FavoriteStatus favoriteStatus2 = favoriteStatus;
-        final RealNameStatus realNameStatus2 = realNameStatus;
-        final GamerType gamerType2 = gamerType;
-        final CharSequence charSequence2 = charSequence;
         UTCEventTracker.callTrackWrapper(() -> {
-            HashMap access$200 = UTCChangeRelationship.getAdditionalInfo(str2);
-            access$200.put("relationship", Integer.valueOf(relationship2.getValue()));
-            access$200.put("favorite", Integer.valueOf(favoriteStatus2.getValue()));
-            access$200.put("realname", Integer.valueOf(realNameStatus2.getValue()));
-            access$200.put("gamertype", Integer.valueOf(gamerType2.getValue()));
-            UTCPageAction.track(UTCNames.PageAction.ChangeRelationship.Done, charSequence2, access$200);
+            HashMap<String, Object> hashMap = UTCChangeRelationship.getAdditionalInfo(str);
+            hashMap.put("relationship", relationship.getValue());
+            hashMap.put("favorite", favoriteStatus.getValue());
+            hashMap.put("realname", realNameStatus.getValue());
+            hashMap.put("gamertype", gamerType.getValue());
+            UTCPageAction.track(UTCNames.PageAction.ChangeRelationship.Done, charSequence, hashMap);
         });
     }
 

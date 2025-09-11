@@ -1,22 +1,9 @@
 package com.microsoft.xbox.xle.anim;
 
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.Interpolator;
-import android.view.animation.ScaleAnimation;
-import android.view.animation.TranslateAnimation;
-
+import android.view.animation.*;
 import com.microsoft.xbox.toolkit.XLERValueHelper;
-import com.microsoft.xbox.toolkit.anim.AnimationFunctionType;
-import com.microsoft.xbox.toolkit.anim.AnimationProperty;
-import com.microsoft.xbox.toolkit.anim.BackEaseInterpolator;
-import com.microsoft.xbox.toolkit.anim.EasingMode;
-import com.microsoft.xbox.toolkit.anim.ExponentialInterpolator;
-import com.microsoft.xbox.toolkit.anim.HeightAnimation;
-import com.microsoft.xbox.toolkit.anim.SineInterpolator;
-import com.microsoft.xbox.toolkit.anim.XLEInterpolator;
+import com.microsoft.xbox.toolkit.anim.*;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
-
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.simpleframework.xml.Attribute;

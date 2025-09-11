@@ -7,8 +7,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-
-import com.microsoft.xboxtcui.R;
 import com.microsoft.xbox.telemetry.helpers.UTCReportUser;
 import com.microsoft.xbox.telemetry.helpers.UTCTelemetry;
 import com.microsoft.xbox.toolkit.XLEAssert;
@@ -16,6 +14,7 @@ import com.microsoft.xbox.toolkit.ui.CustomTypefaceTextView;
 import com.microsoft.xbox.toolkit.ui.XLEButton;
 import com.microsoft.xbox.xle.viewmodel.AdapterBase;
 import com.microsoft.xbox.xle.viewmodel.ReportUserScreenViewModel;
+import com.microsoft.xboxtcui.R;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
 
 /**

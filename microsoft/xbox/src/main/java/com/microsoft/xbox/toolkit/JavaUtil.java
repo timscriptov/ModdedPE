@@ -3,9 +3,7 @@ package com.microsoft.xbox.toolkit;
 import android.graphics.Rect;
 import android.text.format.DateUtils;
 import android.view.View;
-
 import com.microsoft.xboxtcui.XboxTcuiSdk;
-
 import org.apache.http.protocol.HTTP;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -16,15 +14,7 @@ import java.lang.reflect.Field;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Locale;
-import java.util.Random;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * 07.01.2021
@@ -251,7 +241,7 @@ public class JavaUtil {
         return sb3.toString();
     }
 
-    public static @NotNull String concatenateStringsWithDelimiter(String str, boolean z, @NotNull String ... strArr) {
+    public static @NotNull String concatenateStringsWithDelimiter(String str, boolean z, @NotNull String... strArr) {
         StringBuilder sb = new StringBuilder();
         sb.append(z ? " " : "");
         sb.append(str);

@@ -1,7 +1,6 @@
 package com.microsoft.xbox.toolkit;
 
 import com.microsoft.xbox.toolkit.network.XLEThreadPool;
-
 import org.jetbrains.annotations.NotNull;
 
 public abstract class XLEAsyncTask<Result> {
@@ -27,7 +26,7 @@ public abstract class XLEAsyncTask<Result> {
         };
     }
 
-    public static void executeAll(@NotNull XLEAsyncTask ... xLEAsyncTaskArr) {
+    public static void executeAll(@NotNull XLEAsyncTask... xLEAsyncTaskArr) {
         if (xLEAsyncTaskArr.length > 0) {
             int i = 0;
             while (i < xLEAsyncTaskArr.length - 1) {

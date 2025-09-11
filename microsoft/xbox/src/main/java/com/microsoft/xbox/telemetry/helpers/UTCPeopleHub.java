@@ -2,7 +2,6 @@ package com.microsoft.xbox.telemetry.helpers;
 
 import com.microsoft.xbox.telemetry.utc.model.UTCNames;
 import com.microsoft.xbox.toolkit.XLEAssert;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -18,8 +17,8 @@ public class UTCPeopleHub {
     public static String currentXUID = "";
 
     private static void verifyTrackedDefaults() {
-        XLEAssert.assertFalse("Called trackPeopleHubView without set currentXUID", currentXUID.equals(""));
-        XLEAssert.assertFalse("Called trackPeopleHubView without set activityTitle", currentActivityTitle.toString().equals(""));
+        XLEAssert.assertFalse("Called trackPeopleHubView without set currentXUID", currentXUID.isEmpty());
+        XLEAssert.assertFalse("Called trackPeopleHubView without set activityTitle", currentActivityTitle.toString().isEmpty());
     }
 
     public static @NotNull HashMap<String, Object> getAdditionalInfo(String str) {
@@ -41,9 +40,9 @@ public class UTCPeopleHub {
 
     public static void trackMute(final CharSequence charSequence, final String str, final boolean z) {
         UTCEventTracker.callTrackWrapper(() -> {
-            HashMap access$200 = UTCPeopleHub.getAdditionalInfo(str);
-            access$200.put("isMuted", Boolean.valueOf(z));
-            UTCPageAction.track(UTCNames.PageAction.PeopleHub.Mute, charSequence, access$200);
+            HashMap<String, Object> hashMap = UTCPeopleHub.getAdditionalInfo(str);
+            hashMap.put("isMuted", z);
+            UTCPageAction.track(UTCNames.PageAction.PeopleHub.Mute, charSequence, hashMap);
         });
     }
 

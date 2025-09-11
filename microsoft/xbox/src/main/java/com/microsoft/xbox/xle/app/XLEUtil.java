@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
-
 import com.microsoft.xbox.toolkit.DialogManager;
 import com.microsoft.xbox.toolkit.ThreadManager;
 import com.microsoft.xbox.toolkit.XLEAssert;

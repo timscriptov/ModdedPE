@@ -9,7 +9,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-
 import com.microsoft.xbox.toolkit.BackgroundThreadWaitor;
 import com.microsoft.xbox.toolkit.XLERValueHelper;
 

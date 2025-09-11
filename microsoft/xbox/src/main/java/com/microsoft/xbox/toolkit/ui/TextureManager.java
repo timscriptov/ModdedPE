@@ -5,25 +5,12 @@ import android.animation.AnimatorListenerAdapter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
-
-import com.microsoft.xboxtcui.R;
-import com.microsoft.xbox.toolkit.BackgroundThreadWaitor;
-import com.microsoft.xbox.toolkit.MemoryMonitor;
-import com.microsoft.xbox.toolkit.MultiMap;
-import com.microsoft.xbox.toolkit.StreamUtil;
-import com.microsoft.xbox.toolkit.ThreadManager;
-import com.microsoft.xbox.toolkit.ThreadSafePriorityQueue;
-import com.microsoft.xbox.toolkit.TimeMonitor;
-import com.microsoft.xbox.toolkit.XLEAssert;
-import com.microsoft.xbox.toolkit.XLEFileCache;
-import com.microsoft.xbox.toolkit.XLEFileCacheManager;
-import com.microsoft.xbox.toolkit.XLEMemoryCache;
-import com.microsoft.xbox.toolkit.XLEThread;
+import com.microsoft.xbox.toolkit.*;
 import com.microsoft.xbox.toolkit.network.HttpClientFactory;
 import com.microsoft.xbox.toolkit.network.XLEHttpStatusAndStream;
 import com.microsoft.xbox.toolkit.network.XLEThreadPool;
+import com.microsoft.xboxtcui.R;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
-
 import org.apache.http.HttpHost;
 import org.apache.http.client.methods.HttpGet;
 import org.jetbrains.annotations.NotNull;
@@ -53,11 +40,11 @@ public class TextureManager {
     private static final int TEXTURE_TIMEOUT_MS = 15000;
     private static final long TIME_TO_RETRY_MS = 300000;
     public static TextureManager instance = new TextureManager();
+    public final Object listLock = new Object();
     private final TimeMonitor stopwatch = new TimeMonitor();
     public XLEMemoryCache<TextureManagerScaledNetworkBitmapRequest, XLEBitmap> bitmapCache = new XLEMemoryCache<>(Math.min(getNetworkBitmapCacheSizeInMB(), 50) * 1048576, BITMAP_CACHE_MAX_FILE_SIZE_IN_BYTES);
     public XLEFileCache bitmapFileCache = XLEFileCacheManager.createCache(BMP_FILE_CACHE_DIR_NAME, BMP_FILE_CACHE_SIZE);
     public HashSet<TextureManagerScaledNetworkBitmapRequest> inProgress = new HashSet<>();
-    public final Object listLock = new Object();
     public HashMap<TextureManagerScaledNetworkBitmapRequest, RetryEntry> timeToRetryCache = new HashMap<>();
     public ThreadSafePriorityQueue<TextureManagerDownloadRequest> toDecode = new ThreadSafePriorityQueue<>();
     public MultiMap<TextureManagerScaledNetworkBitmapRequest, ImageView> waitingForImage = new MultiMap<>();
@@ -382,44 +369,66 @@ public class TextureManager {
 
         public void run() {
             while (true) {
-                TextureManagerDownloadRequest textureManagerDownloadRequest = toDecode.pop();
-                XLEBitmap xLEBitmap = null;
-                if (textureManagerDownloadRequest.stream != null) {
+                TextureManagerDownloadRequest request = toDecode.pop();
+                XLEBitmap resultBitmap = null;
+
+                if (request.stream != null) {
                     BackgroundThreadWaitor.getInstance().waitForReady(TextureManager.DECODE_THREAD_WAIT_TIMEOUT_MS);
+
                     try {
-                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                        StreamUtil.CopyStream(byteArrayOutputStream, textureManagerDownloadRequest.stream);
-                        byte[] byteArray = byteArrayOutputStream.toByteArray();
-                        BitmapFactory.Options options = new BitmapFactory.Options();
-                        options.inJustDecodeBounds = true;
-                        BitmapFactory.decodeStream(new ByteArrayInputStream(byteArray), null, options);
-                        BitmapFactory.Options access$200 = computeInSampleSizeOptions(textureManagerDownloadRequest.key.bindingOption.width, textureManagerDownloadRequest.key.bindingOption.height, options);
-                        int i = options.outWidth / access$200.inSampleSize;
-                        int i2 = options.outHeight / access$200.inSampleSize;
-                        XLEBitmap decodeStream = XLEBitmap.decodeStream(new ByteArrayInputStream(byteArray), access$200);
-                        if (textureManagerDownloadRequest.key.bindingOption.useFileCache && !bitmapFileCache.contains(textureManagerDownloadRequest.key)) {
-                            bitmapFileCache.save(textureManagerDownloadRequest.key, new ByteArrayInputStream(byteArray));
+                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                        StreamUtil.CopyStream(outputStream, request.stream);
+                        byte[] imageData = outputStream.toByteArray();
+
+                        BitmapFactory.Options boundsOptions = new BitmapFactory.Options();
+                        boundsOptions.inJustDecodeBounds = true;
+                        BitmapFactory.decodeStream(new ByteArrayInputStream(imageData), null, boundsOptions);
+
+                        BitmapFactory.Options decodeOptions = computeInSampleSizeOptions(
+                                request.key.bindingOption.width,
+                                request.key.bindingOption.height,
+                                boundsOptions
+                        );
+
+                        XLEBitmap decodedBitmap = XLEBitmap.decodeStream(
+                                new ByteArrayInputStream(imageData),
+                                decodeOptions
+                        );
+
+                        if (request.key.bindingOption.useFileCache &&
+                                !bitmapFileCache.contains(request.key)) {
+                            bitmapFileCache.save(request.key, new ByteArrayInputStream(imageData));
                         }
-                        xLEBitmap = TextureManager.this.createScaledBitmap(decodeStream, textureManagerDownloadRequest.key.bindingOption.width, textureManagerDownloadRequest.key.bindingOption.height);
-                    } catch (Exception unused) {
+
+                        resultBitmap = TextureManager.this.createScaledBitmap(
+                                decodedBitmap,
+                                request.key.bindingOption.width,
+                                request.key.bindingOption.height
+                        );
+
+                    } catch (Exception ignored) {
                     }
                 }
+
                 BackgroundThreadWaitor.getInstance().waitForReady(TextureManager.DECODE_THREAD_WAIT_TIMEOUT_MS);
+
                 synchronized (listLock) {
-                    if (xLEBitmap != null) {
-                        bitmapCache.add(textureManagerDownloadRequest.key, xLEBitmap, xLEBitmap.getByteCount());
-                        timeToRetryCache.remove(textureManagerDownloadRequest.key);
-                    } else if (textureManagerDownloadRequest.key.bindingOption.resourceIdForError != -1) {
-                        xLEBitmap = loadResource(textureManagerDownloadRequest.key.bindingOption.resourceIdForError);
-                        RetryEntry retryEntry = timeToRetryCache.get(textureManagerDownloadRequest.key);
+                    if (resultBitmap != null) {
+                        bitmapCache.add(request.key, resultBitmap, resultBitmap.getByteCount());
+                        timeToRetryCache.remove(request.key);
+                    } else if (request.key.bindingOption.resourceIdForError != -1) {
+                        resultBitmap = loadResource(request.key.bindingOption.resourceIdForError);
+
+                        RetryEntry retryEntry = timeToRetryCache.get(request.key);
                         if (retryEntry != null) {
                             retryEntry.startNext();
                         } else {
-                            timeToRetryCache.put(textureManagerDownloadRequest.key, new RetryEntry());
+                            timeToRetryCache.put(request.key, new RetryEntry());
                         }
                     }
-                    drainWaitingForImage(textureManagerDownloadRequest.key, xLEBitmap);
-                    inProgress.remove(textureManagerDownloadRequest.key);
+
+                    drainWaitingForImage(request.key, resultBitmap);
+                    inProgress.remove(request.key);
                 }
             }
         }
@@ -429,27 +438,28 @@ public class TextureManager {
         private final TextureManagerDownloadRequest request;
 
         public TextureManagerDownloadThreadWorker(TextureManagerDownloadRequest textureManagerDownloadRequest) {
-            this.request = textureManagerDownloadRequest;
+            request = textureManagerDownloadRequest;
         }
 
         public void run() {
-            XLEAssert.assertTrue(this.request.key != null && this.request.key.url != null);
-            this.request.stream = null;
+            XLEAssert.assertTrue(request.key != null && request.key.url != null);
+            request.stream = null;
             try {
-                if (!this.request.key.url.startsWith(HttpHost.DEFAULT_SCHEME_NAME)) {
-                    this.request.stream = downloadFromAssets(this.request.key.url);
-                } else if (this.request.key.bindingOption.useFileCache) {
-                    this.request.stream = TextureManager.this.bitmapFileCache.getInputStreamForRead(this.request.key);
-                    if (this.request.stream == null) {
-                        this.request.stream = downloadFromWeb(this.request.key.url);
+                String url = request.key.url;
+                if (!url.startsWith(HttpHost.DEFAULT_SCHEME_NAME)) {
+                    request.stream = downloadFromAssets(url);
+                } else if (request.key.bindingOption.useFileCache) {
+                    request.stream = bitmapFileCache.getInputStreamForRead(request.key);
+                    if (request.stream == null) {
+                        request.stream = downloadFromWeb(url);
                     }
                 } else {
-                    this.request.stream = downloadFromWeb(this.request.key.url);
+                    request.stream = downloadFromWeb(url);
                 }
-            } catch (Exception unused) {
+            } catch (Exception ignored) {
             }
-            synchronized (TextureManager.this.listLock) {
-                TextureManager.this.toDecode.push(this.request);
+            synchronized (listLock) {
+                toDecode.push(request);
             }
         }
 

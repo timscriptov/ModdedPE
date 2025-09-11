@@ -1,7 +1,6 @@
 package com.microsoft.xbox.toolkit.ui.util;
 
 import android.widget.TextView;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

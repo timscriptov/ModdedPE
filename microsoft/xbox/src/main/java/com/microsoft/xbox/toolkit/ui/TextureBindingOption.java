@@ -1,7 +1,6 @@
 package com.microsoft.xbox.toolkit.ui;
 
 import com.microsoft.xbox.toolkit.XLERValueHelper;
-
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

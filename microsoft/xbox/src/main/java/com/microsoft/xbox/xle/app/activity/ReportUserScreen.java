@@ -1,8 +1,8 @@
 package com.microsoft.xbox.xle.app.activity;
 
-import com.microsoft.xboxtcui.R;
 import com.microsoft.xbox.telemetry.helpers.UTCReportUser;
 import com.microsoft.xbox.xle.viewmodel.ReportUserScreenViewModel;
+import com.microsoft.xboxtcui.R;
 
 /**
  * 07.01.2021

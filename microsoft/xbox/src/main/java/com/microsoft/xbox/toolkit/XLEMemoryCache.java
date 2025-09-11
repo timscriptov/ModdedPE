@@ -1,7 +1,6 @@
 package com.microsoft.xbox.toolkit;
 
 import android.util.LruCache;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

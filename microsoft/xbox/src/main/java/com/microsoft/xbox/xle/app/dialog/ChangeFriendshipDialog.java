@@ -7,27 +7,19 @@ import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.microsoft.xboxtcui.R;
 import com.microsoft.xbox.telemetry.helpers.UTCChangeRelationship;
 import com.microsoft.xbox.toolkit.DialogManager;
 import com.microsoft.xbox.toolkit.JavaUtil;
 import com.microsoft.xbox.toolkit.XLEException;
 import com.microsoft.xbox.toolkit.XLEManagedDialog;
 import com.microsoft.xbox.toolkit.network.ListState;
-import com.microsoft.xbox.toolkit.ui.CustomTypefaceTextView;
-import com.microsoft.xbox.toolkit.ui.FastProgressBar;
-import com.microsoft.xbox.toolkit.ui.NavigationManager;
-import com.microsoft.xbox.toolkit.ui.SwitchPanel;
-import com.microsoft.xbox.toolkit.ui.XLEButton;
-import com.microsoft.xbox.toolkit.ui.XLECheckBox;
-import com.microsoft.xbox.toolkit.ui.XLEClickableLayout;
-import com.microsoft.xbox.toolkit.ui.XLEUniversalImageView;
+import com.microsoft.xbox.toolkit.ui.*;
 import com.microsoft.xbox.xle.app.ImageUtil;
 import com.microsoft.xbox.xle.app.SGProjectSpecificDialogManager;
 import com.microsoft.xbox.xle.app.XLEUtil;
 import com.microsoft.xbox.xle.viewmodel.ChangeFriendshipDialogViewModel;
 import com.microsoft.xbox.xle.viewmodel.ViewModelBase;
+import com.microsoft.xboxtcui.R;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
 
 /**

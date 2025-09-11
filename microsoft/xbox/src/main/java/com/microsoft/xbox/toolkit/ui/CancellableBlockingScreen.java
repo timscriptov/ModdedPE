@@ -5,7 +5,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.TextView;
-
 import com.microsoft.xbox.toolkit.XLERValueHelper;
 
 /**

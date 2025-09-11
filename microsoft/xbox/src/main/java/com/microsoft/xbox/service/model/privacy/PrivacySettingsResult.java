@@ -1,7 +1,6 @@
 package com.microsoft.xbox.service.model.privacy;
 
 import com.microsoft.xbox.toolkit.GsonUtil;
-
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;

@@ -3,7 +3,6 @@ package com.microsoft.xbox.xle.viewmodel;
 import com.microsoft.xbox.service.model.FollowersData;
 import com.microsoft.xbox.service.model.ProfileModel;
 import com.microsoft.xbox.service.model.UserProfileData;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

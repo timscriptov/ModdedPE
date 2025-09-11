@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
-
 import com.microsoft.xbox.toolkit.BackgroundThreadWaitor;
 import com.microsoft.xbox.toolkit.anim.MAAS;
 import com.microsoft.xbox.toolkit.anim.MAASAnimation;
@@ -19,7 +18,6 @@ import com.microsoft.xbox.xle.anim.XLEMAASAnimationPackageNavigationManager;
 import com.microsoft.xbox.xle.ui.XLERootView;
 import com.microsoft.xbox.xle.viewmodel.ViewModelBase;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

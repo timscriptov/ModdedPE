@@ -3,7 +3,6 @@ package com.microsoft.xbox.toolkit.ui;
 import android.app.Dialog;
 import android.content.Context;
 import android.widget.TextView;
-
 import com.microsoft.xbox.toolkit.XLERValueHelper;
 
 /**

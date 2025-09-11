@@ -4,14 +4,12 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.LayoutAnimationController;
-
 import com.microsoft.xbox.toolkit.XLEAssert;
 import com.microsoft.xbox.toolkit.XLERValueHelper;
 import com.microsoft.xbox.toolkit.anim.MAASAnimation;
 import com.microsoft.xbox.toolkit.anim.XLEAnimation;
 import com.microsoft.xbox.toolkit.anim.XLEAnimationAbsListView;
 import com.microsoft.xbox.toolkit.anim.XLEAnimationView;
-
 import org.jetbrains.annotations.NotNull;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;

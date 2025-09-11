@@ -2,18 +2,10 @@ package com.microsoft.xbox.toolkit;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -151,46 +143,70 @@ public class XLEFileCache {
     }
 
     private class CachedFileInputStreamItem {
-        private final byte[] computedMd5;
         private final InputStream contentInputStream;
-        private final byte[] savedMd5;
+        private byte[] computedMd5;
+        private byte[] savedMd5;
         private MessageDigest mDigest = null;
 
         public CachedFileInputStreamItem(XLEFileCacheItemKey xLEFileCacheItemKey, File file) throws IOException {
-            FileInputStream fileInputStream = new FileInputStream(file);
-            try {
-                MessageDigest instance = MessageDigest.getInstance("MD5");
-                this.mDigest = instance;
-                byte[] bArr = new byte[instance.getDigestLength()];
-                this.savedMd5 = bArr;
-                if (fileInputStream.read(bArr) == this.mDigest.getDigestLength()) {
-                    int access$000 = XLEFileCache.readInt(fileInputStream);
-                    byte[] bArr2 = new byte[access$000];
-                    if (access$000 != fileInputStream.read(bArr2) || !xLEFileCacheItemKey.getKeyString().equals(new String(bArr2))) {
-                        file.delete();
-                        throw new IOException("File key check failed because keyLength != readKeyLength or !key.getKeyString().equals(new String(urlOrSomething))");
-                    }
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    StreamUtil.CopyStream(byteArrayOutputStream, fileInputStream);
-                    fileInputStream.close();
-                    byte[] byteArray = byteArrayOutputStream.toByteArray();
-                    this.mDigest.update(byteArray);
-                    this.computedMd5 = this.mDigest.digest();
-                    if (!isMd5Error()) {
-                        this.contentInputStream = new ByteArrayInputStream(byteArray);
-                        return;
-                    }
-                    file.delete();
-                    throw new IOException(fileInputStream.getFD() + "the saved md5 is not equal computed md5.ComputedMd5:" + this.computedMd5 + "     SavedMd5:" + this.savedMd5);
-                }
-                fileInputStream.close();
-                throw new IOException("Ddigest lengh check failed!");
+            try (FileInputStream fileInputStream = new FileInputStream(file)) {
+                initializeDigest();
+                readAndValidateMd5(fileInputStream);
+                validateFileKey(xLEFileCacheItemKey, fileInputStream);
+                byte[] content = readContent(fileInputStream);
+                validateContentIntegrity(content, file);
+                this.contentInputStream = new ByteArrayInputStream(content);
             } catch (NoSuchAlgorithmException e) {
-                fileInputStream.close();
-                throw new IOException("File digest failed! " + e.getMessage());
-            } catch (OutOfMemoryError e2) {
-                fileInputStream.close();
-                throw new IOException("File digest failed! Out of memory: " + e2.getMessage());
+                throw new IOException("MD5 algorithm not available: " + e.getMessage(), e);
+            } catch (OutOfMemoryError e) {
+                throw new IOException("Out of memory while processing file: " + e.getMessage(), e);
+            }
+        }
+
+        private void initializeDigest() throws NoSuchAlgorithmException {
+            this.mDigest = MessageDigest.getInstance("MD5");
+            this.savedMd5 = new byte[this.mDigest.getDigestLength()];
+        }
+
+        private void readAndValidateMd5(@NotNull FileInputStream fileInputStream) throws IOException {
+            int bytesRead = fileInputStream.read(this.savedMd5);
+            if (bytesRead != this.mDigest.getDigestLength()) {
+                throw new IOException("Digest length check failed! Expected: " +
+                        this.mDigest.getDigestLength() + ", got: " + bytesRead);
+            }
+        }
+
+        private void validateFileKey(XLEFileCacheItemKey cacheItemKey, FileInputStream fileInputStream)
+                throws IOException {
+            int keyLength = XLEFileCache.readInt(fileInputStream);
+            byte[] keyBytes = new byte[keyLength];
+
+            int bytesRead = fileInputStream.read(keyBytes);
+            if (bytesRead != keyLength) {
+                throw new IOException("Key length mismatch. Expected: " + keyLength + ", got: " + bytesRead);
+            }
+
+            String actualKey = new String(keyBytes);
+            if (!cacheItemKey.getKeyString().equals(actualKey)) {
+                throw new IOException("File key validation failed. Expected: " +
+                        cacheItemKey.getKeyString() + ", got: " + actualKey);
+            }
+        }
+
+        private byte @NotNull [] readContent(FileInputStream fileInputStream) throws IOException {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            StreamUtil.CopyStream(byteArrayOutputStream, fileInputStream);
+            return byteArrayOutputStream.toByteArray();
+        }
+
+        private void validateContentIntegrity(byte[] content, File file) throws IOException {
+            this.mDigest.update(content);
+            this.computedMd5 = this.mDigest.digest();
+
+            if (isMd5Error()) {
+                file.delete();
+                throw new IOException("MD5 validation failed. Computed: " + Arrays.toString(this.computedMd5) +
+                        ", Saved: " + Arrays.toString(this.savedMd5));
             }
         }
 
@@ -199,19 +215,14 @@ public class XLEFileCache {
         }
 
         private boolean isMd5Error() {
-            for (int i = 0; i < this.mDigest.getDigestLength(); i++) {
-                if (this.savedMd5[i] != this.computedMd5[i]) {
-                    return true;
-                }
-            }
-            return false;
+            return !Arrays.equals(this.savedMd5, this.computedMd5);
         }
     }
 
     private class CachedFileOutputStreamItem extends FileOutputStream {
         private final File destFile;
-        private MessageDigest mDigest = null;
-        private boolean startDigest = false;
+        private final MessageDigest mDigest;
+        private final boolean startDigest;
         private boolean writeMd5Finished = false;
 
         public CachedFileOutputStreamItem(@NotNull XLEFileCacheItemKey xLEFileCacheItemKey, File file) throws IOException {

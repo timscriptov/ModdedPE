@@ -2,17 +2,11 @@ package com.microsoft.xbox.idp.toolkit;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
+import android.graphics.*;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
-
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -23,8 +17,6 @@ import org.jetbrains.annotations.NotNull;
 
 @SuppressLint("AppCompatCustomView")
 public class CircleImageView extends ImageView {
-    static final /* synthetic */ boolean $assertionsDisabled = false;
-
     public CircleImageView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
     }

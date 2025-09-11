@@ -2,7 +2,6 @@ package com.microsoft.xbox.toolkit.anim;
 
 import com.microsoft.xbox.toolkit.XMLHelper;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
-
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;

@@ -2,7 +2,6 @@ package com.microsoft.xbox.toolkit.ui;
 
 import android.view.View;
 import android.widget.AdapterView;
-
 import com.microsoft.xbox.toolkit.XLEAssert;
 
 /**

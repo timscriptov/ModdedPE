@@ -1,7 +1,6 @@
 package com.microsoft.xboxlive;
 
 import android.content.Context;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

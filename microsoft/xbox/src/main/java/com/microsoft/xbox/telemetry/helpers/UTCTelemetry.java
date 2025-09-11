@@ -3,7 +3,6 @@ package com.microsoft.xbox.telemetry.helpers;
 import com.microsoft.xbox.idp.ui.ErrorActivity;
 import com.microsoft.xbox.telemetry.utc.CommonData;
 import com.microsoft.xbox.telemetry.utc.model.UTCNames;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

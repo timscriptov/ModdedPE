@@ -1,9 +1,8 @@
 package com.microsoft.xbox.service.model.sls;
 
-import com.microsoft.xboxtcui.R;
 import com.microsoft.xbox.toolkit.XLEAssert;
+import com.microsoft.xboxtcui.R;
 import com.microsoft.xboxtcui.XboxTcuiSdk;
-
 import org.jetbrains.annotations.NotNull;
 
 /**
