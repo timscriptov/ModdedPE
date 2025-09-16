@@ -64,4 +64,9 @@ template<class T> static T xabs(T _Val);
 #define A$stmia_sp$_$r0$  0xe8ad0001 /* stmia sp!, {r0}   */
 #define A$bx_r0           0xe12fff10 /* bx r0             */
 
+#if defined(__arm64__) || defined(__aarch64__)
+#define ARM64_LDR_X16_IMM(imm) (0x58000000 | (16 << 5) | ((imm) & 0x1FFFFC) >> 2)
+#define ARM64_BR_X16 (0xD61F0200 | (16 << 5))
+#endif
+
 #endif//SUBSTRATE_ARM_HPP
