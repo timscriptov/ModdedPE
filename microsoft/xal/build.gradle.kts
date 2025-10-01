@@ -31,6 +31,8 @@ dependencies {
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.browser)
+    
+    implementation(libs.material)
 
     implementation(libs.pkix)
 

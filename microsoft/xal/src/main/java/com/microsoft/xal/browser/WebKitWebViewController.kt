@@ -24,6 +24,7 @@ import android.webkit.CookieManager
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
 import android.webkit.WebView
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 
 /**
@@ -32,11 +33,11 @@ import androidx.appcompat.app.AppCompatActivity
  * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
 class WebKitWebViewController : AppCompatActivity() {
-    private var mWebView: WebView? = null
 
     @SuppressLint("SetJavaScriptEnabled")
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(ProgressBar(this))
         val extras = intent.extras
         if (extras == null) {
             Log.e(TAG, "onCreate() Called with no extras.")
@@ -47,7 +48,7 @@ class WebKitWebViewController : AppCompatActivity() {
         val url = extras.getString(START_URL, "")
         val endUrl = extras.getString(END_URL, "")
         if (url.isEmpty() || endUrl.isEmpty()) {
-            Log.e(TAG, "onCreate() Received invalid start or end URL.");
+            Log.e(TAG, "onCreate() Received invalid start or end URL.")
             setResult(RESULT_FAILED)
             finish()
             return
@@ -55,7 +56,7 @@ class WebKitWebViewController : AppCompatActivity() {
         val requestHeaderKeys = extras.getStringArray(REQUEST_HEADER_KEYS) ?: emptyArray()
         val requestHeaderValues = extras.getStringArray(REQUEST_HEADER_VALUES) ?: emptyArray()
         if (requestHeaderKeys.size != requestHeaderValues.size) {
-            Log.e(TAG, "onCreate() Received request header and key arrays of different lengths.");
+            Log.e(TAG, "onCreate() Received request header and key arrays of different lengths.")
             setResult(RESULT_FAILED)
             finish()
             return
@@ -85,15 +86,15 @@ class WebKitWebViewController : AppCompatActivity() {
 
         val hashMap = HashMap<String, String>(requestHeaderKeys.size)
         for (i in requestHeaderKeys.indices) {
-            val str2 = requestHeaderKeys[i]
-            val str = requestHeaderValues[i]
-            if (str2.isNullOrEmpty() || str.isNullOrEmpty()) {
+            val key = requestHeaderKeys[i]
+            val value = requestHeaderValues[i]
+            if (key.isNullOrEmpty() || value.isNullOrEmpty()) {
                 Log.e(TAG, "onCreate() Received null or empty request field.")
                 setResult(RESULT_FAILED)
                 finish()
                 return
             }
-            hashMap[requestHeaderKeys[i]] = requestHeaderValues[i]
+            hashMap[key] = value
         }
 
         val webView = WebView(this)
@@ -106,8 +107,11 @@ class WebKitWebViewController : AppCompatActivity() {
             }
         }
         webView.webViewClient = XalWebViewClient(this@WebKitWebViewController, endUrl)
-        webView.loadUrl(url)
-        mWebView = webView
+        if (hashMap.isNotEmpty()) {
+            webView.loadUrl(url, hashMap)
+        } else {
+            webView.loadUrl(url)
+        }
     }
 
     private fun deleteCookies(domain: String, useHttps: Boolean) {

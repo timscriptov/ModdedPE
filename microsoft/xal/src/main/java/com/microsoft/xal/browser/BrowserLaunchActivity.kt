@@ -16,14 +16,13 @@
  */
 package com.microsoft.xal.browser
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.net.toUri
 import com.microsoft.xal.browser.ShowUrlType.Companion.fromInt
 
 
@@ -50,22 +49,28 @@ class BrowserLaunchActivity : AppCompatActivity() {
                 )
             )
             finish()
-        } else if (savedInstanceState != null) {
+            return
+        }
+        if (savedInstanceState != null) {
             Log.e(TAG, "onCreate() Recreating with saved state.")
             mOperationId = savedInstanceState.getLong(OPERATION_ID_STATE_KEY)
             mCustomTabsInProgress = savedInstanceState.getBoolean(CUSTOM_TABS_IN_PROGRESS_STATE_KEY)
             mSharedBrowserUsed = savedInstanceState.getBoolean(SHARED_BROWSER_USED_STATE_KEY)
             mBrowserInfo = savedInstanceState.getString(BROWSER_INFO_STATE_KEY)
-        } else if (extras != null) {
+        }
+        if (extras != null) {
             Log.e(TAG, "onCreate() Created with intent args. Starting auth session.")
             mOperationId = extras.getLong(OPERATION_ID, 0L)
             val parameters = BrowserLaunchParameters.parameters(extras)
             mLaunchParameters = parameters
             if (parameters == null || mOperationId == 0L) {
                 Log.e(TAG, "onCreate() Found invalid args, failing operation.")
-                finishOperation(WebResult.FAIL, null);
+                finishOperation(WebResult.FAIL, null)
+                return
             }
-        } else if (intent.data != null) {
+            return
+        }
+        if (intent.data != null) {
             Log.e(TAG, "onCreate() Unexpectedly created with intent data. Finishing with failure.")
             setResult(RESULT_FAILED)
             finishOperation(WebResult.FAIL, null)
@@ -143,9 +148,11 @@ class BrowserLaunchActivity : AppCompatActivity() {
 
                 else -> {
                     finishOperation(WebResult.FAIL, null)
+                    return
                 }
             }
         }
+        Log.w(TAG, "onActivityResult() Result received from unrecognized request.");
     }
 
     override fun onDestroy() {
@@ -159,35 +166,35 @@ class BrowserLaunchActivity : AppCompatActivity() {
     }
 
     private fun startAuthSession(browserLaunchParameters: BrowserLaunchParameters) {
-//        val selectBrowser = selectBrowser(applicationContext, browserLaunchParameters.useInProcBrowser)
-//        mBrowserInfo = selectBrowser.toString()
-//        Log.i(TAG, "startAuthSession() Set browser info: $mBrowserInfo")
-//        Log.i(
-//            TAG,
-//            "startAuthSession() Starting auth session for ShowUrlType: " + browserLaunchParameters.showType.toString()
-//        );
-//        val packageName = selectBrowser.packageName()
-//        if (packageName == null) {
-        Log.i(TAG, "startAuthSession() BrowserSelector returned null package name. Choosing WebKit strategy.")
-        startWebView(
-            browserLaunchParameters.startUrl,
-            browserLaunchParameters.endUrl,
-            browserLaunchParameters.showType,
-            browserLaunchParameters.requestHeaderKeys,
-            browserLaunchParameters.requestHeaderValues
+        val selectBrowser = BrowserSelector.selectBrowser(applicationContext, browserLaunchParameters.useInProcBrowser)
+        mBrowserInfo = selectBrowser.toString()
+        Log.i(TAG, "startAuthSession() Set browser info: $mBrowserInfo")
+        Log.i(
+            TAG,
+            "startAuthSession() Starting auth session for ShowUrlType: " + browserLaunchParameters.showType.toString()
         )
-//        } else {
-//            Log.i(
-//                TAG,
-//                "startAuthSession() BrowserSelector returned non-null package name. Choosing CustomTabs strategy."
-//            )
-//            startCustomTabsInBrowser(
-//                packageName,
-//                browserLaunchParameters.startUrl,
-//                browserLaunchParameters.endUrl,
-//                browserLaunchParameters.showType
-//            )
-//        }
+        val packageName = selectBrowser.packageName()
+        if (packageName == null) {
+            Log.i(TAG, "startAuthSession() BrowserSelector returned null package name. Choosing WebKit strategy.")
+            startWebView(
+                browserLaunchParameters.startUrl,
+                browserLaunchParameters.endUrl,
+                browserLaunchParameters.showType,
+                browserLaunchParameters.requestHeaderKeys,
+                browserLaunchParameters.requestHeaderValues
+            )
+        } else {
+            Log.i(
+                TAG,
+                "startAuthSession() BrowserSelector returned non-null package name. Choosing CustomTabs strategy."
+            )
+            startCustomTabsInBrowser(
+                packageName,
+                browserLaunchParameters.startUrl,
+                browserLaunchParameters.endUrl,
+                browserLaunchParameters.showType
+            )
+        }
     }
 
     private fun startCustomTabsInBrowser(
@@ -207,12 +214,13 @@ class BrowserLaunchActivity : AppCompatActivity() {
         builder.setShowTitle(true)
 
         val build = builder.build()
-        build.intent.setData(Uri.parse(startUrl))
+        build.intent.setData(startUrl.toUri())
         build.intent.setPackage(packageName)
 
         startActivity(build.intent)
     }
 
+    // TODO
     private fun startWebView(
         startUrl: String,
         endUrl: String,

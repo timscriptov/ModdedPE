@@ -192,6 +192,7 @@ public class PreloadActivity extends BaseActivity {
                 mPreloadingMessageLayout.addView(textView);
             } else if (msg.what == MSG_START_MINECRAFT) {
                 Intent intent = new Intent(PreloadActivity.this, MinecraftActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
                 intent.putExtras(msg.getData());
                 startActivity(intent);
                 finish();

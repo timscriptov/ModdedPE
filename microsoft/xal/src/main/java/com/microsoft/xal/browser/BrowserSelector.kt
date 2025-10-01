@@ -19,13 +19,14 @@ package com.microsoft.xal.browser
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.Signature
-import android.net.Uri
 import android.os.Build
 import android.util.Base64
 import android.util.Log
 import androidx.browser.customtabs.CustomTabsService
+import androidx.core.net.toUri
 import androidx.core.os.EnvironmentCompat
 import org.jetbrains.annotations.Contract
 import java.security.MessageDigest
@@ -82,7 +83,7 @@ object BrowserSelector {
 
     private fun userDefaultBrowserInfo(context: Context): BrowserInfo {
         var versionName: String
-        val intent = Intent("android.intent.action.VIEW", Uri.parse("https://microsoft.com"))
+        val intent = Intent("android.intent.action.VIEW", "https://microsoft.com".toUri())
         val resolveActivity = context.packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
         return when (val packageName = resolveActivity?.activityInfo?.packageName) {
             null -> {
@@ -121,51 +122,18 @@ object BrowserSelector {
 
     @SuppressLint("PackageManagerGetSignatures")
     private fun browserAllowedForCustomTabs(context: Context, packageName: String): Boolean {
-//        val signatureBrowser = customTabsAllowedBrowsers[packageName] ?: return false
-//        try {
-//            val packageInfo = context.packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
-//            if (packageInfo == null) {
-//                Log.e("ModdedPE", "No package info found for package: $packageName")
-//                return false
-//            }
-//            packageInfo.signatures?.let { signatures->
-//                for (signature in signatures) {
-//                    if (hashFromSignature(signature) == signatureBrowser) {
-//                        return true
-//                    }
-//                }
-//            }
-//        } catch (e: PackageManager.NameNotFoundException) {
-//            Log.e("ModdedPE", "browserAllowedForCustomTabs() Error in getPackageInfo(): $e")
-//        } catch (e: NoSuchAlgorithmException) {
-//            Log.e("ModdedPE", "browserAllowedForCustomTabs() Error in hashFromSignature(): $e")
-//        }
-//        return false
         val signatureBrowser = customTabsAllowedBrowsers[packageName] ?: return false
         try {
-            val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                context.packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNING_CERTIFICATES)
-            } else {
-                context.packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
-            }
+            val packageInfo = getPackageInfoCompat(context, packageName)
             if (packageInfo == null) {
                 Log.e("ModdedPE", "No package info found for package: $packageName")
                 return false
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                packageInfo.signingInfo?.let { signingInfo -> // Изменено на signingInfo
-                    for (signature in signingInfo.apkContentsSigners) { // Используем apkContentsSigners вместо signatures
-                        if (hashFromSignature(signature) == signatureBrowser) { // Преобразуем в байтовый массив
-                            return true
-                        }
-                    }
-                }
-            } else {
-                packageInfo.signatures?.let { signatures ->
-                    for (signature in signatures) {
-                        if (hashFromSignature(signature) == signatureBrowser) {
-                            return true
-                        }
+            val signatures = getSignaturesCompat(packageInfo)
+            if (signatures != null) {
+                for (signature in signatures) {
+                    if (hashFromSignature(signature) == signatureBrowser) {
+                        return true
                     }
                 }
             }
@@ -175,6 +143,22 @@ object BrowserSelector {
             Log.e("ModdedPE", "browserAllowedForCustomTabs() Error in hashFromSignature(): $e")
         }
         return false
+    }
+
+    private fun getSignaturesCompat(packageInfo: PackageInfo): Array<Signature>? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            packageInfo.signingInfo?.apkContentsSigners
+        } else {
+            packageInfo.signatures
+        }
+    }
+
+    private fun getPackageInfoCompat(context: Context, packageName: String): PackageInfo? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            context.packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNING_CERTIFICATES)
+        } else {
+            context.packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+        }
     }
 
     @SuppressLint("QueryPermissionsNeeded")

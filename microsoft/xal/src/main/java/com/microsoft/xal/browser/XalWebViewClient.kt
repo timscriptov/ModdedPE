@@ -42,7 +42,6 @@ class XalWebViewClient(
         webResourceRequest: WebResourceRequest
     ): WebResourceResponse? {
         val uri = webResourceRequest.url.toString()
-//        Log.e("XBOX_URI", uri)
         if (uri.contains("favicon.ico") || uri.contains("AppLogos")) {
             Thread { webView.loadUrl(uri) }
         }

@@ -40,7 +40,7 @@ class IntentHandler : AppCompatActivity() {
         Log.e(TAG, "onCreate() New intent received.")
         val intent = Intent(this, BrowserLaunchActivity::class.java)
         intent.setData(intent.data)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
         finish()
     }
