@@ -39,7 +39,7 @@ public class NotificationListenerService extends FirebaseMessagingService {
                 return;
             }
             Log.i("ModdedPE", "Device Push Token: " + result);
-            NotificationListenerService.sDeviceRegistrationToken = result;
+            sDeviceRegistrationToken = result;
         });
     }
 

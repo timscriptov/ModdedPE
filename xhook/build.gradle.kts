@@ -5,7 +5,7 @@ plugins {
 android {
     namespace = "com.mcal.xhook"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
-    ndkVersion = "26.1.10909125"
+    ndkVersion = libs.versions.ndkVersion.get()
 
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
@@ -37,8 +37,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 }
 
