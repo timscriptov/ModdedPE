@@ -33,7 +33,7 @@ import java.util.*
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 @SuppressLint("InflateParams", "ClickableViewAccessibility")
 class NModBanner : RelativeLayout {

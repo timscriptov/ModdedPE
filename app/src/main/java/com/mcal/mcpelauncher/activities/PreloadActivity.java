@@ -34,7 +34,7 @@ import java.util.Random;
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 public class PreloadActivity extends BaseActivity {
     private final static int MSG_START_MINECRAFT = 1;

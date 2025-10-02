@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 public class MinecraftInfo {
     @SuppressLint("StaticFieldLeak")

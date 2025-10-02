@@ -22,7 +22,7 @@ import com.mcal.pesdk.utils.MinecraftInfo;
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 public class PESdk {
     private final MinecraftInfo mMinecraftInfo;

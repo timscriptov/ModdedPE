@@ -43,7 +43,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 public class MainSettingsFragment extends PreferenceFragmentCompat {
     private Preference mDataPathPreference;

@@ -28,7 +28,7 @@ import com.mcal.mcpelauncher.utils.I18n.setLanguage
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 class AboutActivity : BaseActivity() {
     private lateinit var binding: ModdedpeAboutBinding

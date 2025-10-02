@@ -27,7 +27,7 @@ import androidx.appcompat.widget.Toolbar
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 class CenteredToolBar : Toolbar {
     private var centeredTitleTextView: AppCompatTextView? = null

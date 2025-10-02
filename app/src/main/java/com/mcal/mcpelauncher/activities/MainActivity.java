@@ -42,7 +42,7 @@ import java.util.List;
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 public class MainActivity extends BaseActivity {
     private ViewPager mMainViewPager;

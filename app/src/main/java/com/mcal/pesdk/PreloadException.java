@@ -18,7 +18,7 @@ package com.mcal.pesdk;
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 public class PreloadException extends Exception {
     public static final int TYPE_LOAD_LIBS_FAILED = 1;

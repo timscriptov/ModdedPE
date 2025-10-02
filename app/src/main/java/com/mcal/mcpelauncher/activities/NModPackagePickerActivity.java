@@ -38,7 +38,7 @@ import java.util.Collections;
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 public class NModPackagePickerActivity extends BaseActivity {
     public static final String TAG_PACKAGE_NAME = "package_name";

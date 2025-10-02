@@ -18,7 +18,7 @@ package com.mcal.pesdk.nmod;
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 public class LoadFailedException extends Exception {
     public static final int TYPE_LOAD_LIB_FAILED = 1;

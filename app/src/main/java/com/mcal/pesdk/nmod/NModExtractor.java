@@ -34,7 +34,7 @@ import java.util.zip.*;
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 class NModExtractor {
     private final Context mContext;

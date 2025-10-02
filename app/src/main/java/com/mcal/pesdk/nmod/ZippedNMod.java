@@ -33,7 +33,7 @@ import java.util.zip.ZipInputStream;
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 public class ZippedNMod extends NMod {
     private ZipFile mZipFile = null;

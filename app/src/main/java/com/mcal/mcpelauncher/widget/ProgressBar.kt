@@ -26,7 +26,7 @@ import com.mcal.mcpelauncher.R
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 class ProgressBar : ProgressBar {
     private lateinit var mPaint: Paint

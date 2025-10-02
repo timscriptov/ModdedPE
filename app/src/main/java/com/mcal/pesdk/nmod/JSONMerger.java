@@ -26,7 +26,7 @@ import java.util.Iterator;
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 class JSONMerger {
     private final String mSrc;

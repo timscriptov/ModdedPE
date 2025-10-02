@@ -25,7 +25,7 @@ import java.util.zip.ZipFile
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  * @author Vologhat
  */
 @SuppressLint("StaticFieldLeak")

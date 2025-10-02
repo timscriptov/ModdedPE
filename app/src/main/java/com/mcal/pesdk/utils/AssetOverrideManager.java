@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 public class AssetOverrideManager {
     private static AssetOverrideManager mInstance;

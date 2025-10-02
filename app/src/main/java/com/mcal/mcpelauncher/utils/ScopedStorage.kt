@@ -21,7 +21,7 @@ import java.io.File
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 object ScopedStorage {
     @JvmStatic

@@ -32,7 +32,7 @@ import java.io.FileInputStream;
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 public class NModDescriptionActivity extends BaseActivity {
     public final static String TAG_PACKAGE_NAME = "nmod_package_name";

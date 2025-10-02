@@ -41,7 +41,7 @@ import java.util.List;
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 public class MCPkgPickerActivity extends BaseActivity {
     public static final int REQUEST_PICK_PACKAGE = 5;

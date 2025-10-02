@@ -27,7 +27,7 @@ import com.mcal.mcpelauncher.utils.PreloadingFinishedListener
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 class SplashesActivity : BaseActivity(), PreloadingFinishedListener {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -26,7 +26,7 @@ import java.util.zip.ZipOutputStream;
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 public class NModJSONEditor {
     private final NMod mTargetNMod;

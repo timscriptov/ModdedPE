@@ -20,7 +20,7 @@ import android.os.Build
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 object ABIInfo {
     @JvmStatic

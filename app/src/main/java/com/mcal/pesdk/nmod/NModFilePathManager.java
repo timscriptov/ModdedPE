@@ -23,7 +23,7 @@ import java.io.File;
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 class NModFilePathManager {
     private static final String FILEPATH_DIR_NAME_NMOD_PACKS = "nmod_packs";

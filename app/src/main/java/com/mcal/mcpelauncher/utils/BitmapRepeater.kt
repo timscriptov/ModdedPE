@@ -21,7 +21,7 @@ import android.graphics.Canvas
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 object BitmapRepeater {
     private fun repeatW(width: Int, src: Bitmap): Bitmap {

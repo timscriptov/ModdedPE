@@ -18,7 +18,7 @@ package com.mcal.pesdk.nmod;
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 public class NModWarning {
     private final int mType;

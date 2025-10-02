@@ -27,7 +27,7 @@ import com.mcal.mcpelauncher.utils.BitmapRepeater.repeat
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 class RepeatableImageView : AppCompatImageView {
     constructor(context: Context) : super(context)

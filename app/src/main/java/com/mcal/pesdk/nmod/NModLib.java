@@ -21,7 +21,7 @@ import com.mojang.minecraftpe.MainActivity;
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 public class NModLib {
     static {

@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 class NModDataLoader {
     private static final String TAG_SHARED_PREFERENCE = "nmod_data_list";

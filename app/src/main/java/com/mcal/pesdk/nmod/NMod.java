@@ -30,7 +30,7 @@ import java.util.ArrayList;
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 public abstract class NMod {
     public static final String MANIFEST_NAME = "nmod_manifest.json";

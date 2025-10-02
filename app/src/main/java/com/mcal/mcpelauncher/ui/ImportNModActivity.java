@@ -38,7 +38,7 @@ import java.net.URISyntaxException;
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 public class ImportNModActivity extends BaseActivity {
     private static final int MSG_SUCCEED = 1;

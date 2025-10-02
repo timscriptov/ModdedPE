@@ -43,7 +43,7 @@ import java.util.Collections;
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 public class DirPickerActivity extends BaseActivity {
     public static final int REQUEST_PICK_DIR = 3;

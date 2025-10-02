@@ -18,7 +18,7 @@ package com.mcal.pesdk.nativeapi;
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 public class NativeUtils {
     static {

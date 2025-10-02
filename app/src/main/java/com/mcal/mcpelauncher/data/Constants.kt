@@ -18,7 +18,7 @@ package com.mcal.mcpelauncher.data
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 object Constants {
     const val FILENAME_SEQUENCE_SEPARATOR = "-"

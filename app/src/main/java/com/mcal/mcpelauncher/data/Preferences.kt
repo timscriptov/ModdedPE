@@ -22,7 +22,7 @@ import com.mcal.mcpelauncher.utils.ScopedStorage
 
 /**
  * @author Тимашков Иван
- * @author https://github.com/TimScriptov
+ * @author <a href="https://github.com/TimScriptov">timscriptov</a>
  */
 object Preferences {
     private val preferences = PreferenceManager.getDefaultSharedPreferences(ModdedPEApplication.getContext())
