@@ -16,39 +16,25 @@
  */
 package com.mcal.pesdk;
 
-import android.content.res.AssetManager;
 import android.os.Bundle;
-
 import com.google.gson.Gson;
 import com.mcal.mcpelauncher.data.Constants;
 import com.mcal.mcpelauncher.data.Preferences;
-import com.mcal.mcpelauncher.utils.ScopedStorage;
 import com.mcal.pesdk.nmod.NModLib;
 import com.mcal.pesdk.utils.AssetOverrideManager;
 import com.mcal.pesdk.utils.MinecraftInfo;
 import com.mojang.minecraftpe.MainActivity;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov
  */
 public class GameManager {
-    private final PESdk mPESdk;
     private final ArrayList<String> patchAssetPath = new ArrayList<>();
-
-    GameManager(PESdk pesdk) {
-        mPESdk = pesdk;
-    }
-
-    public AssetManager getAssets() {
-        return mPESdk.getMinecraftInfo().getAssets();
-    }
 
     public void onMinecraftActivityCreate(@NotNull MainActivity activity, Bundle savedInstanceState) {
         boolean safeMode = Preferences.isSafeMode();

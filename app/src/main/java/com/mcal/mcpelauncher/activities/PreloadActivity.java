@@ -22,9 +22,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.LinearLayout;
-
 import androidx.appcompat.widget.AppCompatTextView;
-
 import com.mcal.mcpelauncher.R;
 import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.pesdk.PreloadException;

@@ -18,7 +18,6 @@ package com.mcal.pesdk.nmod;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

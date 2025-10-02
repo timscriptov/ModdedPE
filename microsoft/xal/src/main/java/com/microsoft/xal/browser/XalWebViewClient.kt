@@ -2,15 +2,17 @@ package com.microsoft.xal.browser
 
 import android.app.Activity
 import android.content.Intent
-import android.util.Log
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity.RESULT_OK
-import com.microsoft.xal.browser.WebKitWebViewController.Companion.RESPONSE_KEY
+import com.microsoft.xal.browser.WebKitWebViewController.RESPONSE_KEY
 import java.io.IOException
 
+/**
+ * @author <a href="https://github.com/timscriptov">timscriptov</a>
+ */
 class XalWebViewClient(
     private val mActivity: Activity,
     private val mUrl: String,

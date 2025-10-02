@@ -17,7 +17,6 @@
 package com.mcal.pesdk;
 
 import android.content.Context;
-
 import com.mcal.pesdk.nmod.NModAPI;
 import com.mcal.pesdk.utils.MinecraftInfo;
 
@@ -34,7 +33,7 @@ public class PESdk {
     public PESdk(Context context) {
         mMinecraftInfo = new MinecraftInfo(context);
         mNModAPI = new NModAPI(context);
-        mGameManager = new GameManager(this);
+        mGameManager = new GameManager();
         mIsInited = false;
     }
 

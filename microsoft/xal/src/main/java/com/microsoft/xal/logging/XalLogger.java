@@ -1,6 +1,5 @@
 package com.microsoft.xal.logging;
 
-import android.annotation.SuppressLint;
 import android.util.Log;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,42 +12,46 @@ import java.util.GregorianCalendar;
  *
  * @author <a href="https://github.com/timscriptov">timscriptov</a>
  */
-
 public class XalLogger implements AutoCloseable {
-    @SuppressLint("SimpleDateFormat")
     private static final SimpleDateFormat LogDateFormat = new SimpleDateFormat("HH:mm:ss.SSS");
     private static final String TAG = "XALJAVA";
-    private final ArrayList<LogEntry> m_logs = new ArrayList<>();
     private final String m_subArea;
+    private final ArrayList<LogEntry> m_logs = new ArrayList<>();
     private LogLevel m_leastVerboseLevel = LogLevel.Verbose;
 
     public XalLogger(String subArea) {
-        m_subArea = subArea;
+        this.m_subArea = subArea;
         Verbose("XalLogger created.");
     }
 
     private static native void nativeLogBatch(int i, LogEntry[] logEntryArr);
 
+    @Override
     public void close() {
         Flush();
     }
 
     public synchronized void Flush() {
-        if (!m_logs.isEmpty()) {
-            try {
-                nativeLogBatch(m_leastVerboseLevel.ToInt(), m_logs.toArray(new LogEntry[m_logs.size()]));
-                m_logs.clear();
-                m_leastVerboseLevel = LogLevel.Verbose;
-            } catch (Exception | UnsatisfiedLinkError e) {
-                Log.e(TAG, "Failed to flush logs: " + e.toString());
-            }
+        if (this.m_logs.isEmpty()) {
+            return;
+        }
+        try {
+            int iToInt = this.m_leastVerboseLevel.ToInt();
+            ArrayList<LogEntry> arrayList = this.m_logs;
+            nativeLogBatch(iToInt, arrayList.toArray(new LogEntry[arrayList.size()]));
+            this.m_logs.clear();
+            this.m_leastVerboseLevel = LogLevel.Verbose;
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to flush logs: " + e);
+        } catch (UnsatisfiedLinkError e2) {
+            Log.e(TAG, "Failed to flush logs: " + e2);
         }
     }
 
     public synchronized void Log(LogLevel level, String msg) {
-        m_logs.add(new LogEntry(level, String.format("[%c][%s][%s] %s", level.ToChar(), Timestamp(), m_subArea, msg)));
-        if (m_leastVerboseLevel.ToInt() > level.ToInt()) {
-            m_leastVerboseLevel = level;
+        this.m_logs.add(new LogEntry(level, String.format("[%c][%s][%s] %s", level.ToChar(), Timestamp(), this.m_subArea, msg)));
+        if (this.m_leastVerboseLevel.ToInt() > level.ToInt()) {
+            this.m_leastVerboseLevel = level;
         }
     }
 
@@ -77,8 +80,7 @@ public class XalLogger implements AutoCloseable {
         Log(LogLevel.Verbose, msg);
     }
 
-    @NotNull
-    private String Timestamp() {
+    private @NotNull String Timestamp() {
         return LogDateFormat.format(GregorianCalendar.getInstance().getTime());
     }
 
@@ -92,17 +94,17 @@ public class XalLogger implements AutoCloseable {
         private final char m_levelChar;
         private final int m_val;
 
-        LogLevel(int val, char levelChar) {
-            m_val = val;
-            m_levelChar = levelChar;
+        LogLevel(int i, char c) {
+            this.m_val = i;
+            this.m_levelChar = c;
         }
 
         public int ToInt() {
-            return m_val;
+            return this.m_val;
         }
 
         public char ToChar() {
-            return m_levelChar;
+            return this.m_levelChar;
         }
     }
 }

@@ -29,7 +29,7 @@ object ABIInfo {
             if (androidArch.contains("arm64-v8a")) {
                 return "arm64-v8a"
             } else if (androidArch.contains("x86_64")) {
-                return "x86"//"x86_64"
+                return "x86_64"
             }
         }
         for (androidArch in Build.SUPPORTED_32_BIT_ABIS) {

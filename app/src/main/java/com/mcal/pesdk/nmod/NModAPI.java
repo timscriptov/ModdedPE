@@ -17,9 +17,7 @@
 package com.mcal.pesdk.nmod;
 
 import android.content.Context;
-
 import com.mcal.mcpelauncher.data.Constants;
-
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

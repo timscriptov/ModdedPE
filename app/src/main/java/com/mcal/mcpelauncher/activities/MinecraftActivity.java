@@ -37,7 +37,7 @@ public class MinecraftActivity extends com.mojang.minecraftpe.MainActivity {
 
     @Override
     public AssetManager getAssets() {
-        return getPESdk().getGameManager().getAssets();
+        return getPESdk().getMinecraftInfo().getAssets();
     }
 
     @Override
@@ -53,6 +53,12 @@ public class MinecraftActivity extends com.mojang.minecraftpe.MainActivity {
         } else {
             return Preferences.getDataSavedPath();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        getPESdk().getGameManager().onMinecraftActivityFinish(this);
+        super.onDestroy();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
