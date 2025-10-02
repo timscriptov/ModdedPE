@@ -94,6 +94,7 @@ class ProgressBar : ProgressBar {
                     mPaint
                 )
             }
+
             2 -> {
                 canvas.drawRect(
                     0f,
@@ -111,6 +112,7 @@ class ProgressBar : ProgressBar {
                     mPaint
                 )
             }
+
             3 -> {
                 canvas.drawRect(
                     0f,
@@ -128,6 +130,7 @@ class ProgressBar : ProgressBar {
                     mPaint
                 )
             }
+
             4 -> {
                 canvas.drawRect(
                     0f,

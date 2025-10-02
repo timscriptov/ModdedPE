@@ -21,17 +21,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-
 import com.mcal.mcpelauncher.BuildConfig;
 import com.mcal.mcpelauncher.ModdedPEApplication;
 import com.mcal.mcpelauncher.R;
 import com.mcal.mcpelauncher.activities.PreloadActivity;
 import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.mcpelauncher.ui.AboutActivity;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

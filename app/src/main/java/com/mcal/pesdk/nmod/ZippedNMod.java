@@ -20,18 +20,10 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-
 import com.mcal.pesdk.utils.ABIInfo;
-
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -65,7 +57,8 @@ public class ZippedNMod extends NMod {
         try {
             Method method = AssetManager.class.getMethod("addAssetPath", String.class);
             method.invoke(mAssets, file.getPath());
-        } catch (NoSuchMethodException | SecurityException | InvocationTargetException | IllegalArgumentException | IllegalAccessException e) {
+        } catch (NoSuchMethodException | SecurityException | InvocationTargetException | IllegalArgumentException |
+                 IllegalAccessException e) {
             e.printStackTrace();
         }
         preload();

@@ -18,15 +18,10 @@ package com.mcal.pesdk.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
-import android.os.Build;
-
 import com.mcal.mcpelauncher.data.Preferences;
-
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -58,7 +53,7 @@ public class MinecraftInfo {
     public static String getMinecraftPackageNativeLibraryDir() {
         final Context context = mContext;
         if (new SplitParser(context).isAppBundle()) {
-            return context.getCacheDir().getPath() + "/lib/" + Build.CPU_ABI;
+            return context.getCacheDir().getPath() + "/lib/" + ABIInfo.getABI();
         } else {
             return mMCContext.getApplicationInfo().nativeLibraryDir;
         }
@@ -68,31 +63,25 @@ public class MinecraftInfo {
         return mMCContext;
     }
 
-    private static @Nullable ApplicationInfo getMinecraftApplicationInfo() {
-        try {
-            return mMCContext.getPackageManager().getPackageInfo(Preferences.getMinecraftPackageName(), 0).applicationInfo;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public boolean isSupportedMinecraftVersion(String[] versions) {
         final String mcpeVersionName = getMinecraftVersionName();
-        if (mcpeVersionName == null)
+        if (mcpeVersionName == null) {
             return false;
+        }
         for (String nameItem : versions) {
             Pattern pattern = Pattern.compile(nameItem);
             Matcher matcher = pattern.matcher(mcpeVersionName);
-            if (matcher.find())
+            if (matcher.find()) {
                 return true;
+            }
         }
         return false;
     }
 
     public String getMinecraftVersionName() {
-        if (getMinecraftPackageContext() == null)
+        if (getMinecraftPackageContext() == null) {
             return null;
+        }
         try {
             return mContext.getPackageManager().getPackageInfo(getMinecraftPackageContext().getPackageName(), PackageManager.GET_CONFIGURATIONS).versionName;
         } catch (PackageManager.NameNotFoundException e) {

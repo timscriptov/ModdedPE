@@ -26,18 +26,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
-
 import com.mcal.mcpelauncher.R;
 import com.mcal.mcpelauncher.activities.BaseActivity;
 import com.mcal.mcpelauncher.data.Constants;
 import com.mcal.mcpelauncher.utils.ScopedStorage;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -52,9 +49,9 @@ public class DirPickerActivity extends BaseActivity {
     public static final int REQUEST_PICK_DIR = 3;
     public final static String TAG_DIR_PATH = "dir_path";
     private static final int MSG_SELECT = 1;
+    private final SelectHandler mSelectHandler = new SelectHandler();
     private File currentPath;
     private ArrayList<File> filesInCurrentPath;
-    private final SelectHandler mSelectHandler = new SelectHandler();
 
     public static void startThisActivity(AppCompatActivity context, @NotNull File path) {
         startThisActivity(context, path.getPath());

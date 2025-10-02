@@ -2,9 +2,9 @@ package com.mcal.pesdk.dex.env;
 
 import android.content.Context;
 import android.util.Log;
-
 import com.mcal.pesdk.dex.utils.ReflectionHelper;
-
+import dalvik.system.BaseDexClassLoader;
+import dalvik.system.DexFile;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -15,9 +15,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipFile;
-
-import dalvik.system.BaseDexClassLoader;
-import dalvik.system.DexFile;
 
 public class ClassLoaderPatch {
     private static final List<Object> patchedObjects = new ArrayList();

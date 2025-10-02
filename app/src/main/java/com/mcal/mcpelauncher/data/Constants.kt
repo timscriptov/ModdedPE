@@ -16,8 +16,6 @@
  */
 package com.mcal.mcpelauncher.data
 
-import com.mcal.mcpelauncher.BuildConfig
-
 /**
  * @author Тимашков Иван
  * @author https://github.com/TimScriptov

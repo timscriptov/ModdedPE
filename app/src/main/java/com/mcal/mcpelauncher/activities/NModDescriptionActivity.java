@@ -21,13 +21,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
-
 import com.mcal.mcpelauncher.R;
 import com.mcal.pesdk.nmod.NMod;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

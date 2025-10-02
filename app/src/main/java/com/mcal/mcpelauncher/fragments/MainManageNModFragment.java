@@ -32,7 +32,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,7 +41,6 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mcal.mcpelauncher.ModdedPEApplication;
 import com.mcal.mcpelauncher.R;
@@ -55,7 +53,6 @@ import com.mcal.pesdk.nmod.ExtractFailedException;
 import com.mcal.pesdk.nmod.NMod;
 import com.mcal.pesdk.nmod.PackagedNMod;
 import com.mcal.pesdk.nmod.ZippedNMod;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

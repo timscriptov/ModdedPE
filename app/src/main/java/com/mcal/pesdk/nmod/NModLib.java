@@ -17,7 +17,6 @@
 package com.mcal.pesdk.nmod;
 
 import android.os.Bundle;
-
 import com.mojang.minecraftpe.MainActivity;
 
 /**

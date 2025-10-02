@@ -28,15 +28,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
-
 import com.mcal.mcpelauncher.R;
 import com.mcal.mcpelauncher.utils.ScopedStorage;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

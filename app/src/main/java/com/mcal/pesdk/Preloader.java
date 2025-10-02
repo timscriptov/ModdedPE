@@ -20,19 +20,13 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-
 import com.google.gson.Gson;
 import com.mcal.mcpelauncher.data.Constants;
 import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.pesdk.nativeapi.LibraryLoader;
-import com.mcal.pesdk.nmod.LoadFailedException;
-import com.mcal.pesdk.nmod.NMod;
-import com.mcal.pesdk.nmod.NModJSONEditor;
-import com.mcal.pesdk.nmod.NModLib;
-import com.mcal.pesdk.nmod.NModTextEditor;
+import com.mcal.pesdk.nmod.*;
 import com.mcal.pesdk.utils.MinecraftInfo;
 import com.mcal.pesdk.utils.SplitParser;
-
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 
@@ -69,8 +63,9 @@ public class Preloader {
     public void preload(Context context) throws PreloadException {
         mPreloadListener.onStart();
 
-        if (mBundle == null)
+        if (mBundle == null) {
             mBundle = new Bundle();
+        }
         Gson gson = new Gson();
         boolean safeMode = Preferences.isSafeMode();
 

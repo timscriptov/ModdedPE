@@ -17,7 +17,6 @@
 package com.mcal.pesdk.nmod;
 
 import android.content.Context;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

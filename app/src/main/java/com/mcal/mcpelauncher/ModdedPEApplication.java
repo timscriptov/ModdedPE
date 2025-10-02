@@ -4,10 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
-
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
-
 import com.google.android.material.color.DynamicColors;
 import com.mcal.mcpelauncher.data.Preferences;
 import com.mcal.pesdk.PESdk;
@@ -19,6 +17,13 @@ public class ModdedPEApplication extends Application {
 
     public static PESdk getMPESdk() {
         return mPESdk;
+    }
+
+    public static Context getContext() {
+        if (context == null) {
+            context = new ModdedPEApplication();
+        }
+        return context;
     }
 
     @Override
@@ -33,13 +38,6 @@ public class ModdedPEApplication extends Application {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
         DynamicColors.applyToActivitiesIfAvailable(this);
-    }
-
-    public static Context getContext() {
-        if (context == null) {
-            context = new ModdedPEApplication();
-        }
-        return context;
     }
 
     public AssetManager getAssets() {

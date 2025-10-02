@@ -24,7 +24,6 @@ import android.view.Gravity
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.Toolbar
-import com.mcal.mcpelauncher.R
 
 /**
  * @author Тимашков Иван

@@ -22,9 +22,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-
 import androidx.appcompat.widget.AppCompatTextView;
-
 import com.mcal.mcpelauncher.ModdedPEApplication;
 import com.mcal.mcpelauncher.R;
 import com.mcal.mcpelauncher.activities.BaseActivity;
@@ -32,7 +30,6 @@ import com.mcal.mcpelauncher.activities.NModDescriptionActivity;
 import com.mcal.pesdk.nmod.ExtractFailedException;
 import com.mcal.pesdk.nmod.NMod;
 import com.mcal.pesdk.nmod.ZippedNMod;
-
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
