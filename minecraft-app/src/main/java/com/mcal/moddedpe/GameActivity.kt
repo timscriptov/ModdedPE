@@ -29,6 +29,7 @@ class GameActivity : MainActivity() {
         val nativeDir = File("${filesDir}/native/")
         Patcher.patchNativeLibraryDir(classLoader, nativeDir)
         arrayListOf(
+            "maesdk",
             "fmod",
             "minecraftpe",
         ).forEach {

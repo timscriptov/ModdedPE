@@ -109,6 +109,7 @@ class LauncherRepositoryImpl(
         }
 
         listOf(
+            "libmaesdk.so",
             "libminecraftpe.so",
             "libMediaDecoders_Android.so",
         ).forEach { libName ->
