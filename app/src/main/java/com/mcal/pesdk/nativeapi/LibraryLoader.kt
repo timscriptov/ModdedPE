@@ -84,4 +84,12 @@ object LibraryLoader {
         System.loadLibrary("nmod-core")
         nativeOnNModAPILoaded("$mcLibsPath/libminecraftpe.so")
     }
+
+    @JvmStatic
+    @SuppressLint("UnsafeDynamicallyLoadedCode")
+    fun loadMaeSdk(mcLibsPath: String) {
+        runCatching {
+            System.load(File(mcLibsPath, "libmaesdk.so").absolutePath)
+        }
+    }
 }

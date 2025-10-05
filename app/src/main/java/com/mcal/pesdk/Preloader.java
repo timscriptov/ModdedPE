@@ -74,6 +74,9 @@ public class Preloader {
 
             mPreloadListener.onLoadNativeLibs();
 
+            mPreloadListener.onLoadMaeSdkLib();
+            LibraryLoader.loadMaeSdk(MinecraftInfo.getMinecraftPackageNativeLibraryDir());
+
             mPreloadListener.onLoadCppSharedLib();
             LibraryLoader.loadCppShared(MinecraftInfo.getMinecraftPackageNativeLibraryDir());
 
@@ -296,6 +299,10 @@ public class Preloader {
 
         public void onFinish(Bundle bundle) {
             Log.e(TAG, "onFinish()");
+        }
+
+        public void onLoadMaeSdkLib() {
+            Log.e(TAG, "onLoadMaeSdkLib()");
         }
     }
 }
