@@ -34,7 +34,8 @@ class SplitParser(private var context: Context) {
         "libminecraftpe.so",
         "libc++_shared.so",
         "libfmod.so",
-        "libMediaDecoders_Android.so"
+        "libMediaDecoders_Android.so",
+        "libmaesdk.so",
     )
 
     /**

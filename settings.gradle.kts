@@ -33,8 +33,9 @@ dependencyResolutionManagement {
     }
 }
 
-include(":app")
-include(":minecraft-app")
+//include(":app")
+include(":app-x")
+//include(":minecraft-app")
 
 include(":minecraft")
 include(":httpclient")

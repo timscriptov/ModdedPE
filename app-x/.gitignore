@@ -1,0 +1,6 @@
+*.iml
+/build
+/.cxx
+/release
+/jniLibs
+/src/main/jniLibs
