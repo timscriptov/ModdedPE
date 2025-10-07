@@ -19,11 +19,13 @@ package com.mcal.moddedpe3.ui.home
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import cafe.adriel.voyager.core.model.ScreenModel
-import com.mcal.moddedpe3.MinecraftActivity
 import com.mcal.moddedpe3.data.model.HomeScreenState
 import com.mcal.moddedpe3.data.repository.MainRepository
+import com.mcal.moddedpe3.data.repository.MainRepositoryImpl.Companion.PACKAGE_NAME
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -45,27 +47,33 @@ class HomeViewModel(
         )
     }
 
-    fun launchGame(activity: Activity?) {
-        // Загружаем библиотеки и проверяем успешность
-        val librariesLoaded = mainRepository.loadNativeLibraries()
-
-        if (librariesLoaded) {
-            // Добавляем ассеты перед запуском
-            try {
-                val assetManager = context.assets
-                mainRepository.addAssetOverrides(assetManager)
-            } catch (e: Exception) {
-                Log.e("HomeViewModel", "Error adding asset overrides", e)
+    fun installGame(activity: Activity) {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse("market://details?id=$PACKAGE_NAME")
+                setPackage("com.android.vending")
             }
 
-            val intent = Intent(activity, MinecraftActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME
-            activity?.startActivity(intent)
-            activity?.finish()
-        } else {
-            // Показать ошибку пользователю
-            Log.e("HomeViewModel", "Failed to load native libraries, cannot launch game")
-            // Здесь можно добавить показ Toast или Snackbar с ошибкой
+            if (intent.resolveActivity(activity.packageManager) != null) {
+                activity.startActivity(intent)
+            } else {
+                installFromBrowser(activity)
+            }
+        } catch (e: Exception) {
+            Log.e("installGame", "Failed to open Google Play", e)
+            try {
+                installFromBrowser(activity)
+            } catch (e2: Exception) {
+                Log.e("installGame", "Failed to open browser", e2)
+                Toast.makeText(activity, "Не удалось открыть Google Play", Toast.LENGTH_SHORT).show()
+            }
         }
+    }
+
+    fun installFromBrowser(activity: Activity) {
+        val webIntent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse("https://play.google.com/store/apps/details?id=$PACKAGE_NAME")
+        }
+        activity.startActivity(webIntent)
     }
 }

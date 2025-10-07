@@ -49,13 +49,6 @@ class MinecraftActivity : MainActivity(), KoinComponent {
             }
 
             Patcher.patchNativeLibraryDir(classLoader, dir)
-
-            if (!repository.loadNativeLibraries()) {
-                Log.e("MinecraftActivity", "Failed to load native libraries")
-                finish()
-                return
-            }
-
             super.onCreate(p1)
         } catch (e: Exception) {
             Log.e("MinecraftActivity", "Error during initialization", e)

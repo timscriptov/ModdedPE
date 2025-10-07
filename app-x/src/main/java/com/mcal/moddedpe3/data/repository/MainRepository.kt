@@ -24,7 +24,7 @@ interface MainRepository {
     fun getMinecraftAssetPaths(): List<String>
     fun getMinecraftPackageResourcePath(): String?
     fun addAssetOverrides(assetManager: AssetManager)
-    fun loadNativeLibraries(): Boolean
+    fun loadNativeLibrary(libraryName: String): Boolean
     fun getMinecraftPackageContext(): Context?
     fun getMinecraftPackageNativeLibraryDir(): String?
     fun isMinecraftAppBundle(): Boolean

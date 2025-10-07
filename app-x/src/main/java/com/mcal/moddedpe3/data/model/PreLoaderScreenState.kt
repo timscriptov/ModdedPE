@@ -5,5 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class PreLoaderScreenState(
-    val items: List<String> = emptyList()
+    val logs: List<String> = emptyList(),
+    val progress: Float = -1f,
+    val currentStatus: String = "",
 ) : Parcelable

@@ -32,8 +32,8 @@ class MainRepositoryImpl(
     private val context: Context
 ) : MainRepository {
     companion object {
-        private const val PACKAGE_NAME = "com.mojang.minecraftpe"
-        private val MINECRAFT_LIBS = listOf(
+        const val PACKAGE_NAME = "com.mojang.minecraftpe"
+        val MINECRAFT_LIBS = listOf(
             "libc++_shared.so",
             "libfmod.so",
             "libmaesdk.so",
@@ -69,7 +69,6 @@ class MainRepositoryImpl(
 
     override fun getMinecraftPackageNativeLibraryDir(): String? {
         return if (isMinecraftAppBundle()) {
-            copyNativeLibrariesFromAppBundle()
             getNativeLibraryDir()
         } else {
             getMinecraftPackageContext()?.applicationInfo?.nativeLibraryDir
@@ -197,7 +196,7 @@ class MainRepositoryImpl(
         }
     }
 
-    private fun copyNativeLibrariesFromAppBundle(): Boolean {
+    private fun copyNativeLibraryFromAppBundle(libraryName: String): Boolean {
         return try {
             val mcContext = getMinecraftPackageContext() ?: return false
             val appInfo = mcContext.applicationInfo
@@ -209,7 +208,7 @@ class MainRepositoryImpl(
             }
 
             // Проверяем, нужно ли копировать библиотеки
-            if (areLibrariesAlreadyCopied(cacheLibDir)) {
+            if (areLibrariesAlreadyCopied(libraryName)) {
                 Log.d("ModdedPE", "Libraries already copied to cache")
                 return true
             }
@@ -218,14 +217,14 @@ class MainRepositoryImpl(
 
             // Ищем библиотеки во всех split APK
             appInfo.splitPublicSourceDirs?.forEach { splitPath ->
-                if (copyLibrariesFromSplit(splitPath, targetABI, cacheLibDir)) {
+                if (copyLibraryFromSplit(libraryName, splitPath, targetABI, cacheLibDir)) {
                     success = true
                 }
             }
 
             // Если не нашли в splits, проверяем основной APK
             if (!success) {
-                success = copyLibrariesFromSplit(appInfo.sourceDir, targetABI, cacheLibDir)
+                success = copyLibraryFromSplit(libraryName, appInfo.sourceDir, targetABI, cacheLibDir)
             }
 
             if (success) {
@@ -241,7 +240,12 @@ class MainRepositoryImpl(
         }
     }
 
-    private fun copyLibrariesFromSplit(splitPath: String, targetABI: String, targetDir: File): Boolean {
+    private fun copyLibraryFromSplit(
+        libraryName: String,
+        splitPath: String,
+        targetABI: String,
+        targetDir: File
+    ): Boolean {
         return try {
             val splitFile = File(splitPath)
             if (!splitFile.exists()) return false
@@ -257,7 +261,7 @@ class MainRepositoryImpl(
                     // Ищем библиотеки для нужной ABI
                     if (entryPath.startsWith("lib/$targetABI/") && !entry.isDirectory) {
                         val libName = entryPath.substringAfterLast('/')
-                        if (MINECRAFT_LIBS.contains(libName)) {
+                        if (libraryName.contains(libName)) {
                             if (extractLibraryFromZip(zip, entry, File(targetDir, libName))) {
                                 copiedAny = true
                                 Log.d("ModdedPE", "Copied library: $libName")
@@ -290,45 +294,43 @@ class MainRepositoryImpl(
         }
     }
 
-    private fun areLibrariesAlreadyCopied(cacheLibDir: File): Boolean {
-        return MINECRAFT_LIBS.all { libName ->
-            val libFile = File(cacheLibDir, libName)
-            libFile.exists() && libFile.length() > 0
-        }
+    private fun areLibrariesAlreadyCopied(libraryName: String): Boolean {
+        val cacheLibDir = File(getNativeLibraryDir())
+        val libFile = File(cacheLibDir, libraryName)
+        return libFile.exists() && libFile.length() > 0
     }
 
-    override fun loadNativeLibraries(): Boolean {
+    override fun loadNativeLibrary(libraryName: String): Boolean {
         return try {
-            val nativeLibDir = getMinecraftPackageNativeLibraryDir()
-            if (nativeLibDir != null) {
-                val libDir = File(nativeLibDir)
-                if (libDir.exists() && libDir.isDirectory) {
-                    var successCount = 0
-                    MINECRAFT_LIBS.forEach { libName ->
-                        val libFile = File(libDir, libName)
-                        if (libFile.exists()) {
-                            try {
-                                System.load(libFile.absolutePath)
-                                Log.d("ModdedPE", "Successfully loaded native library: $libName")
-                                successCount++
-                            } catch (e: UnsatisfiedLinkError) {
-                                Log.e("ModdedPE", "Failed to load native library: $libName", e)
-                            } catch (e: SecurityException) {
-                                Log.e("ModdedPE", "Security exception loading native library: $libName", e)
-                            }
-                        } else {
-                            Log.w("ModdedPE", "Native library not found: $libName at ${libFile.absolutePath}")
-                        }
-                    }
-
-                    // Проверяем, что все основные библиотеки загружены
-                    successCount >= MINECRAFT_LIBS.size - 1 // Допускаем одну неудачу
-                } else {
-                    Log.e("ModdedPE", "Native library directory not found or is not a directory: $nativeLibDir")
-                    false
-                }
-            } else {
+            if (isMinecraftAppBundle()) {
+                copyNativeLibraryFromAppBundle(libraryName)
+            }
+            val nativeLibDir = getMinecraftPackageNativeLibraryDir() ?: run {
                 Log.e("ModdedPE", "Failed to get Minecraft native library directory")
+                return false
+            }
+
+            val libDir = File(nativeLibDir)
+            if (!libDir.exists() || !libDir.isDirectory) {
+                Log.e("ModdedPE", "Native library directory not found or is not a directory: $nativeLibDir")
+                return false
+            }
+
+            val libFile = File(libDir, libraryName)
+            if (!libFile.exists()) {
+                Log.w("ModdedPE", "Native library not found: $libraryName at ${libFile.absolutePath}")
+                return false
+            }
+
+            try {
+                System.load(libFile.absolutePath)
+                Log.d("ModdedPE", "Successfully loaded native library: $libraryName")
+                true
+            } catch (e: UnsatisfiedLinkError) {
+                Log.e("ModdedPE", "Failed to load native library: $libraryName", e)
+                false
+            } catch (e: SecurityException) {
+                Log.e("ModdedPE", "Security exception loading native library: $libraryName", e)
                 false
             }
         } catch (e: Exception) {

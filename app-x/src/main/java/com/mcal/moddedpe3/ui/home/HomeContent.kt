@@ -38,23 +38,27 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.mcal.moddedpe3.R
 import com.mcal.moddedpe3.data.model.HomeScreenState
+import com.mcal.moddedpe3.ui.preloader.PreLoaderScreen
 
 @Composable
 fun Screen.HomeContent() {
     val viewModel = koinScreenModel<HomeViewModel>()
     val state by viewModel.state.collectAsState()
-    val activity = LocalActivity.current
+    val activity = LocalActivity.currentOrThrow
     if (state.isInstalled) {
-        GameInstalledContent(activity, state, viewModel)
+        GameInstalledContent(state)
     } else {
-        GameNotFoundContent()
+        GameNotFoundContent(activity, viewModel)
     }
 }
 
 @Composable
-private fun GameInstalledContent(activity: Activity?, state: HomeScreenState, viewModel: HomeViewModel) {
+private fun GameInstalledContent(state: HomeScreenState) {
+    val navigator = LocalNavigator.currentOrThrow
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -110,10 +114,12 @@ private fun GameInstalledContent(activity: Activity?, state: HomeScreenState, vi
             }
         }
 
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { viewModel.launchGame(activity) },
+            onClick = {
+                navigator.push(PreLoaderScreen())
+            },
             modifier = Modifier
                 .height(60.dp)
                 .fillMaxWidth(0.8f)
@@ -149,11 +155,11 @@ private fun GameInstalledContent(activity: Activity?, state: HomeScreenState, vi
 }
 
 @Composable
-private fun GameNotFoundContent() {
+private fun GameNotFoundContent(activity: Activity, viewModel: HomeViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(32.dp),
+            .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -164,7 +170,7 @@ private fun GameNotFoundContent() {
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.error)
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Text(
             text = "Minecraft не найден",
@@ -184,11 +190,11 @@ private fun GameNotFoundContent() {
             textAlign = TextAlign.Center
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             onClick = {
-
+                viewModel.installGame(activity)
             },
             modifier = Modifier
                 .height(50.dp)

@@ -21,6 +21,7 @@ import com.mcal.moddedpe3.data.repository.MainRepositoryImpl
 import com.mcal.moddedpe3.ui.home.HomeViewModel
 import com.mcal.moddedpe3.ui.main.MainViewModel
 import com.mcal.moddedpe3.ui.mods.ModsViewModel
+import com.mcal.moddedpe3.ui.preloader.PreLoaderViewModel
 import com.mcal.moddedpe3.ui.settings.SettingsViewModel
 import org.koin.core.module.Module
 import org.koin.dsl.module
@@ -40,6 +41,11 @@ private val viewModelsModule = module {
     factory {
         HomeViewModel(
             context = get(),
+            mainRepository = get()
+        )
+    }
+    factory {
+        PreLoaderViewModel(
             mainRepository = get()
         )
     }

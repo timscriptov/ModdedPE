@@ -18,9 +18,14 @@ package com.mcal.moddedpe3.navigation
 
 import cafe.adriel.voyager.core.registry.screenModule
 import com.mcal.moddedpe3.ui.main.MainScreen
+import com.mcal.moddedpe3.ui.preloader.PreLoaderScreen
 
 val mainScreenModule = screenModule {
     register<Screens.Main> {
         MainScreen()
+    }
+
+    register<Screens.PreLoader> {
+        PreLoaderScreen()
     }
 }

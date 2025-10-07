@@ -19,10 +19,6 @@ package com.mcal.moddedpe3.ui.main
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Extension
-import androidx.compose.material.icons.rounded.Home
-import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -30,9 +26,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
+import com.mcal.moddedpe3.R
 import com.mcal.moddedpe3.data.model.MainTab
 import com.mcal.moddedpe3.ui.home.HomeContent
 import com.mcal.moddedpe3.ui.mods.ModsContent
@@ -41,24 +39,19 @@ import com.mcal.moddedpe3.ui.settings.SettingsContent
 class MainScreen : Screen {
     @Composable
     override fun Content() {
-        Main()
-    }
-
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    fun Main() {
         val viewModel = koinScreenModel<MainViewModel>()
         val screenState by viewModel.screenState.collectAsState()
 
         Scaffold(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
         ) { padding ->
             Row(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
             ) {
-                // Основной контент
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -72,7 +65,6 @@ class MainScreen : Screen {
                     }
                 }
 
-                // Панель навигации
                 NavigationPanel(
                     selectedTab = screenState.selectedTab,
                     onTabSelected = { tab ->
@@ -92,24 +84,24 @@ class MainScreen : Screen {
             modifier = Modifier
                 .fillMaxHeight()
                 .width(80.dp)
-                .background(MaterialTheme.colorScheme.surfaceVariant),
+                .background(MaterialTheme.colorScheme.surface),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             NavigationButton(
-                icon = Icons.Rounded.Home,
+                icon = ImageVector.vectorResource(R.drawable.ic_home),
                 label = "Главная",
                 isSelected = selectedTab == MainTab.HOME,
                 onClick = { onTabSelected(MainTab.HOME) }
             )
             NavigationButton(
-                icon = Icons.Rounded.Extension,
+                icon = ImageVector.vectorResource(R.drawable.ic_extension),
                 label = "Моды",
                 isSelected = selectedTab == MainTab.MODS,
                 onClick = { onTabSelected(MainTab.MODS) }
             )
             NavigationButton(
-                icon = Icons.Rounded.Settings,
+                icon = ImageVector.vectorResource(R.drawable.ic_settings),
                 label = "Настройки",
                 isSelected = selectedTab == MainTab.SETTINGS,
                 onClick = { onTabSelected(MainTab.SETTINGS) }
@@ -127,13 +119,19 @@ class MainScreen : Screen {
         val backgroundColor = if (isSelected) {
             MaterialTheme.colorScheme.primary
         } else {
-            MaterialTheme.colorScheme.primaryContainer
+            MaterialTheme.colorScheme.surfaceVariant
         }
 
         val iconColor = if (isSelected) {
             MaterialTheme.colorScheme.onPrimary
         } else {
-            MaterialTheme.colorScheme.onPrimaryContainer
+            MaterialTheme.colorScheme.onSurfaceVariant
+        }
+
+        val textColor = if (isSelected) {
+            MaterialTheme.colorScheme.primary
+        } else {
+            MaterialTheme.colorScheme.onSurfaceVariant
         }
 
         Column(
@@ -159,7 +157,7 @@ class MainScreen : Screen {
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = textColor
             )
         }
     }
