@@ -25,9 +25,6 @@ import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
 import java.io.File
 
-/**
- * @author <a href="https://github.com/timscriptov">timscriptov</a>
- */
 class MinecraftActivity : MainActivity(), KoinComponent {
 
     private val repository: MainRepository by inject()

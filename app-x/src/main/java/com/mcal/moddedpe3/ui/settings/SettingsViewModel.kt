@@ -17,7 +17,49 @@
 package com.mcal.moddedpe3.ui.settings
 
 import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
+import com.mcal.moddedpe3.data.model.SettingsScreenState
+import com.mcal.moddedpe3.data.repository.SettingsRepository
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
-class SettingsViewModel : ScreenModel {
+class SettingsViewModel(
+    private val settingsRepository: SettingsRepository
+) : ScreenModel {
+    private val _state = MutableStateFlow(SettingsScreenState())
+    val state = _state.asStateFlow()
 
+    private val _exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        throwable.printStackTrace()
+    }
+
+    init {
+        loadSettings()
+    }
+
+    private fun loadSettings() {
+        screenModelScope.launch(_exceptionHandler) {
+            settingsRepository.loadSettings()?.let { savedSettings ->
+                _state.value = savedSettings
+            }
+        }
+    }
+
+    fun setSafeMode(enabled: Boolean) {
+        _state.value = _state.value.copy(isSafeMode = enabled)
+        saveSettings()
+    }
+
+    fun setMinecraftPackageName(packageName: String) {
+        _state.value = _state.value.copy(minecraftPackageName = packageName)
+        saveSettings()
+    }
+
+    private fun saveSettings() {
+        screenModelScope.launch(_exceptionHandler) {
+            settingsRepository.saveSettings(_state.value)
+        }
+    }
 }

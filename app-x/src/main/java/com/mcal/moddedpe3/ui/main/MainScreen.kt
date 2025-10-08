@@ -56,7 +56,6 @@ class MainScreen : Screen {
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(1f)
-                        .padding(16.dp)
                 ) {
                     when (screenState.selectedTab) {
                         MainTab.HOME -> HomeContent()

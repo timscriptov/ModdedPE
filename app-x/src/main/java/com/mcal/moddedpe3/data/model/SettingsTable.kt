@@ -16,12 +16,12 @@
  */
 package com.mcal.moddedpe3.data.model
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import org.jetbrains.exposed.sql.Table
 
-@Parcelize
-data class PreLoaderScreenState(
-    val logs: List<String> = emptyList(),
-    val progress: Float = -1f,
-    val currentStatus: String = "",
-) : Parcelable
+object SettingsTable : Table("settings") {
+    val id = integer("id").autoIncrement()
+    val isSafeMode = bool("is_safe_mode")
+    val minecraftPackageName = varchar("minecraft_package_name", 255)
+
+    override val primaryKey = PrimaryKey(id)
+}

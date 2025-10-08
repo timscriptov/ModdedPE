@@ -103,8 +103,8 @@ dependencies {
     implementation("androidx.vectordrawable:vectordrawable:1.1.0")
     implementation("androidx.vectordrawable:vectordrawable-animated:1.1.0")
 
-//    implementation(libs.exposed.jdbc)
-//    implementation(libs.xerial.jdbc)
+    implementation(libs.exposed.jdbc)
+    implementation(libs.xerial.jdbc)
 
 //    implementation(libs.ktor.client.okhttp)
 //    implementation(libs.ktor.client.core)

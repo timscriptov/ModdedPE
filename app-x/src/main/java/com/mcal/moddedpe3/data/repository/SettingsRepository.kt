@@ -14,14 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.moddedpe3.data.model
+package com.mcal.moddedpe3.data.repository
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import com.mcal.moddedpe3.data.model.SettingsScreenState
+import org.jetbrains.exposed.sql.statements.InsertStatement
 
-@Parcelize
-data class PreLoaderScreenState(
-    val logs: List<String> = emptyList(),
-    val progress: Float = -1f,
-    val currentStatus: String = "",
-) : Parcelable
+interface SettingsRepository {
+    suspend fun saveSettings(settings: SettingsScreenState): InsertStatement<Number>
+    suspend fun loadSettings(): SettingsScreenState?
+    suspend fun getSafeMode(): Boolean
+    suspend fun getMinecraftPackageName(): String
+}

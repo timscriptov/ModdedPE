@@ -21,7 +21,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
 import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.transitions.SlideTransition
 import com.mcal.moddedpe3.ui.main.MainScreen
 
 class MainActivity : ComponentActivity() {
@@ -30,9 +29,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 val screen = MainScreen()
-                Navigator(screen) { nav ->
-                    SlideTransition(nav)
-                }
+                Navigator(screen)
             }
         }
     }
