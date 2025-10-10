@@ -31,8 +31,9 @@ import java.util.zip.ZipFile
 class MinecraftInfo(
     private val context: Context
 ) {
+    val nModPreferences = NModPreferences(context)
+
     companion object {
-        const val PACKAGE_NAME = "com.mojang.minecraftpe"
         val MINECRAFT_LIBS = listOf(
             "libc++_shared.so",
             "libfmod.so",
@@ -55,7 +56,7 @@ class MinecraftInfo(
     fun getMinecraftPackageContext(): Context? {
         return try {
             context.createPackageContext(
-                PACKAGE_NAME,
+                nModPreferences.minecraftPackageName,
                 Context.CONTEXT_IGNORE_SECURITY or Context.CONTEXT_INCLUDE_CODE
             )
         } catch (e: PackageManager.NameNotFoundException) {
@@ -82,7 +83,7 @@ class MinecraftInfo(
 
     fun findMinecraftPackage(): PackageInfo? {
         return try {
-            context.packageManager.getPackageInfo(PACKAGE_NAME, 0)
+            context.packageManager.getPackageInfo(nModPreferences.minecraftPackageName, 0)
         } catch (e: PackageManager.NameNotFoundException) {
             Log.e("ModdedPE", "Minecraft not found")
             null
