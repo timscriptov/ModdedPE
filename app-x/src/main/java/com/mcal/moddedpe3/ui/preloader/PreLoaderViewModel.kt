@@ -18,34 +18,98 @@ package com.mcal.moddedpe3.ui.preloader
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
+import android.util.Log
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.mcal.moddedpe3.MinecraftActivity
+import com.mcal.moddedpe3.data.model.FailedNMod
+import com.mcal.moddedpe3.data.model.PreLoaderContentType
 import com.mcal.moddedpe3.data.model.PreLoaderScreenState
 import com.mcal.moddedpe3.data.repository.MainRepository
-import com.mcal.moddedpe3.data.repository.MainRepositoryImpl.Companion.MINECRAFT_LIBS
+import com.mcal.pesdk.MinecraftInfo.Companion.MINECRAFT_LIBS
+import com.mcal.pesdk.Preloader
+import com.mcal.pesdk.nmod.NMod
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class PreLoaderViewModel(
-    private val mainRepository: MainRepository
+    private val mainRepository: MainRepository,
 ) : ScreenModel {
     private val _state = MutableStateFlow(PreLoaderScreenState())
     val state = _state.asStateFlow()
 
     fun initializePreLoader(activity: Activity) {
-        addLog("Инициализация системы...")
-        updateProgress(0.1f, "Проверка зависимостей")
+        val mFailedNMods = ArrayList<FailedNMod>()
 
-        MINECRAFT_LIBS.forEachIndexed { index, library ->
-            addLog("Загрузка $library")
-            updateProgress(0.2f + (index * 0.15f), "Загрузка $library")
-            mainRepository.loadNativeLibrary(library)
+        runCatching {
+            Preloader(activity, null, object : Preloader.PreloadListener() {
+                override fun onStart() {
+                    addLog("Инициализация системы...")
+                    MINECRAFT_LIBS.forEach { library ->
+                        addLog("Загрузка $library")
+                        mainRepository.loadNativeLibrary(library)
+                    }
+                }
+
+                override fun onLoadSubstrateLib() {
+                    addLog("Загрузка libsubstrate.so")
+                }
+
+                override fun onLoadXHookLib() {
+                    addLog("Загрузка libxhook.so")
+                }
+
+                override fun onLoadGameLauncherLib() {
+                    addLog("Загрузка liblauncher-core.so")
+                }
+
+                override fun onLoadPESdkLib() {
+                    addLog("Загрузка libnmod-core.so")
+                }
+
+                override fun onStartLoadingAllNMods() {
+                    addLog("Загрузка аддонов...")
+                }
+
+                override fun onNModLoaded(nmod: NMod) {
+                    addLog("Загрузка " + nmod.packageName)
+                }
+
+                override fun onFailedLoadingNMod(nmod: NMod) {
+                    addLog("Ошибка загрузки " + nmod.packageName)
+                    mFailedNMods.add(
+                        FailedNMod(
+                            name = nmod.name,
+                            packageName = nmod.packageName,
+                            loadException = nmod.loadException,
+                            icon = nmod.copyIconToData()
+                        )
+                    )
+                }
+
+                override fun onFinish(bundle: Bundle) {
+                    if (mFailedNMods.isEmpty()) {
+                        addLog("Готово")
+                        launchGame(activity)
+                    } else {
+                        _state.update { currentState ->
+                            currentState.copy(
+                                contentType = PreLoaderContentType.NMOD_ERROR,
+                                failedNMods = mFailedNMods.toList()
+                            )
+                        }
+                    }
+                }
+            }).preload()
+        }.onFailure { exception ->
+            _state.update { currentState ->
+                currentState.copy(
+                    contentType = PreLoaderContentType.APP_ERROR,
+                    errorMessage = exception.toString()
+                )
+            }
         }
-
-        addLog("Все библиотеки успешно загружены")
-        updateProgress(1.0f, "Готово")
-        launchGame(activity)
     }
 
     private fun addLog(message: String) {
@@ -54,18 +118,11 @@ class PreLoaderViewModel(
                 logs = currentState.logs + message
             )
         }
-    }
-
-    private fun updateProgress(progress: Float, status: String) {
-        _state.update { currentState ->
-            currentState.copy(
-                progress = progress,
-                currentStatus = status
-            )
-        }
+        Log.e("test123", message)
     }
 
     private fun launchGame(activity: Activity) {
+        addLog("Запуск Minecraft...")
         val intent = Intent(activity, MinecraftActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME
         activity.startActivity(intent)

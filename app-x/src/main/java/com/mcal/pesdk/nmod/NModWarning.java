@@ -14,14 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.moddedpe3.data.model
+package com.mcal.pesdk.nmod;
 
-import org.jetbrains.exposed.sql.Table
+public class NModWarning {
+    private final int mType;
+    private final Throwable mCause;
 
-object SettingsTable : Table("settings") {
-    val id = integer("id").autoIncrement()
-    val isSafeMode = bool("is_safe_mode")
-    val minecraftPackageName = varchar("minecraft_package_name", 255)
+    public NModWarning(int type, Throwable cause) {
+        mType = type;
+        mCause = cause;
+    }
 
-    override val primaryKey = PrimaryKey(id)
+    public int getType() {
+        return mType;
+    }
+
+    public Throwable getCause() {
+        return mCause;
+    }
 }

@@ -17,34 +17,37 @@
 package com.mcal.moddedpe3.ui.preloader
 
 import androidx.activity.compose.LocalActivity
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import com.mcal.moddedpe3.data.model.FailedNMod
+import com.mcal.moddedpe3.data.model.PreLoaderContentType
+import com.mcal.moddedpe3.data.model.PreLoaderScreenState
 import kotlinx.coroutines.launch
 
 class PreLoaderScreen : Screen {
     @Composable
     override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinScreenModel<PreLoaderViewModel>()
         val state by viewModel.state.collectAsState()
         val scope = rememberCoroutineScope()
@@ -58,89 +61,183 @@ class PreLoaderScreen : Screen {
         }
 
         LaunchedEffect(state.logs.size) {
-            scope.launch {
-                listState.animateScrollToItem(state.logs.size)
+            if (state.contentType == PreLoaderContentType.LOADING) {
+                scope.launch {
+                    listState.animateScrollToItem(state.logs.size)
+                }
             }
         }
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black)
-                .padding(16.dp),
-            contentAlignment = Alignment.Center
-        ) {
+        Scaffold(
+            modifier = Modifier.fillMaxSize()
+        ) { padding ->
             Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
             ) {
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(Color(0xFF1E1E1E))
-                        .padding(16.dp)
-                ) {
-                    LazyColumn(
-                        state = listState,
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        items(state.logs) { log ->
-                            TerminalLine(
-                                text = log,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
-                    }
-                }
+                when (state.contentType) {
+                    PreLoaderContentType.LOADING -> LoadingContent(
+                        state = state,
+                        listState = listState,
+                    )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                    PreLoaderContentType.APP_ERROR -> AppErrorContent(
+                        errorMessage = state.errorMessage,
+                        onHomeClicked = { navigator.pop() }
+                    )
 
-                val progressAnimation by animateFloatAsState(
-                    targetValue = state.progress,
-                    label = "progress"
-                )
-
-                LinearProgressIndicator(
-                    progress = { progressAnimation },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(8.dp)
-                        .clip(RoundedCornerShape(4.dp)),
-                    color = Color.Green,
-                    trackColor = Color.Gray.copy(alpha = 0.3f)
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                AnimatedVisibility(
-                    visible = state.currentStatus.isNotEmpty(),
-                    enter = fadeIn(),
-                    exit = fadeOut()
-                ) {
-                    Text(
-                        text = state.currentStatus,
-                        color = Color.White,
-                        fontSize = 14.sp,
-                        fontFamily = FontFamily.Monospace,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth()
+                    PreLoaderContentType.NMOD_ERROR -> NModErrorContent(
+                        failedNMods = state.failedNMods,
+                        onHomeClicked = { navigator.pop() }
                     )
                 }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Text(
-                    text = "${(state.progress * 100).toInt()}%",
-                    color = Color.Green,
-                    fontSize = 16.sp,
-                    fontFamily = FontFamily.Monospace,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
             }
         }
+    }
+}
+
+@Composable
+private fun LoadingContent(
+    state: PreLoaderScreenState,
+    listState: LazyListState,
+) {
+    LazyColumn(
+        state = listState,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        items(state.logs) { log ->
+            TerminalLine(
+                text = log,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    }
+}
+
+@Composable
+private fun AppErrorContent(
+    errorMessage: String,
+    onHomeClicked: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "Ошибка приложения",
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.error,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+
+        Text(
+            text = errorMessage,
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(bottom = 24.dp)
+        )
+
+        Button(onClick = onHomeClicked) {
+            Text("Вернуться на главный экран")
+        }
+    }
+}
+
+@Composable
+private fun NModErrorContent(
+    failedNMods: List<FailedNMod>,
+    onHomeClicked: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "Ошибка загрузки модов",
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.error,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(bottom = 24.dp)
+        )
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(1f)
+        ) {
+            items(failedNMods) { nMod ->
+                NModErrorItem(nmod = nMod)
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(onClick = onHomeClicked) {
+            Text("Вернуться на главный экран")
+        }
+    }
+}
+
+@Composable
+private fun NModErrorItem(
+    nmod: FailedNMod,
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        val iconBitmap = remember(nmod.packageName) {
+            runCatching {
+                val iconPath = nmod.icon
+                if (iconPath?.exists() == true) {
+                    android.graphics.BitmapFactory.decodeFile(iconPath.absolutePath)
+                } else {
+                    null
+                }
+            }.getOrNull()
+        }
+
+        if (iconBitmap != null) {
+            Image(
+                bitmap = iconBitmap.asImageBitmap(),
+                contentDescription = "Иконка мода ${nmod.name}",
+                modifier = Modifier
+                    .size(64.dp)
+                    .padding(bottom = 8.dp)
+            )
+        }
+
+        Text(
+            text = nmod.name,
+            style = MaterialTheme.typography.titleMedium,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(bottom = 4.dp)
+        )
+
+        Text(
+            text = "Пакет: ${nmod.packageName}",
+            style = MaterialTheme.typography.bodySmall,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(bottom = 4.dp)
+        )
+
+        Text(
+            text = "Ошибка: ${nmod.loadException?.message ?: "Неизвестная ошибка"}",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.error,
+            textAlign = TextAlign.Center
+        )
     }
 }
 
@@ -151,7 +248,6 @@ private fun TerminalLine(
 ) {
     Text(
         text = "> $text",
-        color = Color.Green,
         fontSize = 12.sp,
         fontFamily = FontFamily.Monospace,
         modifier = modifier.padding(vertical = 2.dp)

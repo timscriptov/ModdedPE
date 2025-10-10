@@ -33,6 +33,11 @@ android {
             useSupportLibrary = true
         }
     }
+    externalNativeBuild {
+        ndkBuild {
+            path = File("src/main/cpp/Android.mk")
+        }
+    }
     buildTypes {
         release {
             isShrinkResources = true
@@ -89,6 +94,8 @@ dependencies {
     implementation(project(":httpclient"))
     implementation(project(":microsoft:xal"))
     implementation(project(":microsoft:xbox"))
+    implementation(project(":substrate"))
+    implementation(project(":xhook"))
     implementation(project(":fmod"))
 
     implementation(libs.androidx.games.activity)
@@ -99,12 +106,12 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
     implementation(libs.androidx.material.icons.extended)
+    implementation("io.coil-kt:coil-compose:2.7.0")
 
     implementation("androidx.vectordrawable:vectordrawable:1.1.0")
     implementation("androidx.vectordrawable:vectordrawable-animated:1.1.0")
 
-    implementation(libs.exposed.jdbc)
-    implementation(libs.xerial.jdbc)
+    implementation(libs.gson)
 
 //    implementation(libs.ktor.client.okhttp)
 //    implementation(libs.ktor.client.core)

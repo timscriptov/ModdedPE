@@ -17,46 +17,26 @@
 package com.mcal.moddedpe3.data.repository
 
 import android.content.Context
-import com.mcal.moddedpe3.data.model.SettingsScreenState
-import com.mcal.moddedpe3.data.model.SettingsTable
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import org.jetbrains.exposed.sql.deleteAll
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.selectAll
+import com.mcal.pesdk.NModPreferences
 
 class SettingsRepositoryImpl(
     private val context: Context
 ) : SettingsRepository {
+    private val nModPreferences = NModPreferences(context)
 
-    private val databaseHelper by lazy { DatabaseHelper(context) }
-
-    override suspend fun saveSettings(settings: SettingsScreenState) = withContext(Dispatchers.IO) {
-        databaseHelper.execute { db ->
-            SettingsTable.deleteAll()
-            SettingsTable.insert {
-                it[isSafeMode] = settings.isSafeMode
-                it[minecraftPackageName] = settings.minecraftPackageName
-            }
-        }
+    override fun getSafeMode(): Boolean {
+        return nModPreferences.safeMode
     }
 
-    override suspend fun loadSettings(): SettingsScreenState? = withContext(Dispatchers.IO) {
-        databaseHelper.execute { db ->
-            SettingsTable.selectAll().firstOrNull()?.let { row ->
-                SettingsScreenState(
-                    isSafeMode = row[SettingsTable.isSafeMode],
-                    minecraftPackageName = row[SettingsTable.minecraftPackageName]
-                )
-            }
-        }
+    override fun setSafeMode(mode: Boolean) {
+        nModPreferences.safeMode = mode
     }
 
-    override suspend fun getSafeMode(): Boolean = withContext(Dispatchers.IO) {
-        loadSettings()?.isSafeMode ?: false
+    override fun getMinecraftPackageName(): String {
+        return nModPreferences.minecraftPackageName
     }
 
-    override suspend fun getMinecraftPackageName(): String = withContext(Dispatchers.IO) {
-        loadSettings()?.minecraftPackageName ?: "com.mojang.minecraftpe"
+    override fun setMinecraftPackageName(packageName: String) {
+        nModPreferences.minecraftPackageName = packageName
     }
 }

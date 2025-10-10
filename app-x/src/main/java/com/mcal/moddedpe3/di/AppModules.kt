@@ -16,7 +16,10 @@
  */
 package com.mcal.moddedpe3.di
 
-import com.mcal.moddedpe3.data.repository.*
+import com.mcal.moddedpe3.data.repository.MainRepository
+import com.mcal.moddedpe3.data.repository.MainRepositoryImpl
+import com.mcal.moddedpe3.data.repository.SettingsRepository
+import com.mcal.moddedpe3.data.repository.SettingsRepositoryImpl
 import com.mcal.moddedpe3.ui.home.HomeViewModel
 import com.mcal.moddedpe3.ui.main.MainViewModel
 import com.mcal.moddedpe3.ui.mods.ModsViewModel
@@ -30,7 +33,6 @@ object AppModules : FeatureModule {
         get() = listOf(
             viewModelsModule,
             repositoriesModule,
-            databaseModule
         )
 }
 
@@ -40,17 +42,19 @@ private val viewModelsModule = module {
     }
     factory {
         HomeViewModel(
-            context = get(),
-            mainRepository = get()
+            mainRepository = get(),
+            settingsRepository = get()
         )
     }
     factory {
         PreLoaderViewModel(
-            mainRepository = get()
+            mainRepository = get(),
         )
     }
     factory {
-        ModsViewModel()
+        ModsViewModel(
+            context = get()
+        )
     }
     factory {
         SettingsViewModel(
@@ -70,8 +74,4 @@ private val repositoriesModule = module {
             context = get()
         )
     }
-}
-
-private val databaseModule = module {
-    single { DatabaseHelper(get()) }
 }

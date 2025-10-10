@@ -17,7 +17,6 @@
 package com.mcal.moddedpe3.ui.home
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
@@ -25,13 +24,13 @@ import android.widget.Toast
 import cafe.adriel.voyager.core.model.ScreenModel
 import com.mcal.moddedpe3.data.model.HomeScreenState
 import com.mcal.moddedpe3.data.repository.MainRepository
-import com.mcal.moddedpe3.data.repository.MainRepositoryImpl.Companion.PACKAGE_NAME
+import com.mcal.moddedpe3.data.repository.SettingsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class HomeViewModel(
-    private val context: Context,
-    private val mainRepository: MainRepository
+    private val mainRepository: MainRepository,
+    private val settingsRepository: SettingsRepository,
 ) : ScreenModel {
     private val _state = MutableStateFlow(HomeScreenState())
     val state = _state.asStateFlow()
@@ -50,7 +49,7 @@ class HomeViewModel(
     fun installGame(activity: Activity) {
         try {
             val intent = Intent(Intent.ACTION_VIEW).apply {
-                data = Uri.parse("market://details?id=$PACKAGE_NAME")
+                data = Uri.parse("market://details?id=${settingsRepository.getMinecraftPackageName()}")
                 setPackage("com.android.vending")
             }
 
@@ -72,7 +71,8 @@ class HomeViewModel(
 
     fun installFromBrowser(activity: Activity) {
         val webIntent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse("https://play.google.com/store/apps/details?id=$PACKAGE_NAME")
+            data =
+                Uri.parse("https://play.google.com/store/apps/details?id=${settingsRepository.getMinecraftPackageName()}")
         }
         activity.startActivity(webIntent)
     }

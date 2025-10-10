@@ -138,18 +138,20 @@ public class Preloader {
                     continue;
                 }
 
-                if (loadNMod(context, nmod, preloadDataItem))
+                if (loadNMod(context, nmod, preloadDataItem)) {
                     mPreloadListener.onNModLoaded(nmod);
-                else
+                } else {
                     mPreloadListener.onFailedLoadingNMod(nmod);
+                }
             }
 
             mPreloadData.assets_packs_path = mAssetsArrayList.toArray(new String[0]);
             mPreloadData.loaded_libs = mLoadedNativeLibs.toArray(new String[0]);
             mBundle.putString(Constants.NMOD_DATA_TAG, gson.toJson(mPreloadData));
             mPreloadListener.onFinishedLoadingAllNMods();
-        } else
-            mBundle.putString(Constants.NMOD_DATA_TAG, gson.toJson(new Preloader.NModPreloadData()));
+        } else {
+            mBundle.putString(Constants.NMOD_DATA_TAG, gson.toJson(new NModPreloadData()));
+        }
 
         mPreloadListener.onFinish(mBundle);
     }

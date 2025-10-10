@@ -24,10 +24,10 @@ interface MainRepository {
     fun getMinecraftAssetPaths(): List<String>
     fun getMinecraftPackageResourcePath(): String?
     fun addAssetOverrides(assetManager: AssetManager)
+    fun addAssetPath(assetManager: AssetManager, path: String)
     fun loadNativeLibrary(libraryName: String): Boolean
     fun getMinecraftPackageContext(): Context?
     fun getMinecraftPackageNativeLibraryDir(): String?
-    fun isMinecraftAppBundle(): Boolean
     fun findMinecraftPackage(): PackageInfo?
     fun getMinecraftLabel(packageInfo: PackageInfo?): String
     fun getMinecraftVersionCode(packageInfo: PackageInfo?): Long

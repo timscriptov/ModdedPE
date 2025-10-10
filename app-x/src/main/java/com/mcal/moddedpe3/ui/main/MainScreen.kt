@@ -43,9 +43,7 @@ class MainScreen : Screen {
         val screenState by viewModel.screenState.collectAsState()
 
         Scaffold(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+            modifier = Modifier.fillMaxSize()
         ) { padding ->
             Row(
                 modifier = Modifier

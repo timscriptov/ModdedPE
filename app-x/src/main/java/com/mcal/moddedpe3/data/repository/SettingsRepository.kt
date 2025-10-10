@@ -16,12 +16,9 @@
  */
 package com.mcal.moddedpe3.data.repository
 
-import com.mcal.moddedpe3.data.model.SettingsScreenState
-import org.jetbrains.exposed.sql.statements.InsertStatement
-
 interface SettingsRepository {
-    suspend fun saveSettings(settings: SettingsScreenState): InsertStatement<Number>
-    suspend fun loadSettings(): SettingsScreenState?
-    suspend fun getSafeMode(): Boolean
-    suspend fun getMinecraftPackageName(): String
+    fun getSafeMode(): Boolean
+    fun setSafeMode(mode: Boolean)
+    fun getMinecraftPackageName(): String
+    fun setMinecraftPackageName(packageName: String)
 }

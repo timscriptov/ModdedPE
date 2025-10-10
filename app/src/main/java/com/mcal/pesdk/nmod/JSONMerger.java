@@ -57,9 +57,9 @@ class JSONMerger {
 
     @Contract("_, _ -> param1")
     private static JSONObject mergeObject(JSONObject object1, @NotNull JSONObject object2) throws JSONException {
-        Iterator iterator = object2.keys();
+        Iterator<String> iterator = object2.keys();
         for (; iterator.hasNext(); ) {
-            String name = (String) iterator.next();
+            String name = iterator.next();
             judgeTypeAndPut(object1, object2, name);
         }
         return object1;

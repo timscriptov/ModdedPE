@@ -17,11 +17,28 @@
 package com.mcal.moddedpe3.data.model
 
 import android.os.Parcelable
+import com.mcal.pesdk.nmod.LoadFailedException
 import kotlinx.parcelize.Parcelize
+import java.io.File
+
+enum class PreLoaderContentType {
+    LOADING,
+    APP_ERROR,
+    NMOD_ERROR
+}
+
+@Parcelize
+data class FailedNMod(
+    val name: String = "",
+    val packageName: String = "",
+    val loadException: LoadFailedException? = null,
+    val icon: File? = null,
+) : Parcelable
 
 @Parcelize
 data class PreLoaderScreenState(
+    val contentType: PreLoaderContentType = PreLoaderContentType.LOADING,
     val logs: List<String> = emptyList(),
-    val progress: Float = -1f,
-    val currentStatus: String = "",
+    val errorMessage: String = "",
+    val failedNMods: List<FailedNMod> = emptyList()
 ) : Parcelable

@@ -30,6 +30,21 @@ class MinecraftActivity : MainActivity(), KoinComponent {
     private val repository: MainRepository by inject()
 
     override fun onCreate(p1: Bundle?) {
+//         if (!safeMode) {
+//            Gson gson = new Gson();
+//            Bundle data = activity.getIntent().getExtras();
+//
+//            Preloader.NModPreloadData preloadData = gson.fromJson(data.getString(Constants.NMOD_DATA_TAG), Preloader.NModPreloadData.class);
+//
+//            for (String assetsPath : preloadData.assets_packs_path)
+//                AssetOverrideManager.addAssetOverride(activity.getAssets(), assetsPath);
+//
+//            String[] loadedNModLibs = preloadData.loaded_libs;
+//            for (String nativeLibName : loadedNModLibs) {
+//                NModLib lib = new NModLib(nativeLibName);
+//                lib.callOnActivityCreate(activity, savedInstanceState);
+//            }
+//        }
         try {
             val nativeDirPath = repository.getMinecraftPackageNativeLibraryDir()
             if (nativeDirPath == null) {
@@ -67,6 +82,11 @@ class MinecraftActivity : MainActivity(), KoinComponent {
     }
 
     override fun onDestroy() {
+//        val loadedNModLibs: Array<String?> = preloadData.loaded_libs
+//        for (nativeLibName in loadedNModLibs) {
+//            val lib = NModLib(nativeLibName)
+//            lib.callOnActivityFinish(activity)
+//        }
         super.onDestroy()
     }
 }

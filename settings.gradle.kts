@@ -33,7 +33,7 @@ dependencyResolutionManagement {
     }
 }
 
-//include(":app")
+include(":app")
 include(":app-x")
 //include(":minecraft-app")
 
