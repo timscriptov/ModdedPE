@@ -16,8 +16,8 @@ android {
         applicationId = "com.mcal.moddedpe3"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 972110101
-        versionName = "1.21.101.1"
+        versionCode = 972111101
+        versionName = "1.21.111.1"
 
         ndk {
             abiFilters.addAll(
