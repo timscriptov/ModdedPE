@@ -74,7 +74,7 @@ namespace NModAPI {
 // Register Natives
 //-------------------------------------------------------------
 
-extern "C" JNIEXPORT jboolean JNICALL Java_com_mcal_pesdk_nmod_NModLib_nativeRegisterNatives(JNIEnv*env, jclass thiz, jclass cls) {
+extern "C" JNIEXPORT jboolean JNICALL Java_com_mcal_pesdk3_nmod_NModLib_nativeRegisterNatives(JNIEnv*env, jclass thiz, jclass cls) {
     JNINativeMethod methods[] = {
         {"nativeCallOnActivityFinish", "(Ljava/lang/String;Lcom/mojang/minecraftpe/MainActivity;)Z", (void *)&NModAPI::nativeCallOnActivityFinish},
         {"nativeCallOnLoad", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z", (void *)&NModAPI::nativeCallOnLoad},
@@ -86,7 +86,7 @@ extern "C" JNIEXPORT jboolean JNICALL Java_com_mcal_pesdk_nmod_NModLib_nativeReg
     return JNI_TRUE;
 }
 
-extern "C" JNIEXPORT void JNICALL Java_com_mcal_pesdk_nativeapi_LibraryLoader_nativeOnNModAPILoaded(JNIEnv*env, jclass thiz, jstring libPath) {
+extern "C" JNIEXPORT void JNICALL Java_com_mcal_pesdk3_nativeapi_LibraryLoader_nativeOnNModAPILoaded(JNIEnv*env, jclass thiz, jstring libPath) {
     const char *mNativeLibPath;
     mNativeLibPath = toString(env, libPath).c_str();
     mMCPENativeLibPath = mNativeLibPath;

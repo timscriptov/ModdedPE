@@ -18,7 +18,7 @@ extern "C" JNIEXPORT jint JNI_OnLoad(JavaVM*,void*) {
     return JNI_VERSION_1_6;
 }
 
-extern "C" JNIEXPORT void JNICALL Java_com_mcal_pesdk_nativeapi_LibraryLoader_nativeOnLauncherLoaded(JNIEnv*env, jclass thiz, jstring libPath) {
+extern "C" JNIEXPORT void JNICALL Java_com_mcal_pesdk3_nativeapi_LibraryLoader_nativeOnLauncherLoaded(JNIEnv*env, jclass thiz, jstring libPath) {
     const char * mNativeLibPath = env->GetStringUTFChars(libPath, 0);
     void* imageMCPE=(void*) dlopen(mNativeLibPath,RTLD_LAZY);
     mOnCreateFunc = (void(*)(ANativeActivity*,void*,size_t)) dlsym(imageMCPE,"ANativeActivity_onCreate");
