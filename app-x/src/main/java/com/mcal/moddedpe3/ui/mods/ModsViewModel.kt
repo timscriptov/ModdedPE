@@ -23,11 +23,12 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.mcal.moddedpe3.data.model.ImportResult
 import com.mcal.moddedpe3.data.model.ImportState
 import com.mcal.moddedpe3.data.model.ModsScreenState
-import com.mcal.pesdk.nmod.NMod
-import com.mcal.pesdk.nmod.NModAPI
+import com.mcal.pesdk3.nmod.NMod
+import com.mcal.pesdk3.nmod.NModAPI
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
@@ -39,7 +40,7 @@ class ModsViewModel(
     private val _state = MutableStateFlow(ModsScreenState())
     val state: StateFlow<ModsScreenState> = _state.asStateFlow()
 
-    private val nModAPI: NModAPI = NModAPI(context)
+    private var nModAPI: NModAPI = NModAPI(context)
 
     init {
         loadMods()
@@ -48,62 +49,71 @@ class ModsViewModel(
     fun loadMods() {
         screenModelScope.launch {
             try {
-                nModAPI.initNModDatas()
+                nModAPI.initNModData()
 
-                val enabledMods = nModAPI.importedEnabledNMods
-                val disabledMods = nModAPI.importedDisabledNMods
+                val enabledMods = nModAPI.getImportedEnabledNMods()
+                val disabledMods = nModAPI.getImportedDisabledNMods()
 
-                _state.value = _state.value.copy(
-                    enabledMods = enabledMods,
-                    disabledMods = disabledMods,
-                    hasMods = enabledMods.isNotEmpty() || disabledMods.isNotEmpty()
-                )
+                _state.update { currentState ->
+                    currentState.copy(
+                        enabledMods = enabledMods,
+                        disabledMods = disabledMods,
+                    )
+                }
             } catch (e: Exception) {
-                _state.value = _state.value.copy(
-                    importState = ImportState.Error("Failed to load mods: ${e.message}")
-                )
+                _state.update { currentState ->
+                    currentState.copy(
+                        importState = ImportState.Error("Failed to load mods: ${e.message}")
+                    )
+                }
             }
         }
     }
 
     fun importModFromUri(uri: Uri?) {
         if (uri == null) {
-            _state.value = _state.value.copy(
-                importState = ImportState.Error("No file selected")
-            )
+            _state.update { currentState ->
+                currentState.copy(
+                    importState = ImportState.Error("No file selected")
+                )
+            }
             return
         }
 
         screenModelScope.launch {
-            _state.value = _state.value.copy(
-                importState = ImportState.Loading
-            )
+            _state.update { currentState ->
+                currentState.copy(
+                    importState = ImportState.Loading
+                )
+            }
 
             try {
                 when (val result = copyModFile(uri)) {
                     is ImportResult.Success -> {
-                        _state.value = _state.value.copy(
-                            importState = ImportState.Success
-                        )
-                        loadMods()
+                        _state.update { currentState ->
+                            currentState.copy(
+                                importState = ImportState.Success
+                            )
+                        }
                     }
 
                     is ImportResult.Error -> {
-                        _state.value = _state.value.copy(
-                            importState = ImportState.Error(result.message)
-                        )
+                        _state.update { currentState ->
+                            currentState.copy(
+                                importState = ImportState.Error(result.message)
+                            )
+                        }
                     }
                 }
             } catch (e: Exception) {
-                _state.value = _state.value.copy(
-                    importState = ImportState.Error("Import failed: ${e.message}")
-                )
+                _state.update { currentState ->
+                    currentState.copy(
+                        importState = ImportState.Error("Import failed: ${e.message}")
+                    )
+                }
             }
+            loadMods()
         }
-    }
-
-    fun getModKey(mod: NMod): String {
-        return "${mod.packageName}_${mod.versionName}_${mod.versionCode}_${mod.name.hashCode()}"
     }
 
     private fun copyModFile(uri: Uri): ImportResult {
@@ -117,16 +127,8 @@ class ModsViewModel(
                 }
             }
 
-            val fileName = getFileName(uri) ?: "imported_mod_${System.currentTimeMillis()}.nmod"
-
-            if (!fileName.endsWith(".nmod", ignoreCase = true) &&
-                !fileName.endsWith(".apk", ignoreCase = true)
-            ) {
-                return ImportResult.Error("Invalid file format. Please select a .nmod or .zip file")
-            }
-
+            val fileName = "imported_mod_${System.currentTimeMillis()}.nmod"
             val outputFile = File(modsDir, fileName)
-
             if (outputFile.exists()) {
                 return ImportResult.Error("A mod with the same name already exists")
             }
@@ -161,41 +163,26 @@ class ModsViewModel(
         }
     }
 
-    private fun getFileName(uri: Uri): String? {
-        return try {
-            context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
-                if (cursor.moveToFirst()) {
-                    val displayNameIndex = cursor.getColumnIndex("_display_name")
-                    if (displayNameIndex != -1) {
-                        cursor.getString(displayNameIndex)
-                    } else {
-                        null
-                    }
-                } else {
-                    null
-                }
-            }
-        } catch (e: Exception) {
-            null
-        } ?: uri.path?.substringAfterLast('/')
-    }
-
     fun resetImportState() {
-        _state.value = _state.value.copy(
-            importState = ImportState.Idle
-        )
+        _state.update { currentState ->
+            currentState.copy(
+                importState = ImportState.Idle
+            )
+        }
     }
 
     fun toggleMod(mod: NMod, enabled: Boolean) {
         screenModelScope.launch {
             try {
                 nModAPI.setEnabled(mod, enabled)
-                loadMods()
             } catch (e: Exception) {
-                _state.value = _state.value.copy(
-                    importState = ImportState.Error("Failed to toggle mod: ${e.message}")
-                )
+                _state.update { currentState ->
+                    currentState.copy(
+                        importState = ImportState.Error("Failed to toggle mod: ${e.message}")
+                    )
+                }
             }
+            loadMods()
         }
     }
 
@@ -203,15 +190,19 @@ class ModsViewModel(
         screenModelScope.launch {
             try {
                 nModAPI.removeImportedNMod(mod)
-                loadMods()
-                _state.value = _state.value.copy(
-                    importState = ImportState.DeleteSuccess
-                )
+                _state.update { currentState ->
+                    currentState.copy(
+                        importState = ImportState.DeleteSuccess
+                    )
+                }
             } catch (e: Exception) {
-                _state.value = _state.value.copy(
-                    importState = ImportState.Error("Failed to delete mod: ${e.message}")
-                )
+                _state.update { currentState ->
+                    currentState.copy(
+                        importState = ImportState.Error("Failed to delete mod: ${e.message}")
+                    )
+                }
             }
+            loadMods()
         }
     }
 
@@ -219,12 +210,14 @@ class ModsViewModel(
         screenModelScope.launch {
             try {
                 nModAPI.upPosNMod(mod)
-                loadMods()
             } catch (e: Exception) {
-                _state.value = _state.value.copy(
-                    importState = ImportState.Error("Failed to move mod up: ${e.message}")
-                )
+                _state.update { currentState ->
+                    currentState.copy(
+                        importState = ImportState.Error("Failed to move mod up: ${e.message}")
+                    )
+                }
             }
+            loadMods()
         }
     }
 
@@ -232,24 +225,25 @@ class ModsViewModel(
         screenModelScope.launch {
             try {
                 nModAPI.downPosNMod(mod)
-                loadMods()
             } catch (e: Exception) {
-                _state.value = _state.value.copy(
-                    importState = ImportState.Error("Failed to move mod down: ${e.message}")
-                )
+                _state.update { currentState ->
+                    currentState.copy(
+                        importState = ImportState.Error("Failed to move mod down: ${e.message}")
+                    )
+                }
             }
+            loadMods()
         }
     }
 
     fun canMoveUp(mod: NMod): Boolean {
         val enabledMods = _state.value.enabledMods
-        val index = enabledMods.indexOf(mod)
-        return index > 0
+        return enabledMods.indexOf(mod) > 0
     }
 
     fun canMoveDown(mod: NMod): Boolean {
         val enabledMods = _state.value.enabledMods
         val index = enabledMods.indexOf(mod)
-        return index in 0 until enabledMods.size - 1
+        return index >= 0 && index < enabledMods.size - 1
     }
 }

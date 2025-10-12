@@ -17,7 +17,7 @@
 package com.mcal.moddedpe3.data.model
 
 import android.os.Parcelable
-import com.mcal.pesdk.nmod.LoadFailedException
+import com.mcal.pesdk3.data.LoadFailedException
 import kotlinx.parcelize.Parcelize
 import java.io.File
 

@@ -17,7 +17,7 @@
 package com.mcal.moddedpe3.data.repository
 
 import android.content.Context
-import com.mcal.pesdk.NModPreferences
+import com.mcal.pesdk3.NModPreferences
 
 class SettingsRepositoryImpl(
     private val context: Context

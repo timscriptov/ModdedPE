@@ -1,5 +1,6 @@
 [versions]
 agp = "8.12.0"
+coilCompose = "2.7.0"
 gamesActivity = "4.0.0"
 kotlin = "2.2.20"
 compose-plugin = "1.9.0"
@@ -13,6 +14,7 @@ android-targetSdk = "36"
 activity-ktx = "1.11.0"
 fragment-ktx = "1.8.9"
 playServicesAds = "24.6.0"
+vectordrawable = "1.2.0"
 wortise-sdk = "1.5.1"
 annotation = "1.9.1"
 annotations = "26.0.2-1"
@@ -56,6 +58,9 @@ xerial = "3.50.3.0"
 [libraries]
 androidx-games-activity = { module = "androidx.games:games-activity", version.ref = "gamesActivity" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
+androidx-vectordrawable = { module = "androidx.vectordrawable:vectordrawable", version.ref = "vectordrawable" }
+androidx-vectordrawable-animated = { module = "androidx.vectordrawable:vectordrawable-animated", version.ref = "vectordrawable" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
 wortise-sdk = { module = "com.wortise:android-sdk", version.ref = "wortise-sdk" }
 androidx-activity = { module = "androidx.activity:activity", version.ref = "activity-ktx" }

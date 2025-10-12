@@ -20,7 +20,12 @@ import android.content.res.AssetManager
 import android.os.Bundle
 import android.util.Log
 import com.mcal.moddedpe3.data.repository.MainRepository
+import com.mcal.moddedpe3.data.repository.SettingsRepository
+import com.mcal.pesdk3.Preloader
+import com.mcal.pesdk3.Preloader.Companion.NMOD_DATA_TAG
+import com.mcal.pesdk3.nmod.NModLib
 import com.mojang.minecraftpe.MainActivity
+import kotlinx.serialization.json.Json
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
 import java.io.File
@@ -28,43 +33,64 @@ import java.io.File
 class MinecraftActivity : MainActivity(), KoinComponent {
 
     private val repository: MainRepository by inject()
+    private val settingsRepository: SettingsRepository by inject()
 
-    override fun onCreate(p1: Bundle?) {
-//         if (!safeMode) {
-//            Gson gson = new Gson();
-//            Bundle data = activity.getIntent().getExtras();
-//
-//            Preloader.NModPreloadData preloadData = gson.fromJson(data.getString(Constants.NMOD_DATA_TAG), Preloader.NModPreloadData.class);
-//
-//            for (String assetsPath : preloadData.assets_packs_path)
-//                AssetOverrideManager.addAssetOverride(activity.getAssets(), assetsPath);
-//
-//            String[] loadedNModLibs = preloadData.loaded_libs;
-//            for (String nativeLibName : loadedNModLibs) {
-//                NModLib lib = new NModLib(nativeLibName);
-//                lib.callOnActivityCreate(activity, savedInstanceState);
-//            }
-//        }
+    private val json = Json {
+        ignoreUnknownKeys = true
+        isLenient = true
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         try {
-            val nativeDirPath = repository.getMinecraftPackageNativeLibraryDir()
-            if (nativeDirPath == null) {
-                Log.e("MinecraftActivity", "Failed to get native library directory")
-                finish()
-                return
-            }
-
-            val dir = File(nativeDirPath)
-            if (!dir.exists()) {
-                Log.e("MinecraftActivity", "Native library directory does not exist: $nativeDirPath")
-                finish()
-                return
-            }
-
-            Patcher.patchNativeLibraryDir(classLoader, dir)
-            super.onCreate(p1)
+            patchNativeDir()
+            callOnActivityCreate(savedInstanceState)
+            super.onCreate(savedInstanceState)
         } catch (e: Exception) {
             Log.e("MinecraftActivity", "Error during initialization", e)
             finish()
+        }
+    }
+
+    private fun patchNativeDir() {
+        val nativeDirPath = repository.getMinecraftPackageNativeLibraryDir()
+        if (nativeDirPath == null) {
+            Log.e("MinecraftActivity", "Failed to get native library directory")
+            finish()
+            return
+        }
+
+        val dir = File(nativeDirPath)
+        if (!dir.exists()) {
+            Log.e("MinecraftActivity", "Native library directory does not exist: $nativeDirPath")
+            finish()
+            return
+        }
+
+        Patcher.patchNativeLibraryDir(classLoader, dir)
+    }
+
+    private fun callOnActivityCreate(savedInstanceState: Bundle?) {
+        if (!settingsRepository.getSafeMode()) {
+            intent.extras?.let { data ->
+                val jsonString = data.getString(NMOD_DATA_TAG)
+                if (!jsonString.isNullOrEmpty()) {
+                    try {
+                        val preloadData = json.decodeFromString<Preloader.NModPreloadData>(jsonString)
+
+                        for (assetsPath in preloadData.assetsPacksPath) {
+                            repository.addAssetPath(getAssets(), assetsPath)
+                        }
+
+                        val loadedNModLibs: Array<String> = preloadData.loadedLibs
+                        for (nativeLibName in loadedNModLibs) {
+                            val lib = NModLib(nativeLibName)
+                            lib.callOnActivityCreate(this, savedInstanceState)
+                        }
+                    } catch (e: Exception) {
+                        Log.e("MinecraftActivity", "Error parsing preload data", e)
+                    }
+                }
+            }
         }
     }
 
@@ -82,11 +108,25 @@ class MinecraftActivity : MainActivity(), KoinComponent {
     }
 
     override fun onDestroy() {
-//        val loadedNModLibs: Array<String?> = preloadData.loaded_libs
-//        for (nativeLibName in loadedNModLibs) {
-//            val lib = NModLib(nativeLibName)
-//            lib.callOnActivityFinish(activity)
-//        }
+        callOnActivityFinish()
         super.onDestroy()
+    }
+
+    private fun callOnActivityFinish() {
+        intent.extras?.let { data ->
+            val jsonString = data.getString(NMOD_DATA_TAG)
+            if (!jsonString.isNullOrEmpty()) {
+                try {
+                    val preloadData = json.decodeFromString<Preloader.NModPreloadData>(jsonString)
+
+                    for (nativeLibName in preloadData.loadedLibs) {
+                        val lib = NModLib(nativeLibName)
+                        lib.callOnActivityFinish(this)
+                    }
+                } catch (e: Exception) {
+                    Log.e("MinecraftActivity", "Error parsing preload data in onDestroy", e)
+                }
+            }
+        }
     }
 }

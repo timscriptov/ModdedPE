@@ -19,7 +19,7 @@ package com.mcal.moddedpe3.data.repository
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.res.AssetManager
-import com.mcal.pesdk.MinecraftInfo
+import com.mcal.pesdk3.MinecraftInfo
 
 class MainRepositoryImpl(
     private val context: Context

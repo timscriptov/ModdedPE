@@ -106,16 +106,10 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
     implementation(libs.androidx.material.icons.extended)
-    implementation("io.coil-kt:coil-compose:2.7.0")
+    implementation(libs.coil.compose)
 
-    implementation("androidx.vectordrawable:vectordrawable:1.1.0")
-    implementation("androidx.vectordrawable:vectordrawable-animated:1.1.0")
-
-    implementation(libs.gson)
-
-//    implementation(libs.ktor.client.okhttp)
-//    implementation(libs.ktor.client.core)
-//    implementation(libs.ktor.client.cio)
+    implementation(libs.androidx.vectordrawable)
+    implementation(libs.androidx.vectordrawable.animated)
 
     implementation(libs.kotlinx.serialization.json)
 
@@ -123,15 +117,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.preference.ktx)
     implementation(libs.material)
-
-    // Wortise AD
-//    implementation(libs.wortise.sdk)
-
-    // IronSource AD
-//    implementation(libs.mediationsdk)
-
-    // Admob AD
-//    implementation(libs.play.services.ads)
 
     implementation(libs.bundles.koin)
     implementation(libs.bundles.voyager)

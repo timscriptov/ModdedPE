@@ -48,18 +48,14 @@ import cafe.adriel.voyager.koin.koinScreenModel
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.mcal.moddedpe3.data.model.ImportState
-import com.mcal.pesdk.nmod.NMod
+import com.mcal.moddedpe3.data.model.ModsScreenState
+import com.mcal.pesdk3.nmod.NMod
 import kotlinx.coroutines.delay
 
 @Composable
 fun Screen.ModsContent() {
     val viewModel = koinScreenModel<ModsViewModel>()
-    val state by viewModel.state.collectAsState()
-
-    val enabledMods = state.enabledMods
-    val disabledMods = state.disabledMods
-    val hasMods = state.hasMods
-    val importState = state.importState
+    val screenState by viewModel.state.collectAsState()
 
     var selectedModForInfo by remember { mutableStateOf<NMod?>(null) }
 
@@ -71,8 +67,8 @@ fun Screen.ModsContent() {
         }
     }
 
-    LaunchedEffect(importState) {
-        if (importState is ImportState.Success || importState is ImportState.DeleteSuccess) {
+    LaunchedEffect(screenState.importState) {
+        if (screenState.importState is ImportState.Success || screenState.importState is ImportState.DeleteSuccess) {
             delay(2000)
             viewModel.resetImportState()
         }
@@ -81,15 +77,17 @@ fun Screen.ModsContent() {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        if (hasMods) {
+        if (screenState.hasMods()) {
             ModsList(
-                viewModel = viewModel,
-                enabledMods = enabledMods,
-                disabledMods = disabledMods,
+                screenState = screenState,
                 onImportMod = { filePickerLauncher.launch("*/*") },
-                onToggleMod = { mod, enabled -> viewModel.toggleMod(mod, enabled) },
-                onDeleteMod = { mod -> viewModel.deleteMod(mod) },
-                onShowModInfo = { mod -> selectedModForInfo = mod },
+                onToggleMod = { mod, enabled ->
+                    viewModel.toggleMod(mod, enabled)
+                },
+                onDeleteMod = { mod ->
+                    selectedModForInfo = mod
+                    viewModel.deleteMod(mod)
+                },
                 onMoveUp = { mod -> viewModel.moveModUp(mod) },
                 onMoveDown = { mod -> viewModel.moveModDown(mod) },
                 canMoveUp = { mod -> viewModel.canMoveUp(mod) },
@@ -100,7 +98,7 @@ fun Screen.ModsContent() {
         }
 
         selectedModForInfo?.let { mod ->
-            ModInfoDialog(
+            DeleteModDialog(
                 mod = mod,
                 onDismiss = { selectedModForInfo = null },
                 onDelete = {
@@ -110,7 +108,7 @@ fun Screen.ModsContent() {
             )
         }
 
-        ImportStatusOverlay(importState = importState, onDismiss = { viewModel.resetImportState() })
+        ImportStatusOverlay(importState = screenState.importState, onDismiss = { viewModel.resetImportState() })
     }
 }
 
@@ -352,41 +350,13 @@ fun ModItem(
     isEnabled: Boolean,
     onToggleMod: (Boolean) -> Unit,
     onDeleteMod: () -> Unit,
-    onShowInfo: () -> Unit,
     onMoveUp: () -> Unit,
     onMoveDown: () -> Unit,
     canMoveUp: Boolean,
     canMoveDown: Boolean
 ) {
-    var showDeleteDialog by remember { mutableStateOf(false) }
-
-    if (showDeleteDialog) {
-        AlertDialog(
-            onDismissRequest = { showDeleteDialog = false },
-            title = { Text("Delete Mod") },
-            text = { Text("Are you sure you want to delete \"${mod.name}\"? This action cannot be undone.") },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        showDeleteDialog = false
-                        onDeleteMod()
-                    }
-                ) {
-                    Text("Delete", color = MaterialTheme.colorScheme.error)
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showDeleteDialog = false }) {
-                    Text("Cancel")
-                }
-            }
-        )
-    }
-
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onShowInfo() },
+        modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
@@ -403,7 +373,7 @@ fun ModItem(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = mod.name,
+                    text = mod.getName(),
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface,
@@ -414,7 +384,7 @@ fun ModItem(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = mod.packageName,
+                    text = mod.getPackageName(),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                     maxLines = 1,
@@ -424,17 +394,17 @@ fun ModItem(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = "v${mod.versionName} • ${mod.author}",
+                    text = "v${mod.getVersionName()} • ${mod.getAuthor()}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
 
-                if (mod.description.isNotEmpty()) {
+                if (mod.getDescription().isNotEmpty()) {
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = mod.description,
+                        text = mod.getDescription(),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                         maxLines = 2,
@@ -455,7 +425,7 @@ fun ModItem(
                         }
                     )
 
-                    if (mod.isBugPack) {
+                    if (mod.isBugPack()) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Icon(
                             imageVector = Icons.Default.Warning,
@@ -475,7 +445,7 @@ fun ModItem(
 
             Spacer(modifier = Modifier.size(8.dp))
             IconButton(
-                onClick = { showDeleteDialog = true },
+                onClick = onDeleteMod,
                 modifier = Modifier.size(40.dp)
             ) {
                 Box(
@@ -624,33 +594,15 @@ private fun ModIcon(mod: NMod) {
 
 @Composable
 fun ModsList(
-    enabledMods: List<NMod>,
-    disabledMods: List<NMod>,
+    screenState: ModsScreenState,
     onImportMod: () -> Unit,
     onToggleMod: (NMod, Boolean) -> Unit,
     onDeleteMod: (NMod) -> Unit,
-    onShowModInfo: (NMod) -> Unit,
     onMoveUp: (NMod) -> Unit,
     onMoveDown: (NMod) -> Unit,
     canMoveUp: (NMod) -> Boolean,
     canMoveDown: (NMod) -> Boolean,
-    viewModel: ModsViewModel,
 ) {
-    val totalModsCount = enabledMods.size + disabledMods.size
-
-    // Создаем стабильные ключи для всех модов
-    val enabledModsWithKeys = remember(enabledMods) {
-        enabledMods.map { mod ->
-            mod to viewModel.getModKey(mod)
-        }
-    }
-
-    val disabledModsWithKeys = remember(disabledMods) {
-        disabledMods.map { mod ->
-            mod to viewModel.getModKey(mod)
-        }
-    }
-
     Column(modifier = Modifier.fillMaxSize()) {
         Row(
             modifier = Modifier
@@ -666,7 +618,7 @@ fun ModsList(
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "${enabledMods.size}/$totalModsCount включено",
+                    text = "${screenState.enabledMods.size}/${screenState.getTotalModsCount()} включено",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )
@@ -693,95 +645,52 @@ fun ModsList(
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // Включенные моды
-            if (enabledModsWithKeys.isNotEmpty()) {
-                items(
-                    items = enabledModsWithKeys,
-                    key = { it.second } // Используем стабильный ключ
-                ) { (mod, _) ->
-                    ModItem(
-                        mod = mod,
-                        isEnabled = true,
-                        onToggleMod = { enabled -> onToggleMod(mod, enabled) },
-                        onDeleteMod = { onDeleteMod(mod) },
-                        onShowInfo = { onShowModInfo(mod) },
-                        onMoveUp = { onMoveUp(mod) },
-                        onMoveDown = { onMoveDown(mod) },
-                        canMoveUp = canMoveUp(mod),
-                        canMoveDown = canMoveDown(mod)
-                    )
-                }
+            items(
+                items = screenState.enabledMods,
+            ) { mod ->
+                ModItem(
+                    mod = mod,
+                    isEnabled = true,
+                    onToggleMod = { enabled -> onToggleMod(mod, enabled) },
+                    onDeleteMod = { onDeleteMod(mod) },
+                    onMoveUp = { onMoveUp(mod) },
+                    onMoveDown = { onMoveDown(mod) },
+                    canMoveUp = canMoveUp(mod),
+                    canMoveDown = canMoveDown(mod)
+                )
             }
 
-            // Отключенные моды
-            if (disabledModsWithKeys.isNotEmpty()) {
-                items(
-                    items = disabledModsWithKeys,
-                    key = { it.second } // Используем стабильный ключ
-                ) { (mod, _) ->
-                    ModItem(
-                        mod = mod,
-                        isEnabled = false,
-                        onToggleMod = { enabled -> onToggleMod(mod, enabled) },
-                        onDeleteMod = { onDeleteMod(mod) },
-                        onShowInfo = { onShowModInfo(mod) },
-                        onMoveUp = { onMoveUp(mod) },
-                        onMoveDown = { onMoveDown(mod) },
-                        canMoveUp = false,
-                        canMoveDown = false
-                    )
-                }
+            items(
+                items = screenState.disabledMods,
+            ) { mod ->
+                ModItem(
+                    mod = mod,
+                    isEnabled = false,
+                    onToggleMod = { enabled -> onToggleMod(mod, enabled) },
+                    onDeleteMod = { onDeleteMod(mod) },
+                    onMoveUp = { onMoveUp(mod) },
+                    onMoveDown = { onMoveDown(mod) },
+                    canMoveUp = false,
+                    canMoveDown = false
+                )
             }
         }
     }
 }
 
 @Composable
-fun ModInfoDialog(
+fun DeleteModDialog(
     mod: NMod,
     onDismiss: () -> Unit,
     onDelete: () -> Unit
 ) {
-    var showDeleteDialog by remember { mutableStateOf(false) }
-
-    if (showDeleteDialog) {
-        AlertDialog(
-            onDismissRequest = { showDeleteDialog = false },
-            title = { Text("Delete Mod") },
-            text = { Text("Are you sure you want to delete \"${mod.name}\"? This action cannot be undone.") },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        showDeleteDialog = false
-                        onDelete()
-                    }
-                ) {
-                    Text("Delete", color = MaterialTheme.colorScheme.error)
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showDeleteDialog = false }) {
-                    Text("Cancel")
-                }
-            }
-        )
-    }
-
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = {
-            Text(
-                mod.name,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-        },
-        text = {
-            ModInfoContent(mod = mod)
-        },
+        title = { Text("Delete Mod") },
+        text = { Text("Are you sure you want to delete \"${mod.getName()}\"? This action cannot be undone.") },
         confirmButton = {
             Button(
-                onClick = { showDeleteDialog = true },
+                onClick = onDelete,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.error
                 )
@@ -797,89 +706,4 @@ fun ModInfoDialog(
             }
         }
     )
-}
-
-@Composable
-private fun ModInfoContent(mod: NMod) {
-    Column {
-        // Mod icon if available
-        val iconFile = mod.copyIconToData()
-        if (iconFile != null && iconFile.exists()) {
-            Image(
-                painter = rememberAsyncImagePainter(
-                    ImageRequest.Builder(LocalContext.current)
-                        .data(iconFile)
-                        .build()
-                ),
-                contentDescription = "Mod icon",
-                modifier = Modifier
-                    .size(64.dp)
-                    .align(Alignment.CenterHorizontally)
-                    .background(Color.LightGray),
-                contentScale = ContentScale.Crop
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-
-        // Mod details
-        InfoRow("Package", mod.packageName)
-        InfoRow("Version", "v${mod.versionName}")
-        InfoRow("Author", mod.author)
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Description
-        Text(
-            text = "Description:",
-            style = MaterialTheme.typography.bodySmall,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = mod.description.ifEmpty { "No description provided" },
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-        )
-
-        // Error info if mod has issues
-        if (mod.isBugPack) {
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Errors:",
-                style = MaterialTheme.typography.bodySmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.error
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = mod.loadException?.message ?: "Unknown error",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.error
-            )
-        }
-    }
-}
-
-@Composable
-private fun InfoRow(label: String, value: String) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            text = "$label:",
-            style = MaterialTheme.typography.bodySmall,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
-        )
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(1f, fill = false)
-        )
-    }
 }

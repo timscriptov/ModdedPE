@@ -26,9 +26,9 @@ import com.mcal.moddedpe3.data.model.FailedNMod
 import com.mcal.moddedpe3.data.model.PreLoaderContentType
 import com.mcal.moddedpe3.data.model.PreLoaderScreenState
 import com.mcal.moddedpe3.data.repository.MainRepository
-import com.mcal.pesdk.MinecraftInfo.Companion.MINECRAFT_LIBS
-import com.mcal.pesdk.Preloader
-import com.mcal.pesdk.nmod.NMod
+import com.mcal.pesdk3.MinecraftInfo.Companion.MINECRAFT_LIBS
+import com.mcal.pesdk3.Preloader
+import com.mcal.pesdk3.nmod.NMod
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -73,16 +73,16 @@ class PreLoaderViewModel(
                 }
 
                 override fun onNModLoaded(nmod: NMod) {
-                    addLog("Загрузка " + nmod.packageName)
+                    addLog("Загрузка " + nmod.getPackageName())
                 }
 
                 override fun onFailedLoadingNMod(nmod: NMod) {
-                    addLog("Ошибка загрузки " + nmod.packageName)
+                    addLog("Ошибка загрузки " + nmod.getPackageName())
                     mFailedNMods.add(
                         FailedNMod(
-                            name = nmod.name,
-                            packageName = nmod.packageName,
-                            loadException = nmod.loadException,
+                            name = nmod.getName(),
+                            packageName = nmod.getPackageName(),
+                            loadException = nmod.getLoadException(),
                             icon = nmod.copyIconToData()
                         )
                     )
