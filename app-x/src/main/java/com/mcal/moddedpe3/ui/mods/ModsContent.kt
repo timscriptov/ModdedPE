@@ -49,15 +49,16 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.mcal.moddedpe3.data.model.ImportState
 import com.mcal.moddedpe3.data.model.ModsScreenState
-import com.mcal.pesdk3.nmod.NMod
+import com.mcal.pesdk3.data.LocalNMod
 import kotlinx.coroutines.delay
+import java.io.File
 
 @Composable
 fun Screen.ModsContent() {
     val viewModel = koinScreenModel<ModsViewModel>()
     val screenState by viewModel.state.collectAsState()
 
-    var selectedModForInfo by remember { mutableStateOf<NMod?>(null) }
+    var selectedModForInfo by remember { mutableStateOf<LocalNMod?>(null) }
 
     val filePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -345,7 +346,7 @@ fun NoModsContent(onImportMod: () -> Unit) {
 
 @Composable
 fun ModItem(
-    mod: NMod,
+    mod: LocalNMod,
     isEnabled: Boolean,
     onToggleMod: (Boolean) -> Unit,
     onDeleteMod: () -> Unit,
@@ -372,7 +373,7 @@ fun ModItem(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = mod.getName(),
+                    text = mod.name,
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface,
@@ -383,7 +384,7 @@ fun ModItem(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = mod.getPackageName(),
+                    text = mod.packageName,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                     maxLines = 1,
@@ -393,17 +394,17 @@ fun ModItem(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = "v${mod.getVersionName()} • ${mod.getAuthor()}",
+                    text = "v${mod.versionName} • ${mod.author}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
 
-                if (mod.getDescription().isNotEmpty()) {
+                if (mod.description.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = mod.getDescription(),
+                        text = mod.description,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                         maxLines = 2,
@@ -424,7 +425,7 @@ fun ModItem(
                         }
                     )
 
-                    if (mod.isBugPack()) {
+                    if (mod.isBugPack) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Icon(
                             imageVector = Icons.Default.Warning,
@@ -553,13 +554,13 @@ fun ModItem(
 }
 
 @Composable
-private fun ModIcon(mod: NMod) {
-    val iconFile = mod.copyIconToData()
-    if (iconFile != null && iconFile.exists()) {
+private fun ModIcon(mod: LocalNMod) {
+    val iconPath = mod.iconPath
+    if (iconPath != null && File(iconPath).exists()) {
         Image(
             painter = rememberAsyncImagePainter(
                 ImageRequest.Builder(LocalContext.current)
-                    .data(iconFile)
+                    .data(iconPath)
                     .build()
             ),
             contentDescription = "Mod icon",
@@ -595,12 +596,12 @@ private fun ModIcon(mod: NMod) {
 fun ModsList(
     screenState: ModsScreenState,
     onImportMod: () -> Unit,
-    onToggleMod: (NMod, Boolean) -> Unit,
-    onDeleteMod: (NMod) -> Unit,
-    onMoveUp: (NMod) -> Unit,
-    onMoveDown: (NMod) -> Unit,
-    canMoveUp: (NMod) -> Boolean,
-    canMoveDown: (NMod) -> Boolean,
+    onToggleMod: (LocalNMod, Boolean) -> Unit,
+    onDeleteMod: (LocalNMod) -> Unit,
+    onMoveUp: (LocalNMod) -> Unit,
+    onMoveDown: (LocalNMod) -> Unit,
+    canMoveUp: (LocalNMod) -> Boolean,
+    canMoveDown: (LocalNMod) -> Boolean,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Row(
@@ -683,14 +684,14 @@ fun ModsList(
 
 @Composable
 fun DeleteModDialog(
-    mod: NMod,
+    mod: LocalNMod,
     onDismiss: () -> Unit,
     onDelete: () -> Unit
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Delete Mod") },
-        text = { Text("Are you sure you want to delete \"${mod.getName()}\"? This action cannot be undone.") },
+        text = { Text("Are you sure you want to delete \"${mod.packageName}\"? This action cannot be undone.") },
         confirmButton = {
             Button(
                 onClick = onDelete,

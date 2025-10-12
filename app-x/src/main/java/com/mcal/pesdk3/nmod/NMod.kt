@@ -211,6 +211,23 @@ abstract class NMod {
         }
     }
 
+    fun copyBannerToData(): File? {
+        val icon = getIcon() ?: return null
+        NModFilePathManager(mContext).getNModIconDir().mkdirs()
+        val file = NModFilePathManager(mContext).getNModBannerIconPath(this)
+        try {
+            val baos = ByteArrayOutputStream()
+            icon.compress(Bitmap.CompressFormat.PNG, 100, baos)
+            file.createNewFile()
+            val outfile = FileOutputStream(file)
+            outfile.write(baos.toByteArray())
+            outfile.close()
+            return file
+        } catch (ioe: IOException) {
+            return null
+        }
+    }
+
     fun getLoadException(): LoadFailedException? {
         return mBugException
     }

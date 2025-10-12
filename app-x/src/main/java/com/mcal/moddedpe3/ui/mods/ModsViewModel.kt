@@ -23,8 +23,9 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.mcal.moddedpe3.data.model.ImportResult
 import com.mcal.moddedpe3.data.model.ImportState
 import com.mcal.moddedpe3.data.model.ModsScreenState
-import com.mcal.pesdk3.nmod.NMod
+import com.mcal.pesdk3.data.LocalNMod
 import com.mcal.pesdk3.nmod.NModAPI
+import com.mcal.pesdk3.nmod.toLocalNMod
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -54,8 +55,9 @@ class ModsViewModel(
 
                 _state.update { currentState ->
                     currentState.copy(
-                        enabledMods = enabledMods,
-                        disabledMods = disabledMods,
+                        allMods = nModAPI.getLoadedNMods(),
+                        enabledMods = enabledMods.map { it.toLocalNMod(true) },
+                        disabledMods = disabledMods.map { it.toLocalNMod(false) },
                     )
                 }
             } catch (e: Exception) {
@@ -169,10 +171,15 @@ class ModsViewModel(
         }
     }
 
-    fun toggleMod(mod: NMod, enabled: Boolean) {
+    fun toggleMod(localMod: LocalNMod, enabled: Boolean) {
         screenModelScope.launch {
             try {
-                nModAPI.setEnabled(mod, enabled)
+                val allMods = nModAPI.getImportedEnabledNMods() + nModAPI.getImportedDisabledNMods()
+                allMods.find {
+                    it.getPackageName() == localMod.packageName
+                }?.let {
+                    nModAPI.setEnabled(it, enabled)
+                }
             } catch (e: Exception) {
                 _state.update { currentState ->
                     currentState.copy(
@@ -184,10 +191,12 @@ class ModsViewModel(
         }
     }
 
-    fun deleteMod(mod: NMod) {
+    fun deleteMod(mod: LocalNMod) {
         screenModelScope.launch {
             try {
-                nModAPI.removeImportedNMod(mod)
+                _state.value.allMods.find { it.getPackageName() == mod.packageName }?.let { nMod ->
+                    nModAPI.removeImportedNMod(nMod)
+                }
                 _state.update { currentState ->
                     currentState.copy(
                         importState = ImportState.DeleteSuccess
@@ -204,10 +213,12 @@ class ModsViewModel(
         }
     }
 
-    fun moveModUp(mod: NMod) {
+    fun moveModUp(mod: LocalNMod) {
         screenModelScope.launch {
             try {
-                nModAPI.upPosNMod(mod)
+                _state.value.allMods.find { it.getPackageName() == mod.packageName }?.let { nMod ->
+                    nModAPI.upPosNMod(nMod)
+                }
             } catch (e: Exception) {
                 _state.update { currentState ->
                     currentState.copy(
@@ -219,10 +230,12 @@ class ModsViewModel(
         }
     }
 
-    fun moveModDown(mod: NMod) {
+    fun moveModDown(mod: LocalNMod) {
         screenModelScope.launch {
             try {
-                nModAPI.downPosNMod(mod)
+                _state.value.allMods.find { it.getPackageName() == mod.packageName }?.let { nMod ->
+                    nModAPI.downPosNMod(nMod)
+                }
             } catch (e: Exception) {
                 _state.update { currentState ->
                     currentState.copy(
@@ -234,12 +247,12 @@ class ModsViewModel(
         }
     }
 
-    fun canMoveUp(mod: NMod): Boolean {
+    fun canMoveUp(mod: LocalNMod): Boolean {
         val enabledMods = _state.value.enabledMods
         return enabledMods.indexOf(mod) > 0
     }
 
-    fun canMoveDown(mod: NMod): Boolean {
+    fun canMoveDown(mod: LocalNMod): Boolean {
         val enabledMods = _state.value.enabledMods
         val index = enabledMods.indexOf(mod)
         return index >= 0 && index < enabledMods.size - 1

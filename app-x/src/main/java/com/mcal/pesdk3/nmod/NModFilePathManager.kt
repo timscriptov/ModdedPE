@@ -68,6 +68,10 @@ class NModFilePathManager(
     }
 
     fun getNModIconPath(nMod: NMod): File {
-        return File(getNModIconDir().absolutePath + File.separator + nMod.getPackageName())
+        return File(getNModIconDir().absolutePath + File.separator + nMod.getPackageName() + "_icon.png")
+    }
+
+    fun getNModBannerIconPath(nMod: NMod): File {
+        return File(getNModIconDir().absolutePath + File.separator + nMod.getPackageName() + "_banner.png")
     }
 }
