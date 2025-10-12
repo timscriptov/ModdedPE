@@ -86,7 +86,6 @@ fun Screen.ModsContent() {
                 },
                 onDeleteMod = { mod ->
                     selectedModForInfo = mod
-                    viewModel.deleteMod(mod)
                 },
                 onMoveUp = { mod -> viewModel.moveModUp(mod) },
                 onMoveDown = { mod -> viewModel.moveModDown(mod) },
@@ -645,34 +644,38 @@ fun ModsList(
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(
-                items = screenState.enabledMods,
-            ) { mod ->
-                ModItem(
-                    mod = mod,
-                    isEnabled = true,
-                    onToggleMod = { enabled -> onToggleMod(mod, enabled) },
-                    onDeleteMod = { onDeleteMod(mod) },
-                    onMoveUp = { onMoveUp(mod) },
-                    onMoveDown = { onMoveDown(mod) },
-                    canMoveUp = canMoveUp(mod),
-                    canMoveDown = canMoveDown(mod)
-                )
+            if (screenState.enabledMods.isNotEmpty()) {
+                items(
+                    items = screenState.enabledMods,
+                ) { mod ->
+                    ModItem(
+                        mod = mod,
+                        isEnabled = true,
+                        onToggleMod = { enabled -> onToggleMod(mod, enabled) },
+                        onDeleteMod = { onDeleteMod(mod) },
+                        onMoveUp = { onMoveUp(mod) },
+                        onMoveDown = { onMoveDown(mod) },
+                        canMoveUp = canMoveUp(mod),
+                        canMoveDown = canMoveDown(mod)
+                    )
+                }
             }
 
-            items(
-                items = screenState.disabledMods,
-            ) { mod ->
-                ModItem(
-                    mod = mod,
-                    isEnabled = false,
-                    onToggleMod = { enabled -> onToggleMod(mod, enabled) },
-                    onDeleteMod = { onDeleteMod(mod) },
-                    onMoveUp = { onMoveUp(mod) },
-                    onMoveDown = { onMoveDown(mod) },
-                    canMoveUp = false,
-                    canMoveDown = false
-                )
+            if (screenState.disabledMods.isNotEmpty()) {
+                items(
+                    items = screenState.disabledMods,
+                ) { mod ->
+                    ModItem(
+                        mod = mod,
+                        isEnabled = false,
+                        onToggleMod = { enabled -> onToggleMod(mod, enabled) },
+                        onDeleteMod = { onDeleteMod(mod) },
+                        onMoveUp = { onMoveUp(mod) },
+                        onMoveDown = { onMoveDown(mod) },
+                        canMoveUp = false,
+                        canMoveDown = false
+                    )
+                }
             }
         }
     }
