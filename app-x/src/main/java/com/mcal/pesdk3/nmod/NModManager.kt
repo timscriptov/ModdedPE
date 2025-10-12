@@ -27,6 +27,20 @@ class NModManager(
     private var allNMods = ArrayList<NMod>()
     private var disabledNMods = ArrayList<NMod>()
 
+    init {
+        val dataLoader = NModDataLoader(context)
+
+        dataLoader.getAllList().forEach { item ->
+            if (!PackageNameChecker.isValidPackageName(item)) {
+                dataLoader.removeByName(item)
+            }
+        }
+
+        forEachItemToAddNMod(dataLoader.getEnabledList(), true)
+        forEachItemToAddNMod(dataLoader.getDisabledList(), false)
+        refreshData()
+    }
+
     fun getEnabledNMods(): ArrayList<NMod> {
         return enabledNMods
     }
@@ -40,24 +54,6 @@ class NModManager(
     }
 
     fun getAllNMods(): ArrayList<NMod> = allNMods
-
-    fun init() {
-        allNMods = ArrayList()
-        enabledNMods = ArrayList()
-        disabledNMods = ArrayList()
-
-        val dataLoader = NModDataLoader(context)
-
-        dataLoader.getAllList().forEach { item ->
-            if (!PackageNameChecker.isValidPackageName(item)) {
-                dataLoader.removeByName(item)
-            }
-        }
-
-        forEachItemToAddNMod(dataLoader.getEnabledList(), true)
-        forEachItemToAddNMod(dataLoader.getDisabledList(), false)
-        refreshData()
-    }
 
     fun removeImportedNMod(nMod: NMod) {
         getEnabledNMods().remove(nMod)
@@ -118,7 +114,6 @@ class NModManager(
 
     private fun refreshData() {
         val dataLoader = NModDataLoader(context)
-
         dataLoader.getAllList().forEach { item ->
             if (getImportedNMod(item) == null) {
                 dataLoader.removeByName(item)

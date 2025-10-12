@@ -88,10 +88,10 @@ class PreLoaderViewModel(
                     )
                 }
 
-                override fun onFinish(bundle: Bundle) {
+                override fun onFinish(bundle: Bundle?) {
                     if (mFailedNMods.isEmpty()) {
                         addLog("Готово")
-                        launchGame(activity)
+                        launchGame(activity, bundle)
                     } else {
                         _state.update { currentState ->
                             currentState.copy(
@@ -121,10 +121,13 @@ class PreLoaderViewModel(
         Log.e("test123", message)
     }
 
-    private fun launchGame(activity: Activity) {
+    private fun launchGame(activity: Activity, bundle: Bundle?) {
         addLog("Запуск Minecraft...")
         val intent = Intent(activity, MinecraftActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME
+        if (bundle != null) {
+            intent.putExtras(bundle)
+        }
         activity.startActivity(intent)
         activity.finish()
     }

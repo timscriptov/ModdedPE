@@ -37,7 +37,7 @@ import java.util.ArrayList
 class Preloader(
     private val context: Context,
     private var bundle: Bundle?,
-    private var preloadListener: PreloadListener?
+    private var preloadListener: PreloadListener
 ) {
     companion object {
         const val NMOD_DATA_TAG = "nmod_data"
@@ -52,16 +52,9 @@ class Preloader(
     private val minecraftInfo = MinecraftInfo(context)
     private val json = Json { encodeDefaults = true }
 
-    init {
-        nModAPI.initNModData()
-        if (preloadListener == null) {
-            preloadListener = PreloadListener()
-        }
-    }
-
     @Throws(PreloadException::class)
     fun preload() {
-        preloadListener!!.onStart()
+        preloadListener.onStart()
 
         if (bundle == null) {
             bundle = Bundle()
@@ -70,16 +63,16 @@ class Preloader(
         val safeMode = preferences.safeMode
 
         try {
-            preloadListener!!.onLoadGameLauncherLib()
+            preloadListener.onLoadGameLauncherLib()
             LibraryLoader.loadLauncher(minecraftInfo.getMinecraftPackageNativeLibraryDir()!!)
             if (!safeMode) {
-                preloadListener!!.onLoadSubstrateLib()
+                preloadListener.onLoadSubstrateLib()
                 LibraryLoader.loadSubstrate()
 
-                preloadListener!!.onLoadXHookLib()
+                preloadListener.onLoadXHookLib()
                 LibraryLoader.loadXHook()
 
-                preloadListener!!.onLoadPESdkLib()
+                preloadListener.onLoadPESdkLib()
                 LibraryLoader.loadNModAPI(minecraftInfo.getMinecraftPackageNativeLibraryDir()!!)
             }
         } catch (throwable: Throwable) {
@@ -87,7 +80,7 @@ class Preloader(
         }
 
         if (!safeMode) {
-            preloadListener!!.onStartLoadingAllNMods()
+            preloadListener.onStartLoadingAllNMods()
             // init data
             preloadData = NModPreloadData()
             assetsArrayList.clear()
@@ -105,7 +98,7 @@ class Preloader(
             // start init nmods
             for (nmod in loadedEnabledNMods) {
                 if (nmod.isBugPack()) {
-                    preloadListener!!.onFailedLoadingNMod(nmod)
+                    preloadListener.onFailedLoadingNMod(nmod)
                     continue
                 }
 
@@ -114,25 +107,25 @@ class Preloader(
                     preloadDataItem = nmod.copyNModFiles()
                 } catch (ioe: IOException) {
                     nmod.setBugPack(LoadFailedException(LoadFailedException.Companion.TYPE_IO_FAILED, ioe))
-                    preloadListener!!.onFailedLoadingNMod(nmod)
+                    preloadListener.onFailedLoadingNMod(nmod)
                     continue
                 }
 
                 if (loadNMod(context, nmod, preloadDataItem)) {
-                    preloadListener!!.onNModLoaded(nmod)
+                    preloadListener.onNModLoaded(nmod)
                 } else {
-                    preloadListener!!.onFailedLoadingNMod(nmod)
+                    preloadListener.onFailedLoadingNMod(nmod)
                 }
             }
 
             preloadData.assetsPacksPath = assetsArrayList.toTypedArray()
             preloadData.loadedLibs = loadedNativeLibs.toTypedArray()
-            bundle!!.putString(NMOD_DATA_TAG, json.encodeToString(preloadData))
+            bundle?.putString(NMOD_DATA_TAG, json.encodeToString(preloadData))
         } else {
-            bundle!!.putString(NMOD_DATA_TAG, json.encodeToString(NModPreloadData()))
+            bundle?.putString(NMOD_DATA_TAG, json.encodeToString(NModPreloadData()))
         }
 
-        preloadListener!!.onFinish(bundle!!)
+        preloadListener.onFinish(bundle)
     }
 
     @SuppressLint("UnsafeDynamicallyLoadedCode")
@@ -252,6 +245,6 @@ class Preloader(
         open fun onStartLoadingAllNMods() {}
         open fun onNModLoaded(nmod: NMod) {}
         open fun onFailedLoadingNMod(nmod: NMod) {}
-        open fun onFinish(bundle: Bundle) {}
+        open fun onFinish(bundle: Bundle?) {}
     }
 }

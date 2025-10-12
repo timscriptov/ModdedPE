@@ -30,10 +30,6 @@ class NModAPI(
         return extractor.archiveFromZipped(filePath)
     }
 
-    fun initNModData() {
-        nModManager.init()
-    }
-
     fun getLoadedNMods(): ArrayList<NMod> {
         return nModManager.getAllNMods()
     }

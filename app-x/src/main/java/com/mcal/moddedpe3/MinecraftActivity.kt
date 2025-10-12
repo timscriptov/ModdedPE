@@ -81,8 +81,7 @@ class MinecraftActivity : MainActivity(), KoinComponent {
                             repository.addAssetPath(getAssets(), assetsPath)
                         }
 
-                        val loadedNModLibs: Array<String> = preloadData.loadedLibs
-                        for (nativeLibName in loadedNModLibs) {
+                        for (nativeLibName in preloadData.loadedLibs) {
                             val lib = NModLib(nativeLibName)
                             lib.callOnActivityCreate(this, savedInstanceState)
                         }

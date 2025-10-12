@@ -49,8 +49,6 @@ class ModsViewModel(
     fun loadMods() {
         screenModelScope.launch {
             try {
-                nModAPI.initNModData()
-
                 val enabledMods = nModAPI.getImportedEnabledNMods()
                 val disabledMods = nModAPI.getImportedDisabledNMods()
 
