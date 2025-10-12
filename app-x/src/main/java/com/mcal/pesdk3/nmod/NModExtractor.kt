@@ -24,6 +24,7 @@ import android.graphics.Canvas
 import android.graphics.PixelFormat
 import android.graphics.drawable.Drawable
 import android.os.Build
+import androidx.core.graphics.createBitmap
 import com.mcal.pesdk3.data.ExtractFailedException
 import com.mcal.pesdk3.data.NModInfo
 import kotlinx.serialization.json.Json
@@ -32,7 +33,6 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
-import androidx.core.graphics.createBitmap
 
 class NModExtractor(
     private val context: Context

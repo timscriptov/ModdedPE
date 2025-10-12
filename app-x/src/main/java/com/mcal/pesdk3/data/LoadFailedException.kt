@@ -9,6 +9,7 @@ class LoadFailedException(val type: Int, cause: Throwable?) : Exception(cause) {
             TYPE_INVALID_SIZE -> "INVALID_SIZE"
             TYPE_IO_FAILED -> "IO_FAILED"
             TYPE_JSON_SYNTAX -> "JSON_SYNTAX"
+            TYPE_LOAD_DEX_FAILED -> "LOAD_DEX_FAILED"
             else -> "TYPE"
         }
     }
@@ -20,5 +21,6 @@ class LoadFailedException(val type: Int, cause: Throwable?) : Exception(cause) {
         const val TYPE_FILE_NOT_FOUND: Int = 4
         const val TYPE_DECODE_FAILED: Int = 5
         const val TYPE_INVALID_SIZE: Int = 6
+        const val TYPE_LOAD_DEX_FAILED: Int = 7
     }
 }

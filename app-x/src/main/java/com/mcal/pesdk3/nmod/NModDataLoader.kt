@@ -24,7 +24,7 @@ class NModDataLoader(
 ) {
     private val nModPreferences = NModPreferences(context)
 
-    fun getNModsPreferences() : NModPreferences {
+    fun getNModsPreferences(): NModPreferences {
         return nModPreferences
     }
 

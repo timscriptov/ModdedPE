@@ -27,6 +27,7 @@ import com.mcal.moddedpe3.data.model.PreLoaderContentType
 import com.mcal.moddedpe3.data.model.PreLoaderScreenState
 import com.mcal.moddedpe3.data.repository.MainRepository
 import com.mcal.pesdk3.MinecraftInfo.Companion.MINECRAFT_LIBS
+import com.mcal.pesdk3.PreloadListener
 import com.mcal.pesdk3.Preloader
 import com.mcal.pesdk3.nmod.NMod
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,7 +44,7 @@ class PreLoaderViewModel(
         val mFailedNMods = ArrayList<FailedNMod>()
 
         runCatching {
-            Preloader(activity, null, object : Preloader.PreloadListener() {
+            Preloader(activity, null, object : PreloadListener() {
                 override fun onStart() {
                     addLog("Инициализация системы...")
                     MINECRAFT_LIBS.forEach { library ->

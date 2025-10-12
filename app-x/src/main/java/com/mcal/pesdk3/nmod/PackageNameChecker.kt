@@ -16,8 +16,6 @@
  */
 package com.mcal.pesdk3.nmod
 
-import kotlin.text.iterator
-
 object PackageNameChecker {
     private fun isValidJavaIdentifier(className: String): Boolean {
         if (className.isEmpty() || !Character.isJavaIdentifierStart(className[0])) {

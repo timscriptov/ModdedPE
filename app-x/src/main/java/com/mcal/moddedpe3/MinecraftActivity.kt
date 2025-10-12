@@ -21,8 +21,10 @@ import android.os.Bundle
 import android.util.Log
 import com.mcal.moddedpe3.data.repository.MainRepository
 import com.mcal.moddedpe3.data.repository.SettingsRepository
-import com.mcal.pesdk3.Preloader
+import com.mcal.pesdk3.MinecraftInfo.Companion.MINECRAFT_LIBS
 import com.mcal.pesdk3.Preloader.Companion.NMOD_DATA_TAG
+import com.mcal.pesdk3.data.NModPreloadData
+import com.mcal.pesdk3.dex.Patcher
 import com.mcal.pesdk3.nmod.NModLib
 import com.mojang.minecraftpe.MainActivity
 import kotlinx.serialization.json.Json
@@ -42,6 +44,12 @@ class MinecraftActivity : MainActivity(), KoinComponent {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
+            // Запущен через ФМ для установки Майнкрафт аддонов
+            if ((intent.extras?.getString(NMOD_DATA_TAG)) == null) {
+                MINECRAFT_LIBS.forEach { library ->
+                    repository.loadNativeLibrary(library)
+                }
+            }
             patchNativeDir()
             callOnActivityCreate(savedInstanceState)
             super.onCreate(savedInstanceState)
@@ -66,7 +74,7 @@ class MinecraftActivity : MainActivity(), KoinComponent {
             return
         }
 
-        Patcher.patchNativeLibraryDir(classLoader, dir)
+        Patcher.patchNativeLibraryDir(classLoader, nativeDirPath)
     }
 
     private fun callOnActivityCreate(savedInstanceState: Bundle?) {
@@ -75,7 +83,7 @@ class MinecraftActivity : MainActivity(), KoinComponent {
                 val jsonString = data.getString(NMOD_DATA_TAG)
                 if (!jsonString.isNullOrEmpty()) {
                     try {
-                        val preloadData = json.decodeFromString<Preloader.NModPreloadData>(jsonString)
+                        val preloadData = json.decodeFromString<NModPreloadData>(jsonString)
 
                         for (assetsPath in preloadData.assetsPacksPath) {
                             repository.addAssetPath(getAssets(), assetsPath)
@@ -116,7 +124,7 @@ class MinecraftActivity : MainActivity(), KoinComponent {
             val jsonString = data.getString(NMOD_DATA_TAG)
             if (!jsonString.isNullOrEmpty()) {
                 try {
-                    val preloadData = json.decodeFromString<Preloader.NModPreloadData>(jsonString)
+                    val preloadData = json.decodeFromString<NModPreloadData>(jsonString)
 
                     for (nativeLibName in preloadData.loadedLibs) {
                         val lib = NModLib(nativeLibName)

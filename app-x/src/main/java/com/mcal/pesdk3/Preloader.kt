@@ -21,18 +21,14 @@ import android.content.Context
 import android.os.Bundle
 import com.mcal.pesdk3.data.LoadFailedException
 import com.mcal.pesdk3.data.NModPreloadBean
+import com.mcal.pesdk3.data.NModPreloadData
+import com.mcal.pesdk3.dex.Patcher
 import com.mcal.pesdk3.nativeapi.LibraryLoader
-import com.mcal.pesdk3.nmod.NMod
-import com.mcal.pesdk3.nmod.NModAPI
-import com.mcal.pesdk3.nmod.NModJSONEditor
-import com.mcal.pesdk3.nmod.NModLib
-import com.mcal.pesdk3.nmod.NModTextEditor
-import kotlinx.serialization.Serializable
+import com.mcal.pesdk3.nmod.*
 import kotlinx.serialization.json.Json
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
-import java.util.ArrayList
 
 class Preloader(
     private val context: Context,
@@ -46,6 +42,7 @@ class Preloader(
     private var preloadData = NModPreloadData()
     private val assetsArrayList = ArrayList<String>()
     private val loadedNativeLibs = ArrayList<String>()
+    private val loadedDexes = ArrayList<String>()
     private val loadedEnabledNMods = ArrayList<NMod>()
     private val nModAPI = NModAPI(context)
     private val preferences = NModPreferences(context)
@@ -63,17 +60,19 @@ class Preloader(
         val safeMode = preferences.safeMode
 
         try {
-            preloadListener.onLoadGameLauncherLib()
-            LibraryLoader.loadLauncher(minecraftInfo.getMinecraftPackageNativeLibraryDir()!!)
-            if (!safeMode) {
-                preloadListener.onLoadSubstrateLib()
-                LibraryLoader.loadSubstrate()
+            minecraftInfo.getMinecraftPackageNativeLibraryDir()?.let { nativeDir ->
+                preloadListener.onLoadGameLauncherLib()
+                LibraryLoader.loadLauncher(nativeDir)
+                if (!safeMode) {
+                    preloadListener.onLoadSubstrateLib()
+                    LibraryLoader.loadSubstrate()
 
-                preloadListener.onLoadXHookLib()
-                LibraryLoader.loadXHook()
+                    preloadListener.onLoadXHookLib()
+                    LibraryLoader.loadXHook()
 
-                preloadListener.onLoadPESdkLib()
-                LibraryLoader.loadNModAPI(minecraftInfo.getMinecraftPackageNativeLibraryDir()!!)
+                    preloadListener.onLoadPESdkLib()
+                    LibraryLoader.loadNModAPI(nativeDir)
+                }
             }
         } catch (throwable: Throwable) {
             throw PreloadException(PreloadException.TYPE_LOAD_LIBS_FAILED, throwable)
@@ -82,12 +81,14 @@ class Preloader(
         if (!safeMode) {
             preloadListener.onStartLoadingAllNMods()
             // init data
-            preloadData = NModPreloadData()
             assetsArrayList.clear()
             loadedNativeLibs.clear()
+            loadedDexes.clear()
             loadedEnabledNMods.clear()
 
-            assetsArrayList.add(minecraftInfo.getMinecraftPackageContext()!!.packageResourcePath)
+            minecraftInfo.getMinecraftPackageContext()?.let { mcPkgContext ->
+                assetsArrayList.add(mcPkgContext.packageResourcePath)
+            }
 
             // init index
             val unIndexedNModArrayList = nModAPI.getImportedEnabledNMods()
@@ -106,7 +107,7 @@ class Preloader(
                 try {
                     preloadDataItem = nmod.copyNModFiles()
                 } catch (ioe: IOException) {
-                    nmod.setBugPack(LoadFailedException(LoadFailedException.Companion.TYPE_IO_FAILED, ioe))
+                    nmod.setBugPack(LoadFailedException(LoadFailedException.TYPE_IO_FAILED, ioe))
                     preloadListener.onFailedLoadingNMod(nmod)
                     continue
                 }
@@ -120,6 +121,7 @@ class Preloader(
 
             preloadData.assetsPacksPath = assetsArrayList.toTypedArray()
             preloadData.loadedLibs = loadedNativeLibs.toTypedArray()
+            preloadData.loadedDexes = loadedDexes.toTypedArray()
             bundle?.putString(NMOD_DATA_TAG, json.encodeToString(preloadData))
         } else {
             bundle?.putString(NMOD_DATA_TAG, json.encodeToString(NModPreloadData()))
@@ -134,7 +136,8 @@ class Preloader(
         var textEditFile: String? = null
 
         // edit json files
-        if (nmod.getInfo()?.jsonEdit != null && nmod.getInfo()!!.jsonEdit!!.isNotEmpty()) {
+        val jsonEdit = nmod.getInfo()?.jsonEdit
+        if (jsonEdit != null && jsonEdit.isNotEmpty()) {
             val assetFiles = ArrayList<File>()
             for (filePath in assetsArrayList) {
                 assetFiles.add(File(filePath))
@@ -146,20 +149,21 @@ class Preloader(
             } catch (e: IOException) {
                 nmod.setBugPack(
                     if (e is FileNotFoundException) {
-                        LoadFailedException(LoadFailedException.Companion.TYPE_FILE_NOT_FOUND, e)
+                        LoadFailedException(LoadFailedException.TYPE_FILE_NOT_FOUND, e)
                     } else {
-                        LoadFailedException(LoadFailedException.Companion.TYPE_IO_FAILED, e)
+                        LoadFailedException(LoadFailedException.TYPE_IO_FAILED, e)
                     }
                 )
                 return false
             } catch (e: IllegalArgumentException) {
-                nmod.setBugPack(LoadFailedException(LoadFailedException.Companion.TYPE_JSON_SYNTAX, e))
+                nmod.setBugPack(LoadFailedException(LoadFailedException.TYPE_JSON_SYNTAX, e))
                 return false
             }
         }
 
         // edit text files
-        if (nmod.getInfo()?.textEdit != null && nmod.getInfo()!!.textEdit!!.isNotEmpty()) {
+        val textEdit = nmod.getInfo()?.textEdit
+        if (textEdit != null && textEdit.isNotEmpty()) {
             val assetFiles = ArrayList<File>()
             for (filePath in assetsArrayList) {
                 assetFiles.add(File(filePath))
@@ -171,9 +175,9 @@ class Preloader(
             } catch (e: IOException) {
                 nmod.setBugPack(
                     if (e is FileNotFoundException) {
-                        LoadFailedException(LoadFailedException.Companion.TYPE_FILE_NOT_FOUND, e)
+                        LoadFailedException(LoadFailedException.TYPE_FILE_NOT_FOUND, e)
                     } else {
-                        LoadFailedException(LoadFailedException.Companion.TYPE_IO_FAILED, e)
+                        LoadFailedException(LoadFailedException.TYPE_IO_FAILED, e)
                     }
                 )
                 return false
@@ -187,64 +191,52 @@ class Preloader(
         jsonEditFile?.let { assetsArrayList.add(it) }
         textEditFile?.let { assetsArrayList.add(it) }
 
+        // Load DEX files
+        try {
+            val dexFiles = nmod.getAllDexes()
+            if (dexFiles.isNotEmpty()) {
+                val dexOptDir = context.codeCacheDir.absolutePath
+                Patcher.patchMultipleDexFiles(
+                    context.classLoader,
+                    dexFiles,
+                    dexOptDir
+                )
+                loadedDexes.addAll(dexFiles)
+            }
+        } catch (t: Throwable) {
+            nmod.setBugPack(LoadFailedException(LoadFailedException.TYPE_LOAD_DEX_FAILED, t))
+            return false
+        }
+
         // load elf files
-        if (preloadDataItem.nativeLibs != null && preloadDataItem.nativeLibs!!.isNotEmpty()) {
-            for (nameItem in preloadDataItem.nativeLibs!!) {
-                try {
-                    System.load(nameItem.name!!)
-                } catch (t: Throwable) {
-                    nmod.setBugPack(LoadFailedException(LoadFailedException.Companion.TYPE_LOAD_LIB_FAILED, t))
-                    return false
+        val nativeLibs = preloadDataItem.nativeLibs
+        if (nativeLibs != null && nativeLibs.isNotEmpty()) {
+            for (nameItem in nativeLibs) {
+                val name = nameItem.name
+                if (name != null) {
+                    try {
+                        System.load(name)
+                    } catch (t: Throwable) {
+                        nmod.setBugPack(LoadFailedException(LoadFailedException.TYPE_LOAD_LIB_FAILED, t))
+                        return false
+                    }
                 }
             }
 
-            for (nameItem in preloadDataItem.nativeLibs!!) {
+            for (nameItem in nativeLibs) {
                 if (nameItem.useApi) {
-                    val lib = NModLib(nameItem.name!!)
-                    lib.callOnLoad(
-                        minecraftInfo.getMinecraftVersionName(minecraftInfo.findMinecraftPackage()),
-                        nModAPI.getVersionName()
-                    )
-                    loadedNativeLibs.add(nameItem.name!!)
+                    val name = nameItem.name
+                    if (name != null) {
+                        val lib = NModLib(name)
+                        lib.callOnLoad(
+                            minecraftInfo.getMinecraftVersionName(minecraftInfo.findMinecraftPackage()),
+                            nModAPI.getVersionName()
+                        )
+                        loadedNativeLibs.add(name)
+                    }
                 }
             }
         }
         return true
-    }
-
-    @Serializable
-    data class NModPreloadData(
-        var assetsPacksPath: Array<String> = emptyArray(),
-        var loadedLibs: Array<String> = emptyArray()
-    ) {
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            if (javaClass != other?.javaClass) return false
-
-            other as NModPreloadData
-
-            if (!assetsPacksPath.contentEquals(other.assetsPacksPath)) return false
-            if (!loadedLibs.contentEquals(other.loadedLibs)) return false
-
-            return true
-        }
-
-        override fun hashCode(): Int {
-            var result = assetsPacksPath.contentHashCode()
-            result = 31 * result + loadedLibs.contentHashCode()
-            return result
-        }
-    }
-
-    open class PreloadListener {
-        open fun onStart() {}
-        open fun onLoadSubstrateLib() {}
-        open fun onLoadXHookLib() {}
-        open fun onLoadGameLauncherLib() {}
-        open fun onLoadPESdkLib() {}
-        open fun onStartLoadingAllNMods() {}
-        open fun onNModLoaded(nmod: NMod) {}
-        open fun onFailedLoadingNMod(nmod: NMod) {}
-        open fun onFinish(bundle: Bundle?) {}
     }
 }

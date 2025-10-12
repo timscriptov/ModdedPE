@@ -25,6 +25,7 @@ class NModFilePathManager(
     companion object {
         private const val FILEPATH_DIR_NAME_NMOD_PACKS = "nmod_packs"
         private const val FILEPATH_DIR_NAME_NMOD_LIBS = "nmod_libs"
+        private const val FILEPATH_DIR_NAME_NMOD_DEXES = "nmod_dexes"
         private const val FILEPATH_DIR_NAME_NMOD_ICON = "nmod_icon"
         private const val FILEPATH_FILE_NAME_NMOD_CAHCHE = "nmod_cached"
         private const val FILEPATH_DIR_NAME_NMOD_JSON_PACKS = "nmod_json_packs"
@@ -52,11 +53,21 @@ class NModFilePathManager(
     }
 
     fun getNModLibsDir(): File {
-        return File(context.filesDir.absolutePath + File.separator + FILEPATH_DIR_NAME_NMOD_LIBS)
+        val dir = File(context.filesDir.absolutePath, FILEPATH_DIR_NAME_NMOD_LIBS)
+        if (!dir.exists()) dir.mkdirs()
+        return dir
+    }
+
+    fun getNModDexesDir(): File {
+        val dir = File(context.filesDir.absolutePath, FILEPATH_DIR_NAME_NMOD_DEXES)
+        if (!dir.exists()) dir.mkdirs()
+        return dir
     }
 
     fun getNModCacheDir(): File {
-        return File(context.cacheDir.absolutePath)
+        val dir = File(context.cacheDir.absolutePath)
+        if (!dir.exists()) dir.mkdirs()
+        return dir
     }
 
     fun getNModCachePath(): File {
@@ -64,7 +75,9 @@ class NModFilePathManager(
     }
 
     fun getNModIconDir(): File {
-        return File(context.filesDir.absolutePath + File.separator + FILEPATH_DIR_NAME_NMOD_ICON)
+        val dir = File(context.filesDir.absolutePath, FILEPATH_DIR_NAME_NMOD_ICON)
+        if (!dir.exists()) dir.mkdirs()
+        return dir
     }
 
     fun getNModIconPath(nMod: NMod): File {

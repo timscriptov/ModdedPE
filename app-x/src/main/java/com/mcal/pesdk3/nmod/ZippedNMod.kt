@@ -57,22 +57,21 @@ class ZippedNMod(
         val ret = NModPreloadBean()
         val zipInput = ZipInputStream(BufferedInputStream(FileInputStream(file.absolutePath)))
 
-        File(getNativeLibsPath()).mkdirs()
-
+        val dexFiles = mutableListOf<String>()
         var entry: ZipEntry?
+
         while (zipInput.nextEntry.also { entry = it } != null) {
-            if (entry != null && !entry.isDirectory && entry.name.startsWith("lib${File.separator}${minecraftInfo.getMinecraftABI()}${File.separator}")) {
-                val libInputStream = zipFile.getInputStream(entry)
-                val buffer = ByteArray(1024)
-                val outFile = File(getNativeLibsPath() + File.separator + entry.name.substringAfterLast(File.separator))
-                outFile.createNewFile()
-                FileOutputStream(outFile).use { writerStream ->
-                    var byteRead: Int
-                    while (libInputStream.read(buffer).also { byteRead = it } != -1) {
-                        writerStream.write(buffer, 0, byteRead)
+            entry?.let { currentEntry ->
+                when {
+                    !currentEntry.isDirectory && currentEntry.name.startsWith("lib${File.separator}${minecraftInfo.getMinecraftABI()}${File.separator}") -> {
+                        extractNativeLibrary(currentEntry)
+                    }
+
+                    !currentEntry.isDirectory && isDexFile(currentEntry.name) -> {
+                        val dexFilePath = extractDexFile(currentEntry)
+                        dexFilePath?.let { dexFiles.add(it) }
                     }
                 }
-                libInputStream.close()
             }
         }
         zipInput.close()
@@ -81,7 +80,7 @@ class ZippedNMod(
         mInfo?.nativeLibsInfo?.forEach { libItem ->
             val newInfo = NModLibInfo(
                 useApi = libItem.useApi,
-                name = getNativeLibsPath() + File.separator + libItem.name
+                name = getNativeLibsDir().path + File.separator + libItem.name
             )
             nativeLibs.add(newInfo)
         }
@@ -89,6 +88,50 @@ class ZippedNMod(
         ret.nativeLibs = nativeLibs.toTypedArray()
         ret.assetsPath = getPackageResourcePath()
         return ret
+    }
+
+    private fun extractNativeLibrary(entry: ZipEntry) {
+        try {
+            val libInputStream = zipFile.getInputStream(entry)
+            val buffer = ByteArray(1024)
+            val outFile = File(getNativeLibsDir(), entry.name.substringAfterLast(File.separator))
+            outFile.createNewFile()
+            FileOutputStream(outFile).use { writerStream ->
+                var byteRead: Int
+                while (libInputStream.read(buffer).also { byteRead = it } != -1) {
+                    writerStream.write(buffer, 0, byteRead)
+                }
+            }
+            libInputStream.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun extractDexFile(entry: ZipEntry): String? {
+        return try {
+            val dexInputStream = zipFile.getInputStream(entry)
+            val buffer = ByteArray(1024)
+            val outFile = File(getDexesDir(), entry.name.substringAfterLast(File.separator))
+            outFile.createNewFile()
+            FileOutputStream(outFile).use { writerStream ->
+                var byteRead: Int
+                while (dexInputStream.read(buffer).also { byteRead = it } != -1) {
+                    writerStream.write(buffer, 0, byteRead)
+                }
+            }
+            dexInputStream.close()
+            outFile.absolutePath
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private fun isDexFile(entryName: String): Boolean {
+        return entryName == "classes.dex" ||
+                entryName.matches(Regex("classes[0-9]+\\.dex")) ||
+                entryName.matches(Regex("classes[0-9]*\\.dex"))
     }
 
     override fun getNModType(): Int {
@@ -125,9 +168,5 @@ class ZippedNMod(
         } catch (e: IOException) {
             null
         }
-    }
-
-    private fun getNativeLibsPath(): String {
-        return NModFilePathManager(mContext).getNModLibsDir().toString() + File.separator + getPackageName()
     }
 }

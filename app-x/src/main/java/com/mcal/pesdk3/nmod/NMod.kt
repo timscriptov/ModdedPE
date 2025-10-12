@@ -26,7 +26,11 @@ import com.mcal.pesdk3.data.NModPreloadBean
 import com.mcal.pesdk3.data.NModWarning
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
-import java.io.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.nio.charset.Charset
 
 abstract class NMod {
     companion object {
@@ -68,19 +72,38 @@ abstract class NMod {
 
     protected abstract fun createInfoInputStream(): InputStream?
 
+    fun getNativeLibsDir(): File {
+        val dir = File(NModFilePathManager(mContext).getNModLibsDir(), getPackageName())
+        if (!dir.exists()) dir.mkdirs()
+        return dir
+    }
+
+    fun getDexesDir(): File {
+        val dir = File(NModFilePathManager(mContext).getNModDexesDir(), getPackageName())
+        if (!dir.exists()) dir.mkdirs()
+        return dir
+    }
+
+    fun getAllDexes(): Array<String> {
+        val dexDir = getDexesDir()
+        if (!dexDir.exists() || !dexDir.isDirectory) {
+            return emptyArray()
+        }
+
+        return dexDir.listFiles { file ->
+            file.isFile && file.name.matches(Regex("classes([0-9]*)\\.dex"))
+        }?.map { it.absolutePath }?.toTypedArray() ?: emptyArray()
+    }
+
     fun preload() {
         mBugException = null
         mIcon = createIcon()
 
         try {
             createInfoInputStream()?.let { input ->
-                val buffer = ByteArray(1024)
-                val tmp = StringBuilder()
-                var byteRead: Int
-                while (input.read(buffer).also { byteRead = it } > 0) {
-                    tmp.append(String(buffer, 0, byteRead))
+                mInfo = input.use { stream ->
+                    json.decodeFromString<NModInfo>(stream.readText())
                 }
-                mInfo = json.decodeFromString(tmp.toString())
             }
         } catch (e: SerializationException) {
             mInfo = null
@@ -122,33 +145,32 @@ abstract class NMod {
         if (isBugPack()) {
             return getPackageName()
         }
-        if (mInfo == null || mInfo!!.name == null) {
-            return getPackageName()
-        }
-        return mInfo!!.name!!
+        return mInfo?.name ?: getPackageName()
     }
 
     @Throws(LoadFailedException::class)
     fun createBannerImage(): Bitmap? {
-        val ret: Bitmap
-        try {
-            mInfo?.bannerImagePath?.let { path ->
-                val inputStream = getAssets().open(path)
-                ret = BitmapFactory.decodeStream(inputStream) ?: return null
-            } ?: run {
-                return null
+        val bannerPath = mInfo?.bannerImagePath ?: return null
+
+        return try {
+            getAssets().open(bannerPath).use { inputStream ->
+                BitmapFactory.decodeStream(inputStream)?.takeIf { bitmap ->
+                    validateBannerSize(bitmap)
+                }
             }
         } catch (e: IOException) {
             throw LoadFailedException(LoadFailedException.TYPE_FILE_NOT_FOUND, e)
         }
+    }
 
-        if (ret.width != 1024 || ret.height != 500) {
+    private fun validateBannerSize(bitmap: Bitmap): Boolean {
+        if (bitmap.width != 1024 || bitmap.height != 500) {
             throw LoadFailedException(
                 LoadFailedException.TYPE_INVALID_SIZE,
                 RuntimeException("Invalid image size for banner: width must be 1024, height must be 500.")
             )
         }
-        return ret
+        return true
     }
 
     fun getBannerImage(): Bitmap? {
@@ -156,10 +178,9 @@ abstract class NMod {
     }
 
     fun getBannerTitle(): String {
-        mInfo?.bannerTitle?.let { title ->
-            return getName() + " : " + title
-        }
-        return getName()
+        return mInfo?.bannerTitle?.let { title ->
+            "${getName()} : $title"
+        } ?: getName()
     }
 
     fun isValidBanner(): Boolean {
@@ -195,37 +216,17 @@ abstract class NMod {
     }
 
     fun copyIconToData(): File? {
-        val icon = getIcon() ?: return null
-        NModFilePathManager(mContext).getNModIconDir().mkdirs()
-        val file = NModFilePathManager(mContext).getNModIconPath(this)
-        try {
-            val baos = ByteArrayOutputStream()
-            icon.compress(Bitmap.CompressFormat.PNG, 100, baos)
-            file.createNewFile()
-            val outfile = FileOutputStream(file)
-            outfile.write(baos.toByteArray())
-            outfile.close()
-            return file
-        } catch (ioe: IOException) {
-            return null
-        }
+        return getIcon()?.saveToFile(
+            NModFilePathManager(mContext).getNModIconPath(this),
+            Bitmap.CompressFormat.PNG
+        )
     }
 
     fun copyBannerToData(): File? {
-        val icon = getIcon() ?: return null
-        NModFilePathManager(mContext).getNModIconDir().mkdirs()
-        val file = NModFilePathManager(mContext).getNModBannerIconPath(this)
-        try {
-            val baos = ByteArrayOutputStream()
-            icon.compress(Bitmap.CompressFormat.PNG, 100, baos)
-            file.createNewFile()
-            val outfile = FileOutputStream(file)
-            outfile.write(baos.toByteArray())
-            outfile.close()
-            return file
-        } catch (ioe: IOException) {
-            return null
-        }
+        return getBannerImage()?.saveToFile(
+            NModFilePathManager(mContext).getNModBannerIconPath(this),
+            Bitmap.CompressFormat.PNG
+        )
     }
 
     fun getLoadException(): LoadFailedException? {
@@ -265,5 +266,21 @@ abstract class NMod {
         result = 31 * result + (mIcon?.hashCode() ?: 0)
         result = 31 * result + (mBannerImage?.hashCode() ?: 0)
         return result
+    }
+
+    private fun Bitmap.saveToFile(file: File, format: Bitmap.CompressFormat): File? {
+        return try {
+            file.parentFile?.mkdirs()
+            FileOutputStream(file).use { outputStream ->
+                compress(format, 100, outputStream)
+            }
+            file
+        } catch (ioe: IOException) {
+            null
+        }
+    }
+
+    private fun InputStream.readText(charset: Charset = Charsets.UTF_8): String {
+        return reader(charset).use { it.readText() }
     }
 }

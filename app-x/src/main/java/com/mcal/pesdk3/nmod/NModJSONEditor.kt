@@ -48,14 +48,14 @@ class NModJSONEditor(
             targetNMod.getInfo()?.jsonEdit?.forEach { jsonEdit ->
                 jsonEdit.path?.let { path ->
                     when (jsonEdit.mode) {
-                        NModJsonEditBean.Companion.MODE_REPLACE -> {
+                        NModJsonEditBean.MODE_REPLACE -> {
                             val content = readJsonFromThis(path)
                             zipOutput.putNextEntry(ZipEntry("assets${File.separator}${path}"))
                             zipOutput.write(content.toByteArray())
                             zipOutput.closeEntry()
                         }
 
-                        NModJsonEditBean.Companion.MODE_MERGE -> {
+                        NModJsonEditBean.MODE_MERGE -> {
                             val parentContent = readJsonFromParents(path)
                             val thisContent = readJsonFromThis(path)
                             val merger = JSONMerger(parentContent, thisContent)
