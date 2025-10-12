@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -75,41 +76,66 @@ private fun GameInstalledContent(state: HomeScreenState) {
                 containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f)
             )
         ) {
-            Column(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
             ) {
-                Text(
-                    text = state.name,
-                    style = MaterialTheme.typography.displaySmall.copy(
-                        fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    ),
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    text = "Версия",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    text = state.versionName,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.Bold
-                    ),
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                if (state.versionCode > 0) {
-                    Text(
-                        text = "Build: ${state.versionCode}",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                if (state.iconBitmap != null) {
+                    Image(
+                        bitmap = state.iconBitmap.asImageBitmap(),
+                        contentDescription = "Minecraft Icon",
+                        modifier = Modifier
+                            .size(80.dp)
+                            .padding(bottom = 16.dp)
                     )
+                } else {
+                    Image(
+                        painter = painterResource(R.drawable.ic_bug_report),
+                        contentDescription = "Minecraft Icon",
+                        modifier = Modifier
+                            .size(80.dp)
+                            .padding(bottom = 16.dp),
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
+                    )
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                ) {
+                    Text(
+                        text = state.name,
+                        style = MaterialTheme.typography.displaySmall.copy(
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        ),
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        text = "Версия",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    Text(
+                        text = state.versionName,
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.Bold
+                        ),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+
+                    if (state.versionCode > 0) {
+                        Text(
+                            text = "Build: ${state.versionCode}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                        )
+                    }
                 }
             }
         }

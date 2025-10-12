@@ -19,6 +19,7 @@ package com.mcal.moddedpe3.data.repository
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.res.AssetManager
+import android.graphics.Bitmap
 
 interface MainRepository {
     fun getMinecraftAssetPaths(): List<String>
@@ -28,6 +29,7 @@ interface MainRepository {
     fun loadNativeLibrary(libraryName: String): Boolean
     fun getMinecraftPackageContext(): Context?
     fun getMinecraftPackageNativeLibraryDir(): String?
+    fun getMinecraftIconBitmap(): Bitmap?
     fun findMinecraftPackage(): PackageInfo?
     fun getMinecraftLabel(packageInfo: PackageInfo?): String
     fun getMinecraftVersionCode(packageInfo: PackageInfo?): Long

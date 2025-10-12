@@ -19,6 +19,7 @@ package com.mcal.moddedpe3.data.repository
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.res.AssetManager
+import android.graphics.Bitmap
 import com.mcal.pesdk3.MinecraftInfo
 
 class MainRepositoryImpl(
@@ -32,6 +33,10 @@ class MainRepositoryImpl(
 
     override fun getMinecraftPackageNativeLibraryDir(): String? {
         return minecraftInfo.getMinecraftPackageNativeLibraryDir()
+    }
+
+    override fun getMinecraftIconBitmap(): Bitmap? {
+        return minecraftInfo.getMinecraftIconBitmap()
     }
 
     override fun findMinecraftPackage(): PackageInfo? {

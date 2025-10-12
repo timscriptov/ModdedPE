@@ -43,6 +43,7 @@ class HomeViewModel(
             name = mainRepository.getMinecraftLabel(packageInfo),
             versionName = mainRepository.getMinecraftVersionName(packageInfo),
             versionCode = mainRepository.getMinecraftVersionCode(packageInfo),
+            iconBitmap = mainRepository.getMinecraftIconBitmap()
         )
     }
 

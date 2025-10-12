@@ -17,6 +17,7 @@
 package com.mcal.moddedpe3.data.model
 
 import android.content.pm.PackageInfo
+import android.graphics.Bitmap
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
@@ -27,4 +28,5 @@ data class HomeScreenState(
     val packageInfo: PackageInfo? = null,
     val versionName: String = "",
     val versionCode: Long = -1,
+    val iconBitmap: Bitmap? = null,
 ) : Parcelable

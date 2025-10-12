@@ -20,8 +20,13 @@ import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.AssetManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.Log
+import androidx.core.graphics.createBitmap
 import java.io.File
 import java.io.FileOutputStream
 import java.lang.reflect.Method
@@ -197,6 +202,37 @@ class MinecraftInfo(
             }
         }
         return abi ?: getDeviceABI()
+    }
+
+    fun getMinecraftIconBitmap(): Bitmap? {
+        try {
+            val packageInfo = findMinecraftPackage() ?: return null
+            val mcContext = getMinecraftPackageContext() ?: return null
+
+            val iconDrawable = packageInfo.applicationInfo?.loadIcon(mcContext.packageManager)
+            if (iconDrawable != null) {
+                return drawableToBitmap(iconDrawable)
+            }
+        } catch (e: Exception) {
+            Log.e("ModdedPE", "Error getting Minecraft icon", e)
+        }
+        return null
+    }
+
+    private fun drawableToBitmap(drawable: Drawable): Bitmap {
+        if (drawable is BitmapDrawable) {
+            return drawable.bitmap
+        }
+
+        val width = drawable.intrinsicWidth.coerceAtLeast(1)
+        val height = drawable.intrinsicHeight.coerceAtLeast(1)
+
+        val bitmap = createBitmap(width, height)
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+
+        return bitmap
     }
 
     private fun copyNativeLibraryFromAppBundle(libraryName: String): Boolean {
