@@ -17,46 +17,33 @@
 package com.mcal.pesdk3.nmod
 
 import android.content.Context
-import android.content.SharedPreferences
+import com.mcal.pesdk3.NModPreferences
 
 class NModDataLoader(
     private val context: Context
 ) {
-    companion object {
-        private const val TAG_SHARED_PREFERENCE = "nmod_data_list"
-        private const val TAG_ENABLED_LIST = "enabled_nmods_list"
-        private const val TAG_DISABLE_LIST = "disabled_nmods_list"
-    }
+    private val nModPreferences = NModPreferences(context)
 
-    private fun toArrayList(str: String): ArrayList<String> {
-        return str.split("/")
-            .filter { it.isNotEmpty() }
-            .toCollection(ArrayList())
-    }
-
-    private fun fromArrayList(arrayList: ArrayList<String>): String {
-        return arrayList.joinToString("/")
+    fun getNModsPreferences() : NModPreferences {
+        return nModPreferences
     }
 
     fun getAllList(): ArrayList<String> {
         val result = ArrayList<String>()
-        result.addAll(getDisabledList())
-        result.addAll(getEnabledList())
+        result.addAll(nModPreferences.enabledNMods)
+        result.addAll(nModPreferences.disabledNMods)
         return result
     }
 
     fun removeByName(name: String) {
-        val preferences = getSharedPreferences()
-        val enabledList = getEnabledList()
-        val disableList = getDisabledList()
+        val enabledList = nModPreferences.enabledNMods
+        val disabledList = nModPreferences.disabledNMods
 
         enabledList.remove(name)
-        disableList.remove(name)
+        disabledList.remove(name)
 
-        preferences.edit()
-            .putString(TAG_ENABLED_LIST, fromArrayList(enabledList))
-            .putString(TAG_DISABLE_LIST, fromArrayList(disableList))
-            .apply()
+        nModPreferences.enabledNMods = enabledList
+        nModPreferences.disabledNMods = disabledList
     }
 
     fun setIsEnabled(nMod: NMod, isEnabled: Boolean) {
@@ -67,45 +54,34 @@ class NModDataLoader(
         }
     }
 
-    private fun getSharedPreferences(): SharedPreferences {
-        return context.getSharedPreferences(TAG_SHARED_PREFERENCE, Context.MODE_PRIVATE)
-    }
-
     private fun addNewEnabled(nMod: NMod) {
-        val preferences = getSharedPreferences()
-        val enabledList = getEnabledList()
-        val disableList = getDisabledList()
+        val enabledList = nModPreferences.enabledNMods
+        val disabledList = nModPreferences.disabledNMods
 
         if (!enabledList.contains(nMod.getPackageName())) {
             enabledList.add(nMod.getPackageName())
         }
-        disableList.remove(nMod.getPackageName())
+        disabledList.remove(nMod.getPackageName())
 
-        preferences.edit()
-            .putString(TAG_ENABLED_LIST, fromArrayList(enabledList))
-            .putString(TAG_DISABLE_LIST, fromArrayList(disableList))
-            .apply()
+        nModPreferences.enabledNMods = enabledList
+        nModPreferences.disabledNMods = disabledList
     }
 
     private fun removeEnabled(nMod: NMod) {
-        val preferences = getSharedPreferences()
-        val enabledList = getEnabledList()
-        val disableList = getDisabledList()
+        val enabledList = nModPreferences.enabledNMods
+        val disabledList = nModPreferences.disabledNMods
 
         enabledList.remove(nMod.getPackageName())
-        if (!disableList.contains(nMod.getPackageName())) {
-            disableList.add(nMod.getPackageName())
+        if (!disabledList.contains(nMod.getPackageName())) {
+            disabledList.add(nMod.getPackageName())
         }
 
-        preferences.edit()
-            .putString(TAG_ENABLED_LIST, fromArrayList(enabledList))
-            .putString(TAG_DISABLE_LIST, fromArrayList(disableList))
-            .apply()
+        nModPreferences.enabledNMods = enabledList
+        nModPreferences.disabledNMods = disabledList
     }
 
     fun upNMod(nMod: NMod) {
-        val preferences = getSharedPreferences()
-        val enabledList = getEnabledList()
+        val enabledList = nModPreferences.enabledNMods
         val index = enabledList.indexOf(nMod.getPackageName())
 
         if (index == -1 || index == 0) {
@@ -122,14 +98,11 @@ class NModDataLoader(
         enabledList[indexFront] = nameSelf
         enabledList[index] = nameFront
 
-        preferences.edit()
-            .putString(TAG_ENABLED_LIST, fromArrayList(enabledList))
-            .apply()
+        nModPreferences.enabledNMods = enabledList
     }
 
     fun downNMod(nMod: NMod) {
-        val preferences = getSharedPreferences()
-        val enabledList = getEnabledList()
+        val enabledList = nModPreferences.enabledNMods
         val index = enabledList.indexOf(nMod.getPackageName())
 
         if (index == -1 || index == enabledList.size - 1) {
@@ -146,18 +119,6 @@ class NModDataLoader(
         enabledList[indexBack] = nameSelf
         enabledList[index] = nameBack
 
-        preferences.edit()
-            .putString(TAG_ENABLED_LIST, fromArrayList(enabledList))
-            .apply()
-    }
-
-    fun getEnabledList(): ArrayList<String> {
-        val preferences = getSharedPreferences()
-        return toArrayList(preferences.getString(TAG_ENABLED_LIST, "") ?: "")
-    }
-
-    fun getDisabledList(): ArrayList<String> {
-        val preferences = getSharedPreferences()
-        return toArrayList(preferences.getString(TAG_DISABLE_LIST, "") ?: "")
+        nModPreferences.enabledNMods = enabledList
     }
 }

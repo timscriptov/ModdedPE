@@ -32,6 +32,7 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
+import androidx.core.graphics.createBitmap
 
 class NModExtractor(
     private val context: Context
@@ -46,9 +47,9 @@ class NModExtractor(
             contextPackage.assets.open(NMod.MANIFEST_NAME).close()
             PackagedNMod(packageName, context, contextPackage)
         } catch (e: IOException) {
-            throw ExtractFailedException(ExtractFailedException.Companion.TYPE_NO_MANIFEST, e)
+            throw ExtractFailedException(ExtractFailedException.TYPE_NO_MANIFEST, e)
         } catch (notFoundE: PackageManager.NameNotFoundException) {
-            throw ExtractFailedException(ExtractFailedException.Companion.TYPE_PACKAGE_NOT_FOUND, notFoundE)
+            throw ExtractFailedException(ExtractFailedException.TYPE_PACKAGE_NOT_FOUND, notFoundE)
         }
     }
 
@@ -72,7 +73,7 @@ class NModExtractor(
         return if (packageInfo != null) {
             if (nModInfo.packageName != null && nModInfo.packageName != packageInfo.packageName) {
                 throw ExtractFailedException(
-                    ExtractFailedException.Companion.TYPE_INEQUAL_PACKAGE_NAME,
+                    ExtractFailedException.TYPE_INEQUAL_PACKAGE_NAME,
                     RuntimeException("Package name defined in AndroidManifest.xml and nmod_manifest.json must equal!")
                 )
             }
@@ -89,18 +90,18 @@ class NModExtractor(
                 val nModFile = getFile(path, nModInfo, packageManager, packageInfo, packageName)
                 ZippedNMod(packageName, context, copyCachedNModToData(nModFile, packageName))
             } catch (ioe: IOException) {
-                throw ExtractFailedException(ExtractFailedException.Companion.TYPE_IO_EXCEPTION, ioe)
+                throw ExtractFailedException(ExtractFailedException.TYPE_IO_EXCEPTION, ioe)
             }
         } else {
             if (nModInfo.packageName == null) {
                 throw ExtractFailedException(
-                    ExtractFailedException.Companion.TYPE_UNDEFINED_PACKAGE_NAME,
+                    ExtractFailedException.TYPE_UNDEFINED_PACKAGE_NAME,
                     RuntimeException("Undefined package name in manifest.")
                 )
             }
             if (!PackageNameChecker.isValidPackageName(nModInfo.packageName)) {
                 throw ExtractFailedException(
-                    ExtractFailedException.Companion.TYPE_INVAILD_PACKAGE_NAME,
+                    ExtractFailedException.TYPE_INVAILD_PACKAGE_NAME,
                     RuntimeException("The provided package name is not a valid java-styled package name.")
                 )
             }
@@ -109,7 +110,7 @@ class NModExtractor(
                 val nModFile = getFile(path)
                 ZippedNMod(nModInfo.packageName!!, context, copyCachedNModToData(nModFile, nModInfo.packageName!!))
             } catch (ioe: IOException) {
-                throw ExtractFailedException(ExtractFailedException.Companion.TYPE_IO_EXCEPTION, ioe)
+                throw ExtractFailedException(ExtractFailedException.TYPE_IO_EXCEPTION, ioe)
             }
         }
     }
@@ -255,7 +256,7 @@ class NModExtractor(
 
     @Suppress("DEPRECATION")
     private fun createBitmapFromIcon(icon: Drawable): Bitmap {
-        val bitmap = Bitmap.createBitmap(
+        val bitmap = createBitmap(
             icon.intrinsicWidth,
             icon.intrinsicHeight,
             if (icon.opacity != PixelFormat.OPAQUE) Bitmap.Config.ARGB_8888 else Bitmap.Config.RGB_565
@@ -305,7 +306,7 @@ class NModExtractor(
             cachedNModFile.delete()
             finalFile
         } catch (ioe: IOException) {
-            throw ExtractFailedException(ExtractFailedException.Companion.TYPE_IO_EXCEPTION, ioe)
+            throw ExtractFailedException(ExtractFailedException.TYPE_IO_EXCEPTION, ioe)
         }
     }
 
@@ -332,13 +333,13 @@ class NModExtractor(
                 val manifest2 = zipFile.getEntry("assets${File.separator}${NMod.MANIFEST_NAME}")
                 if (manifest1 != null && manifest2 != null) {
                     throw ExtractFailedException(
-                        ExtractFailedException.Companion.TYPE_REDUNDANT_MANIFEST,
+                        ExtractFailedException.TYPE_REDUNDANT_MANIFEST,
                         RuntimeException("NModAPI found two nmod_manifest.json in this file but didn't know which one to read.Please delete one.(/nmod_manifest.json or /assets/nmod_manifest.json)")
                     )
                 }
                 if (manifest1 == null && manifest2 == null) {
                     throw ExtractFailedException(
-                        ExtractFailedException.Companion.TYPE_NO_MANIFEST,
+                        ExtractFailedException.TYPE_NO_MANIFEST,
                         RuntimeException("There is no nmod_manifest.json found in this file.")
                     )
                 }
@@ -348,12 +349,12 @@ class NModExtractor(
                         val content = input.reader().readText()
                         Json.decodeFromString(NModInfo.serializer(), content)
                     } catch (e: Exception) {
-                        throw ExtractFailedException(ExtractFailedException.Companion.TYPE_JSON_SYNTAX_EXCEPTION, e)
+                        throw ExtractFailedException(ExtractFailedException.TYPE_JSON_SYNTAX_EXCEPTION, e)
                     }
                 }
             }
         } catch (e: IOException) {
-            throw ExtractFailedException(ExtractFailedException.Companion.TYPE_DECODE_FAILED, e)
+            throw ExtractFailedException(ExtractFailedException.TYPE_DECODE_FAILED, e)
         }
     }
 }

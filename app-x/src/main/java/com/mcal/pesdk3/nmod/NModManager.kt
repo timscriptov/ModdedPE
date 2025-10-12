@@ -36,8 +36,8 @@ class NModManager(
             }
         }
 
-        forEachItemToAddNMod(dataLoader.getEnabledList(), true)
-        forEachItemToAddNMod(dataLoader.getDisabledList(), false)
+        forEachItemToAddNMod(dataLoader.getNModsPreferences().enabledNMods, true)
+        forEachItemToAddNMod(dataLoader.getNModsPreferences().disabledNMods, false)
         refreshData()
     }
 
@@ -53,7 +53,9 @@ class NModManager(
         return getEnabledNMods().filter { it.isValidBanner() }.toCollection(ArrayList())
     }
 
-    fun getAllNMods(): ArrayList<NMod> = allNMods
+    fun getAllNMods(): ArrayList<NMod> {
+        return allNMods
+    }
 
     fun removeImportedNMod(nMod: NMod) {
         getEnabledNMods().remove(nMod)
@@ -139,7 +141,7 @@ class NModManager(
 
     private fun refreshEnabledOrderList() {
         val dataLoader = NModDataLoader(context)
-        val enabledList = dataLoader.getEnabledList()
+        val enabledList = dataLoader.getNModsPreferences().enabledNMods
         getEnabledNMods().clear()
         for (pkgName in enabledList) {
             getImportedNMod(pkgName)?.let { nMod ->
