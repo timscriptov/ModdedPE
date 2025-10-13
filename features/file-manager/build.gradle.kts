@@ -1,30 +1,25 @@
 plugins {
-    alias(libs.plugins.androidApplication)
-    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.androidLibrary)
     alias(libs.plugins.compose.compiler)
 
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.kotlinxParcelize)
+    alias(libs.plugins.kotlinAndroid)
 }
 
 android {
-    namespace = "com.mcal.moddedpe3"
+    namespace = "com.mcal.files"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.mcal.moddedpe3"
         minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 972111101
-        versionName = "1.21.111.1"
         vectorDrawables {
             useSupportLibrary = true
         }
     }
     buildTypes {
         release {
-            isShrinkResources = true
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -53,10 +48,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-    lint {
-        abortOnError = false
-        checkReleaseBuilds = false
-    }
     buildFeatures {
         buildConfig = true
         compose = true
@@ -64,23 +55,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.15"
     }
-    configurations {
-        all {
-            exclude(group = "xpp3", module = "xpp3")
-        }
-    }
 }
 
 dependencies {
-    implementation(project(":pesdk"))
-    implementation(project(":minecraft"))
-    implementation(project(":httpclient"))
-    implementation(project(":microsoft:xal"))
-    implementation(project(":microsoft:xbox"))
-    implementation(project(":substrate"))
-    implementation(project(":xhook"))
-    implementation(project(":fmod"))
-    implementation(project(":features:file-manager"))
     implementation(project(":features:text-editor"))
 
     implementation(libs.androidx.games.activity)
@@ -105,9 +82,4 @@ dependencies {
 
     implementation(libs.bundles.koin)
     implementation(libs.bundles.voyager)
-}
-
-configurations.all {
-    exclude(group = "net.sf.kxml", module = "kxml2")
-    exclude(group = "xpp3", module = "xpp3")
 }

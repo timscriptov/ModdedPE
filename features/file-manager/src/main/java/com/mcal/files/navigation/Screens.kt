@@ -14,11 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.moddedpe3.navigation
+package com.mcal.files.navigation
 
 import cafe.adriel.voyager.core.registry.ScreenProvider
 
 sealed class Screens : ScreenProvider {
-    data object Main : Screens()
-    data object PreLoader : Screens()
+    data object Files : Screens()
 }

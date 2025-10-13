@@ -20,8 +20,6 @@ import com.mcal.moddedpe3.data.repository.MainRepository
 import com.mcal.moddedpe3.data.repository.MainRepositoryImpl
 import com.mcal.moddedpe3.data.repository.SettingsRepository
 import com.mcal.moddedpe3.data.repository.SettingsRepositoryImpl
-import com.mcal.moddedpe3.ui.editor.TextEditorViewModel
-import com.mcal.moddedpe3.ui.files.FilesViewModel
 import com.mcal.moddedpe3.ui.home.HomeViewModel
 import com.mcal.moddedpe3.ui.main.MainViewModel
 import com.mcal.moddedpe3.ui.mods.ModsViewModel
@@ -30,58 +28,50 @@ import com.mcal.moddedpe3.ui.settings.SettingsViewModel
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-object AppModules : FeatureModule {
-    override val modules: List<Module>
+object AppModules {
+    val modules: List<Module>
         get() = listOf(
             viewModelsModule,
             repositoriesModule,
         )
-}
 
-private val viewModelsModule = module {
-    factory {
-        MainViewModel()
+    private val viewModelsModule = module {
+        factory {
+            MainViewModel()
+        }
+        factory {
+            HomeViewModel(
+                mainRepository = get(),
+                settingsRepository = get()
+            )
+        }
+        factory {
+            PreLoaderViewModel(
+                mainRepository = get(),
+            )
+        }
+        factory {
+            ModsViewModel(
+                context = get()
+            )
+        }
+        factory {
+            SettingsViewModel(
+                settingsRepository = get()
+            )
+        }
     }
-    factory {
-        HomeViewModel(
-            mainRepository = get(),
-            settingsRepository = get()
-        )
-    }
-    factory {
-        PreLoaderViewModel(
-            mainRepository = get(),
-        )
-    }
-    factory {
-        ModsViewModel(
-            context = get()
-        )
-    }
-    factory {
-        SettingsViewModel(
-            settingsRepository = get()
-        )
-    }
-    factory {
-        FilesViewModel(
-            context = get()
-        )
-    }
-    factory {
-        TextEditorViewModel()
-    }
-}
 
-private val repositoriesModule = module {
-    factory<MainRepository> {
-        MainRepositoryImpl(
-            context = get()
-        )
-    }
-    factory<SettingsRepository> {
-        SettingsRepositoryImpl(
-            context = get()
-        )
+    private val repositoriesModule = module {
+        factory<MainRepository> {
+            MainRepositoryImpl(
+                context = get()
+            )
+        }
+        factory<SettingsRepository> {
+            SettingsRepositoryImpl(
+                context = get()
+            )
+        }
     }
 }

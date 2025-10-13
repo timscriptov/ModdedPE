@@ -34,11 +34,11 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.mcal.files.ui.FilesScreen
 import com.mcal.moddedpe3.composition.PreferencesButton
 import com.mcal.moddedpe3.composition.PreferencesSection
 import com.mcal.moddedpe3.composition.PreferencesSwitch
 import com.mcal.moddedpe3.composition.PreferencesTextField
-import com.mcal.moddedpe3.ui.files.FilesScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

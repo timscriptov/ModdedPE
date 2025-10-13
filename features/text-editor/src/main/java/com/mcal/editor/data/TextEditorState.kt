@@ -14,16 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.moddedpe3.data.model
+package com.mcal.editor.data
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
-@Parcelize
-data class FilesScreenState(
-    val currentPath: String = "",
-    val files: List<FileItem> = emptyList(),
+data class TextEditorState(
+    val content: String = "",
+    val originalContent: String = "",
     val isLoading: Boolean = false,
-    val showDeleteDialog: Boolean = false,
-    val fileToDelete: FileItem? = null,
-) : Parcelable
+    val isModified: Boolean = false,
+    val isSaved: Boolean = false,
+    val showSaveDialog: Boolean = false,
+    val error: String? = null,
+    val canUndo: Boolean = false,
+    val canRedo: Boolean = false
+)

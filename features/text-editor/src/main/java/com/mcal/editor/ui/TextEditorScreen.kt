@@ -14,36 +14,49 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.moddedpe3.ui.editor
+package com.mcal.editor.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.Redo
+import androidx.compose.material.icons.automirrored.rounded.Undo
 import androidx.compose.material.icons.rounded.ArrowBackIosNew
+import androidx.compose.material.icons.rounded.Save
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.mcal.editor.composition.ErrorDialog
+import com.mcal.editor.composition.SaveDialog
 import java.io.File
 
 class TextEditorScreen(
     private val file: File,
 ) : Screen {
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    @OptIn(
+        ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
+        ExperimentalComposeUiApi::class
+    )
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
@@ -81,32 +94,31 @@ class TextEditorScreen(
                         }
                     },
                     actions = {
-                        if (state.isModified) {
-                            Text(
-                                text = "Modified",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.padding(end = 8.dp)
-                            )
+                        IconButton(
+                            onClick = { viewModel.undo() },
+                            enabled = state.canUndo && !state.isLoading
+                        ) {
+                            Icon(Icons.AutoMirrored.Rounded.Undo, contentDescription = "Undo")
                         }
-                        TextButton(
+
+                        IconButton(
+                            onClick = { viewModel.redo() },
+                            enabled = state.canRedo && !state.isLoading
+                        ) {
+                            Icon(Icons.AutoMirrored.Rounded.Redo, contentDescription = "Redo")
+                        }
+
+                        IconButton(
                             onClick = {
                                 viewModel.saveFile(file)
                             },
                             enabled = state.isModified && !state.isLoading
                         ) {
-                            if (state.isLoading) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(16.dp),
-                                    strokeWidth = 2.dp
-                                )
-                            } else {
-                                Text("Save")
-                            }
+                            Icon(Icons.Rounded.Save, contentDescription = "Save")
                         }
                     }
                 )
-            }
+            },
         ) { paddingValues ->
             if (state.isLoading) {
                 Box(
@@ -118,60 +130,49 @@ class TextEditorScreen(
                     CircularProgressIndicator()
                 }
             } else {
-                BasicTextField(
-                    value = state.content,
-                    onValueChange = { newContent ->
-                        viewModel.updateContent(newContent)
-                    },
+                Box(
                     modifier = Modifier
-                        .fillMaxSize()
                         .padding(paddingValues)
-                        .padding(16.dp),
-                    textStyle = TextStyle(fontSize = 16.sp)
-                )
+                        .fillMaxSize()
+                        .horizontalScroll(rememberScrollState())
+                ) {
+                    BasicTextField(
+                        value = state.content,
+                        onValueChange = { newContent ->
+                            viewModel.updateContent(newContent)
+                        },
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 16.dp),
+                        textStyle = TextStyle(
+                            fontSize = 16.sp,
+                            lineHeight = 20.sp
+                        ),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Default),
+                    )
+                }
             }
         }
 
         if (state.showSaveDialog) {
-            AlertDialog(
-                onDismissRequest = { viewModel.hideSaveDialog() },
-                title = { Text("Save changes?") },
-                text = { Text("Do you want to save changes to \"${file.name}\"?") },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            viewModel.saveFile(file)
-                            viewModel.hideSaveDialog()
-                        }
-                    ) {
-                        Text("Save")
-                    }
+            SaveDialog(
+                fileName = file.name,
+                onDismiss = { viewModel.hideSaveDialog() },
+                onSave = {
+                    viewModel.saveFile(file)
+                    viewModel.hideSaveDialog()
                 },
-                dismissButton = {
-                    TextButton(
-                        onClick = {
-                            viewModel.hideSaveDialog()
-                            navigator.pop()
-                        }
-                    ) {
-                        Text("Don't save")
-                    }
+                onDontSave = {
+                    viewModel.hideSaveDialog()
+                    navigator.pop()
                 }
             )
         }
 
         if (state.error != null) {
-            AlertDialog(
-                onDismissRequest = { viewModel.clearError() },
-                title = { Text("Error") },
-                text = { Text(state.error!!) },
-                confirmButton = {
-                    TextButton(
-                        onClick = { viewModel.clearError() }
-                    ) {
-                        Text("OK")
-                    }
-                }
+            ErrorDialog(
+                error = state.error!!,
+                onDismiss = { viewModel.clearError() }
             )
         }
     }

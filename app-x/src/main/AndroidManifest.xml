@@ -54,6 +54,7 @@
             android:exported="true"
             android:excludeFromRecents="false"
             android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="sensorLandscape"
             android:configChanges="fontScale|smallestScreenSize|screenSize|uiMode|screenLayout|orientation|navigation|keyboardHidden|keyboard|touchscreen|locale|mnc|mcc"
             android:alwaysRetainTaskState="true">

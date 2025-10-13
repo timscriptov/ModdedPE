@@ -14,10 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.moddedpe3.di
+package com.mcal.editor.navigation
 
-import org.koin.core.module.Module
+import cafe.adriel.voyager.core.registry.screenModule
+import com.mcal.editor.ui.TextEditorScreen
+import java.io.File
 
-interface FeatureModule {
-    val modules: List<Module>
+val editorScreenModule = screenModule {
+    register<Screens.TextEditor> { (file: File) ->
+        TextEditorScreen(file)
+    }
 }

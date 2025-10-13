@@ -14,21 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.moddedpe3.ui.editor
+package com.mcal.editor.ui
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.mcal.moddedpe3.data.model.TextEditorState
+import com.mcal.editor.data.TextEditorState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.util.*
 
 class TextEditorViewModel : ScreenModel {
     private val _state = MutableStateFlow(TextEditorState())
     val state = _state.asStateFlow()
+
+    private val undoStack = LinkedList<String>()
+    private val redoStack = LinkedList<String>()
+    private var isUndoRedoOperation = false
 
     fun loadFileContent(file: File) {
         _state.value = _state.value.copy(isLoading = true)
@@ -38,11 +43,17 @@ class TextEditorViewModel : ScreenModel {
                 val content = withContext(Dispatchers.IO) {
                     file.readText()
                 }
+                undoStack.clear()
+                redoStack.clear()
+                undoStack.push(content)
+
                 _state.value = _state.value.copy(
                     content = content,
                     originalContent = content,
                     isLoading = false,
-                    isModified = false
+                    isModified = false,
+                    canUndo = false,
+                    canRedo = false
                 )
             } catch (e: Exception) {
                 _state.value = _state.value.copy(
@@ -57,10 +68,56 @@ class TextEditorViewModel : ScreenModel {
 
     fun updateContent(newContent: String) {
         val currentState = _state.value
+
+        if (!isUndoRedoOperation) {
+            undoStack.push(currentState.content)
+            redoStack.clear()
+        }
+
         _state.value = currentState.copy(
             content = newContent,
-            isModified = newContent != currentState.originalContent
+            isModified = newContent != currentState.originalContent,
+            canUndo = undoStack.size > 1,
+            canRedo = redoStack.isNotEmpty()
         )
+    }
+
+    fun undo() {
+        if (undoStack.size > 1) {
+            isUndoRedoOperation = true
+
+            redoStack.push(_state.value.content)
+
+            undoStack.pop()
+
+            val previousContent = undoStack.peek()
+            updateContent(previousContent ?: "")
+
+            isUndoRedoOperation = false
+
+            _state.value = _state.value.copy(
+                canUndo = undoStack.size > 1,
+                canRedo = redoStack.isNotEmpty()
+            )
+        }
+    }
+
+    fun redo() {
+        if (redoStack.isNotEmpty()) {
+            isUndoRedoOperation = true
+
+            undoStack.push(_state.value.content)
+
+            val nextContent = redoStack.pop()
+            updateContent(nextContent)
+
+            isUndoRedoOperation = false
+
+            _state.value = _state.value.copy(
+                canUndo = undoStack.size > 1,
+                canRedo = redoStack.isNotEmpty()
+            )
+        }
     }
 
     fun saveFile(file: File) {
@@ -71,12 +128,18 @@ class TextEditorViewModel : ScreenModel {
                 withContext(Dispatchers.IO) {
                     file.writeText(_state.value.content)
                 }
+                undoStack.clear()
+                redoStack.clear()
+                undoStack.push(_state.value.content)
+
                 _state.value = _state.value.copy(
                     originalContent = _state.value.content,
                     isLoading = false,
                     isModified = false,
                     isSaved = true,
-                    error = null
+                    error = null,
+                    canUndo = false,
+                    canRedo = false
                 )
             } catch (e: Exception) {
                 _state.value = _state.value.copy(
@@ -100,6 +163,7 @@ class TextEditorViewModel : ScreenModel {
     }
 
     fun resetState() {
-        _state.value = TextEditorState()
+        undoStack.clear()
+        redoStack.clear()
     }
 }

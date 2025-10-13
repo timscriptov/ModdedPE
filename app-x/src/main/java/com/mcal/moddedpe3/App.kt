@@ -18,6 +18,11 @@ package com.mcal.moddedpe3
 
 import android.app.Application
 import cafe.adriel.voyager.core.registry.ScreenRegistry
+import com.mcal.editor.di.TextEditorModules
+import com.mcal.editor.navigation.editorScreenModule
+import com.mcal.editor.ui.TextEditorScreen
+import com.mcal.files.di.FileManagerModules
+import com.mcal.files.navigation.filesScreenModule
 import com.mcal.moddedpe3.di.AppModules
 import com.mcal.moddedpe3.navigation.mainScreenModule
 import org.koin.android.ext.koin.androidContext
@@ -30,11 +35,15 @@ class App : Application() {
             androidContext(this@App)
             val featureModules = listOf(
                 AppModules.modules,
+                TextEditorModules.modules,
+                FileManagerModules.modules,
             ).flatten()
             modules(featureModules)
         }
         ScreenRegistry {
             mainScreenModule()
+            filesScreenModule()
+            editorScreenModule()
         }
     }
 }

@@ -14,20 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.moddedpe3.data.model
+package com.mcal.files.navigation
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import cafe.adriel.voyager.core.registry.screenModule
+import com.mcal.files.ui.FilesScreen
 
-@Parcelize
-data class TextEditorState(
-    val content: String = "",
-    val originalContent: String = "",
-    val isLoading: Boolean = false,
-    val isModified: Boolean = false,
-    val isSaved: Boolean = false,
-    val showSaveDialog: Boolean = false,
-    val error: String? = null
-) : Parcelable {
-    fun calculateIsModified(): Boolean = content != originalContent
+val filesScreenModule = screenModule {
+    register<Screens.Files> {
+        FilesScreen()
+    }
 }

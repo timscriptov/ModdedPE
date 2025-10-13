@@ -14,11 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.moddedpe3.navigation
+package com.mcal.editor.composition
 
-import cafe.adriel.voyager.core.registry.ScreenProvider
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
 
-sealed class Screens : ScreenProvider {
-    data object Main : Screens()
-    data object PreLoader : Screens()
+@Composable
+fun ErrorDialog(
+    error: String,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Error") },
+        text = { Text(error) },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text("OK")
+            }
+        }
+    )
 }

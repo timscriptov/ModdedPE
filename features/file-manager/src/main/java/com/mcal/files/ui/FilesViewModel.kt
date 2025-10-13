@@ -14,15 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.moddedpe3.ui.files
+package com.mcal.files.ui
 
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.FileProvider
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.mcal.moddedpe3.data.model.FileItem
-import com.mcal.moddedpe3.data.model.FilesScreenState
+import com.mcal.files.data.FileItem
+import com.mcal.files.data.FilesScreenState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

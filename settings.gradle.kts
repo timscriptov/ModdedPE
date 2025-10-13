@@ -37,6 +37,9 @@ include(":app")
 include(":app-x")
 include(":minecraft-app")
 
+include(":features:file-manager")
+include(":features:text-editor")
+
 include(":pesdk")
 
 include(":minecraft")

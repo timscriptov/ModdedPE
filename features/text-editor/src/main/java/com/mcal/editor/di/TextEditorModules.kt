@@ -14,11 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.moddedpe3.navigation
+package com.mcal.editor.di
 
-import cafe.adriel.voyager.core.registry.ScreenProvider
+import com.mcal.editor.ui.TextEditorViewModel
+import org.koin.core.module.Module
+import org.koin.dsl.module
 
-sealed class Screens : ScreenProvider {
-    data object Main : Screens()
-    data object PreLoader : Screens()
+object TextEditorModules {
+    val modules: List<Module>
+        get() = listOf(
+            viewModelsModule,
+        )
+
+    private val viewModelsModule = module {
+        factory {
+            TextEditorViewModel()
+        }
+    }
 }

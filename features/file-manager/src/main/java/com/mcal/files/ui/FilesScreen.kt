@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.moddedpe3.ui.files
+package com.mcal.files.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -39,10 +39,10 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.mcal.moddedpe3.composition.DeleteDialog
-import com.mcal.moddedpe3.data.model.FileItem
-import com.mcal.moddedpe3.ui.editor.TextEditorScreen
-import okio.IOException
+import com.mcal.editor.ui.TextEditorScreen
+import com.mcal.files.composition.DeleteDialog
+import com.mcal.files.data.FileItem
+import java.io.IOException
 
 class FilesScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
