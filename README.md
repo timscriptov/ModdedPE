@@ -2,7 +2,7 @@
 
 [![License Info](https://img.shields.io/badge/license-GNU_GPLv3-blue.svg?style=flat-square)](https://github.com/timscriptov/ModdedPE)
 
-![logo](Art/title_logo.png)
+![logo][1]
 
 ## What is ModdedPE?
 
