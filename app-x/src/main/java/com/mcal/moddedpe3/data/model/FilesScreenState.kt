@@ -14,23 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.moddedpe3.navigation
+package com.mcal.moddedpe3.data.model
 
-import cafe.adriel.voyager.core.registry.screenModule
-import com.mcal.moddedpe3.ui.files.FilesScreen
-import com.mcal.moddedpe3.ui.main.MainScreen
-import com.mcal.moddedpe3.ui.preloader.PreLoaderScreen
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-val mainScreenModule = screenModule {
-    register<Screens.Main> {
-        MainScreen()
-    }
-
-    register<Screens.PreLoader> {
-        PreLoaderScreen()
-    }
-
-    register<Screens.Files> {
-        FilesScreen()
-    }
-}
+@Parcelize
+data class FilesScreenState(
+    val currentPath: String = "",
+    val files: List<FileItem> = emptyList(),
+    val isLoading: Boolean = false,
+    val showDeleteDialog: Boolean = false,
+    val fileToDelete: FileItem? = null,
+    val showTextDialog: Boolean = false,
+    val textContent: String = ""
+) : Parcelable

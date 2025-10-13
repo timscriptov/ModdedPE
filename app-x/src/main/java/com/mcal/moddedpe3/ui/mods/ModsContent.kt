@@ -47,6 +47,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.mcal.moddedpe3.composition.DeleteDialog
 import com.mcal.moddedpe3.data.model.ImportState
 import com.mcal.moddedpe3.data.model.ModsScreenState
 import com.mcal.pesdk3.data.LocalNMod
@@ -98,8 +99,9 @@ fun Screen.ModsContent() {
         }
 
         selectedModForInfo?.let { mod ->
-            DeleteModDialog(
-                mod = mod,
+            DeleteDialog(
+                title = "Delete Mod",
+                text = "Are you sure you want to delete \"${mod.packageName}\"? This action cannot be undone.",
                 onDismiss = { selectedModForInfo = null },
                 onDelete = {
                     viewModel.deleteMod(mod)
@@ -680,34 +682,4 @@ fun ModsList(
             }
         }
     }
-}
-
-@Composable
-fun DeleteModDialog(
-    mod: LocalNMod,
-    onDismiss: () -> Unit,
-    onDelete: () -> Unit
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("Delete Mod") },
-        text = { Text("Are you sure you want to delete \"${mod.packageName}\"? This action cannot be undone.") },
-        confirmButton = {
-            Button(
-                onClick = onDelete,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.error
-                )
-            ) {
-                Icon(Icons.Default.Delete, contentDescription = null)
-                Spacer(modifier = Modifier.size(4.dp))
-                Text("Delete")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Close")
-            }
-        }
-    )
 }

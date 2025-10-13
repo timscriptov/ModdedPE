@@ -21,4 +21,5 @@ import cafe.adriel.voyager.core.registry.ScreenProvider
 sealed class Screens : ScreenProvider {
     data object Main : Screens()
     data object PreLoader : Screens()
+    data object Files : Screens()
 }

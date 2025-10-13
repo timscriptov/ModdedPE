@@ -20,9 +20,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Games
-import androidx.compose.material.icons.filled.Security
-import androidx.compose.material.icons.filled.Storage
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -34,13 +32,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import com.mcal.moddedpe3.composition.PreferencesButton
 import com.mcal.moddedpe3.composition.PreferencesSection
 import com.mcal.moddedpe3.composition.PreferencesSwitch
 import com.mcal.moddedpe3.composition.PreferencesTextField
+import com.mcal.moddedpe3.ui.files.FilesScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Screen.SettingsContent() {
+    val navigator = LocalNavigator.currentOrThrow
     val viewModel = koinScreenModel<SettingsViewModel>()
     val state by viewModel.state.collectAsState()
 
@@ -94,6 +97,21 @@ fun Screen.SettingsContent() {
 //                    onValueChange = { viewModel.setRenderDistance(it) },
 //                    valueSuffix = " chunks"
 //                )
+            }
+
+            PreferencesSection(
+                title = "File Management",
+                icon = Icons.Default.Folder
+            ) {
+                PreferencesButton(
+                    title = "View App Files",
+                    description = "Browse and manage app internal files",
+                    icon = Icons.Default.FolderOpen,
+                    iconColor = Color(0xFF2196F3),
+                    onClick = {
+                        navigator.push(FilesScreen())
+                    }
+                )
             }
 
             Spacer(
