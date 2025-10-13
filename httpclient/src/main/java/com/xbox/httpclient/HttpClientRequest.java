@@ -78,7 +78,7 @@ public class HttpClientRequest {
 
     @NotNull
     private String GetAllNetworksInfo() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) appContext.getSystemService("connectivity");
+        ConnectivityManager connectivityManager = (ConnectivityManager) appContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         StringBuilder sb = new StringBuilder("Has default proxy: ");
         sb.append(connectivityManager.getDefaultProxy() != null)
                 .append("\nHas active network: ")
