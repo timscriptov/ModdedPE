@@ -25,17 +25,16 @@ Module for creating Minecraft clones
 2. Create an archive with native libraries at the path: `minecraft-app/src/main/jniLibs/ABI/libgame.so` (zip: `libminecraftpe.so`/`libMediaDecoders_Android.so`/`libfmod.so`/`libc++_shared.so`...)
 
 ## NMOD Examples
-
 Here are some samples that can help you develop NMods:
-[NMod Examples][7]<br>
+> [NMod Examples][8]<br>
 
 ## NMod API
-
 Would like to develop another mcpe launcher that can load NMods?
 The Open Source NModAPI will help you a lot.
-[NMod API][7]<br>
+> [NMod API][7]<br>
 
 ## Collaborators
+> [listerily][2]<br>
 
 ### Additional components
 > [XHook][4]<br>
