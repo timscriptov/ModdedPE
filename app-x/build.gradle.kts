@@ -10,7 +10,6 @@ plugins {
 android {
     namespace = "com.mcal.moddedpe3"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
-    ndkVersion = "26.1.10909125"
 
     defaultConfig {
         applicationId = "com.mcal.moddedpe3"
@@ -18,24 +17,8 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 972111101
         versionName = "1.21.111.1"
-
-        ndk {
-            abiFilters.addAll(
-                setOf(
-                    "armeabi-v7a",
-                    "arm64-v8a",
-                    "x86",
-                    "x86_64"
-                )
-            )
-        }
         vectorDrawables {
             useSupportLibrary = true
-        }
-    }
-    externalNativeBuild {
-        ndkBuild {
-            path = File("src/main/cpp/Android.mk")
         }
     }
     buildTypes {
@@ -75,7 +58,6 @@ android {
         checkReleaseBuilds = false
     }
     buildFeatures {
-//        viewBinding = true
         buildConfig = true
         compose = true
     }
@@ -90,6 +72,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":pesdk"))
     implementation(project(":minecraft"))
     implementation(project(":httpclient"))
     implementation(project(":microsoft:xal"))

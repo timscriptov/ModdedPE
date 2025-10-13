@@ -17,7 +17,6 @@
 package com.mcal.pesdk3.nmod
 
 import android.os.Bundle
-import com.mojang.minecraftpe.MainActivity
 
 class NModLib(
     private val name: String
@@ -26,11 +25,11 @@ class NModLib(
         nativeRegisterNatives(NModLib::class.java)
     }
 
-    fun callOnActivityCreate(mainActivity: MainActivity, bundle: Bundle?): Boolean {
+    fun callOnActivityCreate(mainActivity: Any, bundle: Bundle?): Boolean {
         return nativeCallOnActivityCreate(name, mainActivity, bundle)
     }
 
-    fun callOnActivityFinish(mainActivity: MainActivity): Boolean {
+    fun callOnActivityFinish(mainActivity: Any): Boolean {
         return nativeCallOnActivityFinish(name, mainActivity)
     }
 
@@ -41,13 +40,13 @@ class NModLib(
     companion object {
         private external fun nativeRegisterNatives(cls: Class<*>): Boolean
 
-        private external fun nativeCallOnActivityFinish(name: String, mainActivity: MainActivity): Boolean
+        private external fun nativeCallOnActivityFinish(name: String, mainActivity: Any): Boolean
 
         private external fun nativeCallOnLoad(name: String, mcVersion: String, apiVersion: String): Boolean
 
         private external fun nativeCallOnActivityCreate(
             name: String,
-            mainActivity: MainActivity,
+            mainActivity: Any,
             savedInstanceState: Bundle?
         ): Boolean
     }

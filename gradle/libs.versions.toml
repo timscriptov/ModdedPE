@@ -1,6 +1,7 @@
 [versions]
 agp = "8.12.0"
 coilCompose = "2.7.0"
+coreGraphics = "1.0.3"
 gamesActivity = "4.0.0"
 kotlin = "2.2.20"
 compose-plugin = "1.9.0"
@@ -56,6 +57,7 @@ exposed = "0.61.0"
 xerial = "3.50.3.0"
 
 [libraries]
+androidx-core-graphics = { module = "androidx.core:core-graphics", version.ref = "coreGraphics" }
 androidx-games-activity = { module = "androidx.games:games-activity", version.ref = "gamesActivity" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-vectordrawable = { module = "androidx.vectordrawable:vectordrawable", version.ref = "vectordrawable" }
@@ -133,7 +135,7 @@ voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voy
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
-kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version = "2.2.0" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

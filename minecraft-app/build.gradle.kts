@@ -73,7 +73,6 @@ android {
         checkReleaseBuilds = false
     }
     buildFeatures {
-//        viewBinding = true
         buildConfig = true
         compose = true
     }
@@ -103,13 +102,6 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
 
-//    implementation(libs.exposed.jdbc)
-//    implementation(libs.xerial.jdbc)
-
-//    implementation(libs.ktor.client.okhttp)
-//    implementation(libs.ktor.client.core)
-//    implementation(libs.ktor.client.cio)
-
     implementation(libs.apkparser)
 
     implementation(libs.kotlinx.serialization.json)
@@ -118,18 +110,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.preference.ktx)
     implementation(libs.material)
-
-    // Wortise AD
-//    implementation(libs.wortise.sdk)
-
-    // IronSource AD
-//    implementation(libs.mediationsdk)
-
-    // Admob AD
-//    implementation(libs.play.services.ads)
-
-    implementation(libs.bundles.koin)
-    implementation(libs.bundles.voyager)
 }
 
 configurations.all {

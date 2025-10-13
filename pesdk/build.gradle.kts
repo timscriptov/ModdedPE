@@ -1,11 +1,15 @@
 plugins {
     alias(libs.plugins.androidLibrary)
+
+    alias(libs.plugins.kotlinxSerialization)
+    alias(libs.plugins.kotlinxParcelize)
+    alias(libs.plugins.kotlinAndroid)
 }
 
 android {
-    namespace = "com.mcal.substrate"
+    namespace = "com.nmod.pesdk"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
-    ndkVersion = libs.versions.ndkVersion.get()
+    ndkVersion = "26.1.10909125"
 
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
@@ -34,6 +38,24 @@ android {
             )
         }
     }
+    packaging {
+        resources {
+            excludes += listOf(
+                "META-INF/AL2.0",
+                "META-INF/LGPL2.1",
+                "META-INF/DEPENDENCIES",
+                "META-INF/LICENSE",
+                "META-INF/LICENSE.txt",
+                "META-INF/license.txt",
+                "META-INF/NOTICE",
+                "META-INF/NOTICE.txt",
+                "META-INF/notice.txt",
+                "META-INF/ASL2.0",
+                "META-INF/INDEX.LIST",
+                "META-INF/*.kotlin_module"
+            )
+        }
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
@@ -41,5 +63,7 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.core.ktx)
 }
