@@ -23,15 +23,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBackIosNew
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -144,9 +146,10 @@ private fun AppErrorContent(
             modifier = Modifier.padding(bottom = 24.dp)
         )
 
-        Button(onClick = onHomeClicked) {
-            Text("Вернуться на главный экран")
-        }
+        ButtonHome(
+            text = "Вернуться на главный экран",
+            onHomeClicked = onHomeClicked,
+        )
     }
 }
 
@@ -183,9 +186,47 @@ private fun NModErrorContent(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Button(onClick = onHomeClicked) {
-            Text("Вернуться на главный экран")
-        }
+        ButtonHome(
+            text = "Вернуться на главный экран",
+            onHomeClicked = onHomeClicked,
+        )
+    }
+}
+
+@Composable
+fun ButtonHome(text: String, onHomeClicked: () -> Unit) {
+    Button(
+        onClick = onHomeClicked,
+        modifier = Modifier
+            .height(60.dp)
+            .fillMaxWidth(0.8f)
+            .shadow(
+                elevation = 8.dp,
+                shape = RoundedCornerShape(16.dp)
+            ),
+        shape = RoundedCornerShape(16.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary
+        ),
+        elevation = ButtonDefaults.buttonElevation(
+            defaultElevation = 8.dp,
+            pressedElevation = 4.dp
+        )
+    ) {
+        Icon(
+            imageVector = Icons.Rounded.ArrowBackIosNew,
+            contentDescription = "Back",
+            modifier = Modifier.size(24.dp)
+        )
+        Spacer(modifier = Modifier.width(12.dp))
+        Text(
+            text = text,
+            style = MaterialTheme.typography.titleMedium.copy(
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp
+            )
+        )
     }
 }
 
