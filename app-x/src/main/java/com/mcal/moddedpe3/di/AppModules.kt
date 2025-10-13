@@ -20,6 +20,7 @@ import com.mcal.moddedpe3.data.repository.MainRepository
 import com.mcal.moddedpe3.data.repository.MainRepositoryImpl
 import com.mcal.moddedpe3.data.repository.SettingsRepository
 import com.mcal.moddedpe3.data.repository.SettingsRepositoryImpl
+import com.mcal.moddedpe3.ui.editor.TextEditorViewModel
 import com.mcal.moddedpe3.ui.files.FilesViewModel
 import com.mcal.moddedpe3.ui.home.HomeViewModel
 import com.mcal.moddedpe3.ui.main.MainViewModel
@@ -64,6 +65,9 @@ private val viewModelsModule = module {
     }
     factory {
         FilesViewModel()
+    }
+    factory {
+        TextEditorViewModel()
     }
 }
 

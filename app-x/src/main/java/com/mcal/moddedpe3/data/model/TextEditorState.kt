@@ -14,14 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.moddedpe3.navigation
+package com.mcal.moddedpe3.data.model
 
-import cafe.adriel.voyager.core.registry.ScreenProvider
-import java.io.File
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-sealed class Screens : ScreenProvider {
-    data object Main : Screens()
-    data object PreLoader : Screens()
-    data object Files : Screens()
-    data class TextEditor(val file: File) : Screens()
+@Parcelize
+data class TextEditorState(
+    val content: String = "",
+    val originalContent: String = "",
+    val isLoading: Boolean = false,
+    val isModified: Boolean = false,
+    val isSaved: Boolean = false,
+    val showSaveDialog: Boolean = false,
+    val error: String? = null
+) : Parcelable {
+    fun calculateIsModified(): Boolean = content != originalContent
 }

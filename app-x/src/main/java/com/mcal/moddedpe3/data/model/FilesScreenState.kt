@@ -26,6 +26,4 @@ data class FilesScreenState(
     val isLoading: Boolean = false,
     val showDeleteDialog: Boolean = false,
     val fileToDelete: FileItem? = null,
-    val showTextDialog: Boolean = false,
-    val textContent: String = ""
 ) : Parcelable

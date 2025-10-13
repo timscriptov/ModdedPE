@@ -82,33 +82,4 @@ class FilesViewModel : ScreenModel {
             hideDeleteDialog()
         }
     }
-
-    fun showTextDialog(content: String) {
-        _state.value = _state.value.copy(
-            showTextDialog = true,
-            textContent = content
-        )
-    }
-
-    fun hideTextDialog() {
-        _state.value = _state.value.copy(
-            showTextDialog = false,
-            textContent = ""
-        )
-    }
-
-    fun readFileContent(file: File) {
-        screenModelScope.launch {
-            val content = withContext(Dispatchers.IO) {
-                try {
-                    file.readText()
-                } catch (e: Exception) {
-                    "Error reading file: ${e.message}"
-                }
-            }
-            withContext(Dispatchers.Main) {
-                showTextDialog(content)
-            }
-        }
-    }
 }

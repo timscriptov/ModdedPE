@@ -18,9 +18,9 @@ package com.mcal.moddedpe3.data.model
 
 import android.os.Parcelable
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Folder
-import androidx.compose.material.icons.filled.InsertDriveFile
-import androidx.compose.material.icons.filled.TextSnippet
+import androidx.compose.material.icons.rounded.Folder
+import androidx.compose.material.icons.rounded.InsertDriveFile
+import androidx.compose.material.icons.rounded.TextSnippet
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -35,14 +35,14 @@ data class FileItem(val file: File) : Parcelable {
     val icon: @Composable () -> Unit = {
         Icon(
             imageVector = when {
-                file.isDirectory -> Icons.Default.Folder
-                file.isTextFile() -> Icons.Default.TextSnippet
-                else -> Icons.Default.InsertDriveFile
+                file.isDirectory -> Icons.Rounded.Folder
+                isTextFile() -> Icons.Rounded.TextSnippet
+                else -> Icons.Rounded.InsertDriveFile
             },
             contentDescription = null,
             tint = when {
                 file.isDirectory -> Color(0xFFFFA000)
-                file.isTextFile() -> Color(0xFF2196F3)
+                isTextFile() -> Color(0xFF2196F3)
                 else -> Color(0xFF757575)
             }
         )
@@ -66,12 +66,5 @@ data class FileItem(val file: File) : Parcelable {
         }
 
         return "%.1f %s".format(fileSize, units[unitIndex])
-    }
-
-    private fun File.isTextFile(): Boolean {
-        val textExtensions = listOf("txt", "xml", "json", "properties", "cfg", "ini", "log")
-        val name = name.lowercase()
-        return textExtensions.any { name.endsWith(".$it") } ||
-                extension.lowercase() in textExtensions
     }
 }

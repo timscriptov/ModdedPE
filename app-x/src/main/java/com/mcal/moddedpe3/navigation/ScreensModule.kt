@@ -17,9 +17,11 @@
 package com.mcal.moddedpe3.navigation
 
 import cafe.adriel.voyager.core.registry.screenModule
+import com.mcal.moddedpe3.ui.editor.TextEditorScreen
 import com.mcal.moddedpe3.ui.files.FilesScreen
 import com.mcal.moddedpe3.ui.main.MainScreen
 import com.mcal.moddedpe3.ui.preloader.PreLoaderScreen
+import java.io.File
 
 val mainScreenModule = screenModule {
     register<Screens.Main> {
@@ -32,5 +34,9 @@ val mainScreenModule = screenModule {
 
     register<Screens.Files> {
         FilesScreen()
+    }
+
+    register<Screens.TextEditor> { (file: File) ->
+        TextEditorScreen(file)
     }
 }

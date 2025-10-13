@@ -16,13 +16,10 @@
  */
 package com.mcal.moddedpe3.ui.files
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIosNew
 import androidx.compose.material.icons.rounded.ArrowUpward
@@ -34,7 +31,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -44,6 +40,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.mcal.moddedpe3.composition.DeleteDialog
 import com.mcal.moddedpe3.data.model.FileItem
+import com.mcal.moddedpe3.ui.editor.TextEditorScreen
 import okio.IOException
 
 class FilesScreen : Screen {
@@ -109,7 +106,7 @@ class FilesScreen : Screen {
                                     if (file.isDirectory) {
                                         viewModel.loadFiles(file.file.absolutePath)
                                     } else if (file.isTextFile()) {
-                                        viewModel.readFileContent(file.file)
+                                        navigator.push(TextEditorScreen(file = file.file))
                                     }
                                 },
                                 onDeleteClick = {
@@ -129,33 +126,6 @@ class FilesScreen : Screen {
                 onDismiss = { viewModel.hideDeleteDialog() },
                 onDelete = {
                     viewModel.deleteFile(state.fileToDelete!!)
-                }
-            )
-        }
-
-        if (state.showTextDialog) {
-            AlertDialog(
-                onDismissRequest = { viewModel.hideTextDialog() },
-                title = { Text("File Content") },
-                text = {
-                    Column {
-                        Text(
-                            text = state.textContent,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .heightIn(min = 100.dp, max = 400.dp)
-                                .verticalScroll(rememberScrollState())
-                                .background(Color.LightGray.copy(alpha = 0.1f))
-                                .padding(8.dp)
-                        )
-                    }
-                },
-                confirmButton = {
-                    TextButton(
-                        onClick = { viewModel.hideTextDialog() }
-                    ) {
-                        Text("Close")
-                    }
                 }
             )
         }
