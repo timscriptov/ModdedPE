@@ -16,6 +16,9 @@
  */
 package com.mcal.moddedpe3.ui.files
 
+import android.content.Context
+import android.content.Intent
+import androidx.core.content.FileProvider
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.mcal.moddedpe3.data.model.FileItem
@@ -27,7 +30,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 
-class FilesViewModel : ScreenModel {
+class FilesViewModel(
+    private val context: Context
+) : ScreenModel {
     private val _state = MutableStateFlow(FilesScreenState())
     val state = _state.asStateFlow()
 
@@ -80,6 +85,40 @@ class FilesViewModel : ScreenModel {
             file.file.delete()
             loadFiles(_state.value.currentPath)
             hideDeleteDialog()
+        }
+    }
+
+    fun shareFile(file: FileItem) {
+        val uri = FileProvider.getUriForFile(
+            context,
+            "${context.packageName}.fileprovider",
+            file.file
+        )
+
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = getMimeType(file.file)
+            putExtra(Intent.EXTRA_STREAM, uri)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+
+        val shareIntent = Intent.createChooser(intent, "Share File").apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        context.startActivity(shareIntent)
+    }
+
+    private fun getMimeType(file: File): String {
+        return when {
+            file.extension.equals("txt", ignoreCase = true) -> "text/plain"
+            file.extension.equals("json", ignoreCase = true) -> "application/json"
+            file.extension.equals("xml", ignoreCase = true) -> "application/xml"
+            file.extension.equals("pdf", ignoreCase = true) -> "application/pdf"
+            file.extension.equals("zip", ignoreCase = true) -> "application/zip"
+            file.extension.equals("png", ignoreCase = true) -> "image/png"
+            file.extension.equals("jpg", ignoreCase = true) -> "image/jpeg"
+            file.extension.equals("jpeg", ignoreCase = true) -> "image/jpeg"
+            file.extension.equals("gif", ignoreCase = true) -> "image/gif"
+            else -> "*/*"
         }
     }
 }

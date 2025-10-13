@@ -64,7 +64,9 @@ private val viewModelsModule = module {
         )
     }
     factory {
-        FilesViewModel()
+        FilesViewModel(
+            context = get()
+        )
     }
     factory {
         TextEditorViewModel()

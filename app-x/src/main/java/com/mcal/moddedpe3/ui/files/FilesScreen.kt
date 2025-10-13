@@ -24,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIosNew
 import androidx.compose.material.icons.rounded.ArrowUpward
 import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -109,9 +110,12 @@ class FilesScreen : Screen {
                                         navigator.push(TextEditorScreen(file = file.file))
                                     }
                                 },
+                                onShareClick = {
+                                    viewModel.shareFile(file)
+                                },
                                 onDeleteClick = {
                                     viewModel.showDeleteDialog(file)
-                                }
+                                },
                             )
                         }
                     }
@@ -181,6 +185,7 @@ fun CurrentPathCard(
 fun FileItemView(
     file: FileItem,
     onFileClick: () -> Unit,
+    onShareClick: () -> Unit,
     onDeleteClick: () -> Unit
 ) {
     Card(
@@ -218,15 +223,30 @@ fun FileItemView(
                     }
                 }
             }
-            IconButton(
-                onClick = onDeleteClick,
-                modifier = Modifier.size(24.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Delete,
-                    contentDescription = "Delete",
-                    tint = MaterialTheme.colorScheme.error
-                )
+            Row {
+                if (!file.isDirectory) {
+                    IconButton(
+                        onClick = onShareClick,
+                        modifier = Modifier.size(24.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Share,
+                            contentDescription = "Share",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                IconButton(
+                    onClick = onDeleteClick,
+                    modifier = Modifier.size(24.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Delete,
+                        contentDescription = "Delete",
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                }
             }
         }
     }
