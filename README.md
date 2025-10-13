@@ -22,8 +22,7 @@ Modern version of the launcher with completely redesigned interface in Jetpack C
 Module for creating Minecraft clones
 
 1. Add resources to the path: `assets-pack/src/main/assets/..`
-2. Create an archive with native libraries at the path: `minecraft-app/src/main/jniLibs/ABI/libgame.so` (zip: `libminecraftpe.so`/`libMediaDecoders_Android.so`)
-3. The project must contain the `libfmod.so` and `libc++_shared.so` binaries
+2. Create an archive with native libraries at the path: `minecraft-app/src/main/jniLibs/ABI/libgame.so` (zip: `libminecraftpe.so`/`libMediaDecoders_Android.so`/`libfmod.so`/`libc++_shared.so`...)
 
 ## NMOD Examples
 
