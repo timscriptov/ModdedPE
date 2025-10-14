@@ -16,6 +16,7 @@ It is recommended to use the new **`app-x`** module, which is completely rewritt
 ## Project Modules
 
 ### 📱 Module `app-x` (recommended)
+TODO: Fix NMod Loader
 Modern version of the launcher with completely redesigned interface in Jetpack Compose.
 
 ### 🎮 Module `minecraft-app`
