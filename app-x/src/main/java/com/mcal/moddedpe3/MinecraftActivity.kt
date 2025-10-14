@@ -45,13 +45,14 @@ class MinecraftActivity : MainActivity(), KoinComponent {
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
             // Запущен через ФМ для установки Майнкрафт аддонов
-            if ((intent.extras?.getString(NMOD_DATA_TAG)) == null) {
+            if ((intent.extras?.getString(NMOD_DATA_TAG)) != null) {
+                patchNativeDir()
+                callOnActivityCreate(savedInstanceState)
+            } else {
                 MINECRAFT_LIBS.forEach { library ->
                     repository.loadNativeLibrary(library)
                 }
             }
-            patchNativeDir()
-            callOnActivityCreate(savedInstanceState)
             super.onCreate(savedInstanceState)
         } catch (e: Exception) {
             Log.e("MinecraftActivity", "Error during initialization", e)
@@ -115,7 +116,9 @@ class MinecraftActivity : MainActivity(), KoinComponent {
     }
 
     override fun onDestroy() {
-        callOnActivityFinish()
+        if ((intent.extras?.getString(NMOD_DATA_TAG)) != null) {
+            callOnActivityFinish()
+        }
         super.onDestroy()
     }
 

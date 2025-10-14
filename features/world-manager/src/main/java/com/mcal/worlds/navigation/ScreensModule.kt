@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.moddedpe3.data.model
+package com.mcal.worlds.navigation
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import cafe.adriel.voyager.core.registry.screenModule
+import com.mcal.worlds.ui.WorldsManagerScreen
 
-@Parcelize
-data class SettingsScreenState(
-    val isSafeMode: Boolean = false,
-    val minecraftPackageName: String = "com.mojang.minecraftpe",
-) : Parcelable
+val worldsScreenModule = screenModule {
+    register<Screens.Worlds> {
+        WorldsManagerScreen()
+    }
+}

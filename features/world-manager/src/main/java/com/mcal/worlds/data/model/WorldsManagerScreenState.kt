@@ -14,13 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.moddedpe3.data.model
+package com.mcal.worlds.data.model
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
-@Parcelize
-data class SettingsScreenState(
-    val isSafeMode: Boolean = false,
-    val minecraftPackageName: String = "com.mojang.minecraftpe",
-) : Parcelable
+data class WorldsManagerScreenState(
+    val worlds: List<MinecraftWorld> = emptyList(),
+)

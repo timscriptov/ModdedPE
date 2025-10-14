@@ -16,11 +16,14 @@
  */
 package com.mcal.files.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FolderOff
 import androidx.compose.material.icons.rounded.ArrowBackIosNew
 import androidx.compose.material.icons.rounded.ArrowUpward
 import androidx.compose.material.icons.rounded.Delete
@@ -32,9 +35,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -52,10 +57,10 @@ class FilesScreen : Screen {
         val filesDir = context.filesDir.parentFile ?: throw IOException("filesDir not found")
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinScreenModel<FilesViewModel>()
-        val state by viewModel.state.collectAsState()
+        val screenState by viewModel.state.collectAsState()
 
         LaunchedEffect(Unit) {
-            if (state.currentPath.isEmpty()) {
+            if (screenState.currentPath.isEmpty()) {
                 viewModel.loadFiles(filesDir.absolutePath)
             }
         }
@@ -78,14 +83,14 @@ class FilesScreen : Screen {
                     .padding(paddingValues)
             ) {
                 CurrentPathCard(
-                    currentPath = state.currentPath,
+                    currentPath = screenState.currentPath,
                     rootPath = filesDir.absolutePath,
                     onBackClick = {
-                        viewModel.navigateToParent(state.currentPath, filesDir.absolutePath)
+                        viewModel.navigateToParent(screenState.currentPath, filesDir.absolutePath)
                     }
                 )
 
-                if (state.isLoading) {
+                if (screenState.isLoading) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
@@ -95,41 +100,66 @@ class FilesScreen : Screen {
                         CircularProgressIndicator()
                     }
                 } else {
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .weight(1f)
-                    ) {
-                        items(state.files) { file ->
-                            FileItemView(
-                                file = file,
-                                onFileClick = {
-                                    if (file.isDirectory) {
-                                        viewModel.loadFiles(file.file.absolutePath)
-                                    } else if (file.isTextFile()) {
-                                        navigator.push(TextEditorScreen(file = file.file))
-                                    }
-                                },
-                                onShareClick = {
-                                    viewModel.shareFile(file)
-                                },
-                                onDeleteClick = {
-                                    viewModel.showDeleteDialog(file)
-                                },
-                            )
+                    if (screenState.files.isEmpty()) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Icon(
+                                    Icons.Default.FolderOff,
+                                    contentDescription = "No files",
+                                    modifier = Modifier.size(64.dp),
+                                    tint = Color.Gray
+                                )
+                                Spacer(modifier = Modifier.height(16.dp))
+                                Text(
+                                    "No files found",
+                                    fontSize = 18.sp,
+                                    color = Color.Gray
+                                )
+                            }
+                        }
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .weight(1f)
+                        ) {
+                            items(screenState.files) { file ->
+                                FileItemView(
+                                    file = file,
+                                    onFileClick = {
+                                        if (file.isDirectory) {
+                                            viewModel.loadFiles(file.file.absolutePath)
+                                        } else if (file.isTextFile()) {
+                                            navigator.push(TextEditorScreen(file = file.file))
+                                        }
+                                    },
+                                    onShareClick = {
+                                        viewModel.shareFile(file)
+                                    },
+                                    onDeleteClick = {
+                                        viewModel.showDeleteDialog(file)
+                                    },
+                                )
+                            }
                         }
                     }
                 }
             }
         }
 
-        if (state.showDeleteDialog && state.fileToDelete != null) {
+        if (screenState.showDeleteDialog && screenState.fileToDelete != null) {
             DeleteDialog(
                 title = "Delete File",
-                text = "Are you sure you want to delete \"${state.fileToDelete!!.name}\"? This action cannot be undone.",
+                text = "Are you sure you want to delete \"${screenState.fileToDelete!!.name}\"? This action cannot be undone.",
                 onDismiss = { viewModel.hideDeleteDialog() },
                 onDelete = {
-                    viewModel.deleteFile(state.fileToDelete!!)
+                    viewModel.deleteFile(screenState.fileToDelete!!)
                 }
             )
         }
@@ -227,25 +257,47 @@ fun FileItemView(
                 if (!file.isDirectory) {
                     IconButton(
                         onClick = onShareClick,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(40.dp),
                     ) {
-                        Icon(
-                            imageVector = Icons.Rounded.Share,
-                            contentDescription = "Share",
-                            tint = MaterialTheme.colorScheme.primary
-                        )
+                        Box(
+                            modifier = Modifier
+                                .size(32.dp)
+                                .background(
+                                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                                    shape = CircleShape
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.Share,
+                                contentDescription = "Share",
+                                modifier = Modifier.size(20.dp),
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
                     }
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 IconButton(
                     onClick = onDeleteClick,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(40.dp)
                 ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Delete,
-                        contentDescription = "Delete",
-                        tint = MaterialTheme.colorScheme.error
-                    )
+                    Box(
+                        modifier = Modifier
+                            .size(32.dp)
+                            .background(
+                                color = MaterialTheme.colorScheme.error.copy(alpha = 0.1f),
+                                shape = CircleShape
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Delete,
+                            contentDescription = "Delete",
+                            modifier = Modifier.size(20.dp),
+                            tint = MaterialTheme.colorScheme.error
+                        )
+                    }
                 }
             }
         }

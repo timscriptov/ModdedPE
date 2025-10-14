@@ -25,6 +25,8 @@ import com.mcal.files.di.FileManagerModules
 import com.mcal.files.navigation.filesScreenModule
 import com.mcal.moddedpe3.di.AppModules
 import com.mcal.moddedpe3.navigation.mainScreenModule
+import com.mcal.worlds.di.WorldManagerModules
+import com.mcal.worlds.navigation.worldsScreenModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -37,6 +39,7 @@ class App : Application() {
                 AppModules.modules,
                 TextEditorModules.modules,
                 FileManagerModules.modules,
+                WorldManagerModules.modules,
             ).flatten()
             modules(featureModules)
         }
@@ -44,6 +47,7 @@ class App : Application() {
             mainScreenModule()
             filesScreenModule()
             editorScreenModule()
+            worldsScreenModule()
         }
     }
 }

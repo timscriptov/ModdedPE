@@ -39,6 +39,7 @@ import com.mcal.moddedpe3.composition.PreferencesButton
 import com.mcal.moddedpe3.composition.PreferencesSection
 import com.mcal.moddedpe3.composition.PreferencesSwitch
 import com.mcal.moddedpe3.composition.PreferencesTextField
+import com.mcal.worlds.ui.WorldsManagerScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -118,6 +119,15 @@ fun Screen.SettingsContent() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(16.dp)
+            )
+            PreferencesButton(
+                title = "Manage Worlds",
+                description = "View and manage Minecraft worlds",
+                icon = Icons.Default.Terrain,
+                iconColor = Color(0xFF795548),
+                onClick = {
+                    navigator.push(WorldsManagerScreen())
+                }
             )
         }
     }

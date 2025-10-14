@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcal.moddedpe3.data.model
+package com.mcal.worlds.data.repository
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import com.mcal.worlds.data.model.MinecraftWorld
+import java.io.File
 
-@Parcelize
-data class SettingsScreenState(
-    val isSafeMode: Boolean = false,
-    val minecraftPackageName: String = "com.mojang.minecraftpe",
-) : Parcelable
+interface WorldRepository {
+    suspend fun getWorlds(): List<MinecraftWorld>
+    suspend fun deleteWorld(worldDir: String): Boolean
+    suspend fun createWorldArchive(world: MinecraftWorld): File?
+}
