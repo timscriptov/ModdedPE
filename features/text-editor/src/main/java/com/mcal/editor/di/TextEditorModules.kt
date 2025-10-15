@@ -16,6 +16,8 @@
  */
 package com.mcal.editor.di
 
+import com.mcal.editor.data.repository.TextEditorRepository
+import com.mcal.editor.data.repository.TextEditorRepositoryImpl
 import com.mcal.editor.ui.TextEditorViewModel
 import org.koin.core.module.Module
 import org.koin.dsl.module
@@ -24,11 +26,21 @@ object TextEditorModules {
     val modules: List<Module>
         get() = listOf(
             viewModelsModule,
+            repositoriesModule,
         )
 
     private val viewModelsModule = module {
         factory {
-            TextEditorViewModel()
+            TextEditorViewModel(
+                file = get(),
+                textEditorRepository = get()
+            )
+        }
+    }
+
+    private val repositoriesModule = module {
+        factory<TextEditorRepository> {
+            TextEditorRepositoryImpl()
         }
     }
 }

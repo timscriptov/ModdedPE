@@ -22,8 +22,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Redo
 import androidx.compose.material.icons.automirrored.rounded.Undo
@@ -37,22 +35,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.mcal.editor.composition.Editor
 import com.mcal.editor.composition.ErrorDialog
 import com.mcal.editor.composition.SaveDialog
+import com.mcal.editor.lang.provider.LanguageDetector
+import com.mcal.editor.lang.provider.SyntaxProvider
+import com.mcal.editor.lang.provider.SyntaxProvider.getDefaultTheme
+import org.koin.core.parameter.parametersOf
 import java.io.File
 
 class TextEditorScreen(
     private val file: File,
 ) : Screen {
-
     @OptIn(
         ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
         ExperimentalComposeUiApi::class
@@ -60,18 +58,20 @@ class TextEditorScreen(
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = koinScreenModel<TextEditorViewModel>()
+        val viewModel = koinScreenModel<TextEditorViewModel> { parametersOf(file) }
         val state by viewModel.state.collectAsState()
-
-        LaunchedEffect(file) {
-            viewModel.loadFileContent(file)
-        }
 
         LaunchedEffect(state.isSaved) {
             if (state.isSaved) {
                 navigator.pop()
             }
         }
+
+        val detectedLanguage = LanguageDetector.detectLanguage(file)
+        val patterns = SyntaxProvider.getSyntaxPatterns(
+            detectedLanguage,
+            getDefaultTheme(detectedLanguage)
+        )
 
         Scaffold(
             topBar = {
@@ -136,19 +136,12 @@ class TextEditorScreen(
                         .fillMaxSize()
                         .horizontalScroll(rememberScrollState())
                 ) {
-                    BasicTextField(
-                        value = state.content,
+                    Editor(
+                        text = state.content,
+                        patterns = patterns,
                         onValueChange = { newContent ->
                             viewModel.updateContent(newContent)
-                        },
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 16.dp),
-                        textStyle = TextStyle(
-                            fontSize = 16.sp,
-                            lineHeight = 20.sp
-                        ),
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Default),
+                        }
                     )
                 }
             }

@@ -19,6 +19,7 @@ package com.mcal.editor.ui
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.mcal.editor.data.TextEditorState
+import com.mcal.editor.data.repository.TextEditorRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,7 +28,10 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.*
 
-class TextEditorViewModel : ScreenModel {
+class TextEditorViewModel(
+    private val file: File,
+    private val textEditorRepository: TextEditorRepository
+) : ScreenModel {
     private val _state = MutableStateFlow(TextEditorState())
     val state = _state.asStateFlow()
 
@@ -35,14 +39,16 @@ class TextEditorViewModel : ScreenModel {
     private val redoStack = LinkedList<String>()
     private var isUndoRedoOperation = false
 
+    init {
+        loadFileContent(file)
+    }
+
     fun loadFileContent(file: File) {
         _state.value = _state.value.copy(isLoading = true)
 
         screenModelScope.launch {
             try {
-                val content = withContext(Dispatchers.IO) {
-                    file.readText()
-                }
+                val content = textEditorRepository.readFileContent(file)
                 undoStack.clear()
                 redoStack.clear()
                 undoStack.push(content)
@@ -125,9 +131,7 @@ class TextEditorViewModel : ScreenModel {
 
         screenModelScope.launch {
             try {
-                withContext(Dispatchers.IO) {
-                    file.writeText(_state.value.content)
-                }
+                textEditorRepository.writeFileContent(file, _state.value.content)
                 undoStack.clear()
                 redoStack.clear()
                 undoStack.push(_state.value.content)
