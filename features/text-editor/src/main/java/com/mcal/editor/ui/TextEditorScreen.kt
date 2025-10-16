@@ -151,11 +151,11 @@ class TextEditorScreen(
             SaveDialog(
                 fileName = file.name,
                 onDismiss = { viewModel.hideSaveDialog() },
-                onSave = {
+                onSaveClick = {
                     viewModel.saveFile(file)
                     viewModel.hideSaveDialog()
                 },
-                onDontSave = {
+                onCancelClick = {
                     viewModel.hideSaveDialog()
                     navigator.pop()
                 }

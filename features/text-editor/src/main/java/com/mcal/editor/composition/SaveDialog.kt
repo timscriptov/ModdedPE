@@ -25,21 +25,21 @@ import androidx.compose.runtime.Composable
 fun SaveDialog(
     fileName: String,
     onDismiss: () -> Unit,
-    onSave: () -> Unit,
-    onDontSave: () -> Unit
+    onSaveClick: () -> Unit,
+    onCancelClick: () -> Unit
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Save changes?") },
         text = { Text("Do you want to save changes to \"$fileName\"?") },
         confirmButton = {
-            TextButton(onClick = onSave) {
+            TextButton(onClick = onSaveClick) {
                 Text("Save")
             }
         },
         dismissButton = {
-            TextButton(onClick = onDontSave) {
-                Text("Don't save")
+            TextButton(onClick = onCancelClick) {
+                Text("Cancel")
             }
         }
     )
